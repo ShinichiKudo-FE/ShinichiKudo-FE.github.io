@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>
+    props 和 state 的区别  | 默默默默燃
+  </title>
+  <meta name="description" content="一枚前端搬砖队队员的记录册">
+  
+  <meta name="keywords" content="
+  React
+  ">
+  
+  <meta name="author" content="张白告丶">
+
+  <meta http-equiv="Cache-Control" content="no-transform"/>
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="theme-color" content="#1e2327">
+  <link rel="apple-touch-icon" href="https://github.githubassets.com/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://github.githubassets.com/apple-touch-icon-180x180.png">
+
+  <link rel="icon" type="image/x-icon" href="https://github.githubassets.com/favicon.ico">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+  
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.25-csp/vue.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+</head>
+
+<body id="replica-app">
+
+<nav class="navbar-wrapper">
+  <div class="navbar">
+    <div class="container clearfix">
+      <a href="/" class="navbar-logo"><i class="fa fa-github"></i></a>
+
+      <div class="navbar-search float-left desktop-only">
+        <div class="navbar-search-form">
+          <label for="gsc-i-id1">This website</label>
+          <div id="google-search">
+            <gcse:search></gcse:search>
+          </div>
+        </div>
+      </div>
+
+      <ul class="navbar-nav float-left">
+        
+        <li><a href="/archives">Archives</a></li>
+        
+        
+        <li><a href="/categories">Categories</a></li>
+        
+        
+        <li><a href="/tags">Tags</a></li>
+        
+        
+        <li class="desktop-only"><a href="/atom.xml" target="_blank">RSS</a></li>
+        
+      </ul>
+
+      <ul class="navbar-nav user-nav float-right desktop-only">
+        <li class="user-nav-notification">
+          <a><span class="user-nav-unread"></span><i class="fa fa-bell"></i></a>
+        </li>
+        <li>
+          <a><i class="fa fa-plus"></i> <i class="fa fa-caret-down"></i></a>
+        </li>
+        <li class="user-nav-logo">
+          <a><img src="https://octodex.github.com/images/baracktocat.jpg"> <i class="fa fa-caret-down"></i></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container">
+  <header class="header-wrapper desktop-only">
+  <div class="container header-site-detail">
+    <ul class="header-toolbar">
+      <li class="clearfix">
+        <a href="/archives" class="header-toolbar-left"><i
+                  class="fa fa-file-text"></i> Posts </a>
+        <a href="/archives"
+           class="header-toolbar-right"> 147 </a>
+      </li>
+      <li>
+        <a href="/tags" class="header-toolbar-left"><i
+                  class="fa fa-tags"></i> Tags </a>
+        <a href="/tags"
+           class="header-toolbar-right"> 47 </a>
+      </li>
+      <li>
+        <a href="/categories" class="header-toolbar-left"><i
+                  class="fa fa-folder-open"></i> Categories </a>
+        <a href="/categories"
+           class="header-toolbar-right"> 23 </a>
+      </li>
+    </ul>
+    <h2 class="header-title">
+      <i class="fa fa-book text-muted"></i>
+      <a href="/">默默默默燃</a>
+      
+      
+    </h2>
+  </div>
+
+  <div class="container">
+    <div class="header-tab-wrapper clearfix">
+      <span class="header-tab header-tab-selected"><i class="fa fa-thumbs-o-up"></i> Like</span>
+      <span class="header-tab"><i class="fa fa-share-alt"></i> Share</span>
+      <span class="header-tab"><i class="fa fa-comments-o"></i> Discussion</span>
+      <span class="header-tab"><i class="fa fa-bookmark-o"></i> Bookmark </span>
+      <span class="header-tab"><i class="fa fa-smile-o"></i> Smile <i class="fa fa-caret-down"></i></span>
+    </div>
+  </div>
+</header>
+
+
+<div class="post-container container">
+  <h3>
+    <i class="fa fa-user-o"></i>
+    张白告丶
+
+    <span class="post-date float-right" title="{{moment(1523157777000).format('MMM DD, YYYY, h:mm:ss A')}}">
+      
+          <i class="fa fa-pencil-square-o"></i>
+      
+      {{moment(1523157777000).fromNow()}}
+    </span>
+  </h3>
+
+  <article class="post-content">
+    <h1>props 和 state 的区别 </h1>
+    <p>react是基于状态实现对DOM控制和渲染。组件状态可分为两种：一种是组件间的状态传递，另一种是组件的内部状态。这两种状态使用<code>props</code>和<code>state</code>表示。<code>props</code>用于父组件向子组件的数据传递，组件内部也有自己的状态：<code>state</code>，这些状态只能在组件内部修改。</p>
+<h1 id="数据流与props"><a href="#数据流与props" class="headerlink" title="数据流与props"></a>数据流与props</h1><p>react的数据流是单向的，只会从父组件传递到子组件。属性props（properties）是父子组件进行传递状态的接口。React会向下遍历整个组件树，并重新渲染使用这个属性的组件。</p>
+<h2 id="设置props"><a href="#设置props" class="headerlink" title="设置props"></a>设置props</h2><p>可以在组件挂载时设置<code>props</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sites = [&#123;<span class="attr">title</span>:<span class="string">'baidu.com'</span>&#125;];</span><br><span class="line">&lt;ListSites sites = &#123;sites&#125;/&gt;</span><br></pre></td></tr></table></figure>
+<p>也可以通过调用组件实例的<code>SetProps()</code>方法设置props</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sites = [&#123;<span class="attr">title</span>:<span class="string">'baidu.com'</span>&#125;];</span><br><span class="line">ReactDOM.render(</span><br><span class="line">    &lt;ListSites/&gt;,</span><br><span class="line">    <span class="built_in">document</span>.getElementById(<span class="string">'example'</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>SetProps()方法只能用于组件外部调用，不能在组件内使用<code>this.SetProps()</code>修改组件属性。组件内部的this.props是只读的，只能用于访问props属性，不能修改组件自身的属性。</p>
+<h3 id="JSX语法中的属性设置"><a href="#JSX语法中的属性设置" class="headerlink" title="JSX语法中的属性设置"></a>JSX语法中的属性设置</h3><p>JSX语法中，props可以设置为字符串：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href=<span class="string">"http://itbilu.com"</span>&gt;IT笔录&lt;<span class="regexp">/a&gt;</span></span><br></pre></td></tr></table></figure>
+<p>或是通过{}语法设置：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;<span class="attr">url</span>:<span class="string">'itbilu.com'</span>, <span class="attr">name</span>:<span class="string">'IT笔录'</span>&#125;;</span><br><span class="line">&lt;a href=<span class="string">"http://&#123;obj.url&#125;"</span>&gt;&#123;obj.name&#125;&lt;<span class="regexp">/a&gt;</span></span><br></pre></td></tr></table></figure>
+<p>JSX还支持将props直接设置为一个对象：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Site</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span></span>&#123;</span><br><span class="line">    render()&#123;</span><br><span class="line">        <span class="keyword">var</span> obj = (&#123;<span class="attr">url</span>:<span class="string">'baidu.com'</span>,<span class="attr">name</span>:<span class="string">'IT笔录'</span>&#125;)</span><br><span class="line">        <span class="keyword">return</span>(</span><br><span class="line">            &lt;Site &#123;...obj&#125;/&gt;</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>props还可以用来添加事件处理：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> saveBtn = React.createClass(&#123;</span><br><span class="line">    render:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        &lt;a onClick=&#123;<span class="keyword">this</span>.handleClick&#125;&gt;保存&lt;<span class="regexp">/a&gt;</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">    handleClick:function()&#123;</span></span><br><span class="line"><span class="regexp">        /</span><span class="regexp">/...</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">&#125;)</span></span><br></pre></td></tr></table></figure>
+<h3 id="props的传递"><a href="#props的传递" class="headerlink" title="props的传递"></a>props的传递</h3><p>组件接收上级组件的props，并传递到下级组件，如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myCheackBox = React.createClass (&#123;</span><br><span class="line">    render:myCheackBox()&#123;</span><br><span class="line">        <span class="keyword">var</span> myClass = <span class="keyword">this</span>.props.cheacked ? <span class="string">'MyCheacked'</span>:<span class="string">'MyCheackBox'</span>;</span><br><span class="line">        <span class="keyword">return</span>(</span><br><span class="line">            &lt;div className = &#123;myClass&#125; onClick = &#123;<span class="keyword">this</span>.props.onClick&#125;&gt;</span><br><span class="line">                &#123;<span class="keyword">this</span>.props.children&#125;</span><br><span class="line">            &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">        )</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">&#125;)</span></span><br><span class="line"><span class="regexp">React.render(</span></span><br><span class="line"><span class="regexp">    &lt;MyCheackBox cheacked = &#123;true&#125; onClick = &#123;console.log.bind(console)&#125;&gt;</span></span><br><span class="line"><span class="regexp">        hello world</span></span><br><span class="line"><span class="regexp">    &lt;MyCheackBox/</span>&gt;,</span><br><span class="line">    <span class="built_in">document</span>.getElementById(<span class="string">'example'</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h2 id="组件内部状态与State"><a href="#组件内部状态与State" class="headerlink" title="组件内部状态与State"></a>组件内部状态与State</h2><p>props可以理解为父子组件的状态传递，而React有自己内部的状态，这个内部状态则用State表示。</p>
+<p>如，用state定义一个<dropdown>组件的状态：</dropdown></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> SiteDropdown = React.createClass(&#123;</span><br><span class="line">     getInitalState: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span>: &#123;</span><br><span class="line">        showOptions: <span class="literal">false</span></span><br><span class="line">        &#125;</span><br><span class="line">     &#125;</span><br><span class="line">     render:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">         <span class="keyword">var</span> opts;</span><br><span class="line">         <span class="keyword">if</span>(<span class="keyword">this</span>.state.showOptions)&#123;</span><br><span class="line">             &lt;ul&gt;</span><br><span class="line">                &lt;li&gt;itbilu.com&lt;<span class="regexp">/li&gt;</span></span><br><span class="line"><span class="regexp">                &lt;li&gt;yijiebuyi.com&lt;/</span>li&gt;</span><br><span class="line">                &lt;li&gt;niefengjun.cn&lt;<span class="regexp">/li&gt;</span></span><br><span class="line"><span class="regexp">             &lt;/u</span>l&gt;</span><br><span class="line">         &#125;;</span><br><span class="line">         <span class="keyword">return</span>( <span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">onClick</span>=<span class="string">&#123;this.handleClick&#125;</span> &gt;</span></span></span><br><span class="line"><span class="xml">                <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">        )</span><br><span class="line">     &#125;,</span><br><span class="line">     handleClick:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">         <span class="keyword">this</span>.SetState (&#123;</span><br><span class="line">             showOptions: <span class="literal">true</span></span><br><span class="line">         &#125;)</span><br><span class="line">     &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>随着state的变化，render也会调用，react会对比render返回的值，如果有变化就会DOM；<br>state与props类似，只能通过setState()方法修改。不同的是，state只能在组件内部使用，其实是对组件本身状态的一个引用</p>
+<h2 id="props与state的比较"><a href="#props与state的比较" class="headerlink" title="props与state的比较"></a>props与state的比较</h2><p><code>React</code>会根据<code>props</code>和<code>state</code>更新视图状态，虽然二者有相似之处，但是两者的应用范围不同。具体表现如下：</p>
+<blockquote>
+<ul>
+<li><p>props会在整个组件数中传递数据和配置，props可以设置任命类型的数据，应该把当作组件的数据源。其不但可以用于上级组件与下级组件的通信，也可以用作事件处理器</p>
+</li>
+<li><p>state只能组件内部使用，state只应该用于存储简单的视图状（如：上面示例用于控制下拉框的可见状态）</p>
+</li>
+<li><p>props与state都不能直接修改，而应该分别使用SetProps()和SetProps()修改</p>
+</li>
+</ul>
+</blockquote>
+<p><a href="https://itbilu.com/javascript/react/4k5RfzDKx.html#props" target="_blank" rel="noopener">原文地址</a></p>
+
+  </article>
+</div>
+
+
+    
+
+
+
+
+</div>
+
+<div class="footer-wrapper container">
+  <footer class="footer clearfix">
+    <div class="clearfix">
+    <a href="https://zhanghao-web.github.io" class="footer-logo">
+      <i class="fa fa-github"></i>
+    </a>
+    <ul class="footer-social-link">
+      <li>© 2019 张白告丶</li>
+      <li><a href="https://zhanghao-web.github.io">Home</a></li>
+      
+    </ul>
+    <div class="footer-theme-info">
+      Theme <a href="//github.com/sabrinaluo/hexo-theme-replica">Replica</a>
+      by <a href="//github.com/sabrinaluo">Hiitea</a> ❤ Powered by Hexo
+    </div>
+    </div>
+    
+  </footer>
+</div>
+
+
+
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>
+    Node学习(十) --数据库入门 | 默默默默燃
+  </title>
+  <meta name="description" content="一枚前端搬砖队队员的记录册">
+  
+  <meta name="keywords" content="
+  Node
+  ">
+  
+  <meta name="author" content="张白告丶">
+
+  <meta http-equiv="Cache-Control" content="no-transform"/>
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="theme-color" content="#1e2327">
+  <link rel="apple-touch-icon" href="https://github.githubassets.com/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://github.githubassets.com/apple-touch-icon-180x180.png">
+
+  <link rel="icon" type="image/x-icon" href="https://github.githubassets.com/favicon.ico">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+  
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.25-csp/vue.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+</head>
+
+<body id="replica-app">
+
+<nav class="navbar-wrapper">
+  <div class="navbar">
+    <div class="container clearfix">
+      <a href="/" class="navbar-logo"><i class="fa fa-github"></i></a>
+
+      <div class="navbar-search float-left desktop-only">
+        <div class="navbar-search-form">
+          <label for="gsc-i-id1">This website</label>
+          <div id="google-search">
+            <gcse:search></gcse:search>
+          </div>
+        </div>
+      </div>
+
+      <ul class="navbar-nav float-left">
+        
+        <li><a href="/archives">Archives</a></li>
+        
+        
+        <li><a href="/categories">Categories</a></li>
+        
+        
+        <li><a href="/tags">Tags</a></li>
+        
+        
+        <li class="desktop-only"><a href="/atom.xml" target="_blank">RSS</a></li>
+        
+      </ul>
+
+      <ul class="navbar-nav user-nav float-right desktop-only">
+        <li class="user-nav-notification">
+          <a><span class="user-nav-unread"></span><i class="fa fa-bell"></i></a>
+        </li>
+        <li>
+          <a><i class="fa fa-plus"></i> <i class="fa fa-caret-down"></i></a>
+        </li>
+        <li class="user-nav-logo">
+          <a><img src="https://octodex.github.com/images/baracktocat.jpg"> <i class="fa fa-caret-down"></i></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container">
+  <header class="header-wrapper desktop-only">
+  <div class="container header-site-detail">
+    <ul class="header-toolbar">
+      <li class="clearfix">
+        <a href="/archives" class="header-toolbar-left"><i
+                  class="fa fa-file-text"></i> Posts </a>
+        <a href="/archives"
+           class="header-toolbar-right"> 147 </a>
+      </li>
+      <li>
+        <a href="/tags" class="header-toolbar-left"><i
+                  class="fa fa-tags"></i> Tags </a>
+        <a href="/tags"
+           class="header-toolbar-right"> 47 </a>
+      </li>
+      <li>
+        <a href="/categories" class="header-toolbar-left"><i
+                  class="fa fa-folder-open"></i> Categories </a>
+        <a href="/categories"
+           class="header-toolbar-right"> 23 </a>
+      </li>
+    </ul>
+    <h2 class="header-title">
+      <i class="fa fa-book text-muted"></i>
+      <a href="/">默默默默燃</a>
+      
+      
+    </h2>
+  </div>
+
+  <div class="container">
+    <div class="header-tab-wrapper clearfix">
+      <span class="header-tab header-tab-selected"><i class="fa fa-thumbs-o-up"></i> Like</span>
+      <span class="header-tab"><i class="fa fa-share-alt"></i> Share</span>
+      <span class="header-tab"><i class="fa fa-comments-o"></i> Discussion</span>
+      <span class="header-tab"><i class="fa fa-bookmark-o"></i> Bookmark </span>
+      <span class="header-tab"><i class="fa fa-smile-o"></i> Smile <i class="fa fa-caret-down"></i></span>
+    </div>
+  </div>
+</header>
+
+
+<div class="post-container container">
+  <h3>
+    <i class="fa fa-user-o"></i>
+    张白告丶
+
+    <span class="post-date float-right" title="{{moment(1555854192000).format('MMM DD, YYYY, h:mm:ss A')}}">
+      
+          <i class="fa fa-pencil-square-o"></i>
+      
+      {{moment(1555854192000).fromNow()}}
+    </span>
+  </h3>
+
+  <article class="post-content">
+    <h1>Node学习(十) --数据库入门</h1>
+    <h2 id="数据库的分类"><a href="#数据库的分类" class="headerlink" title="数据库的分类"></a>数据库的分类</h2><p>1.<strong>文件数据库</strong> 它的优点是：数据保存在单一文件中，因此部署十分方便，常用来嵌入到APP中保存数据，以及手机中的短信、通话记录等。</p>
+<p>常用的有SQLite、Access等。</p>
+<p>2.<strong>关系型数据库</strong> 关系型数据库的功能强大，适用场景丰富，它的特点是数据之间互相是关联的。</p>
+<p>比如淘宝，一个用户下有个人信息、订单信息、聊天记录等，可以分别存储在不同表中，通过用户ID相互关联起来。但它的性能不是最强的。</p>
+<p>常用有SQL。</p>
+<p>3.<strong>分布式数据库</strong> 它的特点是可以安装在多台机器上，可以将查询等操作分散开，合理利用服务器资源。</p>
+<p>还可以将数据设置多个备份，一旦其中一台服务器异常，可以由其他服务器同步数据。</p>
+<p>常用的有MongoDB。</p>
+<p>4.<strong>NoSQL</strong> 它只能支持简单查询，但性能强于关系型数据库，常用来做接口、数据缓存等。</p>
+<p>常用的有MongoDB、Memcached、Redis等。</p>
+<h2 id="SQL语句"><a href="#SQL语句" class="headerlink" title="SQL语句"></a>SQL语句</h2><p>结构化查询语言(Structured Query Language)简称SQL，它主要用来存取、查询、更新和管理关系数据库系统。</p>
+<p>SQL 分为两个部分：数据定义语言 (DDL)和数据操作语言 (DML) 。</p>
+<h2 id="DDL语句"><a href="#DDL语句" class="headerlink" title="DDL语句"></a>DDL语句</h2><p>CREATE DATABASE - 创建新数据库<br>ALTER DATABASE - 修改数据库<br>CREATE TABLE - 创建新表<br>ALTER TABLE - 变更（改变）数据库表<br>DROP TABLE - 删除表<br>CREATE INDEX - 创建索引（搜索键）<br>DROP INDEX - 删除索引</p>
+<h2 id="DDM语句"><a href="#DDM语句" class="headerlink" title="DDM语句"></a>DDM语句</h2><p>数据操作语言 (DML) 是最常用的操作，即增删改查，它包括如下部分：</p>
+<p>1.增INSERT INTO - 向数据库表中插入数据<br>INSERT INTO &lt;表&gt; (字段, …) VALUES(值, …);<br>INSERT INTO user_table (username, password) VALUES(‘lee’, ‘123456’);<br>在user_table表中插入一条数据。</p>
+<p>2.删DELETE - 从数据库表中删除数据<br>DELETE FROM &lt;表&gt; WHERE 条件;<br>DELETE FROM user_table WHERE ID=2;<br>删除user_table表中ID为2的项目。</p>
+<p>3.改UPDATE - 更新数据库表中的数据<br>UPDATE &lt;表&gt; SET 字段=新值,字段=新值,… WHERE 条件;<br>UPDATE user_table SET password=’888888’, username=’chen’ WHERE ID=1;<br>将user_table表中ID为1的用户名和密码更新。</p>
+<p>4.查SELECT - 从数据库表中获取数据<br>SELECT 字段列表 FROM &lt;表&gt; WHERE 条件 ORDER BY 字段 LIMIT 30,30;<br>SELECT ID FROM user_table WHERE username=‘lee’ ORDER BY ID ASC LIMIT 0,10;<br>查询user_table表中username为lee的用户的ID，取0~10个，按升序排列。</p>
+<h2 id="数据库索引"><a href="#数据库索引" class="headerlink" title="数据库索引"></a>数据库索引</h2><p>数据库的索引需要作用是提高查询性能，另外还可以对数据进行限制，如限制为“唯一”。</p>
+<p>索引的类型有四种，如下：</p>
+<p>1.主键</p>
+<p>具有“唯一”和“索引”的双重优点。</p>
+<p>2.唯一</p>
+<p>定义字段为唯一，即不可重复。</p>
+<p>3.索引</p>
+<p>优点：提高查询性能，相当于书的目录。</p>
+<p>缺点：降低增、删、改的性能，因为这些操作可能会触发数据库整理、重建索引。另外，索引也会占用磁盘空间。</p>
+<p>4.全文索引</p>
+<p>适合文本搜索，常用在搜索引擎中。</p>
+
+  </article>
+</div>
+
+
+    
+
+
+
+
+</div>
+
+<div class="footer-wrapper container">
+  <footer class="footer clearfix">
+    <div class="clearfix">
+    <a href="https://zhanghao-web.github.io" class="footer-logo">
+      <i class="fa fa-github"></i>
+    </a>
+    <ul class="footer-social-link">
+      <li>© 2019 张白告丶</li>
+      <li><a href="https://zhanghao-web.github.io">Home</a></li>
+      
+    </ul>
+    <div class="footer-theme-info">
+      Theme <a href="//github.com/sabrinaluo/hexo-theme-replica">Replica</a>
+      by <a href="//github.com/sabrinaluo">Hiitea</a> ❤ Powered by Hexo
+    </div>
+    </div>
+    
+  </footer>
+</div>
+
+
+
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>

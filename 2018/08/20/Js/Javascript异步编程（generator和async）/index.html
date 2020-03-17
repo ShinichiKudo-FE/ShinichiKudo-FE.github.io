@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>
+    Javascript异步编程(generator和async) | 默默默默燃
+  </title>
+  <meta name="description" content="一枚前端搬砖队队员的记录册">
+  
+  <meta name="keywords" content="
+  Js
+  ">
+  
+  <meta name="author" content="张白告丶">
+
+  <meta http-equiv="Cache-Control" content="no-transform"/>
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="theme-color" content="#1e2327">
+  <link rel="apple-touch-icon" href="https://github.githubassets.com/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://github.githubassets.com/apple-touch-icon-180x180.png">
+
+  <link rel="icon" type="image/x-icon" href="https://github.githubassets.com/favicon.ico">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+  
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.25-csp/vue.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+</head>
+
+<body id="replica-app">
+
+<nav class="navbar-wrapper">
+  <div class="navbar">
+    <div class="container clearfix">
+      <a href="/" class="navbar-logo"><i class="fa fa-github"></i></a>
+
+      <div class="navbar-search float-left desktop-only">
+        <div class="navbar-search-form">
+          <label for="gsc-i-id1">This website</label>
+          <div id="google-search">
+            <gcse:search></gcse:search>
+          </div>
+        </div>
+      </div>
+
+      <ul class="navbar-nav float-left">
+        
+        <li><a href="/archives">Archives</a></li>
+        
+        
+        <li><a href="/categories">Categories</a></li>
+        
+        
+        <li><a href="/tags">Tags</a></li>
+        
+        
+        <li class="desktop-only"><a href="/atom.xml" target="_blank">RSS</a></li>
+        
+      </ul>
+
+      <ul class="navbar-nav user-nav float-right desktop-only">
+        <li class="user-nav-notification">
+          <a><span class="user-nav-unread"></span><i class="fa fa-bell"></i></a>
+        </li>
+        <li>
+          <a><i class="fa fa-plus"></i> <i class="fa fa-caret-down"></i></a>
+        </li>
+        <li class="user-nav-logo">
+          <a><img src="https://octodex.github.com/images/baracktocat.jpg"> <i class="fa fa-caret-down"></i></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container">
+  <header class="header-wrapper desktop-only">
+  <div class="container header-site-detail">
+    <ul class="header-toolbar">
+      <li class="clearfix">
+        <a href="/archives" class="header-toolbar-left"><i
+                  class="fa fa-file-text"></i> Posts </a>
+        <a href="/archives"
+           class="header-toolbar-right"> 147 </a>
+      </li>
+      <li>
+        <a href="/tags" class="header-toolbar-left"><i
+                  class="fa fa-tags"></i> Tags </a>
+        <a href="/tags"
+           class="header-toolbar-right"> 47 </a>
+      </li>
+      <li>
+        <a href="/categories" class="header-toolbar-left"><i
+                  class="fa fa-folder-open"></i> Categories </a>
+        <a href="/categories"
+           class="header-toolbar-right"> 23 </a>
+      </li>
+    </ul>
+    <h2 class="header-title">
+      <i class="fa fa-book text-muted"></i>
+      <a href="/">默默默默燃</a>
+      
+      
+    </h2>
+  </div>
+
+  <div class="container">
+    <div class="header-tab-wrapper clearfix">
+      <span class="header-tab header-tab-selected"><i class="fa fa-thumbs-o-up"></i> Like</span>
+      <span class="header-tab"><i class="fa fa-share-alt"></i> Share</span>
+      <span class="header-tab"><i class="fa fa-comments-o"></i> Discussion</span>
+      <span class="header-tab"><i class="fa fa-bookmark-o"></i> Bookmark </span>
+      <span class="header-tab"><i class="fa fa-smile-o"></i> Smile <i class="fa fa-caret-down"></i></span>
+    </div>
+  </div>
+</header>
+
+
+<div class="post-container container">
+  <h3>
+    <i class="fa fa-user-o"></i>
+    张白告丶
+
+    <span class="post-date float-right" title="{{moment(1534733007000).format('MMM DD, YYYY, h:mm:ss A')}}">
+      
+          <i class="fa fa-pencil-square-o"></i>
+      
+      {{moment(1534733007000).fromNow()}}
+    </span>
+  </h3>
+
+  <article class="post-content">
+    <h1>Javascript异步编程(generator和async)</h1>
+    <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>从Promise开始，JavaScript就在引入新功能，来帮助更简单的方法来处理异步编程，帮助我们远离回调地狱。<br>Promise是下边要讲的<code>Generator/yield</code>与<code>async/await</code>的基础，希望你已经提前了解了它。</p>
+<p>在大概ES6的时代，推出了<code>Generator/yield</code>两个关键字，使用<code>Generator</code>可以很方便的帮助我们建立一个处理Promise的解释器。</p>
+<p>然后，在ES7左右，我们又得到了<code>async/await</code>这样的语法，可以让我们以接近编写同步代码的方式来编写异步代码（无需使用<code>.then()</code>或者回调函数）。</p>
+<p>两者都能够帮助我们很方便的进行异步编程，但同样，这两者之间也是有不少区别的。</p>
+<h2 id="generator"><a href="#generator" class="headerlink" title="generator"></a>generator</h2><p><code>Generator</code>是一个函数，可以在函数内部通过yield返回一个值（此时，<strong>Generator函数的执行会暂定，直到下次触发<code>.next()</code></strong>）<br>创建一个Generator函数的方法是在function关键字后添加<code>*</code>标识。</p>
+<p>在调用一个Generator函数后，并不会立即执行其中的代码，函数会返回一个Generator对象，通过调用对象的next函数，可以获得yield/return的返回值。<br>无论是触发了yield还是return，next()函数总会返回一个带有value和done属性的对象。</p>
+<p>value为返回值，done则是一个Boolean对象，用来标识Generator是否还能继续提供返回值。</p>
+<p>PS: <strong>generator()函数的执行是惰性的，yield后的代码只在触发next()后执行</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> * <span class="title">oddGenerator</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">yield</span> <span class="number">1</span></span><br><span class="line">  <span class="keyword">yield</span> <span class="number">3</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">5</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> iterator = oddGenerator()</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> first = iterator.next()  <span class="comment">// &#123; value: 1, done: false &#125;</span></span><br><span class="line"><span class="keyword">let</span> second = iterator.next() <span class="comment">// &#123; value: 3, done: false &#125;</span></span><br><span class="line"><span class="keyword">let</span> third = iterator.next()  <span class="comment">// &#123; value: 5, done: true  &#125;</span></span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h3 id="next-的参数传递"><a href="#next-的参数传递" class="headerlink" title="next()的参数传递"></a>next()的参数传递</h3><p>我们可以在调用next()的时候传递一个参数，可以在上次yield前接收到这个参数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> * <span class="title">outputGenerator</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> ret1 = <span class="keyword">yield</span> <span class="number">1</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`got ret1: <span class="subst">$&#123;ret1&#125;</span>`</span>)</span><br><span class="line">  <span class="keyword">let</span> ret2 = <span class="keyword">yield</span> <span class="number">2</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`got ret2: <span class="subst">$&#123;ret2&#125;</span>`</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> iterator = outputGenerator()</span><br><span class="line"></span><br><span class="line">iterator.next(<span class="number">1</span>)</span><br><span class="line">iterator.next(<span class="number">2</span>) <span class="comment">// got ret1: 2</span></span><br><span class="line">iterator.next(<span class="number">3</span>) <span class="comment">// got ret2: 3</span></span><br></pre></td></tr></table></figure>
+<p>第一眼看上去可能会有些诡异，为什么第一条log是在第二次调用next时才进行输出的</p>
+<p>这就又要说到上边的Generator的实现了，上边说到了，yield与return都是用来返回值的语法。<br>函数在执行时遇到这两个关键字后就会暂停执行，等待下次激活。</p>
+<p>然后<code>let ret1 = yield 1</code>，这是一个赋值表达式，也就是说会先执行=右边的部分，在=右边执行的过程中遇到了yield关键字，函数也就在此处暂停了，在下次触发next()时才被激活，此时，我们继续进行上次未完成的赋值语句<code>let ret1 = XXX</code>，并在再次遇到yield时暂停。</p>
+<ul>
+<li>这也就解释了为什么第二次调用next()的参数会被第一次yield赋值的变量接收到</li>
+</ul>
+<h3 id="用作迭代器使用"><a href="#用作迭代器使用" class="headerlink" title="用作迭代器使用"></a>用作迭代器使用</h3><p>因为Generator对象是一个迭代器，所以我们可以直接用于<code>for...of</code>循环：</p>
+<blockquote>
+<p>但是要注意的是，用作迭代器中的使用，则只会作用于yield,return的返回值不计入迭代</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> * <span class="title">oddGenerator</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">yield</span> <span class="number">1</span></span><br><span class="line">  <span class="keyword">yield</span> <span class="number">3</span></span><br><span class="line">  <span class="keyword">yield</span> <span class="number">5</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="string">'won\'t be iterate'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> value <span class="keyword">of</span> oddGenerator()) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(value)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// &gt; 1</span></span><br><span class="line"><span class="comment">// &gt; 3</span></span><br><span class="line"><span class="comment">// &gt; 5</span></span><br></pre></td></tr></table></figure>
+<h3 id="Generator函数内部的Generator"><a href="#Generator函数内部的Generator" class="headerlink" title="Generator函数内部的Generator"></a>Generator函数内部的Generator</h3><p>除了yield语法以外，其实还有一个<code>yield*</code>语法，可以粗略的理解为是 <strong>Generator函数版的[…]</strong><br>用来展开Generator迭代器的。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> * <span class="title">gen1</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">yield</span> <span class="number">1</span></span><br><span class="line">  <span class="keyword">yield</span>* gen2()</span><br><span class="line">  <span class="keyword">yield</span> <span class="number">5</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> * <span class="title">gen2</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">yield</span> <span class="number">2</span></span><br><span class="line">  <span class="keyword">yield</span> <span class="number">3</span></span><br><span class="line">  <span class="keyword">yield</span> <span class="number">4</span></span><br><span class="line">  <span class="keyword">return</span> <span class="string">'won\'t be iterate'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> value <span class="keyword">of</span> gen1()) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(value)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// &gt; 1</span></span><br><span class="line"><span class="comment">// &gt; 2</span></span><br><span class="line"><span class="comment">// &gt; 3</span></span><br><span class="line"><span class="comment">// &gt; 4</span></span><br><span class="line"><span class="comment">// &gt; 5</span></span><br></pre></td></tr></table></figure>
+<h3 id="模拟实现Promise执行器"><a href="#模拟实现Promise执行器" class="headerlink" title="模拟实现Promise执行器"></a>模拟实现Promise执行器</h3><p>然后我们结合着Promise，来实现一个简易的执行器。</p>
+<p>最受欢迎的类似的库是： <a href="https://www.npmjs.com/package/co" target="_blank" rel="noopener">co</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">run</span> (<span class="params">gen</span>) </span>&#123;</span><br><span class="line">  gen = gen()</span><br><span class="line">  <span class="keyword">return</span> next(gen.next())</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">next</span> (<span class="params">&#123;done, value&#125;</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> &#123;</span><br><span class="line">     <span class="keyword">if</span> (done) &#123; <span class="comment">// finish</span></span><br><span class="line">       resolve(value)</span><br><span class="line">     &#125; <span class="keyword">else</span> &#123; <span class="comment">// not yet</span></span><br><span class="line">       value.then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">         next(gen.next(data)).then(resolve)</span><br><span class="line">       &#125;)</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getRandom</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> &#123;</span><br><span class="line">    setTimeout(<span class="function"><span class="params">_</span> =&gt;</span> resolve(<span class="built_in">Math</span>.random() * <span class="number">10</span> | <span class="number">0</span>), <span class="number">1000</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> * <span class="title">main</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> num1 = <span class="keyword">yield</span> getRandom()</span><br><span class="line">  <span class="keyword">let</span> num2 = <span class="keyword">yield</span> getRandom()</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> num1 + num2</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">run(main).then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`got data: <span class="subst">$&#123;data&#125;</span>`</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>一个简单的解释器的模拟（仅作举例说明）</li>
+</ul>
+<p>在例子中，我们约定yield后边的必然是一个Promise函数<br>我们只看main()函数的代码，使用Generator确实能够让我们让近似同步的方式来编写异步代码<br>但是，这样写就意味着我们必须有一个外部函数负责帮我们执行main()函数这个Generator，并处理其中生成的Promise，然后在then回调中将结果返回到Generator函数，以便可以执行下边的代码。</p>
+<h2 id="async"><a href="#async" class="headerlink" title="async"></a>async</h2><p>我们用作async/awiat重写上面generator的例子：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getRandom</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> &#123;</span><br><span class="line">    setTimeout(<span class="function"><span class="params">_</span> =&gt;</span> resolve(<span class="built_in">Math</span>.random() * <span class="number">10</span> | <span class="number">0</span>), <span class="number">1000</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">main</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> num1 = <span class="keyword">await</span> getRandom()</span><br><span class="line">  <span class="keyword">let</span> num2 = <span class="keyword">await</span> getRandom()</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> num1 + num2</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">`got data: <span class="subst">$&#123;<span class="keyword">await</span> main()&#125;</span>`</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这样看上去，好像我们从Generator/yield换到async/await只需要把*都改为async，yield都改为await就可以了。 所以很多人都直接拿Generator/yield来解释async/await的行为，但这会带来如下几个问题：</p>
+</blockquote>
+<ul>
+<li>Generator有其他的用途，而不仅仅是用来帮助你处理Promise</li>
+<li>这样的解释让那些不熟悉这两者的人理解起来更困难（因为你还要去解释那些类似co的库）</li>
+</ul>
+<p>async/await是 <strong>处理Promise的一个极其方便的方法，但如果使用不当的话，也会造成一些令人头疼的问题</strong></p>
+<h3 id="Async函数始终返回一个Promise"><a href="#Async函数始终返回一个Promise" class="headerlink" title="Async函数始终返回一个Promise"></a>Async函数始终返回一个Promise</h3><p>一个async函数，无论你return 1或者throw new Error()。<br>在调用方来讲，接收到的始终是一个Promise对象：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">throwError</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>()</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">returnNumber</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(returnNumber() <span class="keyword">instanceof</span> <span class="built_in">Promise</span>) <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(throwError() <span class="keyword">instanceof</span> <span class="built_in">Promise</span>)   <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<p>也就是说，无论函数是做什么用的，你都要按照Promise的方式来处理它。</p>
+<h3 id="Await是按照顺序执行的，并不能并行执行"><a href="#Await是按照顺序执行的，并不能并行执行" class="headerlink" title="Await是按照顺序执行的，并不能并行执行"></a>Await是按照顺序执行的，并不能并行执行</h3><p>JavaScript是单线程的，这就意味着await一只能一次处理一个，如果你有多个Promise需要处理，则就意味着，你要等到前一个Promise处理完成才能进行下一个的处理，这就意味着，如果我们同时发送大量的请求，这样处理就会非常慢，one by one：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> bannerImages = [];</span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">getImageInfo</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> bannerImages.map(<span class="keyword">async</span> banner =&gt; <span class="keyword">await</span> getImageInfo(banner));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>就像这样的四个定时器，我们需要等待4s才能执行完毕：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">delay</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> setTimeout(resolve, <span class="number">1000</span>))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> tasks = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">runner</span> (<span class="params">tasks</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> task <span class="keyword">of</span> tasks) &#123;</span><br><span class="line">    <span class="keyword">await</span> delay()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.time(<span class="string">'runner'</span>)</span><br><span class="line"><span class="keyword">await</span> runner(tasks)</span><br><span class="line"><span class="built_in">console</span>.timeEnd(<span class="string">'runner'</span>)</span><br></pre></td></tr></table></figure>
+<p>像这种情况，我们可以通过<code>Promise.all()</code>进行如下优化：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">delay</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> setTimeout(resolve, <span class="number">1000</span>))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> tasks = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">runner</span> (<span class="params">tasks</span>) </span>&#123;</span><br><span class="line">  tasks = tasks.map(delay)</span><br><span class="line">  <span class="keyword">await</span> <span class="built_in">Promise</span>.all(tasks)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.time(<span class="string">'runner'</span>)</span><br><span class="line"><span class="keyword">await</span> runner(tasks)</span><br><span class="line"><span class="built_in">console</span>.timeEnd(<span class="string">'runner'</span>)</span><br></pre></td></tr></table></figure>
+<p>草案中提到过await*，但现在貌似还不是标准，所以还是采用Promise.all包裹一层的方法来实现</p>
+<p>我们知道，Promise对象在创建时就会执行函数内部的代码，也就意味着，在我们使用map创建这个数组时，所有的Promise代码都会执行，也就是说，所有的请求都会同时发出去，然后我们通过await Promise.all来监听所有Promise的响应。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>Generator与async function都是返回一个特定类型的对象：</p>
+<p>Generator: 一个类似{ value: XXX, done: true }这样结构的Object<br>Async: 始终返回一个Promise，使用await或者.then()来获取返回值<br>Generator是属于生成器，一种特殊的迭代器，用来解决异步回调问题感觉有些不务正业了。。 而async则是为了更简洁的使用Promise而提出的语法，相比Generator + co这种的实现方式，更为专注，生来就是为了处理异步编程。</p>
+<p>现在已经是2018年了，async也是用了好久，就让Generator去做他该做的事情吧。。</p>
+
+  </article>
+</div>
+
+
+    
+
+
+
+
+</div>
+
+<div class="footer-wrapper container">
+  <footer class="footer clearfix">
+    <div class="clearfix">
+    <a href="https://zhanghao-web.github.io" class="footer-logo">
+      <i class="fa fa-github"></i>
+    </a>
+    <ul class="footer-social-link">
+      <li>© 2019 张白告丶</li>
+      <li><a href="https://zhanghao-web.github.io">Home</a></li>
+      
+    </ul>
+    <div class="footer-theme-info">
+      Theme <a href="//github.com/sabrinaluo/hexo-theme-replica">Replica</a>
+      by <a href="//github.com/sabrinaluo">Hiitea</a> ❤ Powered by Hexo
+    </div>
+    </div>
+    
+  </footer>
+</div>
+
+
+
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>

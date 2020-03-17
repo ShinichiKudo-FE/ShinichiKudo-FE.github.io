@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>
+    通过示例来学习ES2016, 2017, 2018的新特性 | 默默默默燃
+  </title>
+  <meta name="description" content="一枚前端搬砖队队员的记录册">
+  
+  <meta name="keywords" content="
+  ES6
+  ">
+  
+  <meta name="author" content="张白告丶">
+
+  <meta http-equiv="Cache-Control" content="no-transform"/>
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="theme-color" content="#1e2327">
+  <link rel="apple-touch-icon" href="https://github.githubassets.com/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://github.githubassets.com/apple-touch-icon-180x180.png">
+
+  <link rel="icon" type="image/x-icon" href="https://github.githubassets.com/favicon.ico">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+  
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.25-csp/vue.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+</head>
+
+<body id="replica-app">
+
+<nav class="navbar-wrapper">
+  <div class="navbar">
+    <div class="container clearfix">
+      <a href="/" class="navbar-logo"><i class="fa fa-github"></i></a>
+
+      <div class="navbar-search float-left desktop-only">
+        <div class="navbar-search-form">
+          <label for="gsc-i-id1">This website</label>
+          <div id="google-search">
+            <gcse:search></gcse:search>
+          </div>
+        </div>
+      </div>
+
+      <ul class="navbar-nav float-left">
+        
+        <li><a href="/archives">Archives</a></li>
+        
+        
+        <li><a href="/categories">Categories</a></li>
+        
+        
+        <li><a href="/tags">Tags</a></li>
+        
+        
+        <li class="desktop-only"><a href="/atom.xml" target="_blank">RSS</a></li>
+        
+      </ul>
+
+      <ul class="navbar-nav user-nav float-right desktop-only">
+        <li class="user-nav-notification">
+          <a><span class="user-nav-unread"></span><i class="fa fa-bell"></i></a>
+        </li>
+        <li>
+          <a><i class="fa fa-plus"></i> <i class="fa fa-caret-down"></i></a>
+        </li>
+        <li class="user-nav-logo">
+          <a><img src="https://octodex.github.com/images/baracktocat.jpg"> <i class="fa fa-caret-down"></i></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container">
+  <header class="header-wrapper desktop-only">
+  <div class="container header-site-detail">
+    <ul class="header-toolbar">
+      <li class="clearfix">
+        <a href="/archives" class="header-toolbar-left"><i
+                  class="fa fa-file-text"></i> Posts </a>
+        <a href="/archives"
+           class="header-toolbar-right"> 147 </a>
+      </li>
+      <li>
+        <a href="/tags" class="header-toolbar-left"><i
+                  class="fa fa-tags"></i> Tags </a>
+        <a href="/tags"
+           class="header-toolbar-right"> 47 </a>
+      </li>
+      <li>
+        <a href="/categories" class="header-toolbar-left"><i
+                  class="fa fa-folder-open"></i> Categories </a>
+        <a href="/categories"
+           class="header-toolbar-right"> 23 </a>
+      </li>
+    </ul>
+    <h2 class="header-title">
+      <i class="fa fa-book text-muted"></i>
+      <a href="/">默默默默燃</a>
+      
+      
+    </h2>
+  </div>
+
+  <div class="container">
+    <div class="header-tab-wrapper clearfix">
+      <span class="header-tab header-tab-selected"><i class="fa fa-thumbs-o-up"></i> Like</span>
+      <span class="header-tab"><i class="fa fa-share-alt"></i> Share</span>
+      <span class="header-tab"><i class="fa fa-comments-o"></i> Discussion</span>
+      <span class="header-tab"><i class="fa fa-bookmark-o"></i> Bookmark </span>
+      <span class="header-tab"><i class="fa fa-smile-o"></i> Smile <i class="fa fa-caret-down"></i></span>
+    </div>
+  </div>
+</header>
+
+
+<div class="post-container container">
+  <h3>
+    <i class="fa fa-user-o"></i>
+    张白告丶
+
+    <span class="post-date float-right" title="{{moment(1531823264000).format('MMM DD, YYYY, h:mm:ss A')}}">
+      
+          <i class="fa fa-pencil-square-o"></i>
+      
+      {{moment(1531823264000).fromNow()}}
+    </span>
+  </h3>
+
+  <article class="post-content">
+    <h1>通过示例来学习ES2016, 2017, 2018的新特性</h1>
+    <p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/es_16_17_18.png" alt="es678"></p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本文会辅以有用的例子来讲述TC39中的18个特性，它们分别在ES2016, ES2017和ES2018中加入。<br>鉴于本文内容很长，我们将分为两个部分来介绍，此为第一部分。</p>
+<h2 id="ES6"><a href="#ES6" class="headerlink" title="ES6"></a>ES6</h2><h3 id="Array-prototype-includes"><a href="#Array-prototype-includes" class="headerlink" title="Array.prototype.includes"></a>Array.prototype.includes</h3><p>includes是一个Array上很有用的函数，用于快速查找数组中是否包含某个元素。(包括NaN，所以和indexOf不一样)。</p>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/includes.png" alt="includes"></p>
+<h3 id="指数函数的中缀形式"><a href="#指数函数的中缀形式" class="headerlink" title="指数函数的中缀形式"></a>指数函数的中缀形式</h3><p>加/减法我们通常都是用其中缀形式，直观易懂。在ECMAScript2016中，我们可以使用<code>**</code>来替代<code>Math.pow</code>。</p>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/pow.png" alt="pow"><br><a id="more"></a></p>
+<h2 id="ES7"><a href="#ES7" class="headerlink" title="ES7"></a>ES7</h2><h3 id="Object-values"><a href="#Object-values" class="headerlink" title="Object.values()"></a>Object.values()</h3><p><code>Object.values()</code>函数和<code>Object.keys()</code>很相似，它返回一个对象中自己属性的所有值(通过原型链继承的不算)。</p>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/objvalues.png" alt="objvalues"></p>
+<h3 id="Object-entries"><a href="#Object-entries" class="headerlink" title="Object.entries()"></a>Object.entries()</h3><p><code>Object.entries()</code>和<code>Object.keys</code>相关，不过entries()函数会将key和value以数组的形式都返回。这样，使用循环或则将对象转为Map就很方便了。</p>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/objentry1.png" alt="objentry1"></p>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/objentry2.png" alt="objentry2"></p>
+<h3 id="字符串追加"><a href="#字符串追加" class="headerlink" title="字符串追加"></a>字符串追加</h3><p>提供了两个字符串追加的方法<code>String.prototype.padStart</code>和<code>String.prototype.padEnd</code>，方便我们将一个新的字符串追加到某个字符串的头尾。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'someString'</span>.padStart(numberOfCharcters [,stringForPadding]);</span><br><span class="line"><span class="string">'5'</span>.padStart(<span class="number">10</span>) <span class="comment">// '          5'</span></span><br><span class="line"><span class="string">'5'</span>.padStart(<span class="number">10</span>, <span class="string">'=*'</span>) <span class="comment">//'=*=*=*=*=5'</span></span><br><span class="line"><span class="string">'5'</span>.padEnd(<span class="number">10</span>) <span class="comment">// '5         '</span></span><br><span class="line"><span class="string">'5'</span>.padEnd(<span class="number">10</span>, <span class="string">'=*'</span>) <span class="comment">//'5=*=*=*=*='</span></span><br></pre></td></tr></table></figure>
+<p>这个对于格式化输出很有用！</p>
+<h4 id="padStart例子"><a href="#padStart例子" class="headerlink" title="padStart例子"></a>padStart例子</h4><p>我们有一个不同长度元素的数组，我们可以往前面追加0来使得他们打印的长度都为10。</p>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/padStart.png" alt="padStart"></p>
+<h4 id="padEnd例子"><a href="#padEnd例子" class="headerlink" title="padEnd例子"></a>padEnd例子</h4><p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/padEnd.png" alt="padEnd例子"></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> cars = &#123;</span><br><span class="line">  <span class="string">'🚙BMW'</span>: <span class="string">'10'</span>,</span><br><span class="line">  <span class="string">'🚘Tesla'</span>: <span class="string">'5'</span>,</span><br><span class="line">  <span class="string">'🚖Lamborghini'</span>: <span class="string">'0'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">Object</span>.entries(cars).map(<span class="function">(<span class="params">[name, count]</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">//padEnd appends ' -' until the name becomes 20 characters</span></span><br><span class="line">  <span class="comment">//padStart prepends '0' until the count becomes 3 characters.</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;name.padEnd(<span class="number">20</span>, <span class="string">' -'</span>)&#125;</span> Count: <span class="subst">$&#123;count.padStart(<span class="number">3</span>, <span class="string">'0'</span>)&#125;</span>`</span>)</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//Prints..</span></span><br><span class="line"><span class="comment">// 🚙BMW - - - - - - -  Count: 010</span></span><br><span class="line"><span class="comment">// 🚘Tesla - - - - - -  Count: 005</span></span><br><span class="line"><span class="comment">// 🚖Lamborghini - - -  Count: 000</span></span><br></pre></td></tr></table></figure>
+<h4 id="使用padStart和padEnd来格式化Emojis和其他宽字符"><a href="#使用padStart和padEnd来格式化Emojis和其他宽字符" class="headerlink" title="使用padStart和padEnd来格式化Emojis和其他宽字符"></a>使用padStart和padEnd来格式化Emojis和其他宽字符</h4><p>Emojis和宽字符使用多个字节来表示，因此可能使用padStart和padEnd的结果并非如你所愿。</p>
+<p>比如：我们追加❤️到heart前面：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//你会发现不仅没有5个桃心，有一个桃心还很奇怪。</span></span><br><span class="line"><span class="string">'heart'</span>.padStart(<span class="number">10</span>, <span class="string">"❤️"</span>); <span class="comment">// prints.. '❤️❤️❤heart'</span></span><br></pre></td></tr></table></figure>
+<p>这是因为❤️占有2个字节(‘\u2764\uFE0F’)，而heart本身有5个字节，因此只有5个字节的余地。所以只是追加了2个半的桃心。最后追加的’\u2764’会显示为小黑桃心。</p>
+<h3 id="Object-getOwnPropertyDescriptors"><a href="#Object-getOwnPropertyDescriptors" class="headerlink" title="Object.getOwnPropertyDescriptors"></a>Object.getOwnPropertyDescriptors</h3><p>该函数返回一个对象所有的属性，甚至包括get/set函数。ES2017加入这个函数的主要动机在于方便将一个对象深度拷贝给另一个对象，同时可以将getter/setter拷贝。和Object.assign不同。</p>
+<p>Object.assign将一个对象除了getter/setter以外的都深度拷贝了。</p>
+<p>将原对象Car拷贝到ElectricCar，你就会发现Object.getOwnPropertyDescriptors拷贝了 getter和setter，而Object.assign没有。</p>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/objcopy.png" alt="objcopy"></p>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/objcopy2.png" alt="objcopy2"></p>
+<h3 id="允许在函数参数最后添加逗号"><a href="#允许在函数参数最后添加逗号" class="headerlink" title="允许在函数参数最后添加逗号"></a>允许在函数参数最后添加逗号</h3><p>这是一个很小的改动，方便git算法更加方便区分代码职责。我们用一个详细的例子来理解：</p>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/gitcomma.png" alt="gitcomma"></p>
+<p>值得一提的是，在函数调用的时候，也可以在最后添加逗号。</p>
+<h3 id="Async-Await"><a href="#Async-Await" class="headerlink" title="Async/Await"></a>Async/Await</h3><p>迄今为止，我介绍的特性中最有用的就属这个功能了。Async函数可以帮助我们摆脱“回调地狱”，并且整个代码会更加简洁。</p>
+<p>async关键字告诉JavaScript编译器对于标定的函数要区别对待。当编译器遇到await函数的时候会暂停。它会等到await标定的函数返回的promise。该promise要么得到结果、要么reject。</p>
+<p>在下面的例子中，getAmount函数调用getUser和getBankBalance两个异步函数。我们可以用promise来实现它，不过用async await更加简洁。</p>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/async_await.png" alt="async_await"></p>
+<h4 id="async函数返回Promise"><a href="#async函数返回Promise" class="headerlink" title="async函数返回Promise"></a>async函数返回Promise</h4><p>如果你想获取一个async函数的结果，你需要使用Promise的then语法。</p>
+<p>在下面的例子中，我们想用console.log来打印doubleAndAdd的结果，可以使用then语法，将console.log函数作为参数传入。</p>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/async_promise.png" alt="async_promise"></p>
+<h4 id="并行处理"><a href="#并行处理" class="headerlink" title="并行处理"></a>并行处理</h4><p>在上面的例子中，我们显示地调用了await两次，因为每次都等待了1秒钟，因此总计两秒钟。现在，我们可以使用Promise.all函数来让他们并行处理。</p>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/await_parallel.png" alt="await_parallel"></p>
+<h4 id="async-await的错误处理"><a href="#async-await的错误处理" class="headerlink" title="async/await的错误处理"></a>async/await的错误处理</h4><p>有很多方法来处理错误。</p>
+<ul>
+<li>方法1：在函数中使用try-catch</li>
+</ul>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/trycatch.png" alt="trycatch"></p>
+<ul>
+<li>方法2：catch每一个await表达式</li>
+</ul>
+<p>因为每一个await表达式都会返回Promise，你可以对一个进行catch操作。</p>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/await_catch.png" alt="await_catch"></p>
+<ul>
+<li>方法3：catch整个async-await函数</li>
+</ul>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/catch_all.png" alt="catch_all"></p>
+<p><a href="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/" target="_blank" rel="noopener">原文地址</a></p>
+
+  </article>
+</div>
+
+
+    
+
+
+
+
+</div>
+
+<div class="footer-wrapper container">
+  <footer class="footer clearfix">
+    <div class="clearfix">
+    <a href="https://zhanghao-web.github.io" class="footer-logo">
+      <i class="fa fa-github"></i>
+    </a>
+    <ul class="footer-social-link">
+      <li>© 2019 张白告丶</li>
+      <li><a href="https://zhanghao-web.github.io">Home</a></li>
+      
+    </ul>
+    <div class="footer-theme-info">
+      Theme <a href="//github.com/sabrinaluo/hexo-theme-replica">Replica</a>
+      by <a href="//github.com/sabrinaluo">Hiitea</a> ❤ Powered by Hexo
+    </div>
+    </div>
+    
+  </footer>
+</div>
+
+
+
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>

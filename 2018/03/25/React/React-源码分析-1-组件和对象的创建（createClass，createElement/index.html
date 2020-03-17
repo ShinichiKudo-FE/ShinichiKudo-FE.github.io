@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>
+    React 源码分析 1 组件和对象的创建（createClass，createElement) | 默默默默燃
+  </title>
+  <meta name="description" content="一枚前端搬砖队队员的记录册">
+  
+  <meta name="keywords" content="
+  React
+  ">
+  
+  <meta name="author" content="张白告丶">
+
+  <meta http-equiv="Cache-Control" content="no-transform"/>
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="theme-color" content="#1e2327">
+  <link rel="apple-touch-icon" href="https://github.githubassets.com/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://github.githubassets.com/apple-touch-icon-180x180.png">
+
+  <link rel="icon" type="image/x-icon" href="https://github.githubassets.com/favicon.ico">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+  
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.25-csp/vue.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+</head>
+
+<body id="replica-app">
+
+<nav class="navbar-wrapper">
+  <div class="navbar">
+    <div class="container clearfix">
+      <a href="/" class="navbar-logo"><i class="fa fa-github"></i></a>
+
+      <div class="navbar-search float-left desktop-only">
+        <div class="navbar-search-form">
+          <label for="gsc-i-id1">This website</label>
+          <div id="google-search">
+            <gcse:search></gcse:search>
+          </div>
+        </div>
+      </div>
+
+      <ul class="navbar-nav float-left">
+        
+        <li><a href="/archives">Archives</a></li>
+        
+        
+        <li><a href="/categories">Categories</a></li>
+        
+        
+        <li><a href="/tags">Tags</a></li>
+        
+        
+        <li class="desktop-only"><a href="/atom.xml" target="_blank">RSS</a></li>
+        
+      </ul>
+
+      <ul class="navbar-nav user-nav float-right desktop-only">
+        <li class="user-nav-notification">
+          <a><span class="user-nav-unread"></span><i class="fa fa-bell"></i></a>
+        </li>
+        <li>
+          <a><i class="fa fa-plus"></i> <i class="fa fa-caret-down"></i></a>
+        </li>
+        <li class="user-nav-logo">
+          <a><img src="https://octodex.github.com/images/baracktocat.jpg"> <i class="fa fa-caret-down"></i></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container">
+  <header class="header-wrapper desktop-only">
+  <div class="container header-site-detail">
+    <ul class="header-toolbar">
+      <li class="clearfix">
+        <a href="/archives" class="header-toolbar-left"><i
+                  class="fa fa-file-text"></i> Posts </a>
+        <a href="/archives"
+           class="header-toolbar-right"> 147 </a>
+      </li>
+      <li>
+        <a href="/tags" class="header-toolbar-left"><i
+                  class="fa fa-tags"></i> Tags </a>
+        <a href="/tags"
+           class="header-toolbar-right"> 47 </a>
+      </li>
+      <li>
+        <a href="/categories" class="header-toolbar-left"><i
+                  class="fa fa-folder-open"></i> Categories </a>
+        <a href="/categories"
+           class="header-toolbar-right"> 23 </a>
+      </li>
+    </ul>
+    <h2 class="header-title">
+      <i class="fa fa-book text-muted"></i>
+      <a href="/">默默默默燃</a>
+      
+      
+    </h2>
+  </div>
+
+  <div class="container">
+    <div class="header-tab-wrapper clearfix">
+      <span class="header-tab header-tab-selected"><i class="fa fa-thumbs-o-up"></i> Like</span>
+      <span class="header-tab"><i class="fa fa-share-alt"></i> Share</span>
+      <span class="header-tab"><i class="fa fa-comments-o"></i> Discussion</span>
+      <span class="header-tab"><i class="fa fa-bookmark-o"></i> Bookmark </span>
+      <span class="header-tab"><i class="fa fa-smile-o"></i> Smile <i class="fa fa-caret-down"></i></span>
+    </div>
+  </div>
+</header>
+
+
+<div class="post-container container">
+  <h3>
+    <i class="fa fa-user-o"></i>
+    张白告丶
+
+    <span class="post-date float-right" title="{{moment(1521984408000).format('MMM DD, YYYY, h:mm:ss A')}}">
+      
+          <i class="fa fa-pencil-square-o"></i>
+      
+      {{moment(1521984408000).fromNow()}}
+    </span>
+  </h3>
+
+  <article class="post-content">
+    <h1>React 源码分析 1 组件和对象的创建（createClass，createElement)</h1>
+    <p>React受大家欢迎的一个重要原因就是可以自定义组件。这样的一方面可以复用开发好的组件，实现一处开发，处处调用，另外也能使用别人开发好的组件，提高封装性。另一方面使得代码结构很清晰，组件间耦合减少，方便维护。ES5创建组件时，调用React.createClass()即可. ES6中使用class myComponent extends React.Component, 其实内部还是调用createClass创建组件。</p>
+<p>组件创建我们可以简单类比为Java中ClassLoader加载class。下面来分析下createClass的源码，我们省去了开发阶段错误提示的相关代码，如propType的检查。（if (“development” !== ‘production’) {}代码段都不进行分析了，这些只在开发调试阶段调用）</p>
+<h1 id="组件创建"><a href="#组件创建" class="headerlink" title="组件创建"></a>组件创建</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">createClass: <span class="function"><span class="keyword">function</span> (<span class="params">spec</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> Constructor = <span class="function"><span class="keyword">function</span> (<span class="params">props, context, updater</span>) </span>&#123;</span><br><span class="line">      <span class="comment">// 触发自动绑定</span></span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.__reactAutoBindPairs.length) &#123;</span><br><span class="line">        bindAutoBindMethods(<span class="keyword">this</span>);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 初始化参数</span></span><br><span class="line">      <span class="keyword">this</span>.props = props;</span><br><span class="line">      <span class="keyword">this</span>.context = context;</span><br><span class="line">      <span class="keyword">this</span>.refs = emptyObject;  <span class="comment">// 本组件对象的引用，可以利用它来调用组件的方法</span></span><br><span class="line">      <span class="keyword">this</span>.updater = updater || ReactNoopUpdateQueue;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 调用getInitialState()来初始化state变量</span></span><br><span class="line">      <span class="keyword">this</span>.state = <span class="literal">null</span>;</span><br><span class="line">      <span class="keyword">var</span> initialState = <span class="keyword">this</span>.getInitialState ? <span class="keyword">this</span>.getInitialState() : <span class="literal">null</span>;</span><br><span class="line">      <span class="keyword">this</span>.state = initialState;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 继承父类</span></span><br><span class="line">    Constructor.prototype = <span class="keyword">new</span> ReactClassComponent();</span><br><span class="line">    Constructor.prototype.constructor = Constructor;</span><br><span class="line">    Constructor.prototype.__reactAutoBindPairs = [];</span><br><span class="line"></span><br><span class="line">    injectedMixins.forEach(mixSpecIntoComponent.bind(<span class="literal">null</span>, Constructor));</span><br><span class="line"></span><br><span class="line">    mixSpecIntoComponent(Constructor, spec);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 调用getDefaultProps，并挂载到组件类上。defaultProps是类变量，使用ES6写法时更清晰</span></span><br><span class="line">    <span class="keyword">if</span> (Constructor.getDefaultProps) &#123;</span><br><span class="line">      Constructor.defaultProps = Constructor.getDefaultProps();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// React中暴露给应用调用的方法，如render componentWillMount。</span></span><br><span class="line">    <span class="comment">// 如果应用未设置，则将他们设为null</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> methodName <span class="keyword">in</span> ReactClassInterface) &#123;</span><br><span class="line">      <span class="keyword">if</span> (!Constructor.prototype[methodName]) &#123;</span><br><span class="line">        Constructor.prototype[methodName] = <span class="literal">null</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Constructor;</span><br><span class="line">  &#125;,</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<blockquote>
+<p>createClass主要做的事情有<br>1.定义构造方法Constructor，构造方法中进行props，refs等的初始化，并调用getInitialState来初始化state<br>2.调用getDefaultProps，并放在defaultProps类变量上。这个变量不属于某个单独的对象。可理解为static 变量<br>3.将React中暴露给应用，但应用中没有设置的方法，设置为null。</p>
+</blockquote>
+<h1 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h1><p>JSX中创建React元素最终会被babel转译为createElement(type, config, children), babel根据JSX中标签的首字母来判断是原生DOM组件，还是自定义React组件。如果首字母大写，则为React组件。这也是为什么ES6中React组件类名必须大写的原因。如下面代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;div className=<span class="string">"title"</span> ref=<span class="string">"example"</span>&gt;</span><br><span class="line">    &lt;span&gt;<span class="number">123</span>&lt;<span class="regexp">/span&gt;    /</span><span class="regexp">/ 原生DOM组件，首字母小写</span></span><br><span class="line"><span class="regexp">    &lt;ErrorPage title='123456' desc=&#123;[]&#125;/</span>&gt;    <span class="comment">// 自定义组件，首字母大写</span></span><br><span class="line">&lt;<span class="regexp">/div&gt;</span></span><br></pre></td></tr></table></figure>
+<p>转译完成后<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">React.createElement(</span><br><span class="line">        <span class="string">'div'</span>,    <span class="comment">// type,标签名,原生DOM对象为String</span></span><br><span class="line">        &#123;</span><br><span class="line">            className: <span class="string">'title'</span>,</span><br><span class="line">            ref: <span class="string">'example'</span></span><br><span class="line">        &#125;,   <span class="comment">// config，属性</span></span><br><span class="line">        React.createElement(<span class="string">'span'</span>, <span class="literal">null</span>, <span class="string">'123'</span>),   <span class="comment">// children，子元素</span></span><br><span class="line">        React.createElement(</span><br><span class="line">            <span class="comment">// type,标签名,React自定义组件的type不为String.</span></span><br><span class="line">            <span class="comment">// _errorPage2.default为从其他文件中引入的React组件</span></span><br><span class="line">            _errorPage2.default,    </span><br><span class="line">            &#123;</span><br><span class="line">                title: <span class="string">'123456'</span>,</span><br><span class="line">                desc: []</span><br><span class="line">            &#125;</span><br><span class="line">        )   <span class="comment">// children，子元素</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<p>下面来分析下createElement的源码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">ReactElement.createElement = <span class="function"><span class="keyword">function</span> (<span class="params">type, config, children</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> propName;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 初始化参数</span></span><br><span class="line">  <span class="keyword">var</span> props = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> key = <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">var</span> ref = <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">var</span> self = <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">var</span> source = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 从config中提取出内容，如ref key props</span></span><br><span class="line">  <span class="keyword">if</span> (config != <span class="literal">null</span>) &#123;</span><br><span class="line">    ref = config.ref === <span class="literal">undefined</span> ? <span class="literal">null</span> : config.ref;</span><br><span class="line">    key = config.key === <span class="literal">undefined</span> ? <span class="literal">null</span> : <span class="string">''</span> + config.key;</span><br><span class="line">    self = config.__self === <span class="literal">undefined</span> ? <span class="literal">null</span> : config.__self;</span><br><span class="line">    source = config.__source === <span class="literal">undefined</span> ? <span class="literal">null</span> : config.__source;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 提取出config中的prop，放入props变量中</span></span><br><span class="line">    <span class="keyword">for</span> (propName <span class="keyword">in</span> config) &#123;</span><br><span class="line">      <span class="keyword">if</span> (config.hasOwnProperty(propName) &amp;&amp; !RESERVED_PROPS.hasOwnProperty(propName)) &#123;</span><br><span class="line">        props[propName] = config[propName];</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 处理children，挂到props的children属性下</span></span><br><span class="line">  <span class="comment">// 入参的前两个为type和config，后面的就都是children参数了。故需要减2</span></span><br><span class="line">  <span class="keyword">var</span> childrenLength = <span class="built_in">arguments</span>.length - <span class="number">2</span>;</span><br><span class="line">  <span class="keyword">if</span> (childrenLength === <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="comment">// 只有一个参数时，直接挂到children属性下，不是array的方式</span></span><br><span class="line">    props.children = children;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (childrenLength &gt; <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="comment">// 不止一个时，放到array中，然后将array挂到children属性下</span></span><br><span class="line">    <span class="keyword">var</span> childArray = <span class="built_in">Array</span>(childrenLength);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; childrenLength; i++) &#123;</span><br><span class="line">      childArray[i] = <span class="built_in">arguments</span>[i + <span class="number">2</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    props.children = childArray;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 取出组件类中的静态变量defaultProps，并给未在JSX中设置值的属性设置默认值</span></span><br><span class="line">  <span class="keyword">if</span> (type &amp;&amp; type.defaultProps) &#123;</span><br><span class="line">    <span class="keyword">var</span> defaultProps = type.defaultProps;</span><br><span class="line">    <span class="keyword">for</span> (propName <span class="keyword">in</span> defaultProps) &#123;</span><br><span class="line">      <span class="keyword">if</span> (props[propName] === <span class="literal">undefined</span>) &#123;</span><br><span class="line">        props[propName] = defaultProps[propName];</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 返回一个ReactElement对象</span></span><br><span class="line">  <span class="keyword">return</span> ReactElement(type, key, ref, self, source, ReactCurrentOwner.current, props);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>下面来看ReactElement源码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ReactElement = <span class="function"><span class="keyword">function</span> (<span class="params">type, key, ref, self, source, owner, props</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> element = &#123;</span><br><span class="line">    <span class="comment">// This tag allow us to uniquely identify this as a React Element</span></span><br><span class="line">    $$<span class="keyword">typeof</span>: REACT_ELEMENT_TYPE,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ReactElement对象上的四个变量，特别关键</span></span><br><span class="line">    type: type,</span><br><span class="line">    key: key,</span><br><span class="line">    ref: ref,</span><br><span class="line">    props: props,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Record the component responsible for creating this element.</span></span><br><span class="line">    _owner: owner</span><br><span class="line">  &#125;;</span><br><span class="line">    <span class="keyword">return</span> element;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到仅仅是给ReactElement对象内的成员变量赋值而已，不在赘述。</p>
+<p>流程如如下</p>
+<h1 id="组件对象初始化"><a href="#组件对象初始化" class="headerlink" title="组件对象初始化"></a>组件对象初始化</h1><p>在mountComponent()挂载组件中，会进行组件渲染，调用到instantiateReactComponent()方法。这个过程我们在React生命周期方法中再详细讲述，这里有个大体了解即可。instantiateReactComponent()根据ReactElement中不同的type字段，创建不同类型的组件对象。源码如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 初始化组件对象，node是一个ReactElement对象，是节点元素在React中的表示</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">instantiateReactComponent</span>(<span class="params">node</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> instance;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> isEmpty = node === <span class="literal">null</span> || node === <span class="literal">false</span>;</span><br><span class="line">  <span class="keyword">if</span> (isEmpty) &#123;</span><br><span class="line">    <span class="comment">// 空对象</span></span><br><span class="line">    instance = ReactEmptyComponent.create(instantiateReactComponent);</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> node === <span class="string">'object'</span>) &#123;</span><br><span class="line">    <span class="comment">// 组件对象，包括DOM原生的和React自定义组件</span></span><br><span class="line">    <span class="keyword">var</span> element = node;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 根据ReactElement中的type字段区分</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> element.type === <span class="string">'string'</span>) &#123;</span><br><span class="line">      <span class="comment">// type为string则表示DOM原生对象，比如div span等。可以参看上面babel转译的那段代码</span></span><br><span class="line">      instance = ReactNativeComponent.createInternalComponent(element);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isInternalComponentType(element.type)) &#123;</span><br><span class="line">      <span class="comment">// 保留给以后版本使用，此处暂时不会涉及到</span></span><br><span class="line">      instance = <span class="keyword">new</span> element.type(element);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// React自定义组件</span></span><br><span class="line">      instance = <span class="keyword">new</span> ReactCompositeComponentWrapper(element);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> node === <span class="string">'string'</span> || <span class="keyword">typeof</span> node === <span class="string">'number'</span>) &#123;</span><br><span class="line">    <span class="comment">// 元素是一个string时，对应的比如&lt;span&gt;123&lt;/span&gt; 中的123</span></span><br><span class="line">    <span class="comment">// 本质上它不是一个ReactElement，但为了统一，也按照同样流程处理，称为ReactDOMTextComponent</span></span><br><span class="line">    instance = ReactNativeComponent.createInstanceForText(node);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 无处理</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 初始化参数，这两个参数是DOM diff时用到的</span></span><br><span class="line">  instance._mountIndex = <span class="number">0</span>;</span><br><span class="line">  instance._mountImage = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>故我们可以看到有四种创建组件元素的方式，同时对应四种ReactElement<br>1.ReactEmptyComponent.create(), 创建空对象ReactDOMEmptyComponent<br>2.ReactNativeComponent.createInternalComponent(), 创建DOM原生对象 ReactDOMComponent<br>3.new ReactCompositeComponentWrapper(), 创建React自定义对象ReactCompositeComponent<br>4.ReactNativeComponent.createInstanceForText(), 创建文本对象 ReactDOMTextComponent</p>
+</blockquote>
+<p>下面分别分析这几种对象，和创建他们的过程。</p>
+<p><strong>ReactDOMEmptyComponent</strong><br>由ReactEmptyComponent.create()创建，最终生成ReactDOMEmptyComponent对象，源码如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> emptyComponentFactory;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> ReactEmptyComponentInjection = &#123;</span><br><span class="line">  injectEmptyComponentFactory: <span class="function"><span class="keyword">function</span> (<span class="params">factory</span>) </span>&#123;</span><br><span class="line">    emptyComponentFactory = factory;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> ReactEmptyComponent = &#123;</span><br><span class="line">  create: <span class="function"><span class="keyword">function</span> (<span class="params">instantiate</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> emptyComponentFactory(instantiate);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">ReactEmptyComponent.injection = ReactEmptyComponentInjection;</span><br><span class="line"></span><br><span class="line">ReactInjection.EmptyComponent.injectEmptyComponentFactory(<span class="function"><span class="keyword">function</span> (<span class="params">instantiate</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 前面比较绕，关键就是这句话，创建ReactDOMEmptyComponent对象</span></span><br><span class="line">   <span class="keyword">return</span> <span class="keyword">new</span> ReactDOMEmptyComponent(instantiate);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 各种null，就不分析了</span></span><br><span class="line"><span class="keyword">var</span> ReactDOMEmptyComponent = <span class="function"><span class="keyword">function</span> (<span class="params">instantiate</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>._currentElement = <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">this</span>._nativeNode = <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">this</span>._nativeParent = <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">this</span>._nativeContainerInfo = <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">this</span>._domID = <span class="literal">null</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>ReactDOMComponent</strong><br>由ReactNativeComponent.createInternalComponent()创建。这里注意原生组件不代表是DOM组件，而是React封装过的Virtual DOM对象。React并不直接操作原生DOM。</p>
+<p>大家可以自己看ReactDOMComponent的源码。重点看下ReactDOMComponent.Mixin<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">ReactDOMComponent.Mixin = &#123;</span><br><span class="line">  mountComponent: <span class="function"><span class="keyword">function</span> (<span class="params">transaction, nativeParent, nativeContainerInfo, context</span>) </span>&#123;&#125;,</span><br><span class="line">  _createOpenTagMarkupAndPutListeners: <span class="function"><span class="keyword">function</span> (<span class="params">transaction, props</span>)</span>&#123;&#125;,</span><br><span class="line">  _createContentMarkup: <span class="function"><span class="keyword">function</span> (<span class="params">transaction, props, context</span>) </span>&#123;&#125;,</span><br><span class="line">  _createInitialChildren: <span class="function"><span class="keyword">function</span> (<span class="params">transaction, props, context, lazyTree</span>) </span>&#123;&#125;</span><br><span class="line">  receiveComponent: <span class="function"><span class="keyword">function</span> (<span class="params">nextElement, transaction, context</span>) </span>&#123;&#125;,</span><br><span class="line">  updateComponent: <span class="function"><span class="keyword">function</span> (<span class="params">transaction, prevElement, nextElement, context</span>) </span>&#123;&#125;,</span><br><span class="line">  _updateDOMProperties: <span class="function"><span class="keyword">function</span> (<span class="params">lastProps, nextProps, transaction</span>) </span>&#123;&#125;,</span><br><span class="line">  _updateDOMChildren: <span class="function"><span class="keyword">function</span> (<span class="params">lastProps, nextProps, transaction, context</span>) </span>&#123;&#125;,</span><br><span class="line">  getNativeNode: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;,</span><br><span class="line">  unmountComponent: <span class="function"><span class="keyword">function</span> (<span class="params">safely</span>) </span>&#123;&#125;,</span><br><span class="line">  getPublicInstance: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>其中暴露给外部的比较关键的是mountComponent，receiveComponen， updateComponent，unmountComponent。他们会引发React生命周期方法的调用，下一节再讲。</p>
+<p><strong>ReactCompositeComponent</strong><br>由new ReactCompositeComponentWrapper()创建，重点看下ReactCompositeComponentMixin</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ReactCompositeComponentMixin = &#123;</span><br><span class="line">  <span class="comment">// new对应的方法，创建ReactCompositeComponent对象</span></span><br><span class="line">  construct: <span class="function"><span class="keyword">function</span>(<span class="params">element</span>) </span>&#123;&#125;,</span><br><span class="line">  mountComponent,   <span class="comment">// 初始挂载组件时被调用，仅一次</span></span><br><span class="line">  performInitialMountWithErrorHandling, <span class="comment">// 和performInitialMount相近，只是多了错误处理</span></span><br><span class="line">  performInitialMount,  <span class="comment">// 执行mountComponent的渲染阶段，会调用到instantiateReactComponent，从而进入初始化React组件的入口</span></span><br><span class="line">  getNativeNode,</span><br><span class="line">  unmountComponent, <span class="comment">// 卸载组件，内存释放等工作</span></span><br><span class="line">  receiveComponent,</span><br><span class="line">  performUpdateIfNecessary,</span><br><span class="line">  updateComponent,  <span class="comment">// setState后被调用，重新渲染组件</span></span><br><span class="line">  attachRef,    <span class="comment">// 将ref指向组件对象，这样我们就可以利用它调用对象内的方法了</span></span><br><span class="line">  detachRef,    <span class="comment">// 将组件的引用从全局对象refs中删掉，这样我们就不能利用ref找到组件对象了</span></span><br><span class="line">  instantiateReactComponent，  <span class="comment">// 初始化React组件的入口，在mountComponent时的渲染阶段会被调用</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>ReactDOMTextComponent</strong></p>
+<p>由ReactNativeComponent.createInstanceForText()创建，我们也不细细分析了，主要入口代码如下，大家可以自行分析。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ReactDOMTextComponent = <span class="function"><span class="keyword">function</span> (<span class="params">text</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>._currentElement = text;</span><br><span class="line">  <span class="keyword">this</span>._stringText = <span class="string">''</span> + text;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">_assign(ReactDOMTextComponent.prototype, &#123;</span><br><span class="line">  mountComponent,</span><br><span class="line">  receiveComponent,</span><br><span class="line">  getNativeNode,</span><br><span class="line">  unmountComponent</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href="https://zhuanlan.zhihu.com/p/25881952" target="_blank" rel="noopener">原文地址</a></p>
+
+  </article>
+</div>
+
+
+    
+
+
+
+
+</div>
+
+<div class="footer-wrapper container">
+  <footer class="footer clearfix">
+    <div class="clearfix">
+    <a href="https://zhanghao-web.github.io" class="footer-logo">
+      <i class="fa fa-github"></i>
+    </a>
+    <ul class="footer-social-link">
+      <li>© 2019 张白告丶</li>
+      <li><a href="https://zhanghao-web.github.io">Home</a></li>
+      
+    </ul>
+    <div class="footer-theme-info">
+      Theme <a href="//github.com/sabrinaluo/hexo-theme-replica">Replica</a>
+      by <a href="//github.com/sabrinaluo">Hiitea</a> ❤ Powered by Hexo
+    </div>
+    </div>
+    
+  </footer>
+</div>
+
+
+
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>

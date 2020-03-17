@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>
+    React 源码分析 2 React组件插入Dom流程 | 默默默默燃
+  </title>
+  <meta name="description" content="一枚前端搬砖队队员的记录册">
+  
+  <meta name="keywords" content="
+  React
+  ">
+  
+  <meta name="author" content="张白告丶">
+
+  <meta http-equiv="Cache-Control" content="no-transform"/>
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="theme-color" content="#1e2327">
+  <link rel="apple-touch-icon" href="https://github.githubassets.com/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://github.githubassets.com/apple-touch-icon-180x180.png">
+
+  <link rel="icon" type="image/x-icon" href="https://github.githubassets.com/favicon.ico">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+  
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.25-csp/vue.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+</head>
+
+<body id="replica-app">
+
+<nav class="navbar-wrapper">
+  <div class="navbar">
+    <div class="container clearfix">
+      <a href="/" class="navbar-logo"><i class="fa fa-github"></i></a>
+
+      <div class="navbar-search float-left desktop-only">
+        <div class="navbar-search-form">
+          <label for="gsc-i-id1">This website</label>
+          <div id="google-search">
+            <gcse:search></gcse:search>
+          </div>
+        </div>
+      </div>
+
+      <ul class="navbar-nav float-left">
+        
+        <li><a href="/archives">Archives</a></li>
+        
+        
+        <li><a href="/categories">Categories</a></li>
+        
+        
+        <li><a href="/tags">Tags</a></li>
+        
+        
+        <li class="desktop-only"><a href="/atom.xml" target="_blank">RSS</a></li>
+        
+      </ul>
+
+      <ul class="navbar-nav user-nav float-right desktop-only">
+        <li class="user-nav-notification">
+          <a><span class="user-nav-unread"></span><i class="fa fa-bell"></i></a>
+        </li>
+        <li>
+          <a><i class="fa fa-plus"></i> <i class="fa fa-caret-down"></i></a>
+        </li>
+        <li class="user-nav-logo">
+          <a><img src="https://octodex.github.com/images/baracktocat.jpg"> <i class="fa fa-caret-down"></i></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container">
+  <header class="header-wrapper desktop-only">
+  <div class="container header-site-detail">
+    <ul class="header-toolbar">
+      <li class="clearfix">
+        <a href="/archives" class="header-toolbar-left"><i
+                  class="fa fa-file-text"></i> Posts </a>
+        <a href="/archives"
+           class="header-toolbar-right"> 147 </a>
+      </li>
+      <li>
+        <a href="/tags" class="header-toolbar-left"><i
+                  class="fa fa-tags"></i> Tags </a>
+        <a href="/tags"
+           class="header-toolbar-right"> 47 </a>
+      </li>
+      <li>
+        <a href="/categories" class="header-toolbar-left"><i
+                  class="fa fa-folder-open"></i> Categories </a>
+        <a href="/categories"
+           class="header-toolbar-right"> 23 </a>
+      </li>
+    </ul>
+    <h2 class="header-title">
+      <i class="fa fa-book text-muted"></i>
+      <a href="/">默默默默燃</a>
+      
+      
+    </h2>
+  </div>
+
+  <div class="container">
+    <div class="header-tab-wrapper clearfix">
+      <span class="header-tab header-tab-selected"><i class="fa fa-thumbs-o-up"></i> Like</span>
+      <span class="header-tab"><i class="fa fa-share-alt"></i> Share</span>
+      <span class="header-tab"><i class="fa fa-comments-o"></i> Discussion</span>
+      <span class="header-tab"><i class="fa fa-bookmark-o"></i> Bookmark </span>
+      <span class="header-tab"><i class="fa fa-smile-o"></i> Smile <i class="fa fa-caret-down"></i></span>
+    </div>
+  </div>
+</header>
+
+
+<div class="post-container container">
+  <h3>
+    <i class="fa fa-user-o"></i>
+    张白告丶
+
+    <span class="post-date float-right" title="{{moment(1522030587000).format('MMM DD, YYYY, h:mm:ss A')}}">
+      
+          <i class="fa fa-pencil-square-o"></i>
+      
+      {{moment(1522030587000).fromNow()}}
+    </span>
+  </h3>
+
+  <article class="post-content">
+    <h1>React 源码分析 2 React组件插入Dom流程</h1>
+    <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>React广受好评的一个重要原因就是组件化开发，一方面分模块的方式便于协同开发，降低耦合，后期维护也轻松；另一方面使得一次开发，多处复用成为现实，甚至可以直接复用开源React组件。开发完一个组件后，我们需要插入DOM中，一般使用如下代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ReactDOM.render(</span><br><span class="line">  &lt;h1&gt;Hello, world!<span class="xml"><span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span>,</span><br><span class="line">  <span class="built_in">document</span>.getElementById(<span class="string">'example'</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>经过babel转码后为</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ReactDOM.render(</span><br><span class="line">        React.createElement(</span><br><span class="line">          <span class="string">'h1'</span>,   <span class="comment">// type, DOM原生组件的type为string，React自定义组件type为Object</span></span><br><span class="line">          <span class="literal">null</span>,   <span class="comment">// config，会设置到ref，key，props中</span></span><br><span class="line">          <span class="string">'Hello, world!'</span>   <span class="comment">// children，子组件.这儿为文本组件</span></span><br><span class="line">        ),</span><br><span class="line">        <span class="built_in">document</span>.getElementById(<span class="string">'example'</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>那么React底层是怎么将组件插入DOM中的呢。本文来详细分析它的前因后果。</p>
+<h1 id="ReactMount-renderSubtreeIntoContainer"><a href="#ReactMount-renderSubtreeIntoContainer" class="headerlink" title="ReactMount._renderSubtreeIntoContainer()"></a>ReactMount._renderSubtreeIntoContainer()</h1><p>ReactDOM.render()实际调用ReactMount.render(),接着调用到ReactMount._renderSubtreeIntoContainer().</p>
+<p>这个调用链比较简单，不分析了。下面重点分析_renderSubtreeIntoContainer(). 我们去除掉开发调试阶段的报错代码（比如 “development” !== ‘production’）。</p>
+<a id="more"></a>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 将ReactElement插入DOM中，并返回ReactElement对应的ReactComponent。</span></span><br><span class="line"><span class="comment">   * ReactElement是React元素在内存中的表示形式，可以理解为一个数据类，包含type，key，refs，props等成员变量</span></span><br><span class="line"><span class="comment">   * ReactComponent是React元素的操作类，包含mountComponent(), updateComponent()等很多操作组件的方法</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * @param &#123;parentComponent&#125; 父组件，对于第一次渲染，为null</span></span><br><span class="line"><span class="comment">   * @param &#123;nextElement&#125; 要插入到DOM中的组件，对应上面例子中的&lt;h1&gt;Hello, world!&lt;/h1&gt;经过babel转译后的元素</span></span><br><span class="line"><span class="comment">   * @param &#123;container&#125; 要插入到的容器，对应上面例子中的document.getElementById('example')获取的DOM对象</span></span><br><span class="line"><span class="comment">   * @param &#123;callback&#125; 第一次渲染为null</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * @return &#123;component&#125;  返回ReactComponent，对于ReactDOM.render()调用，不用管返回值。</span></span><br><span class="line"><span class="comment">   */</span> </span><br><span class="line">_renderSubtreeIntoContainer: <span class="function"><span class="keyword">function</span> (<span class="params">parentComponent, nextElement, container, callback</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 刚开始一段开发阶段的报错代码，省去</span></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 包装ReactElement，将nextElement挂载到wrapper的props属性下，这段代码不是很关键</span></span><br><span class="line">    <span class="keyword">var</span> nextWrappedElement = ReactElement(TopLevelWrapper, <span class="literal">null</span>, <span class="literal">null</span>, <span class="literal">null</span>, <span class="literal">null</span>, <span class="literal">null</span>, nextElement);</span><br><span class="line">    <span class="comment">// 获取要插入到的容器的前一次的ReactComponent，这是为了做DOM diff</span></span><br><span class="line">    <span class="comment">// 对于ReactDOM.render()调用，prevComponent为null</span></span><br><span class="line">    <span class="keyword">var</span> prevComponent = getTopLevelWrapperInContainer(container);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (prevComponent) &#123;</span><br><span class="line">      <span class="comment">// 从prevComponent中获取到prevElement这个数据对象。一定要搞清楚ReactElement和ReactComponent的作用，他们很关键</span></span><br><span class="line">      <span class="keyword">var</span> prevWrappedElement = prevComponent._currentElement;</span><br><span class="line">      <span class="keyword">var</span> prevElement = prevWrappedElement.props;</span><br><span class="line">      <span class="comment">// DOM diff精髓，同一层级内，type和key不变时，只用update就行。否则先unmount组件再mount组件</span></span><br><span class="line">      <span class="comment">// 这是React为了避免递归太深，而做的DOM diff前提假设。它只对同一DOM层级，type相同，key(如果有)相同的组件做DOM diff，否则不用比较，直接先unmount再mount。这个假设使得diff算法复杂度从O(n^3)降低为O(n).</span></span><br><span class="line">      <span class="comment">// shouldUpdateReactComponent源码请看后面的分析</span></span><br><span class="line">      <span class="keyword">if</span> (shouldUpdateReactComponent(prevElement, nextElement)) &#123;</span><br><span class="line">        <span class="keyword">var</span> publicInst = prevComponent._renderedComponent.getPublicInstance();</span><br><span class="line">        <span class="keyword">var</span> updatedCallback = callback &amp;&amp; <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">          callback.call(publicInst);</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="comment">// 只需要update，调用_updateRootComponent，然后直接return了</span></span><br><span class="line">        ReactMount._updateRootComponent(prevComponent, nextWrappedElement, container, updatedCallback);</span><br><span class="line">        <span class="keyword">return</span> publicInst;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 不做update，直接先卸载再挂载。即unmountComponent,再mountComponent。mountComponent在后面代码中进行</span></span><br><span class="line">        ReactMount.unmountComponentAtNode(container);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> reactRootElement = getReactRootElementInContainer(container);</span><br><span class="line">    <span class="keyword">var</span> containerHasReactMarkup = reactRootElement &amp;&amp; !!internalGetID(reactRootElement);</span><br><span class="line">    <span class="keyword">var</span> containerHasNonRootReactChild = hasNonRootReactChild(container);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> shouldReuseMarkup = containerHasReactMarkup &amp;&amp; !prevComponent &amp;&amp; !containerHasNonRootReactChild;</span><br><span class="line">    <span class="comment">// 初始化，渲染组件，然后插入到DOM中。_renderNewRootComponent很关键，后面详细分析</span></span><br><span class="line">    <span class="keyword">var</span> component = ReactMount._renderNewRootComponent(nextWrappedElement, container, shouldReuseMarkup, parentComponent != <span class="literal">null</span> ? parentComponent._reactInternalInstance._processChildContext(parentComponent._reactInternalInstance._context) : emptyObject)._renderedComponent.getPublicInstance();</span><br><span class="line">    <span class="comment">// render方法中带入的回调，ReactDOM.render()调用时一般不传入</span></span><br><span class="line">    <span class="keyword">if</span> (callback) &#123;</span><br><span class="line">      callback.call(component);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> component;</span><br><span class="line">  &#125;,</span><br></pre></td></tr></table></figure>
+<p>shouldUpdateReactComponent()源码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">shouldUpdateReactComponent</span>(<span class="params">prevElement, nextElement</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 前后两次ReactElement中任何一个为null，则必须另一个为null才返回true。这种情况一般不会碰到</span></span><br><span class="line">  <span class="keyword">var</span> prevEmpty = prevElement === <span class="literal">null</span> || prevElement === <span class="literal">false</span>;</span><br><span class="line">  <span class="keyword">var</span> nextEmpty = nextElement === <span class="literal">null</span> || nextElement === <span class="literal">false</span>;</span><br><span class="line">  <span class="keyword">if</span> (prevEmpty || nextEmpty) &#123;</span><br><span class="line">    <span class="keyword">return</span> prevEmpty === nextEmpty;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> prevType = <span class="keyword">typeof</span> prevElement;</span><br><span class="line">  <span class="keyword">var</span> nextType = <span class="keyword">typeof</span> nextElement;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// React DOM diff算法</span></span><br><span class="line">  <span class="keyword">if</span> (prevType === <span class="string">'string'</span> || prevType === <span class="string">'number'</span>) &#123;</span><br><span class="line">    <span class="comment">// 如果前后两次为数字或者字符,则认为只需要update(处理文本元素)，返回true</span></span><br><span class="line">    <span class="keyword">return</span> (nextType === <span class="string">'string'</span> || nextType === <span class="string">'number'</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// 如果前后两次为DOM元素或React元素,则必须type和key不变(key用于listView等组件,很多时候我们没有设置key，故只需type相同)才update,否则先unmount再重新mount。返回false</span></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      nextType === <span class="string">'object'</span> &amp;&amp;</span><br><span class="line">      prevElement.type === nextElement.type &amp;&amp;</span><br><span class="line">      prevElement.key === nextElement.key</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="ReactMount-renderNewRootComponent"><a href="#ReactMount-renderNewRootComponent" class="headerlink" title="ReactMount._renderNewRootComponent"></a>ReactMount._renderNewRootComponent</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">_renderNewRootComponent: <span class="function"><span class="keyword">function</span> (<span class="params">nextElement, container, shouldReuseMarkup, context</span>) </span>&#123;</span><br><span class="line">   ReactBrowserEventEmitter.ensureScrollValueMonitoring();</span><br><span class="line">   <span class="comment">// 初始化ReactComponent，根据ReactElement中不同的type字段，创建不同类型的组件对象，即ReactComponent</span></span><br><span class="line">   <span class="comment">// 前一篇文章中已经分析了。http://blog.csdn.net/u013510838/article/details/55669769</span></span><br><span class="line">   <span class="keyword">var</span> componentInstance = instantiateReactComponent(nextElement);</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 处理batchedMountComponentIntoNode方法调用，将ReactComponent插入DOM中，后面详细分析</span></span><br><span class="line">   ReactUpdates.batchedUpdates(batchedMountComponentIntoNode, componentInstance, container, shouldReuseMarkup, context);</span><br><span class="line"></span><br><span class="line">   <span class="keyword">var</span> wrapperID = componentInstance._instance.rootID;</span><br><span class="line">   instancesByReactRootID[wrapperID] = componentInstance;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span> componentInstance;</span><br><span class="line"> &#125;,</span><br></pre></td></tr></table></figure>
+<p>batchedMountComponentIntoNode以transaction事务的形式调用mountComponentIntoNode，源码分析如下。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mountComponentIntoNode</span>(<span class="params">wrapperInstance, container, transaction, shouldReuseMarkup, context</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> markerName;</span><br><span class="line">  <span class="comment">// 一段log，可以不管</span></span><br><span class="line">  <span class="keyword">if</span> (ReactFeatureFlags.logTopLevelRenders) &#123;</span><br><span class="line">    <span class="keyword">var</span> wrappedElement = wrapperInstance._currentElement.props;</span><br><span class="line">    <span class="keyword">var</span> type = wrappedElement.type;</span><br><span class="line">    markerName = <span class="string">'React mount: '</span> + (<span class="keyword">typeof</span> type === <span class="string">'string'</span> ? type : type.displayName || type.name);</span><br><span class="line">    <span class="built_in">console</span>.time(markerName);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 调用对应ReactComponent中的mountComponent方法来渲染组件，这个是React生命周期的重要方法。后面详细分析。</span></span><br><span class="line">  <span class="comment">// mountComponent返回React组件解析的HTML。不同的ReactComponent的mountComponent策略不同，可以看做多态</span></span><br><span class="line">  <span class="comment">// 上面的&lt;h1&gt;Hello, world!&lt;/h1&gt;, 对应的是ReactDOMTextComponent，最终解析成的HTML为</span></span><br><span class="line">  <span class="comment">// &lt;h1 data-reactroot=""&gt;Hello, world!&lt;/h1&gt;</span></span><br><span class="line">  <span class="keyword">var</span> markup = ReactReconciler.mountComponent(wrapperInstance, transaction, <span class="literal">null</span>, ReactDOMContainerInfo(wrapperInstance, container), context);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (markerName) &#123;</span><br><span class="line">    <span class="built_in">console</span>.timeEnd(markerName);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  wrapperInstance._renderedComponent._topLevelWrapper = wrapperInstance;</span><br><span class="line">  <span class="comment">// 将解析出来的HTML插入DOM中</span></span><br><span class="line">  ReactMount._mountImageIntoNode(markup, container, wrapperInstance, shouldReuseMarkup, transaction);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>_mountImageIntoNode源码如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">_mountImageIntoNode: <span class="function"><span class="keyword">function</span> (<span class="params">markup, container, instance, shouldReuseMarkup, transaction</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 对于ReactDOM.render()调用，shouldReuseMarkup为false</span></span><br><span class="line">    <span class="keyword">if</span> (shouldReuseMarkup) &#123;</span><br><span class="line">      ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (transaction.useCreateElement) &#123;</span><br><span class="line">      <span class="comment">// 清空container的子节点，这个地方不明白为什么这么做</span></span><br><span class="line">      <span class="keyword">while</span> (container.lastChild) &#123;</span><br><span class="line">        container.removeChild(container.lastChild);</span><br><span class="line">      &#125;</span><br><span class="line">      DOMLazyTree.insertTreeBefore(container, markup, <span class="literal">null</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// 将markup这个HTML设置到container这个DOM元素的innerHTML属性上，这样就插入到了DOM中了</span></span><br><span class="line">      setInnerHTML(container, markup);</span><br><span class="line">      <span class="comment">// 将instance这个ReactComponent渲染后的对象，即Virtual DOM，保存到container这个DOM元素的firstChild这个原生节点上。简单理解就是将Virtual DOM保存到内存中，这样可以大大提高交互效率</span></span><br><span class="line">      ReactDOMComponentTree.precacheNode(instance, container.firstChild);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>ReactDOM.render(）是渲染React组件并插入到DOM中的入口方法，它的执行流程大概为</p>
+<p>1.React.createElement(),创建ReactElement对象。他的重要的成员变量有type,key,ref,props。这个过程中会调用getInitialState(), 初始化state，只在挂载的时候才调用。后面update时不再调用了。</p>
+<p>2.instantiateReactComponent()，根据ReactElement的type分别创建ReactDOMComponent， ReactCompositeComponent，ReactDOMTextComponent等对象</p>
+<p>3.mountComponent(), 调用React生命周期方法解析组件，得到它的HTML。</p>
+<p>4._mountImageIntoNode(), 将HTML插入到DOM父节点中，通过设置DOM父节点的innerHTML属性。</p>
+<p>5.缓存节点在React中的对应对象，即Virtual DOM。</p>
+<p>!()[]</p>
+<p><a href="https://zhuanlan.zhihu.com/p/25882202" target="_blank" rel="noopener">原文地址</a></p>
+
+  </article>
+</div>
+
+
+    
+
+
+
+
+</div>
+
+<div class="footer-wrapper container">
+  <footer class="footer clearfix">
+    <div class="clearfix">
+    <a href="https://zhanghao-web.github.io" class="footer-logo">
+      <i class="fa fa-github"></i>
+    </a>
+    <ul class="footer-social-link">
+      <li>© 2019 张白告丶</li>
+      <li><a href="https://zhanghao-web.github.io">Home</a></li>
+      
+    </ul>
+    <div class="footer-theme-info">
+      Theme <a href="//github.com/sabrinaluo/hexo-theme-replica">Replica</a>
+      by <a href="//github.com/sabrinaluo">Hiitea</a> ❤ Powered by Hexo
+    </div>
+    </div>
+    
+  </footer>
+</div>
+
+
+
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>
+    使用 Redux-Saga 管理 React 应用中的异步 action （上） | 默默默默燃
+  </title>
+  <meta name="description" content="一枚前端搬砖队队员的记录册">
+  
+  <meta name="keywords" content="
+  React-saga
+  ">
+  
+  <meta name="author" content="张白告丶">
+
+  <meta http-equiv="Cache-Control" content="no-transform"/>
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="theme-color" content="#1e2327">
+  <link rel="apple-touch-icon" href="https://github.githubassets.com/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://github.githubassets.com/apple-touch-icon-180x180.png">
+
+  <link rel="icon" type="image/x-icon" href="https://github.githubassets.com/favicon.ico">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+  
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.25-csp/vue.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+</head>
+
+<body id="replica-app">
+
+<nav class="navbar-wrapper">
+  <div class="navbar">
+    <div class="container clearfix">
+      <a href="/" class="navbar-logo"><i class="fa fa-github"></i></a>
+
+      <div class="navbar-search float-left desktop-only">
+        <div class="navbar-search-form">
+          <label for="gsc-i-id1">This website</label>
+          <div id="google-search">
+            <gcse:search></gcse:search>
+          </div>
+        </div>
+      </div>
+
+      <ul class="navbar-nav float-left">
+        
+        <li><a href="/archives">Archives</a></li>
+        
+        
+        <li><a href="/categories">Categories</a></li>
+        
+        
+        <li><a href="/tags">Tags</a></li>
+        
+        
+        <li class="desktop-only"><a href="/atom.xml" target="_blank">RSS</a></li>
+        
+      </ul>
+
+      <ul class="navbar-nav user-nav float-right desktop-only">
+        <li class="user-nav-notification">
+          <a><span class="user-nav-unread"></span><i class="fa fa-bell"></i></a>
+        </li>
+        <li>
+          <a><i class="fa fa-plus"></i> <i class="fa fa-caret-down"></i></a>
+        </li>
+        <li class="user-nav-logo">
+          <a><img src="https://octodex.github.com/images/baracktocat.jpg"> <i class="fa fa-caret-down"></i></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container">
+  <header class="header-wrapper desktop-only">
+  <div class="container header-site-detail">
+    <ul class="header-toolbar">
+      <li class="clearfix">
+        <a href="/archives" class="header-toolbar-left"><i
+                  class="fa fa-file-text"></i> Posts </a>
+        <a href="/archives"
+           class="header-toolbar-right"> 147 </a>
+      </li>
+      <li>
+        <a href="/tags" class="header-toolbar-left"><i
+                  class="fa fa-tags"></i> Tags </a>
+        <a href="/tags"
+           class="header-toolbar-right"> 47 </a>
+      </li>
+      <li>
+        <a href="/categories" class="header-toolbar-left"><i
+                  class="fa fa-folder-open"></i> Categories </a>
+        <a href="/categories"
+           class="header-toolbar-right"> 23 </a>
+      </li>
+    </ul>
+    <h2 class="header-title">
+      <i class="fa fa-book text-muted"></i>
+      <a href="/">默默默默燃</a>
+      
+      
+    </h2>
+  </div>
+
+  <div class="container">
+    <div class="header-tab-wrapper clearfix">
+      <span class="header-tab header-tab-selected"><i class="fa fa-thumbs-o-up"></i> Like</span>
+      <span class="header-tab"><i class="fa fa-share-alt"></i> Share</span>
+      <span class="header-tab"><i class="fa fa-comments-o"></i> Discussion</span>
+      <span class="header-tab"><i class="fa fa-bookmark-o"></i> Bookmark </span>
+      <span class="header-tab"><i class="fa fa-smile-o"></i> Smile <i class="fa fa-caret-down"></i></span>
+    </div>
+  </div>
+</header>
+
+
+<div class="post-container container">
+  <h3>
+    <i class="fa fa-user-o"></i>
+    张白告丶
+
+    <span class="post-date float-right" title="{{moment(1534820201000).format('MMM DD, YYYY, h:mm:ss A')}}">
+      
+          <i class="fa fa-pencil-square-o"></i>
+      
+      {{moment(1534820201000).fromNow()}}
+    </span>
+  </h3>
+
+  <article class="post-content">
+    <h1>使用 Redux-Saga 管理 React 应用中的异步 action （上）</h1>
+    <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>可以用<code>Don’t call me, I’ll call you</code>这句话来比喻<code>react-saga</code>。</p>
+<h2 id="Generators-先行！"><a href="#Generators-先行！" class="headerlink" title="Generators 先行！"></a>Generators 先行！</h2><p>为了理解 Sagas，我们首先要理解什么是 <code>Generator</code>。下面是 <a href="https://link.juejin.im/?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FJavaScript%2FReference%2FStatements%2Ffunction%252A" target="_blank" rel="noopener">MDN</a> 对 Generator 的描述：</p>
+<blockquote>
+<p>Generator 是在执行时能暂停，后面又能从暂停处继续执行的函数。它的上下文会在继续执行时保存。</p>
+</blockquote>
+<p>你可以把 Generator 理解成一种遍历器对象生成函数，（译注：Generator 执行后返回的遍历器对象）提供一个 <code>next</code> 方法。执行这个方法就会返回下一个状态，或者返回遍历结束的状态。这就需要 Generator 能够维护内部状态。</p>
+<p>下面是一个基本的 Generator 示例，它生成的遍历器对象会返回几个字符串：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> * <span class="title">helloWorld</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">yield</span> hello;</span><br><span class="line">    <span class="keyword">yield</span> world;</span><br><span class="line">    <span class="keyword">return</span> helloWorld;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> f = helloWorld();</span><br><span class="line">f.next() <span class="comment">// &#123;value:'hello',done:false&#125;</span></span><br><span class="line">f.next() <span class="comment">// &#123;value:'world',done:false&#125;</span></span><br><span class="line">f.next() <span class="comment">// &#123;value:'helloWorld',done:true&#125;</span></span><br></pre></td></tr></table></figure>
+<p>next 方法的返回值结构非常简单 — 只要我们通过 yield/return 返回值，这个返回值就是 value 属性的值。如果我们没有返回值，value 属性的值就是 undefined，done 属性的值就是 true。<br>还有一点值的注意的是，执行 helloWorld 后，函数会在调用 yield 的地方停下来。当我们调用 next 方法后，函数会继续执行，直到遇到下一个 yield。如果我们调用了 return 语句或者函数执行完毕，done 属性就会为真。</p>
+<ul>
+<li>如果状态序列的长度不确定时，我们可以用下面的方法来写：</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> results = generator.next();</span><br><span class="line"><span class="keyword">while</span>(!results.done)&#123;</span><br><span class="line"> <span class="built_in">console</span>.log(results.value);</span><br><span class="line"> results = generator.next();</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(results.value);</span><br></pre></td></tr></table></figure>
+<h2 id="什么是-Sagas？"><a href="#什么是-Sagas？" class="headerlink" title="什么是 Sagas？"></a>什么是 Sagas？</h2><p>Sagas 是通过 Generator 函数来创建的。<a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Fredux-saga%2Fredux-saga" target="_blank" rel="noopener">官方文档</a> 的解释如下：</p>
+<blockquote>
+<p>Saga 就像应用中的一个独立线程，完全负责管理异步 action。</p>
+</blockquote>
+<p>你可以把 Saga 想象成一个以最快速度不断地调用 next 方法并尝试获取所有 yield 表达式值的线程。你可能会问这和 React 有什么关系，为什么要使用它，所以首先来看看如何在 React &amp; Redux 应用使用 Saga：<br>在 React &amp; Redux 应用中，一个常见的用法从调用一个 action 开始。被分配用来处理这个 action 的 reducer 会使用新的 state 更新 store，随后视图就会被更新渲染。<br><a id="more"></a></p>
+<p>如果一个 Saga 被分配用来处理这个 action — 这个 action 通常就是个异步 action（比如一个对服务端的请求），一旦这个 action 完成后，Saga 会调用另一个 action 让 reducer 进行处理。</p>
+<h2 id="常见用例"><a href="#常见用例" class="headerlink" title="常见用例"></a>常见用例</h2><p>我们可以通过一个常见流程来说明：<br>用户与页面进行交互，这个交互动作会触发一个从服务端请求数据的动作(此时页面显示 loading 提示)，最终我们用请求回来的数据去渲染页面的内容。<br>让我们为每步创建一个 action，然后用 Redux-Saga 实现一个简化的版本如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// saga.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; take &#125; <span class="keyword">from</span> <span class="string">'redux-saga/effects'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">mySaga</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">yield</span> take(USER_INTERACTED_WITH_UI_ACTION);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个 Saga 的函数名叫做 <code>mySaga</code>。它调用了 Redux-Saga <a href="https://link.juejin.im/?target=https%3A%2F%2Fredux-saga.js.org%2Fdocs%2Fapi%2F%23effect-creators" target="_blank" rel="noopener">effect</a> 的 <code>take</code> 方法，这个方法会阻塞 Saga 的执行，直到有人调用了作为参数的那个 action，Saga 的执行也会结束，就像我们前面看到的 Generator 一样（done 变为 true）。</p>
+<p>现在我们要让页面展示 loading 提示来响应这个 action。可以通过 <code>put</code> 方法调用另一个 action，然后分配 reducer 来处理，从而完成上述功能。如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// saga.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; take, put &#125; <span class="keyword">from</span> <span class="string">'redux-saga/effects'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">mySaga</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">yield</span> take(USER_INTERACTED_WITH_UI_ACTION);</span><br><span class="line">    <span class="keyword">yield</span> put(SHOW_LOADING_ACTION, &#123;<span class="attr">isLoading</span>: <span class="literal">true</span>&#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// reducer.js</span></span><br><span class="line">...</span><br><span class="line"><span class="keyword">case</span> SHOW_LOADING_ACTION: <span class="function">(<span class="params">state, isLoading</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;, state, &#123;<span class="attr">showLoading</span>: isLoading&#125;);</span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>下一步是调用 <code>call</code> 方法，它接收一个函数和一组参数，使用这些参数来执行这个函数。我们给 <code>call</code> 方法传递一个请求服务端并返回一个 Promise 的 <code>GET</code> 函数，它会保存请求结果：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// saga.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; take, put, call &#125; <span class="keyword">from</span> <span class="string">'redux-saga/effects'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">mySaga</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">yield</span> take(USER_INTERACTED_WITH_UI_ACTION);</span><br><span class="line">    <span class="keyword">yield</span> put(SHOW_LOADING_ACTION, &#123;<span class="attr">isLoading</span>: <span class="literal">true</span>&#125;);</span><br><span class="line">    <span class="keyword">const</span> data = <span class="keyword">yield</span> call(GET, <span class="string">'https://my.server.com/getdata'</span>);</span><br><span class="line">    <span class="keyword">yield</span> put(SHOW_DATA_ACTION, &#123;<span class="attr">data</span>: data&#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// reducer.js</span></span><br><span class="line">...</span><br><span class="line"><span class="keyword">case</span> SHOW_DATA_ACTION: <span class="function">(<span class="params">state, data</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;, state, &#123;<span class="attr">data</span>: data, <span class="attr">showLoading</span>: <span class="literal">false</span>&#125;;</span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>通过调用 <code>SHOW_DATA_ACTION</code> 来用接收的数据更新页面。</p>
+<h2 id="刚刚发生了什么？"><a href="#刚刚发生了什么？" class="headerlink" title="刚刚发生了什么？"></a>刚刚发生了什么？</h2><p>应用启动后，所有的 Sagas 都会被执行，你可以认为一直在调用 next 方法直到结束。take 方法类似于线程挂起的作用，一旦调用了<code>USER_INTERACTED_WITH_UI_ACTION</code>，线程就会恢复执行。</p>
+<p>然后，我们继续调用 <code>SHOW_LOADING_ACTION</code>，reducer 会处理这个 action。由于 Saga 还在继续运行，call 方法会发起对服务端的请求，Saga 会在再次挂起，直到请求结束。</p>
+<h2 id="每次都使用"><a href="#每次都使用" class="headerlink" title="每次都使用"></a>每次都使用</h2><p>在上面的例子中，Saga 只处理了一个用户交互的 action，因为我们用 put 方法执行了 <code>SHOW_DATA_ACTION</code> 这个 action，然后后面就没有 yield 了（done 就是 true 了对吧？）。<br>如果我们希望在每次调用 <code>USER_INTERACTED_WITH_UI_ACTION</code> 这个 action 的时候，都会执行这一系列的 actions，我们可以用 while(true) 语句来包裹 Saga 内部的逻辑代码。完整代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// saga.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; take, put, call &#125; <span class="keyword">from</span> <span class="string">'redux-saga/effects'</span></span><br><span class="line"></span><br><span class="line"><span class="number">1.</span> <span class="function"><span class="keyword">function</span>* <span class="title">mySaga</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"><span class="number">2.</span>   <span class="keyword">while</span> (<span class="literal">true</span>)&#123;</span><br><span class="line"><span class="number">3.</span>    <span class="keyword">yield</span> take(USER_INTERACTED_WITH_UI_ACTION);</span><br><span class="line"><span class="number">4.</span>    <span class="keyword">yield</span> put(SHOW_LOADING_ACTION, &#123;<span class="attr">isLoading</span>: <span class="literal">true</span>&#125;);</span><br><span class="line"><span class="number">5.</span>    <span class="keyword">const</span> data = <span class="keyword">yield</span> call(GET, <span class="string">'https://my.server.com/getdata'</span>);</span><br><span class="line"><span class="number">6.</span>    <span class="keyword">yield</span> put(SHOW_DATA_ACTION, &#123;<span class="attr">data</span>: data&#125;);</span><br><span class="line"><span class="number">7.</span>  &#125;</span><br><span class="line"><span class="number">8.</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// reducer.js</span></span><br><span class="line">...</span><br><span class="line"><span class="keyword">case</span> SHOW_LOADING_ACTION: <span class="function">(<span class="params">state, isLoading</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;, state, &#123;<span class="attr">showLoading</span>: isLoading&#125;);</span><br><span class="line">&#125;,</span><br><span class="line"><span class="keyword">case</span> SHOW_DATA_ACTION: <span class="function">(<span class="params">state, data</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;, state, &#123;<span class="attr">data</span>: data, <span class="attr">showLoading</span>: <span class="literal">false</span>&#125;;</span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>这个无限循环不会造成堆栈溢出，也不会使你的应用崩溃！因为 <code>take</code> 方法就像线程挂起一样，<code>mySaga</code> 执行后会一直保持 <code>pending</code> 状态，直到那个 <code>action</code> 被触发。下次重新进入循环后，也会重复上述过程。</p>
+<ul>
+<li>让我们一步步地看一下上面的过程：</li>
+</ul>
+<p>1.应用启动，执行所有 Sagas。<br>2.mySaga 运行，进入 while(true) 循环，在第 3 行挂起。<br>3.USER_INTERACTED_WITH_UI_ACTION 这个 action 被触发。<br>4.Saga 的线程激活，执行第 4 行，触发 SHOW_LOADING_ACTION 这个 action，然后分配的 reducer 进行处理（reducer 处理后，页面就会显示 loading 提示）。<br>5.发送一个请求到服务端（第 5 行），然后会再次挂起，直到请求的 Promise 变为 resolved，请求结果的数据会赋值给 data 变量。<br>6.SHOW_DATA_ACTION 接收 data 作为参数被触发，然后 reducer 就可以使用这些数据来更新页面。<br>再次进入循环，回到第 2 步。</p>
+<h2 id="接下来"><a href="#接下来" class="headerlink" title="接下来"></a>接下来</h2><p>在这篇文章中，我们介绍了 Redux-Saga 相关的基本概念，展示了如何在 React 应用中使用它。下篇文章中，我会展示在实际应用中使用它获得的价值。</p>
+<p><a href="https://juejin.im/post/5ac1cb9d6fb9a028cf32a046" target="_blank" rel="noopener">原文地址</a></p>
+
+  </article>
+</div>
+
+
+    
+
+
+
+
+</div>
+
+<div class="footer-wrapper container">
+  <footer class="footer clearfix">
+    <div class="clearfix">
+    <a href="https://zhanghao-web.github.io" class="footer-logo">
+      <i class="fa fa-github"></i>
+    </a>
+    <ul class="footer-social-link">
+      <li>© 2019 张白告丶</li>
+      <li><a href="https://zhanghao-web.github.io">Home</a></li>
+      
+    </ul>
+    <div class="footer-theme-info">
+      Theme <a href="//github.com/sabrinaluo/hexo-theme-replica">Replica</a>
+      by <a href="//github.com/sabrinaluo">Hiitea</a> ❤ Powered by Hexo
+    </div>
+    </div>
+    
+  </footer>
+</div>
+
+
+
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>

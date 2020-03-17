@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>
+    助你理解React高阶组件 | 默默默默燃
+  </title>
+  <meta name="description" content="一枚前端搬砖队队员的记录册">
+  
+  <meta name="keywords" content="
+  React
+  ">
+  
+  <meta name="author" content="张白告丶">
+
+  <meta http-equiv="Cache-Control" content="no-transform"/>
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="theme-color" content="#1e2327">
+  <link rel="apple-touch-icon" href="https://github.githubassets.com/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://github.githubassets.com/apple-touch-icon-180x180.png">
+
+  <link rel="icon" type="image/x-icon" href="https://github.githubassets.com/favicon.ico">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+  
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.25-csp/vue.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+</head>
+
+<body id="replica-app">
+
+<nav class="navbar-wrapper">
+  <div class="navbar">
+    <div class="container clearfix">
+      <a href="/" class="navbar-logo"><i class="fa fa-github"></i></a>
+
+      <div class="navbar-search float-left desktop-only">
+        <div class="navbar-search-form">
+          <label for="gsc-i-id1">This website</label>
+          <div id="google-search">
+            <gcse:search></gcse:search>
+          </div>
+        </div>
+      </div>
+
+      <ul class="navbar-nav float-left">
+        
+        <li><a href="/archives">Archives</a></li>
+        
+        
+        <li><a href="/categories">Categories</a></li>
+        
+        
+        <li><a href="/tags">Tags</a></li>
+        
+        
+        <li class="desktop-only"><a href="/atom.xml" target="_blank">RSS</a></li>
+        
+      </ul>
+
+      <ul class="navbar-nav user-nav float-right desktop-only">
+        <li class="user-nav-notification">
+          <a><span class="user-nav-unread"></span><i class="fa fa-bell"></i></a>
+        </li>
+        <li>
+          <a><i class="fa fa-plus"></i> <i class="fa fa-caret-down"></i></a>
+        </li>
+        <li class="user-nav-logo">
+          <a><img src="https://octodex.github.com/images/baracktocat.jpg"> <i class="fa fa-caret-down"></i></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container">
+  <header class="header-wrapper desktop-only">
+  <div class="container header-site-detail">
+    <ul class="header-toolbar">
+      <li class="clearfix">
+        <a href="/archives" class="header-toolbar-left"><i
+                  class="fa fa-file-text"></i> Posts </a>
+        <a href="/archives"
+           class="header-toolbar-right"> 147 </a>
+      </li>
+      <li>
+        <a href="/tags" class="header-toolbar-left"><i
+                  class="fa fa-tags"></i> Tags </a>
+        <a href="/tags"
+           class="header-toolbar-right"> 47 </a>
+      </li>
+      <li>
+        <a href="/categories" class="header-toolbar-left"><i
+                  class="fa fa-folder-open"></i> Categories </a>
+        <a href="/categories"
+           class="header-toolbar-right"> 23 </a>
+      </li>
+    </ul>
+    <h2 class="header-title">
+      <i class="fa fa-book text-muted"></i>
+      <a href="/">默默默默燃</a>
+      
+      
+    </h2>
+  </div>
+
+  <div class="container">
+    <div class="header-tab-wrapper clearfix">
+      <span class="header-tab header-tab-selected"><i class="fa fa-thumbs-o-up"></i> Like</span>
+      <span class="header-tab"><i class="fa fa-share-alt"></i> Share</span>
+      <span class="header-tab"><i class="fa fa-comments-o"></i> Discussion</span>
+      <span class="header-tab"><i class="fa fa-bookmark-o"></i> Bookmark </span>
+      <span class="header-tab"><i class="fa fa-smile-o"></i> Smile <i class="fa fa-caret-down"></i></span>
+    </div>
+  </div>
+</header>
+
+
+<div class="post-container container">
+  <h3>
+    <i class="fa fa-user-o"></i>
+    张白告丶
+
+    <span class="post-date float-right" title="{{moment(1521622886000).format('MMM DD, YYYY, h:mm:ss A')}}">
+      
+          <i class="fa fa-pencil-square-o"></i>
+      
+      {{moment(1521622886000).fromNow()}}
+    </span>
+  </h3>
+
+  <article class="post-content">
+    <h1>助你理解React高阶组件</h1>
+    <h1 id="高阶组件"><a href="#高阶组件" class="headerlink" title="高阶组件"></a>高阶组件</h1><p>高阶组件（HOC）是react中对组件逻辑进行重用的高级技术。但高阶组件本身并不是React API。它只是一种模式，这种模式是由react自身的组合性质必然产生的。</p>
+<p>具体而言，<strong>高阶组件就是一个函数，且该函数接受一个组件作为参数，并返回一个新的组件</strong></p>
+<p>高阶组件在React第三方库中很常见，比如Redux的<a href="https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options" target="_blank" rel="noopener">connect</a>方法和Relay的<a href="">createContainer</a>.</p>
+<h2 id="使用高阶组件（HOC）解决交叉问题"><a href="#使用高阶组件（HOC）解决交叉问题" class="headerlink" title="使用高阶组件（HOC）解决交叉问题"></a>使用高阶组件（HOC）解决交叉问题</h2><h2 id="不要改变原始组件，使用组合"><a href="#不要改变原始组件，使用组合" class="headerlink" title="不要改变原始组件，使用组合"></a>不要改变原始组件，使用组合</h2><h2 id="约定：将不相关的props属性传递给包裹组件"><a href="#约定：将不相关的props属性传递给包裹组件" class="headerlink" title="约定：将不相关的props属性传递给包裹组件"></a>约定：将不相关的props属性传递给包裹组件</h2><h2 id="约定：最大化使用组合"><a href="#约定：最大化使用组合" class="headerlink" title="约定：最大化使用组合"></a>约定：最大化使用组合</h2><h2 id="约定：包装显示名字以便于调试"><a href="#约定：包装显示名字以便于调试" class="headerlink" title="约定：包装显示名字以便于调试"></a>约定：包装显示名字以便于调试</h2><a id="more"></a>
+<h1 id="函数模拟高阶组件"><a href="#函数模拟高阶组件" class="headerlink" title="函数模拟高阶组件"></a>函数模拟高阶组件</h1><p>我们通过普通函数来理解什么是高阶组件哦~</p>
+<p>1.最普通的方法，一个welcome，一个goodbye。两个函数先从localStorage读取了username，然后对username做了一些处理。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">welcome</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> username = localStorage.getItem(<span class="string">'username'</span>);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'welcome '</span> + username);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">goodbey</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"><span class="keyword">let</span> username = localStorage.getItem(<span class="string">'username'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'goodbey '</span> + username);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">welcome();</span><br><span class="line">goodbey();</span><br></pre></td></tr></table></figure></p>
+<p>2.我们发现两个函数有一句代码是一样的，这叫冗余唉。不好不好~（你可以把那一句代码理解成平时的一大堆代码）</p>
+<p>我们要写一个中间函数，读取username,他来负责把username传递给两个函数。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">welcome</span>(<span class="params">username</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'welcome '</span> + username);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">goodbey</span>(<span class="params">username</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'goodbey '</span> + username);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">wrapWithUsername</span>(<span class="params">wrappedFunc</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> newFunc = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> username = localStorage.getItem(<span class="string">'username'</span>);</span><br><span class="line">        wrappedFunc(username);</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">return</span> newFunc;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">welcome = wrapWithUsername(welcome);</span><br><span class="line">goodbey = wrapWithUsername(goodbey);</span><br><span class="line"></span><br><span class="line">welcome();</span><br><span class="line">goodbey();</span><br></pre></td></tr></table></figure></p>
+<p>好了，我们里面的wrapWithUsername函数就是一个“高阶函数”。<br>他做了什么？他帮我们处理了username，传递给目标函数。我们调用最终的函数welcome的时候，根本不用关心username是怎么来的。<br>我们增加个用户study函数。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">function</span> <span class="title">study</span>(<span class="params">username</span>)</span>&#123;</span><br><span class="line">     <span class="built_in">console</span>.log(<span class="string">'study'</span> + username);</span><br><span class="line"> &#125;</span><br><span class="line"> study = wrapWithUsername(study);</span><br><span class="line"></span><br><span class="line">study();</span><br></pre></td></tr></table></figure>
+<p>这里你是不是理解了为什么说wrapWithUsername是高阶函数？我们只需要知道，用wrapWithUsername包装我们的study函数后，study函数第一个参数是username。</p>
+<p>我们写平时写代码的时候，不用关心wrapWithUsername内部是如何实现的。</p>
+<h1 id="高阶组件就是一个没有副作用的纯函数。"><a href="#高阶组件就是一个没有副作用的纯函数。" class="headerlink" title="高阶组件就是一个没有副作用的纯函数。"></a>高阶组件就是一个没有副作用的纯函数。</h1><p>我们把上一节的函数统统改成react组件。</p>
+<p>最普通的组件哦。<br>welcome函数转为react组件。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123;Component&#125; <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Welcome</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(props) &#123;</span><br><span class="line">        <span class="keyword">super</span>(props);</span><br><span class="line">        <span class="keyword">this</span>.state = &#123;</span><br><span class="line">            username: <span class="string">''</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    componentWillMount() &#123;</span><br><span class="line">        <span class="keyword">let</span> username = localStorage.getItem(<span class="string">'username'</span>);</span><br><span class="line">        <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">            username: username</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    render() &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            &lt;div&gt;welcome &#123;<span class="keyword">this</span>.state.username&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">        )</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">export default Welcome;</span></span><br></pre></td></tr></table></figure></p>
+<p>2.goodbey函数转为react组件。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123;Component&#125; <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Goodbye</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(props) &#123;</span><br><span class="line">        <span class="keyword">super</span>(props);</span><br><span class="line">        <span class="keyword">this</span>.state = &#123;</span><br><span class="line">            username: <span class="string">''</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    componentWillMount() &#123;</span><br><span class="line">        <span class="keyword">let</span> username = localStorage.getItem(<span class="string">'username'</span>);</span><br><span class="line">        <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">            username: username</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    render() &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            &lt;div&gt;goodbye &#123;<span class="keyword">this</span>.state.username&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">        )</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">export default Goodbye;</span></span><br></pre></td></tr></table></figure></p>
+<p>3.现在你是不是更能看到问题所在了？两个组件大部分代码都是重复的唉。<br>按照上一节wrapWithUsername函数的思路，我们来写一个高阶组件(高阶组件就是一个函数，且该函数接受一个组件作为参数，并返回一个新的组件)。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123;Component&#125; <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> (WrappedComponent) =&gt; &#123;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">NewComponent</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">        <span class="keyword">constructor</span>() &#123;</span><br><span class="line">            <span class="keyword">super</span>();</span><br><span class="line">            <span class="keyword">this</span>.state = &#123;</span><br><span class="line">                username: <span class="string">''</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        componentWillMount() &#123;</span><br><span class="line">            <span class="keyword">let</span> username = localStorage.getItem(<span class="string">'username'</span>);</span><br><span class="line">            <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">                username: username</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        render() &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">WrappedComponent</span> <span class="attr">username</span>=<span class="string">&#123;this.state.username&#125;/</span>&gt;</span></span></span><br><span class="line"><span class="xml">        &#125;</span></span><br><span class="line"><span class="xml">    &#125;</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">    return NewComponent</span></span><br><span class="line"><span class="xml">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>这样我们就能简化Welcome组件和Goodbye组件。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//welcome</span></span><br><span class="line"><span class="keyword">import</span> React, &#123;Component&#125; <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="keyword">import</span> wrapWithUsername <span class="keyword">from</span> <span class="string">'wrapWithUsername'</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Welcome</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    render() &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            &lt;div&gt;welcome &#123;<span class="keyword">this</span>.props.username&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">        )</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">Welcome = wrapWithUsername(Welcome);</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">export default Welcome;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/goodbye</span></span><br><span class="line"><span class="regexp">import React, &#123;Component&#125; from 'react';</span></span><br><span class="line"><span class="regexp">import wrapWithUsername from 'wrapWithUsername';</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">class Goodbye extends Component &#123;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">    render() &#123;</span></span><br><span class="line"><span class="regexp">        return (</span></span><br><span class="line"><span class="regexp">            &lt;div&gt;goodbye &#123;this.props.username&#125;&lt;/</span>div&gt;</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Goodbye = wrapWithUsername(Goodbye);</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> Goodbye;</span><br></pre></td></tr></table></figure></p>
+<p>看到没有，高阶组件就是把username通过props传递给目标组件了。目标组件只管从props里面拿来用就好了。</p>
+<p>到这里位置，高阶组件就讲完了。你再返回去理解下定义，是不是豁然开朗</p>
+<blockquote>
+<p>你现在理解react-redux的<em>connect函数</em>~<br>把redux的state和action创建函数，通过props注入给了Component。<br>你在目标组件Component里面可以直接用this.props去调用redux state和action创建函数了。</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ConnectedComment = connect(mapStateToProps, mapDispatchToProps)(Component);</span><br></pre></td></tr></table></figure>
+<p>相当于这样</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// connect是一个返回函数的函数（就是个高阶函数）</span></span><br><span class="line"><span class="keyword">const</span> enhance = connect(mapStateToProps, mapDispatchToProps);</span><br><span class="line"><span class="comment">// 返回的函数就是一个高阶组件，该高阶组件返回一个与Redux store</span></span><br><span class="line"><span class="comment">// 关联起来的新组件</span></span><br><span class="line"><span class="keyword">const</span> ConnectedComment = enhance(Component);</span><br></pre></td></tr></table></figure>
+<p>antd的Form也是一样的</p>
+<p>const WrappedNormalLoginForm = Form.create()(NormalLoginForm);</p>
+<h1 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h1><h2 id="不要再render函数中使用高阶组件"><a href="#不要再render函数中使用高阶组件" class="headerlink" title="不要再render函数中使用高阶组件"></a>不要再render函数中使用高阶组件</h2><p>React使用的差异算法（称为协调）使用组件标识确定是否更新现有的子对象树或丢掉现有的子树并重新挂载。如果render函数返回的组件和之前render函数返回的组件是相同的，React就递归的比较新子对象树和旧子对象树的差异，并更新旧子对象树。如果他们不相等，就会完全卸载掉旧的之对象树。</p>
+<h2 id="必须将静态方法做拷贝"><a href="#必须将静态方法做拷贝" class="headerlink" title="必须将静态方法做拷贝"></a>必须将静态方法做拷贝</h2><p>有时，给组件定义静态方法是十分有用的。例如，Relay的容器就开放了一个静态方法 getFragment便于组合GraphQL的代码片段。</p>
+<h2 id="Refs属性不能传递"><a href="#Refs属性不能传递" class="headerlink" title="Refs属性不能传递"></a>Refs属性不能传递</h2><p>一般来说，高阶组件可以传递所有的props属性给包裹的组件，但是不能传递refs引用。因为并不是像key一样，refs是一个伪属性，React对它进行了特殊处理。如果你向一个由高阶组件创建的组件的元素添加ref应用，那么ref指向的是最外层容器组件实例的，而不是包裹组件。</p>
+<p><a href="https://github.com/brickspert/blog/issues/2" target="_blank" rel="noopener">原文地址</a></p>
+
+  </article>
+</div>
+
+
+    
+
+
+
+
+</div>
+
+<div class="footer-wrapper container">
+  <footer class="footer clearfix">
+    <div class="clearfix">
+    <a href="https://zhanghao-web.github.io" class="footer-logo">
+      <i class="fa fa-github"></i>
+    </a>
+    <ul class="footer-social-link">
+      <li>© 2019 张白告丶</li>
+      <li><a href="https://zhanghao-web.github.io">Home</a></li>
+      
+    </ul>
+    <div class="footer-theme-info">
+      Theme <a href="//github.com/sabrinaluo/hexo-theme-replica">Replica</a>
+      by <a href="//github.com/sabrinaluo">Hiitea</a> ❤ Powered by Hexo
+    </div>
+    </div>
+    
+  </footer>
+</div>
+
+
+
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>

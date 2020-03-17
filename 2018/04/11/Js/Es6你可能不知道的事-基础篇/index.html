@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>
+    Es6你可能不知道的事---基础篇 | 默默默默燃
+  </title>
+  <meta name="description" content="一枚前端搬砖队队员的记录册">
+  
+  <meta name="keywords" content="
+  Js
+  ">
+  
+  <meta name="author" content="张白告丶">
+
+  <meta http-equiv="Cache-Control" content="no-transform"/>
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="theme-color" content="#1e2327">
+  <link rel="apple-touch-icon" href="https://github.githubassets.com/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://github.githubassets.com/apple-touch-icon-180x180.png">
+
+  <link rel="icon" type="image/x-icon" href="https://github.githubassets.com/favicon.ico">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+  
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.25-csp/vue.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+</head>
+
+<body id="replica-app">
+
+<nav class="navbar-wrapper">
+  <div class="navbar">
+    <div class="container clearfix">
+      <a href="/" class="navbar-logo"><i class="fa fa-github"></i></a>
+
+      <div class="navbar-search float-left desktop-only">
+        <div class="navbar-search-form">
+          <label for="gsc-i-id1">This website</label>
+          <div id="google-search">
+            <gcse:search></gcse:search>
+          </div>
+        </div>
+      </div>
+
+      <ul class="navbar-nav float-left">
+        
+        <li><a href="/archives">Archives</a></li>
+        
+        
+        <li><a href="/categories">Categories</a></li>
+        
+        
+        <li><a href="/tags">Tags</a></li>
+        
+        
+        <li class="desktop-only"><a href="/atom.xml" target="_blank">RSS</a></li>
+        
+      </ul>
+
+      <ul class="navbar-nav user-nav float-right desktop-only">
+        <li class="user-nav-notification">
+          <a><span class="user-nav-unread"></span><i class="fa fa-bell"></i></a>
+        </li>
+        <li>
+          <a><i class="fa fa-plus"></i> <i class="fa fa-caret-down"></i></a>
+        </li>
+        <li class="user-nav-logo">
+          <a><img src="https://octodex.github.com/images/baracktocat.jpg"> <i class="fa fa-caret-down"></i></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container">
+  <header class="header-wrapper desktop-only">
+  <div class="container header-site-detail">
+    <ul class="header-toolbar">
+      <li class="clearfix">
+        <a href="/archives" class="header-toolbar-left"><i
+                  class="fa fa-file-text"></i> Posts </a>
+        <a href="/archives"
+           class="header-toolbar-right"> 147 </a>
+      </li>
+      <li>
+        <a href="/tags" class="header-toolbar-left"><i
+                  class="fa fa-tags"></i> Tags </a>
+        <a href="/tags"
+           class="header-toolbar-right"> 47 </a>
+      </li>
+      <li>
+        <a href="/categories" class="header-toolbar-left"><i
+                  class="fa fa-folder-open"></i> Categories </a>
+        <a href="/categories"
+           class="header-toolbar-right"> 23 </a>
+      </li>
+    </ul>
+    <h2 class="header-title">
+      <i class="fa fa-book text-muted"></i>
+      <a href="/">默默默默燃</a>
+      
+      
+    </h2>
+  </div>
+
+  <div class="container">
+    <div class="header-tab-wrapper clearfix">
+      <span class="header-tab header-tab-selected"><i class="fa fa-thumbs-o-up"></i> Like</span>
+      <span class="header-tab"><i class="fa fa-share-alt"></i> Share</span>
+      <span class="header-tab"><i class="fa fa-comments-o"></i> Discussion</span>
+      <span class="header-tab"><i class="fa fa-bookmark-o"></i> Bookmark </span>
+      <span class="header-tab"><i class="fa fa-smile-o"></i> Smile <i class="fa fa-caret-down"></i></span>
+    </div>
+  </div>
+</header>
+
+
+<div class="post-container container">
+  <h3>
+    <i class="fa fa-user-o"></i>
+    张白告丶
+
+    <span class="post-date float-right" title="{{moment(1523426729000).format('MMM DD, YYYY, h:mm:ss A')}}">
+      
+          <i class="fa fa-pencil-square-o"></i>
+      
+      {{moment(1523426729000).fromNow()}}
+    </span>
+  </h3>
+
+  <article class="post-content">
+    <h1>Es6你可能不知道的事---基础篇</h1>
+    <p>ES6，或许应该叫 ES2015（2015 年 6 月正式发布），对于大多数前端同学都不陌生。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h1 id="let-const"><a href="#let-const" class="headerlink" title="let + const"></a>let + const</h1><p>这个大概是开始了解 ES6 后，我们第一个感觉自己完全明白并兴致勃勃的开始使用的特性。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义常量</span></span><br><span class="line"><span class="keyword">const</span> REG_GET_INPUT = <span class="regexp">/^\d&#123;1,3&#125;$/</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义配置项</span></span><br><span class="line"><span class="keyword">let</span> config = &#123;</span><br><span class="line">  isDev : <span class="literal">false</span>,</span><br><span class="line">  pubDir: <span class="string">'./admin/'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 引入 gulp</span></span><br><span class="line"><span class="keyword">let</span> gulp    = <span class="built_in">require</span>(<span class="string">'gulp'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 引入gulp相关插件</span></span><br><span class="line"><span class="keyword">let</span> concat  = <span class="built_in">require</span>(<span class="string">'gulp-concat'</span>);</span><br><span class="line"><span class="keyword">let</span> uglify  = <span class="built_in">require</span>(<span class="string">'gulp-uglify'</span>);</span><br><span class="line"><span class="keyword">let</span> cssnano = <span class="built_in">require</span>(<span class="string">'gulp-cssnano'</span>);</span><br></pre></td></tr></table></figure></p>
+<p>很多人看完概念之后，第一印象都是：“const 是表示不可变的值，而 let 则是用来替换原来的 var 的。”</p>
+<p>所以就会出现上面代码中的样子；一段代码中出现大量的 let，只有部分常量用 const 去做定义，这样的使用方式是错误的。</p>
+<h3 id="你可能不知道的事"><a href="#你可能不知道的事" class="headerlink" title="你可能不知道的事"></a>你可能不知道的事</h3><p><code>const</code> 的定义是<code>不可重新赋值</code>的值，与<code>不可变的值</code>(immutable value)不同；const 定义的 Object，在定义之后仍可以修改其属性。</p>
+<p>所以其实他的使用场景很广，包括常量、配置项以及引用的组件、定义的 “大部分” 中间变量等，都应该以<strong>const</strong>做定义。反之就 <strong>let</strong> 而言，他的使用场景应该是相对较少的，我们只会在 <strong>loop(for，while 循环)</strong>及少量必须<strong>重定义</strong>的变量上用到他。</p>
+<blockquote>
+<p>猜想：就执行效率而言，Const由于不可重新赋值，所以可以做更多语法静态分析方面的优化，从而有更高的执行效率</p>
+</blockquote>
+<p>所以上面代码中，所有使用 let 的部分，其实都应该是用 const 的。<br><a id="more"></a></p>
+<h2 id="Template-Strings（字符串模板）"><a href="#Template-Strings（字符串模板）" class="headerlink" title="Template Strings（字符串模板）"></a>Template Strings（字符串模板）</h2><p>字符串模板是我刚接触ES6时最喜欢的特性之一，他语法简洁，语义明确，而且很好的解决了之前字符串拼接麻烦的问题<br>我们先来看看他的一般使用场景：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> start = <span class="string">'hi all'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> getName = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">'jelly'</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> conf = &#123;</span><br><span class="line">  fav: <span class="string">'Coding'</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 模板</span></span><br><span class="line"><span class="keyword">const</span> msg = <span class="string">`<span class="subst">$&#123;start&#125;</span>, my name is <span class="subst">$&#123;getName()&#125;</span>, <span class="subst">$&#123;conf.fav&#125;</span> is my favourite`</span>;</span><br></pre></td></tr></table></figure></p>
+<h3 id="你可能不知道的事-1"><a href="#你可能不知道的事-1" class="headerlink" title="你可能不知道的事"></a>你可能不知道的事</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 与引号混用</span></span><br><span class="line"><span class="keyword">const</span> wantToSay = <span class="string">`I'm a "tbfed"`</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 支持多行文本</span></span><br><span class="line"><span class="keyword">const</span> slogan = </span><br><span class="line"><span class="string">`</span></span><br><span class="line"><span class="string">I have a dream today!</span></span><br><span class="line"><span class="string">`</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 比较适合写HTML</span></span><br><span class="line"><span class="keyword">const</span> resultTpl = </span><br><span class="line"><span class="string">`</span></span><br><span class="line"><span class="string">  &lt;section&gt;</span></span><br><span class="line"><span class="string">    &lt;div&gt;...&lt;/div&gt;</span></span><br><span class="line"><span class="string">  &lt;/section&gt;</span></span><br><span class="line"><span class="string">`</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="Enhanced-Object-Literals（增强的对象字面量）"><a href="#Enhanced-Object-Literals（增强的对象字面量）" class="headerlink" title="Enhanced Object Literals（增强的对象字面量）"></a>Enhanced Object Literals（增强的对象字面量）</h2><p>增强的对象字面量是 ES6 中的升华功能，他设计了很多简写，这些简写不但保留了明确的语义，还减少了我们多余的代码量。</p>
+<p>当他的使用成为一个习惯时，我们会看到自己代码变得更为优雅。</p>
+<h3 id="你可能不知道的事-2"><a href="#你可能不知道的事-2" class="headerlink" title="你可能不知道的事"></a>你可能不知道的事</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> _bookNum = <span class="number">4</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> basicConfig = &#123;</span><br><span class="line">  level: <span class="number">5</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> config = &#123;</span><br><span class="line">  <span class="comment">// 直接指定原型对象</span></span><br><span class="line">  __proto__: basicConfig,</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 属性简写 相当于_bookNum:_bookNum</span></span><br><span class="line">  _bookNum,</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 方法简写 </span></span><br><span class="line">  <span class="comment">//相当于 getBookNum:function()&#123;..&#125;</span></span><br><span class="line">  getBookNum() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.bookNum;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Arrows-and-Lexical-This（箭头函数）"><a href="#Arrows-and-Lexical-This（箭头函数）" class="headerlink" title="Arrows and Lexical This（箭头函数）"></a>Arrows and Lexical This（箭头函数）</h2><p>箭头函数是ES6中的一个新的语法特性，他的用法简单，形态优雅，备受人们青睐。<br>大多数同学初识这个特性时，更多的仅仅用它作为函数定义的简写，这其实就有些屈才了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 未使用箭头函数的写法</span></span><br><span class="line">&#123;</span><br><span class="line">  ...</span><br><span class="line">  </span><br><span class="line">  addOptions: <span class="function"><span class="keyword">function</span> (<span class="params">options</span>) </span>&#123;</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">var</span> self = <span class="keyword">this</span>;</span><br><span class="line">  </span><br><span class="line">    options.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">name, opts</span>)</span>&#123;</span><br><span class="line">      </span><br><span class="line">      self[name] = self.addChild(name, opts);</span><br><span class="line">      </span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">  &#125; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用箭头函数后的写法</span></span><br><span class="line">&#123;</span><br><span class="line">  ...</span><br><span class="line">  </span><br><span class="line">  addOptions: <span class="function"><span class="keyword">function</span> (<span class="params">options</span>) </span>&#123;</span><br><span class="line">  </span><br><span class="line">    options.forEach(<span class="function">(<span class="params">name, opts</span>) =&gt;</span> &#123;</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">this</span>[name] = <span class="keyword">this</span>.addChild(name, opts);</span><br><span class="line">      </span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">  &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以注意到上下两段代码的区别。</p>
+<p>在未使用箭头函数前，我们在过程函数中使用父级 this，需要将其显式缓存到另一个中间变量中，因为过程函数有独立的 this 变量，会覆盖父级；使用箭头函数后，不但简写了一个过程函数（ forEach 的参数），还省略掉了 this 的中间变量的定义。</p>
+<p><strong>原因：箭头函数没有独立执行上下文（ this ），所以其内部引用 this 对象会直接访问父级。</strong></p>
+<p>当然，从这块我们也可以看出，箭头函数是无法替代全部 function 的使用场景的，例如我们需要有<em>独立 this</em> 的函数。</p>
+<h3 id="你可能不知道的事-3"><a href="#你可能不知道的事-3" class="headerlink" title="你可能不知道的事"></a>你可能不知道的事</h3><blockquote>
+<ul>
+<li><p>箭头函数不但没有独立的this，他也没有独立的arguments，所以如果需要取不定参的时候，要么使用 function，要么用 ES6 的另一个新特性 rest（具体在 rest 中会有详解）。</p>
+</li>
+<li><p>箭头函数语法很灵活，在只有一个参数或者只有一句表达式做方法体时，可以省略相应括号。</p>
+</li>
+</ul>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 完整写法</span></span><br><span class="line"><span class="keyword">const</span> getOptions = <span class="function">(<span class="params">name, key</span>) =&gt;</span> &#123;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 省略参数括号</span></span><br><span class="line"><span class="keyword">const</span> getOptions = <span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">  ... </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 省略参数和方法体括号</span></span><br><span class="line"><span class="keyword">const</span> getOptions = <span class="function"><span class="params">key</span> =&gt;</span> <span class="built_in">console</span>.log(key);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 无参数或方法体，括号不能省略</span></span><br><span class="line"><span class="keyword">const</span> noop = <span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;;</span><br></pre></td></tr></table></figure>
+<p>有个简单小栗子，这一灵活的语法在写连续的Promise链式调用时，可以使代码更加优雅</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">gitPromise</span><br><span class="line">  .then(<span class="function"><span class="params">()</span> =&gt;</span> git.add())</span><br><span class="line">  .then(<span class="function"><span class="params">()</span> =&gt;</span> git.commit())</span><br><span class="line">  .then(<span class="function"><span class="params">()</span> =&gt;</span> git.log())</span><br><span class="line">  .then(<span class="function">(<span class="params">msg</span>) =&gt;</span> &#123;</span><br><span class="line">      ...</span><br><span class="line">  &#125;)</span><br><span class="line">  .then(<span class="function"><span class="params">()</span> =&gt;</span> git.push())</span><br><span class="line">  .catch(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">      utils.error(err);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="Destructuring（解构）"><a href="#Destructuring（解构）" class="headerlink" title="Destructuring（解构）"></a>Destructuring（解构）</h2><p>解构这个特性可以简单解读为分别定义，用于一次定义多个变量，常常用于分解方法返回对象为多个变量，分别使用。<br>使用过ES6的同学应该或多或少接触过这个特性，但是你可能不知道它如下几个用法：</p>
+<h3 id="你可能不知道的事-4"><a href="#你可能不知道的事-4" class="headerlink" title="你可能不知道的事"></a>你可能不知道的事</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> bookSet = [<span class="string">'UED'</span>, <span class="string">'TB fed'</span>, <span class="string">'Not find'</span>];</span><br><span class="line"><span class="keyword">const</span> bookCollection = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;<span class="attr">book1</span>: <span class="string">'UED'</span>, <span class="attr">book2</span>: <span class="string">'TB fed'</span>&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1. 解构也可以设置默认值</span></span><br><span class="line"><span class="keyword">const</span> &#123;book1, book3 = <span class="string">'Not find'</span>&#125; = bookCollection();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 解构数组时候是可以跳过其中某几项的</span></span><br><span class="line"><span class="keyword">const</span> [book1,,book3] = bookSet;  <span class="comment">// book1 = 'UED', book3 = 'Not find'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 解构可以取到指定对象的任何属性，包括它包含的方法</span></span><br><span class="line"><span class="keyword">const</span> &#123;<span class="attr">length</span>: setLength&#125; = bookSet;  <span class="comment">// setLength = 3</span></span><br></pre></td></tr></table></figure>
+<h2 id="Rest-Spread"><a href="#Rest-Spread" class="headerlink" title="Rest + Spread"></a>Rest + Spread</h2><p>Rest 和 Spread 主要是应用 <code>... 运算符</code>，完成值的聚合和分解。</p>
+<h3 id="你可能不知道的事-5"><a href="#你可能不知道的事-5" class="headerlink" title="你可能不知道的事"></a>你可能不知道的事</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 1. rest 得到的是一个真正的数组而不是一个伪数组</span></span><br><span class="line"><span class="keyword">const</span> getOptions = <span class="function"><span class="keyword">function</span>(<span class="params">...args</span>)</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(args.join); <span class="comment">// function</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. rest 可以配合箭头函数使用，达到取得所有参数的目的</span></span><br><span class="line"><span class="keyword">const</span> getOptions = <span class="function">(<span class="params">...args</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(args); <span class="comment">// array</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. spread 可以用于解构时，聚合所得的值</span></span><br><span class="line"><span class="keyword">const</span> [opt1, ...opts] = [<span class="string">'one'</span>, <span class="string">'two'</span>, <span class="string">'three'</span>, <span class="string">'four'</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 4. spread 可以用于数组定义</span></span><br><span class="line"><span class="keyword">const</span> opts = [<span class="string">'one'</span>, <span class="string">'two'</span>, <span class="string">'three'</span>, <span class="string">'four'</span>];</span><br><span class="line"><span class="keyword">const</span> config = [<span class="string">'other'</span>, ...opts];</span><br></pre></td></tr></table></figure>
+<h2 id="Classes"><a href="#Classes" class="headerlink" title="Classes"></a>Classes</h2><p>ES6 中实现的一个语法糖，用于<strong>简化基于原型集成实现类定义</strong>的场景。<br>虽然有很多人不太喜欢这个特性，认为它作为一个简单增强扩展，并没有其他语言 class 应有的特点。<br>但是就我自己观点来看，还是感觉这样一种写法确实比原有的原型继承的写法语义更清晰、明确，而且语法更简单。</p>
+<p>同样，可能有些用法是你之前容易忽略掉的，在此做个补充。</p>
+<h3 id="你可能不知道的事-6"><a href="#你可能不知道的事-6" class="headerlink" title="你可能不知道的事"></a>你可能不知道的事</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 静态变量</span></span><br><span class="line"><span class="comment">// ES6 的类定义实现了静态方法的定义，但静态变量呢？</span></span><br><span class="line"><span class="comment">// 可以用如下方式实现:</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TbFedMembers</span></span>&#123;</span><br><span class="line">  <span class="keyword">static</span> get HuaChen()&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'jelly'</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">TbFedMembers.HuaChen; <span class="comment">// "化辰"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 私有属性（私有属性有多种实现方式，只谈及其中一种）</span></span><br><span class="line"><span class="comment">// 闭包</span></span><br><span class="line"><span class="keyword">const</span> TbFedMembers = <span class="function">(<span class="params">(</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> HuaChen = <span class="string">'jelly'</span>;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> <span class="class"><span class="keyword">class</span></span>&#123;</span><br><span class="line">    getOneMemberName()&#123;</span><br><span class="line">      <span class="keyword">return</span> HuaChen;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+<h2 id="Promises"><a href="#Promises" class="headerlink" title="Promises"></a>Promises</h2><p>Promise 不只是一个对象、一个语法，他更是一种异步编程方式的变化<br>相信使用过 ES6 的同学都已经开始尝试了 Promise，甚至在不支持ES6的时候，已经开始使用一些基于 Promise 思想的开源框架。</p>
+<p>那么我们之前用 Promise 究竟用的对么？有什么需要注意的点呢？</p>
+<h3 id="你可能不知道的事-7"><a href="#你可能不知道的事-7" class="headerlink" title="你可能不知道的事"></a>你可能不知道的事</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 1. 多个异步任务同时执行用 Promise.all，顺序执行使用链式调用</span></span><br><span class="line"><span class="comment">// Promise.all</span></span><br><span class="line"><span class="built_in">Promise</span></span><br><span class="line">  .all([jsBuildPromise, cssBuildPromise])</span><br><span class="line">  .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    ...</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// chain</span></span><br><span class="line">jsBuildPromise</span><br><span class="line">  .then(<span class="function"><span class="params">()</span> =&gt;</span> cssBuildPromise)</span><br><span class="line">  .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    ...</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. Promise 的链式调用需要每一个过程返回一个 Promise 对象才能保证顺序执行</span></span><br><span class="line">gitPromise</span><br><span class="line">  .then(<span class="function"><span class="params">()</span> =&gt;</span> git.add())  <span class="comment">// 正确，箭头函数简写</span></span><br><span class="line">  .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    git.commit(); <span class="comment">// 错误，函数返回 undefined，会立即执行下一过程</span></span><br><span class="line">  &#125;)</span><br><span class="line">  .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> git.log(); <span class="comment">// 正确</span></span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. Promise 需要调用 catch 方法来捕获错误，而且过程内的错误不会阻塞后续代码执行</span></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  f;  <span class="comment">// not define error !</span></span><br><span class="line">&#125;)</span><br><span class="line">.catch(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(err)  <span class="comment">// show 'f is not define'</span></span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'error test'</span>);  <span class="comment">// 此行可以被正常执行</span></span><br></pre></td></tr></table></figure>
+<p><a href="http://taobaofed.org/blog/2016/07/22/es6-basics/" target="_blank" rel="noopener">原文地址</a></p>
+
+  </article>
+</div>
+
+
+    
+
+
+
+
+</div>
+
+<div class="footer-wrapper container">
+  <footer class="footer clearfix">
+    <div class="clearfix">
+    <a href="https://zhanghao-web.github.io" class="footer-logo">
+      <i class="fa fa-github"></i>
+    </a>
+    <ul class="footer-social-link">
+      <li>© 2019 张白告丶</li>
+      <li><a href="https://zhanghao-web.github.io">Home</a></li>
+      
+    </ul>
+    <div class="footer-theme-info">
+      Theme <a href="//github.com/sabrinaluo/hexo-theme-replica">Replica</a>
+      by <a href="//github.com/sabrinaluo">Hiitea</a> ❤ Powered by Hexo
+    </div>
+    </div>
+    
+  </footer>
+</div>
+
+
+
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>

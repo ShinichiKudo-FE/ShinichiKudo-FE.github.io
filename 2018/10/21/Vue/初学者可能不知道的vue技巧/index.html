@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>
+    初学者可能不知道的vue技巧 | 默默默默燃
+  </title>
+  <meta name="description" content="一枚前端搬砖队队员的记录册">
+  
+  <meta name="keywords" content="
+  Vue
+  ">
+  
+  <meta name="author" content="张白告丶">
+
+  <meta http-equiv="Cache-Control" content="no-transform"/>
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="theme-color" content="#1e2327">
+  <link rel="apple-touch-icon" href="https://github.githubassets.com/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://github.githubassets.com/apple-touch-icon-180x180.png">
+
+  <link rel="icon" type="image/x-icon" href="https://github.githubassets.com/favicon.ico">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+  
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.25-csp/vue.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+</head>
+
+<body id="replica-app">
+
+<nav class="navbar-wrapper">
+  <div class="navbar">
+    <div class="container clearfix">
+      <a href="/" class="navbar-logo"><i class="fa fa-github"></i></a>
+
+      <div class="navbar-search float-left desktop-only">
+        <div class="navbar-search-form">
+          <label for="gsc-i-id1">This website</label>
+          <div id="google-search">
+            <gcse:search></gcse:search>
+          </div>
+        </div>
+      </div>
+
+      <ul class="navbar-nav float-left">
+        
+        <li><a href="/archives">Archives</a></li>
+        
+        
+        <li><a href="/categories">Categories</a></li>
+        
+        
+        <li><a href="/tags">Tags</a></li>
+        
+        
+        <li class="desktop-only"><a href="/atom.xml" target="_blank">RSS</a></li>
+        
+      </ul>
+
+      <ul class="navbar-nav user-nav float-right desktop-only">
+        <li class="user-nav-notification">
+          <a><span class="user-nav-unread"></span><i class="fa fa-bell"></i></a>
+        </li>
+        <li>
+          <a><i class="fa fa-plus"></i> <i class="fa fa-caret-down"></i></a>
+        </li>
+        <li class="user-nav-logo">
+          <a><img src="https://octodex.github.com/images/baracktocat.jpg"> <i class="fa fa-caret-down"></i></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container">
+  <header class="header-wrapper desktop-only">
+  <div class="container header-site-detail">
+    <ul class="header-toolbar">
+      <li class="clearfix">
+        <a href="/archives" class="header-toolbar-left"><i
+                  class="fa fa-file-text"></i> Posts </a>
+        <a href="/archives"
+           class="header-toolbar-right"> 147 </a>
+      </li>
+      <li>
+        <a href="/tags" class="header-toolbar-left"><i
+                  class="fa fa-tags"></i> Tags </a>
+        <a href="/tags"
+           class="header-toolbar-right"> 47 </a>
+      </li>
+      <li>
+        <a href="/categories" class="header-toolbar-left"><i
+                  class="fa fa-folder-open"></i> Categories </a>
+        <a href="/categories"
+           class="header-toolbar-right"> 23 </a>
+      </li>
+    </ul>
+    <h2 class="header-title">
+      <i class="fa fa-book text-muted"></i>
+      <a href="/">默默默默燃</a>
+      
+      
+    </h2>
+  </div>
+
+  <div class="container">
+    <div class="header-tab-wrapper clearfix">
+      <span class="header-tab header-tab-selected"><i class="fa fa-thumbs-o-up"></i> Like</span>
+      <span class="header-tab"><i class="fa fa-share-alt"></i> Share</span>
+      <span class="header-tab"><i class="fa fa-comments-o"></i> Discussion</span>
+      <span class="header-tab"><i class="fa fa-bookmark-o"></i> Bookmark </span>
+      <span class="header-tab"><i class="fa fa-smile-o"></i> Smile <i class="fa fa-caret-down"></i></span>
+    </div>
+  </div>
+</header>
+
+
+<div class="post-container container">
+  <h3>
+    <i class="fa fa-user-o"></i>
+    张白告丶
+
+    <span class="post-date float-right" title="{{moment(1540116141000).format('MMM DD, YYYY, h:mm:ss A')}}">
+      
+          <i class="fa fa-pencil-square-o"></i>
+      
+      {{moment(1540116141000).fromNow()}}
+    </span>
+  </h3>
+
+  <article class="post-content">
+    <h1>初学者可能不知道的vue技巧</h1>
+    <h1 id="技巧-坑点"><a href="#技巧-坑点" class="headerlink" title="技巧/坑点"></a>技巧/坑点</h1><h2 id="setTimeout-setInterval"><a href="#setTimeout-setInterval" class="headerlink" title="setTimeout/ setInterval"></a>setTimeout/ setInterval</h2><ul>
+<li>场景一 ：this指向改变无法用this访问vue实例</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mounted()&#123;</span><br><span class="line">  setTimeout( <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">//setInterval同理</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>); <span class="comment">//此时this指向Window对象</span></span><br><span class="line">  &#125;，<span class="number">1000</span>) ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>解决方法 :使用箭头函数或者缓存this</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">  <span class="comment">//箭头函数访问this实例因为箭头函数本身没有绑定this</span></span><br><span class="line">  setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>. log(<span class="keyword">this</span>);&#125;,  <span class="number">500</span>) ;</span><br><span class="line">    <span class="comment">//使用变量访问this实例let self=this;</span></span><br><span class="line">  &#125;,<span class="number">1000</span>);</span><br><span class="line">  setTimeout (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>. log(self);<span class="comment">//使用self变量访问this实例</span></span><br><span class="line">  &#125;, <span class="number">1000</span>) ;</span><br><span class="line">​</span><br></pre></td></tr></table></figure>
+<h3 id="setInterval路由跳转继续运行并没有销毁"><a href="#setInterval路由跳转继续运行并没有销毁" class="headerlink" title="setInterval路由跳转继续运行并没有销毁"></a>setInterval路由跳转继续运行并没有销毁</h3><blockquote>
+<p>场景一 :比如一些弹幕，走马灯文字，这类需要定时调用的，路由跳转之后，因为组件已经销毁了，但是setlnterval还没有销毁，还在继续后台调用，控制台会不断报错，如果运算量大的话，无法及时清除，会导致严重的页面卡顿。</p>
+</blockquote>
+<ul>
+<li>解决方法 :在组件生命周期beforeDestroy停止setInterval</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">created() &#123;</span><br><span class="line">     <span class="keyword">this</span>.intervalid = setInterval(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">this</span>.layerError = <span class="string">""</span>;</span><br><span class="line">        <span class="keyword">this</span>.Timer = <span class="literal">null</span>;</span><br><span class="line">    &#125;, <span class="number">100000</span>);</span><br><span class="line"> &#125;</span><br><span class="line">beforeDestroy( )&#123;</span><br><span class="line">  <span class="comment">//我通常是把setInterval( )定时器赋值给this实例，然后就可以像下面这么暂停。</span></span><br><span class="line">  clearInterval(<span class="keyword">this</span>.intervalid);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Vue路由拦截浏览器后退实现草稿保存类似需求"><a href="#Vue路由拦截浏览器后退实现草稿保存类似需求" class="headerlink" title="Vue路由拦截浏览器后退实现草稿保存类似需求"></a>Vue路由拦截浏览器后退实现草稿保存类似需求</h2><ul>
+<li><p>场景一 :为了防止用户突然离开，没有保存已输入的信息</p>
+</li>
+<li><p>解决方法 :</p>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">​</span><br><span class="line">  <span class="comment">//在路由组件中:mounted()&#123;&#125;，</span></span><br><span class="line">  beforeRouteLeave (to, <span class="keyword">from</span>, next) &#123;</span><br><span class="line">      <span class="keyword">if</span>(用户已经输入信息)&#123;</span><br><span class="line">        <span class="comment">//出现弹窗提醒保存草稿，或者自动后台为其保存</span></span><br><span class="line">      &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        next(<span class="literal">true</span>);<span class="comment">//用户离开</span></span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">​</span><br></pre></td></tr></table></figure>
+<h2 id="自定义组件添加click等事件不生效"><a href="#自定义组件添加click等事件不生效" class="headerlink" title="自定义组件添加click等事件不生效"></a>自定义组件添加click等事件不生效</h2><ul>
+<li>场景一 :一些自定义组件，需要额外添加一些事件来实现一些特定需求</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">el-progress</span> <span class="attr">type</span>=<span class="string">"circle"</span> <span class="attr">:percentage</span>=<span class="string">“0</span>" @<span class="attr">click</span>=<span class="string">“stopProgress”</span>&gt;</span><span class="tag">&lt;/<span class="name">elprogress</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">  <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="undefined">     methods:&#123;</span></span><br><span class="line"><span class="undefined">          stopProgress() &#123; </span></span><br><span class="line"><span class="javascript">          <span class="built_in">console</span>.log(<span class="string">'停止'</span>)</span></span><br><span class="line"><span class="undefined">          &#125;</span></span><br><span class="line"><span class="undefined">      &#125;</span></span><br><span class="line"><span class="undefined">  &#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<ul>
+<li>解决方法:使用.native修饰符</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">el-progress</span> <span class="attr">type</span>=<span class="string">"circle"</span> <span class="attr">:percentage</span>=<span class="string">“0</span>" @<span class="attr">click.native</span>=<span class="string">“stopProgress”</span>&gt;</span><span class="tag">&lt;/<span class="name">el-progress</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">  <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="undefined">      methods:&#123;</span></span><br><span class="line"><span class="undefined">          stopProgress() &#123; </span></span><br><span class="line"><span class="javascript">          <span class="built_in">console</span>.log(<span class="string">'停止'</span>)</span></span><br><span class="line"><span class="undefined">          &#125;</span></span><br><span class="line"><span class="undefined">      &#125;</span></span><br><span class="line"><span class="undefined">  &#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="手动操控自定义组件"><a href="#手动操控自定义组件" class="headerlink" title="手动操控自定义组件"></a>手动操控自定义组件</h2><ul>
+<li><p>场景一 :一些自定义组件，需要去获取组件对象进行一些其他的Dom操作</p>
+</li>
+<li><p>解决方法 :使用ref属性暴露组件获取句柄</p>
+</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">​</span><br><span class="line">  <span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">el-progress</span> <span class="attr">type</span>=<span class="string">"circle"</span> <span class="attr">:percentage</span>=<span class="string">"O"</span> <span class="attr">ref</span>=<span class="string">"progress"</span>&gt;</span><span class="tag">&lt;/<span class="name">el-progress</span>&gt;</span><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">    <span class="keyword">this</span>.$refs.progress <span class="comment">//组件对象实例， 可以手动调用组件的内置方法和属性</span></span></span><br><span class="line"><span class="javascript">    <span class="keyword">this</span>.$refs.progress.$el <span class="comment">//组件 对象的最外层dom元素</span></span></span><br><span class="line"><span class="undefined">  </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">​</span><br></pre></td></tr></table></figure>
+<h2 id="深度作用选择器"><a href="#深度作用选择器" class="headerlink" title="深度作用选择器"></a>深度作用选择器</h2><ul>
+<li>场景一 : scoped的样式，希望影响到子组件的默认样式</li>
+</ul>
+<blockquote>
+<p>在样式中设置完scoped在浏览器解析为如下图这样，a是个div，a div里面包含一个组件里面解析完了div的样式名字为b，想在父组件影响到子组件的默认样式。</p>
+</blockquote>
+<p>解决方法：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">​</span><br><span class="line">  <span class="tag">&lt;<span class="name">style</span> <span class="attr">scoped</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="css">    <span class="selector-class">.a</span> &gt;&gt;&gt; <span class="selector-class">.b</span> &#123; <span class="comment">/* ... */</span> &#125;</span></span><br><span class="line"><span class="undefined">  </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">    //有些像Sass之类的预处理器无法正确解析&gt;&gt;&gt;。这种情况下你可以使用/deep/操作符取而代之- - - -这是一个&gt;&gt;&gt;的别名，同样可以正常工作。</span><br><span class="line">  <span class="tag">&lt;<span class="name">style</span> <span class="attr">scoped</span> <span class="attr">lang</span>=<span class="string">“scss”</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined">    .a /deep/ .b &#123; /* ... */ &#125;</span></span><br><span class="line"><span class="undefined">  </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="Vue数组-对象更新视图不更新"><a href="#Vue数组-对象更新视图不更新" class="headerlink" title="Vue数组/对象更新视图不更新"></a>Vue数组/对象更新视图不更新</h2><ul>
+<li>场景一 :很多时候我们习惯于这样操作数组和对象</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">​</span><br><span class="line">  data() &#123; </span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        arr: [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],</span><br><span class="line">        obj:&#123;</span><br><span class="line">          a: <span class="number">1</span>,</span><br><span class="line">          b: <span class="number">2</span> </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;; </span><br><span class="line">  &#125;,</span><br><span class="line">​</span><br><span class="line">  <span class="comment">// 数组更新视图不更新</span></span><br><span class="line">  <span class="keyword">this</span>.arr[<span class="number">0</span>] = <span class="string">'OBKoro1'</span>;</span><br><span class="line">  <span class="keyword">this</span>.arr.length = <span class="number">1</span>;</span><br><span class="line">  <span class="built_in">console</span>.log(arr);<span class="comment">// ['OBKoro1']; </span></span><br><span class="line">  <span class="comment">// 数据更新，对象视图不更新    </span></span><br><span class="line">  <span class="keyword">this</span>.obj.c = <span class="string">'OBKoro1'</span>;</span><br><span class="line">  <span class="keyword">delete</span> <span class="keyword">this</span>.obj.a;</span><br><span class="line">  <span class="built_in">console</span>.log(obj);  <span class="comment">// &#123;b:2,c:'OBKoro1'&#125;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>解决方法 ：</p>
+</blockquote>
+<ul>
+<li><p>this. $set(你要改变的数组/对象，你要改变的位置/key,你要改成什么value)</p>
+</li>
+<li><p>数组原生方法触发视图更新（ vue官网可查）:</p>
+</li>
+<li><p>整体替换数组/对象</p>
+</li>
+</ul>
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/19/1668a00148264e2c?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="vue"></p>
+<h2 id="Vue-Filters过滤器的使用"><a href="#Vue-Filters过滤器的使用" class="headerlink" title="Vue Filters过滤器的使用"></a>Vue Filters过滤器的使用</h2><ul>
+<li>场景一 :常见的数据文本的格式化</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">  <span class="comment">// 在双花括号中</span></span><br><span class="line">  &lt;div&gt;&#123;&#123; message | DateFormat &#125;&#125;&lt;<span class="regexp">/div&gt; /</span><span class="regexp">/展示正确时间</span></span><br><span class="line"><span class="regexp">  /</span><span class="regexp">/ 在'v-bind'中</span></span><br><span class="line"><span class="regexp">  &lt;div v-bind:id="rawId | formatId"&gt;&lt;/</span>div&gt;</span><br><span class="line">​</span><br><span class="line"><span class="comment">//   Demo:一个日期过滤器返回yyyy- MM-ddhh:mm:ss的样式</span></span><br><span class="line"><span class="comment">//   引入一个提前写好日期格式化的js</span></span><br><span class="line">  <span class="keyword">import</span> dayjs <span class="keyword">from</span> <span class="string">'dayjs'</span>;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">     data() &#123;</span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">                <span class="comment">//时间毫秒</span></span><br><span class="line">                message:<span class="number">18324798324789</span> </span><br><span class="line">            &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    filters: &#123;</span><br><span class="line">        <span class="comment">//传入进行日期格式化</span></span><br><span class="line">      DateFormat(value) &#123;</span><br><span class="line">        <span class="keyword">return</span> dayjs(value).format(“YYYY-MM-DD HH:mm:ss<span class="string">")</span></span><br><span class="line"><span class="string">        &#125; </span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br></pre></td></tr></table></figure>
+<h2 id="Vue深度watch与watch立即触发回调"><a href="#Vue深度watch与watch立即触发回调" class="headerlink" title="Vue深度watch与watch立即触发回调"></a>Vue深度watch与watch立即触发回调</h2><ul>
+<li><p>场景一 :在watch里面监测对象里面对应的值是监测不到的，可以用如下方法。</p>
+</li>
+<li><p>选项: deep</p>
+</li>
+<li><p>在选项参数中指定deep:true,可以监听对象中子属性的变化。</p>
+</li>
+<li><p>选项: immediate</p>
+</li>
+<li><p>在选项参数中指定immediate:true,将立即以表达式的当前值触发回调，也就是默认触发一次。</p>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">watch: &#123;</span><br><span class="line">  obj: &#123;</span><br><span class="line">      handler(val, oldVal) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'属性变化触发这个回调'</span>,val, oldVal); </span><br><span class="line">      &#125;,</span><br><span class="line">      deep: <span class="literal">true</span> <span class="comment">// 监测这个对象中每一个属性的变化</span></span><br><span class="line">  &#125;,</span><br><span class="line">  step: &#123; <span class="comment">// 属性 //watch</span></span><br><span class="line">     handler(val, oldVal) &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">"默认触发一次"</span>, val, oldVal); </span><br><span class="line">     &#125;,</span><br><span class="line">     immediate: <span class="literal">true</span> <span class="comment">// 默认触发一次</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  </article>
+</div>
+
+
+    
+
+
+
+
+</div>
+
+<div class="footer-wrapper container">
+  <footer class="footer clearfix">
+    <div class="clearfix">
+    <a href="https://zhanghao-web.github.io" class="footer-logo">
+      <i class="fa fa-github"></i>
+    </a>
+    <ul class="footer-social-link">
+      <li>© 2019 张白告丶</li>
+      <li><a href="https://zhanghao-web.github.io">Home</a></li>
+      
+    </ul>
+    <div class="footer-theme-info">
+      Theme <a href="//github.com/sabrinaluo/hexo-theme-replica">Replica</a>
+      by <a href="//github.com/sabrinaluo">Hiitea</a> ❤ Powered by Hexo
+    </div>
+    </div>
+    
+  </footer>
+</div>
+
+
+
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>

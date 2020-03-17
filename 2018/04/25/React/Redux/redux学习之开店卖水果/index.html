@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>
+    redux学习之开店卖水果 | 默默默默燃
+  </title>
+  <meta name="description" content="一枚前端搬砖队队员的记录册">
+  
+  <meta name="keywords" content="
+  Redux
+  ">
+  
+  <meta name="author" content="张白告丶">
+
+  <meta http-equiv="Cache-Control" content="no-transform"/>
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="theme-color" content="#1e2327">
+  <link rel="apple-touch-icon" href="https://github.githubassets.com/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://github.githubassets.com/apple-touch-icon-180x180.png">
+
+  <link rel="icon" type="image/x-icon" href="https://github.githubassets.com/favicon.ico">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+  
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.25-csp/vue.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+</head>
+
+<body id="replica-app">
+
+<nav class="navbar-wrapper">
+  <div class="navbar">
+    <div class="container clearfix">
+      <a href="/" class="navbar-logo"><i class="fa fa-github"></i></a>
+
+      <div class="navbar-search float-left desktop-only">
+        <div class="navbar-search-form">
+          <label for="gsc-i-id1">This website</label>
+          <div id="google-search">
+            <gcse:search></gcse:search>
+          </div>
+        </div>
+      </div>
+
+      <ul class="navbar-nav float-left">
+        
+        <li><a href="/archives">Archives</a></li>
+        
+        
+        <li><a href="/categories">Categories</a></li>
+        
+        
+        <li><a href="/tags">Tags</a></li>
+        
+        
+        <li class="desktop-only"><a href="/atom.xml" target="_blank">RSS</a></li>
+        
+      </ul>
+
+      <ul class="navbar-nav user-nav float-right desktop-only">
+        <li class="user-nav-notification">
+          <a><span class="user-nav-unread"></span><i class="fa fa-bell"></i></a>
+        </li>
+        <li>
+          <a><i class="fa fa-plus"></i> <i class="fa fa-caret-down"></i></a>
+        </li>
+        <li class="user-nav-logo">
+          <a><img src="https://octodex.github.com/images/baracktocat.jpg"> <i class="fa fa-caret-down"></i></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container">
+  <header class="header-wrapper desktop-only">
+  <div class="container header-site-detail">
+    <ul class="header-toolbar">
+      <li class="clearfix">
+        <a href="/archives" class="header-toolbar-left"><i
+                  class="fa fa-file-text"></i> Posts </a>
+        <a href="/archives"
+           class="header-toolbar-right"> 147 </a>
+      </li>
+      <li>
+        <a href="/tags" class="header-toolbar-left"><i
+                  class="fa fa-tags"></i> Tags </a>
+        <a href="/tags"
+           class="header-toolbar-right"> 47 </a>
+      </li>
+      <li>
+        <a href="/categories" class="header-toolbar-left"><i
+                  class="fa fa-folder-open"></i> Categories </a>
+        <a href="/categories"
+           class="header-toolbar-right"> 23 </a>
+      </li>
+    </ul>
+    <h2 class="header-title">
+      <i class="fa fa-book text-muted"></i>
+      <a href="/">默默默默燃</a>
+      
+      
+    </h2>
+  </div>
+
+  <div class="container">
+    <div class="header-tab-wrapper clearfix">
+      <span class="header-tab header-tab-selected"><i class="fa fa-thumbs-o-up"></i> Like</span>
+      <span class="header-tab"><i class="fa fa-share-alt"></i> Share</span>
+      <span class="header-tab"><i class="fa fa-comments-o"></i> Discussion</span>
+      <span class="header-tab"><i class="fa fa-bookmark-o"></i> Bookmark </span>
+      <span class="header-tab"><i class="fa fa-smile-o"></i> Smile <i class="fa fa-caret-down"></i></span>
+    </div>
+  </div>
+</header>
+
+
+<div class="post-container container">
+  <h3>
+    <i class="fa fa-user-o"></i>
+    张白告丶
+
+    <span class="post-date float-right" title="{{moment(1524623674000).format('MMM DD, YYYY, h:mm:ss A')}}">
+      
+          <i class="fa fa-pencil-square-o"></i>
+      
+      {{moment(1524623674000).fromNow()}}
+    </span>
+  </h3>
+
+  <article class="post-content">
+    <h1>redux学习之开店卖水果</h1>
+    <h1 id="Redux-是什么"><a href="#Redux-是什么" class="headerlink" title="Redux 是什么"></a>Redux 是什么</h1><p>每当我们谈及到 <a href="https://github.com/reactjs/redux" target="_blank" rel="noopener">redux</a>，大家都会说是 <a href="https://github.com/facebook/react" target="_blank" rel="noopener">react</a> 的状态管理工具。这么说确实没错，毕竟 redux 项目也是 <code>React Community</code> 组织下的一个子项目。而且 redux 的诞生也是和 react 这个 ui 库急需一个状态管理解决方案有很大的联系。但是 redux 和 react 并没有任何的耦合。虽然它们经常一起用，但是 <code>redux 的用途并不局限于 react</code>，或者说，和 <code>react 的结合只是 redux 的使用方式之一</code>。</p>
+<p>那么撇开 react 不谈， redux 到底是什么呢？我们看一下这个例子。</p>
+<p>在实际的开发当中，我们可能会碰到这样的需求：监听一个事件，当事件触发的时候，我们可以做一些想做的事情。</p>
+<h2 id="redux基础用法—卖水果"><a href="#redux基础用法—卖水果" class="headerlink" title="redux基础用法—卖水果"></a>redux基础用法—卖水果</h2><p>一天，程序员阿大（化名）想要去买水果吃，发现小区周围居然没有水果店，于是就打算自己开一个水果店赚点小钱。<br>阿大分析了一下水果店的营业模式。其实就是<strong>处理每一位顾客的需求</strong>，然后记账看看每天的盈亏。那么抽象成程序就是<code>监听顾客的行为，并把每个行为的结果都记在账上</code>，这正好是 <strong>redux</strong> 所擅长的。阿大胸有成竹，说着就开始写了起来：</p>
+<h3 id="首先模拟顾客的购买行为："><a href="#首先模拟顾客的购买行为：" class="headerlink" title="首先模拟顾客的购买行为："></a>首先模拟顾客的购买行为：</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> action = &#123;</span><br><span class="line">  type: <span class="string">'BUY_APPLE'</span>, <span class="comment">// 买苹果</span></span><br><span class="line">  payload: &#123;</span><br><span class="line">    count: <span class="number">2</span> <span class="comment">// 买 2 斤</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那不同的顾客要的斤数可能不同，于是他写了下面这个方法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 只要知道斤数就可以快速生成顾客的各种需求</span></span><br><span class="line"><span class="comment"> * @param &#123;number&#125; num 顾客要买的斤数</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">buyApple</span>(<span class="params">num</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    type: <span class="string">'BUY_APPLE'</span>,</span><br><span class="line">    payload: &#123;</span><br><span class="line">      count: num</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后是账本的结构，记录每天卖了多少斤：<br><a id="more"></a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 被托管的数据 state</span></span><br><span class="line"><span class="comment">// 账本，今天已卖的苹果：0 斤；为了简便，就只举一个例子，事实上还有很多其他水果，大家自行脑补</span></span><br><span class="line"><span class="keyword">const</span> state = &#123; <span class="attr">apple</span>: <span class="number">0</span> &#125;;</span><br></pre></td></tr></table></figure>
+<p>好了，现在顾客需求，账本都有了，那谁来记账呢？所以阿大请了一个<code>收银员</code>负责记账，并告诉他这么记账：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 监听函数 listener</span></span><br><span class="line"><span class="comment"> * 收银员只要知道顾客的需求就能正确的操作账本</span></span><br><span class="line"><span class="comment"> * @param &#123;object&#125; state 账本</span></span><br><span class="line"><span class="comment"> * @param &#123;object&#125; action 顾客的需求</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">reducer</span>(<span class="params">state, action</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 注册 ‘买苹果’ 事件</span></span><br><span class="line">  <span class="comment">// 如果有人买了苹果，加上顾客买的斤数，更新账本</span></span><br><span class="line">  <span class="keyword">if</span> (action.type === <span class="string">'BUY_APPLE'</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;, state, &#123;</span><br><span class="line">      apple: state.apple + action.payload.count</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 没注册的事件不作处理</span></span><br><span class="line">  <span class="comment">// 买咱们店里没有的东西，不更新账本，原样返回</span></span><br><span class="line">  <span class="keyword">return</span> state;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>好，万事俱备，可以正式的监听顾客的购买需求并更新账本了：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123;createStore&#125; = <span class="built_in">require</span>(<span class="string">'redux'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建水果店需要收银员（监听函数 listener）和账本（被托管的数据）</span></span><br><span class="line"><span class="keyword">const</span> store = createStore(reducer, state);</span><br></pre></td></tr></table></figure>
+<p>不仅如此，redux 还提供了一个功能，每服务一个顾客，都可以额外做一些事情，于是阿大就想看看每笔交易之后的账本：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// store.getState() 可以获取最新的 state</span></span><br><span class="line">store.subscribe(<span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="built_in">JSON</span>.stringify(store.getState())));</span><br></pre></td></tr></table></figure>
+<p>好了，顾客开始来买水果了：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 触发用户购买水果的事件</span></span><br><span class="line"><span class="comment">// 销售员开始销售</span></span><br><span class="line">store.dispatch(buyApple(<span class="number">3</span>)); <span class="comment">// &#123;"apple":3&#125;</span></span><br><span class="line">store.dispatch(buyApple(<span class="number">4</span>)); <span class="comment">// &#123;"apple":7&#125;</span></span><br></pre></td></tr></table></figure>
+<p>店铺稳定的运营了下去，阿大心里美滋滋~</p>
+<h3 id="讲解"><a href="#讲解" class="headerlink" title="讲解"></a>讲解</h3><p>不过在此之前要先说 redux 特别讲究也是特别重要的 3 点：</p>
+<ul>
+<li>只能有唯一的 store 对象保存整个应用的 state</li>
+<li>state 是只读的，只能通过 dispatch(action) 的方式来改变 state</li>
+<li>reducer 必须是纯函数</li>
+</ul>
+<h4 id="action"><a href="#action" class="headerlink" title="action"></a>action</h4><p>action 是行为信息的抽象，对象类型，它描述发生了什么。这个对象必须有一个 type 属性，对于对象里面的其他内容，redux 不做限制。但是推荐符合 Flux Standard Action 规范：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  type: <span class="string">'ACTION_TYPE'</span>,</span><br><span class="line">  payload, <span class="comment">// action 携带的数据</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="action-creator"><a href="#action-creator" class="headerlink" title="action creator"></a>action creator</h4><p>action creator 顾名思义就是用来创建 action 的，action creator 只简单的返回 action。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createAction</span>(<span class="params">num</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    type: <span class="string">'ACTION_TYPE'</span>,</span><br><span class="line">    payload,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="state"><a href="#state" class="headerlink" title="state"></a>state</h4><p>state 是被托管的数据，也就是每次触发监听事件，我们要操作的数据。</p>
+<h4 id="reducer"><a href="#reducer" class="headerlink" title="reducer"></a>reducer</h4><p>reducer 是用来控制 state 改变的函数。action 描述了发生了什么，但是并不会知道相应的 state 该怎么改变。对于不同的 action，相应的 state 变化是用 reducer 来描述的。</p>
+<p>reducer 接受两个函数，第一个是 <code>state</code>，第二个是 <code>action</code>，并返回计算之后新的 state。reducer 必须是一个<strong>纯函数</strong>，对于相同的输入 state 和 action，一定会返回相同的新的 state。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nextState = reducer(prevState, action);</span><br></pre></td></tr></table></figure>
+<p>因为 reducer 是纯函数，所以原来的 <strong>prevState</strong> 并不会改变，新的 <strong>nextState</strong> 是一个最新的快照。</p>
+<h4 id="store"><a href="#store" class="headerlink" title="store"></a>store</h4><p>store 是把上面三个元素合起来的一个大对象:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  createStore,</span><br><span class="line">  combineReducers,</span><br><span class="line">  bindActionCreators,</span><br><span class="line">  applyMiddleware,</span><br><span class="line">  compose,</span><br><span class="line">  __DO_NOT_USE__ActionTypes</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>它负责：</p>
+<ul>
+<li>托管应用的 state</li>
+<li>允许通过 store.getState() 方法访问到托管的 state</li>
+<li>允许通过 store.dispatch() 方法来触发 action 更新 state</li>
+<li>允许通过 store.subscribe() 注册监听函数监听每一次的 action 触发</li>
+<li>允许注销通过 store.subscribe() 方法注册的监听函数</li>
+</ul>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 注册</span></span><br><span class="line"><span class="keyword">const</span> unsubscribe = store.subscribe(<span class="function"><span class="params">()</span> =&gt;</span> &#123; <span class="comment">/** do something */</span>&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注销</span></span><br><span class="line">unsubscribe();</span><br></pre></td></tr></table></figure>
+<p><img src="https://user-gold-cdn.xitu.io/2018/4/18/162d7d65eb48257f?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="图解"></p>
+<h2 id="reducer拆分"><a href="#reducer拆分" class="headerlink" title="reducer拆分"></a>reducer拆分</h2><p>谁知道水果店生意越来越好，于是阿大开始拓展业务，不仅卖水果，还卖起了生鲜，于是有了水果部和生鲜部。</p>
+<p>于是阿大想了想未来购买生鲜的顾客的行为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 买生鲜 - 鸡蛋</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">buyEgg</span>(<span class="params">num</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    type: <span class="string">'BUY_EGG'</span>,</span><br><span class="line">    payload: &#123;</span><br><span class="line">      count: num</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>分了不同的部门之后，不同的业务有不同的记账方式，得分账记了，开来要增加一个生鲜的记账本：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> freshState = &#123;</span><br><span class="line">  egg: <span class="number">0</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>原来的水果账本也要改个名字：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//- const state = &#123;</span></span><br><span class="line">+ <span class="keyword">const</span> fruitsState = &#123;</span><br><span class="line">    apple: <span class="number">0</span></span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure>
+<p>然后增加生鲜部的收银员, 管理生鲜账本 <code>freshState</code>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 生鲜部收银员</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">freshReducer</span>(<span class="params">state = freshState, action</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (action.type === <span class="string">'BUY_EGG'</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;, state, &#123;</span><br><span class="line">      egg: state.egg + action.payload.count</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> state;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后原来水果部的收银员管理水果账本 fruitsState 需要修改下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 水果部收银员</span></span><br><span class="line"><span class="comment">//- function reducer(state, action) &#123;</span></span><br><span class="line">+ <span class="function"><span class="keyword">function</span> <span class="title">fruitReducer</span>(<span class="params">state = fruitState, action</span>) </span>&#123;</span><br><span class="line">   <span class="keyword">if</span> (action.type === <span class="string">'BUY_APPLE'</span>) &#123;</span><br><span class="line">     <span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;, state, &#123;</span><br><span class="line">       apple: state.apple + action.payload.count</span><br><span class="line">     &#125;);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> state;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>但是阿大并不想看各个部门的分账本，他只想看一个总账本就好了。刚好 redux 提供了 <strong>combineReducers</strong> 功能，可以把各个收银员管理的账本合起来：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//- const &#123; createStore &#125; = require('redux');</span></span><br><span class="line">+ <span class="keyword">const</span> &#123; createStore, combineReducers &#125; = <span class="built_in">require</span>(<span class="string">'redux'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 总账本</span></span><br><span class="line">+ <span class="keyword">const</span> state = &#123;</span><br><span class="line">+   fruits: fruitsReducer,</span><br><span class="line">+   fresh: freshReducer</span><br><span class="line">+ &#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 总收银员</span></span><br><span class="line">+ <span class="keyword">const</span> reducer = combineReducers(state);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建新的水果生鲜店</span></span><br><span class="line"><span class="comment">//- const store = createStore(reducer, state);</span></span><br><span class="line">+ <span class="keyword">const</span> store = createStore(reducer);</span><br></pre></td></tr></table></figure>
+<p>这样，水果生鲜店就可以营业了，销售员又开始处理顾客的购物需求了：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">store.dispatch(buyApple(<span class="number">3</span>)); <span class="comment">// &#123;"fruit":&#123;"apple":3&#125;,"fresh":&#123;"egg":0&#125;&#125;</span></span><br><span class="line">store.dispatch(buyEgg(<span class="number">1</span>)); <span class="comment">// &#123;"fruit":&#123;"apple":3&#125;,"fresh":&#123;"egg":1&#125;&#125;</span></span><br><span class="line">store.dispatch(buyApple(<span class="number">4</span>)); <span class="comment">// &#123;"fruit":&#123;"apple":7&#125;,"fresh":&#123;"egg":1&#125;&#125;</span></span><br><span class="line">store.dispatch(buyEgg(<span class="number">8</span>)); <span class="comment">// &#123;"fruit":&#123;"apple":7&#125;,"fresh":&#123;"egg":9&#125;&#125;</span></span><br><span class="line"><span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
+<h3 id="图解："><a href="#图解：" class="headerlink" title="图解："></a>图解：</h3><p><img src="https://user-gold-cdn.xitu.io/2018/4/18/162d7f51769b18c2?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="reducer"></p>
+<h4 id="combineReducers"><a href="#combineReducers" class="headerlink" title="combineReducers"></a>combineReducers</h4><p>当业务场景越来越复杂的时候，state 的结构也会变得越来越复杂而且庞大。如果只用一个 reducer 来计算 state 的变化势必会特别麻烦。这个时候我们就可以把 state 里独立的数据分离出来，单独用一个 reducer 来计算，然后再通过 <strong>combineReducers</strong> 方法合入到 state 中。<br>combineReducers 接收一个对象，这个对象就是最终的 state</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> reducer = combineReducers(&#123;</span><br><span class="line">  fruits: fruitsReducer,</span><br><span class="line">  fresh: freshReducer</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="处理-async-action"><a href="#处理-async-action" class="headerlink" title="处理 async action"></a>处理 async action</h2><p>阿大通过 redux 的 bindReducers 方法将水果店的业务分治成功，店铺也越做越大。以至于有顾客开始想要买一些进口的水果生鲜。</p>
+<p>阿大考虑了一下，决定继续拓展这个店铺，从事进口商品的销售。首先是顾客的需求行为需要购买进口水果生鲜：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 买水果 - 进口苹果</span></span><br><span class="line">+ <span class="function"><span class="keyword">function</span> <span class="title">buyImportedApple</span>(<span class="params">num</span>) </span>&#123;</span><br><span class="line">+   <span class="keyword">return</span> &#123;</span><br><span class="line">+     type: <span class="string">'BUY_IMPORTED_APPLE'</span>,</span><br><span class="line">+     payload: &#123;</span><br><span class="line">+       num</span><br><span class="line">+     &#125;</span><br><span class="line">+   &#125;</span><br><span class="line">+ &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 买生鲜 - 进口鸡蛋</span></span><br><span class="line">+ <span class="function"><span class="keyword">function</span> <span class="title">buyImportedEgg</span>(<span class="params">num</span>) </span>&#123;</span><br><span class="line">+   <span class="keyword">return</span>  &#123;</span><br><span class="line">+     type: <span class="string">'BUY_IMPORTED_EGG'</span>,</span><br><span class="line">+     payload: &#123;</span><br><span class="line">+       num</span><br><span class="line">+     &#125;</span><br><span class="line">+   &#125;</span><br><span class="line">+ &#125;</span><br></pre></td></tr></table></figure>
+<p>然后水果部和生鲜部的账本也要更新啦：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 水果账本</span></span><br><span class="line"> <span class="keyword">const</span> fruitState = &#123;</span><br><span class="line">   orange: <span class="number">0</span>,</span><br><span class="line">   apple: <span class="number">0</span>,</span><br><span class="line">   banana: <span class="number">0</span>,</span><br><span class="line">+  importedApple: <span class="number">0</span></span><br><span class="line"> &#125;;</span><br><span class="line"></span><br><span class="line"> <span class="comment">// 生鲜账本</span></span><br><span class="line"> <span class="keyword">const</span> freshState = &#123;</span><br><span class="line">   egg: <span class="number">0</span>,</span><br><span class="line">   fish: <span class="number">0</span>,</span><br><span class="line">   vegetable: <span class="number">0</span>,</span><br><span class="line">+  importedEgg: <span class="number">0</span></span><br><span class="line"> &#125;;</span><br></pre></td></tr></table></figure>
+<p>同样的，相应部门的收银员们也要学会怎么处理进口水果生鲜的记账，他们的记账方式要改成下面这样：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 水果部收银员</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fruitReducer</span>(<span class="params">state = fruitState, action</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 如果有人买了相应的水果，更新账本</span></span><br><span class="line">  <span class="keyword">switch</span> (action.type) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">'BUY_APPLE'</span>:</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;, state, &#123;</span><br><span class="line">        apple: state.apple + action.payload.count</span><br><span class="line">      &#125;);</span><br><span class="line">    <span class="keyword">case</span> <span class="string">'BUY_IMPORTED_APPLE'</span>:</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;, state, &#123;</span><br><span class="line">        importedApple: state.importedApple + action.payload.count</span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 买其他的东西，不更新账本，原样返回</span></span><br><span class="line">    <span class="keyword">default</span>: <span class="keyword">return</span> state;</span><br><span class="line">  &#125; ;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 生鲜部收银员</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">freshReducer</span>(<span class="params">state = freshState, action</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">switch</span> (action.type) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">'BUY_EGG'</span>:</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;, state, &#123;</span><br><span class="line">        egg: state.egg + action.payload.count</span><br><span class="line">      &#125;);</span><br><span class="line">    <span class="keyword">case</span> <span class="string">'BUY_IMPORTED_EGG'</span>:</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;, state, &#123;</span><br><span class="line">        importedEgg: state.importedEgg + action.payload.count</span><br><span class="line">      &#125;);</span><br><span class="line">    <span class="keyword">default</span>: <span class="keyword">return</span> state;</span><br><span class="line">  &#125; ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可是这时候阿大发现，进口水果生鲜不能大量存在自己仓库卖，因为它们又贵又容易坏，只有当顾客需要买的时候，才能去采购这些水果生鲜，于是阿大又雇了一个<strong>采购员</strong>专门负责处理要买进口水果和生鲜的顾客，等到货了再通知销售员取货给顾客：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 采购商品生成器，不同的商品需要不同的时间采购</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fetchGoodsGenerator</span>(<span class="params">time, action</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 用延时模拟采购时间</span></span><br><span class="line">  <span class="keyword">const</span> timer = setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    clearTimeout(timer);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 采购完成，通知销售员</span></span><br><span class="line">    store.dispatch(action);</span><br><span class="line">  &#125;, time);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 采购进口苹果需要 2 天（2s）</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fetchImportedApple</span>(<span class="params">action</span>) </span>&#123;</span><br><span class="line">  fetchGoodsGenerator(<span class="number">2000</span>, action);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 采购进口鸡蛋需要 3 天（3s）</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fetchImportedEgg</span>(<span class="params">action</span>) </span>&#123;</span><br><span class="line">  fetchGoodsGenerator(<span class="number">3000</span>, action);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 采购员</span></span><br><span class="line"><span class="keyword">const</span> API = &#123;</span><br><span class="line">  fetchImportedApple, <span class="comment">// 采购进口苹果</span></span><br><span class="line">  fetchImportedEgg <span class="comment">// 采购进口鸡蛋</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>好了，布置完了之后，顾客开始来买水果生鲜了：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 销售员开始销售，采购员开始采购</span></span><br><span class="line">store.dispatch(buyApple(<span class="number">3</span>));</span><br><span class="line">API.fetchImportedApple(buyImportedApple(<span class="number">10</span>));</span><br><span class="line">store.dispatch(buyEgg(<span class="number">1</span>));</span><br><span class="line">API.fetchImportedEgg(buyImportedEgg(<span class="number">10</span>));</span><br><span class="line">store.dispatch(buyApple(<span class="number">4</span>));</span><br><span class="line">API.fetchImportedApple(buyImportedApple(<span class="number">10</span>));</span><br><span class="line">store.dispatch(buyEgg(<span class="number">8</span>));</span><br><span class="line">API.fetchImportedEgg(buyImportedEgg(<span class="number">10</span>));</span><br><span class="line"><span class="comment">// &#123;"fruit":&#123;"apple":3,"importedApple":0&#125;,"fresh":&#123;"egg":0,"importedEgg":0&#125;&#125;</span></span><br><span class="line"><span class="comment">// &#123;"fruit":&#123;"apple":3,"importedApple":0&#125;,"fresh":&#123;"egg":1,"importedEgg":0&#125;&#125;</span></span><br><span class="line"><span class="comment">// &#123;"fruit":&#123;"apple":7,"importedApple":0&#125;,"fresh":&#123;"egg":1,"importedEgg":0&#125;&#125;</span></span><br><span class="line"><span class="comment">// &#123;"fruit":&#123;"apple":7,"importedApple":0&#125;,"fresh":&#123;"egg":9,"importedEgg":0&#125;&#125;</span></span><br><span class="line"><span class="comment">// &#123;"fruit":&#123;"apple":7,"importedApple":10&#125;,"fresh":&#123;"egg":9,"importedEgg":0&#125;&#125;</span></span><br><span class="line"><span class="comment">// &#123;"fruit":&#123;"apple":7,"importedApple":20&#125;,"fresh":&#123;"egg":9,"importedEgg":0&#125;&#125;</span></span><br><span class="line"><span class="comment">// &#123;"fruit":&#123;"apple":7,"importedApple":20&#125;,"fresh":&#123;"egg":9,"importedEgg":10&#125;&#125;</span></span><br><span class="line"><span class="comment">// &#123;"fruit":&#123;"apple":7,"importedApple":20&#125;,"fresh":&#123;"egg":9,"importedEgg":20&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="图解"><a href="#图解" class="headerlink" title="图解"></a>图解</h3><p><img src="https://user-gold-cdn.xitu.io/2018/4/18/162d925e3fdc050d?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="async action"></p>
+<p>在实际的开发当中我们经常会调用一些 API 接口获取数据更新 state。刚开始使用 redux 的一个误区就是在 reducer 里接收到异步的 action 之后，就在 reducer 里做异步操作，调用 API。但是这样是错误的。reducer 只能是纯函数，不能有任何副作用。这样才能保证对于相同的输入，一定会有相同的输出。</p>
+<p><a href="https://juejin.im/user/57d8a928d203090069c13a21/likes" target="_blank" rel="noopener">原文地址</a></p>
+
+  </article>
+</div>
+
+
+    
+
+
+
+
+</div>
+
+<div class="footer-wrapper container">
+  <footer class="footer clearfix">
+    <div class="clearfix">
+    <a href="https://zhanghao-web.github.io" class="footer-logo">
+      <i class="fa fa-github"></i>
+    </a>
+    <ul class="footer-social-link">
+      <li>© 2019 张白告丶</li>
+      <li><a href="https://zhanghao-web.github.io">Home</a></li>
+      
+    </ul>
+    <div class="footer-theme-info">
+      Theme <a href="//github.com/sabrinaluo/hexo-theme-replica">Replica</a>
+      by <a href="//github.com/sabrinaluo">Hiitea</a> ❤ Powered by Hexo
+    </div>
+    </div>
+    
+  </footer>
+</div>
+
+
+
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>

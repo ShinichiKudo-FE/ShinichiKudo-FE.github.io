@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>
+    Node学习(十二) --使用async/await异步操作数据库 | 默默默默燃
+  </title>
+  <meta name="description" content="一枚前端搬砖队队员的记录册">
+  
+  <meta name="keywords" content="
+  Node
+  ">
+  
+  <meta name="author" content="张白告丶">
+
+  <meta http-equiv="Cache-Control" content="no-transform"/>
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="theme-color" content="#1e2327">
+  <link rel="apple-touch-icon" href="https://github.githubassets.com/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://github.githubassets.com/apple-touch-icon-180x180.png">
+
+  <link rel="icon" type="image/x-icon" href="https://github.githubassets.com/favicon.ico">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+  
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.25-csp/vue.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+</head>
+
+<body id="replica-app">
+
+<nav class="navbar-wrapper">
+  <div class="navbar">
+    <div class="container clearfix">
+      <a href="/" class="navbar-logo"><i class="fa fa-github"></i></a>
+
+      <div class="navbar-search float-left desktop-only">
+        <div class="navbar-search-form">
+          <label for="gsc-i-id1">This website</label>
+          <div id="google-search">
+            <gcse:search></gcse:search>
+          </div>
+        </div>
+      </div>
+
+      <ul class="navbar-nav float-left">
+        
+        <li><a href="/archives">Archives</a></li>
+        
+        
+        <li><a href="/categories">Categories</a></li>
+        
+        
+        <li><a href="/tags">Tags</a></li>
+        
+        
+        <li class="desktop-only"><a href="/atom.xml" target="_blank">RSS</a></li>
+        
+      </ul>
+
+      <ul class="navbar-nav user-nav float-right desktop-only">
+        <li class="user-nav-notification">
+          <a><span class="user-nav-unread"></span><i class="fa fa-bell"></i></a>
+        </li>
+        <li>
+          <a><i class="fa fa-plus"></i> <i class="fa fa-caret-down"></i></a>
+        </li>
+        <li class="user-nav-logo">
+          <a><img src="https://octodex.github.com/images/baracktocat.jpg"> <i class="fa fa-caret-down"></i></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container">
+  <header class="header-wrapper desktop-only">
+  <div class="container header-site-detail">
+    <ul class="header-toolbar">
+      <li class="clearfix">
+        <a href="/archives" class="header-toolbar-left"><i
+                  class="fa fa-file-text"></i> Posts </a>
+        <a href="/archives"
+           class="header-toolbar-right"> 147 </a>
+      </li>
+      <li>
+        <a href="/tags" class="header-toolbar-left"><i
+                  class="fa fa-tags"></i> Tags </a>
+        <a href="/tags"
+           class="header-toolbar-right"> 47 </a>
+      </li>
+      <li>
+        <a href="/categories" class="header-toolbar-left"><i
+                  class="fa fa-folder-open"></i> Categories </a>
+        <a href="/categories"
+           class="header-toolbar-right"> 23 </a>
+      </li>
+    </ul>
+    <h2 class="header-title">
+      <i class="fa fa-book text-muted"></i>
+      <a href="/">默默默默燃</a>
+      
+      
+    </h2>
+  </div>
+
+  <div class="container">
+    <div class="header-tab-wrapper clearfix">
+      <span class="header-tab header-tab-selected"><i class="fa fa-thumbs-o-up"></i> Like</span>
+      <span class="header-tab"><i class="fa fa-share-alt"></i> Share</span>
+      <span class="header-tab"><i class="fa fa-comments-o"></i> Discussion</span>
+      <span class="header-tab"><i class="fa fa-bookmark-o"></i> Bookmark </span>
+      <span class="header-tab"><i class="fa fa-smile-o"></i> Smile <i class="fa fa-caret-down"></i></span>
+    </div>
+  </div>
+</header>
+
+
+<div class="post-container container">
+  <h3>
+    <i class="fa fa-user-o"></i>
+    张白告丶
+
+    <span class="post-date float-right" title="{{moment(1556521687000).format('MMM DD, YYYY, h:mm:ss A')}}">
+      
+          <i class="fa fa-pencil-square-o"></i>
+      
+      {{moment(1556521687000).fromNow()}}
+    </span>
+  </h3>
+
+  <article class="post-content">
+    <h1>Node学习(十二) --使用async/await异步操作数据库</h1>
+    <p>上一篇使用Node.js操作数据库，虽然能实现功能，但是异步操作需要不断写回调函数，代码严重冗余，而且阅读困难。</p>
+<p>可以使用<a href="https://github.com/haoxins/co-mysql" target="_blank" rel="noopener">co-mysql</a>，将<code>query</code>方法该写为返回一个<code>Promise</code>，就可以使用<code>async/await</code>进行异步处理。</p>
+<p>我们可以参考一下它的源码，看看它是如何实现将回调函数转换为</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = wrapper;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> slice = [].slice;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 该模块导出为一个包装函数，运行它的返回值是一个带有query方法的对象。</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">wrapper</span>(<span class="params">client</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// client即为mysql.createPool或mysql.createConnection方法创建的连接对象。</span></span><br><span class="line">  <span class="keyword">var</span> query = client.query;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> o = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">  o.query = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 提取调用query方法时，传入的所有参数，将其存入一个数组。</span></span><br><span class="line">    <span class="keyword">var</span> args = slice.call(<span class="built_in">arguments</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建一个Promise对象，它将作为o.query的返回值，让其支持async/await方式调用。</span></span><br><span class="line">    <span class="keyword">var</span> p = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">      <span class="comment">// 为args增加一个回调函数，它将作为client.query方法的回调函数运行，它接收到结果时，将进行判断运行reject还是resolve</span></span><br><span class="line">      args.push(<span class="function"><span class="keyword">function</span> (<span class="params">err, rows</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (err) &#123;</span><br><span class="line">          reject(err);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          resolve(rows);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 用apply方法，将o.query接收到的参数都传给client.query，它可以等同于</span></span><br><span class="line">      <span class="comment">/* </span></span><br><span class="line"><span class="comment">        client.query(args[0], function(err, rows) &#123;</span></span><br><span class="line"><span class="comment">          if (err) &#123;</span></span><br><span class="line"><span class="comment">            reject(err);</span></span><br><span class="line"><span class="comment">          &#125; else &#123;</span></span><br><span class="line"><span class="comment">            resolve(rows);</span></span><br><span class="line"><span class="comment">          &#125;</span></span><br><span class="line"><span class="comment">        &#125;)</span></span><br><span class="line"><span class="comment">      */</span></span><br><span class="line">      query.apply(client, args);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> p;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> o;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>于是上一篇的代码可以进行如下优化：<br><a id="more"></a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>)</span><br><span class="line"><span class="keyword">const</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>)</span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</span><br><span class="line"><span class="keyword">const</span> mysql = <span class="built_in">require</span>(<span class="string">'mysql'</span>)</span><br><span class="line"><span class="keyword">const</span> coMysql = <span class="built_in">require</span>(<span class="string">'co-mysql'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1. 连接服务器</span></span><br><span class="line"><span class="keyword">const</span> pool = mysql.createPool(&#123;</span><br><span class="line">  connectionLimit: <span class="number">10</span>,  <span class="comment">// 建立的连接数量，默认为10个</span></span><br><span class="line">  host: <span class="string">'localhost'</span>,  <span class="comment">// 地址</span></span><br><span class="line">  port: <span class="number">3306</span>,  <span class="comment">// 端口，不传则默认3306</span></span><br><span class="line">  user: <span class="string">'root'</span>,  <span class="comment">// 登录名</span></span><br><span class="line">  password: <span class="string">''</span>,  <span class="comment">// 密码</span></span><br><span class="line">  database: <span class="string">'test'</span>  <span class="comment">// 连接的数据库</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> connection = coMysql(pool)</span><br><span class="line"></span><br><span class="line"><span class="comment">/* const username = 'lily'</span></span><br><span class="line"><span class="comment">const password = '888888'</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">// 向数据库中插入数据</span></span><br><span class="line"><span class="comment">connection.query(`INSERT INTO user_table (username, password) VALUES ('$&#123;username&#125;', '$&#123;password&#125;')`, (err, data) =&gt; &#123;</span></span><br><span class="line"><span class="comment">  if (err) &#123;</span></span><br><span class="line"><span class="comment">    console.error(err)</span></span><br><span class="line"><span class="comment">  &#125; else &#123;</span></span><br><span class="line"><span class="comment">    console.log(data)</span></span><br><span class="line"><span class="comment">  &#125;</span></span><br><span class="line"><span class="comment">&#125;)</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">// 查询user_table表的数据</span></span><br><span class="line"><span class="comment">connection.query(`SELECT * FROM User_table`, (err, data) =&gt; &#123;</span></span><br><span class="line"><span class="comment">  if (err) &#123;</span></span><br><span class="line"><span class="comment">    console.error(err)</span></span><br><span class="line"><span class="comment">  &#125; else &#123;</span></span><br><span class="line"><span class="comment">    console.log(data)</span></span><br><span class="line"><span class="comment">  &#125;</span></span><br><span class="line"><span class="comment">&#125;) */</span></span><br><span class="line"><span class="comment">// more</span></span><br><span class="line"><span class="comment">// 2. 与HTTP模块配合使用</span></span><br><span class="line"><span class="keyword">const</span> server = http.createServer(<span class="keyword">async</span> (req, res) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123;</span><br><span class="line">    pathname,</span><br><span class="line">    query</span><br><span class="line">  &#125; = url.parse(req.url, <span class="literal">true</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (pathname === <span class="string">'/reg'</span>) &#123;</span><br><span class="line">    <span class="comment">// 获取get请求数据</span></span><br><span class="line">    <span class="keyword">const</span> &#123;</span><br><span class="line">      username,</span><br><span class="line">      password</span><br><span class="line">    &#125; = query</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 校验参数是否正确</span></span><br><span class="line">    <span class="keyword">if</span> (!username || !password) &#123;</span><br><span class="line">      res.write(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">        error: <span class="number">1</span>,</span><br><span class="line">        msg: <span class="string">'用户名或密码不可为空'</span></span><br><span class="line">      &#125;))</span><br><span class="line">      res.end()</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (username.length &gt; <span class="number">32</span>) &#123;</span><br><span class="line">      res.write(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">        error: <span class="number">1</span>,</span><br><span class="line">        msg: <span class="string">'用户名的长度不可超过32位'</span></span><br><span class="line">      &#125;))</span><br><span class="line">      res.end()</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (password.length &gt; <span class="number">32</span>) &#123;</span><br><span class="line">      res.write(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">        error: <span class="number">1</span>,</span><br><span class="line">        msg: <span class="string">'密码的长度不可超过32位'</span></span><br><span class="line">      &#125;))</span><br><span class="line">      res.end()</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;  <span class="comment">// 校验通过，开始注册流程</span></span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 检查用户名是否已存在</span></span><br><span class="line">        <span class="keyword">const</span> data = <span class="keyword">await</span> connection.query(<span class="string">`SELECT ID FROM User_table WHERE username='<span class="subst">$&#123;username&#125;</span>'`</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (data.length) &#123;</span><br><span class="line">          res.write(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">            error: <span class="number">1</span>,</span><br><span class="line">            msg: <span class="string">'此用户名已被占用'</span></span><br><span class="line">          &#125;))</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="comment">// 将用户名和密码插入数据库</span></span><br><span class="line">          <span class="keyword">await</span> connection.query(<span class="string">`INSERT INTO userddd_table (username, password) VALUES('<span class="subst">$&#123;username&#125;</span>', '<span class="subst">$&#123;password&#125;</span>')`</span>)</span><br><span class="line"></span><br><span class="line">          res.write(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">            error: <span class="number">0</span>,</span><br><span class="line">            msg: <span class="string">'注册成功'</span></span><br><span class="line">          &#125;))</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">        <span class="built_in">console</span>.error(error)</span><br><span class="line">        res.writeHead(<span class="number">500</span>)</span><br><span class="line">      &#125;</span><br><span class="line">      res.end()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (pathname === <span class="string">'/login'</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> arr = []</span><br><span class="line"></span><br><span class="line">    req.on(<span class="string">'data'</span>, (buffer) =&gt; &#123;</span><br><span class="line">      <span class="comment">// 获取POST请求的Buffer数据</span></span><br><span class="line">      arr.push(buffer)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    req.on(<span class="string">'end'</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">      <span class="comment">// 将Buffer数据合并</span></span><br><span class="line">      <span class="keyword">let</span> buffer = Buffer.concat(arr)</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 处理接收到的POST数据</span></span><br><span class="line">      <span class="keyword">const</span> post = <span class="built_in">JSON</span>.parse(buffer.toString())</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 获取post请求数据</span></span><br><span class="line">      <span class="keyword">const</span> &#123;</span><br><span class="line">        username,</span><br><span class="line">        password</span><br><span class="line">      &#125; = post</span><br><span class="line"></span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 根据用户名查询</span></span><br><span class="line">        <span class="keyword">const</span> data = <span class="keyword">await</span> connection.query(<span class="string">`SELECT username, password FROM User_table WHERE username='<span class="subst">$&#123;username&#125;</span>'`</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!data.length) &#123;</span><br><span class="line">          <span class="comment">// 用户不存在</span></span><br><span class="line">          res.write(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">            error: <span class="number">1</span>,</span><br><span class="line">            msg: <span class="string">'用户名或密码错误'</span></span><br><span class="line">          &#125;))</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (data[<span class="number">0</span>].password !== password) &#123;</span><br><span class="line">          <span class="comment">// 密码不正确</span></span><br><span class="line">          res.write(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">            error: <span class="number">1</span>,</span><br><span class="line">            msg: <span class="string">'用户名或密码错误'</span></span><br><span class="line">          &#125;))</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          res.write(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">            error: <span class="number">0</span>,</span><br><span class="line">            msg: <span class="string">'登录成功'</span></span><br><span class="line">          &#125;))</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">        <span class="built_in">console</span>.error(error)</span><br><span class="line">        res.writeHead(<span class="number">500</span>)</span><br><span class="line">      &#125;</span><br><span class="line">      res.end()</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 若请求不为接口，则默认为请求文件</span></span><br><span class="line">    <span class="keyword">if</span> (pathname !== <span class="string">'/favicon.ico'</span>) &#123;</span><br><span class="line">      fs.readFile(<span class="string">`.<span class="subst">$&#123;pathname&#125;</span>`</span>, (err, buffer) =&gt; &#123;</span><br><span class="line">        <span class="keyword">if</span> (err) &#123;</span><br><span class="line">          res.writeHead(<span class="number">404</span>)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          res.write(buffer)</span><br><span class="line">        &#125;</span><br><span class="line">        res.end()</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      res.writeHead(<span class="number">404</span>)</span><br><span class="line">      res.end()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8080</span>)</span><br></pre></td></tr></table></figure>
+  </article>
+</div>
+
+
+    
+
+
+
+
+</div>
+
+<div class="footer-wrapper container">
+  <footer class="footer clearfix">
+    <div class="clearfix">
+    <a href="https://zhanghao-web.github.io" class="footer-logo">
+      <i class="fa fa-github"></i>
+    </a>
+    <ul class="footer-social-link">
+      <li>© 2019 张白告丶</li>
+      <li><a href="https://zhanghao-web.github.io">Home</a></li>
+      
+    </ul>
+    <div class="footer-theme-info">
+      Theme <a href="//github.com/sabrinaluo/hexo-theme-replica">Replica</a>
+      by <a href="//github.com/sabrinaluo">Hiitea</a> ❤ Powered by Hexo
+    </div>
+    </div>
+    
+  </footer>
+</div>
+
+
+
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>
+    通过一个问题学习map,filter,reduce语法 | 默默默默燃
+  </title>
+  <meta name="description" content="一枚前端搬砖队队员的记录册">
+  
+  <meta name="keywords" content="
+  Js
+  ">
+  
+  <meta name="author" content="张白告丶">
+
+  <meta http-equiv="Cache-Control" content="no-transform"/>
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="theme-color" content="#1e2327">
+  <link rel="apple-touch-icon" href="https://github.githubassets.com/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://github.githubassets.com/apple-touch-icon-180x180.png">
+
+  <link rel="icon" type="image/x-icon" href="https://github.githubassets.com/favicon.ico">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+  
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.25-csp/vue.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+</head>
+
+<body id="replica-app">
+
+<nav class="navbar-wrapper">
+  <div class="navbar">
+    <div class="container clearfix">
+      <a href="/" class="navbar-logo"><i class="fa fa-github"></i></a>
+
+      <div class="navbar-search float-left desktop-only">
+        <div class="navbar-search-form">
+          <label for="gsc-i-id1">This website</label>
+          <div id="google-search">
+            <gcse:search></gcse:search>
+          </div>
+        </div>
+      </div>
+
+      <ul class="navbar-nav float-left">
+        
+        <li><a href="/archives">Archives</a></li>
+        
+        
+        <li><a href="/categories">Categories</a></li>
+        
+        
+        <li><a href="/tags">Tags</a></li>
+        
+        
+        <li class="desktop-only"><a href="/atom.xml" target="_blank">RSS</a></li>
+        
+      </ul>
+
+      <ul class="navbar-nav user-nav float-right desktop-only">
+        <li class="user-nav-notification">
+          <a><span class="user-nav-unread"></span><i class="fa fa-bell"></i></a>
+        </li>
+        <li>
+          <a><i class="fa fa-plus"></i> <i class="fa fa-caret-down"></i></a>
+        </li>
+        <li class="user-nav-logo">
+          <a><img src="https://octodex.github.com/images/baracktocat.jpg"> <i class="fa fa-caret-down"></i></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container">
+  <header class="header-wrapper desktop-only">
+  <div class="container header-site-detail">
+    <ul class="header-toolbar">
+      <li class="clearfix">
+        <a href="/archives" class="header-toolbar-left"><i
+                  class="fa fa-file-text"></i> Posts </a>
+        <a href="/archives"
+           class="header-toolbar-right"> 147 </a>
+      </li>
+      <li>
+        <a href="/tags" class="header-toolbar-left"><i
+                  class="fa fa-tags"></i> Tags </a>
+        <a href="/tags"
+           class="header-toolbar-right"> 47 </a>
+      </li>
+      <li>
+        <a href="/categories" class="header-toolbar-left"><i
+                  class="fa fa-folder-open"></i> Categories </a>
+        <a href="/categories"
+           class="header-toolbar-right"> 23 </a>
+      </li>
+    </ul>
+    <h2 class="header-title">
+      <i class="fa fa-book text-muted"></i>
+      <a href="/">默默默默燃</a>
+      
+      
+    </h2>
+  </div>
+
+  <div class="container">
+    <div class="header-tab-wrapper clearfix">
+      <span class="header-tab header-tab-selected"><i class="fa fa-thumbs-o-up"></i> Like</span>
+      <span class="header-tab"><i class="fa fa-share-alt"></i> Share</span>
+      <span class="header-tab"><i class="fa fa-comments-o"></i> Discussion</span>
+      <span class="header-tab"><i class="fa fa-bookmark-o"></i> Bookmark </span>
+      <span class="header-tab"><i class="fa fa-smile-o"></i> Smile <i class="fa fa-caret-down"></i></span>
+    </div>
+  </div>
+</header>
+
+
+<div class="post-container container">
+  <h3>
+    <i class="fa fa-user-o"></i>
+    张白告丶
+
+    <span class="post-date float-right" title="{{moment(1563932692000).format('MMM DD, YYYY, h:mm:ss A')}}">
+      
+          <i class="fa fa-pencil-square-o"></i>
+      
+      {{moment(1563932692000).fromNow()}}
+    </span>
+  </h3>
+
+  <article class="post-content">
+    <h1>通过一个问题学习map,filter,reduce语法</h1>
+    <h2 id="比如一个从1-10的简单的数组，需要从中取奇数，你会怎么做？"><a href="#比如一个从1-10的简单的数组，需要从中取奇数，你会怎么做？" class="headerlink" title="比如一个从1-10的简单的数组，需要从中取奇数，你会怎么做？"></a>比如一个从1-10的简单的数组，需要从中取奇数，你会怎么做？</h2><p>这个问题不难，有的少侠可能会使用for循环来过滤出偶数，某些少侠可能会使用while循环，又或是使用数组自带的filter方法。</p>
+<p>这里，我们先不考虑使用for和while这些迭代方法，我们选择使用数组自带的filter方法，如果使用filter方法的话，</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> nums = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>];</span><br><span class="line"><span class="comment">// 过滤出所有奇数</span></span><br><span class="line">nums.filter(<span class="function"><span class="params">num</span> =&gt;</span> num % <span class="number">2</span> !== <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(nums);</span><br></pre></td></tr></table></figure>
+<p>还是挺简单的对吧？</p>
+<p>相信大部分少侠都能很轻松完成。</p>
+<p>在filter函数内部，我们使用 <code>num % 2 !== 0</code> 来判断 是否是一个奇数，如果是一个奇数，就过滤出来。</p>
+<p>在这里，有的少侠可能就会想到，如果把这个判断过程单独分成一个函数，会方便一些，也方便以后的修改扩展。</p>
+<p>比如单独写一个isOdd函数</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isOdd = <span class="function"><span class="params">num</span> =&gt;</span> num % <span class="number">2</span> !== <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p>然后在filter里面使用这个函数，是吧？</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> nums = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> isOdd = <span class="function"><span class="params">num</span> =&gt;</span> num % <span class="number">2</span> !== <span class="number">0</span>;</span><br><span class="line"><span class="comment">// 过滤出所有奇数</span></span><br><span class="line"><span class="keyword">const</span> odd = nums.filter(isOdd);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(odd);</span><br></pre></td></tr></table></figure>
+<h2 id="如果要把nums里面的数字翻倍，用map函数，又该怎么做呢？"><a href="#如果要把nums里面的数字翻倍，用map函数，又该怎么做呢？" class="headerlink" title="如果要把nums里面的数字翻倍，用map函数，又该怎么做呢？"></a>如果要把nums里面的数字翻倍，用map函数，又该怎么做呢？</h2><p>聪明的少侠这次肯定一下就明白了：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> nums = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>];</span><br><span class="line"><span class="keyword">const</span> double = <span class="function"><span class="params">num</span> =&gt;</span> num *<span class="number">2</span>;</span><br><span class="line"><span class="keyword">const</span> doubleNumbers = nums.map(double);</span><br><span class="line"><span class="built_in">console</span>.log(doubleNumbers);</span><br></pre></td></tr></table></figure>
+<h2 id="从nums里面过滤出所有奇数，并翻倍这些奇数。"><a href="#从nums里面过滤出所有奇数，并翻倍这些奇数。" class="headerlink" title="从nums里面过滤出所有奇数，并翻倍这些奇数。"></a>从nums里面过滤出所有奇数，并翻倍这些奇数。</h2><p>这个问题也不难是吧？</p>
+<p>让我猜一下，一些少侠应该会写成下面这样：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> nums = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> isOdd = <span class="function"><span class="params">num</span> =&gt;</span> num % <span class="number">2</span> !== <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> double = <span class="function"><span class="params">num</span> =&gt;</span> num *<span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> doubleNums = nums.filter(isOdd).map(double);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(doubleNums);</span><br></pre></td></tr></table></figure>
+<h2 id="如果我们还想继续算出所有奇数翻倍后的和的话"><a href="#如果我们还想继续算出所有奇数翻倍后的和的话" class="headerlink" title="如果我们还想继续算出所有奇数翻倍后的和的话"></a>如果我们还想继续算出所有奇数翻倍后的和的话</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> nums = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> isOdd = <span class="function"><span class="params">num</span> =&gt;</span> num % <span class="number">2</span> !== <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> double = <span class="function"><span class="params">num</span> =&gt;</span> num *<span class="number">2</span>;</span><br><span class="line"><span class="keyword">const</span> add = <span class="function">(<span class="params">sum,num</span>) =&gt;</span> sum += num;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> doubleNums = nums.filter(isOdd).map(double).reduce(add,<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(doubleNums);</span><br></pre></td></tr></table></figure>
+<p>嗯，一个串一个看起来很酷是吧？ 最后的结果也是正确的。</p>
+<p>这样串起来的后果就是，我们会遍历3次数组，filter的时候遍历一次，map的时候遍历一次，reduce的时候再遍历一次。</p>
+<p>现在数组只有10个数字，影响还不大，但是如果是很大的数组，比如100万个数字，遍历3遍的话，那么就会多访问<strong>150万次</strong>，</p>
+<p>想象一下，如果让你自己从中间取出所有奇数，翻倍，并求和，你会觉得怎么做简单一些呢？</p>
+<blockquote>
+<p>是不是觉得下面这样才比较正常？</p>
+</blockquote>
+<ul>
+<li>首先，从第一个数字开始，如果它是奇数，就拿出来，翻倍，然后找个地方放起来</li>
+<li>接着，继续看第二个数字，如果是偶数，就跳过，如果是奇数，就拿出来，翻倍，然后和开始的翻倍后的奇数加起来，找个地方放起来。</li>
+<li>接着看第三个数字，以此类推，只要是奇数，就翻倍，然后和之前的结果加起来。</li>
+<li>直到我们找寻到最后一个数字，就可以算出最终结果了，</li>
+</ul>
+<p>如果使用迭代的话，就是下面这样:<br><a id="more"></a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> nums = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> isOdd = <span class="function"><span class="params">num</span> =&gt;</span> num % <span class="number">2</span> !== <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> double = <span class="function"><span class="params">num</span> =&gt;</span> num *<span class="number">2</span>;</span><br><span class="line"><span class="keyword">const</span> add = <span class="function">(<span class="params">sum,num</span>) =&gt;</span> sum += num;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 保存最终结果</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> result = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i =<span class="number">0</span>; i&lt; nums.length; i++)&#123;</span><br><span class="line">    <span class="keyword">if</span>(nums[i]%<span class="number">2</span> != <span class="number">0</span>)&#123;</span><br><span class="line">        result = result + nums[i]*<span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(result); <span class="comment">// 50</span></span><br></pre></td></tr></table></figure>
+<p>没错，通常这样才是正常的操作。</p>
+<p>但是，</p>
+<p>这样的代码不太方便，</p>
+<p>少侠你肯定也不想每次都写这么一大堆for循环语句吧？</p>
+<p>所以，我们可以先试着继续优化一下。</p>
+<p>我们首先试着用一个叫做magic(魔法)的函数把这些步骤包裹起来:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> nums = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> magic = <span class="function"><span class="params">array</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> length = array.length,</span><br><span class="line">    <span class="keyword">let</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">let</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(i, i &lt; length; i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(array[i] % <span class="number">2</span> !== <span class="number">0</span>)&#123;</span><br><span class="line">            sum = sum + array[i]*<span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(magic(nums)); <span class="comment">// 50</span></span><br></pre></td></tr></table></figure>
+<p>现在看起来好多了，不过，magic内部的操作看起来不是很清晰，</p>
+<p>其他少侠看见了可能很难一眼就明白magic函数在做什么,</p>
+<p>我们可以试着把里面的一些步骤分成更小的函数:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> nums = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> isOdd = <span class="function"><span class="params">num</span> =&gt;</span> num % <span class="number">2</span> !== <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> double = <span class="function"><span class="params">num</span> =&gt;</span> num *<span class="number">2</span>;</span><br><span class="line"><span class="keyword">const</span> add = <span class="function">(<span class="params">sum,num</span>) =&gt;</span> sum += num;</span><br><span class="line"><span class="keyword">const</span> magic = <span class="function"><span class="params">array</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> length = array.length,</span><br><span class="line">    <span class="keyword">let</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">let</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(i, i &lt; length; i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(isOdd(array[i]))&#123;</span><br><span class="line">            sum = add(sum,double(array[i]));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(magic(nums)); <span class="comment">// 50</span></span><br></pre></td></tr></table></figure>
+<p>现在比较简洁也比较清晰了，不过，假如我们现在要计算是偶数而不是奇数怎么办呢？</p>
+<p>或者如果更复杂些，如果是偶数，就反过来，除以二，然后求和，又该怎么办呢？</p>
+<p>难道我们又要复制一次magic函数，然后改动for循环里面的逻辑吗？</p>
+<p>也许，我们可以把for循环内部的逻辑单独提取成一个外部函数！</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> nums = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> isOdd = <span class="function"><span class="params">num</span> =&gt;</span> num % <span class="number">2</span> !== <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> isEvent = <span class="function"><span class="params">num</span> =&gt;</span> !isOdd(num)</span><br><span class="line"><span class="keyword">const</span> double = <span class="function"><span class="params">num</span> =&gt;</span> num *<span class="number">2</span>;</span><br><span class="line"><span class="keyword">const</span> part = <span class="function"><span class="params">num</span> =&gt;</span> num /<span class="number">2</span>;</span><br><span class="line"><span class="keyword">const</span> add = <span class="function">(<span class="params">sum,num</span>) =&gt;</span> sum += num;</span><br><span class="line"><span class="keyword">const</span> magic = <span class="function">(<span class="params">array,fn,sum</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> length = array.length,</span><br><span class="line">    <span class="keyword">let</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(i, i &lt; length; i++)&#123;</span><br><span class="line">        sum = magicFriends(sum,array[i])</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">magicFriends</span>(<span class="params">sum,num</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(isOdd(num))&#123;</span><br><span class="line">        sum = add(sum,double(num));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sum ;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(magic(nums,magicFriends,<span class="number">0</span>)); <span class="comment">// 50</span></span><br></pre></td></tr></table></figure>
+<h2 id="接下来就是见证奇迹的时刻！"><a href="#接下来就是见证奇迹的时刻！" class="headerlink" title="接下来就是见证奇迹的时刻！"></a>接下来就是见证奇迹的时刻！</h2><p>首先，我们给代码里面部分函数和参数改一下名字:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> nums = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> isOdd = <span class="function"><span class="params">num</span> =&gt;</span> num % <span class="number">2</span> !== <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> isEvent = <span class="function"><span class="params">num</span> =&gt;</span> !isOdd(num)</span><br><span class="line"><span class="keyword">const</span> double = <span class="function"><span class="params">num</span> =&gt;</span> num *<span class="number">2</span>;</span><br><span class="line"><span class="keyword">const</span> part = <span class="function"><span class="params">num</span> =&gt;</span> num /<span class="number">2</span>;</span><br><span class="line"><span class="keyword">const</span> add = <span class="function">(<span class="params">sum,num</span>) =&gt;</span> sum += num;</span><br><span class="line"><span class="keyword">const</span> reduce = <span class="function">(<span class="params">array,reducer,result</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> length = array.length,</span><br><span class="line">    <span class="keyword">let</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(i, i &lt; length; i++)&#123;</span><br><span class="line">        result = reducer(sum,array[i])</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">consot magicFriends = <span class="function">(<span class="params">sum,num</span>) =&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(isOdd(num))&#123;</span><br><span class="line">        sum = add(sum,double(num));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sum ;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(reduce(nums,magicFriends,<span class="number">0</span>)); <span class="comment">// 50</span></span><br></pre></td></tr></table></figure>
+<p>是不是有点眼熟了？ 接着，我们换成数组自带的reduce函数:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> nums = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> isOdd = <span class="function"><span class="params">num</span> =&gt;</span> num % <span class="number">2</span> !== <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> isEvent = <span class="function"><span class="params">num</span> =&gt;</span> !isOdd(num)</span><br><span class="line"><span class="keyword">const</span> double = <span class="function"><span class="params">num</span> =&gt;</span> num *<span class="number">2</span>;</span><br><span class="line"><span class="keyword">const</span> part = <span class="function"><span class="params">num</span> =&gt;</span> num /<span class="number">2</span>;</span><br><span class="line"><span class="keyword">const</span> add = <span class="function">(<span class="params">sum,num</span>) =&gt;</span> sum += num;</span><br><span class="line">consot magicFriends = <span class="function">(<span class="params">sum,num</span>) =&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(isOdd(num))&#123;</span><br><span class="line">        sum = add(sum,double(num));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sum ;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(nums.reduce(magicFriends,<span class="number">0</span>)); <span class="comment">// 50</span></span><br></pre></td></tr></table></figure>
+<h2 id="最后回到我们上面的问题"><a href="#最后回到我们上面的问题" class="headerlink" title="最后回到我们上面的问题:"></a>最后回到我们上面的问题:</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> nums = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>];</span><br><span class="line"><span class="keyword">const</span> isOdd = <span class="function"><span class="params">num</span> =&gt;</span> num % <span class="number">2</span> !== <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> double = <span class="function"><span class="params">num</span> =&gt;</span> num *<span class="number">2</span>;</span><br><span class="line"><span class="keyword">const</span> add = <span class="function">(<span class="params">sum,num</span>) =&gt;</span> sum += num;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> result = nums.reduces(<span class="function">(<span class="params">sum,num</span>)=&gt;</span> isOdd(num) ? add(sum,dobule(num) : sum,<span class="number">0</span>));</span><br><span class="line"><span class="built_in">console</span>.log(result); <span class="comment">// 50</span></span><br></pre></td></tr></table></figure>
+<p>这次我们用reduce只遍历了一次数组就完成了之前的操作！</p>
+<p>现在知道为什么之前要把reduce叫做magic(魔法)了吧！</p>
+
+  </article>
+</div>
+
+
+    
+
+
+
+
+</div>
+
+<div class="footer-wrapper container">
+  <footer class="footer clearfix">
+    <div class="clearfix">
+    <a href="https://zhanghao-web.github.io" class="footer-logo">
+      <i class="fa fa-github"></i>
+    </a>
+    <ul class="footer-social-link">
+      <li>© 2019 张白告丶</li>
+      <li><a href="https://zhanghao-web.github.io">Home</a></li>
+      
+    </ul>
+    <div class="footer-theme-info">
+      Theme <a href="//github.com/sabrinaluo/hexo-theme-replica">Replica</a>
+      by <a href="//github.com/sabrinaluo">Hiitea</a> ❤ Powered by Hexo
+    </div>
+    </div>
+    
+  </footer>
+</div>
+
+
+
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>

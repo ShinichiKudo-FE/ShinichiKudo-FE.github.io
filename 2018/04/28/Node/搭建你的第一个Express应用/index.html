@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>
+    搭建你的第一个Express应用 | 默默默默燃
+  </title>
+  <meta name="description" content="一枚前端搬砖队队员的记录册">
+  
+  <meta name="keywords" content="
+  Express
+  ">
+  
+  <meta name="author" content="张白告丶">
+
+  <meta http-equiv="Cache-Control" content="no-transform"/>
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="theme-color" content="#1e2327">
+  <link rel="apple-touch-icon" href="https://github.githubassets.com/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://github.githubassets.com/apple-touch-icon-180x180.png">
+
+  <link rel="icon" type="image/x-icon" href="https://github.githubassets.com/favicon.ico">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+  
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.25-csp/vue.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+</head>
+
+<body id="replica-app">
+
+<nav class="navbar-wrapper">
+  <div class="navbar">
+    <div class="container clearfix">
+      <a href="/" class="navbar-logo"><i class="fa fa-github"></i></a>
+
+      <div class="navbar-search float-left desktop-only">
+        <div class="navbar-search-form">
+          <label for="gsc-i-id1">This website</label>
+          <div id="google-search">
+            <gcse:search></gcse:search>
+          </div>
+        </div>
+      </div>
+
+      <ul class="navbar-nav float-left">
+        
+        <li><a href="/archives">Archives</a></li>
+        
+        
+        <li><a href="/categories">Categories</a></li>
+        
+        
+        <li><a href="/tags">Tags</a></li>
+        
+        
+        <li class="desktop-only"><a href="/atom.xml" target="_blank">RSS</a></li>
+        
+      </ul>
+
+      <ul class="navbar-nav user-nav float-right desktop-only">
+        <li class="user-nav-notification">
+          <a><span class="user-nav-unread"></span><i class="fa fa-bell"></i></a>
+        </li>
+        <li>
+          <a><i class="fa fa-plus"></i> <i class="fa fa-caret-down"></i></a>
+        </li>
+        <li class="user-nav-logo">
+          <a><img src="https://octodex.github.com/images/baracktocat.jpg"> <i class="fa fa-caret-down"></i></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container">
+  <header class="header-wrapper desktop-only">
+  <div class="container header-site-detail">
+    <ul class="header-toolbar">
+      <li class="clearfix">
+        <a href="/archives" class="header-toolbar-left"><i
+                  class="fa fa-file-text"></i> Posts </a>
+        <a href="/archives"
+           class="header-toolbar-right"> 147 </a>
+      </li>
+      <li>
+        <a href="/tags" class="header-toolbar-left"><i
+                  class="fa fa-tags"></i> Tags </a>
+        <a href="/tags"
+           class="header-toolbar-right"> 47 </a>
+      </li>
+      <li>
+        <a href="/categories" class="header-toolbar-left"><i
+                  class="fa fa-folder-open"></i> Categories </a>
+        <a href="/categories"
+           class="header-toolbar-right"> 23 </a>
+      </li>
+    </ul>
+    <h2 class="header-title">
+      <i class="fa fa-book text-muted"></i>
+      <a href="/">默默默默燃</a>
+      
+      
+    </h2>
+  </div>
+
+  <div class="container">
+    <div class="header-tab-wrapper clearfix">
+      <span class="header-tab header-tab-selected"><i class="fa fa-thumbs-o-up"></i> Like</span>
+      <span class="header-tab"><i class="fa fa-share-alt"></i> Share</span>
+      <span class="header-tab"><i class="fa fa-comments-o"></i> Discussion</span>
+      <span class="header-tab"><i class="fa fa-bookmark-o"></i> Bookmark </span>
+      <span class="header-tab"><i class="fa fa-smile-o"></i> Smile <i class="fa fa-caret-down"></i></span>
+    </div>
+  </div>
+</header>
+
+
+<div class="post-container container">
+  <h3>
+    <i class="fa fa-user-o"></i>
+    张白告丶
+
+    <span class="post-date float-right" title="{{moment(1524886073000).format('MMM DD, YYYY, h:mm:ss A')}}">
+      
+          <i class="fa fa-pencil-square-o"></i>
+      
+      {{moment(1524886073000).fromNow()}}
+    </span>
+  </h3>
+
+  <article class="post-content">
+    <h1>搭建你的第一个Express应用</h1>
+    <h1 id="Express介绍"><a href="#Express介绍" class="headerlink" title="Express介绍"></a>Express介绍</h1><ul>
+<li>Express 是一个简洁而灵活的 node.js Web应用框架, 提供一系列强大特性帮助你创建各种Web应用</li>
+<li>丰富的HTTP工具以及来自Connect框架的中间件随取随用，创建强健、友好的API变得快速又简单</li>
+<li>Express 不对 node.js 已有的特性进行二次抽象，我们只是在它之上扩展了Web应用所需的功能</li>
+</ul>
+<p>使用 Express 可以快速地搭建一个完整功能的网站，它有一套健壮的特性，可用于开发单页、多页和混合Web应用。</p>
+<h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>在确认已经安装了node之后(<a href="https://nodejs.org/en/#download" target="_blank" rel="noopener">下载</a>), 在你的机器上创建一个目录，让我们来开始你的第一个应用程序吧</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//新建一个目录文件夹,初始化一个packjson.json文件</span></span><br><span class="line">    $mkdir express-demo &amp;&amp; cd express-demo  &amp;&amp; npm init</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//安装Express</span></span><br><span class="line">$ npm install express -g</span><br></pre></td></tr></table></figure>
+<p>现在我们来写真正的代码了！创建一个名为app.js 或者 server.js的文件，叫什么看你个人喜好了。 载入express 然后使用代码 express()创建一个新的应用程序:<br><a id="more"></a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> app = express();</span><br></pre></td></tr></table></figure>
+<p>在这个应用程序实例里，你可以通过 app.VERB()定义路由，下面的例子是”GET /“返回 “Hello World” 字符串。 req 和 res 对象是和node原生提供给你的一致的，你也可以执行 res.pipe(), req.on(‘data’, callback) 等任何事情在没有Express的情况下可以做的事情。</p>
+<p>Express 给这些对象加了一个封装好的方法，比如 res.send(), 它会帮你设置Content-Length:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">app.get(<span class="string">'./'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">req,res</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"GET 请求成功"</span>)；</span><br><span class="line">    req.send(<span class="string">'Hello Express'</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>现在我们通过执行 app.listen() 来绑定并监听连接。 它接受的参数和nodenet.Server#listen()的方法一致:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">app.listen(<span class="number">3000</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'Listening on port %d'</span>, server.address().port);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>然后在终端执行<code>node app.js</code> 打开3000端口的页面就会看到<code>Hello Express</code>了</p>
+<h2 id="使用express-generator-快速生成一个应用程序"><a href="#使用express-generator-快速生成一个应用程序" class="headerlink" title="使用express-generator 快速生成一个应用程序"></a>使用express-generator 快速生成一个应用程序</h2><h3 id="安装express-generator"><a href="#安装express-generator" class="headerlink" title="安装express-generator"></a>安装express-generator</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install express-generator -g</span><br></pre></td></tr></table></figure>
+<p>这个工具提供了一个非常简单的生成一个程序骨架的功能，但是它也有局限，比如它只支持很少的几个模板引擎。 而事实上Express几乎支持所有的为node所建的模板引擎。 使用 –help查看一下帮助:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Usage: express [options]</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line"></span><br><span class="line">  -h, --help          输出帮助信息</span><br><span class="line">  -V, --version       输出版本号</span><br><span class="line">  -e, --ejs           添加 ejs 模板引擎支持 (默认为jade)</span><br><span class="line">  -H, --hogan         添加 hogan.js模板引擎支持</span><br><span class="line">  -c, --css   样式 &lt;引擎&gt; 支持 (less|stylus) (默认为css)</span><br><span class="line">  -f, --force         强制在非空目录执行</span><br></pre></td></tr></table></figure>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ express myapp</span><br></pre></td></tr></table></figure>
+<p>生成目录的如下:<br><img src="http://hexobed.oss-cn-beijing.aliyuncs.com/18-4-28/74845117.jpg" alt="express"></p>
+<p>默认为<a href="http://jade-lang.com/" target="_blank" rel="noopener">jade</a>和<code>css</code>的结构</p>
+<p><strong>如果你想生成一个支持<a href="https://ejs.bootcss.com/" target="_blank" rel="noopener">ejs</a>, <a href="http://stylus-lang.com/" target="_blank" rel="noopener">Stylus</a>的应用程序，只需要简单的执行下面的命令</strong>：</p>
+<p>则生成的目录为<br><img src="http://hexobed.oss-cn-beijing.aliyuncs.com/18-4-28/16498387.jpg" alt="ejs"></p>
+<ul>
+<li>app.js：启动文件，或者说入口文件</li>
+<li>package.json：存储着工程的信息及模块依赖，当在 dependencies 中添加依赖的模块时，运行npm install，npm 会检查当前目录下的 package.json，并自动安装所有指定的模块</li>
+<li>node_modules：存放 package.json 中安装的模块，当你在 package.json 添加依赖的模块并安装后，存放在这个文件夹下</li>
+<li>public：存放 image、css、js 等文件</li>
+<li>routes：存放路由文件</li>
+<li>views：存放视图文件或者说模版文件</li>
+<li>bin：存放可执行文件</li>
+</ul>
+<p><strong>执行应用</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd myapp</span><br><span class="line">npm install</span><br><span class="line">DEBUG=myapp:* npm start</span><br></pre></td></tr></table></figure>
+<p>打开3000端口就会看到如下页面：<br><img src="http://hexobed.oss-cn-beijing.aliyuncs.com/18-4-28/44690178.jpg" alt="expressapp"></p>
+<p>这些就是一个简单的应用程序创建和运行的所有步骤。 记住Express没有限定任何的目录结构，这只是一个方便你工作的基本结构。 如果你想得到更多怎么组织目录结构选择，可以查看github上的<a href="https://github.com/expressjs/express/tree/master/examples" target="_blank" rel="noopener">示例</a>。</p>
+<h2 id="推荐"><a href="#推荐" class="headerlink" title="推荐"></a>推荐</h2><p>最后给大家推荐一个更详细的例子：<a href="http://ourjs.com/detail/56b2a6f088feaf2d031d2468" target="_blank" rel="noopener">使用express搭建一个简单的博客</a>;</p>
+
+  </article>
+</div>
+
+
+    
+
+
+
+
+</div>
+
+<div class="footer-wrapper container">
+  <footer class="footer clearfix">
+    <div class="clearfix">
+    <a href="https://zhanghao-web.github.io" class="footer-logo">
+      <i class="fa fa-github"></i>
+    </a>
+    <ul class="footer-social-link">
+      <li>© 2019 张白告丶</li>
+      <li><a href="https://zhanghao-web.github.io">Home</a></li>
+      
+    </ul>
+    <div class="footer-theme-info">
+      Theme <a href="//github.com/sabrinaluo/hexo-theme-replica">Replica</a>
+      by <a href="//github.com/sabrinaluo">Hiitea</a> ❤ Powered by Hexo
+    </div>
+    </div>
+    
+  </footer>
+</div>
+
+
+
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>

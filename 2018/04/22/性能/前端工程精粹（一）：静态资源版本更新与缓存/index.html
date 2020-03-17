@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>
+    前端工程精粹（一）：静态资源版本更新与缓存 | 默默默默燃
+  </title>
+  <meta name="description" content="一枚前端搬砖队队员的记录册">
+  
+  <meta name="keywords" content="
+  性能优化
+  ">
+  
+  <meta name="author" content="张白告丶">
+
+  <meta http-equiv="Cache-Control" content="no-transform"/>
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="theme-color" content="#1e2327">
+  <link rel="apple-touch-icon" href="https://github.githubassets.com/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://github.githubassets.com/apple-touch-icon-180x180.png">
+
+  <link rel="icon" type="image/x-icon" href="https://github.githubassets.com/favicon.ico">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+  
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.25-csp/vue.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+</head>
+
+<body id="replica-app">
+
+<nav class="navbar-wrapper">
+  <div class="navbar">
+    <div class="container clearfix">
+      <a href="/" class="navbar-logo"><i class="fa fa-github"></i></a>
+
+      <div class="navbar-search float-left desktop-only">
+        <div class="navbar-search-form">
+          <label for="gsc-i-id1">This website</label>
+          <div id="google-search">
+            <gcse:search></gcse:search>
+          </div>
+        </div>
+      </div>
+
+      <ul class="navbar-nav float-left">
+        
+        <li><a href="/archives">Archives</a></li>
+        
+        
+        <li><a href="/categories">Categories</a></li>
+        
+        
+        <li><a href="/tags">Tags</a></li>
+        
+        
+        <li class="desktop-only"><a href="/atom.xml" target="_blank">RSS</a></li>
+        
+      </ul>
+
+      <ul class="navbar-nav user-nav float-right desktop-only">
+        <li class="user-nav-notification">
+          <a><span class="user-nav-unread"></span><i class="fa fa-bell"></i></a>
+        </li>
+        <li>
+          <a><i class="fa fa-plus"></i> <i class="fa fa-caret-down"></i></a>
+        </li>
+        <li class="user-nav-logo">
+          <a><img src="https://octodex.github.com/images/baracktocat.jpg"> <i class="fa fa-caret-down"></i></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container">
+  <header class="header-wrapper desktop-only">
+  <div class="container header-site-detail">
+    <ul class="header-toolbar">
+      <li class="clearfix">
+        <a href="/archives" class="header-toolbar-left"><i
+                  class="fa fa-file-text"></i> Posts </a>
+        <a href="/archives"
+           class="header-toolbar-right"> 147 </a>
+      </li>
+      <li>
+        <a href="/tags" class="header-toolbar-left"><i
+                  class="fa fa-tags"></i> Tags </a>
+        <a href="/tags"
+           class="header-toolbar-right"> 47 </a>
+      </li>
+      <li>
+        <a href="/categories" class="header-toolbar-left"><i
+                  class="fa fa-folder-open"></i> Categories </a>
+        <a href="/categories"
+           class="header-toolbar-right"> 23 </a>
+      </li>
+    </ul>
+    <h2 class="header-title">
+      <i class="fa fa-book text-muted"></i>
+      <a href="/">默默默默燃</a>
+      
+      
+    </h2>
+  </div>
+
+  <div class="container">
+    <div class="header-tab-wrapper clearfix">
+      <span class="header-tab header-tab-selected"><i class="fa fa-thumbs-o-up"></i> Like</span>
+      <span class="header-tab"><i class="fa fa-share-alt"></i> Share</span>
+      <span class="header-tab"><i class="fa fa-comments-o"></i> Discussion</span>
+      <span class="header-tab"><i class="fa fa-bookmark-o"></i> Bookmark </span>
+      <span class="header-tab"><i class="fa fa-smile-o"></i> Smile <i class="fa fa-caret-down"></i></span>
+    </div>
+  </div>
+</header>
+
+
+<div class="post-container container">
+  <h3>
+    <i class="fa fa-user-o"></i>
+    张白告丶
+
+    <span class="post-date float-right" title="{{moment(1524410209000).format('MMM DD, YYYY, h:mm:ss A')}}">
+      
+          <i class="fa fa-pencil-square-o"></i>
+      
+      {{moment(1524410209000).fromNow()}}
+    </span>
+  </h3>
+
+  <article class="post-content">
+    <h1>前端工程精粹（一）：静态资源版本更新与缓存</h1>
+    <p>每个参与过开发企业级web应用的前端工程师或许都曾思考过前端性能优化方面的问题。我们有雅虎14条性能优化原则，还有两本很经典的性能优化指导书：<code>《高性能网站建设指南》</code>、<code>《高性能网站建设进阶指南》</code>。经验丰富的工程师对于前端性能优化方法耳濡目染，基本都能一一列举出来。这些性能优化原则大概是在7年前提出的，对于web性能优化至今都有非常重要的指导意义。</p>
+<hr>
+<p>然而，对于构建大型web应用的团队来说，要坚持贯彻这些优化原则并不是一件十分容易的事。因为优化原则中很多要求是与工程管理相违背的，比如“把css放在头部”和“把js放在尾部”这两条原则，我们不能让团队的工程师在写样式和脚本引用的时候都去修改一个相同的页面文件。这样做会严重影响团队成员间并行开发的效率，尤其是在团队有版本管理的情况下，每天要花大量的时间进行代码修改合并，这项成本是难以接受的。因此在前端工程界，总会看到周期性的性能优化工作，辛勤的前端工程师们每到月圆之夜就会倾巢出动根据优化原则做一次性能优化。</p>
+<hr>
+<p>本文从一个全新的视角来思考web性能优化与前端工程之间的关系，通过解读百度前端集成解决方案小组（F.I.S）在打造高性能前端架构并统一百度40多条前端产品线的过程中所经历的技术尝试，揭示前端性能优化在前端架构及开发工具设计层面的实现思路。</p>
+<h2 id="性能优化原则及分类"><a href="#性能优化原则及分类" class="headerlink" title="性能优化原则及分类"></a>性能优化原则及分类</h2><p>笔者先假设本文的读者是有前端开发经验的工程师，并对企业级web应用开发及性能优化有一定的思考，因此我不会重复介绍雅虎14条性能优化原则。如果您没有这些前续知识，请移步<a href="https://developer.yahoo.com/performance/rules.html" target="_blank" rel="noopener">这里</a>来学习。</p>
+<p>首先，我们把雅虎14条优化原则，《高性能网站建设指南》以及《高性能网站建设进阶指南》中提到的优化点做一次梳理，按照优化方向分类，可以得到这样一张表格：</p>
+<a id="more"></a>
+<table>
+<thead>
+<tr>
+<th>优化方向</th>
+<th style="text-align:right">优化手段  </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>请求数量</td>
+<td style="text-align:right">合并脚本和样式表，CSS Sprites，拆分初始化负载，划分主域 </td>
+</tr>
+<tr>
+<td>请求带宽</td>
+<td style="text-align:right">启GZip，精简JavaScript，移除重复脚本，图像优化  </td>
+</tr>
+<tr>
+<td>缓存利用</td>
+<td style="text-align:right">使用CDN，使用外部JavaScript和CSS，添加Expires头，减少DNS查找，配置ETag，使AjaX可缓存  </td>
+</tr>
+<tr>
+<td>页面结构</td>
+<td style="text-align:right">将样式表放在顶部，将脚本放在底部，尽早刷新文档的输出   </td>
+</tr>
+<tr>
+<td>代码校验</td>
+<td style="text-align:right">避免CSS表达式，避免重定向   </td>
+</tr>
+</tbody>
+</table>
+<p>表格1 性能优化原则分类</p>
+<ul>
+<li>目前大多数前端团队可以利用yui compressor或者google closure compiler等压缩工具很容易做到“精简Javascript”这条原则；</li>
+<li>同样的，也可以使用图片压缩工具对图像进行压缩，实现“图像优化”原则。这两条原则是对单个资源的处理，因此不会引起任何工程方面的问题。</li>
+<li>很多团队也通过引入代码校验流程来确保实现“避免css表达式”和“避免重定向”原则。</li>
+<li>目前绝大多数互联网公司也已经开启了服务端的Gzip压缩，并使用CDN实现静态资源的缓存和快速访问；</li>
+<li>一些技术实力雄厚的前端团队甚至研发出了自动CSS Sprites工具，解决了CSS Sprites在工程维护方面的难题。</li>
+<li>使用“查找-替换”思路，我们似乎也可以很好的实现“划分主域”原则。</li>
+</ul>
+<p>我们把以上这些已经成熟应用到实际生产中的优化手段去除掉，留下那些还没有很好实现的优化原则。再来回顾一下之前的性能优化分类：</p>
+<table>
+<thead>
+<tr>
+<th>优化方向</th>
+<th style="text-align:right">优化手段  </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>请求数量</td>
+<td style="text-align:right">合并脚本和样式表，拆分初始化负载 </td>
+</tr>
+<tr>
+<td>请求带宽</td>
+<td style="text-align:right">移除重复脚本  </td>
+</tr>
+<tr>
+<td>缓存利用</td>
+<td style="text-align:right">添加Expires头，配置ETag，使Ajax可缓存 </td>
+</tr>
+<tr>
+<td>页面结构</td>
+<td style="text-align:right">将样式表放在顶部，将脚本放在底部，尽早刷新文档的输出   </td>
+</tr>
+</tbody>
+</table>
+<p>表格2 较难实现的优化原则</p>
+<p>现在有很多顶尖的前端团队可以将上述还剩下的优化原则也都一一解决，但业界大多数团队都还没能很好的解决这些问题。因此，本文将就这些原则的解决方案做进一步的分析与讲解，从而为那些还没有进入前端工业化开发的团队提供一些基础技术建设意见，也借此机会与业界顶尖的前端团队在工业化工程化方向上交流一下彼此的心得。</p>
+<h2 id="静态资源版本更新与缓存"><a href="#静态资源版本更新与缓存" class="headerlink" title="静态资源版本更新与缓存"></a>静态资源版本更新与缓存</h2><p>如表格2所示，“缓存利用”分类中保留了“添加Expires头”和“配置ETag”两项。或许有些人会质疑，明明这两项只要配置了服务器的相关选项就可以实现，为什么说它们难以解决呢？确实，开启这两项很容易，但开启了缓存后，我们的项目就开始面临另一个挑战：如何更新这些缓存。</p>
+<p>相信大多数团队也找到了类似的答案，它和《高性能网站建设指南》关于“添加Expires头”所说的原则一样——修订文件名。即：</p>
+<p><strong>最有效的解决方案是修改其所有链接，这样，全新的请求将从原始服务器下载最新的内容。</strong></p>
+<p>思路没错，但要怎么改变链接呢？变成什么样的链接才能有效更新缓存，又能最大限度避免那些没有修改过的文件缓存不失效呢？</p>
+<p>先来看看现在一般前端团队的做法：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script scr = <span class="string">"a.js?t=202131"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure></p>
+<p>或者<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src = <span class="string">"a.js?v=1.0.0"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure></p>
+<p>大家会采用添加query的形式修改链接。这样做是比较直观的解决方案，但在访问量较大的网站，这么做可能将面临一些新的问题。</p>
+<p>通常一个大型的web应用几乎每天都会有迭代和更新，发布新版本也就是发布新的静态资源和页面的过程。以上述代码为例，假设现在线上运行着index.html文件，并且使用了线上的a.js资源。index.html的内容为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src = <span class="string">"a.js?v=1.0.0"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>这次我们更新了页面中的一些内容，得到一个index.html文件，并开发了新的与之匹配的a.js资源来完成页面交互，新的index.html文件的内容因此而变成了<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src = <span class="string">"a.js?v=1.0.1"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure></p>
+<p>好了，现在要开始将两份新的文件发布到线上去。可以看到，index.html和a.js的资源实际上是要覆盖线上的同名文件的。不管怎样，在发布的过程中，index.html和a.js总有一个先后的顺序，从而中间出现一段或大或小的时间间隔。对于一个大型互联网应用来说即使在一个很小的时间间隔内，都有可能出现新用户访问。在这个时间间隔中，访问了网站的用户会发生什么情况呢？</p>
+<blockquote>
+<p>1.如果先覆盖index.html，后覆盖a.js，用户在这个时间间隙访问，会得到新的index.html配合旧的a.js的情况，从而出现错误的页面。<br>2.如果先覆盖a.js，后覆盖index.html，用户在这个间隙访问，会得到旧的index.html配合新的a.js的情况，从而也出现了错误的页面。</p>
+</blockquote>
+<p>这就是为什么大型web应用在版本上线的过程中经常会较集中的出现前端报错日志的原因，也是一些互联网公司选择加班到半夜等待访问低峰期再上线的原因之一。此外，由于静态资源文件版本更新是“覆盖式”的，而页面需要通过修改query来更新，对于使用CDN缓存的web产品来说，还可能面临CDN缓存攻击的问题。我们再来观察一下前面说的版本更新手段：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src = <span class="string">"a.js?v=1.0.0"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure></p>
+<p>我们不难预测，a.js的下一个版本是“1.0.1”，那么就可以刻意构造一串这样的请求“a.js?v=1.0.1”、“a.js?v=1.0.2”、……让<strong>CDN将当前的资源缓存为“未来的版本”</strong>。这样当这个页面所用的资源有更新时，即使更改了链接地址，也会因为CDN的原因返回给用户旧版本的静态资源，从而造成页面错误。即便不是刻意制造的攻击，在上线间隙出现访问也可能导致区域性的CDN缓存错误。</p>
+<p>此外，当版本有更新时，修改所有引用链接也是一件与工程管理相悖的事，至少我们需要一个可以“查找-替换”的工具来自动化的解决版本号修改的问题。</p>
+<p>对付这个问题，目前来说最优方案就是基于文件内容的hash版本冗余机制了。也就是说，我们希望工程师源码是这么写的：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src = <span class="string">"a.js?v=1.0.0"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure></p>
+<p>但是线上代码是这样的<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src = <span class="string">"a_2131e3.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure></p>
+<p>其中”_82244e91”这串字符是根据a.js的文件内容进行hash运算得到的，只有文件内容发生变化了才会有更改。由于版本序列是与文件名写在一起的，而不是同名文件覆盖，因此不会出现上述说的那些问题。同时，这么做还有其他的好处：</p>
+<blockquote>
+<p>1.线上的a.js不是同名文件覆盖，而是文件名+hash的冗余，所以可以先上线静态资源，再上线html页面，不存在间隙问题；<br>2.遇到问题回滚版本的时候，无需回滚a.js，只须回滚页面即可；<br>3.由于静态资源版本号是文件内容的hash，因此所有静态资源可以开启永久强缓存，只有更新了内容的文件才会缓存失效，缓存利用率大增；<br>4.修改静态资源后会在线上产生新的文件，一个文件对应一个版本，因此不会受到构造CDN缓存形式的攻击</p>
+</blockquote>
+<p>虽然这种方案是相比之下最完美的解决方案，但它无法通过手工的形式来维护，因为要依靠手工的形式来计算和替换hash值，并生成相应的文件。这将是一项非常繁琐且容易出错的工作，因此我们需要借助工具。(webpack,gulp等)</p>
+<p><a href="http://www.infoq.com/cn/articles/front-end-engineering-and-performance-optimization-part1" target="_blank" rel="noopener">原文地址</a></p>
+
+  </article>
+</div>
+
+
+    
+
+
+
+
+</div>
+
+<div class="footer-wrapper container">
+  <footer class="footer clearfix">
+    <div class="clearfix">
+    <a href="https://zhanghao-web.github.io" class="footer-logo">
+      <i class="fa fa-github"></i>
+    </a>
+    <ul class="footer-social-link">
+      <li>© 2019 张白告丶</li>
+      <li><a href="https://zhanghao-web.github.io">Home</a></li>
+      
+    </ul>
+    <div class="footer-theme-info">
+      Theme <a href="//github.com/sabrinaluo/hexo-theme-replica">Replica</a>
+      by <a href="//github.com/sabrinaluo">Hiitea</a> ❤ Powered by Hexo
+    </div>
+    </div>
+    
+  </footer>
+</div>
+
+
+
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>
+    用canvas压缩上传的图片 | 默默默默燃
+  </title>
+  <meta name="description" content="一枚前端搬砖队队员的记录册">
+  
+  <meta name="keywords" content="
+  Js
+  ">
+  
+  <meta name="author" content="张白告丶">
+
+  <meta http-equiv="Cache-Control" content="no-transform"/>
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="theme-color" content="#1e2327">
+  <link rel="apple-touch-icon" href="https://github.githubassets.com/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://github.githubassets.com/apple-touch-icon-180x180.png">
+
+  <link rel="icon" type="image/x-icon" href="https://github.githubassets.com/favicon.ico">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+  
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.25-csp/vue.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+</head>
+
+<body id="replica-app">
+
+<nav class="navbar-wrapper">
+  <div class="navbar">
+    <div class="container clearfix">
+      <a href="/" class="navbar-logo"><i class="fa fa-github"></i></a>
+
+      <div class="navbar-search float-left desktop-only">
+        <div class="navbar-search-form">
+          <label for="gsc-i-id1">This website</label>
+          <div id="google-search">
+            <gcse:search></gcse:search>
+          </div>
+        </div>
+      </div>
+
+      <ul class="navbar-nav float-left">
+        
+        <li><a href="/archives">Archives</a></li>
+        
+        
+        <li><a href="/categories">Categories</a></li>
+        
+        
+        <li><a href="/tags">Tags</a></li>
+        
+        
+        <li class="desktop-only"><a href="/atom.xml" target="_blank">RSS</a></li>
+        
+      </ul>
+
+      <ul class="navbar-nav user-nav float-right desktop-only">
+        <li class="user-nav-notification">
+          <a><span class="user-nav-unread"></span><i class="fa fa-bell"></i></a>
+        </li>
+        <li>
+          <a><i class="fa fa-plus"></i> <i class="fa fa-caret-down"></i></a>
+        </li>
+        <li class="user-nav-logo">
+          <a><img src="https://octodex.github.com/images/baracktocat.jpg"> <i class="fa fa-caret-down"></i></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container">
+  <header class="header-wrapper desktop-only">
+  <div class="container header-site-detail">
+    <ul class="header-toolbar">
+      <li class="clearfix">
+        <a href="/archives" class="header-toolbar-left"><i
+                  class="fa fa-file-text"></i> Posts </a>
+        <a href="/archives"
+           class="header-toolbar-right"> 147 </a>
+      </li>
+      <li>
+        <a href="/tags" class="header-toolbar-left"><i
+                  class="fa fa-tags"></i> Tags </a>
+        <a href="/tags"
+           class="header-toolbar-right"> 47 </a>
+      </li>
+      <li>
+        <a href="/categories" class="header-toolbar-left"><i
+                  class="fa fa-folder-open"></i> Categories </a>
+        <a href="/categories"
+           class="header-toolbar-right"> 23 </a>
+      </li>
+    </ul>
+    <h2 class="header-title">
+      <i class="fa fa-book text-muted"></i>
+      <a href="/">默默默默燃</a>
+      
+      
+    </h2>
+  </div>
+
+  <div class="container">
+    <div class="header-tab-wrapper clearfix">
+      <span class="header-tab header-tab-selected"><i class="fa fa-thumbs-o-up"></i> Like</span>
+      <span class="header-tab"><i class="fa fa-share-alt"></i> Share</span>
+      <span class="header-tab"><i class="fa fa-comments-o"></i> Discussion</span>
+      <span class="header-tab"><i class="fa fa-bookmark-o"></i> Bookmark </span>
+      <span class="header-tab"><i class="fa fa-smile-o"></i> Smile <i class="fa fa-caret-down"></i></span>
+    </div>
+  </div>
+</header>
+
+
+<div class="post-container container">
+  <h3>
+    <i class="fa fa-user-o"></i>
+    张白告丶
+
+    <span class="post-date float-right" title="{{moment(1533627518000).format('MMM DD, YYYY, h:mm:ss A')}}">
+      
+          <i class="fa fa-pencil-square-o"></i>
+      
+      {{moment(1533627518000).fromNow()}}
+    </span>
+  </h3>
+
+  <article class="post-content">
+    <h1>用canvas压缩上传的图片</h1>
+    <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>现在摄像头已经是手机的标配了，移动网站也做得越来越像APP。然而拍照上传这件事情的体验似乎仍然不如APP，主要原因是现在手机拍摄的照片太大，上传非常消耗流量也非常耗时。APP都会在上传前缩小要上传的照片尺寸，以期更节省流量和时间。在HTML5时代，利用文件API和Canvas技术，Web上也可以做到图片压缩上传。</p>
+<h2 id="过滤文件类型"><a href="#过滤文件类型" class="headerlink" title="过滤文件类型"></a>过滤文件类型</h2><p>首先我们希望用户能直接选择手机照片，而不是在各种类型的文件中选择。只需要在<code>input</code>标签中加入<code>accept</code>属性就可以实现这一点：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"preview"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">accept</span>=<span class="string">"image/*"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在<code>Android4以上，iOS7以上</code>设备实测，当用户点击这个文件选择器的时候，手机会自动调出图片库，并带有拍照选择。</p>
+<h2 id="读文件生成预览"><a href="#读文件生成预览" class="headerlink" title="读文件生成预览"></a>读文件生成预览</h2><p>用户选择了图片之后，需要读取文件内容，读出的内容可供生成预览图，也可以供后面压缩使用。使用HTML5的<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/FileReader" target="_blank" rel="noopener">FileReader API</a>可以达成这一目的。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> file = <span class="built_in">document</span>.querySeletor(<span class="string">"[type=file]"</span>);</span><br><span class="line">file.addEventListener(<span class="string">'change'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>,f; f &lt; e.target.file[i]; i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(f.type.indexOf(<span class="string">'image'</span>) != <span class="number">0</span>) <span class="keyword">continue</span>;</span><br><span class="line">        <span class="keyword">var</span> render = <span class="keyword">new</span> FileReader();</span><br><span class="line">        render.onload = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">            <span class="keyword">var</span> img = <span class="built_in">document</span>.createElement(<span class="string">'img'</span>);</span><br><span class="line">            img.src = e.targte.result;</span><br><span class="line">            <span class="built_in">document</span>.getElementById(<span class="string">'preview'</span>).appendChild(img);</span><br><span class="line">        &#125;</span><br><span class="line">        render.readAsDataURL(f)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;,<span class="literal">false</span>)</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>如果不需要预览图，可以不把img对象添加到DOM上。</p>
+<h2 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h2><p>利用Canvas渲染上下文的<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/drawImage" target="_blank" rel="noopener">drawImage</a>接口，可以把一张图片绘制到Canvas上，在这个过程中可以重新定义图片尺寸，然后再用Canvas的<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLCanvasElement/toDataURL" target="_blank" rel="noopener">toDataURL</a>接口可以生成出压缩后的图片。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> images = <span class="built_in">document</span>.querySeletorAll(<span class="string">'#preview img'</span>);</span><br><span class="line"><span class="keyword">var</span> iWidth = <span class="number">400</span>,iHeight = <span class="number">300</span>;</span><br><span class="line"><span class="keyword">var</span> compressedImages = [];</span><br><span class="line">[].forEach.call(images,<span class="function"><span class="keyword">function</span>(<span class="params">image</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> canvas = <span class="built_in">document</span>.createElement(<span class="string">'canvas'</span>);</span><br><span class="line">    canvas.width = iWidth;</span><br><span class="line">    canvas.height = iHeight;</span><br><span class="line">    canvas.getContent(<span class="string">'2d'</span>).drawImage(image);</span><br><span class="line">    <span class="keyword">var</span> compressed = canvas.toDataURL(<span class="string">"imgae/jepg"</span>,<span class="number">0.7</span>);</span><br><span class="line">    compressedImages.push(compressed);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="上传"><a href="#上传" class="headerlink" title="上传"></a>上传</h2><p>上面一步骤生成的压缩后图片是Data URL形式的，上传前需要把开头部分的<code>data:image/jpeg;base64</code>,截掉才是图片的<code>Base64</code>编码形式。</p>
+<p>可以直接把<code>Base64</code>的字符串上传到服务器，然后由服务端解码为JPG图片，也可以在前端解码上传。如果要在前端解码并以文件方式上传，先要用<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/WindowBase64/atob" target="_blank" rel="noopener">atob</a>函数把<code>Base64</code>解开，然后转换为<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer" target="_blank" rel="noopener">ArrayBuffer</a>，再用它创建一个<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Blob" target="_blank" rel="noopener">Blob</a>对象。文件方式上传需要用<code>multipart/form-data</code>格式，可以利用<a href="https://developer.mozilla.org/zh-CN/docs/Web/Guide/Using_FormData_Objects" target="_blank" rel="noopener">FormData</a>对象组装生成好的Blob对象来实现。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">b64toBlob</span>(<span class="params">b64Data,contentType,sliceSize</span>)</span>&#123;</span><br><span class="line">    contentType = contentType || <span class="string">''</span>;</span><br><span class="line">    sliceSize = sliceSize || <span class="number">512</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> byteCharacters = atob(b64Data);</span><br><span class="line">    <span class="keyword">var</span> byteData = [];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> offset = <span class="number">0</span>; offset &lt; byteCharacters.length; offset += sliceSize)&#123;</span><br><span class="line">        <span class="keyword">var</span> slice = byteCharacters.slice(offset, offset + sliceSize);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> byteNumbers = <span class="keyword">new</span> <span class="built_in">Array</span>(slice.length);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; slice.length; i++) &#123;</span><br><span class="line">            byteNumbers[i] = slice.charCodeAt(i);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> byteArray = <span class="keyword">new</span> <span class="built_in">Uint8Array</span>(byteNumbers);</span><br><span class="line"></span><br><span class="line">        byteArrays.push(byteArray);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> blob = <span class="keyword">new</span> Blob(byteArray,&#123;<span class="attr">type</span>:content&#125;)</span><br><span class="line">    <span class="keyword">return</span> blob;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> fileBlob = b64toBlob(compressed.substr(<span class="number">23</span>),<span class="string">'images/jepg'</span>);</span><br><span class="line"><span class="keyword">var</span> formData = <span class="keyword">new</span> FormData();</span><br><span class="line">formData.append(<span class="string">'file'</span>,fileBlob);</span><br><span class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">xhr.open(<span class="string">'POST'</span>,<span class="string">'upload.php'</span>);</span><br><span class="line">xhr.send(formData);</span><br></pre></td></tr></table></figure>
+<h2 id="安全"><a href="#安全" class="headerlink" title="安全"></a>安全</h2><p>最后，请不要忘记在服务端对用户上传的文件数据进行合法性检查，毕竟黑客也可能用非浏览器上传垃圾文件或者恶意脚本。</p>
+<h2 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h2><p><img src="https://lib.xts.so/xts-img/x/2017/02/3037522307.png" alt="扫描查看"></p>
+
+  </article>
+</div>
+
+
+    
+
+
+
+
+</div>
+
+<div class="footer-wrapper container">
+  <footer class="footer clearfix">
+    <div class="clearfix">
+    <a href="https://zhanghao-web.github.io" class="footer-logo">
+      <i class="fa fa-github"></i>
+    </a>
+    <ul class="footer-social-link">
+      <li>© 2019 张白告丶</li>
+      <li><a href="https://zhanghao-web.github.io">Home</a></li>
+      
+    </ul>
+    <div class="footer-theme-info">
+      Theme <a href="//github.com/sabrinaluo/hexo-theme-replica">Replica</a>
+      by <a href="//github.com/sabrinaluo">Hiitea</a> ❤ Powered by Hexo
+    </div>
+    </div>
+    
+  </footer>
+</div>
+
+
+
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>

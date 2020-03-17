@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>
+    Es6你可能不知道的事---进阶篇 | 默默默默燃
+  </title>
+  <meta name="description" content="一枚前端搬砖队队员的记录册">
+  
+  <meta name="keywords" content="
+  Js
+  ">
+  
+  <meta name="author" content="张白告丶">
+
+  <meta http-equiv="Cache-Control" content="no-transform"/>
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="theme-color" content="#1e2327">
+  <link rel="apple-touch-icon" href="https://github.githubassets.com/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://github.githubassets.com/apple-touch-icon-180x180.png">
+
+  <link rel="icon" type="image/x-icon" href="https://github.githubassets.com/favicon.ico">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+  
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.25-csp/vue.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+</head>
+
+<body id="replica-app">
+
+<nav class="navbar-wrapper">
+  <div class="navbar">
+    <div class="container clearfix">
+      <a href="/" class="navbar-logo"><i class="fa fa-github"></i></a>
+
+      <div class="navbar-search float-left desktop-only">
+        <div class="navbar-search-form">
+          <label for="gsc-i-id1">This website</label>
+          <div id="google-search">
+            <gcse:search></gcse:search>
+          </div>
+        </div>
+      </div>
+
+      <ul class="navbar-nav float-left">
+        
+        <li><a href="/archives">Archives</a></li>
+        
+        
+        <li><a href="/categories">Categories</a></li>
+        
+        
+        <li><a href="/tags">Tags</a></li>
+        
+        
+        <li class="desktop-only"><a href="/atom.xml" target="_blank">RSS</a></li>
+        
+      </ul>
+
+      <ul class="navbar-nav user-nav float-right desktop-only">
+        <li class="user-nav-notification">
+          <a><span class="user-nav-unread"></span><i class="fa fa-bell"></i></a>
+        </li>
+        <li>
+          <a><i class="fa fa-plus"></i> <i class="fa fa-caret-down"></i></a>
+        </li>
+        <li class="user-nav-logo">
+          <a><img src="https://octodex.github.com/images/baracktocat.jpg"> <i class="fa fa-caret-down"></i></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container">
+  <header class="header-wrapper desktop-only">
+  <div class="container header-site-detail">
+    <ul class="header-toolbar">
+      <li class="clearfix">
+        <a href="/archives" class="header-toolbar-left"><i
+                  class="fa fa-file-text"></i> Posts </a>
+        <a href="/archives"
+           class="header-toolbar-right"> 147 </a>
+      </li>
+      <li>
+        <a href="/tags" class="header-toolbar-left"><i
+                  class="fa fa-tags"></i> Tags </a>
+        <a href="/tags"
+           class="header-toolbar-right"> 47 </a>
+      </li>
+      <li>
+        <a href="/categories" class="header-toolbar-left"><i
+                  class="fa fa-folder-open"></i> Categories </a>
+        <a href="/categories"
+           class="header-toolbar-right"> 23 </a>
+      </li>
+    </ul>
+    <h2 class="header-title">
+      <i class="fa fa-book text-muted"></i>
+      <a href="/">默默默默燃</a>
+      
+      
+    </h2>
+  </div>
+
+  <div class="container">
+    <div class="header-tab-wrapper clearfix">
+      <span class="header-tab header-tab-selected"><i class="fa fa-thumbs-o-up"></i> Like</span>
+      <span class="header-tab"><i class="fa fa-share-alt"></i> Share</span>
+      <span class="header-tab"><i class="fa fa-comments-o"></i> Discussion</span>
+      <span class="header-tab"><i class="fa fa-bookmark-o"></i> Bookmark </span>
+      <span class="header-tab"><i class="fa fa-smile-o"></i> Smile <i class="fa fa-caret-down"></i></span>
+    </div>
+  </div>
+</header>
+
+
+<div class="post-container container">
+  <h3>
+    <i class="fa fa-user-o"></i>
+    张白告丶
+
+    <span class="post-date float-right" title="{{moment(1523498692000).format('MMM DD, YYYY, h:mm:ss A')}}">
+      
+          <i class="fa fa-pencil-square-o"></i>
+      
+      {{moment(1523498692000).fromNow()}}
+    </span>
+  </h3>
+
+  <article class="post-content">
+    <h1>Es6你可能不知道的事---进阶篇</h1>
+    <h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="Module"><a href="#Module" class="headerlink" title="Module"></a>Module</h2><p>模块化是一个进行很久的话题，发展历程中出现过很多模式，例如AMD,CommonJS等等。</p>
+<p><strong>Module</strong>是ES6的一个新特性，是语言层面对模块化的支持。</p>
+<blockquote>
+<p>与之前模块加载机制不同，Module是动态加载，导入的变量的<strong>只读引用</strong>，而不是拷贝。</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. export default 可以做默认导出</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// a.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="number">5</span>;      <span class="comment">// 默认导出</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// b.js</span></span><br><span class="line"><span class="keyword">import</span> b, &#123;a&#125; <span class="keyword">from</span> <span class="string">'./a.js'</span>;    <span class="comment">// 默认导入，不需要加花括号</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 动态的加载机制</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// a.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">let</span> a = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">let</span> b = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  a = <span class="number">15</span>;</span><br><span class="line">  b = <span class="number">20</span>;</span><br><span class="line">  <span class="keyword">return</span> a+b;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// b.js</span></span><br><span class="line"><span class="keyword">import</span> &#123;a, b, add&#125; <span class="keyword">from</span> <span class="string">'./a.js'</span>;</span><br><span class="line">a+b;    <span class="comment">// 20</span></span><br><span class="line">add();  <span class="comment">// 35</span></span><br><span class="line">a+b;    <span class="comment">// 35</span></span><br></pre></td></tr></table></figure>
+<h2 id="Symbol"><a href="#Symbol" class="headerlink" title="Symbol"></a>Symbol</h2><p>symbol是es6的一个新特性，他有如下特点：</p>
+<p>1.symbol是“新”的基本数据类型，从es6开始基本数据类型变成了6个，<strong>undefind,null,number,boolean,string,symbol</strong><br>2.symbol可以用作object的<em>key</em><br>3.symbol存在全局作用域，利用<strong>Symbol.for(key)方法</strong>，可以创建(全局作用域无指定键)或获取全局作用域的symbol；利用<strong>symbol.keyFor(sym)</strong>可以获取指定的symbol的值<br>4.Javascript内部使用了很多内置symbol值，作为特殊的键，来实现一些内部功能；例如：<strong>symbol.iterator</strong>用于标示对象的迭代器</p>
+<blockquote>
+<p>“新” 仅仅是针对前端开发人员来说的，其实 Symbol 概念本身已经在 JavaScript 语言内部长时间使用了<br><a id="more"></a><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. "Symbol(desc)" 方法用于创建一个新的 symbol，参数 "desc" 仅用做 symbol 的描述，并不用于唯一标示 symbol</span></span><br><span class="line"><span class="built_in">Symbol</span>(<span class="string">'abc'</span>) === <span class="built_in">Symbol</span>(<span class="string">'abc'</span>); <span class="comment">// false，'abc'仅作为两个 symbol 的描述信息</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. "Symbol.for(key)" 方法，参数 "key" 是用于在全局作用域中标示 symbol 的唯一键，同时也作为该 symbol 的描述信息</span></span><br><span class="line"><span class="built_in">Symbol</span>.for(<span class="string">'abc'</span>) === <span class="built_in">Symbol</span>(<span class="string">'abc'</span>); <span class="comment">//true 左侧为创建，右侧为获取</span></span><br><span class="line"><span class="built_in">Symbol</span>.for(<span class="string">'abc'</span>) === <span class="built_in">Symbol</span>(<span class="string">'abc'</span>); <span class="comment">//false</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. symbol 无法被 for...in 遍历到 (不可枚举)，可以利用 Object.getOwnPropertySymbols 获取</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">    [<span class="built_in">Symbol</span>(<span class="string">'abc'</span>)]:<span class="string">'abc'</span>,</span><br><span class="line">    <span class="string">'abc'</span>:<span class="string">'abc'</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">let</span> i <span class="keyword">in</span> obj)&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(i);<span class="comment">//abc</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">Object</span>.getOwnPropertySymbols(obj);<span class="comment">//[Symbol(abc)]</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="Iterator-for-…of"><a href="#Iterator-for-…of" class="headerlink" title="Iterator + for …of"></a>Iterator + for …of</h2><p>ES6 中除了新特性外，还有一个新的规范，那就是关于迭代的规范，他包括两部分分别是 “可迭代规范（iterable protocol）” 和 “迭代器规范（iterator protocol）”。任何实现了前者的对象，都可以进行 for…of 循环。</p>
+<p><strong>String,Map,Set,Array</strong>等是原生可迭代对象，因为他们都是在原型(prototype)对象中实现了<code>Symbol.iterator</code>键对应的方法。</p>
+<blockquote>
+<p>for…of是对对象迭代器的遍历（键和值都可以遍历），而for…in是对象可枚举值的遍历</p>
+</blockquote>
+<p>下面用代码来解释一下两个规范：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//1.迭代器规范</span></span><br><span class="line"><span class="keyword">const</span> iter = &#123;</span><br><span class="line">    conter:<span class="number">0</span>,</span><br><span class="line">    next()&#123; <span class="comment">// 迭代器是实现了 "next()" 函数的对象</span></span><br><span class="line">        <span class="keyword">if</span>(++<span class="keyword">this</span>.conter &lt; <span class="number">10</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span>&#123; <span class="comment">// 返回一个含有两个键值对的对象，Object &#123;done =&gt; boolean, value =&gt; any&#125;</span></span><br><span class="line">                done:<span class="literal">false</span>,</span><br><span class="line">                value:<span class="keyword">this</span>.conter</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.conter = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">return</span> &#123; <span class="comment">// done = true 时，value非必须</span></span><br><span class="line">                done : <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 2. 可迭代规范，实现 "Symbol.iterator =&gt; func()" 键值对；而 "func()" 返回一个 迭代器对象</span></span><br><span class="line"><span class="keyword">const</span> iterObj = &#123;&#125;;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">let</span> i <span class="keyword">of</span> iterObj)&#123;&#125;;</span><br><span class="line">iterObj[<span class="built_in">Symbol</span>.iterator] = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> iter;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">let</span> i <span class="keyword">of</span> iterObj)&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(i);<span class="comment">//1,2,3,4,5,6,7,8,9</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="关于集合"><a href="#关于集合" class="headerlink" title="关于集合"></a>关于集合</h2><p>原来我们使用集合，多数情况下会直接用 Object 代替，ES6新增了两个特性，<em>Map</em> 和 <em>Set</em>，他们是对 JavaScript 关于集合概念的补充。</p>
+<h3 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h3><p>为什么要有Map这种数据结构？直接使用Object不好吗？是不是完全可以使用Map取代object用于数据存取？</p>
+<blockquote>
+<p>Map和Object的区别？<br>1.Map和Object都可以用作数据存取，Map适用于存取需要<strong>常需要变化(增减键值对)或遍历的数剧集</strong>，而Object适用于<strong>存取静态（例如配置信息）</strong>的数据集<br>2.Object的key必须是<code>String</code>或者<code>symbol</code>类型，而Map却无此限制，可以是<code>任何值</code><br>3.Map可以很方便的取到键对值的数量，而Object则需要用额外途径</p>
+</blockquote>
+<h3 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h3><p>Set作为最简单的集合，有如下特点：</p>
+<p>1.Set可以存储任何类型的值，<strong>遍历顺序与插入顺序相同</strong></p>
+<p>2.Set内<strong>无重复值</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. Set 的构造函数可以传入一个 “可迭代的对象（例如数组）”，其中包含任意值</span></span><br><span class="line"><span class="keyword">const</span> first = <span class="keyword">new</span> <span class="built_in">Set</span>([<span class="string">'a'</span>, <span class="number">1</span>, &#123;<span class="string">'b'</span>: <span class="number">1</span>&#125;, <span class="literal">null</span>]);    <span class="comment">// Set &#123;"a", 1, Object &#123;b: 1&#125;, null&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. Set 无法插入重复的值</span></span><br><span class="line">first.add(<span class="number">1</span>);    <span class="comment">// Set &#123;"a", 1, Object &#123;b: 1&#125;, null&#125;</span></span><br></pre></td></tr></table></figure>
+<h2 id="WeakMap-WeakSet"><a href="#WeakMap-WeakSet" class="headerlink" title="WeakMap + WeakSet"></a>WeakMap + WeakSet</h2><p><code>WeakMap</code> 与 <code>WeakSet</code> 作为一个比较新颖的概念，其主要特点在于弱引用。</p>
+<p>相比于 Map 与 Set 的强引用，弱引用可以令对象在 “适当” 情况下正确被 GC 回收，减少内存资源浪费。</p>
+<p><strong>但由于不是强引用，所以无法进行遍历或取得值数量，只能用于值的存取（WeakMap）或是否存在值得判断（WeakSet）</strong></p>
+<blockquote>
+<ul>
+<li>在弱引用的情况下，GC 回收时，不会把其视作一个引用；如果没有其他强引用存在，那这个对象将被回收</li>
+</ul>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. WeakMap 键必须是对象</span></span><br><span class="line"><span class="keyword">const</span> err = <span class="keyword">new</span> <span class="built_in">WeakMap</span>([[<span class="string">'a'</span>,<span class="number">1</span>]]);    <span class="comment">// TypeError: Invalid value used as weak map key</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. WeakMap/WeakSet 的弱引用</span></span><br><span class="line"><span class="keyword">const</span> wm = <span class="keyword">new</span> <span class="built_in">WeakMap</span>([[&#123;<span class="string">'a'</span>:<span class="number">1</span>&#125;,<span class="number">1</span>]]);    <span class="comment">// Object &#123;'a': 1&#125; 会正常被 GC 回收</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> ws = <span class="keyword">new</span> <span class="built_in">WeakSet</span>(); </span><br><span class="line">ws.add(&#123;<span class="string">'a'</span>:<span class="number">1</span>&#125;);    <span class="comment">// Object &#123;'a': 1&#125; 会正常被 GC 回收</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj = &#123;<span class="string">'b'</span>: <span class="number">1</span>&#125;;</span><br><span class="line">ws.add(obj);        <span class="comment">// Object &#123;'b': 1&#125; 不会被正常 GC 回收，因为存在一个强引用</span></span><br><span class="line">obj = <span class="literal">undefined</span>;    <span class="comment">// Object &#123;'b': 1&#125; 会正常被 GC 回收</span></span><br></pre></td></tr></table></figure>
+<h2 id="异步编程"><a href="#异步编程" class="headerlink" title="异步编程"></a>异步编程</h2><p>在 ES6 之前，JavaScript 的异步编程都跳不出回调函数这个方式。回调函数方式使用非常简单，在简单异步任务调用时候没有任何问题，但如果出现复杂的异步任务场景时，就显得力不从心了，最主要的问题就是多层回调函数的嵌套会导致代码的横向发展，难以维护；ES6 带来了两个新特性来解决异步编程的难题。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 一个简单的多层嵌套回调函数的例子 (Node.js)</span></span><br><span class="line"><span class="keyword">const</span> git = <span class="built_in">require</span>(<span class="string">'shell'</span>).git;</span><br><span class="line"><span class="keyword">const</span> commitMsg = <span class="string">'...'</span>;</span><br><span class="line"></span><br><span class="line">git.add(<span class="string">'pattern/for/some/files/*'</span>, (err) =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span>(!err)&#123;</span><br><span class="line">    git.commit(commitMsg, (err) =&gt; &#123;</span><br><span class="line">      <span class="keyword">if</span>(!err)&#123;</span><br><span class="line">        git.push(pushOption);</span><br><span class="line">      &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(err);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(err);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<h3 id="Promise"><a href="#Promise" class="headerlink" title="Promise"></a>Promise</h3><p>Promise是ES6的一个新特性，ta他有如下特点：</p>
+<p>1.本质还是回调函数<br>2.区分成功和失败的回调，省去嵌套在内层的判断逻辑<br>3.可以很轻松的完成回调函数模式到promise模式的转化<br>4.代码由回调函数嵌套的横向扩展，变为链式调用的纵向扩展，便于编程和维护</p>
+<p>promise 虽然优势颇多，但是代码结构仍与同步代码区别较大</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 上例用 Promise 实现</span></span><br><span class="line"><span class="comment">// 假定 git.add, git.commit, git.push 均做了 Promise 封装，返回一个 Promise 对象</span></span><br><span class="line"><span class="keyword">const</span> git = <span class="built_in">require</span>(<span class="string">'shell'</span>).git;</span><br><span class="line"><span class="keyword">const</span> commitMsg = <span class="string">'...'</span>;</span><br><span class="line"></span><br><span class="line">git.add(<span class="string">'pattern/for/some/files/*'</span>)</span><br><span class="line">  .then(<span class="function"><span class="params">()</span> =&gt;</span> git.commit(commitMsg))</span><br><span class="line">  .then(git.push)</span><br><span class="line">  .catch(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(err);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="generator"><a href="#generator" class="headerlink" title="generator"></a>generator</h3><p>Generator 作为 ES6 的新特性，是一个语言层面的升级。它有以下几个特点：<br>1.可以使用yield关键字，终止执行返回（内到外）<br>2.可以通过next(val)方法调用重新唤醒，继续执行（外回内）<br>3.运行时（包括挂起态），<strong>共享局部变量</strong><br>4.<code>Generator</code> 执行会返回一个结果对象，结果对象本身既是迭代器，同时也是可迭代对象（同时满足两个迭代规范），所以 Generator 可以<code>直接用于 自定义对象迭代器</code></p>
+<p>由于具备以上特点（第四点除外），Generator 也是 JavaScript 对 协程（coroutine）的实现，协程可以理解为 “可由开发人员控制调度的多线程”</p>
+<blockquote>
+<ul>
+<li><p>协程按照调度机制来区分，可以分为对称式和非对称式</p>
+</li>
+<li><p>非对称式：被调用者（协程）挂起时，必须将控制权返还调用者（协程）</p>
+</li>
+<li><p>对称式：被调用者（协程）挂起时，可将控制权转给 “任意” 其他协程</p>
+</li>
+<li><p>JavaScript 实现的是 非对称式协程（semi-coroutine）；非对称式协程相比于对称式协程，代码逻辑更清晰，易于理解和维护</p>
+</li>
+</ul>
+</blockquote>
+<p>协程给 JavaScript 提供了一个新的方式去完成异步编程；由于 Generator 的执行会返回一个迭代器，需要手动去遍历，所以如果要达到自动执行的目的，除了本身语法外，还需要实现一个执行器，例如 <code>TJ 大神的 co 框架</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 上例用 Generator 实现</span></span><br><span class="line"><span class="comment">// 假定 git.add, git.commit, git.push 均做了 Promise 封装，返回一个 Promise 对象</span></span><br><span class="line"><span class="keyword">const</span> co = <span class="built_in">require</span>(<span class="string">'co'</span>);</span><br><span class="line"><span class="keyword">const</span> git = <span class="built_in">require</span>(<span class="string">'shell'</span>).git;</span><br><span class="line"></span><br><span class="line">co(<span class="function"><span class="keyword">function</span>* (<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">const</span> commitMsg = <span class="string">'...'</span>;      <span class="comment">// 共享的局部变量</span></span><br><span class="line">  </span><br><span class="line">  <span class="keyword">yield</span> git.add(<span class="string">'pattern/for/some/files/*'</span>);</span><br><span class="line">  <span class="keyword">yield</span> git.commit(commitMsg);</span><br><span class="line">  <span class="keyword">yield</span> git.push();</span><br><span class="line">&#125;).catch(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(err);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>Generator 是一个 ES6 最佳的异步编程选择么？显然不是，因为除了基本语法外，我们还要额外去实现执行器来达到执行的目的，但是它整体的代码结构是优于回调函数嵌套和 Promise 模式的。</p>
+<h3 id="Async-Await"><a href="#Async-Await" class="headerlink" title="Async-Await"></a>Async-Await</h3><p>这并不是一个 ES6 新特性，而是 ES7 的语法，放在这里是因为它将是 JavaScript 目前支持异步编程最好的方式<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 上例用 async-await 实现</span></span><br><span class="line"><span class="comment">// 假定 git.add, git.commit, git.push 均做了 Promise 封装，返回一个 Promise 对象</span></span><br><span class="line"><span class="keyword">const</span> git = <span class="built_in">require</span>(<span class="string">'shell'</span>).git;</span><br><span class="line">(<span class="keyword">async</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">const</span> commitMsg = <span class="string">''</span>; <span class="comment">//共享局部变量</span></span><br><span class="line">    <span class="keyword">try</span>()&#123;</span><br><span class="line">        <span class="keyword">await</span> git.add(<span class="string">'pattern/for/some/files/*'</span>);</span><br><span class="line">        <span class="keyword">await</span> git.commit(commitMsg);</span><br><span class="line">        <span class="keyword">await</span> git.push();</span><br><span class="line">    &#125;<span class="keyword">catch</span>(err)&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(err);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure></p>
+<h2 id="元编程"><a href="#元编程" class="headerlink" title="元编程"></a>元编程</h2><p>元编程是指的是开发人员对 “语言本身进行编程”。一般是编程语言暴露了一些 API，供开发人员来操作语言本身的某些特性。ES6 两个新特性 Proxy 和 Reflect 是 JavaScript 关于对象元编程能力的扩展。</p>
+<h3 id="proxy"><a href="#proxy" class="headerlink" title="proxy"></a>proxy</h3><p>Proxy 是 ES6 加入的一个新特性，它可以 <code>“代理” 对象的原生行为</code>，替换为<code>执行自定义行为</code>。</p>
+<p>这样的元编程能力使得我们可以更轻松的扩展出一些特殊对象。</p>
+<blockquote>
+<ul>
+<li>任何对象都可以被“代理”</li>
+<li>利用 Proxy.revocable(target, handler) 可以创建出一个可逆的 “被代理” 对象</li>
+</ul>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 简单 element 选择控制工具的实现</span></span><br><span class="line"><span class="keyword">const</span> cacheElement = <span class="function"><span class="keyword">function</span>(<span class="params">target, prop</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(target.hasOwnProperty(prop))&#123;</span><br><span class="line">      <span class="keyword">return</span> target[prop];</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">      <span class="keyword">return</span> target[prop] = <span class="built_in">document</span>.getElementById(prop);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> elControl = <span class="keyword">new</span> <span class="built_in">Proxy</span>(cacheElement, &#123;</span><br><span class="line">  get: <span class="function">(<span class="params">target, prop</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> cacheElement(target, prop);</span><br><span class="line">  &#125;,</span><br><span class="line">  set: <span class="function">(<span class="params">target, prop, val</span>) =&gt;</span> &#123;</span><br><span class="line">    cacheElement(target, prop).textContent = val;</span><br><span class="line">  &#125;,</span><br><span class="line">  apply: <span class="function">(<span class="params">target, thisArg, args</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Reflect</span>.ownKeys(target);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">elControl.first;     <span class="comment">// div#first</span></span><br><span class="line">elControl.second;    <span class="comment">// div#second</span></span><br><span class="line">elControl.first = <span class="number">5</span>;    <span class="comment">// div#first =&gt; 5</span></span><br><span class="line">elControl.second = <span class="number">10</span>;  <span class="comment">// div#second =&gt; 10</span></span><br><span class="line">elControl();    <span class="comment">// ['first', 'second']</span></span><br></pre></td></tr></table></figure>
+<h3 id="Reflect"><a href="#Reflect" class="headerlink" title="Reflect"></a>Reflect</h3><p>ES6 中引入的 <code>Reflect</code> 是另一个元编程的特性，它使得我们可以直接操纵对象的原生行为。<code>Reflect</code> 可操纵的行为与 <code>Proxy</code> 可代理的行为是一一对应的，这使得可以在 <code>Proxy</code> 的自定义方法中方便的使用 <code>Reflect</code> 调起原生行为<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. Proxy 的自定义方法中，通过 Reflect 调用原生行为</span></span><br><span class="line"><span class="keyword">const</span> customProxy = <span class="keyword">new</span> <span class="built_in">Proxy</span>(&#123;</span><br><span class="line">  <span class="string">'custom'</span>: <span class="number">1</span></span><br><span class="line">&#125;, &#123;</span><br><span class="line">  get: <span class="function">(<span class="params">target, prop</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`get <span class="subst">$&#123;prop&#125;</span> !`</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Reflect</span>.get(target, <span class="literal">undefined</span>, prop);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">customProxy.custom;  <span class="comment">// get custom, 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 与 Object 对象上已经开放的操作原生行为方法相比，语法更加清晰易用（例如：Object.hasOwnProperty 与 Reflect.has）</span></span><br><span class="line"><span class="keyword">const</span> symb = <span class="built_in">Symbol</span>(<span class="string">'b'</span>);</span><br><span class="line"><span class="keyword">const</span> a = &#123;</span><br><span class="line">  [symb]: <span class="number">1</span>,</span><br><span class="line">  <span class="string">'b'</span>: <span class="number">2</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="built_in">Reflect</span>.has(a, symb) &amp;&amp; <span class="built_in">Reflect</span>.has(a, <span class="string">'b'</span>))&#123;  <span class="comment">// good</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'good'</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">Reflect</span>.ownKeys(a);  <span class="comment">// ["b", Symbol(b)]</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="进阶阅读"><a href="#进阶阅读" class="headerlink" title="进阶阅读"></a>进阶阅读</h2><p>如果你关注兼容性，推荐看：<a href="https://kangax.github.io/compat-table/es6/，这里介绍了从" target="_blank" rel="noopener">https://kangax.github.io/compat-table/es6/，这里介绍了从</a> ES5 到 ES2016+ 的所有特性（包括仍未定稿的特性）及其在各环境的兼容性</p>
+<p>如果你关注性能，推荐看：<a href="http://kpdecker.github.io/six-speed/，这里通过性能测试，将" target="_blank" rel="noopener">http://kpdecker.github.io/six-speed/，这里通过性能测试，将</a> ES6 特性的原生实现与 ES5 polyfill 版本进行对比，覆盖了各主流环境；同时也可以侧面对比出各环境在原生实现上的性能优劣</p>
+<p>如果你想全面了解特性，推荐看：<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript，覆盖特性的各方面，包括全面的" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Web/JavaScript，覆盖特性的各方面，包括全面的</a> API（包括不推荐和废弃的）和基础用法</p>
+<p>如果你想看特性更多的使用示例和对应的 polyfill 实现，推荐看：<a href="http://es6-features.org/#Constants，这里对各个特性都给出了使用丰富的例子和一个" target="_blank" rel="noopener">http://es6-features.org/#Constants，这里对各个特性都给出了使用丰富的例子和一个</a> polyfill 实现，简单明了</p>
+<p>如果想了解 ECMA Script 最多最全面的细节，英语又比较过硬，推荐在需要时看：<a href="http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf，（或者直接看最新的：https://tc39.github.io/ecma262/）" target="_blank" rel="noopener">http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf，（或者直接看最新的：https://tc39.github.io/ecma262/）</a></p>
+<p><a href="http://taobaofed.org/blog/2016/11/03/es6-advanced/" target="_blank" rel="noopener">原文地址</a></p>
+
+  </article>
+</div>
+
+
+    
+
+
+
+
+</div>
+
+<div class="footer-wrapper container">
+  <footer class="footer clearfix">
+    <div class="clearfix">
+    <a href="https://zhanghao-web.github.io" class="footer-logo">
+      <i class="fa fa-github"></i>
+    </a>
+    <ul class="footer-social-link">
+      <li>© 2019 张白告丶</li>
+      <li><a href="https://zhanghao-web.github.io">Home</a></li>
+      
+    </ul>
+    <div class="footer-theme-info">
+      Theme <a href="//github.com/sabrinaluo/hexo-theme-replica">Replica</a>
+      by <a href="//github.com/sabrinaluo">Hiitea</a> ❤ Powered by Hexo
+    </div>
+    </div>
+    
+  </footer>
+</div>
+
+
+
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>
+    CSS对比 JavaScript动画 | 默默默默燃
+  </title>
+  <meta name="description" content="一枚前端搬砖队队员的记录册">
+  
+  <meta name="keywords" content="
+  杂文
+  ">
+  
+  <meta name="author" content="张白告丶">
+
+  <meta http-equiv="Cache-Control" content="no-transform"/>
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="theme-color" content="#1e2327">
+  <link rel="apple-touch-icon" href="https://github.githubassets.com/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://github.githubassets.com/apple-touch-icon-180x180.png">
+
+  <link rel="icon" type="image/x-icon" href="https://github.githubassets.com/favicon.ico">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+  
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.25-csp/vue.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+</head>
+
+<body id="replica-app">
+
+<nav class="navbar-wrapper">
+  <div class="navbar">
+    <div class="container clearfix">
+      <a href="/" class="navbar-logo"><i class="fa fa-github"></i></a>
+
+      <div class="navbar-search float-left desktop-only">
+        <div class="navbar-search-form">
+          <label for="gsc-i-id1">This website</label>
+          <div id="google-search">
+            <gcse:search></gcse:search>
+          </div>
+        </div>
+      </div>
+
+      <ul class="navbar-nav float-left">
+        
+        <li><a href="/archives">Archives</a></li>
+        
+        
+        <li><a href="/categories">Categories</a></li>
+        
+        
+        <li><a href="/tags">Tags</a></li>
+        
+        
+        <li class="desktop-only"><a href="/atom.xml" target="_blank">RSS</a></li>
+        
+      </ul>
+
+      <ul class="navbar-nav user-nav float-right desktop-only">
+        <li class="user-nav-notification">
+          <a><span class="user-nav-unread"></span><i class="fa fa-bell"></i></a>
+        </li>
+        <li>
+          <a><i class="fa fa-plus"></i> <i class="fa fa-caret-down"></i></a>
+        </li>
+        <li class="user-nav-logo">
+          <a><img src="https://octodex.github.com/images/baracktocat.jpg"> <i class="fa fa-caret-down"></i></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container">
+  <header class="header-wrapper desktop-only">
+  <div class="container header-site-detail">
+    <ul class="header-toolbar">
+      <li class="clearfix">
+        <a href="/archives" class="header-toolbar-left"><i
+                  class="fa fa-file-text"></i> Posts </a>
+        <a href="/archives"
+           class="header-toolbar-right"> 147 </a>
+      </li>
+      <li>
+        <a href="/tags" class="header-toolbar-left"><i
+                  class="fa fa-tags"></i> Tags </a>
+        <a href="/tags"
+           class="header-toolbar-right"> 47 </a>
+      </li>
+      <li>
+        <a href="/categories" class="header-toolbar-left"><i
+                  class="fa fa-folder-open"></i> Categories </a>
+        <a href="/categories"
+           class="header-toolbar-right"> 23 </a>
+      </li>
+    </ul>
+    <h2 class="header-title">
+      <i class="fa fa-book text-muted"></i>
+      <a href="/">默默默默燃</a>
+      
+      
+    </h2>
+  </div>
+
+  <div class="container">
+    <div class="header-tab-wrapper clearfix">
+      <span class="header-tab header-tab-selected"><i class="fa fa-thumbs-o-up"></i> Like</span>
+      <span class="header-tab"><i class="fa fa-share-alt"></i> Share</span>
+      <span class="header-tab"><i class="fa fa-comments-o"></i> Discussion</span>
+      <span class="header-tab"><i class="fa fa-bookmark-o"></i> Bookmark </span>
+      <span class="header-tab"><i class="fa fa-smile-o"></i> Smile <i class="fa fa-caret-down"></i></span>
+    </div>
+  </div>
+</header>
+
+
+<div class="post-container container">
+  <h3>
+    <i class="fa fa-user-o"></i>
+    张白告丶
+
+    <span class="post-date float-right" title="{{moment(1535294414000).format('MMM DD, YYYY, h:mm:ss A')}}">
+      
+          <i class="fa fa-pencil-square-o"></i>
+      
+      {{moment(1535294414000).fromNow()}}
+    </span>
+  </h3>
+
+  <article class="post-content">
+    <h1>CSS对比 JavaScript动画</h1>
+    <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在网页上创建动画有两种主要方法：使用 CSS 和使用 JavaScript。您选择哪种方法实际上取决于项目的其他依赖关系，以及您尝试实现什么类型的效果。</p>
+<blockquote>
+<p>TL;DR</p>
+</blockquote>
+<ul>
+<li>使用 CSS 动画来实现较简单的“一次性”转换，例如切换 UI 元素状态。</li>
+<li>当您需要高级效果（例如弹跳、停止、暂停、倒退或减速）时，请使用 JavaScript 动画。</li>
+<li>如果选择使用 JavaScript 来编写动画，可选用 Web Animations API 或用起来顺手的现代框架。</li>
+</ul>
+<p>大多数基本动画可以使用 CSS 或 JavaScript 来创建，但工作量和时间将有所不同（另请参考 <a href="https://developers.google.com/web/fundamentals/design-and-ux/animations/animations-and-performance?hl=zh-cn#css-vs-javascript-performance" target="_blank" rel="noopener">CSS 对比 JavaScript 的性能</a>）。每一种方法都有其优点和缺点，但以下内容是很好的指导原则：</p>
+<ul>
+<li><p>当您为 UI 元素采用较小的独立状态时，使用 CSS。 CSS 变换和动画非常适合于从侧面引入导航菜单，或显示工具提示。最后，可以使用 JavaScript 来控制状态，但动画本身是采用 CSS。</p>
+</li>
+<li><p>在需要对动画进行大量控制时，使用 JavaScript。 Web Animations API 是一个基于标准的方*法，现已在 Chrome 和 Opera 中提供。该方法可提供实际对象，非常适合复杂的对象导向型应用。在需要停止、暂停、减速或倒退时，JavaScript 也非常有用。</p>
+</li>
+<li><p>如果您需要手动协调整个场景，可直接使用 <code>requestAnimationFrame</code>。这属于高级 JavaScript 方法，但如果您构建游戏或绘制到 HTML 画布，则该方法非常有用。</p>
+</li>
+</ul>
+<p>或者，如果您已使用包括动画功能的 JavaScript 框架，比如通过 jQuery 的 .animate() 方法或 GreenSock 的 TweenMax，则可能发现继续使用该方法实现动画在总体上更方便。</p>
+<a id="more"></a>
+<h2 id="使用-CSS-编写动画"><a href="#使用-CSS-编写动画" class="headerlink" title="使用 CSS 编写动画"></a>使用 CSS 编写动画</h2><p>使用 CSS 编写动画是使内容在屏幕上移动的最简单方式。此方法被称为声明式，因为您可以指定您想要的结果。</p>
+<p>以下是一些 CSS 代码，让一个元素同时在 X 轴和 Y 轴上移动 100px。其实现方法是使用 CSS 变换，用时设置为 500 毫秒。当添加了 move 类时，transform 值被改变并且变换开始。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">.box &#123;</span><br><span class="line">  -webkit-transform: translate(<span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">  -webkit-transition: -webkit-transform <span class="number">500</span>ms;</span><br><span class="line"></span><br><span class="line">  transform: translate(<span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">  transition: transform <span class="number">500</span>ms;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.box.move &#123;</span><br><span class="line">  -webkit-transform: translate(<span class="number">100</span>px, <span class="number">100</span>px);</span><br><span class="line">  transform: translate(<span class="number">100</span>px, <span class="number">100</span>px);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>除了变换的持续时间之外，还有针对缓动的选项，缓动基本上是动画表现的方式</p>
+<p>如果在上述代码段中，您创建单独的 CSS 类来管理动画，则可以使用 JavaScript 来打开和关闭每个动画：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">box.classList.add(<span class="string">'move'</span>)；</span><br></pre></td></tr></table></figure>
+<p>此操作将给您的应用带来良好的平衡。您可以侧重于使用 JavaScript 来管理状态，只需在目标元素上设置相应的类，让浏览器去处理动画。如果您按照这种方法，则可以侦听元素的 <code>transitionend</code> 事件，但前提是您能够放弃对 Internet Explorer 较旧版本的支持；IE 10 是支持这些事件的首个版本。所有其他浏览器均已支持此事件有一段时间了。</p>
+<p>侦听变换结束所需的 JavaScript 如下所示：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> box = <span class="built_in">document</span>.querySelector(<span class="string">'.box'</span>);</span><br><span class="line">box.addEventListener(<span class="string">'transitionend'</span>, onTransitionEnd, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">onTransitionEnd</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// Handle the transition finishing.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>除了使用 CSS 变换之外，还可以使用 CSS 动画，这允许您对单个动画关键帧、持续时间和迭代进行更多控制。</p>
+<p>例如，可以使用与变换相同的方式为方框设置动画，但是设置动画时没有任何用户交互（例如点击），而是采用无限重复。还可以同时更改多个属性：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * This is a simplified version without</span></span><br><span class="line"><span class="comment"> * vendor prefixes.With them included</span></span><br><span class="line"><span class="comment"> * (which you will need), things get far</span></span><br><span class="line"><span class="comment"> * more verbose!</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="selector-class">.box</span> &#123;</span><br><span class="line">  <span class="comment">/* Choose the animation */</span></span><br><span class="line">  <span class="attribute">animation-name</span>: movingBox;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* The animation’s duration */</span></span><br><span class="line">  <span class="attribute">animation-duration</span>: <span class="number">1300ms</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* The number of times we want</span></span><br><span class="line"><span class="comment">      the animation to run */</span></span><br><span class="line">  <span class="attribute">animation-iteration-count</span>: infinite;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Causes the animation to reverse</span></span><br><span class="line"><span class="comment">      on every odd iteration */</span></span><br><span class="line">  <span class="attribute">animation-direction</span>: alternate;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@<span class="keyword">keyframes</span> movingBox &#123;</span><br><span class="line">  0% &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translate</span>(0, 0);</span><br><span class="line">    <span class="attribute">opacity</span>: <span class="number">0.3</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  25% &#123;</span><br><span class="line">    <span class="attribute">opacity</span>: <span class="number">0.9</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  50% &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translate</span>(100px, 100px);</span><br><span class="line">    <span class="attribute">opacity</span>: <span class="number">0.2</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  100% &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translate</span>(30px, 30px);</span><br><span class="line">    <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>借助 CSS 动画，可独立于目标元素来定义动画本身，并且使用 animation-name 属性来选择所需的动画。</p>
+<p>CSS 动画在某种程度上仍采用供应商前缀，在 Safari、Safari Mobile 和 Android 浏览器中使用-webkit-。Chrome、Opera、Internet Explorer 和 Firefox 均不采用前缀。许多工具可帮助您创建所需的 CSS 前缀版本，使您能够在源文件中编写无前缀的版本。</p>
+<h2 id="使用-JavaScript-和-Web-Animations-API-编写动画"><a href="#使用-JavaScript-和-Web-Animations-API-编写动画" class="headerlink" title="使用 JavaScript 和 Web Animations API 编写动画"></a>使用 JavaScript 和 Web Animations API 编写动画</h2><p>比较而言，使用 JavaScript 创建动画比编写 CSS 变换或动画更复杂，但它一般可为开发者提供更多功能。您可以使用 Web Animations API 给特定的 CSS 属性设置动画，或构建可组合的效果对象。</p>
+<p>JavaScript 动画是命令式，因为您将它们作为代码的一部分嵌入代码中。您还可以将它们封装在其他对象内。以下是在重新创建我们之前所讨论的 CSS 变换时需要编写的 JavaScript：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> target = <span class="built_in">document</span>.querySelector(<span class="string">'.box'</span>);</span><br><span class="line"><span class="keyword">var</span> player = target.animate([</span><br><span class="line">  &#123;<span class="attr">transform</span>: <span class="string">'translate(0)'</span>&#125;,</span><br><span class="line">  &#123;<span class="attr">transform</span>: <span class="string">'translate(100px, 100px)'</span>&#125;</span><br><span class="line">], <span class="number">500</span>);</span><br><span class="line">player.addEventListener(<span class="string">'finish'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  target.style.transform = <span class="string">'translate(100px, 100px)'</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>默认情况下，Web Animations 仅修改元素的呈现形式。如果您想让您的对象保持在它已移动到的位置，则应在动画完成时，按照我们的示例修改其底层样式。</p>
+<p>Web Animations API 是来自 W3C 的新标准，在 Chrome 和 Opera 中受原生支持，且正在进行针对 Firefox 的开发。对于其他的现代浏览器，提供 polyfill。</p>
+<p>使用 JavaScript 动画，您可以完全控制元素在每个步骤的样式。这意味着您可以在您认为合适时减慢动画、暂停动画、停止动画、倒退动画和操纵元素。如果您正在构建复杂的对象导向型应用，则此方法特别有用，因为您可以正确封装您的行为。</p>
+
+  </article>
+</div>
+
+
+    
+
+
+
+
+</div>
+
+<div class="footer-wrapper container">
+  <footer class="footer clearfix">
+    <div class="clearfix">
+    <a href="https://zhanghao-web.github.io" class="footer-logo">
+      <i class="fa fa-github"></i>
+    </a>
+    <ul class="footer-social-link">
+      <li>© 2019 张白告丶</li>
+      <li><a href="https://zhanghao-web.github.io">Home</a></li>
+      
+    </ul>
+    <div class="footer-theme-info">
+      Theme <a href="//github.com/sabrinaluo/hexo-theme-replica">Replica</a>
+      by <a href="//github.com/sabrinaluo">Hiitea</a> ❤ Powered by Hexo
+    </div>
+    </div>
+    
+  </footer>
+</div>
+
+
+
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>

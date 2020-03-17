@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>
+    图片懒加载踩坑 | 默默默默燃
+  </title>
+  <meta name="description" content="一枚前端搬砖队队员的记录册">
+  
+  <meta name="keywords" content="
+  性能
+  ">
+  
+  <meta name="author" content="张白告丶">
+
+  <meta http-equiv="Cache-Control" content="no-transform"/>
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="theme-color" content="#1e2327">
+  <link rel="apple-touch-icon" href="https://github.githubassets.com/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://github.githubassets.com/apple-touch-icon-180x180.png">
+
+  <link rel="icon" type="image/x-icon" href="https://github.githubassets.com/favicon.ico">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+  
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.25-csp/vue.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+</head>
+
+<body id="replica-app">
+
+<nav class="navbar-wrapper">
+  <div class="navbar">
+    <div class="container clearfix">
+      <a href="/" class="navbar-logo"><i class="fa fa-github"></i></a>
+
+      <div class="navbar-search float-left desktop-only">
+        <div class="navbar-search-form">
+          <label for="gsc-i-id1">This website</label>
+          <div id="google-search">
+            <gcse:search></gcse:search>
+          </div>
+        </div>
+      </div>
+
+      <ul class="navbar-nav float-left">
+        
+        <li><a href="/archives">Archives</a></li>
+        
+        
+        <li><a href="/categories">Categories</a></li>
+        
+        
+        <li><a href="/tags">Tags</a></li>
+        
+        
+        <li class="desktop-only"><a href="/atom.xml" target="_blank">RSS</a></li>
+        
+      </ul>
+
+      <ul class="navbar-nav user-nav float-right desktop-only">
+        <li class="user-nav-notification">
+          <a><span class="user-nav-unread"></span><i class="fa fa-bell"></i></a>
+        </li>
+        <li>
+          <a><i class="fa fa-plus"></i> <i class="fa fa-caret-down"></i></a>
+        </li>
+        <li class="user-nav-logo">
+          <a><img src="https://octodex.github.com/images/baracktocat.jpg"> <i class="fa fa-caret-down"></i></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container">
+  <header class="header-wrapper desktop-only">
+  <div class="container header-site-detail">
+    <ul class="header-toolbar">
+      <li class="clearfix">
+        <a href="/archives" class="header-toolbar-left"><i
+                  class="fa fa-file-text"></i> Posts </a>
+        <a href="/archives"
+           class="header-toolbar-right"> 147 </a>
+      </li>
+      <li>
+        <a href="/tags" class="header-toolbar-left"><i
+                  class="fa fa-tags"></i> Tags </a>
+        <a href="/tags"
+           class="header-toolbar-right"> 47 </a>
+      </li>
+      <li>
+        <a href="/categories" class="header-toolbar-left"><i
+                  class="fa fa-folder-open"></i> Categories </a>
+        <a href="/categories"
+           class="header-toolbar-right"> 23 </a>
+      </li>
+    </ul>
+    <h2 class="header-title">
+      <i class="fa fa-book text-muted"></i>
+      <a href="/">默默默默燃</a>
+      
+      
+    </h2>
+  </div>
+
+  <div class="container">
+    <div class="header-tab-wrapper clearfix">
+      <span class="header-tab header-tab-selected"><i class="fa fa-thumbs-o-up"></i> Like</span>
+      <span class="header-tab"><i class="fa fa-share-alt"></i> Share</span>
+      <span class="header-tab"><i class="fa fa-comments-o"></i> Discussion</span>
+      <span class="header-tab"><i class="fa fa-bookmark-o"></i> Bookmark </span>
+      <span class="header-tab"><i class="fa fa-smile-o"></i> Smile <i class="fa fa-caret-down"></i></span>
+    </div>
+  </div>
+</header>
+
+
+<div class="post-container container">
+  <h3>
+    <i class="fa fa-user-o"></i>
+    张白告丶
+
+    <span class="post-date float-right" title="{{moment(1524561422000).format('MMM DD, YYYY, h:mm:ss A')}}">
+      
+          <i class="fa fa-pencil-square-o"></i>
+      
+      {{moment(1524561422000).fromNow()}}
+    </span>
+  </h3>
+
+  <article class="post-content">
+    <h1>图片懒加载踩坑</h1>
+    <h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>对网页加载速度影响最大的就是图片，一张普通的图片可能会有好几 M 的大小，当图片很多时，网页的加载速度变得很缓慢。<br>为了优化网页性能以及用户体验，我们对图片进行懒加载。</p>
+<hr>
+<p>懒加载是一种对网页性能优化的方式，它的原理是优先加载在可视区域内的图片，而不一次性加载所以图片。当浏览器滚动，图片进入可视区时再去加载图片。通过设置图片的 src 属性来让浏览器发起图片的请求。当这个属性为空或者没有时，就不会发送请求。</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><blockquote>
+<p>懒加载的实现主要是判断当前图片是否到了可视区域这一核心逻辑。我们先来整理一下实现思路：<br>1.拿到所有的图片 img dom 。<br>2.遍历每个图片判断当前图片是否到了可视区范围内。<br>3.如果到了就设置图片的 src 属性。<br>4.绑定 window 的 scroll 事件，对其进行事件监听。</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="HTML-结构"><a href="#HTML-结构" class="headerlink" title="HTML 结构"></a>HTML 结构</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"container"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"img-area"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">img</span> <span class="attr">id</span>=<span class="string">"first"</span> <span class="attr">data-src</span>=<span class="string">"./img/ceng.png"</span> <span class="attr">alt</span>=<span class="string">""</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"img-area"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">img</span> <span class="attr">data-src</span>=<span class="string">"./img/data.png"</span> <span class="attr">alt</span>=<span class="string">""</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"img-area"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">img</span> <span class="attr">data-src</span>=<span class="string">"./img/huaji.png"</span> <span class="attr">alt</span>=<span class="string">""</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"img-area"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">img</span> <span class="attr">data-src</span>=<span class="string">"./img/liqi1.png"</span> <span class="attr">alt</span>=<span class="string">""</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"img-area"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">img</span> <span class="attr">data-src</span>=<span class="string">"./img/liqi2.png"</span> <span class="attr">alt</span>=<span class="string">""</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"img-area"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">img</span> <span class="attr">data-src</span>=<span class="string">"./img/steve-jobs.jpg"</span> <span class="attr">alt</span>=<span class="string">""</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>此时 img 标签是没有 <code>src</code> 属性的，我们把真实的图片地址放在一个属性里，这里我们使用 HTML5 的 data 属性，将真实地址放在自定义的 <code>data-src</code> 中。</p>
+<h3 id="判断图片是否进入了可视区域"><a href="#判断图片是否进入了可视区域" class="headerlink" title="判断图片是否进入了可视区域"></a>判断图片是否进入了可视区域</h3><h4 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h4><p>第一种方法我们通过计算该图片距离 document 顶部的高度是否小于当前可视区域相对于 document 顶部高度来判断。</p>
+<p>可视区域相对于 document 顶部高度的计算方法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> clientHeight = <span class="built_in">document</span>.documentElement.clientHeight; <span class="comment">// 视口高度，也就是窗口的高度。</span></span><br><span class="line"><span class="keyword">const</span> scrollHeight = <span class="built_in">document</span>.documentElement.scrollTop + clientHeight; <span class="comment">// 滚动条偏移文档顶部的高度（也就是文档从顶部开始到可视区域被抹去的高度） + 视口高度</span></span><br></pre></td></tr></table></figure>
+<p>画了一张图方便理解:<br><img src="https://user-gold-cdn.xitu.io/2018/4/23/162f0988f351ecca?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="dataimg"></p>
+<p>然后就是计算该图片距离文档顶部的高度。有两种方法，第一种方法是通过元素的 <code>offsetTop</code> 属性来计算。从上图我们了解到元素的 offsetTop 属性是相对于一个 position 为 非 static 的祖先元素，也就是 <code>child.offsetParent</code> 。同时需要将祖先元素的 border 考虑在内，我们通过<code>child.offsetParent.clientTop</code>可以拿到边框厚度。</p>
+<p>由此我们得到元素距离文档顶部的高度的计算方法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getTop</span>(<span class="params">el, initVal</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> top = el.offsetTop + initVal;</span><br><span class="line">    <span class="keyword">if</span> (el.offsetParent !== <span class="literal">null</span>) &#123;</span><br><span class="line">        top += el.offsetParent.clientTop;</span><br><span class="line">        <span class="keyword">return</span> getTop(el.offsetParent, top);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> top;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的这个方法使用了 <code>尾递归调用</code> 。可以提高递归性能。当然这里也可以用循环来实现：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getTop</span>(<span class="params">el</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> top = el.offsetTop;</span><br><span class="line">    <span class="keyword">var</span> parent = el.offsetParent;</span><br><span class="line">    <span class="keyword">while</span>(parent !== <span class="literal">null</span>) &#123;</span><br><span class="line">        top += parent.offsetTop + parent.clientTop;</span><br><span class="line">        parent = parent.offsetParent;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> top;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第二种方法是使用 <code>element.getBoundingClientRect() API</code> 直接得到 top 值。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> first  = <span class="built_in">document</span>.getElementById(<span class="string">'first'</span>);</span><br><span class="line">getTop(first, <span class="number">0</span>);  <span class="comment">// 130</span></span><br><span class="line"><span class="built_in">console</span>.log(first.getBoundingClientRect().top); <span class="comment">// 130</span></span><br></pre></td></tr></table></figure>
+<p>于是我们得到判断方法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">inSight</span>(<span class="params">el</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> clientHeight = <span class="built_in">document</span>.documentElement.clientHeight;</span><br><span class="line">    <span class="keyword">const</span> scrollHeight = <span class="built_in">document</span>.documentElement.scrollTop + clientHeight;</span><br><span class="line">    <span class="comment">// 方法一</span></span><br><span class="line">    <span class="keyword">return</span> getTop(el, <span class="number">0</span>) &lt; scrollHeight;</span><br><span class="line">    <span class="comment">// 方法二</span></span><br><span class="line">    <span class="comment">// return el.getBoundingClientRect().top &lt; clientHeight;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来就是对每个图片进行判断和赋值。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">loadImg</span>(<span class="params">el</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!el.src) &#123;</span><br><span class="line">        el.src = el.dataset.src;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">checkImgs</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> imgs = <span class="built_in">document</span>.getElementsByTagName(<span class="string">'img'</span>);</span><br><span class="line">    <span class="built_in">Array</span>.from(imgs).forEach(<span class="function"><span class="params">el</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (inSight(el)) &#123;</span><br><span class="line">            loadImg(el);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="built_in">console</span>.log(count++);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后给 window 绑定 onscroll 事件以及 onload 事件：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">'scroll'</span>, checkImgs, <span class="literal">false</span>);</span><br><span class="line"><span class="built_in">window</span>.onload = checkImgs;</span><br></pre></td></tr></table></figure>
+<p>我们知道类似 scroll 或 resize 这样的事件浏览器可能在很短的时间内触发很多次，为了提高网页性能，我们需要一个<strong>节流函数</strong>来控制函数的多次触发，在一段时间内（如 500ms）只执行一次回调。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 持续触发事件，每隔一段时间，只执行一次事件。</span></span><br><span class="line"><span class="comment"> * @param fun 要执行的函数</span></span><br><span class="line"><span class="comment"> * @param delay 延迟时间</span></span><br><span class="line"><span class="comment"> * @param time 在 time 时间内必须执行一次</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">throttle</span>(<span class="params">fun, delay, time</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> timeout;</span><br><span class="line">    <span class="keyword">var</span> previous = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> now = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">        <span class="keyword">var</span> context = <span class="keyword">this</span>;</span><br><span class="line">        <span class="keyword">var</span> args = <span class="built_in">arguments</span>;</span><br><span class="line">        clearTimeout(timeout);</span><br><span class="line">        <span class="keyword">if</span> (now - previous &gt;= time) &#123;</span><br><span class="line">            fun.apply(context, args);</span><br><span class="line">            previous = now;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            timeout = setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">                fun.apply(context, args);</span><br><span class="line">            &#125;, delay);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">'scroll'</span>, throttle(checkImgs, <span class="number">200</span>, <span class="number">1000</span>), <span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h3><p>HTML5 有一个新的 IntersectionObserver API，它可以自动观察元素是否可见。</p>
+<p>主要用法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> observer = <span class="keyword">new</span> IntersectionObserver(callback, option);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 开始观察</span></span><br><span class="line">observer.observe(<span class="built_in">document</span>.getElementById(<span class="string">'first'</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 停止观察</span></span><br><span class="line">observer.unobserve(<span class="built_in">document</span>.getElementById(<span class="string">'first'</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 关闭观察器</span></span><br><span class="line">observer.disconnect();</span><br></pre></td></tr></table></figure>
+<p>目标的可见性发生变化时就会调用观察器的 callback。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">callback</span>(<span class="params">changes: IntersectionObserverEntry[]</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(changes[<span class="number">0</span>])</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// IntersectionObserverEntry</span></span><br><span class="line">&#123;</span><br><span class="line">    time: <span class="number">29.499999713152647</span>,</span><br><span class="line">    intersectionRatio: <span class="number">1</span>,</span><br><span class="line">    boundingClientRect: DOMRectReadOnly &#123;</span><br><span class="line">        bottom: <span class="number">144</span>,</span><br><span class="line">        height: <span class="number">4</span>,</span><br><span class="line">        left: <span class="number">289</span>,</span><br><span class="line">        right: <span class="number">293</span>,</span><br><span class="line">        top: <span class="number">140</span>,</span><br><span class="line">        width: <span class="number">4</span>,</span><br><span class="line">        x: <span class="number">289</span>,</span><br><span class="line">        y: <span class="number">140</span></span><br><span class="line">    &#125;,</span><br><span class="line">    intersectionRect: DOMRectReadOnly,</span><br><span class="line">    isIntersecting: <span class="literal">true</span>,</span><br><span class="line">    rootBounds: DOMRectReadOnly,</span><br><span class="line">    target: img#first</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>详细释义：<br>time： 可见性发生变化的时间，是一个高精度时间戳，单位为毫秒<br>intersectionRatio： 目标元素的可见比例，即 intersectionRect 占 boundingClientRect 的比例，完全可见时为 1 ，完全不可见时小于等于 0<br>boundingClientRect： 目标元素的矩形区域的信息<br>intersectionRect： 目标元素与视口（或根元素）的交叉区域的信息<br>rootBounds： 根元素的矩形区域的信息，getBoundingClientRect() 方法的返回值，如果没有根元素（即直接相对于视口滚动），则返回 null<br>isIntersecting： 是否进入了视口，boolean 值<br>target： 被观察的目标元素，是一个 DOM 节点对象</p>
+</blockquote>
+<p>使用 IntersectionObserver 实现图片懒加载：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">query</span>(<span class="params">tag</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Array</span>.from(<span class="built_in">document</span>.getElementsByTagName(tag));</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> observer = <span class="keyword">new</span> IntersectionObserver(</span><br><span class="line">    (changes) =&gt; &#123;</span><br><span class="line">        changes.forEach(<span class="function">(<span class="params">change</span>) =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (change.intersectionRatio &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">var</span> img = change.target;</span><br><span class="line">                img.src = img.dataset.src;</span><br><span class="line">                observer.unobserve(img);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">)</span><br><span class="line">query(<span class="string">'img'</span>).forEach(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">    observer.observe(item);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p><a href="https://juejin.im/post/5add55dd6fb9a07aad171f76?utm_source=gold_browser_extension" target="_blank" rel="noopener">原文地址</a></p>
+
+  </article>
+</div>
+
+
+    
+
+
+
+
+</div>
+
+<div class="footer-wrapper container">
+  <footer class="footer clearfix">
+    <div class="clearfix">
+    <a href="https://zhanghao-web.github.io" class="footer-logo">
+      <i class="fa fa-github"></i>
+    </a>
+    <ul class="footer-social-link">
+      <li>© 2019 张白告丶</li>
+      <li><a href="https://zhanghao-web.github.io">Home</a></li>
+      
+    </ul>
+    <div class="footer-theme-info">
+      Theme <a href="//github.com/sabrinaluo/hexo-theme-replica">Replica</a>
+      by <a href="//github.com/sabrinaluo">Hiitea</a> ❤ Powered by Hexo
+    </div>
+    </div>
+    
+  </footer>
+</div>
+
+
+
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>

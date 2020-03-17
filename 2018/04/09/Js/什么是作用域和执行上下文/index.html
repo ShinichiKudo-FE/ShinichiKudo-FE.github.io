@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>
+    什么是作用域和执行上下文 | 默默默默燃
+  </title>
+  <meta name="description" content="一枚前端搬砖队队员的记录册">
+  
+  <meta name="keywords" content="
+  Js
+  ">
+  
+  <meta name="author" content="张白告丶">
+
+  <meta http-equiv="Cache-Control" content="no-transform"/>
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="theme-color" content="#1e2327">
+  <link rel="apple-touch-icon" href="https://github.githubassets.com/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://github.githubassets.com/apple-touch-icon-180x180.png">
+
+  <link rel="icon" type="image/x-icon" href="https://github.githubassets.com/favicon.ico">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+  
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.25-csp/vue.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+</head>
+
+<body id="replica-app">
+
+<nav class="navbar-wrapper">
+  <div class="navbar">
+    <div class="container clearfix">
+      <a href="/" class="navbar-logo"><i class="fa fa-github"></i></a>
+
+      <div class="navbar-search float-left desktop-only">
+        <div class="navbar-search-form">
+          <label for="gsc-i-id1">This website</label>
+          <div id="google-search">
+            <gcse:search></gcse:search>
+          </div>
+        </div>
+      </div>
+
+      <ul class="navbar-nav float-left">
+        
+        <li><a href="/archives">Archives</a></li>
+        
+        
+        <li><a href="/categories">Categories</a></li>
+        
+        
+        <li><a href="/tags">Tags</a></li>
+        
+        
+        <li class="desktop-only"><a href="/atom.xml" target="_blank">RSS</a></li>
+        
+      </ul>
+
+      <ul class="navbar-nav user-nav float-right desktop-only">
+        <li class="user-nav-notification">
+          <a><span class="user-nav-unread"></span><i class="fa fa-bell"></i></a>
+        </li>
+        <li>
+          <a><i class="fa fa-plus"></i> <i class="fa fa-caret-down"></i></a>
+        </li>
+        <li class="user-nav-logo">
+          <a><img src="https://octodex.github.com/images/baracktocat.jpg"> <i class="fa fa-caret-down"></i></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container">
+  <header class="header-wrapper desktop-only">
+  <div class="container header-site-detail">
+    <ul class="header-toolbar">
+      <li class="clearfix">
+        <a href="/archives" class="header-toolbar-left"><i
+                  class="fa fa-file-text"></i> Posts </a>
+        <a href="/archives"
+           class="header-toolbar-right"> 147 </a>
+      </li>
+      <li>
+        <a href="/tags" class="header-toolbar-left"><i
+                  class="fa fa-tags"></i> Tags </a>
+        <a href="/tags"
+           class="header-toolbar-right"> 47 </a>
+      </li>
+      <li>
+        <a href="/categories" class="header-toolbar-left"><i
+                  class="fa fa-folder-open"></i> Categories </a>
+        <a href="/categories"
+           class="header-toolbar-right"> 23 </a>
+      </li>
+    </ul>
+    <h2 class="header-title">
+      <i class="fa fa-book text-muted"></i>
+      <a href="/">默默默默燃</a>
+      
+      
+    </h2>
+  </div>
+
+  <div class="container">
+    <div class="header-tab-wrapper clearfix">
+      <span class="header-tab header-tab-selected"><i class="fa fa-thumbs-o-up"></i> Like</span>
+      <span class="header-tab"><i class="fa fa-share-alt"></i> Share</span>
+      <span class="header-tab"><i class="fa fa-comments-o"></i> Discussion</span>
+      <span class="header-tab"><i class="fa fa-bookmark-o"></i> Bookmark </span>
+      <span class="header-tab"><i class="fa fa-smile-o"></i> Smile <i class="fa fa-caret-down"></i></span>
+    </div>
+  </div>
+</header>
+
+
+<div class="post-container container">
+  <h3>
+    <i class="fa fa-user-o"></i>
+    张白告丶
+
+    <span class="post-date float-right" title="{{moment(1523245228000).format('MMM DD, YYYY, h:mm:ss A')}}">
+      
+          <i class="fa fa-pencil-square-o"></i>
+      
+      {{moment(1523245228000).fromNow()}}
+    </span>
+  </h3>
+
+  <article class="post-content">
+    <h1>什么是作用域和执行上下文</h1>
+    <h1 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h1><p>首先我们说下作用域，简单地来说作用域指的是一个区域，里面包括变量，函数，常量等等定义信息和赋值信息，以及这个区域内代码书写的结构信息。作用域可以嵌套，我们通常知道js函数内是可以产生作用域的。<br>下面我们用具体代码来示例下：</p>
+<p><img src="https://sfault-image.b0.upaiyun.com/114/508/1145089023-5923b87dde95f_articlex" alt="scope"></p>
+<p><code>全局作用域</code>（global scope）里面定义了两个变量，一个函数。walk 函数生成的作用域里面定义了一个变量，两个函数。innerFunc 和 anotherInnerFunc 这两个函数生成的作用域里面分别定义了一个变量。在规范中作用域更官方的叫法是词法环境（Lexical Environments）。什么意思？就是作用域包含哪些内容取决于你代码怎么写，你把定义 go 变量写在了 walk 函数里面，那么 go 变量就属于<code>walk 函数作用域</code>。</p>
+<blockquote>
+<p>作用域其实由两部分组成(全局作用域，局部作用域)<br>1.记录作用域内变量信息（我们假设变量，常量，函数等统称为变量）和代码结构信息的东西，称之为 Environment Record。<br>2.一个引用 <code>__outer__</code>，这个引用指向当前作用域的父作用域。拿上面代码为例。innerFunc 的函数作用域有一个引用指向 walk 函数作用域，walk 函数作用域有一个引用指向全局作用域。全局作用域的 <code>__outer__</code>为 null。</p>
+</blockquote>
+<h2 id="生成作用域的语法"><a href="#生成作用域的语法" class="headerlink" title="生成作用域的语法"></a>生成作用域的语法</h2><a id="more"></a>
+<p>1.函数声明<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> inner = <span class="string">'inner'</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(inner);</span><br><span class="line">&#125;</span><br><span class="line">f();<span class="comment">//inner</span></span><br><span class="line"><span class="built_in">console</span>.log( inner );<span class="comment">//Uncaught ReferenceError: inner is not defined</span></span><br></pre></td></tr></table></figure></p>
+<p>2.catch语句<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>( <span class="string">'customized error'</span> );</span><br><span class="line">&#125; <span class="keyword">catch</span>( err ) &#123;</span><br><span class="line">  <span class="keyword">var</span> iamnoterror = <span class="string">'not error'</span>;</span><br><span class="line">  <span class="built_in">console</span>.log( iamnoterror ); <span class="comment">// not error</span></span><br><span class="line">  <span class="built_in">console</span>.log( err ); <span class="comment">// Error: customized error</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log( iamnoterror ); <span class="comment">// not error</span></span><br><span class="line"><span class="built_in">console</span>.log( err ); <span class="comment">// Uncaught ReferenceError: e is not defined</span></span><br></pre></td></tr></table></figure></p>
+<p>catch语句生成的作用域只会框住参数部分的变量，使其不能在外部访问。对于 catch 语句体里面声明的变量并不起作用</p>
+<p>3.语句块<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ( <span class="literal">true</span> ) &#123;</span><br><span class="line">  <span class="keyword">let</span> bv = <span class="string">'bv'</span>;</span><br><span class="line">  <span class="keyword">const</span> B_C = <span class="string">'BC'</span>;</span><br><span class="line">  <span class="keyword">let</span> blockFunc = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">notBlockFunc</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">console</span>.log( bv ); <span class="comment">// bv</span></span><br><span class="line">  <span class="built_in">console</span>.log( B_C ); <span class="comment">// BC</span></span><br><span class="line">  <span class="built_in">console</span>.log( notBlockFunc ); <span class="comment">// function notBlockFunc() &#123;&#125;</span></span><br><span class="line">  <span class="built_in">console</span>.log( blockFunc ); <span class="comment">// function () &#123;&#125;</span></span><br><span class="line">  </span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log( bv ); <span class="comment">// Uncaught ReferenceError: bv is not defined</span></span><br><span class="line"><span class="built_in">console</span>.log( B_C ); <span class="comment">// Uncaught ReferenceError: B_C is not defined</span></span><br><span class="line"><span class="built_in">console</span>.log( notBlockFunc ); <span class="comment">// function notBlockFunc() &#123;&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log( blockFunc ); <span class="comment">// ReferenceError: blockFunc is not defined</span></span><br></pre></td></tr></table></figure></p>
+<p>语句块 {} 会生成一个新的作用域，但是这个作用域只绑定块级变量，常量等，即 let，const 声明的属于块级作用域，而 var 声明的还是属于块级作用域的父作用域。</p>
+<h1 id="执行上下文（execution-context）"><a href="#执行上下文（execution-context）" class="headerlink" title="执行上下文（execution context）"></a>执行上下文（execution context）</h1><p>执行上下文是用于跟踪代码的运行情况，其特征如下:</p>
+<blockquote>
+<ul>
+<li><p>一段代码块对应一个执行上下文，被封装成函数的代码被视作一段代码块，或者全局作用域也被视作一个代码块。</p>
+</li>
+<li><p>当程序运行，进入到某段代码块时，一个新的执行上下文被创建，并被放入一个 stack 中。当程序运行到这段代码块结尾后，对应的执行上下文被弹出 stack</p>
+</li>
+<li><p>当程序在某段代码块中运行到某个点需要转到了另一个代码块时（调用了另一个函数），那么当前的可执行上下文的状态会被置为挂起，然后生成一个新的可执行上下文放入 stack 的顶部。</p>
+</li>
+<li><p>stack 最顶部的可执行上下文被称为 running execution context。当顶部的可执行上下文被弹出后，上一个挂起的可执行上下文继续执行。</p>
+</li>
+</ul>
+</blockquote>
+<p>我们用代码来示例下（从 outer 调用到 level1 调用，再逐层返回）：<br><img src="https://sfault-image.b0.upaiyun.com/184/331/1843310870-5923b8a26d26a_articlex" alt="outer"></p>
+<p>执行上下文对象的内部属性：</p>
+<p>[[code evaluation]]：当前代码块执行的状态：prerform，suspend，resume。</p>
+<p>[[Function]]：如果当前执行上下文对应的是一个函数，那么这个属性就保存的这个函数对象。如果对应的是全局环境（可以是一个 script 或者 module），属性值是 null。</p>
+<p>[[Real]]：类似与沙箱的概念？（我还没有看懂，不过不太影响此篇的内容）</p>
+<p>如果程序执行到某个点抛出异常了，那么我们可以用这个记录执行上下文的 stack 来追踪到底哪里出错了，可以看到整个调用栈，此时内部属性 [[Function]] 就起到作用了：</p>
+<p>如果程序执行到某个点抛出异常了，那么我们可以用这个记录执行上下文的 stack 来追踪到底哪里出错了，可以看到整个调用栈，此时内部属性 [[Function]] 就起到作用了：</p>
+<p><img src="https://sfault-image.b0.upaiyun.com/604/427/604427279-5923b8b23e1a4_articlex" alt="error"></p>
+<h1 id="作用域与执行上下文的关系"><a href="#作用域与执行上下文的关系" class="headerlink" title="作用域与执行上下文的关系"></a>作用域与执行上下文的关系</h1><p>因为在一个函数被执行时，创建的执行上下文对象除了保存了些代码执行的信息，还会把当前的作用域保存在执行上下文中，所以他们的关系只是存储关系。</p>
+<h2 id="变量查找"><a href="#变量查找" class="headerlink" title="变量查找"></a>变量查找</h2><p>结合作用域和执行上下文，我们再来看下变量查找的过程。其实第一步不是到作用域里面找 Environment Record，而是先从当前的执行上下文中找保存的作用域（对象），然后再是通过作用域链向上查找变量。而且同一个执行上下文保存的作用域（对象）是可变的，当代码在同一个执行上下文中执行的时候，如果碰到有必要生成一个新作用域的时候，这个新的作用域会被添加到作用域链的头部，然后执行上下文就保存的作用域对象就更新成这个新的作用域。等这个新的作用域生命周期完成后，作用域链又会恢复到之前的状况，然后执行上下文保存的作用域也会恢复成之前的</p>
+<h2 id="this"><a href="#this" class="headerlink" title="this"></a>this</h2><p>网上有把执行上下文等同于 this 的文章，其实 this 的值是通过当前执行上下文中保存的作用域（对象）来获取到的，规范如下。</p>
+<blockquote>
+<p>ResolveThisBinding ( )<br>The abstract operation ResolveThisBinding determines the binding of the keyword this using the LexicalEnvironment of the running execution context. ResolveThisBinding performs the following steps:</p>
+</blockquote>
+<p>1.Let envRec be GetThisEnvironment( ).</p>
+<p>2.Return envRec.GetThisBinding().</p>
+<p><a href="https://segmentfault.com/a/1190000009522006" target="_blank" rel="noopener">原文地址</a></p>
+
+  </article>
+</div>
+
+
+    
+
+
+
+
+</div>
+
+<div class="footer-wrapper container">
+  <footer class="footer clearfix">
+    <div class="clearfix">
+    <a href="https://zhanghao-web.github.io" class="footer-logo">
+      <i class="fa fa-github"></i>
+    </a>
+    <ul class="footer-social-link">
+      <li>© 2019 张白告丶</li>
+      <li><a href="https://zhanghao-web.github.io">Home</a></li>
+      
+    </ul>
+    <div class="footer-theme-info">
+      Theme <a href="//github.com/sabrinaluo/hexo-theme-replica">Replica</a>
+      by <a href="//github.com/sabrinaluo">Hiitea</a> ❤ Powered by Hexo
+    </div>
+    </div>
+    
+  </footer>
+</div>
+
+
+
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>

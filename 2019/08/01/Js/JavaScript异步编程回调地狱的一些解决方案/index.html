@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>
+    JavaScript异步编程回调地狱的一些解决方案 | 默默默默燃
+  </title>
+  <meta name="description" content="一枚前端搬砖队队员的记录册">
+  
+  <meta name="keywords" content="
+  Js
+  ">
+  
+  <meta name="author" content="张白告丶">
+
+  <meta http-equiv="Cache-Control" content="no-transform"/>
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="theme-color" content="#1e2327">
+  <link rel="apple-touch-icon" href="https://github.githubassets.com/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://github.githubassets.com/apple-touch-icon-180x180.png">
+
+  <link rel="icon" type="image/x-icon" href="https://github.githubassets.com/favicon.ico">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+  
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.25-csp/vue.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+</head>
+
+<body id="replica-app">
+
+<nav class="navbar-wrapper">
+  <div class="navbar">
+    <div class="container clearfix">
+      <a href="/" class="navbar-logo"><i class="fa fa-github"></i></a>
+
+      <div class="navbar-search float-left desktop-only">
+        <div class="navbar-search-form">
+          <label for="gsc-i-id1">This website</label>
+          <div id="google-search">
+            <gcse:search></gcse:search>
+          </div>
+        </div>
+      </div>
+
+      <ul class="navbar-nav float-left">
+        
+        <li><a href="/archives">Archives</a></li>
+        
+        
+        <li><a href="/categories">Categories</a></li>
+        
+        
+        <li><a href="/tags">Tags</a></li>
+        
+        
+        <li class="desktop-only"><a href="/atom.xml" target="_blank">RSS</a></li>
+        
+      </ul>
+
+      <ul class="navbar-nav user-nav float-right desktop-only">
+        <li class="user-nav-notification">
+          <a><span class="user-nav-unread"></span><i class="fa fa-bell"></i></a>
+        </li>
+        <li>
+          <a><i class="fa fa-plus"></i> <i class="fa fa-caret-down"></i></a>
+        </li>
+        <li class="user-nav-logo">
+          <a><img src="https://octodex.github.com/images/baracktocat.jpg"> <i class="fa fa-caret-down"></i></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container">
+  <header class="header-wrapper desktop-only">
+  <div class="container header-site-detail">
+    <ul class="header-toolbar">
+      <li class="clearfix">
+        <a href="/archives" class="header-toolbar-left"><i
+                  class="fa fa-file-text"></i> Posts </a>
+        <a href="/archives"
+           class="header-toolbar-right"> 147 </a>
+      </li>
+      <li>
+        <a href="/tags" class="header-toolbar-left"><i
+                  class="fa fa-tags"></i> Tags </a>
+        <a href="/tags"
+           class="header-toolbar-right"> 47 </a>
+      </li>
+      <li>
+        <a href="/categories" class="header-toolbar-left"><i
+                  class="fa fa-folder-open"></i> Categories </a>
+        <a href="/categories"
+           class="header-toolbar-right"> 23 </a>
+      </li>
+    </ul>
+    <h2 class="header-title">
+      <i class="fa fa-book text-muted"></i>
+      <a href="/">默默默默燃</a>
+      
+      
+    </h2>
+  </div>
+
+  <div class="container">
+    <div class="header-tab-wrapper clearfix">
+      <span class="header-tab header-tab-selected"><i class="fa fa-thumbs-o-up"></i> Like</span>
+      <span class="header-tab"><i class="fa fa-share-alt"></i> Share</span>
+      <span class="header-tab"><i class="fa fa-comments-o"></i> Discussion</span>
+      <span class="header-tab"><i class="fa fa-bookmark-o"></i> Bookmark </span>
+      <span class="header-tab"><i class="fa fa-smile-o"></i> Smile <i class="fa fa-caret-down"></i></span>
+    </div>
+  </div>
+</header>
+
+
+<div class="post-container container">
+  <h3>
+    <i class="fa fa-user-o"></i>
+    张白告丶
+
+    <span class="post-date float-right" title="{{moment(1564623416000).format('MMM DD, YYYY, h:mm:ss A')}}">
+      
+          <i class="fa fa-pencil-square-o"></i>
+      
+      {{moment(1564623416000).fromNow()}}
+    </span>
+  </h3>
+
+  <article class="post-content">
+    <h1>JavaScript异步编程回调地狱的一些解决方案</h1>
+    <p><a href="https://www.jianshu.com/p/bc7b8d542dcd" target="_blank" rel="noopener">原文地址</a></p>
+<blockquote>
+<p>异步编程在JavaScript中非常重要。过多的异步编程也带了回调嵌套的问题，本文会提供一些解决“回调地狱”的方法。</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"延时触发"</span>)</span><br><span class="line">&#125;,<span class="number">2000</span>)</span><br><span class="line">fs.readFile(<span class="string">'./samp.txt'</span>,<span class="string">'utf-8'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">res,error</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(res);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>上面就是典型的回调函数，不论是在浏览器中，还是在node中，JavaScript本身是单线程，因此，为了应对一些单线程带来的问题，异步编程成为了JavaScript中非常重要的一部分。</p>
+<p>不论是浏览器中最为常见的<strong>ajax、事件监听，还是node中文件读取、网络编程、数据库等操作</strong>，都离不开异步编程。在异步编程中，许多操作都会放<strong>在回调函数（callback）</strong>中。同步与异步的混杂、过多的回调嵌套都会使得代码变得难以理解与维护，这也是常受人诟病的地方。</p>
+<p>先看下面这段代码</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">fs.readFile(<span class="string">'./sample.txt'</span>, <span class="string">'utf-8'</span>, (err, content) =&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> keyword = content.substring(<span class="number">0</span>, <span class="number">5</span>);</span><br><span class="line">    db.find(<span class="string">`select * from sample where kw = <span class="subst">$&#123;keyword&#125;</span>`</span>, (err, res) =&gt; &#123;</span><br><span class="line">        get(<span class="string">`/sampleget?count=<span class="subst">$&#123;res.length&#125;</span>`</span>, data =&gt; &#123;</span><br><span class="line">           <span class="built_in">console</span>.log(data);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>首先我们读取的一个文件中的关键字keyword，然后根据该keyword进行数据库查询，最后依据查询结果请求数据。</p>
+<ul>
+<li>文件读取：fs.readFile</li>
+<li>数据库查询：db.find</li>
+<li>http请求：get</li>
+</ul>
+<p>可以看到，我们没增加一个异步请求，就会多添加一层回调函数的嵌套，这段代码中三个异步函数的嵌套已经开始使一段本可以语言明确的代码编程不易阅读与维护了。</p>
+<p>抽象出来这种代码会变成下面这样：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">asyncFunc1(opt, (...args1) =&gt; &#123;</span><br><span class="line">    asyncFunc2(opt, (...args2) =&gt; &#123;</span><br><span class="line">        asyncFunc3(opt, (...args3) =&gt; &#123;</span><br><span class="line">            asyncFunc4(opt, (...args4) =&gt; &#123;</span><br><span class="line">                <span class="comment">// some operation</span></span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>左侧明显出现了一个三角形的缩进区域，过多的回调也就让我们陷入<code>“回调地狱”</code>。接下来会介绍一些方法来规避回调地狱。</p>
+<h2 id="一、拆解function"><a href="#一、拆解function" class="headerlink" title="一、拆解function"></a>一、拆解function</h2><p>回调嵌套所带来的一个重要问题就是代码不易阅读与维护。因为普遍来说，过多的缩进（嵌套）会极大的影响代码的可读性。基于这一点，可以进行一个最简单的优化——将各步拆解为单个的<code>function</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getData</span>(<span class="params">count</span>) </span>&#123;</span><br><span class="line">    get(<span class="string">`/sampleget?count=<span class="subst">$&#123;count&#125;</span>`</span>, data =&gt; &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(data);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">queryDB</span>(<span class="params">kw</span>) </span>&#123;</span><br><span class="line">    db.find(<span class="string">`select * from sample where kw = <span class="subst">$&#123;kw&#125;</span>`</span>, (err, res) =&gt; &#123;</span><br><span class="line">        getData(res.length);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">readFile</span>(<span class="params">filepath</span>) </span>&#123;</span><br><span class="line">    fs.readFile(filepath, <span class="string">'utf-8'</span>, (err, content) =&gt; &#123;</span><br><span class="line">        <span class="keyword">let</span> keyword = content.substring(<span class="number">0</span>, <span class="number">5</span>);</span><br><span class="line">        queryDB(keyword);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">readFile(<span class="string">'./sample.txt'</span>);</span><br></pre></td></tr></table></figure>
+<p>可以看到，通过上面的改写方式，代码清晰了许多。该方法非常简单，具有一定的效果，但是缺少通用性。</p>
+<h2 id="二、事件发布-监听模式"><a href="#二、事件发布-监听模式" class="headerlink" title="二、事件发布/监听模式"></a>二、事件发布/监听模式</h2><p>如果在浏览器中写过事件监听<code>addEventListener</code>，那么你对这种事件发布/监听的模式一定不陌生。</p>
+<p>借鉴这种思想，一方面，我们可以监听某一事件，当事件发生时，进行相应回调操作；另一方面，当某些操作完成后，通过发布事件触发回调。这样就可以将原本捆绑在一起的代码解耦。<br><a id="more"></a><br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> events = <span class="built_in">require</span>(<span class="string">'events'</span>);</span><br><span class="line"><span class="keyword">const</span> eventEmitter = <span class="keyword">new</span> events.EventEmitter();</span><br><span class="line"></span><br><span class="line">eventEmitter.on(<span class="string">'db'</span>, (err, kw) =&gt; &#123;</span><br><span class="line">    db.find(<span class="string">`select * from sample where kw = <span class="subst">$&#123;kw&#125;</span>`</span>, (err, res) =&gt; &#123;</span><br><span class="line">        eventEmitter(<span class="string">'get'</span>, res.length);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">eventEmitter.on(<span class="string">'get'</span>, (err, count) =&gt; &#123;</span><br><span class="line">    get(<span class="string">`/sampleget?count=<span class="subst">$&#123;count&#125;</span>`</span>, data =&gt; &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(data);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">fs.readFile(<span class="string">'./sample.txt'</span>, <span class="string">'utf-8'</span>, (err, content) =&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> keyword = content.substring(<span class="number">0</span>, <span class="number">5</span>);</span><br><span class="line">    eventEmitter. emit(<span class="string">'db'</span>, keyword);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>使用这种模式的实现需要一个事件发布/监听的库。上面代码中使用node原生的events模块，当然你可以使用任何你喜欢的库。</p>
+<h2 id="三、Promise"><a href="#三、Promise" class="headerlink" title="三、Promise"></a>三、Promise</h2><p><code>Promise</code>是一种异步解决方案，最早由社区提出并实现，后来写进了es6规范。</p>
+<p>目前一些主流的浏览器已经原生实现了Promise的API，可以在Can I use里查看浏览器的支持情况。当然，如果想要做浏览器的兼容，可以考虑使用一些<code>Promise</code>的实现库，例如bluebird、 Q等。下面以bluebird为例：</p>
+<p>首先，我们需要将异步方法改写为<code>Promise</code>，对于符合node规范的回调函数（第一个参数必须是Error），可以使用<code>bluebird</code>的promisify方法。该方法接收一个标准的异步方法并返回一个<code>Promise</code>对象。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> bluebird = <span class="built_in">require</span>(<span class="string">'bluebird'</span>);</span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">"fs"</span>);</span><br><span class="line"><span class="keyword">const</span> readFile = bluebird.promisify(fs.readFile);</span><br></pre></td></tr></table></figure>
+<p>这样，readFile就变成了一个Promise对象。</p>
+<p>但是，有的异步方法无法进行转换，或者我们需要使用原生<code>Promise</code>，这就需要我们手动进行一些改造。下面提供一种改造的方法。</p>
+<p>以fs.readFile为例，借助原生<code>Promise</code>来改造该方法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> readFile = <span class="function"><span class="keyword">function</span> (<span class="params">filepath</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> resolve,</span><br><span class="line">        reject;</span><br><span class="line">    <span class="keyword">let</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">_resolve, _reject</span>) =&gt;</span> &#123;</span><br><span class="line">        resolve = _resolve;</span><br><span class="line">        reject = _reject;</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">let</span> deferred = &#123;</span><br><span class="line">        resolve,</span><br><span class="line">        reject,</span><br><span class="line">        promise</span><br><span class="line">    &#125;;</span><br><span class="line">    fs.readFile(filepath, <span class="string">'utf-8'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, ...args</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (err) &#123;</span><br><span class="line">            deferred.reject(err);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            deferred.resolve(...args);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> deferred.promise;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们在方法中创建了一个Promise对象，并在异步回调中根据不同的情况使用reject与resolve来改变Promise对象的状态。该方法返回这个Promise对象。其他的一些异步方法也可以参照这种方式进行改造。</p>
+<p>假设通过改造，readFile、queryDB与getData方法均会返回一个Promise对象。代码就变为了:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">readFile(<span class="string">'./sample.txt'</span>).then(<span class="function"><span class="params">content</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> keyword = content.substring(<span class="number">0</span>, <span class="number">5</span>);</span><br><span class="line">    <span class="keyword">return</span> queryDB(keyword);</span><br><span class="line">&#125;).then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> getData(res.length);</span><br><span class="line">&#125;).then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(data);</span><br><span class="line">&#125;).catch(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.warn(err);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>可以看到，之前的嵌套操作编程了通过then连接的链式操作。代码的整洁度上有了一个较大的提高。</p>
+<h2 id="四、generator"><a href="#四、generator" class="headerlink" title="四、generator"></a>四、generator</h2><p><code>generator</code>是es6中的一个新的语法。在function关键字后添加*即可将函数变为<code>generator</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> gen = <span class="function"><span class="keyword">function</span>* (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">yield</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">yield</span> <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">3</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行<code>generator</code>将会返回一个遍历器对象，用于遍历<code>generator</code>内部的状态</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> g = gen();</span><br><span class="line">g.next(); <span class="comment">// &#123; value: 1, done: false &#125;</span></span><br><span class="line">g.next(); <span class="comment">// &#123; value: 2, done: false &#125;</span></span><br><span class="line">g.next(); <span class="comment">// &#123; value: 3, done: true &#125;</span></span><br><span class="line">g.next(); <span class="comment">// &#123; value: undefined, done: true &#125;</span></span><br></pre></td></tr></table></figure>
+<p>可以看到，<code>generator</code>函数有一个最大的特点，可以在内部执行的过程中交出程序的控制权，<code>yield</code>相当于起到了一个暂停的作用；而当一定情况下，外部又将控制权再移交回来。</p>
+<p>想象一下，我们用<code>generator</code>来封装代码，在异步任务处使用<code>yield</code>关键词，此时<code>generator</code>会将程序执行权交给其他代码，而在异步任务完成后，调用next方法来恢复<code>yield</code>下方代码的执行。以readFile为例，大致流程如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 我们的主任务——显示关键字</span></span><br><span class="line"><span class="comment">// 使用yield暂时中断下方代码执行</span></span><br><span class="line"><span class="comment">// yield后面为promise对象</span></span><br><span class="line"><span class="keyword">const</span> showKeyword = <span class="function"><span class="keyword">function</span>* (<span class="params">filepath</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'开始读取'</span>);</span><br><span class="line">    <span class="keyword">let</span> keyword = <span class="keyword">yield</span> readFile(filepath);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`关键字为<span class="subst">$&#123;filepath&#125;</span>`</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// generator的流程控制</span></span><br><span class="line"><span class="keyword">let</span> gen = showKeyword();</span><br><span class="line"><span class="keyword">let</span> res = gen.next();</span><br><span class="line">res.value.then(<span class="function"><span class="params">res</span> =&gt;</span> gen.next(res));</span><br></pre></td></tr></table></figure>
+<p>在主任务部分，原本<code>readFile</code>异步的部分变成了类似同步的写法，代码变得非常清晰。而在下半部分，则是对于什么时候需要移交回控制权给<code>generator</code>的流程控制。</p>
+<p>然而，我们需要手动控制<code>generator</code>的流程，如果能够自动执行<code>generator</code>——在需要的时候自动移交控制权，那么会更加具有实用性。<br>为此，我们可以使用 co 这个库。它可以是省去我们对于<code>generator</code>流程控制的代码</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> co = reuqire(<span class="string">'co'</span>);</span><br><span class="line"><span class="comment">// 我们的主任务——显示关键字</span></span><br><span class="line"><span class="comment">// 使用yield暂时中断下方代码执行</span></span><br><span class="line"><span class="comment">// yield后面为promise对象</span></span><br><span class="line"><span class="keyword">const</span> showKeyword = <span class="function"><span class="keyword">function</span>* (<span class="params">filepath</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'开始读取'</span>);</span><br><span class="line">    <span class="keyword">let</span> keyword = <span class="keyword">yield</span> readFile(filepath);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`关键字为<span class="subst">$&#123;filepath&#125;</span>`</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用co</span></span><br><span class="line">co(showKeyword);</span><br></pre></td></tr></table></figure>
+<p>其中，yeild关键字后面需要是<code>functio, promise, generator, array或object</code>。可以改写文章一开始的例子：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> co = reuqire(<span class="string">'co'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> task = <span class="function"><span class="keyword">function</span>* (<span class="params">filepath</span>) </span>&#123;</span><br><span class="line">   <span class="keyword">let</span> keyword = <span class="keyword">yield</span> readFile(filepath);</span><br><span class="line">   <span class="keyword">let</span> count = <span class="keyword">yield</span> queryDB(keyword);</span><br><span class="line">   <span class="keyword">let</span> data = <span class="keyword">yield</span> getData(res.length);</span><br><span class="line">   <span class="built_in">console</span>.log(data);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">co(task, <span class="string">'./sample.txt'</span>);</span><br></pre></td></tr></table></figure>
+<p>五、async/await</p>
+<p>可以看到，上面的方法虽然都在一定程度上解决了异步编程中回调带来的问题。然而</p>
+<ul>
+<li>function拆分的方式其实仅仅只是拆分代码块，时常会不利于后续维护；</li>
+<li>事件发布/监听方式模糊了异步方法之间的流程关系；</li>
+<li>Promise虽然使得多个嵌套的异步调用能够通过链式的API进行操作，但是过多的then也增加了代码的冗余，也对阅读代码中各阶段的异步任务产生了一定干扰；</li>
+<li>通过generator虽然能提供较好的语法结构，但是毕竟generator与yield的语境用在这里多少还有些不太贴切。</li>
+</ul>
+<p>因此，这里再介绍一个方法，它就是es7中的async/await。</p>
+<p>简单介绍一下async/await。基本上，任何一个函数都可以成为async函数，以下都是合法的书写形式：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">foo</span> (<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line"><span class="keyword">const</span> foo = <span class="keyword">async</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line"><span class="keyword">const</span> foo = <span class="keyword">async</span> () =&gt; &#123;&#125;;</span><br></pre></td></tr></table></figure>
+<p>在async函数中可以使用await语句。await后一般是一个Promise对象。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">foo</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'开始'</span>);</span><br><span class="line">    <span class="keyword">let</span> res = <span class="keyword">await</span> post(data);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`post已完成，结果为：<span class="subst">$&#123;res&#125;</span>`</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>当上面的函数执行到await时，可以简单理解为，函数挂起，等待<code>await</code>后的<code>Promise</code>返回，再执行下面的语句。</p>
+<p>值得注意的是，这段异步操作的代码，看起来就像是“同步操作”。这就大大方便了异步代码的编写与阅读。下面改写我们的例子。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> printData = <span class="keyword">async</span> <span class="function"><span class="keyword">function</span> (<span class="params">filepath</span>) </span>&#123;</span><br><span class="line">   <span class="keyword">let</span> keyword = <span class="keyword">await</span> readFile(filepath);</span><br><span class="line">   <span class="keyword">let</span> count = <span class="keyword">await</span> queryDB(keyword);</span><br><span class="line">   <span class="keyword">let</span> data = <span class="keyword">await</span> getData(res.length);</span><br><span class="line">   <span class="built_in">console</span>.log(data);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">printData(<span class="string">'./sample.txt'</span>);</span><br></pre></td></tr></table></figure>
+<p>可以看到，代码简洁清晰，异步代码也具有了“同步”代码的结构。</p>
+<p>注意，其中<code>readFile、queryDB与getData</code>方法都需要返回一个<code>Promise</code>对象。这可以通过在第三部分Promise里提供的方式进行改写。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>异步编程作为JavaScript中的一部分，具有非常重要的位置，它帮助我们避免同步代码带来的线程阻塞的同时，也为编码与阅读带来了一定的困难。过多的回调嵌套很容易会让我们陷入“回调地狱”中，使代码变成一团乱麻。为了解决“回调地狱”，我们可以使用文中所述的这五种常用方法：</p>
+<ul>
+<li>function拆解</li>
+<li>事件发布/订阅模式</li>
+<li>Promise</li>
+<li>Generator</li>
+<li>async / await</li>
+</ul>
+<p>理解各类方法的原理与实现方式，了解其中利弊，可以帮助我们更好得进行异步编程。</p>
+
+  </article>
+</div>
+
+
+    
+
+
+
+
+</div>
+
+<div class="footer-wrapper container">
+  <footer class="footer clearfix">
+    <div class="clearfix">
+    <a href="https://zhanghao-web.github.io" class="footer-logo">
+      <i class="fa fa-github"></i>
+    </a>
+    <ul class="footer-social-link">
+      <li>© 2019 张白告丶</li>
+      <li><a href="https://zhanghao-web.github.io">Home</a></li>
+      
+    </ul>
+    <div class="footer-theme-info">
+      Theme <a href="//github.com/sabrinaluo/hexo-theme-replica">Replica</a>
+      by <a href="//github.com/sabrinaluo">Hiitea</a> ❤ Powered by Hexo
+    </div>
+    </div>
+    
+  </footer>
+</div>
+
+
+
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>

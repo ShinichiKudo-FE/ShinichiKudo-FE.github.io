@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>
+    深入理解Node.js中的进程与线程 | 默默默默燃
+  </title>
+  <meta name="description" content="一枚前端搬砖队队员的记录册">
+  
+  <meta name="keywords" content="
+  Node
+  ">
+  
+  <meta name="author" content="张白告丶">
+
+  <meta http-equiv="Cache-Control" content="no-transform"/>
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="theme-color" content="#1e2327">
+  <link rel="apple-touch-icon" href="https://github.githubassets.com/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://github.githubassets.com/apple-touch-icon-180x180.png">
+
+  <link rel="icon" type="image/x-icon" href="https://github.githubassets.com/favicon.ico">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+  
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.25-csp/vue.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+</head>
+
+<body id="replica-app">
+
+<nav class="navbar-wrapper">
+  <div class="navbar">
+    <div class="container clearfix">
+      <a href="/" class="navbar-logo"><i class="fa fa-github"></i></a>
+
+      <div class="navbar-search float-left desktop-only">
+        <div class="navbar-search-form">
+          <label for="gsc-i-id1">This website</label>
+          <div id="google-search">
+            <gcse:search></gcse:search>
+          </div>
+        </div>
+      </div>
+
+      <ul class="navbar-nav float-left">
+        
+        <li><a href="/archives">Archives</a></li>
+        
+        
+        <li><a href="/categories">Categories</a></li>
+        
+        
+        <li><a href="/tags">Tags</a></li>
+        
+        
+        <li class="desktop-only"><a href="/atom.xml" target="_blank">RSS</a></li>
+        
+      </ul>
+
+      <ul class="navbar-nav user-nav float-right desktop-only">
+        <li class="user-nav-notification">
+          <a><span class="user-nav-unread"></span><i class="fa fa-bell"></i></a>
+        </li>
+        <li>
+          <a><i class="fa fa-plus"></i> <i class="fa fa-caret-down"></i></a>
+        </li>
+        <li class="user-nav-logo">
+          <a><img src="https://octodex.github.com/images/baracktocat.jpg"> <i class="fa fa-caret-down"></i></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container">
+  <header class="header-wrapper desktop-only">
+  <div class="container header-site-detail">
+    <ul class="header-toolbar">
+      <li class="clearfix">
+        <a href="/archives" class="header-toolbar-left"><i
+                  class="fa fa-file-text"></i> Posts </a>
+        <a href="/archives"
+           class="header-toolbar-right"> 147 </a>
+      </li>
+      <li>
+        <a href="/tags" class="header-toolbar-left"><i
+                  class="fa fa-tags"></i> Tags </a>
+        <a href="/tags"
+           class="header-toolbar-right"> 47 </a>
+      </li>
+      <li>
+        <a href="/categories" class="header-toolbar-left"><i
+                  class="fa fa-folder-open"></i> Categories </a>
+        <a href="/categories"
+           class="header-toolbar-right"> 23 </a>
+      </li>
+    </ul>
+    <h2 class="header-title">
+      <i class="fa fa-book text-muted"></i>
+      <a href="/">默默默默燃</a>
+      
+      
+    </h2>
+  </div>
+
+  <div class="container">
+    <div class="header-tab-wrapper clearfix">
+      <span class="header-tab header-tab-selected"><i class="fa fa-thumbs-o-up"></i> Like</span>
+      <span class="header-tab"><i class="fa fa-share-alt"></i> Share</span>
+      <span class="header-tab"><i class="fa fa-comments-o"></i> Discussion</span>
+      <span class="header-tab"><i class="fa fa-bookmark-o"></i> Bookmark </span>
+      <span class="header-tab"><i class="fa fa-smile-o"></i> Smile <i class="fa fa-caret-down"></i></span>
+    </div>
+  </div>
+</header>
+
+
+<div class="post-container container">
+  <h3>
+    <i class="fa fa-user-o"></i>
+    张白告丶
+
+    <span class="post-date float-right" title="{{moment(1569821438000).format('MMM DD, YYYY, h:mm:ss A')}}">
+      
+          <i class="fa fa-pencil-square-o"></i>
+      
+      {{moment(1569821438000).fromNow()}}
+    </span>
+  </h3>
+
+  <article class="post-content">
+    <h1>深入理解Node.js中的进程与线程</h1>
+    <p><a href="https://juejin.im/post/5d43017be51d4561f40adcf9" target="_blank" rel="noopener">原文地址</a></p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><code>进程</code>与<code>线程</code>是一个程序员的必知概念，面试经常被问及，但是一些文章内容只是讲讲理论知识，可能一些小伙伴并没有真的理解，在实际开发中应用也比较少。本篇文章除了介绍概念，通过Node.js 的角度讲解<code>进程</code>与<code>线程</code>，并且讲解一些在项目中的实战的应用，让你不仅能迎战面试官还可以在实战中完美应用</p>
+<h2 id="文章导览"><a href="#文章导览" class="headerlink" title="文章导览"></a>文章导览</h2><p><img src="https://user-gold-cdn.xitu.io/2019/8/8/16c6cf612c275894?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="进程与线程"></p>
+<h2 id="面试会问"><a href="#面试会问" class="headerlink" title="面试会问"></a>面试会问</h2><ul>
+<li>Node.js是单线程吗？</li>
+</ul>
+<ul>
+<li>Node.js 做耗时的计算时候，如何避免阻塞？</li>
+</ul>
+<ul>
+<li>Node.js如何实现多进程的开启和关闭？</li>
+</ul>
+<ul>
+<li>Node.js可以创建线程吗？</li>
+</ul>
+<ul>
+<li>你们开发过程中如何实现进程守护的？</li>
+</ul>
+<ul>
+<li>除了使用第三方模块，你们自己是否封装过一个多进程架构?</li>
+</ul>
+<h2 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h2><p>进程<code>Process</code>是计算机中的程序关于某数据集合上的一次运行活动，是系统进行资源分配和调度的基本单位，是操作系统结构的基础，进程是线程的容器（来自百科）。进程是资源分配的最小单位。我们启动一个服务、运行一个实例，就是开一个服务进程，例如 Java 里的 JVM 本身就是一个进程，Node.js 里通过 node app.js 开启一个服务进程，多进程就是进程的复制（fork），fork 出来的<strong>每个进程都拥有自己的独立空间地址、数据栈，一个进程无法访问另外一个进程里定义的变量、数据结构，只有建立了 IPC 通信，进程之间才可数据共享</strong>。</p>
+<ul>
+<li>Node.js开启服务进程例子</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer();</span><br><span class="line">server.listen(<span class="number">3000</span>,()=&gt;&#123;</span><br><span class="line">    process.title=<span class="string">'程序员成长指北测试进程'</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'进程id'</span>,process.pid)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>运行上面代码后，以下为 Mac 系统自带的监控工具 “活动监视器” 所展示的效果，可以看到我们刚开启的 Nodejs 进程 7663</p>
+<p><img src="https://user-gold-cdn.xitu.io/2019/8/1/16c4dc0ca13fec40?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="进程1"></p>
+<h2 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h2><p>线程是操作系统能够进行运算调度的最小单位，首先我们要清楚线程是隶属于进程的，被包含于进程之中。<strong>一个线程只能隶属于一个进程，但是一个进程是可以拥有多个线程的</strong>。</p>
+<h3 id="单线程"><a href="#单线程" class="headerlink" title="单线程"></a>单线程</h3><p><strong>单线程就是一个进程只开一个线程</strong></p>
+<p>Javascript 就是属于单线程，程序顺序执行(这里暂且不提JS异步)，可以想象一下队列，前面一个执行完之后，后面才可以执行，当你在使用单线程语言编码时切勿有过多耗时的同步操作，否则线程会造成阻塞，导致后续响应无法处理。你如果采用 Javascript 进行编码时候，请尽可能的利用Javascript异步操作的特性。</p>
+<p><strong>经典计算耗时造成线程阻塞的例子</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">const</span> longComputation = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> sum = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">1e10</span>; i++) &#123;</span><br><span class="line">    sum += i;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">return</span> sum;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">const</span> server = http.createServer();</span><br><span class="line">server.on(<span class="string">'request'</span>, (req, res) =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (req.url === <span class="string">'/compute'</span>) &#123;</span><br><span class="line">    <span class="built_in">console</span>.info(<span class="string">'计算开始'</span>,<span class="keyword">new</span> <span class="built_in">Date</span>());</span><br><span class="line">    <span class="keyword">const</span> sum = longComputation();</span><br><span class="line">    <span class="built_in">console</span>.info(<span class="string">'计算结束'</span>,<span class="keyword">new</span> <span class="built_in">Date</span>());</span><br><span class="line">    <span class="keyword">return</span> res.end(<span class="string">`Sum is <span class="subst">$&#123;sum&#125;</span>`</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    res.end(<span class="string">'Ok'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">3000</span>);</span><br><span class="line"><span class="comment">//打印结果</span></span><br><span class="line"><span class="comment">//计算开始 2019-07-28T07:08:49.849Z</span></span><br><span class="line"><span class="comment">//计算结束 2019-07-28T07:09:04.522Z</span></span><br></pre></td></tr></table></figure>
+<p>查看打印结果，当我们调用<code>127.0.0.1:3000/compute</code><br>的时候，如果想要调用其他的路由地址比如<code>127.0.0.1/</code>大约需要15秒时间，也可以说一个用户请求完第一个compute接口后需要等待15秒，这对于用户来说是极其不友好的。下文我会通过创建多进程的方式child_process.fork 和cluster 来解决解决这个问题。<br><a id="more"></a></p>
+<blockquote>
+<p>单线程的一些说明</p>
+<ul>
+<li>Node.js 虽然是单线程模型，但是其基于事件驱动、异步非阻塞模式，可以应用于高并发场景，避免了线程创建、线程之间上下文切换所产生的资源开销。</li>
+<li>当你的项目中需要有大量计算，CPU 耗时的操作时候，要注意考虑开启多进程来完成了。</li>
+<li>Node.js 开发过程中，错误会引起整个应用退出，应用的健壮性值得考验，尤其是错误的异常抛出，以及进程守护是必须要做的。</li>
+<li>单线程无法利用多核CPU，但是后来Node.js 提供的API以及一些第三方工具相应都得到了解决，文章后面都会讲到。</li>
+</ul>
+</blockquote>
+<h2 id="Node-js-中的进程与线程"><a href="#Node-js-中的进程与线程" class="headerlink" title="Node.js 中的进程与线程"></a>Node.js 中的进程与线程</h2><p>Node.js 是 Javascript 在服务端的运行环境，构建在 chrome 的 V8 引擎之上，基于事件驱动、非阻塞I/O模型，充分利用操作系统提供的异步 I/O 进行多任务的执行，适合于 I/O 密集型的应用场景，因为异步，程序无需阻塞等待结果返回，而是基于回调通知的机制，原本同步模式等待的时间，则可以用来处理其它任务</p>
+<blockquote>
+<p>科普：在 Web 服务器方面，著名的 Nginx 也是采用此模式（事件驱动），避免了多线程的线程创建、线程上下文切换的开销，Nginx 采用 C 语言进行编写，主要用来做高性能的 Web 服务器，不适合做业务。</p>
+</blockquote>
+<p>Web业务开发中，如果你有高并发应用场景那么 Node.js 会是你不错的选择。</p>
+<p>在单核 CPU 系统之上我们采用 单进程 + 单线程 的模式来开发。在多核 CPU 系统之上，可以通过 <code>child_process.fork</code> 开启多个进程（Node.js 在 v0.8 版本之后新增了Cluster 来实现多进程架构） ，即 多进程 + 单线程 模式。注意：开启多进程不是为了解决高并发，主要是解决了单进程模式下 Node.js CPU 利用率不足的情况，充分利用多核 CPU 的性能。</p>
+<h3 id="Node-js-中的进程"><a href="#Node-js-中的进程" class="headerlink" title="Node.js 中的进程"></a>Node.js 中的进程</h3><h4 id="process-模块"><a href="#process-模块" class="headerlink" title="process 模块"></a>process 模块</h4><p>Node.js 中的进程 Process 是一个全局对象，无需 require 直接使用，给我们提供了当前进程中的相关信息。官方文档提供了详细的说明，感兴趣的可以亲自实践下 Process 文档。</p>
+<ul>
+<li>process.env：环境变量，例如通过  process.env.NODE_ENV 获取不同环境项目配置信息</li>
+<li>process.nextTick：这个在谈及 Event Loop 时经常为会提到</li>
+<li>process.pid：获取当前进程id</li>
+<li>process.ppid：当前进程对应的父进程</li>
+<li>process.cwd()：获取当前进程工作目录，</li>
+<li>process.platform：获取当前进程运行的操作系统平台</li>
+<li>process.uptime()：当前进程已运行时间，例如：pm2 守护进程的 uptime 值</li>
+<li>进程事件：process.on(‘uncaughtException’, cb) 捕获异常信息、process.on(‘exit’, cb）进程推出监听</li>
+<li>三个标准流：process.stdout 标准输出、process.stdin 标准输入、process.stderr 标准错误输出</li>
+<li>process.title 指定进程名称，有的时候需要给进程指定一个名称</li>
+</ul>
+<p>以上仅列举了部分常用到功能点，除了 Process 之外 Node.js 还提供了 child_process 模块用来对子进程进行操作，在下文 Nodejs进程创建会继续讲述。</p>
+<h3 id="Node-js-进程创建"><a href="#Node-js-进程创建" class="headerlink" title="Node.js 进程创建"></a>Node.js 进程创建</h3><p>进程创建有多种方式，本篇文章以child_process模块和cluster模块进行讲解。</p>
+<h4 id="child-process模块"><a href="#child-process模块" class="headerlink" title="child_process模块"></a>child_process模块</h4><p>child_process 是 Node.js 的内置模块，官网地址：</p>
+<blockquote>
+<p>child_process 官网地址：<a href="https://link.juejin.im/?target=http%3A%2F%2Fnodejs.cn%2Fapi%2Fchild_process.html%23child_process_child_process" target="_blank" rel="noopener">nodejs.cn/api/child_p…</a></p>
+</blockquote>
+<p>几个常用函数： 四种方式</p>
+<ul>
+<li><code>child_process.spawn()</code>：适用于返回大量数据，例如图像处理，二进制数据处理。</li>
+<li><code>child_process.exec()</code>：适用于小量数据，maxBuffer 默认值为 200 * 1024 超出这个默认值将会导致程序崩溃，数据量过大可采用 spawn。</li>
+<li><code>child_process.execFile()</code>：类似 child_process.exec()，区别是不能通过 shell 来执行，不支持像 I/O 重定向和文件查找这样的行为</li>
+<li><code>child_process.fork()</code>： 衍生新的进程，进程之间是相互独立的，每个进程都有自己的 V8 实例、内存，系统资源是有限的，不建议衍生太多的子进程出来，通长根据系统<strong> CPU 核心数</strong>设置。</li>
+</ul>
+<blockquote>
+<p>CPU 核心数这里特别说明下，fork 确实可以开启多个进程，但是并不建议衍生出来太多的进程，cpu核心数的获取方式<code>const cpus = require(&#39;os&#39;).cpus()</code>;,这里 cpus 返回一个对象数组，包含所安装的每个 CPU/内核的信息，二者总和的数组哦。假设主机装有两个cpu，每个cpu有4个核，那么总核数就是8。</p>
+</blockquote>
+<p><em>fork开启子进程 Demo</em></p>
+<p>fork开启子进程解决文章起初的计算耗时造成线程阻塞。 在进行 compute 计算时创建子进程，子进程计算完成通过 send 方法将结果发送给主进程，主进程通过 message 监听到信息后处理并退出。</p>
+<blockquote>
+<p>fork_app.js</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">const</span> fork = <span class="built_in">require</span>(<span class="string">'child_process'</span>).fork;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(req.url == <span class="string">'/compute'</span>)&#123;</span><br><span class="line">        <span class="keyword">const</span> compute = fork(<span class="string">'./fork_compute.js'</span>);</span><br><span class="line">        compute.send(<span class="string">'开启一个新的子进程'</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 当一个子进程使用 process.send() 发送消息时会触发 'message' 事件</span></span><br><span class="line">        compute.on(<span class="string">'message'</span>, sum =&gt; &#123;</span><br><span class="line">            res.end(<span class="string">`Sum is <span class="subst">$&#123;sum&#125;</span>`</span>);</span><br><span class="line">            compute.kill();</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 子进程监听到一些错误消息退出</span></span><br><span class="line">        compute.on(<span class="string">'close'</span>, (code, signal) =&gt; &#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">`收到close事件，子进程收到信号 <span class="subst">$&#123;signal&#125;</span> 而终止，退出码 <span class="subst">$&#123;code&#125;</span>`</span>);</span><br><span class="line">            compute.kill();</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        res.end(<span class="string">`ok`</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line">server.listen(<span class="number">3000</span>, <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>, () =&gt; &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`server started at http://<span class="subst">$&#123;<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>&#125;</span>:<span class="subst">$&#123;<span class="number">3000</span>&#125;</span>`</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>fork_compute.js</p>
+</blockquote>
+<p>针对文初需要进行计算的的例子我们创建子进程拆分出来单独进行运算。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> computation = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">console</span>.info(<span class="string">'计算开始'</span>);</span><br><span class="line">    <span class="built_in">console</span>.time(<span class="string">'计算耗时'</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">1e10</span>; i++) &#123;</span><br><span class="line">        sum += i</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">console</span>.info(<span class="string">'计算结束'</span>);</span><br><span class="line">    <span class="built_in">console</span>.timeEnd(<span class="string">'计算耗时'</span>);</span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">process.on(<span class="string">'message'</span>, msg =&gt; &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(msg, <span class="string">'process.pid'</span>, process.pid); <span class="comment">// 子进程id</span></span><br><span class="line">    <span class="keyword">const</span> sum = computation();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果Node.js进程是通过进程间通信产生的，那么，process.send()方法可以用来给父进程发送消息</span></span><br><span class="line">    process.send(sum);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h4 id="cluster模块"><a href="#cluster模块" class="headerlink" title="cluster模块"></a>cluster模块</h4><p>cluster 开启子进程Demo</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">const</span> numCPUs = <span class="built_in">require</span>(<span class="string">'os'</span>).cpus().length;</span><br><span class="line"><span class="keyword">const</span> cluster = <span class="built_in">require</span>(<span class="string">'cluster'</span>);</span><br><span class="line"><span class="keyword">if</span>(cluster.isMaster)&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'Master proces id is'</span>,process.pid);</span><br><span class="line">    <span class="comment">// fork workers</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i= <span class="number">0</span>;i&lt;numCPUs;i++)&#123;</span><br><span class="line">        cluster.fork();</span><br><span class="line">    &#125;</span><br><span class="line">    cluster.on(<span class="string">'exit'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">worker,code,signal</span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'worker process died,id'</span>,worker.process.pid)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="comment">// Worker可以共享同一个TCP连接</span></span><br><span class="line">    <span class="comment">// 这里是一个http服务器</span></span><br><span class="line">    http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req,res</span>)</span>&#123;</span><br><span class="line">        res.writeHead(<span class="number">200</span>);</span><br><span class="line">        res.end(<span class="string">'hello word'</span>);</span><br><span class="line">    &#125;).listen(<span class="number">8000</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>cluster原理分析</p>
+<p><img src="https://user-gold-cdn.xitu.io/2019/8/3/16c5658b2e97e9b2?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="cluster原理分析"></p>
+<p>cluster模块调用fork方法来创建子进程，该方法与child_process中的fork是同一个方法。</p>
+<p>cluster模块采用的是经典的主从模型，Cluster会创建一个master，然后根据你指定的数量复制出多个子进程，可以使用cluster.isMaster属性判断当前进程是master还是worker(工作进程)。由master进程来管理所有的子进程，主进程不负责具体的任务处理，主要工作是负责调度和管理。</p>
+<p>cluster模块使用内置的负载均衡来更好地处理线程之间的压力，该负载均衡使用了Round-robin算法（也被称之为循环算法）。当使用Round-robin调度策略时，master accepts()所有传入的连接请求，然后将相应的TCP请求处理发送给选中的工作进程（该方式仍然通过IPC来进行通信）。</p>
+<p>开启多进程时候端口疑问讲解：如果多个Node进程监听同一个端口时会出现 Error:listen EADDRIUNS的错误，而cluster模块为什么可以让多个子进程监听同一个端口呢?原因是master进程内部启动了一个TCP服务器，而真正监听端口的只有这个服务器，当来自前端的请求触发服务器的connection事件后，master会将对应的socket具柄发送给子进程。</p>
+<h4 id="child-process-模块与cluster-模块总结"><a href="#child-process-模块与cluster-模块总结" class="headerlink" title="child_process 模块与cluster 模块总结"></a>child_process 模块与cluster 模块总结</h4><p>无论是 child_process 模块还是 cluster 模块，为了解决 Node.js 实例单线程运行，无法利用多核 CPU 的问题而出现的。核心就是<strong>父进程（即 master 进程）负责监听端口，接收到新的请求后将其分发给下面的 worker 进程</strong>。</p>
+<p>cluster模块的一个弊端：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2019/8/3/16c565aaeb065b4a?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="cluster弊端"></p>
+<p>cluster内部隐时的构建TCP服务器的方式来说对使用者确实简单和透明了很多，但是这种方式无法像使用child_process那样灵活，因为一直主进程只能管理一组相同的工作进程，而自行通过child_process来创建工作进程，一个主进程可以控制多组进程。原因是child_process操作子进程时，可以隐式的创建多个TCP服务器，对比上面的两幅图应该能理解我说的内容。</p>
+<h4 id="Node-js进程通信原理"><a href="#Node-js进程通信原理" class="headerlink" title="Node.js进程通信原理"></a>Node.js进程通信原理</h4><p>前面讲解的无论是child_process模块，还是cluster模块，都需要主进程和工作进程之间的通信。通过fork()或者其他API，创建了子进程之后，为了实现父子进程之间的通信，父子进程之间才能通过message和send()传递信息。</p>
+<p>IPC这个词我想大家并不陌生，不管那一张开发语言只要提到进程通信，都会提到它。IPC的全称是Inter-Process Communication,即进程间通信。它的目的是为了让不同的进程能够互相访问资源并进行协调工作。实现进程间通信的技术有很多，如命名管道，匿名管道，socket，信号量，共享内存，消息队列等。Node中实现IPC通道是依赖于libuv。windows下由命名管道(name pipe)实现，*nix系统则采用Unix Domain Socket实现。表现在应用层上的进程间通信只有简单的message事件和send()方法，接口十分简洁和消息化。</p>
+<p>IPC创建和实现示意图</p>
+<p><img src="https://user-gold-cdn.xitu.io/2019/8/4/16c5b379ad12199e?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="IPC"></p>
+<p>IPC通信管道是如何创建的</p>
+<p><img src="https://user-gold-cdn.xitu.io/2019/8/4/16c5b3812e3bb7d9?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="IPC通信"></p>
+<p>父进程在实际创建子进程之前，会创建IPC通道并监听它，然后才真正的创建出子进程，这个过程中也会通过环境变量（NODE_CHANNEL_FD）告诉子进程这个IPC通道的文件描述符。子进程在启动的过程中，根据文件描述符去连接这个已存在的IPC通道，从而完成父子进程之间的连接</p>
+<h4 id="Node-js句柄传递"><a href="#Node-js句柄传递" class="headerlink" title="Node.js句柄传递"></a>Node.js句柄传递</h4><p>讲句柄之前，先想一个问题，send句柄发送的时候，真的是将服务器对象发送给了子进程？</p>
+<h4 id="子进程对象send-方法可以发送的句柄类型"><a href="#子进程对象send-方法可以发送的句柄类型" class="headerlink" title="子进程对象send()方法可以发送的句柄类型"></a>子进程对象send()方法可以发送的句柄类型</h4><p>net.Socket TCP套接字<br>net.Server TCP服务器，任意建立在TCP服务上的应用层服务都可以享受它带来的好处<br>net.Native C++层面的TCP套接字或IPC管道<br>dgram.Socket UDP套接字<br>dgram.Native C++层面的UDP套接字</p>
+<h4 id="send句柄发送原理分析"><a href="#send句柄发送原理分析" class="headerlink" title="send句柄发送原理分析"></a>send句柄发送原理分析</h4><p>结合句柄的发送与还原示意图更容易理解。</p>
+<p><img src="https://user-gold-cdn.xitu.io/2019/8/4/16c5b52b15d87bbe?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="send句"></p>
+<p>send()方法在将消息发送到IPC管道前，实际将消息组装成了两个对象，一个参数是hadler，另一个是message。message参数如下所示：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    cmd:<span class="string">'NODE_HANDLE'</span>,</span><br><span class="line">    type:<span class="string">'net.Server'</span>,</span><br><span class="line">    msg:message</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>发送到IPC管道中的实际上是我们要发送的句柄文件描述符。这个message对象在写入到IPC管道时，也会通过<code>JSON.stringfy()</code>进行序列化。所以最终发送到IPC通道中的信息都是字符串，send()方法能发送消息和句柄并不意味着它能发送任何对象。</p>
+<p>连接了IPC通道的子线程可以读取父进程发来的消息，将字符串通过<code>JSON.parse()</code>解析还原为对象后，才触发message事件将消息传递给应用层使用。在这个过程中，消息对象还要被进行过滤处理，message.cmd的值如果以NODE_为前缀，它将响应一个内部事件internalMessage，如果message.cmd值为NODE_HANDLE,它将取出<code>message.type</code>值和得到的文件描述符一起还原出一个对应的对象。</p>
+<p>以发送的TCP服务器句柄为例，子进程收到消息后的还原过程代码如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params">message,handle,emit</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> self = <span class="keyword">this</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> server = <span class="keyword">new</span> net.Server();</span><br><span class="line">    server.listen(handler,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">      emit(server);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>多进程 vs 多线程</p>
+<p>属性<br>多进程<br>多线程<br>比较</p>
+<p>数据<br>数据共享复杂，需要用IPC；数据是分开的，同步简单<br>因为共享进程数据，数据共享简单，同步复杂<br>各有千秋</p>
+<p>CPU、内存<br>占用内存多，切换复杂，CPU利用率低<br>占用内存少，切换简单，CPU利用率高<br>多线程更好</p>
+<p>销毁、切换<br>创建销毁、切换复杂，速度慢<br>创建销毁、切换简单，速度很快<br>多线程更好</p>
+<p>coding<br>编码简单、调试方便<br>编码、调试复杂<br>编码、调试复杂</p>
+<p>可靠性<br>进程独立运行，不会相互影响<br>线程同呼吸共命运<br>多进程更好</p>
+<p>分布式<br>可用于多机多核分布式，易于扩展<br>只能用于多核分布式<br>多进程更好</p>
+
+  </article>
+</div>
+
+
+    
+
+
+
+
+</div>
+
+<div class="footer-wrapper container">
+  <footer class="footer clearfix">
+    <div class="clearfix">
+    <a href="https://zhanghao-web.github.io" class="footer-logo">
+      <i class="fa fa-github"></i>
+    </a>
+    <ul class="footer-social-link">
+      <li>© 2019 张白告丶</li>
+      <li><a href="https://zhanghao-web.github.io">Home</a></li>
+      
+    </ul>
+    <div class="footer-theme-info">
+      Theme <a href="//github.com/sabrinaluo/hexo-theme-replica">Replica</a>
+      by <a href="//github.com/sabrinaluo">Hiitea</a> ❤ Powered by Hexo
+    </div>
+    </div>
+    
+  </footer>
+</div>
+
+
+
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>
