@@ -15,14 +15,28 @@
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
     <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
-    <link rel="stylesheet" href="/css/obsidian.css">
-    <link rel="stylesheet" href="/css/ball-atom.min.css">
-</head>
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
 
 
 <body class="loading">
@@ -77,7 +91,7 @@
                 
                 March 10, 2018
             </p>
-            <h3 class="post-title animated fadeInDown"><a href="/2018/03/10/study/Ajax已死，Fetch永生/" title="Ajax已死，Fetch永生">Ajax已死，Fetch永生</a>
+            <h3 class="post-title animated fadeInDown"><a href="/2018/03/10/study/Ajax%E5%B7%B2%E6%AD%BB%EF%BC%8CFetch%E6%B0%B8%E7%94%9F/" title="Ajax已死，Fetch永生" class="">Ajax已死，Fetch永生</a>
             </h3>
             
             <p class="post-count animated fadeInDown">
@@ -103,7 +117,7 @@
             </p>
             
             
-            <ul class="animated fadeInDown post-tags-list"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Fetch/">Fetch</a></li></ul>
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Fetch/" rel="tag">Fetch</a></li></ul>
             
         </div>
     </div>
@@ -137,11 +151,11 @@
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fetch(url).then(<span class="function"><span class="params">response</span> =&gt;</span> response.json())</span><br><span class="line">  .then(<span class="function"><span class="params">data</span> =&gt;</span> <span class="built_in">console</span>.log(data))</span><br><span class="line">  .catch(<span class="function"><span class="params">e</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">"Oops, error"</span>, e))</span><br></pre></td></tr></table></figure>
 <p>现在看起来好很多了，但这种 Promise 的写法还是有 Callback 的影子，而且 promise 使用 catch 方法来进行错误处理的方式有点奇怪。不用急，下面使用 async/await 来做最终优化</p>
 <blockquote>
-<p>注：async/await 是非常新的 API，属于 ES7，目前尚在 Stage 1(提议) 阶段，这是它的<a href="https://github.com/tc39/ecmascript-asyncawait" target="_blank" rel="noopener">完整规范</a>。使用 <font color="blue">Babel</font> 开启 <font color="blue">runtime</font> 模式后可以把 async/await 无痛编译成 ES5 代码。也可以直接使用 <font color="blue">regenerator</font> 来编译到 ES5。</p>
+<p>注：async/await 是非常新的 API，属于 ES7，目前尚在 Stage 1(提议) 阶段，这是它的<a href="https://github.com/tc39/ecmascript-asyncawait" target="_blank" rel="noopener">完整规范</a>。使用 <font color = "blue">Babel</font> 开启 <font color = "blue">runtime</font> 模式后可以把 async/await 无痛编译成 ES5 代码。也可以直接使用 <font color = "blue">regenerator</font> 来编译到 ES5。</p>
 </blockquote>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> response = <span class="keyword">await</span> fetch(url);</span><br><span class="line">  <span class="keyword">let</span> data = <span class="keyword">await</span> response.json();</span><br><span class="line">  <span class="built_in">console</span>.log(data);</span><br><span class="line">&#125; <span class="keyword">catch</span>(e) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"Oops, error"</span>, e);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 注：这段代码如果想运行，外面需要包一个 async function</span></span><br></pre></td></tr></table></figure>
 <p>duang~~ 的一声，使用 await 后，写异步代码就像写同步代码一样爽。await 后面可以跟 Promise 对象，表示等待 Promise resolve() 才会继续向下执行，如果 Promise 被 reject() 或抛出异常则会被外面的 try…catch 捕获。</p>
-<p><font color="red">Promise，generator/yield，await/async</font> 都是现在和未来 JS 解决异步的标准做法，可以完美搭配使用。这也是使用标准 Promise 一大好处。最近也把项目中使用第三方 Promise 库的代码全部转成标准 Promise，为以后全面使用 async/await 做准备。</p>
+<p><font color = "red">Promise，generator/yield，await/async</font> 都是现在和未来 JS 解决异步的标准做法，可以完美搭配使用。这也是使用标准 Promise 一大好处。最近也把项目中使用第三方 Promise 库的代码全部转成标准 Promise，为以后全面使用 async/await 做准备。</p>
 <p>另外，Fetch 也很适合做现在流行的同构应用，有人基于 Fetch 的语法，在 Node 端基于 http 库实现了 <a href="https://github.com/bitinn/node-fetch" target="_blank" rel="noopener">node-fetch</a>，又有人封装了用于同构应用的 <a href="https://github.com/matthew-andrews/isomorphic-fetch" target="_blank" rel="noopener">isomorphic-fetch</a>。</p>
 <blockquote>
 <p>注：同构(isomorphic/universal)就是使前后端运行同一套代码的意思，后端一般是指 NodeJS 环境。</p>
@@ -177,7 +191,7 @@
 <p>竟然没有提到 IE，这实在太不科学了，现在来详细说下 IE</p>
 <h2 id="IE-使用策略"><a href="#IE-使用策略" class="headerlink" title="IE 使用策略"></a>IE 使用策略</h2><p>所有版本的 IE 均不支持原生 Fetch，fetch-ie8 会自动使用 XHR 做 polyfill。但在跨域时有个问题需要处理。</p>
 <p>IE8, 9 的 XHR 不支持 CORS 跨域，虽然提供 XDomainRequest，但这个东西就是玩具，不支持传 Cookie！如果接口需要权限验证，还是乖乖地使用 jsonp 吧，推荐使用 <a href="https://github.com/camsong/fetch-jsonp" target="_blank" rel="noopener">fetch-jsonp</a>。如果有问题直接提 issue，我会第一时间解决。</p>
-<h2 id="Fetch-和标准-Promise-的不足"><a href="#Fetch-和标准-Promise-的不足" class="headerlink" title="Fetch 和标准 Promise 的不足"></a>Fetch 和标准 Promise 的不足</h2><p>由于 Fetch 是典型的异步场景，所以大部分遇到的问题不是 Fetch 的，其实是 Promise 的。ES6 的 Promise 是基于<font color="blue"> Promises/A+ 标准 </font>，为了保持 简单简洁 ，只提供极简的几个 API。如果你用过一些牛 X 的异步库，如 jQuery(不要笑) 、Q.js 或者 RSVP.js，可能会感觉 Promise 功能太少了。</p>
+<h2 id="Fetch-和标准-Promise-的不足"><a href="#Fetch-和标准-Promise-的不足" class="headerlink" title="Fetch 和标准 Promise 的不足"></a>Fetch 和标准 Promise 的不足</h2><p>由于 Fetch 是典型的异步场景，所以大部分遇到的问题不是 Fetch 的，其实是 Promise 的。ES6 的 Promise 是基于<font color = "blue"> Promises/A+ 标准 </font>，为了保持 简单简洁 ，只提供极简的几个 API。如果你用过一些牛 X 的异步库，如 jQuery(不要笑) 、Q.js 或者 RSVP.js，可能会感觉 Promise 功能太少了。</p>
 <h3 id="没有-Deferred"><a href="#没有-Deferred" class="headerlink" title="没有 Deferred"></a>没有 Deferred</h3><p>Deferred 可以在创建 Promise 时可以减少一层嵌套，还有就是跨方法使用时很方便。<br>ECMAScript 11 年就有过 Deferred 提案，但后来没被接受。其实用 Promise 不到十行代码就能实现 Deferred：es6-deferred。现在有了 async/await，generator/yield 后，deferred 就没有使用价值了。</p>
 <h3 id="没有获取状态方法：isRejected，isResolved"><a href="#没有获取状态方法：isRejected，isResolved" class="headerlink" title="没有获取状态方法：isRejected，isResolved"></a>没有获取状态方法：isRejected，isResolved</h3><p>标准 Promise 没有提供获取当前状态 rejected 或者 resolved 的方法。只允许外部传入成功或失败后的回调。我认为这其实是优点，这是一种声明式的接口，更简单。</p>
 <h3 id="缺少其它一些方法：always，progress，finally"><a href="#缺少其它一些方法：always，progress，finally" class="headerlink" title="缺少其它一些方法：always，progress，finally"></a>缺少其它一些方法：always，progress，finally</h3><p>always 可以通过在 then 和 catch 里重复调用方法实现。finally 也类似。progress 这种进度通知的功能还没有用过，暂不知道如何替代。</p>
@@ -332,39 +346,69 @@
 
 
 
-    <link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
-    <script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="/js/plugin.js"></script>
 <script src="/js/obsidian.js"></script>
 <script src="/js/jquery.truncate.js"></script>
 <script src="/js/search.js"></script>
+
+
 <script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
 <script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
 <script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
 
 <script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
 
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
 
 
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
 
-    <script src="/js/busuanzi.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
     <script>
         $(document).ready(function () {
             if ($('span[id^="busuanzi_"]').length) {
@@ -374,10 +418,14 @@
     </script>
 
 
+
 <link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
 <link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
 <script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
 <script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
 
 <!-- Root element of PhotoSwipe. Must have class pswp. -->
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">

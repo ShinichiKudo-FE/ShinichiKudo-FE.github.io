@@ -18,14 +18,28 @@ Module是ES6的一个新特性，是语言层面对模块化的支持。
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
     <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
-    <link rel="stylesheet" href="/css/obsidian.css">
-    <link rel="stylesheet" href="/css/ball-atom.min.css">
-</head>
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
 
 
 <body class="loading">
@@ -81,7 +95,7 @@ Module是ES6的一个新特性，是语言层面对模块化的支持。
                 
                 April 12, 2018
             </p>
-            <h3 class="post-title animated fadeInDown"><a href="/2018/04/12/Js/Es6你可能不知道的事-进阶篇/" title="Es6你可能不知道的事---进阶篇">Es6你可能不知道的事---进阶篇</a>
+            <h3 class="post-title animated fadeInDown"><a href="/2018/04/12/Js/Es6%E4%BD%A0%E5%8F%AF%E8%83%BD%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84%E4%BA%8B-%E8%BF%9B%E9%98%B6%E7%AF%87/" title="Es6你可能不知道的事---进阶篇" class="">Es6你可能不知道的事---进阶篇</a>
             </h3>
             
             <p class="post-count animated fadeInDown">
@@ -107,7 +121,7 @@ Module是ES6的一个新特性，是语言层面对模块化的支持。
             </p>
             
             
-            <ul class="animated fadeInDown post-tags-list"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Js/">Js</a></li></ul>
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Js/" rel="tag">Js</a></li></ul>
             
         </div>
     </div>
@@ -195,8 +209,8 @@ Module是ES6的一个新特性，是语言层面对模块化的支持。
 <li>利用 Proxy.revocable(target, handler) 可以创建出一个可逆的 “被代理” 对象</li>
 </ul>
 </blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 简单 element 选择控制工具的实现</span></span><br><span class="line"><span class="keyword">const</span> cacheElement = <span class="function"><span class="keyword">function</span>(<span class="params">target, prop</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(target.hasOwnProperty(prop))&#123;</span><br><span class="line">      <span class="keyword">return</span> target[prop];</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">      <span class="keyword">return</span> target[prop] = <span class="built_in">document</span>.getElementById(prop);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> elControl = <span class="keyword">new</span> <span class="built_in">Proxy</span>(cacheElement, &#123;</span><br><span class="line">  get: <span class="function">(<span class="params">target, prop</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> cacheElement(target, prop);</span><br><span class="line">  &#125;,</span><br><span class="line">  set: <span class="function">(<span class="params">target, prop, val</span>) =&gt;</span> &#123;</span><br><span class="line">    cacheElement(target, prop).textContent = val;</span><br><span class="line">  &#125;,</span><br><span class="line">  apply: <span class="function">(<span class="params">target, thisArg, args</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Reflect</span>.ownKeys(target);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">elControl.first;     <span class="comment">// div#first</span></span><br><span class="line">elControl.second;    <span class="comment">// div#second</span></span><br><span class="line">elControl.first = <span class="number">5</span>;    <span class="comment">// div#first =&gt; 5</span></span><br><span class="line">elControl.second = <span class="number">10</span>;  <span class="comment">// div#second =&gt; 10</span></span><br><span class="line">elControl();    <span class="comment">// ['first', 'second']</span></span><br></pre></td></tr></table></figure>
-<h3 id="Reflect"><a href="#Reflect" class="headerlink" title="Reflect"></a>Reflect</h3><p>ES6 中引入的 <code>Reflect</code> 是另一个元编程的特性，它使得我们可以直接操纵对象的原生行为。<code>Reflect</code> 可操纵的行为与 <code>Proxy</code> 可代理的行为是一一对应的，这使得可以在 <code>Proxy</code> 的自定义方法中方便的使用 <code>Reflect</code> 调起原生行为<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. Proxy 的自定义方法中，通过 Reflect 调用原生行为</span></span><br><span class="line"><span class="keyword">const</span> customProxy = <span class="keyword">new</span> <span class="built_in">Proxy</span>(&#123;</span><br><span class="line">  <span class="string">'custom'</span>: <span class="number">1</span></span><br><span class="line">&#125;, &#123;</span><br><span class="line">  get: <span class="function">(<span class="params">target, prop</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`get <span class="subst">$&#123;prop&#125;</span> !`</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Reflect</span>.get(target, <span class="literal">undefined</span>, prop);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">customProxy.custom;  <span class="comment">// get custom, 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 与 Object 对象上已经开放的操作原生行为方法相比，语法更加清晰易用（例如：Object.hasOwnProperty 与 Reflect.has）</span></span><br><span class="line"><span class="keyword">const</span> symb = <span class="built_in">Symbol</span>(<span class="string">'b'</span>);</span><br><span class="line"><span class="keyword">const</span> a = &#123;</span><br><span class="line">  [symb]: <span class="number">1</span>,</span><br><span class="line">  <span class="string">'b'</span>: <span class="number">2</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="built_in">Reflect</span>.has(a, symb) &amp;&amp; <span class="built_in">Reflect</span>.has(a, <span class="string">'b'</span>))&#123;  <span class="comment">// good</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'good'</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">Reflect</span>.ownKeys(a);  <span class="comment">// ["b", Symbol(b)]</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 简单 element 选择控制工具的实现</span></span><br><span class="line"><span class="keyword">const</span> cacheElement = <span class="function"><span class="keyword">function</span>(<span class="params">target, prop</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(target.hasOwnProperty(prop))&#123;</span><br><span class="line">      <span class="keyword">return</span> target[prop];</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">      <span class="keyword">return</span> target[prop] = <span class="built_in">document</span>.getElementById(prop);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> elControl = <span class="keyword">new</span> <span class="built_in">Proxy</span>(cacheElement, &#123;</span><br><span class="line">  <span class="keyword">get</span>: (target, prop) =&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> cacheElement(target, prop);</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="keyword">set</span>: (target, prop, val) =&gt; &#123;</span><br><span class="line">    cacheElement(target, prop).textContent = val;</span><br><span class="line">  &#125;,</span><br><span class="line">  apply: <span class="function">(<span class="params">target, thisArg, args</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Reflect</span>.ownKeys(target);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">elControl.first;     <span class="comment">// div#first</span></span><br><span class="line">elControl.second;    <span class="comment">// div#second</span></span><br><span class="line">elControl.first = <span class="number">5</span>;    <span class="comment">// div#first =&gt; 5</span></span><br><span class="line">elControl.second = <span class="number">10</span>;  <span class="comment">// div#second =&gt; 10</span></span><br><span class="line">elControl();    <span class="comment">// ['first', 'second']</span></span><br></pre></td></tr></table></figure>
+<h3 id="Reflect"><a href="#Reflect" class="headerlink" title="Reflect"></a>Reflect</h3><p>ES6 中引入的 <code>Reflect</code> 是另一个元编程的特性，它使得我们可以直接操纵对象的原生行为。<code>Reflect</code> 可操纵的行为与 <code>Proxy</code> 可代理的行为是一一对应的，这使得可以在 <code>Proxy</code> 的自定义方法中方便的使用 <code>Reflect</code> 调起原生行为<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. Proxy 的自定义方法中，通过 Reflect 调用原生行为</span></span><br><span class="line"><span class="keyword">const</span> customProxy = <span class="keyword">new</span> <span class="built_in">Proxy</span>(&#123;</span><br><span class="line">  <span class="string">'custom'</span>: <span class="number">1</span></span><br><span class="line">&#125;, &#123;</span><br><span class="line">  <span class="keyword">get</span>: (target, prop) =&gt; &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`get <span class="subst">$&#123;prop&#125;</span> !`</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Reflect</span>.get(target, <span class="literal">undefined</span>, prop);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">customProxy.custom;  <span class="comment">// get custom, 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 与 Object 对象上已经开放的操作原生行为方法相比，语法更加清晰易用（例如：Object.hasOwnProperty 与 Reflect.has）</span></span><br><span class="line"><span class="keyword">const</span> symb = <span class="built_in">Symbol</span>(<span class="string">'b'</span>);</span><br><span class="line"><span class="keyword">const</span> a = &#123;</span><br><span class="line">  [symb]: <span class="number">1</span>,</span><br><span class="line">  <span class="string">'b'</span>: <span class="number">2</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="built_in">Reflect</span>.has(a, symb) &amp;&amp; <span class="built_in">Reflect</span>.has(a, <span class="string">'b'</span>))&#123;  <span class="comment">// good</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'good'</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">Reflect</span>.ownKeys(a);  <span class="comment">// ["b", Symbol(b)]</span></span><br></pre></td></tr></table></figure></p>
 <h2 id="进阶阅读"><a href="#进阶阅读" class="headerlink" title="进阶阅读"></a>进阶阅读</h2><p>如果你关注兼容性，推荐看：<a href="https://kangax.github.io/compat-table/es6/，这里介绍了从" target="_blank" rel="noopener">https://kangax.github.io/compat-table/es6/，这里介绍了从</a> ES5 到 ES2016+ 的所有特性（包括仍未定稿的特性）及其在各环境的兼容性</p>
 <p>如果你关注性能，推荐看：<a href="http://kpdecker.github.io/six-speed/，这里通过性能测试，将" target="_blank" rel="noopener">http://kpdecker.github.io/six-speed/，这里通过性能测试，将</a> ES6 特性的原生实现与 ES5 polyfill 版本进行对比，覆盖了各主流环境；同时也可以侧面对比出各环境在原生实现上的性能优劣</p>
 <p>如果你想全面了解特性，推荐看：<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript，覆盖特性的各方面，包括全面的" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Web/JavaScript，覆盖特性的各方面，包括全面的</a> API（包括不推荐和废弃的）和基础用法</p>
@@ -351,39 +365,69 @@ Module是ES6的一个新特性，是语言层面对模块化的支持。
 
 
 
-    <link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
-    <script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="/js/plugin.js"></script>
 <script src="/js/obsidian.js"></script>
 <script src="/js/jquery.truncate.js"></script>
 <script src="/js/search.js"></script>
+
+
 <script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
 <script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
 <script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
 
 <script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
 
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
 
 
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
 
-    <script src="/js/busuanzi.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
     <script>
         $(document).ready(function () {
             if ($('span[id^="busuanzi_"]').length) {
@@ -393,10 +437,14 @@ Module是ES6的一个新特性，是语言层面对模块化的支持。
     </script>
 
 
+
 <link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
 <link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
 <script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
 <script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
 
 <!-- Root element of PhotoSwipe. Must have class pswp. -->
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">

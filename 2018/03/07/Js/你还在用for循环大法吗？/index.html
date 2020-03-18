@@ -17,14 +17,28 @@
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
     <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
-    <link rel="stylesheet" href="/css/obsidian.css">
-    <link rel="stylesheet" href="/css/ball-atom.min.css">
-</head>
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
 
 
 <body class="loading">
@@ -80,7 +94,7 @@
                 
                 March 07, 2018
             </p>
-            <h3 class="post-title animated fadeInDown"><a href="/2018/03/07/Js/你还在用for循环大法吗？/" title="你还在用for循环大法吗？">你还在用for循环大法吗？</a>
+            <h3 class="post-title animated fadeInDown"><a href="/2018/03/07/Js/%E4%BD%A0%E8%BF%98%E5%9C%A8%E7%94%A8for%E5%BE%AA%E7%8E%AF%E5%A4%A7%E6%B3%95%E5%90%97%EF%BC%9F/" title="你还在用for循环大法吗？" class="">你还在用for循环大法吗？</a>
             </h3>
             
             <p class="post-count animated fadeInDown">
@@ -106,7 +120,7 @@
             </p>
             
             
-            <ul class="animated fadeInDown post-tags-list"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Js/">Js</a></li></ul>
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Js/" rel="tag">Js</a></li></ul>
             
         </div>
     </div>
@@ -129,14 +143,13 @@
         <div class="content markdown animated fadeIn">
             <p>文章主要介绍了数组Array.prototype方法的使用，需要的朋友可以参考下，如果你是大神，请直接无视。</p>
 <blockquote>
-<p><font color="blue">在ES5中，一共有9个Array方法 <a href="http://kangax.github.io/compat-table/es5/" target="_blank" rel="noopener">http://kangax.github.io/compat-table/es5/</a></font></p>
+<p><font color = "blue">在ES5中，一共有9个Array方法 <a href="http://kangax.github.io/compat-table/es5/" target="_blank" rel="noopener">http://kangax.github.io/compat-table/es5/</a></p>
 </blockquote>
-<p>  Array.prototype.indexOf<br>  Array.prototype.lastIndexOf<br>  Array.prototype.every<br>  Array.prototype.some<br>  Array.prototype.forEach<br>  Array.prototype.map<br>  Array.prototype.filter<br>  Array.prototype.reduce<br>  Array.prototype.reduceRight<br></p>
+<p>  Array.prototype.indexOf<br>  Array.prototype.lastIndexOf<br>  Array.prototype.every<br>  Array.prototype.some<br>  Array.prototype.forEach<br>  Array.prototype.map<br>  Array.prototype.filter<br>  Array.prototype.reduce<br>  Array.prototype.reduceRight<br></font></p>
 <p>在ES6即将普及的时代，我相信这些方法对FE开发者是非常实用的必备技能，接下来我将通过实例帮大家替换for循环大法，更高效的来操作数组。</p>
 <h2 id="indexOf"><a href="#indexOf" class="headerlink" title="indexOf"></a>indexOf</h2><p>indexOf()方法返回在该数组中第一个找到的元素位置，如果它不存在则返回-1。</p>
 <p><strong>使用for：</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ar arr = [<span class="string">'apple'</span>,<span class="string">'orange'</span>,<span class="string">'pear'</span>],</span><br><span class="line">    found = <span class="literal">false</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i= <span class="number">0</span>, l = arr.length; i&lt; l; i++)&#123;</span><br><span class="line">    <span class="keyword">if</span>(arr[i] === <span class="string">'orange'</span>)&#123;</span><br><span class="line">        found = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"found:"</span>,found);</span><br></pre></td></tr></table></figure></p>
-<p><strong>使用indexOf：</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [<span class="string">'apple'</span>,<span class="string">'orange'</span>,<span class="string">'pear'</span>];  </span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"found:"</span>, arr.indexOf(<span class="string">"orange"</span>) != <span class="number">-1</span>);</span><br></pre></td></tr></table></figure></p>
-<a id="more"></a>
+<p><strong>使用indexOf：</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [<span class="string">'apple'</span>,<span class="string">'orange'</span>,<span class="string">'pear'</span>];  </span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"found:"</span>, arr.indexOf(<span class="string">"orange"</span>) != <span class="number">-1</span>);</span><br></pre></td></tr></table></figure><br><a id="more"></a></p>
 <h2 id="lastindexOf"><a href="#lastindexOf" class="headerlink" title="lastindexOf"></a>lastindexOf</h2><p>astIndexOf() 方法返回在该数组中最后一个找到的元素位置，和 indexof相反。</p>
 <h2 id="every"><a href="#every" class="headerlink" title="every()"></a>every()</h2><p>every()可是检测数组中的每一项是否符合条件</p>
 <p><strong>使用for：</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">* 是否全部大于0</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">var</span> ary = [<span class="number">12</span>,<span class="number">23</span>,<span class="number">24</span>,<span class="number">42</span>,<span class="number">1</span>];</span><br><span class="line"><span class="keyword">var</span> result = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; ary.length; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span>(ary[i] &lt; <span class="number">0</span>)&#123;</span><br><span class="line">       <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">true</span>; <span class="comment">//需全部满足</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(result()) <span class="comment">//全部满足,返回true</span></span><br></pre></td></tr></table></figure></p>
@@ -146,19 +159,18 @@
 <p><strong>使用some</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ary = [<span class="number">12</span>,<span class="number">23</span>,<span class="number">-24</span>,<span class="number">42</span>,<span class="number">1</span>];</span><br><span class="line"><span class="keyword">var</span> result = ary.some(<span class="function"><span class="keyword">function</span>(<span class="params">item, index</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> item &lt; <span class="number">0</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(result)</span><br></pre></td></tr></table></figure></p>
 <h2 id="forEach"><a href="#forEach" class="headerlink" title="forEach()"></a>forEach()</h2><p>forEach为每个元素执行对应的方法</p>
 <p><strong>使用for：</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i= <span class="number">0</span>, l = arr.length; i&lt; l; i++)&#123;</span><br><span class="line"><span class="built_in">console</span>.log(arr[i]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><strong>使用forEach()：</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>];</span><br><span class="line"></span><br><span class="line">arr.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">item,index</span>)</span>&#123;</span><br><span class="line"><span class="built_in">console</span>.log(item);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
-<p>forEach是用来替换for循环的</p>
+<p><strong>使用forEach()：</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>];</span><br><span class="line"></span><br><span class="line">arr.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">item,index</span>)</span>&#123;</span><br><span class="line"><span class="built_in">console</span>.log(item);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure><br>forEach是用来替换for循环的</p>
 <h2 id="map"><a href="#map" class="headerlink" title="map()"></a>map()</h2><p>map()对数组的每个元素进行一定操作（映射）后，会返回一个新的数组， </p>
 <p><strong>使用for：</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> oldArr = [&#123;<span class="attr">first_name</span>:<span class="string">"Colin"</span>,<span class="attr">last_name</span>:<span class="string">"Toh"</span>&#125;,&#123;<span class="attr">first_name</span>:<span class="string">"Addy"</span>,<span class="attr">last_name</span>:<span class="string">"Osmani"</span>&#125;,&#123;<span class="attr">first_name</span>:<span class="string">"Yehuda"</span>,<span class="attr">last_name</span>:<span class="string">"Katz"</span>&#125;];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getNewArr</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> newArr = [];</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i= <span class="number">0</span>, l = oldArr.length; i&lt; l; i++)&#123;</span><br><span class="line">    <span class="keyword">var</span> item = oldArr[i];</span><br><span class="line">    item.full_name = [item.first_name,item.last_name].join(<span class="string">" "</span>);</span><br><span class="line">    newArr[i] = item;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> newArr;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(getNewArr());</span><br></pre></td></tr></table></figure></p>
 <p><strong>使用map：</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> oldArr = [&#123;<span class="attr">first_name</span>:<span class="string">"Colin"</span>,<span class="attr">last_name</span>:<span class="string">"Toh"</span>&#125;,&#123;<span class="attr">first_name</span>:<span class="string">"Addy"</span>,<span class="attr">last_name</span>:<span class="string">"Osmani"</span>&#125;,&#123;<span class="attr">first_name</span>:<span class="string">"Yehuda"</span>,<span class="attr">last_name</span>:<span class="string">"Katz"</span>&#125;];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getNewArr</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> oldArr.map(<span class="function"><span class="keyword">function</span>(<span class="params">item,index</span>)</span>&#123;</span><br><span class="line">    item.full_name = [item.first_name,item.last_name].join(<span class="string">" "</span>);</span><br><span class="line">    <span class="keyword">return</span> item;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(getNewArr());</span><br></pre></td></tr></table></figure></p>
 <p>map()是处理服务器返回数据时是一个非常实用的函数。</p>
 <p><strong>forEach 与map的区别：</strong></p>
-<p><font color="red">语法：</font>forEach和map都支持2个参数：一个是回调函数（item,index,list）和上下文；</p>
-<p><strong>forEach：</strong>用来遍历数组中的每一项；这个方法执行是没有返回值的，对原来数组也没有影响；数组中有几项，那么传递进去的匿名回调函数就需要执行几次；每一次执行匿名函数的时候，还给其传递了三个参数值：数组中的当前项item,当前项的索引index,原始数组list；<strong>理论上这个方法是没有返回值的，仅仅是遍历数组中的每一项，不对原来数组进行修改；但是我们可以自己</strong><font color="red">通过数组的索引来修改原来的数组</font>；</p>
+<p><font color='red'>语法：</font>forEach和map都支持2个参数：一个是回调函数（item,index,list）和上下文；</p>
+<p><strong>forEach：</strong>用来遍历数组中的每一项；这个方法执行是没有返回值的，对原来数组也没有影响；数组中有几项，那么传递进去的匿名回调函数就需要执行几次；每一次执行匿名函数的时候，还给其传递了三个参数值：数组中的当前项item,当前项的索引index,原始数组list；<strong>理论上这个方法是没有返回值的，仅仅是遍历数组中的每一项，不对原来数组进行修改；但是我们可以自己</strong><font color = "red">通过数组的索引来修改原来的数组</font>；</p>
 <p>forEach方法中的this是ary,匿名回调函数中的this默认是window；</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ary = [<span class="number">12</span>,<span class="number">23</span>,<span class="number">24</span>,<span class="number">42</span>,<span class="number">1</span>];</span><br><span class="line"><span class="keyword">var</span> res = ary.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">item,index,input</span>) </span>&#123;</span><br><span class="line">  input[index] = item*<span class="number">10</span>;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(res);<span class="comment">//--&gt;undefined;</span></span><br><span class="line"><span class="built_in">console</span>.log(ary);<span class="comment">//--&gt;会对原来的数组产生改变；</span></span><br></pre></td></tr></table></figure>
 <p><strong>map：</strong> 和forEach非常相似，都是用来遍历数组中的每一项值的，用来遍历数组中的每一项；</p>
-<p><font color="red">区别：</font><strong>map的回调函数中支持return返回值；return的是啥，相当于把数组中的这一项变为啥（<font color="red">并不影响原来的数组</font>，只是相当于把原数组克隆一份，把克隆的这一份的数组中的对应项改变了</strong>）；</p>
+<p><font color = "red">区别：</font><strong>map的回调函数中支持return返回值；return的是啥，相当于把数组中的这一项变为啥（<font color ="red">并不影响原来的数组</font>，只是相当于把原数组克隆一份，把克隆的这一份的数组中的对应项改变了</strong>）；</p>
 <p>不管是forEach还是map 都支持第二个参数值，第二个参数的意思是把匿名回调函数中的this进行修改。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ary = [<span class="number">12</span>,<span class="number">23</span>,<span class="number">24</span>,<span class="number">42</span>,<span class="number">1</span>];</span><br><span class="line"><span class="keyword">var</span> res = ary.map(<span class="function"><span class="keyword">function</span> (<span class="params">item,index,input</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> item*<span class="number">10</span>;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(res);<span class="comment">//--&gt;[120,230,240,420,10];</span></span><br><span class="line"><span class="built_in">console</span>.log(ary);<span class="comment">//--&gt;[12,23,24,42,1]；</span></span><br></pre></td></tr></table></figure>
 <h2 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h2><p>该filter()方法创建一个新的匹配过滤条件的数组。<br><strong>使用for：</strong></p>
@@ -325,39 +337,69 @@
 
 
 
-    <link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
-    <script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="/js/plugin.js"></script>
 <script src="/js/obsidian.js"></script>
 <script src="/js/jquery.truncate.js"></script>
 <script src="/js/search.js"></script>
+
+
 <script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
 <script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
 <script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
 
 <script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
 
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
 
 
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
 
-    <script src="/js/busuanzi.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
     <script>
         $(document).ready(function () {
             if ($('span[id^="busuanzi_"]').length) {
@@ -367,10 +409,14 @@
     </script>
 
 
+
 <link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
 <link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
 <script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
 <script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
 
 <!-- Root element of PhotoSwipe. Must have class pswp. -->
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">

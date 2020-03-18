@@ -15,14 +15,28 @@
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
     <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
-    <link rel="stylesheet" href="/css/obsidian.css">
-    <link rel="stylesheet" href="/css/ball-atom.min.css">
-</head>
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
 
 
 <body class="loading">
@@ -78,7 +92,7 @@
                 
                 April 02, 2018
             </p>
-            <h3 class="post-title animated fadeInDown"><a href="/2018/04/02/React/react-16-3新特性/" title="react 16.3新特性">react 16.3新特性</a>
+            <h3 class="post-title animated fadeInDown"><a href="/2018/04/02/React/react-16-3%E6%96%B0%E7%89%B9%E6%80%A7/" title="react 16.3新特性" class="">react 16.3新特性</a>
             </h3>
             
             <p class="post-count animated fadeInDown">
@@ -104,7 +118,7 @@
             </p>
             
             
-            <ul class="animated fadeInDown post-tags-list"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/React/">React</a></li></ul>
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/React/" rel="tag">React</a></li></ul>
             
         </div>
     </div>
@@ -126,13 +140,10 @@
     <div class='main'>
         <div class="content markdown animated fadeIn">
             <h1 id="Context-API"><a href="#Context-API" class="headerlink" title="Context API"></a>Context API</h1><p>Context API总是很让人迷惑。这个API是官方的，但是官方又不希望开发者们使用这个API，说是这个API会在以后发生改变。现在就是那个改变的时刻。新的API已经被merge了。而且它看起来更加的“用户友好”了。尤其是你不得不使用redux、mobx的时候，可以选择新的Context API实现更加简单的状态管理。</p>
-<p>新的API用起来非常的简单：<strong>React.createContext()</strong>，这样就创建了两个组件：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;context&#125; <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="keyword">const</span> ThemeContext = createContext(&#123;</span><br><span class="line">  background: <span class="string">'yellow'</span>,</span><br><span class="line">  color: <span class="string">'white'</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
-<p>调用createContext方法会返回两个对象，一个是<code>Provider</code>，一个是<code>Consumer</code>。</p>
-<p>那个Provider是一个特殊的组件。它可以用来给子树里的组件提供数据。一个例子：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Application</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    &lt;ThemeContext.Provider value=&#123;&#123;<span class="attr">background</span>: <span class="string">'black'</span>, <span class="attr">color</span>: <span class="string">'white'</span>&#125;&#125;&gt;</span><br><span class="line">      &lt;Header /&gt;</span><br><span class="line">      &lt;Main /&gt;</span><br><span class="line">      &lt;Footer /&gt;</span><br><span class="line">    &lt;<span class="regexp">/ThemeContext.Provider&gt;</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure></p>
-<p>上例展示了如何传递“theme” context的。当然这些值可以是动态的（比如，基于this.state）。</p>
+<p>新的API用起来非常的简单：<strong>React.createContext()</strong>，这样就创建了两个组件：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;context&#125; <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="keyword">const</span> ThemeContext = createContext(&#123;</span><br><span class="line">  background: <span class="string">'yellow'</span>,</span><br><span class="line">  color: <span class="string">'white'</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure><br>调用createContext方法会返回两个对象，一个是<code>Provider</code>，一个是<code>Consumer</code>。</p>
+<p>那个Provider是一个特殊的组件。它可以用来给子树里的组件提供数据。一个例子：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Application</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    &lt;ThemeContext.Provider value=&#123;&#123;<span class="attr">background</span>: <span class="string">'black'</span>, <span class="attr">color</span>: <span class="string">'white'</span>&#125;&#125;&gt;</span><br><span class="line">      &lt;Header /&gt;</span><br><span class="line">      &lt;Main /&gt;</span><br><span class="line">      &lt;Footer /&gt;</span><br><span class="line">    &lt;<span class="regexp">/ThemeContext.Provider&gt;</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure><br>上例展示了如何传递“theme” context的。当然这些值可以是动态的（比如，基于this.state）。</p>
 <a id="more"></a>
-<p>下一步就是使用Consumer。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Header = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  &lt;ThemeContext.Consumer&gt;</span><br><span class="line">    &#123;(context) =&gt; &#123;</span><br><span class="line">      <span class="keyword">return</span> (</span><br><span class="line">        &lt;p style=&#123;&#123;<span class="attr">background</span>: context.background, <span class="attr">color</span>: context.color&#125;&#125;&gt;</span><br><span class="line">          Welcome!</span><br><span class="line">        &lt;<span class="regexp">/p&gt;</span></span><br><span class="line"><span class="regexp">      );</span></span><br><span class="line"><span class="regexp">    &#125;&#125;</span></span><br><span class="line"><span class="regexp">  &lt;/</span>ThemeContext.Consumer&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>接下来，定义Header、Title组件。注意：</p>
+<p>下一步就是使用Consumer。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Header = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  &lt;ThemeContext.Consumer&gt;</span><br><span class="line">    &#123;(context) =&gt; &#123;</span><br><span class="line">      <span class="keyword">return</span> (</span><br><span class="line">        &lt;p style=&#123;&#123;<span class="attr">background</span>: context.background, <span class="attr">color</span>: context.color&#125;&#125;&gt;</span><br><span class="line">          Welcome!</span><br><span class="line">        &lt;<span class="regexp">/p&gt;</span></span><br><span class="line"><span class="regexp">      );</span></span><br><span class="line"><span class="regexp">    &#125;&#125;</span></span><br><span class="line"><span class="regexp">  &lt;/</span>ThemeContext.Consumer&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>接下来，定义Header、Title组件。注意：</p>
 <p>Title组件用到了Consumer组件，表示要消费Provider传递的数据。<br>Title组件是App的孙组件，但跳过了Header消费数据。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Header</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;Title&gt;Hello React Context API&lt;<span class="regexp">/Title&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"> </span></span><br><span class="line"><span class="regexp">class Title extends React.Component &#123;</span></span><br><span class="line"><span class="regexp">  render () &#123;</span></span><br><span class="line"><span class="regexp">    return (</span></span><br><span class="line"><span class="regexp">      &lt;ThemeContext.Consumer&gt;</span></span><br><span class="line"><span class="regexp">        &#123;context =&gt; (</span></span><br><span class="line"><span class="regexp">          &lt;h1 style=&#123;&#123;background: context.background, color: context.color&#125;&#125;&gt;</span></span><br><span class="line"><span class="regexp">            &#123;this.props.children&#125;</span></span><br><span class="line"><span class="regexp">          &lt;/</span>h1&gt;</span><br><span class="line">        )&#125;</span><br><span class="line">      &lt;<span class="regexp">/ThemeContext.Consumer&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
 <p>如果在render Consumer的时候没有嵌套在一个Provider里面。那么就会使用createContext方法调用的时候设置的默认值。</p>
@@ -307,39 +318,69 @@
 
 
 
-    <link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
-    <script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="/js/plugin.js"></script>
 <script src="/js/obsidian.js"></script>
 <script src="/js/jquery.truncate.js"></script>
 <script src="/js/search.js"></script>
+
+
 <script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
 <script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
 <script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
 
 <script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
 
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
 
 
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
 
-    <script src="/js/busuanzi.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
     <script>
         $(document).ready(function () {
             if ($('span[id^="busuanzi_"]').length) {
@@ -349,10 +390,14 @@
     </script>
 
 
+
 <link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
 <link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
 <script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
 <script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
 
 <!-- Root element of PhotoSwipe. Must have class pswp. -->
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">

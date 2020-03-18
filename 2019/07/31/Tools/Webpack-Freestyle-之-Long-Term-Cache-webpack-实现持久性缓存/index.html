@@ -20,14 +20,28 @@ How Browser Cache Works首先，我们要搞清楚浏览器缓存是怎么工作
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
     <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
-    <link rel="stylesheet" href="/css/obsidian.css">
-    <link rel="stylesheet" href="/css/ball-atom.min.css">
-</head>
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
 
 
 <body class="loading">
@@ -83,7 +97,7 @@ How Browser Cache Works首先，我们要搞清楚浏览器缓存是怎么工作
                 
                 July 31, 2019
             </p>
-            <h3 class="post-title animated fadeInDown"><a href="/2019/07/31/Tools/Webpack-Freestyle-之-Long-Term-Cache-webpack-实现持久性缓存/" title="Webpack Freestyle 之 Long Term Cache(webpack 实现持久性缓存)">Webpack Freestyle 之 Long Term Cache(webpack 实现持久性缓存)</a>
+            <h3 class="post-title animated fadeInDown"><a href="/2019/07/31/Tools/Webpack-Freestyle-%E4%B9%8B-Long-Term-Cache-webpack-%E5%AE%9E%E7%8E%B0%E6%8C%81%E4%B9%85%E6%80%A7%E7%BC%93%E5%AD%98/" title="Webpack Freestyle 之 Long Term Cache(webpack 实现持久性缓存)" class="">Webpack Freestyle 之 Long Term Cache(webpack 实现持久性缓存)</a>
             </h3>
             
             <p class="post-count animated fadeInDown">
@@ -109,7 +123,7 @@ How Browser Cache Works首先，我们要搞清楚浏览器缓存是怎么工作
             </p>
             
             
-            <ul class="animated fadeInDown post-tags-list"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Webpack/">Webpack</a></li></ul>
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Webpack/" rel="tag">Webpack</a></li></ul>
             
         </div>
     </div>
@@ -155,7 +169,7 @@ How Browser Cache Works首先，我们要搞清楚浏览器缓存是怎么工作
 <p>另外，如果我们打包出来的静态文件只有一个单独的 JavaScript 文件 app.js ，那么每次改动一点代码，app.js 的文件名肯定都会变。但实际上，我只改动了某个模块的代码（其他模块并没有修改），就破坏了其他模块的缓存，这显然没有充分利用到缓存啊。我们的想法是：哪个模块更新了破坏他的缓存，没更新的模块继续利用缓存。</p>
 <p>这个时候，我们就需要用到 webpack 的 code splitting（如果还不会的话，可以阅读 <a href="https://zhuanlan.zhihu.com/p/26710831?refer=ElemeFE" target="_blank" rel="noopener">Webpack 大法之 Code Splitting</a> ）。把整个 App 分成一个个 chunk ，然后哪个 chunk 发生改变，我就破坏他的缓存；没有更新的 chunk ，则继续利用缓存。这样一来，我们就把缓存的作用发挥到淋漓尽致～</p>
 <p>所以，<code>code splitting</code> 的作用除了”减少文件大小”之外，还能更充分地利用缓存。所以，下面就让我们用 webpack 来实现持久性缓存吧。</p>
-<h2 id="Webpack-amp-Caching"><a href="#Webpack-amp-Caching" class="headerlink" title="Webpack &amp; Caching"></a>Webpack &amp; Caching</h2><p>首先，把我们的 <a href="https://link.zhihu.com/?target=https%3A//github.com/lyyourc/webpack-code-splitting-demo" target="_blank" rel="noopener">demo 项目</a>（已经实现了 code splitting ）下载并安装好依赖。</p>
+<h2 id="Webpack-amp-Caching"><a href="#Webpack-amp-Caching" class="headerlink" title="Webpack &amp; Caching"></a>Webpack &amp; Caching</h2><p>首先，把我们的 <a href="https://link.zhihu.com/?target=https%3A//github.com/lyyourc/webpack-code-splitting-demo">demo 项目</a>（已经实现了 code splitting ）下载并安装好依赖。</p>
 <p>接着，修改 webpack 配置文件，给我们打包后的静态文件生成随机的唯一的名字。（ changed files ）</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  output: &#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    filename: <span class="string">'[name].[chunkhash:8].js'</span>,</span><br><span class="line">    chunkFilename: <span class="string">'[name].[chunkhash:8].chunk.js'</span>,</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>我们使用了 <code>[chunkhash]</code> 这个占位符，并且为了更好地分辨和展示 demo ，我们截取了他的前 8 个字符 <code>[chunkhash:8]</code>，但是在实际生产中我们不要那么做！</p>
@@ -181,7 +195,7 @@ How Browser Cache Works首先，我们要搞清楚浏览器缓存是怎么工作
 <p>而此时的打包：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">                        Asset       Size  Chunk Names</span><br><span class="line">common-<span class="keyword">in</span>-lazy<span class="number">.30</span>b1e9b6.chunk.js    <span class="number">11.6</span> kB  common-<span class="keyword">in</span>-lazy</span><br><span class="line">    used-twice<span class="number">.9</span>eccbe5a.chunk.js    <span class="number">17.1</span> kB  used-twice</span><br><span class="line">        Photos<span class="number">.6096611</span>c.chunk.js    <span class="number">8.57</span> kB  Photos</span><br><span class="line">         Emoji<span class="number">.6208</span>da60.chunk.js    <span class="number">1.15</span> kB  Emoji</span><br><span class="line">                 app<span class="number">.4675</span>a374.js    <span class="number">2.61</span> kB  app</span><br><span class="line">              vendor<span class="number">.8</span>b538297.js     <span class="number">103</span> kB  vendor</span><br><span class="line">            manifast<span class="number">.25580296</span>.js    <span class="number">1.54</span> kB  manifast</span><br></pre></td></tr></table></figure>
 <p>卧槽居然所有 chunk 的 hash 都发生了改变，这是为什么？</p>
-<p><strong>原因是在 webpack 里每个模块都有一个 module id </strong>，module id 是该模块在<a href="https://link.zhihu.com/?target=https%3A//webpack.js.org/concepts/dependency-graph/" target="_blank" rel="noopener">模块依赖关系图</a>里按顺序分配的序号，如果这个 module id 发生了变化，那么他的 chunkhash 也会发生变化。（不确定这里是否正确，希望大佬指出错误）</p>
+<p><strong>原因是在 webpack 里每个模块都有一个 module id </strong>，module id 是该模块在<a href="https://link.zhihu.com/?target=https%3A//webpack.js.org/concepts/dependency-graph/">模块依赖关系图</a>里按顺序分配的序号，如果这个 module id 发生了变化，那么他的 chunkhash 也会发生变化。（不确定这里是否正确，希望大佬指出错误）</p>
 <p><img src="https://pic4.zhimg.com/80/v2-5a4b6bef5809e00512873d481a3670e7_hd.png" alt="pic5"></p>
 <p>所以呢，我们需要用一种新的方式来计算 module id 。 <strong>HashedModuleIdsPlugin</strong> 这个插件，他是根据模块所在路径来映射其 module id ，这样就算引入了新的模块，也不会影响 module id 的值，只要模块的路径不改变的话。</p>
 <p>修改我们的 webpack 配置。并且，去掉上面 App.vue 引入的 noop 模块。（ changed files ）</p>
@@ -344,39 +358,69 @@ How Browser Cache Works首先，我们要搞清楚浏览器缓存是怎么工作
 
 
 
-    <link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
-    <script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="/js/plugin.js"></script>
 <script src="/js/obsidian.js"></script>
 <script src="/js/jquery.truncate.js"></script>
 <script src="/js/search.js"></script>
+
+
 <script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
 <script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
 <script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
 
 <script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
 
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
 
 
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
 
-    <script src="/js/busuanzi.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
     <script>
         $(document).ready(function () {
             if ($('span[id^="busuanzi_"]').length) {
@@ -386,10 +430,14 @@ How Browser Cache Works首先，我们要搞清楚浏览器缓存是怎么工作
     </script>
 
 
+
 <link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
 <link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
 <script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
 <script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
 
 <!-- Root element of PhotoSwipe. Must have class pswp. -->
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">

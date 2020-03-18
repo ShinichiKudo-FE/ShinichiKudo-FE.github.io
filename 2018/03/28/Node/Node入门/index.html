@@ -17,14 +17,28 @@ Node.js® is a JavaScript runtime built on Chrome’s V8 JavaScript e,">
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
     <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
-    <link rel="stylesheet" href="/css/obsidian.css">
-    <link rel="stylesheet" href="/css/ball-atom.min.css">
-</head>
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
 
 
 <body class="loading">
@@ -80,7 +94,7 @@ Node.js® is a JavaScript runtime built on Chrome’s V8 JavaScript e,">
                 
                 March 28, 2018
             </p>
-            <h3 class="post-title animated fadeInDown"><a href="/2018/03/28/Node/Node入门/" title="Node入门">Node入门</a>
+            <h3 class="post-title animated fadeInDown"><a href="/2018/03/28/Node/Node%E5%85%A5%E9%97%A8/" title="Node入门" class="">Node入门</a>
             </h3>
             
             <p class="post-count animated fadeInDown">
@@ -106,7 +120,7 @@ Node.js® is a JavaScript runtime built on Chrome’s V8 JavaScript e,">
             </p>
             
             
-            <ul class="animated fadeInDown post-tags-list"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Node/">Node</a></li></ul>
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Node/" rel="tag">Node</a></li></ul>
             
         </div>
     </div>
@@ -243,7 +257,7 @@ Node.js® is a JavaScript runtime built on Chrome’s V8 JavaScript e,">
 <p>和jquery、vue里的Event是非常类似的。而且前端自己也有EventEmitter。</p>
 <h3 id="如何更好的查Node-js文档"><a href="#如何更好的查Node-js文档" class="headerlink" title="如何更好的查Node.js文档"></a>如何更好的查Node.js文档</h3><p>API是应用程序接口Application Programming Interface的简称。从Node.js异步原理，我们可以知道，核心在于 Node.js SDK 中API调用，然后交由EventLoop（Libuv）去执行，所以我们一定要熟悉Node.js的API操作。</p>
 <p>Node.js的API都是异步的，同步的函数是奢求，要查API文档，在高并发场景下慎用。</p>
-<p>笔者推荐使用 <font color="blue">Dash</font> 或 <font color="blue">Zeal</font> 查看离线文档，经常查看离线文档，对Api理解会深入很多，比IDE辅助要好，可以有效避免离开IDE就不会写代码的窘境。</p>
+<p>笔者推荐使用 <font color = 'blue'>Dash</font> 或 <font color = 'blue'>Zeal</font> 查看离线文档，经常查看离线文档，对Api理解会深入很多，比IDE辅助要好，可以有效避免离开IDE就不会写代码的窘境。</p>
 <h2 id="中流砥柱：Promise"><a href="#中流砥柱：Promise" class="headerlink" title="中流砥柱：Promise"></a>中流砥柱：Promise</h2><p>Node.js 因为采用了错误优先的回调风格写法，导致sdk里导出都是回调函数。如果组合调用的话，就会特别痛苦，经常会出现回调里嵌套回调的问题，大家都非常厌烦这种写法，称之为Callback Hell，即回调地狱。一个经典的例子来自著名的Promise模块q文档里。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">step1(<span class="function"><span class="keyword">function</span> (<span class="params">value1</span>) </span>&#123;</span><br><span class="line">    step2(value1, <span class="function"><span class="keyword">function</span>(<span class="params">value2</span>) </span>&#123;</span><br><span class="line">        step3(value2, <span class="function"><span class="keyword">function</span>(<span class="params">value3</span>) </span>&#123;</span><br><span class="line">            step4(value3, <span class="function"><span class="keyword">function</span>(<span class="params">value4</span>) </span>&#123;</span><br><span class="line">                <span class="comment">// Do something with value4</span></span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <p>这里只是做4步，嵌套了4层回调，如果更多步骤呢？很多新手浅尝辄止，到这儿就望而却步，粉转黑。这明显不够成熟，最起码你要看看它的应对解决方案吧！</p>
@@ -385,7 +399,7 @@ Node.js® is a JavaScript runtime built on Chrome’s V8 JavaScript e,">
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#什么是Node-js"><span class="toc-number">1.</span> <span class="toc-text">什么是Node.js</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本原理"><span class="toc-number">1.1.</span> <span class="toc-text">基本原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#学习-Node-js-的三个境界"><span class="toc-number">1.2.</span> <span class="toc-text">学习 Node.js 的三个境界</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装Node-js环境"><span class="toc-number">1.3.</span> <span class="toc-text">安装Node.js环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Node-js应用场景"><span class="toc-number">1.4.</span> <span class="toc-text">Node.js应用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Node核心：异步流程控制"><span class="toc-number">1.5.</span> <span class="toc-text">Node核心：异步流程控制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#异步流程控制学习重点"><span class="toc-number">1.6.</span> <span class="toc-text">异步流程控制学习重点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Api写法：Error-first-Callback-和-EventEmitter"><span class="toc-number">1.7.</span> <span class="toc-text">Api写法：Error-first Callback 和 EventEmitter</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Error-first-Callback-定义错误优先的回调写法只需要注意2条规则即可："><span class="toc-number">1.7.1.</span> <span class="toc-text">Error-first Callback 定义错误优先的回调写法只需要注意2条规则即可：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#EventEmitter"><span class="toc-number">1.7.2.</span> <span class="toc-text">EventEmitter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何更好的查Node-js文档"><span class="toc-number">1.7.3.</span> <span class="toc-text">如何更好的查Node.js文档</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#中流砥柱：Promise"><span class="toc-number">1.8.</span> <span class="toc-text">中流砥柱：Promise</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#定义"><span class="toc-number">1.8.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#调用"><span class="toc-number">1.8.2.</span> <span class="toc-text">调用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#终极解决方案：Async-Await"><span class="toc-number">1.9.</span> <span class="toc-text">终极解决方案：Async/Await</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NodeJs框架分类"><span class="toc-number">1.10.</span> <span class="toc-text">NodeJs框架分类</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#什么是Node-js"><span class="toc-number">1.</span> <span class="toc-text">什么是Node.js</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本原理"><span class="toc-number">1.1.</span> <span class="toc-text">基本原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#学习-Node-js-的三个境界"><span class="toc-number">1.2.</span> <span class="toc-text">学习 Node.js 的三个境界</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装Node-js环境"><span class="toc-number">1.3.</span> <span class="toc-text">安装Node.js环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Node-js应用场景"><span class="toc-number">1.4.</span> <span class="toc-text">Node.js应用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Node核心：异步流程控制"><span class="toc-number">1.5.</span> <span class="toc-text">Node核心：异步流程控制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#异步流程控制学习重点"><span class="toc-number">1.6.</span> <span class="toc-text">异步流程控制学习重点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Api写法：Error-first-Callback-和-EventEmitter"><span class="toc-number">1.7.</span> <span class="toc-text">Api写法：Error-first Callback 和 EventEmitter</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Error-first-Callback-定义错误优先的回调写法只需要注意2条规则即可："><span class="toc-number">1.7.1.</span> <span class="toc-text">Error-first Callback 定义错误优先的回调写法只需要注意2条规则即可：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#EventEmitter"><span class="toc-number">1.7.2.</span> <span class="toc-text">EventEmitter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何更好的查Node-js文档"><span class="toc-number">1.7.3.</span> <span class="toc-text">如何更好的查Node.js文档</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#中流砥柱：Promise"><span class="toc-number">1.8.</span> <span class="toc-text">中流砥柱：Promise</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#定义"><span class="toc-number">1.8.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#调用"><span class="toc-number">1.8.2.</span> <span class="toc-text">调用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#终极解决方案：Async-Await"><span class="toc-number">1.9.</span> <span class="toc-text">终极解决方案：Async&#x2F;Await</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NodeJs框架分类"><span class="toc-number">1.10.</span> <span class="toc-text">NodeJs框架分类</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -475,39 +489,69 @@ Node.js® is a JavaScript runtime built on Chrome’s V8 JavaScript e,">
 
 
 
-    <link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
-    <script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="/js/plugin.js"></script>
 <script src="/js/obsidian.js"></script>
 <script src="/js/jquery.truncate.js"></script>
 <script src="/js/search.js"></script>
+
+
 <script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
 <script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
 <script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
 
 <script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
 
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
 
 
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
 
-    <script src="/js/busuanzi.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
     <script>
         $(document).ready(function () {
             if ($('span[id^="busuanzi_"]').length) {
@@ -517,10 +561,14 @@ Node.js® is a JavaScript runtime built on Chrome’s V8 JavaScript e,">
     </script>
 
 
+
 <link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
 <link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
 <script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
 <script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
 
 <!-- Root element of PhotoSwipe. Must have class pswp. -->
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">

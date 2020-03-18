@@ -16,14 +16,28 @@
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
     <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
-    <link rel="stylesheet" href="/css/obsidian.css">
-    <link rel="stylesheet" href="/css/ball-atom.min.css">
-</head>
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
 
 
 <body class="loading">
@@ -79,7 +93,7 @@
                 
                 April 25, 2018
             </p>
-            <h3 class="post-title animated fadeInDown"><a href="/2018/04/25/React/Redux/redux学习之升级水果店面/" title="redux学习之升级水果店面">redux学习之升级水果店面</a>
+            <h3 class="post-title animated fadeInDown"><a href="/2018/04/25/React/Redux/redux%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%8D%87%E7%BA%A7%E6%B0%B4%E6%9E%9C%E5%BA%97%E9%9D%A2/" title="redux学习之升级水果店面" class="">redux学习之升级水果店面</a>
             </h3>
             
             <p class="post-count animated fadeInDown">
@@ -105,7 +119,7 @@
             </p>
             
             
-            <ul class="animated fadeInDown post-tags-list"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Redux/">Redux</a></li></ul>
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Redux/" rel="tag">Redux</a></li></ul>
             
         </div>
     </div>
@@ -137,13 +151,13 @@
 <p>但是阿大又有一个新的想法，他想详细的看看每一个顾客的<code>购买需求</code>来了之后，账本的前后变化。看来又要加一个新角色<strong>记录员</strong>了。难道要像加采购员那样手动的一个个的加吗？那可太麻烦了。正好阿大发现 redux 里有一个功能就是<strong>中间件</strong>。中间件是干嘛的呢？简而言之，就是把顾客的需求从销售员到收银员之间加上各种角色来处理。每一个角色就是一个中间件。接下来阿大就开始来写中间件了。</p>
 <p>redux 中间件写起来其实很简单，就是一个函数而已。按照它的要求。这个函数接受一个<strong>{ dispatch, getState }</strong>对象作为参数，然后返回一个 <strong>action</strong></p>
 <p>那这样，就可以把原来的<code>采购员也改造成中间件</code>了，其实采购员就是拿到了顾客需求之后让顾客的需求延迟 <strong>dispatch</strong>，这用<code>延迟用函数</code>就可以做到了:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// next 是用中间件增强之后的 dispatch</span></span><br><span class="line"><span class="comment">// dispatch 是最原始的 store.dispatch</span></span><br><span class="line"><span class="keyword">const</span> thunkMiddleware = <span class="function">(<span class="params">&#123; dispatch &#125;</span>) =&gt;</span> next =&gt; <span class="function"><span class="params">action</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> action === <span class="string">'function'</span>) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 函数形式的 action 就把 dispatch 给这个 action，让 action 决定什么时候 dispatch （控制反转）</span></span><br><span class="line">    <span class="keyword">return</span> action(dispatch);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 普通的 action 就直接传递给下一个中间件处理</span></span><br><span class="line">  <span class="keyword">return</span> next(action);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// next 是用中间件增强之后的 dispatch</span></span><br><span class="line"><span class="comment">// dispatch 是最原始的 store.dispatch</span></span><br><span class="line"><span class="keyword">const</span> thunkMiddleware = <span class="function">(<span class="params">&#123; dispatch &#125;</span>) =&gt;</span> <span class="function"><span class="params">next</span> =&gt;</span> <span class="function"><span class="params">action</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> action === <span class="string">'function'</span>) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 函数形式的 action 就把 dispatch 给这个 action，让 action 决定什么时候 dispatch （控制反转）</span></span><br><span class="line">    <span class="keyword">return</span> action(dispatch);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 普通的 action 就直接传递给下一个中间件处理</span></span><br><span class="line">  <span class="keyword">return</span> next(action);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>然后我们就需要把原来的顾客需求改一下了：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 买水果 - 进口苹果</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">buyImportedApple</span>(<span class="params">num</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 返回一个函数类型的 action，这个函数接受 dispatch，可以决定什么时候 dispatch</span></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="params">dispatch</span> =&gt;</span> API.fetchImportedApple(<span class="function"><span class="params">()</span> =&gt;</span> dispatch(&#123;</span><br><span class="line">    type: <span class="string">'BUY_IMPORTED_APPLE'</span>,</span><br><span class="line">    payload: num</span><br><span class="line">  &#125;));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 买生鲜 - 进口鸡蛋</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">buyImportedEgg</span>(<span class="params">num</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="params">dispatch</span> =&gt;</span> API.fetchImportedEgg(<span class="function"><span class="params">()</span> =&gt;</span> dispatch(&#123;</span><br><span class="line">    type: <span class="string">'BUY_IMPORTED_EGG'</span>,</span><br><span class="line">    payload: num</span><br><span class="line">  &#125;));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>然后<code>采购员</code>就可以只负责采购了，改回去：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 采购商品生成器，不同的商品需要不同的时间采购</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fetching</span>(<span class="params">time, callback</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 用延时模拟采购时间</span></span><br><span class="line">  <span class="keyword">const</span> timer = setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    clearTimeout(timer);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 采购完成，通知销售员</span></span><br><span class="line">    callback();</span><br><span class="line">  &#125;, time);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 采购进口苹果需要 2 天（2s）</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fetchImportedApple</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">  fetching(<span class="number">2000</span>, callback);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 采购进口苹果需要 3 天（3s）</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fetchImportedEgg</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">  fetching(<span class="number">3000</span>, callback);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 采购员</span></span><br><span class="line"><span class="keyword">const</span> API = &#123;</span><br><span class="line">  fetchImportedApple, <span class="comment">// 采购进口苹果</span></span><br><span class="line">  fetchImportedEgg <span class="comment">// 采购进口鸡蛋</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>然后，我们在添加一个<code>记录员</code>的中间件：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> loggerMiddleware = <span class="function">(<span class="params">&#123; getState &#125;</span>) =&gt;</span> next =&gt; <span class="function"><span class="params">action</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`state before: <span class="subst">$&#123;<span class="built_in">JSON</span>.stringify(getState())&#125;</span>`</span>);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`action: <span class="subst">$&#123;<span class="built_in">JSON</span>.stringify(action)&#125;</span>`</span>);</span><br><span class="line">  <span class="keyword">const</span> result = next(action);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`state after: <span class="subst">$&#123;<span class="built_in">JSON</span>.stringify(getState())&#125;</span>`</span>);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'================================================'</span>);</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> loggerMiddleware = <span class="function">(<span class="params">&#123; getState &#125;</span>) =&gt;</span> <span class="function"><span class="params">next</span> =&gt;</span> <span class="function"><span class="params">action</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`state before: <span class="subst">$&#123;<span class="built_in">JSON</span>.stringify(getState())&#125;</span>`</span>);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`action: <span class="subst">$&#123;<span class="built_in">JSON</span>.stringify(action)&#125;</span>`</span>);</span><br><span class="line">  <span class="keyword">const</span> result = next(action);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`state after: <span class="subst">$&#123;<span class="built_in">JSON</span>.stringify(getState())&#125;</span>`</span>);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'================================================'</span>);</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>删除掉原来的监听：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//- store.subscribe(() =&gt; console.log(JSON.stringify(store.getState())));</span></span><br></pre></td></tr></table></figure>
 <p>好了，接下来就可以通过 redux 的 <strong>applyMiddleware</strong> 来串联起这些中间件啦。</p>
@@ -303,39 +317,69 @@
 
 
 
-    <link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
-    <script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="/js/plugin.js"></script>
 <script src="/js/obsidian.js"></script>
 <script src="/js/jquery.truncate.js"></script>
 <script src="/js/search.js"></script>
+
+
 <script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
 <script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
 <script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
 
 <script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
 
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
 
 
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
 
-    <script src="/js/busuanzi.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
     <script>
         $(document).ready(function () {
             if ($('span[id^="busuanzi_"]').length) {
@@ -345,10 +389,14 @@
     </script>
 
 
+
 <link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
 <link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
 <script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
 <script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
 
 <!-- Root element of PhotoSwipe. Must have class pswp. -->
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">

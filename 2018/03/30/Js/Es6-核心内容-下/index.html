@@ -16,14 +16,28 @@
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
     <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
-    <link rel="stylesheet" href="/css/obsidian.css">
-    <link rel="stylesheet" href="/css/ball-atom.min.css">
-</head>
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
 
 
 <body class="loading">
@@ -79,7 +93,7 @@
                 
                 March 30, 2018
             </p>
-            <h3 class="post-title animated fadeInDown"><a href="/2018/03/30/Js/Es6-核心内容-下/" title="Es6 核心内容 下">Es6 核心内容 下</a>
+            <h3 class="post-title animated fadeInDown"><a href="/2018/03/30/Js/Es6-%E6%A0%B8%E5%BF%83%E5%86%85%E5%AE%B9-%E4%B8%8B/" title="Es6 核心内容 下" class="">Es6 核心内容 下</a>
             </h3>
             
             <p class="post-count animated fadeInDown">
@@ -105,7 +119,7 @@
             </p>
             
             
-            <ul class="animated fadeInDown post-tags-list"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/ES6/">ES6</a></li></ul>
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/ES6/" rel="tag">ES6</a></li></ul>
             
         </div>
     </div>
@@ -136,9 +150,7 @@
 <blockquote>
 <p>ES6模块的设计思想，是尽量的静态化，使得编译时就能确定模块的依赖关系，以及输入和输出的变量。CommonJS和AMD模块，都只能在运行时确定这些东西。</p>
 </blockquote>
-<h3 id="传统写法"><a href="#传统写法" class="headerlink" title="传统写法"></a>传统写法</h3><p>首先我们回顾下require.js的写法。假设我们有两个js文件: index.js和content.js,现在我们想要在index.js中使用content.js返回的结果，我们要怎么做呢？<br>首先定义：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//content.js</span></span><br><span class="line">define(<span class="string">'content.js'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'A cat'</span>;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
-<a id="more"></a>
-<p>然后require：</p>
+<h3 id="传统写法"><a href="#传统写法" class="headerlink" title="传统写法"></a>传统写法</h3><p>首先我们回顾下require.js的写法。假设我们有两个js文件: index.js和content.js,现在我们想要在index.js中使用content.js返回的结果，我们要怎么做呢？<br>首先定义：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//content.js</span></span><br><span class="line">define(<span class="string">'content.js'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'A cat'</span>;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure><br><a id="more"></a><br>然后require：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//index.js</span></span><br><span class="line"><span class="built_in">require</span>([<span class="string">'./content.js'</span>], <span class="function"><span class="keyword">function</span>(<span class="params">animal</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(animal);   <span class="comment">//A cat</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 <p>那CommonJS是怎么写的呢？<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//index.js</span></span><br><span class="line"><span class="keyword">var</span> animal = <span class="built_in">require</span>(<span class="string">'./content.js'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">//content.js</span></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="string">'A cat'</span></span><br></pre></td></tr></table></figure></p>
 <p>ES6的写法<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//index.js</span></span><br><span class="line"><span class="keyword">import</span> animal <span class="keyword">from</span> <span class="string">'./content'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//content.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="string">'A cat'</span></span><br></pre></td></tr></table></figure></p>
@@ -149,8 +161,7 @@
 <p>如果还希望输入content.js中输出的默认<code>(default)</code>, 可以写在大括号外面。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//index.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> animal, &#123; say, type &#125; <span class="keyword">from</span> <span class="string">'./content'</span>  </span><br><span class="line"><span class="keyword">let</span> says = say()</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">`The <span class="subst">$&#123;type&#125;</span> says <span class="subst">$&#123;says&#125;</span> to <span class="subst">$&#123;animal&#125;</span>`</span>)  </span><br><span class="line"><span class="comment">//The dog says Hello to A cat</span></span><br></pre></td></tr></table></figure>
 <h3 id="修改变量名"><a href="#修改变量名" class="headerlink" title="修改变量名"></a>修改变量名</h3><p>此时我们不喜欢type这个变量名，因为它有可能重名，所以我们需要修改一下它的变量名。在es6中可以用as实现一键换名。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//index.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> animal, &#123; say, type <span class="keyword">as</span> animalType &#125; <span class="keyword">from</span> <span class="string">'./content'</span>  </span><br><span class="line"><span class="keyword">let</span> says = say()</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">`The <span class="subst">$&#123;animalType&#125;</span> says <span class="subst">$&#123;says&#125;</span> to <span class="subst">$&#123;animal&#125;</span>`</span>)  </span><br><span class="line"><span class="comment">//The dog says Hello to A cat</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="模块的整体加载"><a href="#模块的整体加载" class="headerlink" title="模块的整体加载"></a>模块的整体加载</h3><p>除了指定加载某个输出值，还可以使用整体加载，即用星号<code>（*）</code>指定一个对象，所有输出值都加载在这个对象上面。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//index.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> animal, * <span class="keyword">as</span> content <span class="keyword">from</span> <span class="string">'./content'</span>  </span><br><span class="line"><span class="keyword">let</span> says = content.say()</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">`The <span class="subst">$&#123;content.type&#125;</span> says <span class="subst">$&#123;says&#125;</span> to <span class="subst">$&#123;animal&#125;</span>`</span>)  </span><br><span class="line"><span class="comment">//The dog says Hello to A cat</span></span><br></pre></td></tr></table></figure></p>
-<p>通常星号*结合as一起使用比较合适。</p>
+<h3 id="模块的整体加载"><a href="#模块的整体加载" class="headerlink" title="模块的整体加载"></a>模块的整体加载</h3><p>除了指定加载某个输出值，还可以使用整体加载，即用星号<code>（*）</code>指定一个对象，所有输出值都加载在这个对象上面。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//index.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> animal, * <span class="keyword">as</span> content <span class="keyword">from</span> <span class="string">'./content'</span>  </span><br><span class="line"><span class="keyword">let</span> says = content.say()</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">`The <span class="subst">$&#123;content.type&#125;</span> says <span class="subst">$&#123;says&#125;</span> to <span class="subst">$&#123;animal&#125;</span>`</span>)  </span><br><span class="line"><span class="comment">//The dog says Hello to A cat</span></span><br></pre></td></tr></table></figure><br>通常星号*结合as一起使用比较合适。</p>
 <h2 id="终极秘籍"><a href="#终极秘籍" class="headerlink" title="终极秘籍"></a>终极秘籍</h2><p>考虑下面的场景：上面的<code>content.js</code>一共输出了三个变量（default, say, type）,假如我们的实际项目当中只需要用到type这一个变量，其余两个我们暂时不需要。我们可以只输入一个变量：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; type &#125; <span class="keyword">from</span> <span class="string">'./content'</span></span><br></pre></td></tr></table></figure>
 <p>由于其他两个变量没有被使用，我们希望代码打包的时候也忽略它们，抛弃它们，这样在大项目中可以显著减少文件的体积。</p>
@@ -303,39 +314,69 @@
 
 
 
-    <link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
-    <script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="/js/plugin.js"></script>
 <script src="/js/obsidian.js"></script>
 <script src="/js/jquery.truncate.js"></script>
 <script src="/js/search.js"></script>
+
+
 <script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
 <script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
 <script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
 
 <script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
 
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
 
 
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
 
-    <script src="/js/busuanzi.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
     <script>
         $(document).ready(function () {
             if ($('span[id^="busuanzi_"]').length) {
@@ -345,10 +386,14 @@
     </script>
 
 
+
 <link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
 <link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
 <script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
 <script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
 
 <!-- Root element of PhotoSwipe. Must have class pswp. -->
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">

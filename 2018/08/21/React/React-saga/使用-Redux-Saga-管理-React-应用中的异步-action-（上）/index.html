@@ -16,14 +16,28 @@ Generators 先行！为了理解 Sagas，我们首先要理解什么是 Generato
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
     <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
-    <link rel="stylesheet" href="/css/obsidian.css">
-    <link rel="stylesheet" href="/css/ball-atom.min.css">
-</head>
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
 
 
 <body class="loading">
@@ -79,7 +93,7 @@ Generators 先行！为了理解 Sagas，我们首先要理解什么是 Generato
                 
                 August 21, 2018
             </p>
-            <h3 class="post-title animated fadeInDown"><a href="/2018/08/21/React/React-saga/使用-Redux-Saga-管理-React-应用中的异步-action-（上）/" title="使用 Redux-Saga 管理 React 应用中的异步 action （上）">使用 Redux-Saga 管理 React 应用中的异步 action （上）</a>
+            <h3 class="post-title animated fadeInDown"><a href="/2018/08/21/React/React-saga/%E4%BD%BF%E7%94%A8-Redux-Saga-%E7%AE%A1%E7%90%86-React-%E5%BA%94%E7%94%A8%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5-action-%EF%BC%88%E4%B8%8A%EF%BC%89/" title="使用 Redux-Saga 管理 React 应用中的异步 action （上）" class="">使用 Redux-Saga 管理 React 应用中的异步 action （上）</a>
             </h3>
             
             <p class="post-count animated fadeInDown">
@@ -105,7 +119,7 @@ Generators 先行！为了理解 Sagas，我们首先要理解什么是 Generato
             </p>
             
             
-            <ul class="animated fadeInDown post-tags-list"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/React-saga/">React-saga</a></li></ul>
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/React-saga/" rel="tag">React-saga</a></li></ul>
             
         </div>
     </div>
@@ -127,7 +141,7 @@ Generators 先行！为了理解 Sagas，我们首先要理解什么是 Generato
     <div class='main'>
         <div class="content markdown animated fadeIn">
             <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>可以用<code>Don’t call me, I’ll call you</code>这句话来比喻<code>react-saga</code>。</p>
-<h2 id="Generators-先行！"><a href="#Generators-先行！" class="headerlink" title="Generators 先行！"></a>Generators 先行！</h2><p>为了理解 Sagas，我们首先要理解什么是 <code>Generator</code>。下面是 <a href="https://link.juejin.im/?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FJavaScript%2FReference%2FStatements%2Ffunction%252A" target="_blank" rel="noopener">MDN</a> 对 Generator 的描述：</p>
+<h2 id="Generators-先行！"><a href="#Generators-先行！" class="headerlink" title="Generators 先行！"></a>Generators 先行！</h2><p>为了理解 Sagas，我们首先要理解什么是 <code>Generator</code>。下面是 <a href="https://link.juejin.im/?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FJavaScript%2FReference%2FStatements%2Ffunction%252A">MDN</a> 对 Generator 的描述：</p>
 <blockquote>
 <p>Generator 是在执行时能暂停，后面又能从暂停处继续执行的函数。它的上下文会在继续执行时保存。</p>
 </blockquote>
@@ -139,7 +153,7 @@ Generators 先行！为了理解 Sagas，我们首先要理解什么是 Generato
 <li>如果状态序列的长度不确定时，我们可以用下面的方法来写：</li>
 </ul>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> results = generator.next();</span><br><span class="line"><span class="keyword">while</span>(!results.done)&#123;</span><br><span class="line"> <span class="built_in">console</span>.log(results.value);</span><br><span class="line"> results = generator.next();</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(results.value);</span><br></pre></td></tr></table></figure>
-<h2 id="什么是-Sagas？"><a href="#什么是-Sagas？" class="headerlink" title="什么是 Sagas？"></a>什么是 Sagas？</h2><p>Sagas 是通过 Generator 函数来创建的。<a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Fredux-saga%2Fredux-saga" target="_blank" rel="noopener">官方文档</a> 的解释如下：</p>
+<h2 id="什么是-Sagas？"><a href="#什么是-Sagas？" class="headerlink" title="什么是 Sagas？"></a>什么是 Sagas？</h2><p>Sagas 是通过 Generator 函数来创建的。<a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Fredux-saga%2Fredux-saga">官方文档</a> 的解释如下：</p>
 <blockquote>
 <p>Saga 就像应用中的一个独立线程，完全负责管理异步 action。</p>
 </blockquote>
@@ -147,7 +161,7 @@ Generators 先行！为了理解 Sagas，我们首先要理解什么是 Generato
 <p>如果一个 Saga 被分配用来处理这个 action — 这个 action 通常就是个异步 action（比如一个对服务端的请求），一旦这个 action 完成后，Saga 会调用另一个 action 让 reducer 进行处理。</p>
 <h2 id="常见用例"><a href="#常见用例" class="headerlink" title="常见用例"></a>常见用例</h2><p>我们可以通过一个常见流程来说明：<br>用户与页面进行交互，这个交互动作会触发一个从服务端请求数据的动作(此时页面显示 loading 提示)，最终我们用请求回来的数据去渲染页面的内容。<br>让我们为每步创建一个 action，然后用 Redux-Saga 实现一个简化的版本如下：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// saga.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; take &#125; <span class="keyword">from</span> <span class="string">'redux-saga/effects'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">mySaga</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">yield</span> take(USER_INTERACTED_WITH_UI_ACTION);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这个 Saga 的函数名叫做 <code>mySaga</code>。它调用了 Redux-Saga <a href="https://link.juejin.im/?target=https%3A%2F%2Fredux-saga.js.org%2Fdocs%2Fapi%2F%23effect-creators" target="_blank" rel="noopener">effect</a> 的 <code>take</code> 方法，这个方法会阻塞 Saga 的执行，直到有人调用了作为参数的那个 action，Saga 的执行也会结束，就像我们前面看到的 Generator 一样（done 变为 true）。</p>
+<p>这个 Saga 的函数名叫做 <code>mySaga</code>。它调用了 Redux-Saga <a href="https://link.juejin.im/?target=https%3A%2F%2Fredux-saga.js.org%2Fdocs%2Fapi%2F%23effect-creators">effect</a> 的 <code>take</code> 方法，这个方法会阻塞 Saga 的执行，直到有人调用了作为参数的那个 action，Saga 的执行也会结束，就像我们前面看到的 Generator 一样（done 变为 true）。</p>
 <p>现在我们要让页面展示 loading 提示来响应这个 action。可以通过 <code>put</code> 方法调用另一个 action，然后分配 reducer 来处理，从而完成上述功能。如下：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// saga.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; take, put &#125; <span class="keyword">from</span> <span class="string">'redux-saga/effects'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">mySaga</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">yield</span> take(USER_INTERACTED_WITH_UI_ACTION);</span><br><span class="line">    <span class="keyword">yield</span> put(SHOW_LOADING_ACTION, &#123;<span class="attr">isLoading</span>: <span class="literal">true</span>&#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// reducer.js</span></span><br><span class="line">...</span><br><span class="line"><span class="keyword">case</span> SHOW_LOADING_ACTION: <span class="function">(<span class="params">state, isLoading</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;, state, &#123;<span class="attr">showLoading</span>: isLoading&#125;);</span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 <p>下一步是调用 <code>call</code> 方法，它接收一个函数和一组参数，使用这些参数来执行这个函数。我们给 <code>call</code> 方法传递一个请求服务端并返回一个 Promise 的 <code>GET</code> 函数，它会保存请求结果：</p>
@@ -312,39 +326,69 @@ Generators 先行！为了理解 Sagas，我们首先要理解什么是 Generato
 
 
 
-    <link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
-    <script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="/js/plugin.js"></script>
 <script src="/js/obsidian.js"></script>
 <script src="/js/jquery.truncate.js"></script>
 <script src="/js/search.js"></script>
+
+
 <script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
 <script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
 <script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
 
 <script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
 
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
 
 
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
 
-    <script src="/js/busuanzi.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
     <script>
         $(document).ready(function () {
             if ($('span[id^="busuanzi_"]').length) {
@@ -354,10 +398,14 @@ Generators 先行！为了理解 Sagas，我们首先要理解什么是 Generato
     </script>
 
 
+
 <link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
 <link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
 <script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
 <script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
 
 <!-- Root element of PhotoSwipe. Must have class pswp. -->
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">

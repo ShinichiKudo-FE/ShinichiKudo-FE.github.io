@@ -15,14 +15,28 @@
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
     <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
-    <link rel="stylesheet" href="/css/obsidian.css">
-    <link rel="stylesheet" href="/css/ball-atom.min.css">
-</head>
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
 
 
 <body class="loading">
@@ -78,7 +92,7 @@
                 
                 March 27, 2018
             </p>
-            <h3 class="post-title animated fadeInDown"><a href="/2018/03/27/React/React-源码分析-6-React合成事件系统/" title="React 源码分析 6 React合成事件系统">React 源码分析 6 React合成事件系统</a>
+            <h3 class="post-title animated fadeInDown"><a href="/2018/03/27/React/React-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-6-React%E5%90%88%E6%88%90%E4%BA%8B%E4%BB%B6%E7%B3%BB%E7%BB%9F/" title="React 源码分析 6 React合成事件系统" class="">React 源码分析 6 React合成事件系统</a>
             </h3>
             
             <p class="post-count animated fadeInDown">
@@ -104,7 +118,7 @@
             </p>
             
             
-            <ul class="animated fadeInDown post-tags-list"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/React/">React</a></li></ul>
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/React/" rel="tag">React</a></li></ul>
             
         </div>
     </div>
@@ -158,7 +172,7 @@
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">trapBubbledEvent: <span class="function"><span class="keyword">function</span> (<span class="params">topLevelType, handlerBaseName, element</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!element) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> EventListener.listen(</span><br><span class="line">      element,   <span class="comment">// 绑定到的DOM目标,也就是document</span></span><br><span class="line">      handlerBaseName,   <span class="comment">// eventType</span></span><br><span class="line">      ReactEventListener.dispatchEvent.bind(<span class="literal">null</span>, topLevelType));  <span class="comment">// callback, document上的原生事件触发后回调</span></span><br><span class="line">  &#125;,</span><br><span class="line">    </span><br><span class="line">  listen: <span class="function"><span class="keyword">function</span> <span class="title">listen</span>(<span class="params">target, eventType, callback</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (target.addEventListener) &#123;</span><br><span class="line">      <span class="comment">// 将原生事件添加到target这个dom上,也就是document上。</span></span><br><span class="line">      <span class="comment">// 这就是只有document这个DOM节点上有原生事件的原因</span></span><br><span class="line">      target.addEventListener(eventType, callback, <span class="literal">false</span>);</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="comment">// 删除事件,这个由React自己回调,不需要调用者来销毁。但仅仅对于React合成事件才行</span></span><br><span class="line">        remove: <span class="function"><span class="keyword">function</span> <span class="title">remove</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">          target.removeEventListener(eventType, callback, <span class="literal">false</span>);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (target.attachEvent) &#123;</span><br><span class="line">      <span class="comment">// attach和detach的方式</span></span><br><span class="line">      target.attachEvent(<span class="string">'on'</span> + eventType, callback);</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        remove: <span class="function"><span class="keyword">function</span> <span class="title">remove</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">          target.detachEvent(<span class="string">'on'</span> + eventType, callback);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br></pre></td></tr></table></figure>
 <p>在listen方法中，我们终于发现了熟悉的addEventListener这个原生事件注册方法。只有document节点才会调用这个方法，故仅仅只有document节点上才有DOM事件。这大大简化了DOM事件逻辑，也节约了内存。</p>
 <h1 id="事件存储"><a href="#事件存储" class="headerlink" title="事件存储"></a>事件存储</h1><p>事件存储由EventPluginHub来负责，它的入口在我们上面讲到的enqueuePutListener中的putListener方法，如下</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * EventPluginHub用来存储React事件, 将listener存储到`listenerBank[registrationName][key]`</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * @param &#123;object&#125; inst: 事件源</span></span><br><span class="line"><span class="comment">   * @param &#123;string&#125; listener的名字,比如onClick</span></span><br><span class="line"><span class="comment">   * @param &#123;function&#125; listener的callback</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="comment">//</span></span><br><span class="line">  putListener: <span class="function"><span class="keyword">function</span> (<span class="params">inst, registrationName, listener</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 用来标识注册了事件,比如onClick的React对象。key的格式为'.nodeId', 只用知道它可以标示哪个React对象就可以了</span></span><br><span class="line">    <span class="keyword">var</span> key = getDictionaryKey(inst);</span><br><span class="line">    <span class="keyword">var</span> bankForRegistrationName = listenerBank[registrationName] || (listenerBank[registrationName] = &#123;&#125;);</span><br><span class="line">    <span class="comment">// 将listener事件回调方法存入listenerBank[registrationName][key]中,比如listenerBank['onclick'][nodeId]</span></span><br><span class="line">    <span class="comment">// 所有React组件对象定义的所有React事件都会存储在listenerBank中</span></span><br><span class="line">    bankForRegistrationName[key] = listener;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//onSelect和onClick注册了两个事件回调插件, 用于walkAround某些浏览器兼容bug,不用care</span></span><br><span class="line">    <span class="keyword">var</span> PluginModule = EventPluginRegistry.registrationNameModules[registrationName];</span><br><span class="line">    <span class="keyword">if</span> (PluginModule &amp;&amp; PluginModule.didPutListener) &#123;</span><br><span class="line">      PluginModule.didPutListener(inst, registrationName, listener);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">    </span><br><span class="line"><span class="keyword">var</span> getDictionaryKey = <span class="function"><span class="keyword">function</span> (<span class="params">inst</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">'.'</span> + inst._rootNodeID;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * EventPluginHub用来存储React事件, 将listener存储到`listenerBank[registrationName][key]`</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param <span class="type">&#123;object&#125;</span> </span>inst: 事件源</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param <span class="type">&#123;string&#125;</span> </span>listener的名字,比如onClick</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param <span class="type">&#123;function&#125;</span> </span>listener的callback</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="comment">//</span></span><br><span class="line">  putListener: <span class="function"><span class="keyword">function</span> (<span class="params">inst, registrationName, listener</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 用来标识注册了事件,比如onClick的React对象。key的格式为'.nodeId', 只用知道它可以标示哪个React对象就可以了</span></span><br><span class="line">    <span class="keyword">var</span> key = getDictionaryKey(inst);</span><br><span class="line">    <span class="keyword">var</span> bankForRegistrationName = listenerBank[registrationName] || (listenerBank[registrationName] = &#123;&#125;);</span><br><span class="line">    <span class="comment">// 将listener事件回调方法存入listenerBank[registrationName][key]中,比如listenerBank['onclick'][nodeId]</span></span><br><span class="line">    <span class="comment">// 所有React组件对象定义的所有React事件都会存储在listenerBank中</span></span><br><span class="line">    bankForRegistrationName[key] = listener;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//onSelect和onClick注册了两个事件回调插件, 用于walkAround某些浏览器兼容bug,不用care</span></span><br><span class="line">    <span class="keyword">var</span> PluginModule = EventPluginRegistry.registrationNameModules[registrationName];</span><br><span class="line">    <span class="keyword">if</span> (PluginModule &amp;&amp; PluginModule.didPutListener) &#123;</span><br><span class="line">      PluginModule.didPutListener(inst, registrationName, listener);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">    </span><br><span class="line"><span class="keyword">var</span> getDictionaryKey = <span class="function"><span class="keyword">function</span> (<span class="params">inst</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">'.'</span> + inst._rootNodeID;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>由上可见，事件存储在了listenerBank对象中，它按照事件名和React组件对象进行了二维划分，比如nodeId组件上注册的onClick事件最后存储在listenerBank.onclick[nodeId]中</p>
 <h1 id="事件执行"><a href="#事件执行" class="headerlink" title="事件执行"></a>事件执行</h1><h2 id="事件分发"><a href="#事件分发" class="headerlink" title="事件分发"></a>事件分发</h2><p>当事件触发时，document上addEventListener注册的callback会被回调。从前面事件注册部分发现，此时回调函数为ReactEventListener.dispatchEvent，它是事件分发的入口方法。下面我们来详细分析</p>
 <p><img src="https://pic2.zhimg.com/80/v2-35d1c1174231dd45f3fda05516ed0239_hd.jpg" alt="react3"></p>
@@ -335,39 +349,69 @@
 
 
 
-    <link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
-    <script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="/js/plugin.js"></script>
 <script src="/js/obsidian.js"></script>
 <script src="/js/jquery.truncate.js"></script>
 <script src="/js/search.js"></script>
+
+
 <script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
 <script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
 <script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
 
 <script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
 
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
 
 
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
 
-    <script src="/js/busuanzi.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
     <script>
         $(document).ready(function () {
             if ($('span[id^="busuanzi_"]').length) {
@@ -377,10 +421,14 @@
     </script>
 
 
+
 <link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
 <link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
 <script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
 <script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
 
 <!-- Root element of PhotoSwipe. Must have class pswp. -->
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">

@@ -15,14 +15,28 @@
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
     <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
-    <link rel="stylesheet" href="/css/obsidian.css">
-    <link rel="stylesheet" href="/css/ball-atom.min.css">
-</head>
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
 
 
 <body class="loading">
@@ -78,20 +92,20 @@
                 
                 January 06, 2019
             </p>
-            <h3 class="post-title animated fadeInDown"><a href="/2019/01/06/Vue/Vuex源码解析/" title="Vuex源码解析">Vuex源码解析</a>
+            <h3 class="post-title animated fadeInDown"><a href="/2019/01/06/Vue/Vuex%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" title="Vuex源码解析" class="">Vuex源码解析</a>
             </h3>
             
             <p class="post-count animated fadeInDown">
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    66k
+                    65k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    1:01
+                    59 mins.
                 </span>
                 
                 
@@ -104,7 +118,7 @@
             </p>
             
             
-            <ul class="animated fadeInDown post-tags-list"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Vuex/">Vuex</a></li></ul>
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Vuex/" rel="tag">Vuex</a></li></ul>
             
         </div>
     </div>
@@ -151,9 +165,9 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> globalData = &#123;</span><br><span class="line">    d: <span class="string">'hello world'</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">    data () &#123;</span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            $$state: &#123;</span><br><span class="line">                globalData</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">/* modify */</span></span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    globalData.d = <span class="string">'hi~'</span>;</span><br><span class="line">&#125;, <span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">Vue.prototype.globalData = globalData;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 任意模板中 */</span></span><br><span class="line">&lt;div&gt;&#123;&#123;globalData.d&#125;&#125;&lt;<span class="regexp">/div&gt;</span></span><br></pre></td></tr></table></figure>
 <p>上述代码在全局有一个globalData，它被传入一个Vue对象的data中，之后在任意Vue模板中对该变量进行展示，因为此时globalData已经在Vue的prototype上了所以直接通过this.prototype访问，也就是在模板中的。此时，setTimeout在1s之后将globalData.d进行修改，我们发现模板中的globalData.d发生了变化。其实上述部分就是Vuex依赖Vue核心实现数据的“响应式化”。</p>
 <p>接着来看代码。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 通过vm重设store，新建Vue对象使用Vue内部的响应式实现注册state以及computed */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">resetStoreVM</span> (<span class="params">store, state, hot</span>) </span>&#123;</span><br><span class="line">  <span class="comment">/* 存放之前的vm对象 */</span></span><br><span class="line">  <span class="keyword">const</span> oldVm = store._vm </span><br><span class="line"></span><br><span class="line">  <span class="comment">// bind store public getters</span></span><br><span class="line">  store.getters = &#123;&#125;</span><br><span class="line">  <span class="keyword">const</span> wrappedGetters = store._wrappedGetters</span><br><span class="line">  <span class="keyword">const</span> computed = &#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* 通过Object.defineProperty为每一个getter方法设置get方法，比如获取this.$store.getters.test的时候获取的是store._vm.test，也就是Vue对象的computed属性 */</span></span><br><span class="line">  forEachValue(wrappedGetters, (fn, key) =&gt; &#123;</span><br><span class="line">    <span class="comment">// use computed to leverage its lazy-caching mechanism</span></span><br><span class="line">    computed[key] = <span class="function"><span class="params">()</span> =&gt;</span> fn(store)</span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(store.getters, key, &#123;</span><br><span class="line">      get: <span class="function"><span class="params">()</span> =&gt;</span> store._vm[key],</span><br><span class="line">      enumerable: <span class="literal">true</span> <span class="comment">// for local getters</span></span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// use a Vue instance to store the state tree</span></span><br><span class="line">  <span class="comment">// suppress warnings just in case the user has added</span></span><br><span class="line">  <span class="comment">// some funky global mixins</span></span><br><span class="line">  <span class="keyword">const</span> silent = Vue.config.silent</span><br><span class="line">  <span class="comment">/* Vue.config.silent暂时设置为true的目的是在new一个Vue实例的过程中不会报出一切警告 */</span></span><br><span class="line">  Vue.config.silent = <span class="literal">true</span></span><br><span class="line">  <span class="comment">/*  这里new了一个Vue对象，运用Vue内部的响应式实现注册state以及computed*/</span></span><br><span class="line">  store._vm = <span class="keyword">new</span> Vue(&#123;</span><br><span class="line">    data: &#123;</span><br><span class="line">      $$state: state</span><br><span class="line">    &#125;,</span><br><span class="line">    computed</span><br><span class="line">  &#125;)</span><br><span class="line">  Vue.config.silent = silent</span><br><span class="line"></span><br><span class="line">  <span class="comment">// enable strict mode for new vm</span></span><br><span class="line">  <span class="comment">/* 使能严格模式，保证修改store只能通过mutation */</span></span><br><span class="line">  <span class="keyword">if</span> (store.strict) &#123;</span><br><span class="line">    enableStrictMode(store)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (oldVm) &#123;</span><br><span class="line">    <span class="comment">/* 解除旧vm的state的引用，以及销毁旧的Vue对象 */</span></span><br><span class="line">    <span class="keyword">if</span> (hot) &#123;</span><br><span class="line">      <span class="comment">// dispatch changes in all subscribed watchers</span></span><br><span class="line">      <span class="comment">// to force getter re-evaluation for hot reloading.</span></span><br><span class="line">      store._withCommit(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        oldVm._data.$$state = <span class="literal">null</span></span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">    Vue.nextTick(<span class="function"><span class="params">()</span> =&gt;</span> oldVm.$destroy())</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 通过vm重设store，新建Vue对象使用Vue内部的响应式实现注册state以及computed */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">resetStoreVM</span> (<span class="params">store, state, hot</span>) </span>&#123;</span><br><span class="line">  <span class="comment">/* 存放之前的vm对象 */</span></span><br><span class="line">  <span class="keyword">const</span> oldVm = store._vm </span><br><span class="line"></span><br><span class="line">  <span class="comment">// bind store public getters</span></span><br><span class="line">  store.getters = &#123;&#125;</span><br><span class="line">  <span class="keyword">const</span> wrappedGetters = store._wrappedGetters</span><br><span class="line">  <span class="keyword">const</span> computed = &#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* 通过Object.defineProperty为每一个getter方法设置get方法，比如获取this.$store.getters.test的时候获取的是store._vm.test，也就是Vue对象的computed属性 */</span></span><br><span class="line">  forEachValue(wrappedGetters, (fn, key) =&gt; &#123;</span><br><span class="line">    <span class="comment">// use computed to leverage its lazy-caching mechanism</span></span><br><span class="line">    computed[key] = <span class="function"><span class="params">()</span> =&gt;</span> fn(store)</span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(store.getters, key, &#123;</span><br><span class="line">      <span class="keyword">get</span>: () =&gt; store._vm[key],</span><br><span class="line">      enumerable: true // for local getters</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  // use a Vue instance to store the state tree</span><br><span class="line">  // suppress warnings just in case the user has added</span><br><span class="line">  // some funky global mixins</span><br><span class="line">  const silent = Vue.config.silent</span><br><span class="line">  /* Vue.config.silent暂时设置为true的目的是在new一个Vue实例的过程中不会报出一切警告 */</span><br><span class="line">  Vue.config.silent = true</span><br><span class="line">  /*  这里new了一个Vue对象，运用Vue内部的响应式实现注册state以及computed*/</span><br><span class="line">  store._vm = new Vue(&#123;</span><br><span class="line">    data: &#123;</span><br><span class="line">      $$state: state</span><br><span class="line">    &#125;,</span><br><span class="line">    computed</span><br><span class="line">  &#125;)</span><br><span class="line">  Vue.config.silent = silent</span><br><span class="line"></span><br><span class="line">  <span class="comment">// enable strict mode for new vm</span></span><br><span class="line">  <span class="comment">/* 使能严格模式，保证修改store只能通过mutation */</span></span><br><span class="line">  <span class="keyword">if</span> (store.strict) &#123;</span><br><span class="line">    enableStrictMode(store)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (oldVm) &#123;</span><br><span class="line">    <span class="comment">/* 解除旧vm的state的引用，以及销毁旧的Vue对象 */</span></span><br><span class="line">    <span class="keyword">if</span> (hot) &#123;</span><br><span class="line">      <span class="comment">// dispatch changes in all subscribed watchers</span></span><br><span class="line">      <span class="comment">// to force getter re-evaluation for hot reloading.</span></span><br><span class="line">      store._withCommit(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        oldVm._data.$$state = <span class="literal">null</span></span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">    Vue.nextTick(<span class="function"><span class="params">()</span> =&gt;</span> oldVm.$destroy())</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>resetStoreVM首先会遍历wrappedGetters，使用Object.defineProperty方法为每一个getter绑定上get方法，这样我们就可以在组件里访问this.$store.getter.test就等同于访问store._vm.test。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">forEachValue(wrappedGetters, (fn, key) =&gt; &#123;</span><br><span class="line">  <span class="comment">// use computed to leverage its lazy-caching mechanism</span></span><br><span class="line">  computed[key] = <span class="function"><span class="params">()</span> =&gt;</span> fn(store)</span><br><span class="line">  <span class="built_in">Object</span>.defineProperty(store.getters, key, &#123;</span><br><span class="line">    get: <span class="function"><span class="params">()</span> =&gt;</span> store._vm[key],</span><br><span class="line">    enumerable: <span class="literal">true</span> <span class="comment">// for local getters</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">forEachValue(wrappedGetters, (fn, key) =&gt; &#123;</span><br><span class="line">  <span class="comment">// use computed to leverage its lazy-caching mechanism</span></span><br><span class="line">  computed[key] = <span class="function"><span class="params">()</span> =&gt;</span> fn(store)</span><br><span class="line">  <span class="built_in">Object</span>.defineProperty(store.getters, key, &#123;</span><br><span class="line">    <span class="keyword">get</span>: () =&gt; store._vm[key],</span><br><span class="line">    enumerable: true // for local getters</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 <p>之后Vuex采用了new一个Vue对象来实现数据的“响应式化”，运用Vue.js内部提供的数据双向绑定功能来实现store的数据与视图的同步更新。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">store._vm = <span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  data: &#123;</span><br><span class="line">    $$state: state</span><br><span class="line">  &#125;,</span><br><span class="line">  computed</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 <p>这时候我们访问store._vm.test也就访问了Vue实例中的属性。</p>
@@ -338,39 +352,69 @@
 
 
 
-    <link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
-    <script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="/js/plugin.js"></script>
 <script src="/js/obsidian.js"></script>
 <script src="/js/jquery.truncate.js"></script>
 <script src="/js/search.js"></script>
+
+
 <script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
 <script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
 <script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
 
 <script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
 
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
 
 
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
 
-    <script src="/js/busuanzi.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
     <script>
         $(document).ready(function () {
             if ($('span[id^="busuanzi_"]').length) {
@@ -380,10 +424,14 @@
     </script>
 
 
+
 <link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
 <link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
 <script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
 <script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
 
 <!-- Root element of PhotoSwipe. Must have class pswp. -->
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">

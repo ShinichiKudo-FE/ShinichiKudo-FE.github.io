@@ -19,14 +19,28 @@
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
     <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
-    <link rel="stylesheet" href="/css/obsidian.css">
-    <link rel="stylesheet" href="/css/ball-atom.min.css">
-</head>
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
 
 
 <body class="loading">
@@ -82,14 +96,14 @@
                 
                 August 01, 2019
             </p>
-            <h3 class="post-title animated fadeInDown"><a href="/2019/08/01/Js/JavaScript异步编程回调地狱的一些解决方案/" title="JavaScript异步编程回调地狱的一些解决方案">JavaScript异步编程回调地狱的一些解决方案</a>
+            <h3 class="post-title animated fadeInDown"><a href="/2019/08/01/Js/JavaScript%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E5%9B%9E%E8%B0%83%E5%9C%B0%E7%8B%B1%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" title="JavaScript异步编程回调地狱的一些解决方案" class="">JavaScript异步编程回调地狱的一些解决方案</a>
             </h3>
             
             <p class="post-count animated fadeInDown">
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    26k
+                    27k
                 </span>
                 
                 
@@ -108,7 +122,7 @@
             </p>
             
             
-            <ul class="animated fadeInDown post-tags-list"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Js/">Js</a></li></ul>
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Js/" rel="tag">Js</a></li></ul>
             
         </div>
     </div>
@@ -137,7 +151,7 @@
 <p>上面就是典型的回调函数，不论是在浏览器中，还是在node中，JavaScript本身是单线程，因此，为了应对一些单线程带来的问题，异步编程成为了JavaScript中非常重要的一部分。</p>
 <p>不论是浏览器中最为常见的<strong>ajax、事件监听，还是node中文件读取、网络编程、数据库等操作</strong>，都离不开异步编程。在异步编程中，许多操作都会放<strong>在回调函数（callback）</strong>中。同步与异步的混杂、过多的回调嵌套都会使得代码变得难以理解与维护，这也是常受人诟病的地方。</p>
 <p>先看下面这段代码</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">fs.readFile(<span class="string">'./sample.txt'</span>, <span class="string">'utf-8'</span>, (err, content) =&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> keyword = content.substring(<span class="number">0</span>, <span class="number">5</span>);</span><br><span class="line">    db.find(<span class="string">`select * from sample where kw = <span class="subst">$&#123;keyword&#125;</span>`</span>, (err, res) =&gt; &#123;</span><br><span class="line">        get(<span class="string">`/sampleget?count=<span class="subst">$&#123;res.length&#125;</span>`</span>, data =&gt; &#123;</span><br><span class="line">           <span class="built_in">console</span>.log(data);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">fs.readFile(<span class="string">'./sample.txt'</span>, <span class="string">'utf-8'</span>, (err, content) =&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> keyword = content.substring(<span class="number">0</span>, <span class="number">5</span>);</span><br><span class="line">    db.find(<span class="string">`select * from sample where kw = <span class="subst">$&#123;keyword&#125;</span>`</span>, (err, res) =&gt; &#123;</span><br><span class="line">        <span class="keyword">get</span>(`/sampleget?count=$&#123;res.length&#125;<span class="string">`, data =&gt; &#123;</span></span><br><span class="line"><span class="string">           console.log(data);</span></span><br><span class="line"><span class="string">        &#125;);</span></span><br><span class="line"><span class="string">    &#125;);</span></span><br><span class="line"><span class="string">&#125;);</span></span><br></pre></td></tr></table></figure>
 <p>首先我们读取的一个文件中的关键字keyword，然后根据该keyword进行数据库查询，最后依据查询结果请求数据。</p>
 <ul>
 <li>文件读取：fs.readFile</li>
@@ -149,10 +163,10 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">asyncFunc1(opt, (...args1) =&gt; &#123;</span><br><span class="line">    asyncFunc2(opt, (...args2) =&gt; &#123;</span><br><span class="line">        asyncFunc3(opt, (...args3) =&gt; &#123;</span><br><span class="line">            asyncFunc4(opt, (...args4) =&gt; &#123;</span><br><span class="line">                <span class="comment">// some operation</span></span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <p>左侧明显出现了一个三角形的缩进区域，过多的回调也就让我们陷入<code>“回调地狱”</code>。接下来会介绍一些方法来规避回调地狱。</p>
 <h2 id="一、拆解function"><a href="#一、拆解function" class="headerlink" title="一、拆解function"></a>一、拆解function</h2><p>回调嵌套所带来的一个重要问题就是代码不易阅读与维护。因为普遍来说，过多的缩进（嵌套）会极大的影响代码的可读性。基于这一点，可以进行一个最简单的优化——将各步拆解为单个的<code>function</code></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getData</span>(<span class="params">count</span>) </span>&#123;</span><br><span class="line">    get(<span class="string">`/sampleget?count=<span class="subst">$&#123;count&#125;</span>`</span>, data =&gt; &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(data);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">queryDB</span>(<span class="params">kw</span>) </span>&#123;</span><br><span class="line">    db.find(<span class="string">`select * from sample where kw = <span class="subst">$&#123;kw&#125;</span>`</span>, (err, res) =&gt; &#123;</span><br><span class="line">        getData(res.length);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">readFile</span>(<span class="params">filepath</span>) </span>&#123;</span><br><span class="line">    fs.readFile(filepath, <span class="string">'utf-8'</span>, (err, content) =&gt; &#123;</span><br><span class="line">        <span class="keyword">let</span> keyword = content.substring(<span class="number">0</span>, <span class="number">5</span>);</span><br><span class="line">        queryDB(keyword);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">readFile(<span class="string">'./sample.txt'</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getData</span>(<span class="params">count</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">get</span>(`/sampleget?count=$&#123;count&#125;<span class="string">`, data =&gt; &#123;</span></span><br><span class="line"><span class="string">        console.log(data);</span></span><br><span class="line"><span class="string">    &#125;);</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">function queryDB(kw) &#123;</span></span><br><span class="line"><span class="string">    db.find(`</span>select * <span class="keyword">from</span> sample where kw = $&#123;kw&#125;<span class="string">`, (err, res) =&gt; &#123;</span></span><br><span class="line"><span class="string">        getData(res.length);</span></span><br><span class="line"><span class="string">    &#125;);</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">function readFile(filepath) &#123;</span></span><br><span class="line"><span class="string">    fs.readFile(filepath, 'utf-8', (err, content) =&gt; &#123;</span></span><br><span class="line"><span class="string">        let keyword = content.substring(0, 5);</span></span><br><span class="line"><span class="string">        queryDB(keyword);</span></span><br><span class="line"><span class="string">    &#125;);</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">readFile('./sample.txt');</span></span><br></pre></td></tr></table></figure>
 <p>可以看到，通过上面的改写方式，代码清晰了许多。该方法非常简单，具有一定的效果，但是缺少通用性。</p>
 <h2 id="二、事件发布-监听模式"><a href="#二、事件发布-监听模式" class="headerlink" title="二、事件发布/监听模式"></a>二、事件发布/监听模式</h2><p>如果在浏览器中写过事件监听<code>addEventListener</code>，那么你对这种事件发布/监听的模式一定不陌生。</p>
-<p>借鉴这种思想，一方面，我们可以监听某一事件，当事件发生时，进行相应回调操作；另一方面，当某些操作完成后，通过发布事件触发回调。这样就可以将原本捆绑在一起的代码解耦。<br><a id="more"></a><br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> events = <span class="built_in">require</span>(<span class="string">'events'</span>);</span><br><span class="line"><span class="keyword">const</span> eventEmitter = <span class="keyword">new</span> events.EventEmitter();</span><br><span class="line"></span><br><span class="line">eventEmitter.on(<span class="string">'db'</span>, (err, kw) =&gt; &#123;</span><br><span class="line">    db.find(<span class="string">`select * from sample where kw = <span class="subst">$&#123;kw&#125;</span>`</span>, (err, res) =&gt; &#123;</span><br><span class="line">        eventEmitter(<span class="string">'get'</span>, res.length);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">eventEmitter.on(<span class="string">'get'</span>, (err, count) =&gt; &#123;</span><br><span class="line">    get(<span class="string">`/sampleget?count=<span class="subst">$&#123;count&#125;</span>`</span>, data =&gt; &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(data);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">fs.readFile(<span class="string">'./sample.txt'</span>, <span class="string">'utf-8'</span>, (err, content) =&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> keyword = content.substring(<span class="number">0</span>, <span class="number">5</span>);</span><br><span class="line">    eventEmitter. emit(<span class="string">'db'</span>, keyword);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>借鉴这种思想，一方面，我们可以监听某一事件，当事件发生时，进行相应回调操作；另一方面，当某些操作完成后，通过发布事件触发回调。这样就可以将原本捆绑在一起的代码解耦。<br><a id="more"></a><br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> events = <span class="built_in">require</span>(<span class="string">'events'</span>);</span><br><span class="line"><span class="keyword">const</span> eventEmitter = <span class="keyword">new</span> events.EventEmitter();</span><br><span class="line"></span><br><span class="line">eventEmitter.on(<span class="string">'db'</span>, (err, kw) =&gt; &#123;</span><br><span class="line">    db.find(<span class="string">`select * from sample where kw = <span class="subst">$&#123;kw&#125;</span>`</span>, (err, res) =&gt; &#123;</span><br><span class="line">        eventEmitter(<span class="string">'get'</span>, res.length);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">eventEmitter.on(<span class="string">'get'</span>, (err, count) =&gt; &#123;</span><br><span class="line">    <span class="keyword">get</span>(`/sampleget?count=$&#123;count&#125;<span class="string">`, data =&gt; &#123;</span></span><br><span class="line"><span class="string">        console.log(data);</span></span><br><span class="line"><span class="string">    &#125;);</span></span><br><span class="line"><span class="string">&#125;);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">fs.readFile('./sample.txt', 'utf-8', (err, content) =&gt; &#123;</span></span><br><span class="line"><span class="string">    let keyword = content.substring(0, 5);</span></span><br><span class="line"><span class="string">    eventEmitter. emit('db', keyword);</span></span><br><span class="line"><span class="string">&#125;);</span></span><br></pre></td></tr></table></figure></p>
 <p>使用这种模式的实现需要一个事件发布/监听的库。上面代码中使用node原生的events模块，当然你可以使用任何你喜欢的库。</p>
 <h2 id="三、Promise"><a href="#三、Promise" class="headerlink" title="三、Promise"></a>三、Promise</h2><p><code>Promise</code>是一种异步解决方案，最早由社区提出并实现，后来写进了es6规范。</p>
 <p>目前一些主流的浏览器已经原生实现了Promise的API，可以在Can I use里查看浏览器的支持情况。当然，如果想要做浏览器的兼容，可以考虑使用一些<code>Promise</code>的实现库，例如bluebird、 Q等。下面以bluebird为例：</p>
@@ -263,7 +277,7 @@
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一、拆解function"><span class="toc-number">1.</span> <span class="toc-text">一、拆解function</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二、事件发布-监听模式"><span class="toc-number">2.</span> <span class="toc-text">二、事件发布/监听模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三、Promise"><span class="toc-number">3.</span> <span class="toc-text">三、Promise</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#四、generator"><span class="toc-number">4.</span> <span class="toc-text">四、generator</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后记"><span class="toc-number">5.</span> <span class="toc-text">后记</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一、拆解function"><span class="toc-number">1.</span> <span class="toc-text">一、拆解function</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二、事件发布-监听模式"><span class="toc-number">2.</span> <span class="toc-text">二、事件发布&#x2F;监听模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三、Promise"><span class="toc-number">3.</span> <span class="toc-text">三、Promise</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#四、generator"><span class="toc-number">4.</span> <span class="toc-text">四、generator</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后记"><span class="toc-number">5.</span> <span class="toc-text">后记</span></a></li></ol>
                 </div>
             </div>
             
@@ -353,39 +367,69 @@
 
 
 
-    <link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
-    <script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="/js/plugin.js"></script>
 <script src="/js/obsidian.js"></script>
 <script src="/js/jquery.truncate.js"></script>
 <script src="/js/search.js"></script>
+
+
 <script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
 <script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
 <script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
 
 <script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
 
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
-
-    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
 
 
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
 
-    <script src="/js/busuanzi.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
     <script>
         $(document).ready(function () {
             if ($('span[id^="busuanzi_"]').length) {
@@ -395,10 +439,14 @@
     </script>
 
 
+
 <link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
 <link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
 <script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
 <script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
 
 <!-- Root element of PhotoSwipe. Must have class pswp. -->
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
