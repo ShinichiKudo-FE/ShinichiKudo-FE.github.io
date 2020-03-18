@@ -86,13 +86,13 @@ websocket是什么样的协议，有什么与优点？首先websocket是一个�
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    3.2k
+                    1.6k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    3 mins.
+                    1 mins.
                 </span>
                 
                 
@@ -129,11 +129,29 @@ websocket是什么样的协议，有什么与优点？首先websocket是一个�
             <h1 id="websocket"><a href="#websocket" class="headerlink" title="websocket"></a>websocket</h1><p>websocket是HTML5出的协议，他是一个持久化的协议。</p>
 <h2 id="websocket是什么样的协议，有什么与优点？"><a href="#websocket是什么样的协议，有什么与优点？" class="headerlink" title="websocket是什么样的协议，有什么与优点？"></a>websocket是什么样的协议，有什么与优点？</h2><p>首先websocket是一个持久化的协议，在HTTP中一个request只能有一个response,而且这个response也是被动的，不能主动发起。</p>
 <p>下面是用websocket请求的header头</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">GET /chat HTTP/<span class="number">1.1</span></span><br><span class="line">Host: server.example.com</span><br><span class="line"></span><br><span class="line"><span class="comment">//告知服务器是使用websocket的协议</span></span><br><span class="line">Upgrade: websocket   </span><br><span class="line">Connection: Upgrade</span><br><span class="line"></span><br><span class="line">Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw== <span class="comment">//是一个Base64 encode的值，这个是浏览器随机生成的，验证服务器</span></span><br><span class="line">Sec-WebSocket-Protocol: chat, superchat  <span class="comment">// 是一个用户定义的字符串，用来区分同URL下，不同的服务所需要的协议</span></span><br><span class="line">Sec-WebSocket-Version: <span class="number">13</span> <span class="comment">//  是告诉服务器所使用的Websocket Draft（协议版本）</span></span><br><span class="line">Origin: http:<span class="comment">//example.com</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">GET /chat HTTP/1.1
+Host: server.example.com
+
+//告知服务器是使用websocket的协议
+Upgrade: websocket   
+Connection: Upgrade
+
+Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw== //是一个Base64 encode的值，这个是浏览器随机生成的，验证服务器
+Sec-WebSocket-Protocol: chat, superchat  // 是一个用户定义的字符串，用来区分同URL下，不同的服务所需要的协议
+Sec-WebSocket-Version: 13 //  是告诉服务器所使用的Websocket Draft（协议版本）
+Origin: http://example.com
+</code></pre>
 <p>下面是服务器的返回头</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">HTTP/<span class="number">1.1</span> <span class="number">101</span> Switching Protocols</span><br><span class="line">Upgrade: websocket</span><br><span class="line">Connection: Upgrade</span><br><span class="line">Sec-WebSocket-Accept: HSmrc0sMlYUkAGmm5OPpG2HaGWk=</span><br><span class="line">Sec-WebSocket-Protocol: chat</span><br></pre></td></tr></table></figure>
+<pre><code class="js">HTTP/1.1 101 Switching Protocols
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Accept: HSmrc0sMlYUkAGmm5OPpG2HaGWk=
+Sec-WebSocket-Protocol: chat
+</code></pre>
 <p>下面是HTTP告诉客户端，已经切换协议了</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Upgrade: websocket</span><br><span class="line">Connection: Upgrade</span><br></pre></td></tr></table></figure>
+<pre><code class="js">Upgrade: websocket
+Connection: Upgrade
+</code></pre>
 <a id="more"></a>
 <p>##　websocket的作用</p>
 <p>ajax轮询的原理很简单，每隔几秒发送一次请求，询问服务器是否有信息。</p>
@@ -166,7 +184,7 @@ websocket是什么样的协议，有什么与优点？首先websocket是一个�
         data-o='TriDiamond'
         data-a='TriDiamond'
         data-d='undefined'
-    >Comments</div>
+    >Commentaires</div>
 
 
             
@@ -189,8 +207,8 @@ websocket是什么样的协议，有什么与优点？首先websocket是一个�
                 </div>
                 <ul>
                     <li><a href="/">147 <p>Articles</p></a></li>
-                    <li><a href="/categories">23 <p>Categories</p></a></li>
-                    <li><a href="/tags">47 <p>Tags</p></a></li>
+                    <li><a href="/categories">23 <p>Catégories</p></a></li>
+                    <li><a href="/tags">47 <p>Mot-clés</p></a></li>
                 </ul>
             </div>
             
