@@ -1,0 +1,498 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>JavaScript中的“this”是什么？ - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,
+原文：What is “this” in JavaScript?
+
+前言如果你曾使用JavaScript库做过开发，那么你可能已经注意到一个名为 this的特定关键字。虽然 this在JavaSc,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+    <link rel="stylesheet" href="/css/obsidian.css">
+    <link rel="stylesheet" href="/css/ball-atom.min.css">
+</head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://zhanghao-web.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">JavaScript中的“this”是什么？</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/Js"><b>「
+                    </b>JS<b> 」</b></a>
+                
+                August 05, 2018
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2018/08/05/Js/JavaScript中的“this”是什么？/" title="JavaScript中的“this”是什么？">JavaScript中的“this”是什么？</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    17k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    15 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/This/">This</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <blockquote>
+<p>原文：<a href="https://medium.com/m/global-identity?redirectUrl=https%3A%2F%2Fblog.bitsrc.io%2Fwhat-is-this-in-javascript-3b03480514a7" target="_blank" rel="noopener">What is “this” in JavaScript?</a></p>
+</blockquote>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>如果你曾使用JavaScript库做过开发，那么你可能已经注意到一个名为 this的特定关键字。虽然 this在JavaScript中非常常见，但是完全理解this关键字的原理以及在代码中如何使用对相当一部分的开发者来说着实不易。在这篇文章中，我将帮你深入理解 this及其工作机制。<br>在开始之前，请确保已安装 Node。然后，打开命令行终端并运行 node 命令。</p>
+<h2 id="全局环境中的“this”"><a href="#全局环境中的“this”" class="headerlink" title="全局环境中的“this”"></a>全局环境中的“this”</h2><p>this的工作机制理解起来并不是很容易。我们通过将 this置于不同环境下，分别来理解 this是如何工作的。首先看一下 global环境。</p>
+<p>在全局环境中， this相当于全局对象 global。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span> === global;</span><br><span class="line"><span class="literal">true</span>;</span><br></pre></td></tr></table></figure>
+<p>但这只在 <strong>node中才有效。如果我们将相同的代码放在js文件中运行，得到的输出为false</strong>。</p>
+<p>如果想测试效果，可以创建一个名为 index.js的文件，包含以下代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="keyword">this</span> === global);</span><br></pre></td></tr></table></figure>
+<p>然后使用 node命令运行此文件：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ node index.js</span><br><span class="line"><span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<p>原因是在JavaScript文件中， this等同于 <code>module.exports</code>而不是 global 。</p>
+<h2 id="函数中的“this”"><a href="#函数中的“this”" class="headerlink" title="函数中的“this”"></a>函数中的“this”</h2><p>函数中的 this值通常是由函数的调用方来定义。因此，每次执行函数，函数内的 this值可能都不一样。</p>
+<p>在 index.js文件中，编写一个非常简单的函数，来检查 this是否等于global对象。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">rajat</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span> === global)</span><br><span class="line">&#125;</span><br><span class="line">rajat()</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>如果我们使用 node运行此代码，得到的输出为 true 。如果在文件的顶部添加 “use strict”，并再次运行它，将会得到一个 false输出，因为现在的 this值为 undefined 。<br>为了进一步解释这一点，让我们创建一个简单的函数来定义超级英雄的真实姓名和英雄名字</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Hero</span>(<span class="params">heroName, realName</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.realName = realName;</span><br><span class="line">  <span class="keyword">this</span>.heroName = heroName;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> superman= Hero(<span class="string">"Superman"</span>, <span class="string">"Clark Kent"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(superman);</span><br></pre></td></tr></table></figure>
+<p>请注意，这个函数并不是以<code>严格模式</code>编写的。 node运行此代码，并不会得到我们预期的“Superman”和“Clark Kent”，但它只会给我们一个 undefined 。</p>
+<p>背后的原因是，<strong>由于函数不是以严格模式编写的， this指向global对象</strong>。<br>如果在<code>严格模式</code>下运行此代码，我们会收到报错，因为JavaScript不允许将属性 realName和 heroName赋给 undefined 。其实这是一件好事，因为它阻止我们创建全局变量。</p>
+<p>另外，以大写形式书写函数名意味着我们需要将它视为构造函数，使用 new运算符来调用。用下面的代码替换上面代码段的最后两行</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">onst superman = <span class="keyword">new</span> Hero(<span class="string">"Superman"</span>, <span class="string">"Clark Kent"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(superman);</span><br></pre></td></tr></table></figure>
+<p>再次运行 node index.js命令，现在会得到你预期的输出。</p>
+<h2 id="构造函数中的“this”"><a href="#构造函数中的“this”" class="headerlink" title="构造函数中的“this”"></a>构造函数中的“this”</h2><p>JavaScript没有特定的构造函数。我们所能做的就是使用 new运算符将函数调用转换为构造函数调用，如上一节所示。<br>构造函数被调用时，会创建一个新对象并将其设置为函数的 this参数。构造函数会隐式的返回这个对象，除非我们明确的返回了另外一个对象。<br>在 hero函数内部添加下面的 return语句：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> &#123;</span><br><span class="line">  heroName: <span class="string">"Batman"</span>,</span><br><span class="line">  realName: <span class="string">"Bruce Wayne"</span>,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>如果我们再次运行 node命令，我们会看到 上面的 return语句覆盖了构造函数调用。</p>
+<p>return语句不会覆盖构造函数调用的唯一情形是，<strong>return语句返回的不是一个对象</strong>。在这种情况下，对象将包含原始值。</p>
+<h2 id="方法中的“this”"><a href="#方法中的“this”" class="headerlink" title="方法中的“this”"></a>方法中的“this”</h2><p>当函数作为对象的方法被调用时， this指向的是该对象，也称为函数调用的接收器(receiver)。<br>假设 hero对象有一个 dialogue方法 ，那么 dialogue中的 this值指向 hero本身。此时的 hero也被称为 dialogue方法调用的接收者。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> hero = &#123;</span><br><span class="line">  heroName: <span class="string">"Batman"</span>,</span><br><span class="line">  dialogue() &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`I am <span class="subst">$&#123;<span class="keyword">this</span>.heroName&#125;</span>!`</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">hero.dialogue();</span><br></pre></td></tr></table></figure>
+<p>这个例子非常简单，但在实际情况中，我们的方法很难跟踪接收器。在 index.js的末尾添加以下代码段。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> saying = hero.dialogue;</span><br><span class="line">saying();</span><br></pre></td></tr></table></figure>
+<p>如果我将 dialogue的引用存储在另一个变量中，并将该变量作为函数调用。 node运行代码 ， this将返回 undefined ，因为该方法已经丢失了接收器。 this此时指向 global ，而不是 hero 。</p>
+<p>当我们将一个方法作为回调传递给另一个方法时，通常会丢失接收器。我们可以通过添加包装函数或使用 <code>bind</code>方法将 this与特定对象绑定来解决这个问题。</p>
+<h2 id="call-和-apply"><a href="#call-和-apply" class="headerlink" title="call() 和 apply()"></a>call() 和 apply()</h2><p>虽然函数的 this值是隐式设置的，我们在调用函数时也可以使用 call()和 apply()明确设置 this参数。</p>
+<p>我们重构一下前面章节的代码片段，如下所示：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dialogue</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log (<span class="string">`I am <span class="subst">$&#123;<span class="keyword">this</span>.heroName&#125;</span>`</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> hero = &#123;</span><br><span class="line">  heroName: <span class="string">'Batman'</span>,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>如果要将 hero对象作为 dialogue函数的接收器，我们可以这样使用 call()或 apply() ：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dialogue.call(hero)</span><br><span class="line"><span class="comment">// or</span></span><br><span class="line">dialogue.apply(hero)</span><br></pre></td></tr></table></figure>
+<p>如果你是在非严格模式下使用 call或 apply ，JavaScript引擎会忽略传递给 call或 apply的 null或 undefined （译者注：被替换为global）。这也是为什么建议始终以严格模式编写代码的原因之一。</p>
+<h2 id="bind"><a href="#bind" class="headerlink" title="bind()"></a>bind()</h2><p>当我们将一个方法作为回调函数传递给另一个函数时，总是存在丢失方法的原有接收器的风险，使得 this参数指向全局对象。</p>
+<p><code>bind()</code>方法可以将 this参数固定的绑定到一个值上。下面的代码片段， bind会创建一个新的 dialogue函数，并将 this值设置为 hero 。（译者注：<code>bind()</code>方法会创建一个新函数，称为绑定函数-bound function-BF，当调用这个绑定函数时，绑定函数会以创建它时传入 <code>bind()</code>方法的第一个参数作为 this，传入 <code>bind()</code>方法的第二个以及以后的参数加上绑定函数运行时本身的参数按照顺序作为原函数的参数来调用原函数。）</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> hero = &#123;</span><br><span class="line">  heroName: <span class="string">"Batman"</span>,</span><br><span class="line">  dialogue() &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`I am <span class="subst">$&#123;<span class="keyword">this</span>.heroName&#125;</span>`</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">setTimeOut(hero.dialogue.bind(hero), <span class="number">1000</span>);</span><br></pre></td></tr></table></figure>
+<p>这样的话，即使使用 call或 apply方法也无法改变 this的值 。</p>
+<h2 id="箭头函数中的“this”"><a href="#箭头函数中的“this”" class="headerlink" title="箭头函数中的“this”"></a>箭头函数中的“this”</h2><p>箭头函数内的 this与其他类型的JavaScript函数有很大的不同。An arrow function uses the this value from its enclosing execution context, since it does have one of its own.</p>
+<p>箭头函数会<strong>永久地捕获 this值，阻止 apply或 call后续更改它</strong>。</p>
+<p>为了解释箭头函数中的 this是如何工作的，我们来写一个箭头函数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> batman = <span class="keyword">this</span>;</span><br><span class="line"><span class="keyword">const</span> bruce = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span> === batman);</span><br><span class="line">&#125;;</span><br><span class="line">bruce(); <span class="comment">//  true</span></span><br></pre></td></tr></table></figure>
+<p>这里，我们将 this值存储在变量中，然后将该值与箭头函数内的 this值进行比较。在终端中运行 node index.js，输出应该为 true 。</p>
+<p>箭头函数内的 this值无法明确设置。此外，使用 call 、 apply或 bind等方法给 this传值，箭头函数会忽略。<strong>箭头函数引用的是箭头函数在创建时设置的 this值</strong>。（译者注：<strong>箭头函数中没有this绑定，必须通过查找作用域链来决定它的值，如果箭头函数被非箭头函数包裹，那么this值由外围最近一层非箭头函数决定，否则为undefined。</strong>）</p>
+<p>箭头函数也不能用作构造函数。因此，我们也不能在箭头函数内给 this设置属性。</p>
+<p>那么箭头函数对 this 可以做什么呢？</p>
+<p>箭头函数 <strong>可以使我们在回调函数中访问this</strong> 。通过下面的 counter对象来看看如何做到的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> counter = &#123;</span><br><span class="line">  count: <span class="number">0</span>,</span><br><span class="line">  increase() &#123;</span><br><span class="line">    setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(++<span class="keyword">this</span>.count);</span><br><span class="line">    &#125;, <span class="number">1000</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">counter.increase();</span><br></pre></td></tr></table></figure>
+<p>使用 node index.js运行此代码，只会得到一个 NaN的列表。这是因为 this.count已经不是指向 counter对象了。它实际上指向的为 global对象。</p>
+<p>如果想让计数器正常工作，可以使用箭头函数重写它。</p>
+<p>回调函数使用 this与 increase方法绑定， counter现在可以正常工作了。</p>
+<p>注意 ：不要将 <code>++this.count</code> 写成 this.count + 1。后者只会增加count的值一次，每次迭代都会返回相同的值。</p>
+<h2 id="Class中的“this”"><a href="#Class中的“this”" class="headerlink" title="Class中的“this”"></a>Class中的“this”</h2><p>类是JavaScript应用程序中最重要的一部分。让我们看看类中的this有何不同。</p>
+<p>类通常包含一个 constructor ， <strong>this可以指向任何新创建的对象</strong>。</p>
+<p>不过在作为方法时，如果该方法作为普通函数被调用， this也可以指向任何其他值。与方法一样，类也可能失去对接收器的跟踪。</p>
+<p>我们将之前创建的 Hero函数改造为类。该类包含一个构造函数和一个 dialogue()方法。最后，创建一个类的实例并调用 dialogue方法。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Hero</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(heroName) &#123;</span><br><span class="line">    <span class="keyword">this</span>.heroName = heroName;</span><br><span class="line">  &#125;</span><br><span class="line">  dialogue() &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`I am <span class="subst">$&#123;<span class="keyword">this</span>.heroName&#125;</span>`</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> batman = <span class="keyword">new</span> Hero(<span class="string">"Batman"</span>);</span><br><span class="line">batman.dialogue();</span><br></pre></td></tr></table></figure>
+<p>构造函数里的 this指向新创建的 类实例。当我们调用 <code>batman.dialogue()</code>时， dialogue()作为方法被调用， batman是它的接收器。</p>
+<p>但是如果我们将 <code>dialogue()</code>方法的引用存储起来，并稍后将其作为函数调用，我们会丢失该方法的接收器，此时 this参数指向 <code>undefined</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> say = batman.dialogue;</span><br><span class="line">say();</span><br></pre></td></tr></table></figure>
+<p>出现错误的原因是JavaScript 类是隐式的运行在严格模式下的。我们是在没有任何自动绑定的情况下调用 say()函数的。要解决这个问题，我们需要手动使用 bind()将 dialogue()函数与 batman绑定在一起。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> say = batman.dialogue.bind(batman);</span><br><span class="line">say();</span><br></pre></td></tr></table></figure>
+<p>我们也可以在 构造函数方法中做这个绑定。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>我们需要在JavaScript中使用 this ，就像我们需要在英语中使用代词一样。以这两句话为例：</p>
+<blockquote>
+<ul>
+<li>Rajat loves DC Comics.</li>
+<li>Rajat also loves Marvel movies.</li>
+</ul>
+</blockquote>
+<p>我们可以使用代词将这两个句子组合在一起，所以这两句话现在成了：</p>
+<blockquote>
+<ul>
+<li>Rajat loves DC Comics, and he also loves Marvel Comics</li>
+</ul>
+</blockquote>
+<p>这个简短的语法课完美地解释了 this在JavaScript中的重要性。就像代词 he将两个句子连接在一起一样， this可以作为再次引用相同内容的捷径。</p>
+<p><a href="https://juejin.im/post/5b6676e6f265da0fa00a3a12?utm_source=gold_browser_extension#comment" target="_blank" rel="noopener">原文地址</a></p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="https://res.cloudinary.com/tridiamond/image/upload/v1573019751/TriDiamond_logo_ui_xeublz.jpg" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd>
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">147 <p>Articles</p></a></li>
+                    <li><a href="/categories">23 <p>Categories</p></a></li>
+                    <li><a href="/tags">47 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#全局环境中的“this”"><span class="toc-number">1.1.</span> <span class="toc-text">全局环境中的“this”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数中的“this”"><span class="toc-number">1.2.</span> <span class="toc-text">函数中的“this”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#构造函数中的“this”"><span class="toc-number">1.3.</span> <span class="toc-text">构造函数中的“this”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方法中的“this”"><span class="toc-number">1.4.</span> <span class="toc-text">方法中的“this”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#call-和-apply"><span class="toc-number">1.5.</span> <span class="toc-text">call() 和 apply()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bind"><span class="toc-number">1.6.</span> <span class="toc-text">bind()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#箭头函数中的“this”"><span class="toc-number">1.7.</span> <span class="toc-text">箭头函数中的“this”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Class中的“this”"><span class="toc-number">1.8.</span> <span class="toc-text">Class中的“this”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.9.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.3" target="_blank" rel="noopener">v1.4.3</a></small>
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    <link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+    <script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+    <script src="/js/busuanzi.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>

@@ -1,0 +1,534 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>我对React v16.4生命周期的理解 - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,react v16.3生命周期
+react v16.4生命周期
+React v16要废除的三个生命周期函数
+
+componentWillMount
+componentWillReceiveProps,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+    <link rel="stylesheet" href="/css/obsidian.css">
+    <link rel="stylesheet" href="/css/ball-atom.min.css">
+</head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://zhanghao-web.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">我对React v16.4生命周期的理解</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/React"><b>「
+                    </b>REACT<b> 」</b></a>
+                
+                August 13, 2018
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2018/08/13/React/我对React-v16-4生命周期的理解/" title="我对React v16.4生命周期的理解">我对React v16.4生命周期的理解</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    21k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    19 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/React/">React</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <p>react v16.3生命周期<br><img src="http://hexobed.oss-cn-beijing.aliyuncs.com/18-8-13/68110756.jpg" alt="react v16.3"></p>
+<p>react v16.4生命周期<br><img src="http://hexobed.oss-cn-beijing.aliyuncs.com/18-8-13/64176249.jpg" alt="react v16.4"></p>
+<p><strong>React v16要废除的三个生命周期函数</strong></p>
+<ul>
+<li><del>componentWillMount</del></li>
+<li><del>componentWillReceiveProps</del></li>
+<li><del>componentWillUpdate</del></li>
+</ul>
+<blockquote>
+<p>注：目前在16版本中<del>componentWillMount</del>，<del>componentWillReceiveProps</del>，<del>componentWillUpdate</del>并未完全删除这三个生命周期函数，而且新增了<del>UNSAFE_componentWillMount</del>，<del>UNSAFE_componentWillReceiveProps</del>，<del>UNSAFE_componentWillUpdate</del>三个函数，官方计划在17版本完全删除这三个函数，只保留UNSAVE_前缀的三个函数，目的是为了向下兼容，但是对于开发者而言应该尽量避免使用他们，而是使用新增的生命周期函数替代它们</p>
+</blockquote>
+<p><strong>取而代之的生命周期</strong></p>
+<ul>
+<li>static getDerivedStateFromProps</li>
+<li>getSnapshotBeforeUpdate</li>
+</ul>
+<p>我们将React的生命周期分为三个阶段，然后详细讲解每个阶段具体调用了什么函数，这三个阶段是：</p>
+<ul>
+<li>挂载阶段</li>
+<li>更新阶段</li>
+<li>卸载阶段</li>
+</ul>
+<h1 id="挂载阶段"><a href="#挂载阶段" class="headerlink" title="挂载阶段"></a>挂载阶段</h1><a id="more"></a>
+<p>挂载阶段，也可以理解为组件的初始化阶段，就是将我们的组件插入到DOM中，只会发生一次</p>
+<blockquote>
+<p>这个阶段的生命周期函数调用如下</p>
+</blockquote>
+<ul>
+<li>constructor</li>
+<li>getDerviedStateFromProps</li>
+<li><del>componentWillMount/UNSAVE_componentWillMount</del></li>
+<li>render</li>
+<li>componentDidMount</li>
+</ul>
+<h2 id="constructor-NaN"><a href="#constructor-NaN" class="headerlink" title="constructor"></a>constructor</h2><p>组件构造函数，第一个被执行</p>
+<p>如果没有显示定义它，我们会拥有一个默认的构造函数</p>
+<p>如果显示定义了构造函数，我们必须在构造函数第一行执行super(props)，否则我们无法在构造函数里拿到this对象，这些都属于ES6的知识</p>
+<p>在构造函数里我们一般会做两件事：</p>
+<ul>
+<li>初始化state对象</li>
+<li>给自定义方法绑定this</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span></span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(props)&#123;</span><br><span class="line">        <span class="keyword">super</span>(props);</span><br><span class="line">        <span class="keyword">this</span>.state = &#123;</span><br><span class="line">            select,</span><br><span class="line">            height: <span class="string">'atuo'</span>,</span><br><span class="line">            externalClass,</span><br><span class="line">            externalClassText</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.handleClick = <span class="keyword">this</span>.handleClick.bind(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>禁止在构造函数中调用setState，可以直接给state设置初始值</strong></p>
+<h2 id="getDerivedStateFromProps"><a href="#getDerivedStateFromProps" class="headerlink" title="getDerivedStateFromProps"></a>getDerivedStateFromProps</h2><p><code>static getDerivedStateFromProps(nextProps,prevState)</code></p>
+<p>一个静态方法，所以不能在这个函数里面使用this，这个函数有两个参数props和state，分别指接收到的新参数和当前的state对象，这个函数会返回一个对象用来更新当前的state对象，如果不需要更新可以返回null</p>
+<p>该函数会在挂载时，接收到新的props，调用了setState和forceUpdate时被调用</p>
+<p>在React v16.3时只有在挂载时和接收到新的props被调用，据说这是官方的失误，后来修复了</p>
+<p>这个方法就是为了取代之前的<del>componentWillMount、componentWillReceiveProps和componentWillUpdate</del></p>
+<p>当我们接收到新的属性想去修改我们state，可以使用<code>getDerivedStateFromProps</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExampleComponent</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  state = &#123;</span><br><span class="line">    isScrollingDown: <span class="literal">false</span>,</span><br><span class="line">    lastRow: <span class="literal">null</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">static</span> getDerivedStateFromProps(nextProps,prevState)&#123;</span><br><span class="line">      <span class="keyword">if</span>(nextProps.currentRow !== prevState.lastRow)&#123;</span><br><span class="line">          <span class="keyword">return</span> &#123;</span><br><span class="line">            isScrollingDown:</span><br><span class="line">            nextProps.currentRow &gt; prevState.lastRow,</span><br><span class="line">            lastRow: nextProps.currentRow</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="componentWillMount-UNSAFE-componentWillMount"><a href="#componentWillMount-UNSAFE-componentWillMount" class="headerlink" title="componentWillMount/UNSAFE_componentWillMount"></a><del>componentWillMount/UNSAFE_componentWillMount</del></h2><p>在16版本这两个方法并存，但是在17版本中<del>componentWillMount</del>被删除，只保留<del>UNSAFE_componentWillMount</del>，目的是为了做向下兼容，对于新的应用，用<del>getDerivedStateFromProps</del>代替它们<br>由于<del>componentWillMount/ UNSAFE_componentWillMount</del>是在render之前调用，所以就算在这个方法中调用setState也不会触发重新渲染（re-render）</p>
+<h2 id="render"><a href="#render" class="headerlink" title="render"></a>render</h2><p>render方法是react中最核心的方法，一个组件中必须要这个方法：</p>
+<blockquote>
+<p>返回的类型有以下几种</p>
+</blockquote>
+<ul>
+<li>原生DOM，如div</li>
+<li>Fragment（片段）</li>
+<li>React组件</li>
+<li>Portals（插槽）</li>
+<li>字符串和数字，被渲染成text节点</li>
+<li>Boolean和null，不会渲染任何东西</li>
+</ul>
+<blockquote>
+<p>关于Fragment和Portals是React16新增的，如果大家不清楚可以去阅读官方文档，在这里就不展开了</p>
+</blockquote>
+<p>render函数是纯函数，里面只做一件事，就是返回需要渲染的东西，不应该包含其它的业务逻辑，如数据请求，对于这些业务逻辑请移到<code>componentDidMount</code>和<code>componentDidUpdate</code>中</p>
+<h2 id="componentDidMount"><a href="#componentDidMount" class="headerlink" title="componentDidMount"></a>componentDidMount</h2><p>组件卸载之后调用，此时我们可以获取到DOM节点并操作，比如对canvas，svg的操作，服务器请求，订阅都可以写在这个里面，但是记得在<code>componentWillUnmount</code>中取消订阅</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">componentDidMount() &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; progressCanvas, progressSVG &#125; = <span class="keyword">this</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> canvas = progressCanvas.current</span><br><span class="line">    <span class="keyword">const</span> ctx = canvas.getContext(<span class="string">'2d'</span>)</span><br><span class="line">    canvas.width = canvas.getBoundingClientRect().width</span><br><span class="line">    canvas.height = canvas.getBoundingClientRect().height</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> svg = progressSVG.current</span><br><span class="line">    <span class="keyword">const</span> rect = <span class="built_in">document</span>.createElementNS(<span class="string">'http://www.w3.org/2000/svg'</span>, <span class="string">'rect'</span>)</span><br><span class="line">    rect.setAttribute(<span class="string">'x'</span>, <span class="number">0</span>)</span><br><span class="line">    rect.setAttribute(<span class="string">'y'</span>, <span class="number">0</span>)</span><br><span class="line">    rect.setAttribute(<span class="string">'width'</span>, <span class="number">0</span>)</span><br><span class="line">    rect.setAttribute(<span class="string">'height'</span>, svg.getBoundingClientRect().height)</span><br><span class="line">    rect.setAttribute(<span class="string">'style'</span>, <span class="string">'fill:red'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> animate = <span class="built_in">document</span>.createElementNS(<span class="string">'http://www.w3.org/2000/svg'</span>, <span class="string">'animate'</span>)</span><br><span class="line">    animate.setAttribute(<span class="string">'attributeName'</span>, <span class="string">'width'</span>)</span><br><span class="line">    animate.setAttribute(<span class="string">'from'</span>, <span class="number">0</span>)</span><br><span class="line">    animate.setAttribute(<span class="string">'to'</span>, svg.getBoundingClientRect().width)</span><br><span class="line">    animate.setAttribute(<span class="string">'begin'</span>, <span class="string">'0ms'</span>)</span><br><span class="line">    animate.setAttribute(<span class="string">'dur'</span>, <span class="string">'1684ms'</span>)</span><br><span class="line">    animate.setAttribute(<span class="string">'repeatCount'</span>, <span class="string">'indefinite'</span>)</span><br><span class="line">    animate.setAttribute(<span class="string">'calcMode'</span>, <span class="string">'linear'</span>)</span><br><span class="line">    rect.appendChild(animate)</span><br><span class="line">    svg.appendChild(rect)</span><br><span class="line">    svg.pauseAnimations()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.canvas = canvas</span><br><span class="line">    <span class="keyword">this</span>.svg = svg</span><br><span class="line">    <span class="keyword">this</span>.ctx = ctx</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>在<code>componentDidMount</code>中调用setState会触发一次额外的渲染，多调用了一次render函数，但是用户对此没有感知，因为它是在浏览器刷新屏幕前执行的，但是我们应该在开发中避免它，因为它会带来一定的性能问题，我们应该在constructor中初始化我们的state对象，而不应该在componentDidMount调用state方法</p>
+<h1 id="更新阶段"><a href="#更新阶段" class="headerlink" title="更新阶段"></a>更新阶段</h1><p>更新阶段，当组件的props改变了，或组件内部调用了setState或者forceUpdate发生，会发生多次</p>
+<p>这个阶段生命周期函数如下：</p>
+<ul>
+<li><del>componentWillReceiveProps/UNSAFE_componentWillReceiveProps</del></li>
+<li>getRerviedStateFromProps</li>
+<li>shouldComponentUpdate</li>
+<li><del>componentWillUpdate/UNSAFE_componentWillUpdate</del></li>
+<li>render</li>
+<li>getSnapshotBeforeUpdate</li>
+<li>componentDidUpdate</li>
+</ul>
+<h2 id="componentWillReceiveProps-UNSAFE-componentWillReceiveProps"><a href="#componentWillReceiveProps-UNSAFE-componentWillReceiveProps" class="headerlink" title="componentWillReceiveProps/UNSAFE_componentWillReceiveProps"></a><del>componentWillReceiveProps/UNSAFE_componentWillReceiveProps</del></h2><p><code>componentWillReceiveProps(nextProps, prevState)</code><br><code>UNSAFE_componentWillReceiveProps(nextProps, prevState)</code></p>
+<p>在16版本这两个方法并存，但是在17版本中<code>componentWillReceiveProps</code>被删除，<code>UNSAFE_componentWillReceiveProps</code>，目的是为了做向下兼容，对于新的应用，用<code>getDerivedStateFromProps</code>代替它们</p>
+<p>注意，当我们父组件重新渲染的时候，也会导致我们的子组件调用<code>componentWillReceiveProps/UNSAFE_componentWillReceiveProps</code>，即使我们的属性和之前的一样，所以需要我们在这个方法里面去进行判断，如果前后属性不一致才去调用setState</p>
+<p>在装载阶段这两个函数不会被触发，在组件内部调用了setState和forceUpdate也不会触发这两个函数</p>
+<h2 id="getDerivedStateFromProps-1"><a href="#getDerivedStateFromProps-1" class="headerlink" title="`getDerivedStateFromProps"></a>`getDerivedStateFromProps</h2><p>这个方法在装载阶段已经讲过了，这里不再赘述，记住在更新阶段，无论我们接收到新的属性，调用了setState还是调用了forceUpdate，这个方法都会被调用</p>
+<h2 id="shouldComponentUpdate"><a href="#shouldComponentUpdate" class="headerlink" title="shouldComponentUpdate"></a>shouldComponentUpdate</h2><p><code>shouldComponentUpdate(nextProps,nextState)</code></p>
+<p>有两个参数nextProps和nextState，表示新的属性和变化之后的state，返回一个布尔值，true表示会触发重新渲染，false表示不会触发重新渲染，默认返回true</p>
+<p>注意当我们调用<code>forceUpdate</code>并不会触发此方法</p>
+<p>因为默认是返回true，也就是只要接收到新的属性和调用了setState都会触发重新的渲染，这会带来一定的性能问题，所以我们需要将this.props与nextProps以及this.state与nextState进行比较来决定是否返回false，来减少重新渲染</p>
+<p>但是官方提倡我们使用<code>PureComponent</code>来减少重新渲染的次数而不是手工编写shouldComponentUpdate代码，具体该怎么选择，全凭开发者自己选择</p>
+<p>在未来的版本，shouldComponentUpdate返回false，仍然可能导致组件重新的渲染，这是官方自己说的</p>
+<blockquote>
+<p>Currently, if shouldComponentUpdate() returns false, then UNSAFE_componentWillUpdate(), render(), and componentDidUpdate() will not be invoked. In the future React may treat shouldComponentUpdate() as a hint rather than a strict directive, and returning false may still result in a re-rendering of the component.</p>
+</blockquote>
+<h2 id="componentWillUpdate-UNSAFE-componentWillUpdate"><a href="#componentWillUpdate-UNSAFE-componentWillUpdate" class="headerlink" title="componentWillUpdate/UNSAFE_componentWillUpdate"></a><del>componentWillUpdate/UNSAFE_componentWillUpdate</del></h2><p><code>componentWillUpdate(nextProps, nextState)</code><br><code>UNSAFE_componentWillUpdate(nextProps, nextState)</code></p>
+<p>在16版本这两个方法并存，但是在17版本中<del>componentWillUpdate</del>被删除，<del>UNSAFE_componentWillUpdate</del>，目的是为了做向下兼容</p>
+<p>在这个方法里，你不能调用setState，因为能走到这个方法，说明shouldComponentUpdate返回true，此时下一个state状态已经被确定，马上就要执行render重新渲染了，否则会导致整个生命周期混乱，在这里也不能请求一些网络数据，因为在异步渲染中，可能会导致网络请求多次，引起一些性能问题</p>
+<p>如果你在这个方法里保存了滚动位置，也是不准确的，还是因为异步渲染的问题，如果你非要获取滚动位置的话，请在<code>getSnapshotBeforeUpdate</code>调用</p>
+<h2 id="render-1"><a href="#render-1" class="headerlink" title="`render"></a>`render</h2><p>更新阶段也会触发，装载阶段已经讲过了，不再赘述</p>
+<h2 id="getSnapshotBeforeUpdate"><a href="#getSnapshotBeforeUpdate" class="headerlink" title="getSnapshotBeforeUpdate"></a>getSnapshotBeforeUpdate</h2><p><code>getSnapshotBeforeUpdate(prevProps, prevState)</code></p>
+<p>这个方法在render之后，componentDidUpdate之前调用，有两个参数prevProps和prevState，表示之前的属性和之前的state，这个函数有一个返回值，会作为第三个参数传给componentDidUpdate，如果你不想要返回值，请返回null，不写的话控制台会有警告</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/12/1652d5a54fe61cee?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="componentDidUpdate"></p>
+<p>还有这个方法一定要和componentDidUpdate一起使用，否则控制台也会有警告</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/12/1652d5bf732e3ff3?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="componentDidUpdate1"></p>
+<p>前面说过这个方法时用来代替<del>componentWillUpdate/UNSAVE_componentWillUpdate</del>，下面举个例子说明下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ScrollingList</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(props) &#123;</span><br><span class="line">    <span class="keyword">super</span>(props);</span><br><span class="line">    <span class="keyword">this</span>.listRef = React.createRef();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  getSnapshotBeforeUpdate(prevProps, prevState) &#123;</span><br><span class="line">    <span class="comment">// Are we adding new items to the list?</span></span><br><span class="line">    <span class="comment">// Capture the scroll position so we can adjust scroll later.</span></span><br><span class="line">    <span class="keyword">if</span> (prevProps.list.length &lt; <span class="keyword">this</span>.props.list.length) &#123;</span><br><span class="line">      <span class="keyword">const</span> list = <span class="keyword">this</span>.listRef.current;</span><br><span class="line">      <span class="keyword">return</span> list.scrollHeight - list.scrollTop;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  componentDidUpdate(prevProps, prevState, snapshot) &#123;</span><br><span class="line">    <span class="comment">// If we have a snapshot value, we've just added new items.</span></span><br><span class="line">    <span class="comment">// Adjust scroll so these new items don't push the old ones out of view.</span></span><br><span class="line">    <span class="comment">// (snapshot here is the value returned from getSnapshotBeforeUpdate)</span></span><br><span class="line">    <span class="keyword">if</span> (snapshot !== <span class="literal">null</span>) &#123;</span><br><span class="line">      <span class="keyword">const</span> list = <span class="keyword">this</span>.listRef.current;</span><br><span class="line">      list.scrollTop = list.scrollHeight - snapshot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div ref=&#123;<span class="keyword">this</span>.listRef&#125;&gt;&#123;<span class="comment">/* ...contents... */</span>&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<h2 id="componentDidUpdate"><a href="#componentDidUpdate" class="headerlink" title="componentDidUpdate"></a>componentDidUpdate</h2><p><code>componentDidUpdate(prevProps, prevState, snapshot)</code></p>
+<p>该方法在getSnapshotBeforeUpdate方法之后被调用，有三个参数<code>prevProps，prevState，snapshot</code>，<strong>表示之前的props，之前的state，和snapshot</strong>。第三个参数是<code>getSnapshotBeforeUpdate</code>返回的</p>
+<h1 id="卸载阶段"><a href="#卸载阶段" class="headerlink" title="卸载阶段"></a>卸载阶段</h1><p>卸载阶段，当我们的组件被卸载或者销毁了</p>
+<p>这个阶段的生命周期函数只有一个</p>
+<ul>
+<li><code>componentWillUnmount</code></li>
+</ul>
+<h2 id="componentWillUnmount"><a href="#componentWillUnmount" class="headerlink" title="componentWillUnmount"></a>componentWillUnmount</h2><p>当我们的组件被卸载或者销毁了就会调用，我们可以在这个函数里去清除一些定时器，取消网络请求，清理无效的DOM元素等垃圾清理工作</p>
+<p>注意不要在这个函数里去调用setState，因为组件不会重新渲染了</p>
+<p><a href="https://juejin.im/post/5b6f1800f265da282d45a79a?utm_source=gold_browser_extension#comment" target="_blank" rel="noopener">原文链接</a></p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="https://res.cloudinary.com/tridiamond/image/upload/v1573019751/TriDiamond_logo_ui_xeublz.jpg" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd>
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">147 <p>Articles</p></a></li>
+                    <li><a href="/categories">23 <p>Categories</p></a></li>
+                    <li><a href="/tags">47 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#挂载阶段"><span class="toc-number">1.</span> <span class="toc-text">挂载阶段</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#constructor-NaN"><span class="toc-number">1.1.</span> <span class="toc-text">constructor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#getDerivedStateFromProps"><span class="toc-number">1.2.</span> <span class="toc-text">getDerivedStateFromProps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillMount-UNSAFE-componentWillMount"><span class="toc-number">1.3.</span> <span class="toc-text">componentWillMount/UNSAFE_componentWillMount</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#render"><span class="toc-number">1.4.</span> <span class="toc-text">render</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#componentDidMount"><span class="toc-number">1.5.</span> <span class="toc-text">componentDidMount</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#更新阶段"><span class="toc-number">2.</span> <span class="toc-text">更新阶段</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillReceiveProps-UNSAFE-componentWillReceiveProps"><span class="toc-number">2.1.</span> <span class="toc-text">componentWillReceiveProps/UNSAFE_componentWillReceiveProps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#getDerivedStateFromProps-1"><span class="toc-number">2.2.</span> <span class="toc-text">`getDerivedStateFromProps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#shouldComponentUpdate"><span class="toc-number">2.3.</span> <span class="toc-text">shouldComponentUpdate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillUpdate-UNSAFE-componentWillUpdate"><span class="toc-number">2.4.</span> <span class="toc-text">componentWillUpdate/UNSAFE_componentWillUpdate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#render-1"><span class="toc-number">2.5.</span> <span class="toc-text">`render</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#getSnapshotBeforeUpdate"><span class="toc-number">2.6.</span> <span class="toc-text">getSnapshotBeforeUpdate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#componentDidUpdate"><span class="toc-number">2.7.</span> <span class="toc-text">componentDidUpdate</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#卸载阶段"><span class="toc-number">3.</span> <span class="toc-text">卸载阶段</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillUnmount"><span class="toc-number">3.1.</span> <span class="toc-text">componentWillUnmount</span></a></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.3" target="_blank" rel="noopener">v1.4.3</a></small>
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    <link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+    <script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+    <script src="/js/busuanzi.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>

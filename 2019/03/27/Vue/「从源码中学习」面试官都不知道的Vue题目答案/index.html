@@ -1,0 +1,476 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>「从源码中学习」面试官都不知道的Vue题目答案 - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,原文地址
+前言当回答面试官问及的Vue问题，我们除了照本宣科的回答外，其实还可以根据少量的源码来秀一把，来体现出你对Vue的深度了解。
+“new Vue() 做了什么？”new关键字代表实例化一个对,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+    <link rel="stylesheet" href="/css/obsidian.css">
+    <link rel="stylesheet" href="/css/ball-atom.min.css">
+</head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://zhanghao-web.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">「从源码中学习」面试官都不知道的Vue题目答案</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/Vue"><b>「
+                    </b>VUE<b> 」</b></a>
+                
+                March 27, 2019
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2019/03/27/Vue/「从源码中学习」面试官都不知道的Vue题目答案/" title="「从源码中学习」面试官都不知道的Vue题目答案">「从源码中学习」面试官都不知道的Vue题目答案</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    23k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    21 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Vue/">Vue</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <p><a href="https://juejin.im/post/5c959f74f265da610c068fa8#heading-11" target="_blank" rel="noopener">原文地址</a></p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>当回答面试官问及的Vue问题，我们除了照本宣科的回答外，其实还可以根据少量的源码来秀一把，来体现出你对Vue的深度了解。</p>
+<h2 id="“new-Vue-做了什么？”"><a href="#“new-Vue-做了什么？”" class="headerlink" title="“new Vue() 做了什么？”"></a>“new Vue() 做了什么？”</h2><p>new关键字代表实例化一个对象, 而Vue实际上是一个类, 源码位置是<code>/src/core/instance/index.js</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Vue</span> (<span class="params">options</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span> &amp;&amp;</span><br><span class="line">    !(<span class="keyword">this</span> <span class="keyword">instanceof</span> Vue)</span><br><span class="line">  ) &#123;</span><br><span class="line">    warn(<span class="string">'Vue is a constructor and should be called with the `new` keyword'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">this</span>._init(options)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接着我们跳转追踪至<code>this._init()</code>，即<code>Vue.prototype._init</code>,位于<code>src\core\instance\init.js</code>在<code>_init()</code>方法的内部有一系列 <code>init*</code> 的方法</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Vue.prototype._init = <span class="function"><span class="keyword">function</span> (<span class="params">options?: Object</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> vm: Component = <span class="keyword">this</span></span><br><span class="line">    <span class="comment">// ...忽略，从第45行看起</span></span><br><span class="line">    <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">      initProxy(vm)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      vm._renderProxy = vm</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// expose real self</span></span><br><span class="line">    vm._self = vm</span><br><span class="line">    initLifecycle(vm)</span><br><span class="line">    initEvents(vm)</span><br><span class="line">    initRender(vm)</span><br><span class="line">    callHook(vm, <span class="string">'beforeCreate'</span>)</span><br><span class="line">    initInjections(vm) <span class="comment">// resolve injections before data/props</span></span><br><span class="line">    initState(vm)</span><br><span class="line">    initProvide(vm) <span class="comment">// resolve provide after data/props</span></span><br><span class="line">    callHook(vm, <span class="string">'created'</span>)</span><br><span class="line">    <span class="comment">// ...忽略</span></span><br><span class="line">    <span class="keyword">if</span> (vm.$options.el) &#123;</span><br><span class="line">      vm.$mount(vm.$options.el)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="这里我们叙述一下"><a href="#这里我们叙述一下" class="headerlink" title="这里我们叙述一下"></a>这里我们叙述一下</h3><ul>
+<li><code>initProxy</code>，作用域代理，拦截组件内访问其它组件的数据。</li>
+<li><code>initLifecycle</code>, 建立父子组件关系，在当前实例上添加一些属性和生命周期标识。如：<code>$children、$refs、_isMounted</code>等。</li>
+<li><code>initEvents</code>，用来存放除@hook:生命周期钩子名称=”绑定的函数”事件的对象。如：<code>$on、$emit</code>等。</li>
+<li><code>initRender</code>，用于初始化<code>$slots、$attrs、$listeners</code></li>
+<li><code>initInjections</code>，初始化inject，一般用于更深层次的组件通信，相当于加强版的props。用于组件库开发较多。</li>
+</ul>
+<blockquote>
+<p>只要在上一层级的声明的provide，那么下一层级无论多深都能够通过inject来访问到provide的数据。这么做也是有明显的缺点：<strong>在任意层级都能访问，导致数据追踪比较困难，不知道是哪一个层级声明了这个或者不知道哪一层级或若干个层级使用</strong>。</p>
+</blockquote>
+<ul>
+<li>initState，是很多选项初始化的汇总，包括：props、methods、data、computed 和 watch 等。</li>
+<li>initProvide，初始化provide。</li>
+<li>vm.$mount，挂载实例。</li>
+</ul>
+<h2 id="“什么阶段才能访问DOM？”"><a href="#“什么阶段才能访问DOM？”" class="headerlink" title="“什么阶段才能访问DOM？”"></a>“什么阶段才能访问DOM？”</h2><p>这个回答可以从<code>beforeCreate</code>以及 <code>created</code>的调用时机谈起，我们根据上面的概述，来简化下代码:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">callHook(vm, <span class="string">'beforeCreate'</span>)</span><br><span class="line"><span class="comment">// 初始化 inject</span></span><br><span class="line"><span class="comment">// 初始化 props、methods、data、computed 和 watch</span></span><br><span class="line"><span class="comment">// 初始化 provide</span></span><br><span class="line">callHook(vm, <span class="string">'created'</span>)</span><br><span class="line"><span class="comment">// 挂载实例 vm.$mount(vm.$options.el)</span></span><br></pre></td></tr></table></figure>
+<p>所以当面试官问你：</p>
+<ul>
+<li>beforeCreate以及 created 调用时，哪些数据能用与否？</li>
+<li>什么阶段才能访问DOM？</li>
+<li>为什么created之后才挂载实例？</li>
+</ul>
+<h2 id="“谈谈你对Vue的生命周期的理解”"><a href="#“谈谈你对Vue的生命周期的理解”" class="headerlink" title="“谈谈你对Vue的生命周期的理解”"></a>“谈谈你对Vue的生命周期的理解”</h2><p>常规回答这里就不说了，来稍微深入点的：</p>
+<a id="more"></a>
+<p>1.<code>created/mounted/updated/destroyed</code>，以及对应的<code>before</code>钩子。分别是创建=&gt;挂载=&gt;更新=&gt;销毁。</p>
+<p>2.Vue源码中定义了一个<code>mergeHook</code>函数来遍历一个常量数组<code>LIFECYCLE_HOOKS</code>，该数组实际上是<strong>由与生命周期钩子同名的字符串组成的数组</strong>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// v2.6.10 最新版</span></span><br><span class="line"><span class="keyword">var</span> LIFECYCLE_HOOKS = [</span><br><span class="line">    <span class="string">'beforeCreate'</span>,</span><br><span class="line">    <span class="string">'created'</span>,</span><br><span class="line">    <span class="string">'beforeMount'</span>,</span><br><span class="line">    <span class="string">'mounted'</span>,</span><br><span class="line">    <span class="string">'beforeUpdate'</span>,</span><br><span class="line">    <span class="string">'updated'</span>,</span><br><span class="line">    <span class="string">'beforeDestroy'</span>,</span><br><span class="line">    <span class="string">'destroyed'</span>,</span><br><span class="line">    <span class="string">'activated'</span>,</span><br><span class="line">    <span class="string">'deactivated'</span>,</span><br><span class="line">    <span class="string">'errorCaptured'</span>,</span><br><span class="line">    <span class="comment">// v2.6+ </span></span><br><span class="line">    <span class="string">'serverPrefetch'</span></span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>于是，你可以答多activated &amp; deactivated（keep-alive 组件激活/停用）、errorCaptured（v2.5 以上版本有的一个钩子，用于处理错误）这三个。</p>
+</blockquote>
+<h3 id="新生命周期钩子：serverPrefetch是什么？"><a href="#新生命周期钩子：serverPrefetch是什么？" class="headerlink" title="新生命周期钩子：serverPrefetch是什么？"></a>新生命周期钩子：serverPrefetch是什么？</h3><p>可以看到，<code>serverPrefetch</code>前身是<code>ssrPrefetch</code>。顾名思义，这是用来处理ssr的。允许我们在渲染过程中“等待”异步数据。可在任何组件中使用，而不仅仅是路由组件。</p>
+<p><img src="https://user-gold-cdn.xitu.io/2019/3/25/169b418d400ff0b7?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="serverPrefetch"></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- Item.vue --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div v-<span class="keyword">if</span>=<span class="string">"item"</span>&gt;&#123;&#123; item.title &#125;&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">  &lt;div v-else&gt;...&lt;/</span>div&gt;</span><br><span class="line">&lt;<span class="regexp">/template&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">&lt;script&gt;</span></span><br><span class="line"><span class="regexp">export default &#123;</span></span><br><span class="line"><span class="regexp">  computed: &#123;</span></span><br><span class="line"><span class="regexp">    item () &#123;</span></span><br><span class="line"><span class="regexp">      return this.$store.state.items[this.$route.params.id]</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">  &#125;,</span></span><br><span class="line"><span class="regexp">  serverPrefetch () &#123;</span></span><br><span class="line"><span class="regexp">    return this.fetchItem()</span></span><br><span class="line"><span class="regexp">  &#125;,</span></span><br><span class="line"><span class="regexp">  mounted () &#123;</span></span><br><span class="line"><span class="regexp">    if (!this.item) &#123;</span></span><br><span class="line"><span class="regexp">      this.fetchItem()</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">  &#125;,</span></span><br><span class="line"><span class="regexp">  methods: &#123;</span></span><br><span class="line"><span class="regexp">    fetchItem () &#123;</span></span><br><span class="line"><span class="regexp">      /</span><span class="regexp">/ return the Promise from the action</span></span><br><span class="line"><span class="regexp">      return this.$store.dispatch('fetchItem', this.$route.params.id)</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp">&lt;/</span>script&gt;</span><br></pre></td></tr></table></figure>
+<p>绝大多数的面试官都不会去关注v2.6+ 以后的代码记录和变更。这里如果你说出这个v2.6.10的变化，啧啧…面试官肯定更加欣赏你。</p>
+<h3 id="生命周期钩子的合并策略"><a href="#生命周期钩子的合并策略" class="headerlink" title="生命周期钩子的合并策略"></a>生命周期钩子的合并策略</h3><p>拿<code>callHook(vm, &#39;created&#39;)</code>讲，先判断组件的选项中有无对应名字的生命周期钩子，再判断是否有 <code>parentVal(vm)</code>。若存在<code>parentVal(vm)</code>且都有对应的生命周期钩子，则会将两者<code>concat</code>为一个数组<code>(parentVal.concat(childVal))</code>。所以，生命周期钩子其实是可以写成数组。如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">created: [</span><br><span class="line"><span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'first'</span>)</span><br><span class="line">&#125;,</span><br><span class="line"><span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'second'</span>)</span><br><span class="line">&#125;,</span><br><span class="line"><span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'third'</span>)</span><br><span class="line">&#125;]</span><br></pre></td></tr></table></figure>
+<p>钩子函数将按顺序执行</p>
+<h2 id="Vue-router-路由模式有几种？”"><a href="#Vue-router-路由模式有几种？”" class="headerlink" title="Vue-router 路由模式有几种？”"></a>Vue-router 路由模式有几种？”</h2><p>三种 <code>&quot;hash&quot; | &quot;history&quot; | &quot;abstract&quot;</code>，一般人只知道两种<code>&quot;hash&quot; | &quot;history&quot;</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span> (mode) &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="string">'history'</span>:</span><br><span class="line">    <span class="keyword">this</span>.history = <span class="keyword">new</span> HTML5History(<span class="keyword">this</span>, options.base)</span><br><span class="line">    <span class="keyword">break</span></span><br><span class="line">  <span class="keyword">case</span> <span class="string">'hash'</span>:</span><br><span class="line">    <span class="keyword">this</span>.history = <span class="keyword">new</span> HashHistory(<span class="keyword">this</span>, options.base, <span class="keyword">this</span>.fallback)</span><br><span class="line">    <span class="keyword">break</span></span><br><span class="line">  <span class="keyword">case</span> <span class="string">'abstract'</span>:</span><br><span class="line">    <span class="keyword">this</span>.history = <span class="keyword">new</span> AbstractHistory(<span class="keyword">this</span>, options.base)</span><br><span class="line">    <span class="keyword">break</span></span><br><span class="line">  <span class="keyword">default</span>:</span><br><span class="line">    <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">      assert(<span class="literal">false</span>, <span class="string">`invalid mode: <span class="subst">$&#123;mode&#125;</span>`</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code># mode</code><br>类型: <code>string</code><br>默认值: <code>&quot;hash&quot; (浏览器环境) | &quot;abstract&quot;</code> (Node.js 环境)<br>可选值: <code>&quot;hash&quot; | &quot;history&quot; | &quot;abstract&quot;</code><br>配置路由模式:</p>
+<p><code>hash</code>: 使用 URL hash 值来作路由。支持所有浏览器，包括不支持 HTML5 History Api 的浏览器。<br><code>history</code>: 依赖 HTML5 History API 和服务器配置。查看 HTML5 History 模式。<br><code>abstract</code>: 支持所有 JavaScript 运行环境，如 Node.js 服务器端。如果发现没有浏览器的 API，路由会自动强制进入这个模式.</p>
+<h2 id="“谈谈你对keep-alive的了解？”"><a href="#“谈谈你对keep-alive的了解？”" class="headerlink" title="“谈谈你对keep-alive的了解？”"></a>“谈谈你对keep-alive的了解？”</h2><p>先贴一个常规回答：</p>
+<blockquote>
+<p><code>keep-alive</code>是 Vue 内置的一个组件，可以使被包含的组件保留状态，或避免重新渲染。<br>在vue 2.1.0 版本之后，<code>keep-alive</code>新加入了两个属性: <code>include</code>(包含的组件缓存) 与 <code>exclude</code>(排除的组件不缓存，优先级大于include) 。</p>
+</blockquote>
+<p>然后你可以开始骚了：</p>
+<p>1.<code>&lt;keep-alive&gt;</code>是 Vue 源码中实现的一个全局抽象组件，通过自定义 <code>render</code> 函数并且利用了<strong>插槽来实现数据缓存和更新</strong>。它的定义在<code>src/core/components/keep-alive.js</code> 中：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  name: <span class="string">'keep-alive'</span>,</span><br><span class="line">  abstract: <span class="literal">true</span>,</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2.所有的抽象组件是通过定义<code>abstract</code>选项来声明的。抽象组件不渲染真实DOM，且不会出现在父子关系的路径上（initLifecycle会忽略抽象组件），相关代码片段：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (parent &amp;&amp; !options.abstract) &#123;</span><br><span class="line">  <span class="comment">// abstract 即 `ptions.abstract`</span></span><br><span class="line">  <span class="comment">// while 循环查找第一个非抽象的父组件</span></span><br><span class="line">  <span class="keyword">while</span> (parent.$options.abstract &amp;&amp; parent.$parent) &#123;</span><br><span class="line">    parent = parent.$parent</span><br><span class="line">  &#125;</span><br><span class="line">  parent.$children.push(vm)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="了解Vue2-6-新全局API：Vue-observable-吗？”"><a href="#了解Vue2-6-新全局API：Vue-observable-吗？”" class="headerlink" title="了解Vue2.6+新全局API：Vue.observable()吗？”"></a>了解Vue2.6+新全局API：Vue.observable()吗？”</h2><p>Vue2.6+新的全局API是<code>Vue.observable()</code>,它的使用方式</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> vue <span class="keyword">from</span> vue;</span><br><span class="line"><span class="keyword">const</span> state = Vue.observable (&#123;</span><br><span class="line">   counter: <span class="number">0</span>,</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">   render () &#123;</span><br><span class="line">     <span class="keyword">return</span> (</span><br><span class="line">       &lt;div&gt;</span><br><span class="line">         &#123;state.counter&#125;</span><br><span class="line">           &lt;button v-on:click=&#123;() =&gt; &#123;state.counter ++; &#125;&#125;&gt;</span><br><span class="line">           Increment counter</span><br><span class="line">         &lt;<span class="regexp">/ button&gt;</span></span><br><span class="line"><span class="regexp">       &lt;/</span> div&gt;</span><br><span class="line">     );</span><br><span class="line">   &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>而它定义在<code>/src/core/global-api/index.js</code>第48行：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; observe &#125; <span class="keyword">from</span> <span class="string">'core/observer/index'</span></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="comment">// 2.6 explicit observable API</span></span><br><span class="line">Vue.observable = <span class="xml"><span class="tag">&lt;<span class="name">T</span>&gt;</span>(obj: T): T =&gt; &#123;</span></span><br><span class="line"><span class="xml">observe(obj)</span></span><br><span class="line"><span class="xml">return obj</span></span><br><span class="line"><span class="xml">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>再看看它import的observe，最近一次提交在<code>12/1/2018</code></p>
+<p>核心就是暴露出<code>observe(obj)</code>观测后的数据，代码啥都没改</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="https://res.cloudinary.com/tridiamond/image/upload/v1573019751/TriDiamond_logo_ui_xeublz.jpg" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd>
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">147 <p>Articles</p></a></li>
+                    <li><a href="/categories">23 <p>Categories</p></a></li>
+                    <li><a href="/tags">47 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#“new-Vue-做了什么？”"><span class="toc-number">1.1.</span> <span class="toc-text">“new Vue() 做了什么？”</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#这里我们叙述一下"><span class="toc-number">1.1.1.</span> <span class="toc-text">这里我们叙述一下</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#“什么阶段才能访问DOM？”"><span class="toc-number">1.2.</span> <span class="toc-text">“什么阶段才能访问DOM？”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#“谈谈你对Vue的生命周期的理解”"><span class="toc-number">1.3.</span> <span class="toc-text">“谈谈你对Vue的生命周期的理解”</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#新生命周期钩子：serverPrefetch是什么？"><span class="toc-number">1.3.1.</span> <span class="toc-text">新生命周期钩子：serverPrefetch是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#生命周期钩子的合并策略"><span class="toc-number">1.3.2.</span> <span class="toc-text">生命周期钩子的合并策略</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Vue-router-路由模式有几种？”"><span class="toc-number">1.4.</span> <span class="toc-text">Vue-router 路由模式有几种？”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#“谈谈你对keep-alive的了解？”"><span class="toc-number">1.5.</span> <span class="toc-text">“谈谈你对keep-alive的了解？”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#了解Vue2-6-新全局API：Vue-observable-吗？”"><span class="toc-number">1.6.</span> <span class="toc-text">了解Vue2.6+新全局API：Vue.observable()吗？”</span></a></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.3" target="_blank" rel="noopener">v1.4.3</a></small>
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    <link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+    <script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+    <script src="/js/busuanzi.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>

@@ -1,0 +1,452 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>你真的了解setState吗？ - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,
+前言看之前，为了方便理解和简化流程，我们默认react内部代码执行到 performWork、performWorkOnRoot、performSyncWork、performAsyncWork ,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+    <link rel="stylesheet" href="/css/obsidian.css">
+    <link rel="stylesheet" href="/css/ball-atom.min.css">
+</head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://zhanghao-web.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">你真的了解setState吗？</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/React"><b>「
+                    </b>REACT<b> 」</b></a>
+                
+                July 19, 2018
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2018/07/19/React/你真的了解setState吗？/" title="你真的了解setState吗？">你真的了解setState吗？</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    32k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    29 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/React/">React</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <p><img src="https://user-gold-cdn.xitu.io/2018/7/11/16488940d3621cc9?imageView2/1/w/1304/h/734/q/85/format/webp/interlace/1" alt="setState"></p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>看之前，为了方便理解和简化流程，我们默认react内部代码执行到 <strong>performWork、performWorkOnRoot、performSyncWork、performAsyncWork</strong> 这四个方法的时候，就是react去update更新并且作用到UI上。</p>
+<h2 id="合成事件中的setState"><a href="#合成事件中的setState" class="headerlink" title="合成事件中的setState"></a>合成事件中的setState</h2><p>首先得了解一下什么是<code>合成事件</code>，react为了解决跨平台，兼容性问题，自己封装了一套事件机制，代理了原生的事件，像在jsx中常见的<code>onClick</code>、<code>onChange</code>这些都是合成事件。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  state = &#123; <span class="attr">val</span>: <span class="number">0</span> &#125;</span><br><span class="line"></span><br><span class="line">  increment = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123; <span class="attr">val</span>: <span class="keyword">this</span>.state.val + <span class="number">1</span> &#125;)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.state.val) <span class="comment">// 输出的是更新前的val --&gt; 0</span></span><br><span class="line">  &#125;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div onClick=&#123;<span class="keyword">this</span>.increment&#125;&gt;</span><br><span class="line">        &#123;<span class="string">`Counter is: <span class="subst">$&#123;<span class="keyword">this</span>.state.val&#125;</span>`</span>&#125;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>合成事件中的<code>setState</code>写法比较常见，点击事件里去改变 <code>this.state.val</code> 的状态值，在 <code>increment</code> 事件中打个断点可以看到调用栈，这里我贴一张自己画的流程图：<br><a id="more"></a><br><img src="https://user-gold-cdn.xitu.io/2018/7/11/164888c0fb049aef?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="合成事件"></p>
+<p>从 <code>dispatchInteractiveEvent</code> 到 <code>callCallBack</code> 为止，都是对合成事件的处理和执行，从 <code>setState</code> 到 requestWork 是调用 <code>this.setState</code> 的逻辑，这边主要看下 <code>requestWork</code> 这个函数（从 <code>dispatchEvent</code> 到 <code>requestWork</code> 的调用栈是属于 <code>interactiveUpdates$1</code> 的 stry 代码块，下文会提到）。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">requestWork</span>(<span class="params">root, expirationTime</span>) </span>&#123;</span><br><span class="line">  addRootToSchedule(root, expirationTime);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (isRendering) &#123;</span><br><span class="line">    <span class="comment">// Prevent reentrancy. Remaining work will be scheduled at the end of</span></span><br><span class="line">    <span class="comment">// the currently rendering batch.</span></span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (isBatchingUpdates) &#123;</span><br><span class="line">    <span class="comment">// Flush work at the end of the batch.</span></span><br><span class="line">    <span class="keyword">if</span> (isUnbatchingUpdates) &#123;</span><br><span class="line">      <span class="comment">// ...unless we're inside unbatchedUpdates, in which case we should</span></span><br><span class="line">      <span class="comment">// flush it now.</span></span><br><span class="line">      nextFlushedRoot = root;</span><br><span class="line">      nextFlushedExpirationTime = Sync;</span><br><span class="line">      performWorkOnRoot(root, Sync, <span class="literal">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// <span class="doctag">TODO:</span> Get rid of Sync and use current time?</span></span><br><span class="line">  <span class="keyword">if</span> (expirationTime === Sync) &#123;</span><br><span class="line">    performSyncWork();</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    scheduleCallbackWithExpiration(expirationTime);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 <code>requestWork</code> 中有三个if分支，三个分支中有两个方法 <code>performWorkOnRoot</code> 和 <code>performSyncWork</code> ，就是我们默认的update函数，但是在合成事件中，走的是第二个if分支，第二个分支中有两个标识 <code>isBatchingUpdates</code> 和 <code>isUnbatchingUpdates</code> 两个初始值都为  <strong>false</strong> ，但是在 <code>interactiveUpdates$1</code> 中会把 <code>isBatchingUpdates</code> 设为 <strong>true</strong> ，下面就是 <code>interactiveUpdates$1</code> 的代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">interactiveUpdates$1</span>(<span class="params">fn, a, b</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (isBatchingInteractiveUpdates) &#123;</span><br><span class="line">    <span class="keyword">return</span> fn(a, b);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// If there are any pending interactive updates, synchronously flush them.</span></span><br><span class="line">  <span class="comment">// This needs to happen before we read any handlers, because the effect of</span></span><br><span class="line">  <span class="comment">// the previous event may influence which handlers are called during</span></span><br><span class="line">  <span class="comment">// this event.</span></span><br><span class="line">  <span class="keyword">if</span> (!isBatchingUpdates &amp;&amp; !isRendering &amp;&amp; lowestPendingInteractiveExpirationTime !== NoWork) &#123;</span><br><span class="line">    <span class="comment">// Synchronously flush pending interactive updates.</span></span><br><span class="line">    performWork(lowestPendingInteractiveExpirationTime, <span class="literal">false</span>, <span class="literal">null</span>);</span><br><span class="line">    lowestPendingInteractiveExpirationTime = NoWork;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">var</span> previousIsBatchingInteractiveUpdates = isBatchingInteractiveUpdates;</span><br><span class="line">  <span class="keyword">var</span> previousIsBatchingUpdates = isBatchingUpdates;</span><br><span class="line">  isBatchingInteractiveUpdates = <span class="literal">true</span>;</span><br><span class="line">  isBatchingUpdates = <span class="literal">true</span>;  <span class="comment">// 把requestWork中的isBatchingUpdates标识改为true</span></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> fn(a, b);</span><br><span class="line">  &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    isBatchingInteractiveUpdates = previousIsBatchingInteractiveUpdates;</span><br><span class="line">    isBatchingUpdates = previousIsBatchingUpdates;</span><br><span class="line">    <span class="keyword">if</span> (!isBatchingUpdates &amp;&amp; !isRendering) &#123;</span><br><span class="line">      performSyncWork();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个方法中把 <code>isBatchingUpdates</code> 设为了 true ,导致在 <code>requestWork</code> 方法中， <code>isBatchingUpdates</code> 为 true ，但是 <code>isUnbatchingUpdates</code> 是 false ，而被直接return了。</p>
+<p>那return完的逻辑回到哪里呢，最终正是回到了 <code>interactiveUpdates</code> 这个方法，仔细看一眼，这个方法里面有个 <strong>try finally</strong>语法，前端同学这个其实是用的比较少的，简单的说就是会先执行 try 代码块中的语句，然后再执行 finally 中的代码，而 fn(a, b) 是在try代码块中，刚才说到在 <code>requestWork</code> 中被return掉的也就是这个fn（上文提到的 从<code>dispatchEvent</code> 到 <code>requestWork</code> 的一整个调用栈）。</p>
+<p>所以当你在 <code>increment</code> 中调用 <code>setState</code> 之后去console.log的时候，是属于 try 代码块中的执行，但是由于是合成事件，try代码块执行完state并没有更新，所以你输入的结果是更新前的 state 值，这就导致了所谓的”异步”，但是当你的try代码块执行完的时候（也就是你的increment合成事件），这个时候会去执行 finally 里的代码，在 finally 中执行了 <code>performSyncWork</code> 方法，这个时候才会去更新你的 state 并且渲染到UI上。</p>
+<h2 id="生命周期函数中的setState"><a href="#生命周期函数中的setState" class="headerlink" title="生命周期函数中的setState"></a>生命周期函数中的setState</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  state = &#123; <span class="attr">val</span>: <span class="number">0</span> &#125;</span><br><span class="line"></span><br><span class="line"> componentDidMount() &#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123; <span class="attr">val</span>: <span class="keyword">this</span>.state.val + <span class="number">1</span> &#125;)</span><br><span class="line">   <span class="built_in">console</span>.log(<span class="keyword">this</span>.state.val) <span class="comment">// 输出的还是更新前的值 --&gt; 0</span></span><br><span class="line"> &#125;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &#123;<span class="string">`Counter is: <span class="subst">$&#123;<span class="keyword">this</span>.state.val&#125;</span>`</span>&#125;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>钩子函数中<code>setState</code>的调用栈：</p>
+</blockquote>
+<p><img src="https://user-gold-cdn.xitu.io/2018/7/11/164888cef54b5edd?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="钩子函数"></p>
+<p>其实还是和合成事件一样，当 <code>componentDidmount</code> 执行的时候，react内部并没有更新，执行完<code>componentDidmount</code>  后才去 <code>commitUpdateQueue</code> 更新。这就导致你在 <code>componentDidmount</code> 中 <code>setState</code> 完去<code>console.log</code>拿的结果还是更新前的值。</p>
+<h2 id="原生事件中的setState"><a href="#原生事件中的setState" class="headerlink" title="原生事件中的setState"></a>原生事件中的setState</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  state = &#123; <span class="attr">val</span>: <span class="number">0</span> &#125;</span><br><span class="line"></span><br><span class="line">  changeValue = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123; <span class="attr">val</span>: <span class="keyword">this</span>.state.val + <span class="number">1</span> &#125;)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.state.val) <span class="comment">// 输出的是更新后的值 --&gt; 1</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> componentDidMount() &#123;</span><br><span class="line">    <span class="built_in">document</span>.body.addEventListener(<span class="string">'click'</span>, <span class="keyword">this</span>.changeValue, <span class="literal">false</span>)</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &#123;<span class="string">`Counter is: <span class="subst">$&#123;<span class="keyword">this</span>.state.val&#125;</span>`</span>&#125;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>原生事件是指非<code>react</code>合成事件，原生自带的事件监听 <code>addEventListener</code> ，或者也可以用原生js、jq直接 <code>document.querySelector().onclick</code> 这种绑定事件的形式都属于原生事件。</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/7/11/164888d958a2df16?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="原生事件"></p>
+<p>原生事件的调用栈就比较简单了，因为没有走合成事件的那一大堆，直接触发click事件，到 <code>requestWork</code> ,在<code>requestWork</code>里由于 <code>expirationTime === Sync</code> 的原因，直接走了 <code>performSyncWork</code> 去更新，并不像合成事件或钩子函数中被return，所以当你在原生事件中<code>setState</code>后，能同步拿到更新后的state值。</p>
+<h2 id="setTimeout中的setState"><a href="#setTimeout中的setState" class="headerlink" title="setTimeout中的setState"></a>setTimeout中的setState</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  state = &#123; <span class="attr">val</span>: <span class="number">0</span> &#125;</span><br><span class="line"></span><br><span class="line"> componentDidMount() &#123;</span><br><span class="line">    setTimeout(<span class="function"><span class="params">_</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">this</span>.setState(&#123; <span class="attr">val</span>: <span class="keyword">this</span>.state.val + <span class="number">1</span> &#125;)</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span>.state.val) <span class="comment">// 输出更新后的值 --&gt; 1</span></span><br><span class="line">    &#125;, <span class="number">0</span>)</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &#123;<span class="string">`Counter is: <span class="subst">$&#123;<span class="keyword">this</span>.state.val&#125;</span>`</span>&#125;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>在 <code>setTimeout</code> 中去 <code>setState</code> 并不算是一个单独的场景，它是随着你外层去决定的，因为你可以在合成事件中 <code>setTimeout</code> ，可以在钩子函数中 <code>setTimeout</code> ，也可以在原生事件<code>setTimeout</code>，但是不管是哪个场景下，基于 <strong>event loop</strong>的模型下， <code>setTimeout</code> 中里去 <code>setState</code> 总能拿到最新的<code>state</code>值。</p>
+<p>举个栗子，比如之前的合成事件，由于你是 <code>setTimeout(_ =&gt; { this.setState()}, 0)</code> 是在 try 代码块中,当你 try 代码块执行到 <code>setTimeout</code> 的时候，把它丢到列队里，并没有去执行，而是先执行的 <code>finally</code> 代码块，等 finally 执行完了， <code>isBatchingUpdates</code> 又变为了 false ，导致最后去执行队列里的 setState 时候， <code>requestWork</code> 走的是和原生事件一样的 <code>expirationTime === Sync if</code>分支，所以表现就会和原生事件一样，可以同步拿到最新的state值。</p>
+<h2 id="setState中的批量更新"><a href="#setState中的批量更新" class="headerlink" title="setState中的批量更新"></a>setState中的批量更新</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  state = &#123; <span class="attr">val</span>: <span class="number">0</span> &#125;</span><br><span class="line"></span><br><span class="line">  batchUpdates = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123; <span class="attr">val</span>: <span class="keyword">this</span>.state.val + <span class="number">1</span> &#125;)</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123; <span class="attr">val</span>: <span class="keyword">this</span>.state.val + <span class="number">1</span> &#125;)</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123; <span class="attr">val</span>: <span class="keyword">this</span>.state.val + <span class="number">1</span> &#125;)</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div onClick=&#123;<span class="keyword">this</span>.batchUpdates&#125;&gt;</span><br><span class="line">        &#123;<span class="string">`Counter is <span class="subst">$&#123;<span class="keyword">this</span>.state.val&#125;</span>`</span>&#125; <span class="comment">// 1</span></span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>上面的结果最终是1，在 <code>setState</code> 的时候react内部会创建一个 <code>updateQueue</code> ，通过 <code>firstUpdate</code> 、 <code>lastUpdate</code> 、 <code>lastUpdate.next</code> 去维护一个更新的队列，在最终的 <code>performWork</code> 中，相同的key会被覆盖，只会对最后一次的 <code>setState</code> 进行更新，下面是部分实现代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createUpdateQueue</span>(<span class="params">baseState</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> queue = &#123;</span><br><span class="line">    expirationTime: NoWork,</span><br><span class="line">    baseState: baseState,</span><br><span class="line">    firstUpdate: <span class="literal">null</span>,</span><br><span class="line">    lastUpdate: <span class="literal">null</span>,</span><br><span class="line">    firstCapturedUpdate: <span class="literal">null</span>,</span><br><span class="line">    lastCapturedUpdate: <span class="literal">null</span>,</span><br><span class="line">    firstEffect: <span class="literal">null</span>,</span><br><span class="line">    lastEffect: <span class="literal">null</span>,</span><br><span class="line">    firstCapturedEffect: <span class="literal">null</span>,</span><br><span class="line">    lastCapturedEffect: <span class="literal">null</span></span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">return</span> queue;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">appendUpdateToQueue</span>(<span class="params">queue, update, expirationTime</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// Append the update to the end of the list.</span></span><br><span class="line">  <span class="keyword">if</span> (queue.lastUpdate === <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="comment">// Queue is empty</span></span><br><span class="line">    queue.firstUpdate = queue.lastUpdate = update;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    queue.lastUpdate.next = update;</span><br><span class="line">    queue.lastUpdate = update;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (queue.expirationTime === NoWork || queue.expirationTime &gt; expirationTime) &#123;</span><br><span class="line">    <span class="comment">// The incoming update has the earliest expiration of any update in the</span></span><br><span class="line">    <span class="comment">// queue. Update the queue's expiration time.</span></span><br><span class="line">    queue.expirationTime = expirationTime;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看个🌰</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  state = &#123; <span class="attr">val</span>: <span class="number">0</span> &#125;</span><br><span class="line"></span><br><span class="line">  componentDidMount() &#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123; <span class="attr">val</span>: <span class="keyword">this</span>.state.val + <span class="number">1</span> &#125;)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.state.val)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.setState(&#123; <span class="attr">val</span>: <span class="keyword">this</span>.state.val + <span class="number">1</span> &#125;)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.state.val)</span><br><span class="line"></span><br><span class="line">    setTimeout(<span class="function"><span class="params">_</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">this</span>.setState(&#123; <span class="attr">val</span>: <span class="keyword">this</span>.state.val + <span class="number">1</span> &#125;)</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span>.state.val);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.setState(&#123; <span class="attr">val</span>: <span class="keyword">this</span>.state.val + <span class="number">1</span> &#125;)</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span>.state.val)</span><br><span class="line">    &#125;, <span class="number">0</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;this.state.val&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结合上面分析的，钩子函数中的 <code>setState</code> 无法立马拿到更新后的值，所以前两次都是输出0，当执行到 <code>setTimeout</code> 里的时候，前面两个state的值已经被更新，由于 setState 批量更新的策略， <code>this.state.val</code> 只对最后一次的生效，为1，而在 setTimmout 中 setState 是可以同步拿到更新结果，所以 setTimeout 中的两次输出2，3，最终结果就为 0, 0, 2, 3 。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li><p>setState 只在合成事件和钩子函数中是“异步”的，在原生事件和 <code>setTimeout</code> 中都是同步的。</p>
+</li>
+<li><p>setState的“异步”并不是说内部由异步代码实现，其实本身执行的过程和代码都是同步的，只是合成事件和钩子函数的调用顺序在更新之前，导致在合成事件和钩子函数中没法立马拿到更新后的值，形式了所谓的“异步”，当然可以通过第二个参数 <code>setState(partialState, callback)</code> 中的callback拿到更新后的结果。</p>
+</li>
+<li><p>setState 的批量更新优化也是建立在“异步”（合成事件、钩子函数）之上的，在原生事件和setTimeout 中不会批量更新，在“异步”中如果对同一个值进行多次 setState ， setState 的批量更新策略会对其进行覆盖，取最后一次的执行，如果是同时 setState 多个不同的值，在更新时会对其进行合并批量更新。</p>
+</li>
+</ul>
+<p><a href="https://juejin.im/post/5b45c57c51882519790c7441#comment" target="_blank" rel="noopener">原文地址</a></p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="https://res.cloudinary.com/tridiamond/image/upload/v1573019751/TriDiamond_logo_ui_xeublz.jpg" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd>
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">147 <p>Articles</p></a></li>
+                    <li><a href="/categories">23 <p>Categories</p></a></li>
+                    <li><a href="/tags">47 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#合成事件中的setState"><span class="toc-number">1.1.</span> <span class="toc-text">合成事件中的setState</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生命周期函数中的setState"><span class="toc-number">1.2.</span> <span class="toc-text">生命周期函数中的setState</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原生事件中的setState"><span class="toc-number">1.3.</span> <span class="toc-text">原生事件中的setState</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#setTimeout中的setState"><span class="toc-number">1.4.</span> <span class="toc-text">setTimeout中的setState</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#setState中的批量更新"><span class="toc-number">1.5.</span> <span class="toc-text">setState中的批量更新</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.6.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.3" target="_blank" rel="noopener">v1.4.3</a></small>
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    <link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+    <script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+    <script src="/js/busuanzi.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>

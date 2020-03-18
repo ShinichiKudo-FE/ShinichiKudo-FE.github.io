@@ -1,0 +1,435 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Node学习(四) --处理接收到的POST数据 - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,POST数据量通常较大，通常不会一次性从客户端发送到服务端，具体每次发送的大小由协议，以及客户端与服务端之间的协商决定。
+因此，Nodejs在处理POST数据时，需要通过request对象的data,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+    <link rel="stylesheet" href="/css/obsidian.css">
+    <link rel="stylesheet" href="/css/ball-atom.min.css">
+</head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://zhanghao-web.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">Node学习(四) --处理接收到的POST数据</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/Node"><b>「
+                    </b>NODE<b> 」</b></a>
+                
+                March 25, 2019
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2019/03/25/Node/Node学习(四) --处理接收到的POST数据/" title="Node学习(四) --处理接收到的POST数据">Node学习(四) --处理接收到的POST数据</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    34k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    31 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Node/">Node</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <p>POST数据量通常较大，通常不会一次性从客户端发送到服务端，具体每次发送的大小由协议，以及客户端与服务端之间的协商决定。</p>
+<p>因此，Nodejs在处理POST数据时，需要通过request对象的data事件，获取每次传输的数据，并在end事件调用时，处理所有获取的数据。</p>
+<p>request对象是一个<a href="https://link.juejin.im/?target=http%3A%2F%2Fnodejs.cn%2Fapi%2Fhttp.html%23http_class_http_incomingmessage" target="_blank" rel="noopener">http.IncomingMessage</a> 类，而它实现了<a href="https://link.juejin.im/?target=http%3A%2F%2Fnodejs.cn%2Fapi%2Fstream.html%23stream_class_stream_readable" target="_blank" rel="noopener">可读流接口</a>，因此具有了可读流的data、end等事件。</p>
+<p>需要注意的是，data事件中传入的参数是<code>Buffer</code>，<code>Buffer</code>只是一个二进制的数据，它有可能只是一段字符串数据，也有可能是文件的一部分，所以处理Buffer数据的时候要注意这一点。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>)</span><br><span class="line"><span class="keyword">const</span> querystring = <span class="built_in">require</span>(<span class="string">'querystring'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> bufferArray = []  <span class="comment">// 用于存储data事件获取的Buffer数据。</span></span><br><span class="line"></span><br><span class="line">  req.on(<span class="string">'data'</span>, (buffer) =&gt; &#123;</span><br><span class="line">    bufferArray.push(buffer)  <span class="comment">// 将Buffer数据存储在数组中。</span></span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  req.on(<span class="string">'end'</span>, () =&gt; &#123;</span><br><span class="line">    <span class="comment">// Buffer 类是一个全局变量，使用时无需 require('buffer').Buffer。</span></span><br><span class="line">    <span class="comment">// Buffer.concat方法用于合并Buffer数组。</span></span><br><span class="line">    <span class="keyword">const</span> buffer = Buffer.concat(bufferArray)</span><br><span class="line">    <span class="comment">// 已知Buffer数据只是字符串，则可以直接用toString将其转换成字符串。</span></span><br><span class="line">    <span class="keyword">const</span> post = querystring.parse(buffer.toString())</span><br><span class="line">    <span class="built_in">console</span>.log(post)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8080</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="同时处理GET-POST请求"><a href="#同时处理GET-POST请求" class="headerlink" title="同时处理GET/POST请求"></a>同时处理GET/POST请求</h2><p>通常在开发过程中，同一台服务器需要接收多种类型的请求，并区分不同接口，向客户端返回数据。</p>
+<p>最常用的方式，<strong>就是对请求的方法、url进行区分判断，获取到每个请求的数据后，统一由一个回调函数进行处理</strong>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>)</span><br><span class="line"><span class="keyword">const</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>)</span><br><span class="line"><span class="keyword">const</span> querystring = <span class="built_in">require</span>(<span class="string">'querystring'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 定义公共变量，存储请求方法、路径、数据</span></span><br><span class="line">  <span class="keyword">const</span> method = req.method</span><br><span class="line">  <span class="keyword">let</span> path = <span class="string">''</span></span><br><span class="line">  <span class="keyword">let</span> get = &#123;&#125;</span><br><span class="line">  <span class="keyword">let</span> post = &#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 判断请求方法为GET还是POST，区分处理数据</span></span><br><span class="line">  <span class="keyword">if</span> (method === <span class="string">'GET'</span>) &#123;</span><br><span class="line">    <span class="comment">// 使用url.parse解析get数据</span></span><br><span class="line">    <span class="keyword">const</span> &#123; pathname, query &#125; = url.parse(req.url, <span class="literal">true</span>)</span><br><span class="line"></span><br><span class="line">    path = pathname</span><br><span class="line">    get = query</span><br><span class="line"></span><br><span class="line">    complete()</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method === <span class="string">'POST'</span>) &#123;</span><br><span class="line">    path = req.url</span><br><span class="line">    <span class="keyword">let</span> arr = []</span><br><span class="line"></span><br><span class="line">    req.on(<span class="string">'data'</span>, (buffer) =&gt; &#123;</span><br><span class="line">      <span class="comment">// 获取POST请求的Buffer数据</span></span><br><span class="line">      arr.push(buffer)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    req.on(<span class="string">'end'</span>, () =&gt; &#123;</span><br><span class="line">      <span class="comment">// 将Buffer数据合并</span></span><br><span class="line">      <span class="keyword">let</span> buffer = Buffer.concat(arr)</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 处理接收到的POST数据</span></span><br><span class="line">      post = querystring.parse(buffer.toString())</span><br><span class="line"></span><br><span class="line">      complete()</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 在回调函数中统一处理解析后的数据</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">complete</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(method, path, get, post)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8080</span>)</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="实现一个带接口请求的简单服务器"><a href="#实现一个带接口请求的简单服务器" class="headerlink" title="实现一个带接口请求的简单服务器"></a>实现一个带接口请求的简单服务器</h2><p>虽然当前还未涉及到数据库的知识，但已经可以通过文件读写，实现一个简单的服务器，需求如下：</p>
+<ul>
+<li>用户通过GET方法请求/reg接口，实现注册流程。</li>
+<li>用户通过POST方法请求/login接口，实现登录流程。</li>
+<li>非接口请求则直接返回相应文件。</li>
+</ul>
+<p><strong>实现思路</strong></p>
+<ul>
+<li>新建users.json文件，用于存放用户列表数据。</li>
+<li>新建index.html文件，实现表单及注册、登录的前端请求功能。</li>
+<li>服务端判断请求路径，决定是前端是通过接口校验用户数据，还是请求HTML文件。</li>
+<li>若是接口请求，则通过用户列表判断用户状态，实现注册和登录流程。</li>
+</ul>
+<h3 id="代码及示例"><a href="#代码及示例" class="headerlink" title="代码及示例"></a>代码及示例</h3><h4 id="html"><a href="#html" class="headerlink" title="html"></a>html</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  用户：<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"username"</span> <span class="attr">id</span>=<span class="string">"username"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">  密码：<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"password"</span> <span class="attr">id</span>=<span class="string">"password"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"注册"</span> <span class="attr">id</span>=<span class="string">"reg"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"登录"</span> <span class="attr">id</span>=<span class="string">"login"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">    <span class="comment">// 注册</span></span></span><br><span class="line"><span class="javascript">    <span class="built_in">document</span>.querySelector(<span class="string">'#reg'</span>).addEventListener(<span class="string">'click'</span>, <span class="keyword">async</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">      <span class="keyword">const</span> response = <span class="keyword">await</span> fetch(<span class="string">`/reg?username=<span class="subst">$&#123;<span class="built_in">document</span>.querySelector(<span class="string">'#username'</span>).value&#125;</span>&amp;password=<span class="subst">$&#123;<span class="built_in">document</span>.querySelector(<span class="string">'#password'</span>).value&#125;</span>`</span>)</span></span><br><span class="line"><span class="javascript">      <span class="keyword">const</span> result = <span class="keyword">await</span> response.json()</span></span><br><span class="line"><span class="javascript">      <span class="built_in">console</span>.log(result)</span></span><br><span class="line"><span class="undefined">      alert(result.msg)</span></span><br><span class="line"><span class="undefined">    &#125;)</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript">    <span class="comment">// 登录</span></span></span><br><span class="line"><span class="javascript">    <span class="built_in">document</span>.querySelector(<span class="string">'#login'</span>).addEventListener(<span class="string">'click'</span>, <span class="keyword">async</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">      <span class="keyword">const</span> response = <span class="keyword">await</span> fetch(<span class="string">`/login`</span>, &#123;</span></span><br><span class="line"><span class="javascript">        method: <span class="string">'POST'</span>,</span></span><br><span class="line"><span class="javascript">        body: <span class="built_in">JSON</span>.stringify(&#123;</span></span><br><span class="line"><span class="javascript">          username: <span class="built_in">document</span>.querySelector(<span class="string">'#username'</span>).value,</span></span><br><span class="line"><span class="javascript">          password: <span class="built_in">document</span>.querySelector(<span class="string">'#password'</span>).value</span></span><br><span class="line"><span class="undefined">        &#125;)</span></span><br><span class="line"><span class="undefined">      &#125;)</span></span><br><span class="line"><span class="javascript">      <span class="keyword">const</span> result = <span class="keyword">await</span> response.json()</span></span><br><span class="line"><span class="javascript">      <span class="built_in">console</span>.log(result)</span></span><br><span class="line"><span class="undefined">      alert(result.msg)</span></span><br><span class="line"><span class="undefined">    &#125;)</span></span><br><span class="line"><span class="undefined">  </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="server-js"><a href="#server-js" class="headerlink" title="server.js"></a>server.js</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>)</span><br><span class="line"><span class="keyword">const</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>)</span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</span><br><span class="line"><span class="keyword">const</span> querystring = <span class="built_in">require</span>(<span class="string">'querystring'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 定义公共变量，存储请求方法、路径、数据</span></span><br><span class="line">  <span class="keyword">const</span> method = req.method</span><br><span class="line">  <span class="keyword">let</span> path = <span class="string">''</span></span><br><span class="line">  <span class="keyword">let</span> get = &#123;&#125;</span><br><span class="line">  <span class="keyword">let</span> post = &#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 判断请求方法为GET还是POST，区分处理数据</span></span><br><span class="line">  <span class="keyword">if</span> (method === <span class="string">'GET'</span>) &#123;</span><br><span class="line">    <span class="comment">// 使用url.parse解析get数据</span></span><br><span class="line">    <span class="keyword">const</span> &#123; pathname, query &#125; = url.parse(req.url, <span class="literal">true</span>)</span><br><span class="line"></span><br><span class="line">    path = pathname</span><br><span class="line">    get = query</span><br><span class="line"></span><br><span class="line">    complete()</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method === <span class="string">'POST'</span>) &#123;</span><br><span class="line">    path = req.url</span><br><span class="line">    <span class="keyword">let</span> arr = []</span><br><span class="line"></span><br><span class="line">    req.on(<span class="string">'data'</span>, (buffer) =&gt; &#123;</span><br><span class="line">      <span class="comment">// 获取POST请求的Buffer数据</span></span><br><span class="line">      arr.push(buffer)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    req.on(<span class="string">'end'</span>, () =&gt; &#123;</span><br><span class="line">      <span class="comment">// 将Buffer数据合并</span></span><br><span class="line">      <span class="keyword">let</span> buffer = Buffer.concat(arr)</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 处理接收到的POST数据</span></span><br><span class="line">      post = <span class="built_in">JSON</span>.parse(buffer.toString())</span><br><span class="line"></span><br><span class="line">      complete()</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 在回调函数中统一处理解析后的数据</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">complete</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (path === <span class="string">'/reg'</span>) &#123;</span><br><span class="line">        <span class="comment">// 获取get请求数据</span></span><br><span class="line">        <span class="keyword">const</span> &#123;</span><br><span class="line">          username,</span><br><span class="line">          password</span><br><span class="line">        &#125; = get</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 读取user.json文件</span></span><br><span class="line">        fs.readFile(<span class="string">'./users.json'</span>, (error, data) =&gt; &#123;</span><br><span class="line">          <span class="keyword">if</span> (error) &#123;</span><br><span class="line">            res.writeHead(<span class="number">404</span>)</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 读取用户数据</span></span><br><span class="line">            <span class="keyword">const</span> users = <span class="built_in">JSON</span>.parse(data.toString())</span><br><span class="line">            <span class="keyword">const</span> usernameIndex = users.findIndex(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">              <span class="keyword">return</span> username === item.username</span><br><span class="line">            &#125;)</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 判断用户名是否存在</span></span><br><span class="line">            <span class="keyword">if</span> (usernameIndex &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">              res.write(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">                error: <span class="number">1</span>,</span><br><span class="line">                msg: <span class="string">'此用户名已存在'</span></span><br><span class="line">              &#125;))</span><br><span class="line">              res.end()</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">              <span class="comment">// 用户名不存在则在用户列表中增加一个用户</span></span><br><span class="line">              users.push(&#123;</span><br><span class="line">                username,</span><br><span class="line">                password</span><br><span class="line">              &#125;)</span><br><span class="line"></span><br><span class="line">              <span class="comment">// 将新的用户列表保存到user.json文件中</span></span><br><span class="line">              fs.writeFile(<span class="string">'./users.json'</span>, <span class="built_in">JSON</span>.stringify(users), (error) =&gt; &#123;</span><br><span class="line">                <span class="keyword">if</span> (error) &#123;</span><br><span class="line">                  res.writeHead(<span class="number">404</span>)</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                  res.write(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">                    error: <span class="number">0</span>,</span><br><span class="line">                    msg: <span class="string">'注册成功'</span></span><br><span class="line">                  &#125;))</span><br><span class="line">                &#125;</span><br><span class="line">                res.end()</span><br><span class="line">              &#125;)</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (path === <span class="string">'/login'</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> &#123;</span><br><span class="line">          username,</span><br><span class="line">          password</span><br><span class="line">        &#125; = post</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 读取users.json</span></span><br><span class="line">        fs.readFile(<span class="string">'./users.json'</span>, (error, data) =&gt; &#123;</span><br><span class="line">          <span class="keyword">if</span> (error) &#123;</span><br><span class="line">            res.writeHead(<span class="number">404</span>)</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 获取user列表数据</span></span><br><span class="line">            <span class="keyword">const</span> users = <span class="built_in">JSON</span>.parse(data.toString())</span><br><span class="line">            <span class="keyword">const</span> usernameIndex = users.findIndex(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">              <span class="keyword">return</span> username === item.username</span><br><span class="line">            &#125;)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (usernameIndex &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">              <span class="comment">// 用户名存在，则校验密码是否正确</span></span><br><span class="line">              <span class="keyword">if</span> (users[usernameIndex].password === password) &#123;</span><br><span class="line">                res.write(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">                  error: <span class="number">0</span>,</span><br><span class="line">                  msg: <span class="string">'登录成功'</span></span><br><span class="line">                &#125;))</span><br><span class="line">              &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                res.write(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">                  error: <span class="number">1</span>,</span><br><span class="line">                  msg: <span class="string">'密码错误'</span></span><br><span class="line">                &#125;))</span><br><span class="line">              &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">              res.write(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">                error: <span class="number">1</span>,</span><br><span class="line">                msg: <span class="string">'该用户不存在'</span></span><br><span class="line">              &#125;))</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">          res.end()</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 若不是注册或登录接口，则直接返回相应文件</span></span><br><span class="line">        fs.readFile(<span class="string">`.<span class="subst">$&#123;path&#125;</span>`</span>, (error, data) =&gt; &#123;</span><br><span class="line">          <span class="keyword">if</span> (error) &#123;</span><br><span class="line">            res.writeHead(<span class="number">404</span>)</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            res.write(data)</span><br><span class="line">          &#125;</span><br><span class="line">          res.end()</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">      <span class="built_in">console</span>.error(error);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8080</span>)</span><br></pre></td></tr></table></figure>
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="https://res.cloudinary.com/tridiamond/image/upload/v1573019751/TriDiamond_logo_ui_xeublz.jpg" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd>
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">147 <p>Articles</p></a></li>
+                    <li><a href="/categories">23 <p>Categories</p></a></li>
+                    <li><a href="/tags">47 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#同时处理GET-POST请求"><span class="toc-number">1.</span> <span class="toc-text">同时处理GET/POST请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现一个带接口请求的简单服务器"><span class="toc-number">2.</span> <span class="toc-text">实现一个带接口请求的简单服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#代码及示例"><span class="toc-number">2.1.</span> <span class="toc-text">代码及示例</span></a></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.3" target="_blank" rel="noopener">v1.4.3</a></small>
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    <link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+    <script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+    <script src="/js/busuanzi.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>

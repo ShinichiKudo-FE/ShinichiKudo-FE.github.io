@@ -1,0 +1,470 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>前端路由实现与react-router源码分析 - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,前言在单页应用上，前端路由并不陌生。很多前端框架也会有独立开发或推荐配套使用的路由系统。那么，当我们在谈前端路由的时候，还可以谈些什么？本文将简要分析并实现一个的前端路由，并对 react-rout,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+    <link rel="stylesheet" href="/css/obsidian.css">
+    <link rel="stylesheet" href="/css/ball-atom.min.css">
+</head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://zhanghao-web.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">前端路由实现与react-router源码分析</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="javascript:;"><b>「 </b>Article<b> 」</b></a>
+                
+                June 21, 2018
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2018/06/21/study/前端路由实现与react-router源码分析/" title="前端路由实现与react-router源码分析">前端路由实现与react-router源码分析</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    26k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    23 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/路由/">路由</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在单页应用上，前端路由并不陌生。很多前端框架也会有独立开发或推荐配套使用的路由系统。那么，当我们在谈前端路由的时候，还可以谈些什么？本文将简要分析并实现一个的前端路由，并对 react-router 进行分析。</p>
+<h2 id="一个极简前端路由实现"><a href="#一个极简前端路由实现" class="headerlink" title="一个极简前端路由实现"></a>一个极简前端路由实现</h2><p>谈一下前端路由的简要原理，以hash形式（也可以使用History API做处理）为例，当url的hash发生变化时，触发hashchange注册的回调，在回调中进行不同的操作，展示不同的页面。直接看代码比较直观。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Router</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.routes = &#123;&#125;;</span><br><span class="line">    <span class="keyword">this</span>.currentUrl = <span class="string">''</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 存储路由更新时的回调到回调数组routes中，回调函数将负责对页面的更新</span></span><br><span class="line">Router.prototype.route = <span class="function"><span class="keyword">function</span>(<span class="params">path,callback</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.routes[path] = callback || <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 路由执行当前url对应的回调函数，更新页面</span></span><br><span class="line">Router.prototype.refresh = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.currentUrl = location.hash.slice(<span class="number">1</span>) || <span class="string">'/'</span>;</span><br><span class="line">    <span class="keyword">this</span>.routes[<span class="keyword">this</span>.currentUrl]()</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 路由监听</span></span><br><span class="line">Router.prototype.init = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">window</span>.addEventListener(<span class="string">'load'</span>,<span class="keyword">this</span>.refresh.bind(<span class="keyword">this</span>),<span class="literal">false</span>);</span><br><span class="line">    <span class="built_in">window</span>.addEventListener(<span class="string">'hashChange'</span>,<span class="keyword">this</span>.refresh.bind(<span class="keyword">this</span>),<span class="literal">false</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">window</span>.Router = <span class="keyword">new</span> Router();</span><br><span class="line"><span class="built_in">window</span>.Router.init();</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>上面路由系统Router对象实现，主要提供三个方法</p>
+<ul>
+<li>route 存储路由更新时的回调到回调数组routes中，回调函数将负责对页面的更新</li>
+<li>refresh 执行当前url对应的回调函数，更新页面</li>
+<li>init 监听浏览器 url hash 更新事件</li>
+</ul>
+</blockquote>
+<p>Router调用方法以及呈现效果如下，点击对应的url，背景色发生不同的变化</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#"</span>&gt;</span>turn white<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#/blue"</span>&gt;</span>turn bule<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#/green"</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span>turn green<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> content = <span class="built_in">document</span>.quserSelecotor(<span class="string">'body'</span>);</span><br><span class="line"><span class="comment">// change page anything</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">changebBgColor</span>(<span class="params">color</span>)</span>&#123;</span><br><span class="line">    content.style.backgroundColor = color;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Router(<span class="string">'/'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    changeBgColor(<span class="string">'white'</span>);</span><br><span class="line">&#125;)</span><br><span class="line">Router(<span class="string">'/blue'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    changeBgColor(<span class="string">'blue'</span>);</span><br><span class="line">&#125;)</span><br><span class="line">Router(<span class="string">'/green'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    changeBgColor(<span class="string">'green'</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p><img src="https://cloud.githubusercontent.com/assets/10385585/15266370/156436f6-19d5-11e6-8c90-c24f6d8cc24e.gif" alt="router"></p>
+<p>以上为一个前端路由的简单实现，虽然简单，但实际上很多路由系统的根基都立于此，其他路由系统主要是对自身使用的框架机制的进行配套及优化，如与 react 配套的 <a href="https://github.com/ReactTraining/react-router" target="_blank" rel="noopener">react-router</a>。</p>
+<h2 id="react-router-分析"><a href="#react-router-分析" class="headerlink" title="react-router 分析"></a>react-router 分析</h2><h3 id="react-router-与-history-结合形式"><a href="#react-router-与-history-结合形式" class="headerlink" title="react-router 与 history 结合形式"></a>react-router 与 history 结合形式</h3><p>react-router是基于history模块提供的api进行开发的，结合的形式本文记为<strong>包装形式</strong>。所以在开始对其分析之前，先<code>举一个简单的例子来说明如何进行对象的包装</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//原对象</span></span><br><span class="line"><span class="keyword">var</span> historyModule = &#123;</span><br><span class="line">    listener: [],</span><br><span class="line"></span><br><span class="line">    listen: <span class="function"><span class="keyword">function</span>(<span class="params">listener</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.listener.push(listener);</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'historyModule listen'</span>);</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    updateLocation: funcion()&#123;</span><br><span class="line">        <span class="keyword">this</span>.listener.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">listener</span>)</span>&#123;</span><br><span class="line">            listener(<span class="string">'new location'</span>);</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Router将用historyModule对象将其包装</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> Router = &#123;</span><br><span class="line">    source:&#123;&#125;,</span><br><span class="line"></span><br><span class="line">    init: <span class="function"><span class="keyword">function</span>(<span class="params">source</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.source = source;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    listen: <span class="function"><span class="keyword">function</span>(<span class="params">listener</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.source.listen(<span class="function"><span class="keyword">function</span>(<span class="params">location</span>)</span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'Router listen tirgger'</span>);</span><br><span class="line">            listener(location);</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//将historyModule注入到Router中</span></span><br><span class="line">Router.init(historyModule);</span><br><span class="line"></span><br><span class="line"><span class="comment">//Router 注册监听</span></span><br><span class="line">Router.listen(<span class="function"><span class="keyword">function</span>(<span class="params">location</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(loaction + <span class="string">'-&gt; router setstate'</span>);</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// historyModule 触发回调</span></span><br><span class="line">historyModule.updateLocation()</span><br></pre></td></tr></table></figure>
+<p>返回：<br><img src="https://cloud.githubusercontent.com/assets/10385585/15266368/fd76c04a-19d4-11e6-9e9f-817f71eaab09.png" alt="demo"></p>
+<p>可看到 historyModule 中含有机制：historyModule.updateLocation() -&gt; listener( )，Router 通过对其进行包装开发，针对 historyModule 的机制对 Router 也起到了作用，即historyModule.updateLocation() 将触发 Router.listen 中的回调函数 。<a href="https://github.com/joeyguo/blog/blob/master/lab/2016/router/package-style.html" target="_blank" rel="noopener">点击查看完整代码</a><br>这种包装形式能够充分利用原对象（historyModule ）的内部机制，减少开发成本，也更好的分离包装函数（Router）的逻辑，减少对原对象的影响。</p>
+<h3 id="react-router-使用方式"><a href="#react-router-使用方式" class="headerlink" title="react-router 使用方式"></a>react-router 使用方式</h3><p>react-router 以 <code>react component</code> 的组件方式提供 API， 包含 <code>Router，Route，Redirect，Link</code> 等等，这样能够充分利用 <code>react component</code> 提供的生命周期特性，同时也让定义路由跟写 react component 达到统一，如下</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">render((</span><br><span class="line">&lt;Router history=&#123;browserHistory&#125;&gt;</span><br><span class="line">    &lt;Route path=<span class="string">"/"</span> component=&#123;App&#125;&gt;</span><br><span class="line">    &lt;Route path=<span class="string">"about"</span> component=&#123;About&#125;/&gt;</span><br><span class="line">    &lt;Route path=<span class="string">"users"</span> component=&#123;Users&#125;&gt;</span><br><span class="line">        &lt;Route path=<span class="string">"/user/:userId"</span> component=&#123;User&#125;/&gt;</span><br><span class="line">    &lt;<span class="regexp">/Route&gt;</span></span><br><span class="line"><span class="regexp">    &lt;Route path="*" component=&#123;NoMatch&#125;/</span>&gt;</span><br><span class="line">    &lt;<span class="regexp">/Route&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>Router&gt;</span><br><span class="line">), <span class="built_in">document</span>.body)</span><br></pre></td></tr></table></figure>
+<p>就这样，声明了一份含有 path to component 的各个映射的路由表。</p>
+<p>react-router 还提供的 Link 组件（如下），作为提供更新 url 的途径，触发 Link 后最终将通过如上面定义的路由表进行匹配，并拿到对应的 component 及 state 进行 render 渲染页面。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;Link to=&#123;<span class="string">`/user/89757`</span>&#125;&gt;<span class="string">'joey'</span>&lt;<span class="regexp">/Link&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里不细讲 react-router 的使用，详情可见：<a href="https://github.com/reactjs/react-router" target="_blank" rel="noopener">https://github.com/reactjs/react-router</a></p>
+<h2 id="从点击-Link-到-render-对应-component-，路由中发生了什么"><a href="#从点击-Link-到-render-对应-component-，路由中发生了什么" class="headerlink" title="从点击 Link 到 render 对应 component ，路由中发生了什么"></a>从点击 Link 到 render 对应 component ，路由中发生了什么</h2><h3 id="为何能够触发-render-component-？"><a href="#为何能够触发-render-component-？" class="headerlink" title="为何能够触发 render component ？"></a>为何能够触发 render component ？</h3><p>主要是因为触发了 <code>react setState</code> 的方法从而能够触发 <code>render component</code>。</p>
+<p>从顶层组件 Router 出发（下面代码从 <code>react-router/Router</code> 中摘取），可看到 Router 在 react component 生命周期之组件被挂载前 componentWillMount 中使用 this.history.listen 去注册了 url 更新的回调函数。回调函数将在 url 更新时触发，回调中的 setState 起到 render 了新的 component 的作用。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">React.prototype.componentWillMount = <span class="function"><span class="keyword">function</span> <span class="title">componentWillMount</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> createHistory = <span class="keyword">this</span>.props.history;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.history = _useRoutes2[<span class="string">'default'</span>](createHistory)(&#123;</span><br><span class="line">        routes: _RouteUtils.createRoutes(routes || children),</span><br><span class="line">        parseQueryString: parseQueryString,</span><br><span class="line">        stringifyQuery: stringifyQuery</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>._unlisten = <span class="keyword">this</span>.history.listen(<span class="function"><span class="keyword">function</span> (<span class="params">error, state</span>) </span>&#123;</span><br><span class="line">        _this.setState(state, _this.props.onUpdate);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的 _useRoutes2 对 history 操作便是对其做一层包装，所以调用的 this.history 实际为包装以后的对象，该对象含有 _useRoutes2 中的 listen 方法，如下</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">listen</span>(<span class="params">listener</span>)</span>&#123;</span><br><span class="line">    rerurn listen(<span class="function"><span class="keyword">function</span>(<span class="params">location</span>)</span>&#123;</span><br><span class="line">        <span class="comment">// .. 省略其他</span></span><br><span class="line">      match(location, <span class="function"><span class="keyword">function</span> (<span class="params">error, redirectLocation, nextState</span>) </span>&#123;</span><br><span class="line">        listener(<span class="literal">null</span>, nextState);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可看到，上面代码中，主要分为两部分</p>
+<ul>
+<li><p>使用了 history 模块的 listen 注册了一个含有 setState 的回调函数（这样就能使用 history 模块中的机制）</p>
+</li>
+<li><p>回调中的 match 方法为 react-router 所特有，match 函数根据当前 location 以及前面写的 Route 路由表匹配出对应的路由子集得到新的路由状态值 state，具体实现可见 react-router/matchRoutes ，再根据 state 得到对应的 component ，最终执行了 match 中的回调 listener(null, nextState) ，即执行了 Router 中的监听回调（setState），从而更新了展示。</p>
+</li>
+</ul>
+<p>以上，为起始注册的监听，及回调的作用。</p>
+<h3 id="如何触发监听的回调函数的执行？"><a href="#如何触发监听的回调函数的执行？" class="headerlink" title="如何触发监听的回调函数的执行？"></a>如何触发监听的回调函数的执行？</h3><p>这里还得从如何更新 url 说起。一般来说，url 更新主要有两种方式：简单的 hash 更新或使用 history api 进行地址更新。</p>
+<p>在 react-router 中，其提供了 Link 组件，该组件能在 render 中使用，最终会表现为 a 标签，并将 Link 中的各个参数组合放它的 href 属性中。可以从 react-router/ Link 中看到，对该组件的点击事件进行了阻止了浏览器的默认跳转行为，而改用 history 模块的 <code>pushState</code> 方法去触发 url 更新。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Link.prototype.render = <span class="function"><span class="keyword">function</span> <span class="title">render</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// .. 省略其他</span></span><br><span class="line">    props.onClick = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> _this.handleClick(e);</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">if</span> (history) &#123;</span><br><span class="line">     <span class="comment">// .. 省略其他</span></span><br><span class="line">      props.href = history.createHref(to, query);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> _react2[<span class="string">'default'</span>].createElement(<span class="string">'a'</span>, props);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Link.prototype.handleClick = <span class="function"><span class="keyword">function</span> <span class="title">handleClick</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// .. 省略其他</span></span><br><span class="line">    event.preventDefault();</span><br><span class="line">    <span class="keyword">this</span>.context.history.pushState(<span class="keyword">this</span>.props.state, <span class="keyword">this</span>.props.to, <span class="keyword">this</span>.props.query);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>对 history 模块的 pushState 方法对 url 的更新形式，同样分为两种，<br>分别在 <code>history/createBrowserHistory</code> 及 <code>history/createHashHistory</code> 各自的 <code>finishTransition</code> 中，如 <code>history/createBrowserHistory</code> 中使用的是 <code>window.history.replaceState(historyState, null, path)</code>;<br>而 <code>history/createHashHistory</code> 则使用 <code>window.location.hash = url</code>，<br>调用哪个是根据我们一开始创建 history 的方式。</p>
+<p>更新 url 的显示是一部分，另一部分是根据 url 去更新展示，也就是触发前面的监听。这是在前面 <code>finishTransition</code> 更新 url 之后实现的，调用的是 <code>history/createHistory</code> 中的 <code>updateLocation</code> 方法，<code>changeListeners</code> 中为 <code>history/createHistory</code> 中的 listen 中所添加的，如下</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">updateLocation</span>(<span class="params">newLocation</span>) </span>&#123;</span><br><span class="line">   <span class="comment">// 示意代码</span></span><br><span class="line">    location = newLocation;</span><br><span class="line">    changeListeners.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">listener</span>) </span>&#123;</span><br><span class="line">      listener(location);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">listen</span>(<span class="params">listener</span>) </span>&#123;</span><br><span class="line">     <span class="comment">// 示意代码</span></span><br><span class="line">    changeListeners.push(listener);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><blockquote>
+<p>可以将以上 react-router 的整个包装闭环总结为</p>
+</blockquote>
+<ul>
+<li><p>回调函数：含有能够更新 react UI 的 react setState 方法。</p>
+</li>
+<li><p>注册回调：在 Router componentWillMount 中使用 history.listen 注册的回调函数，最终放在 history 模块的 回调函数数组 changeListeners 中。</p>
+</li>
+<li><p>触发回调：Link 点击触发 history 中回调函数数组 changeListeners 的执行，从而触发原来 listen 中的 setState 方法，更新了页面</p>
+</li>
+</ul>
+<p>至于前进与后退的实现，是通过监听 popstate 以及 hashchange 的事件，当前进或后退 url 更新时，触发这两个事件的回调函数，回调的执行方式 Link 大致相同，最终同样更新了 UI ，这里就不再说明。</p>
+<p>react-router 主要是利用底层 history 模块的机制，通过结合 react 的架构机制做一层包装，实际自身的内容并不多，但其包装的思想笔者认为很值得学习，有兴趣的建议阅读下源码，相信会有其他收获。</p>
+<p><a href="https://github.com/joeyguo/blog/issues/2" target="_blank" rel="noopener">原文地址</a></p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="https://res.cloudinary.com/tridiamond/image/upload/v1573019751/TriDiamond_logo_ui_xeublz.jpg" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd>
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">147 <p>Articles</p></a></li>
+                    <li><a href="/categories">23 <p>Categories</p></a></li>
+                    <li><a href="/tags">47 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一个极简前端路由实现"><span class="toc-number">1.1.</span> <span class="toc-text">一个极简前端路由实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#react-router-分析"><span class="toc-number">1.2.</span> <span class="toc-text">react-router 分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#react-router-与-history-结合形式"><span class="toc-number">1.2.1.</span> <span class="toc-text">react-router 与 history 结合形式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#react-router-使用方式"><span class="toc-number">1.2.2.</span> <span class="toc-text">react-router 使用方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#从点击-Link-到-render-对应-component-，路由中发生了什么"><span class="toc-number">1.3.</span> <span class="toc-text">从点击 Link 到 render 对应 component ，路由中发生了什么</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#为何能够触发-render-component-？"><span class="toc-number">1.3.1.</span> <span class="toc-text">为何能够触发 render component ？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何触发监听的回调函数的执行？"><span class="toc-number">1.3.2.</span> <span class="toc-text">如何触发监听的回调函数的执行？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.4.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.3" target="_blank" rel="noopener">v1.4.3</a></small>
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    <link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+    <script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+    <script src="/js/busuanzi.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>
