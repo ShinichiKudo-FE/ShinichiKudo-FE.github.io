@@ -99,13 +99,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    65k
+                    20k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    59 mins.
+                    19 mins.
                 </span>
                 
                 
@@ -144,63 +144,538 @@
 <p>Vuex是一个专门为Vue.js框架设计的、用于对Vue.js应用程序进行状态管理的库，它借鉴了Flux、redux的基本思想，将共享的数据抽离到全局，以一个单例存放，同时利用Vue.js的响应式机制来进行高效的状态管理与更新。正是因为Vuex使用了Vue.js内部的“响应式机制”，所以Vuex是一个专门为Vue.js设计并与之高度契合的框架（优点是更加简洁高效，缺点是只能跟Vue.js搭配使用）。具体使用方法及API可以参考Vuex的官网。</p>
 <p>Vuex实现了一个单向数据流，在全局拥有一个State存放数据，所有修改State的操作必须通过Mutation进行，Mutation的同时提供了订阅者模式供外部插件调用获取State数据的更新。所有异步接口需要走Action，常见于调用后端接口异步获取更新数据，而Action也是无法直接修改State的，还是需要通过Mutation来修改State的数据。最后，根据State的变化，渲染到视图上。Vuex运行依赖Vue内部数据双向绑定机制，需要new一个Vue对象来实现“响应式化”，所以Vuex是一个专门为Vue.js设计的状态管理库。</p>
 <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>使用过Vuex的朋友一定知道，Vuex的安装十分简单，只需要提供一个store，然后执行下面两句代码即完成的Vuex的引入。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Vue.use(Vuex);</span><br><span class="line"></span><br><span class="line"><span class="comment">/*将store放入Vue创建时的option中*/</span></span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">    el: <span class="string">'#app'</span>,</span><br><span class="line">    store</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">Vue.use(Vuex);
+
+/*将store放入Vue创建时的option中*/
+new Vue({
+    el: &#39;#app&#39;,
+    store
+});
+</code></pre>
 <p>那么问题来了，Vuex是怎样把store注入到Vue实例中去的呢？</p>
 <p>Vue.js提供了<code>Vue.use</code>方法用来给Vue.js安装插件，内部通过调用插件的install方法(当插件是一个对象的时候)来进行插件的安装。</p>
 <p>我们来看一下Vuex的install实现。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*暴露给外部的插件install方法，供Vue.use调用安装插件*/</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">install</span> (<span class="params">_Vue</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (Vue) &#123;</span><br><span class="line">    <span class="comment">/*避免重复安装（Vue.use内部也会检测一次是否重复安装同一个插件）*/</span></span><br><span class="line">    <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">      <span class="built_in">console</span>.error(</span><br><span class="line">        <span class="string">'[vuex] already installed. Vue.use(Vuex) should be called only once.'</span></span><br><span class="line">      )</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">/*保存Vue，同时用于检测是否重复安装*/</span></span><br><span class="line">  Vue = _Vue</span><br><span class="line">  <span class="comment">/*将vuexInit混淆进Vue的beforeCreate(Vue2.0)或_init方法(Vue1.0)*/</span></span><br><span class="line">  applyMixin(Vue)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">/*暴露给外部的插件install方法，供Vue.use调用安装插件*/
+export function install (_Vue) {
+  if (Vue) {
+    /*避免重复安装（Vue.use内部也会检测一次是否重复安装同一个插件）*/
+    if (process.env.NODE_ENV !== &#39;production&#39;) {
+      console.error(
+        &#39;[vuex] already installed. Vue.use(Vuex) should be called only once.&#39;
+      )
+    }
+    return
+  }
+  /*保存Vue，同时用于检测是否重复安装*/
+  Vue = _Vue
+  /*将vuexInit混淆进Vue的beforeCreate(Vue2.0)或_init方法(Vue1.0)*/
+  applyMixin(Vue)
+}
+</code></pre>
 <p>这段install代码做了两件事情，一件是防止Vuex被重复安装，另一件是执行applyMixin，目的是执行vuexInit方法初始化Vuex。Vuex针对Vue1.0与2.0分别进行了不同的处理，如果是Vue1.0，Vuex会将vuexInit方法放入Vue的_init方法中，而对于Vue2.0，则会将vuexinit混淆进Vue的beforeCreacte钩子中。来看一下vuexInit的代码。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*Vuex的init钩子，会存入每一个Vue实例等钩子列表*/</span></span><br><span class="line"> <span class="function"><span class="keyword">function</span> <span class="title">vuexInit</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">   <span class="keyword">const</span> options = <span class="keyword">this</span>.$options</span><br><span class="line">   <span class="comment">// store injection</span></span><br><span class="line">   <span class="keyword">if</span> (options.store) &#123;</span><br><span class="line">     <span class="comment">/*存在store其实代表的就是Root节点，直接执行store（function时）或者使用store（非function）*/</span></span><br><span class="line">     <span class="keyword">this</span>.$store = <span class="keyword">typeof</span> options.store === <span class="string">'function'</span></span><br><span class="line">       ? options.store()</span><br><span class="line">       : options.store</span><br><span class="line">   &#125; <span class="keyword">else</span> <span class="keyword">if</span> (options.parent &amp;&amp; options.parent.$store) &#123;</span><br><span class="line">     <span class="comment">/*子组件直接从父组件中获取$store，这样就保证了所有组件都公用了全局的同一份store*/</span></span><br><span class="line">     <span class="keyword">this</span>.$store = options.parent.$store</span><br><span class="line">   &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js"> /*Vuex的init钩子，会存入每一个Vue实例等钩子列表*/
+  function vuexInit () {
+    const options = this.$options
+    // store injection
+    if (options.store) {
+      /*存在store其实代表的就是Root节点，直接执行store（function时）或者使用store（非function）*/
+      this.$store = typeof options.store === &#39;function&#39;
+        ? options.store()
+        : options.store
+    } else if (options.parent &amp;&amp; options.parent.$store) {
+      /*子组件直接从父组件中获取$store，这样就保证了所有组件都公用了全局的同一份store*/
+      this.$store = options.parent.$store
+    }
+  }
+</code></pre>
 <p>vuexInit会尝试从options中获取store，如果当前组件是根组件（Root节点），则options中会存在store，直接获取赋值给$store即可。如果当前组件非根组件，则通过options中的parent获取父组件的$store引用。这样一来，所有的组件都获取到了同一份内存地址的Store实例，于是我们可以在每一个组件中通过this.$store愉快地访问全局的Store实例了。</p>
 <p>那么，什么是Store实例？</p>
 <h2 id="Store"><a href="#Store" class="headerlink" title="Store"></a>Store</h2><p>我们传入到根组件到store，就是Store实例，用Vuex提供到Store方法构造。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">new</span> Vuex.Store(&#123;</span><br><span class="line">    strict: <span class="literal">true</span>,</span><br><span class="line">    modules: &#123;</span><br><span class="line">        moduleA,</span><br><span class="line">        moduleB</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">export default new Vuex.Store({
+    strict: true,
+    modules: {
+        moduleA,
+        moduleB
+    }
+});
+</code></pre>
 <p>我们来看一下Store的实现。首先是构造函数。</p>
 <a id="more"></a>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">constructor</span> (options = &#123;&#125;) &#123;</span><br><span class="line">    <span class="comment">// Auto install if it is not done yet and `window` has `Vue`.</span></span><br><span class="line">    <span class="comment">// To allow users to avoid auto-installation in some cases,</span></span><br><span class="line">    <span class="comment">// this code should be placed here. See #731</span></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">      在浏览器环境下，如果插件还未安装（!Vue即判断是否未安装），则它会自动安装。</span></span><br><span class="line"><span class="comment">      它允许用户在某些情况下避免自动安装。</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="keyword">if</span> (!Vue &amp;&amp; <span class="keyword">typeof</span> <span class="built_in">window</span> !== <span class="string">'undefined'</span> &amp;&amp; <span class="built_in">window</span>.Vue) &#123;</span><br><span class="line">      install(<span class="built_in">window</span>.Vue)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">      assert(Vue, <span class="string">`must call Vue.use(Vuex) before creating a store instance.`</span>)</span><br><span class="line">      assert(<span class="keyword">typeof</span> <span class="built_in">Promise</span> !== <span class="string">'undefined'</span>, <span class="string">`vuex requires a Promise polyfill in this browser.`</span>)</span><br><span class="line">      assert(<span class="keyword">this</span> <span class="keyword">instanceof</span> Store, <span class="string">`Store must be called with the new operator.`</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> &#123;</span><br><span class="line">      <span class="comment">/*一个数组，包含应用在 store 上的插件方法。这些插件直接接收 store 作为唯一参数，可以监听 mutation（用于外部地数据持久化、记录或调试）或者提交 mutation （用于内部数据，例如 websocket 或 某些观察者）*/</span></span><br><span class="line">      plugins = [],</span><br><span class="line">      <span class="comment">/*使 Vuex store 进入严格模式，在严格模式下，任何 mutation 处理函数以外修改 Vuex state 都会抛出错误。*/</span></span><br><span class="line">      strict = <span class="literal">false</span></span><br><span class="line">    &#125; = options</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*从option中取出state，如果state是function则执行，最终得到一个对象*/</span></span><br><span class="line">    <span class="keyword">let</span> &#123;</span><br><span class="line">      state = &#123;&#125;</span><br><span class="line">    &#125; = options</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> state === <span class="string">'function'</span>) &#123;</span><br><span class="line">      state = state()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// store internal state</span></span><br><span class="line">    <span class="comment">/* 用来判断严格模式下是否是用mutation修改state的 */</span></span><br><span class="line">    <span class="keyword">this</span>._committing = <span class="literal">false</span></span><br><span class="line">    <span class="comment">/* 存放action */</span></span><br><span class="line">    <span class="keyword">this</span>._actions = <span class="built_in">Object</span>.create(<span class="literal">null</span>)</span><br><span class="line">    <span class="comment">/* 存放mutation */</span></span><br><span class="line">    <span class="keyword">this</span>._mutations = <span class="built_in">Object</span>.create(<span class="literal">null</span>)</span><br><span class="line">    <span class="comment">/* 存放getter */</span></span><br><span class="line">    <span class="keyword">this</span>._wrappedGetters = <span class="built_in">Object</span>.create(<span class="literal">null</span>)</span><br><span class="line">    <span class="comment">/* module收集器 */</span></span><br><span class="line">    <span class="keyword">this</span>._modules = <span class="keyword">new</span> ModuleCollection(options)</span><br><span class="line">    <span class="comment">/* 根据namespace存放module */</span></span><br><span class="line">    <span class="keyword">this</span>._modulesNamespaceMap = <span class="built_in">Object</span>.create(<span class="literal">null</span>)</span><br><span class="line">    <span class="comment">/* 存放订阅者 */</span></span><br><span class="line">    <span class="keyword">this</span>._subscribers = []</span><br><span class="line">    <span class="comment">/* 用以实现Watch的Vue实例 */</span></span><br><span class="line">    <span class="keyword">this</span>._watcherVM = <span class="keyword">new</span> Vue()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// bind commit and dispatch to self</span></span><br><span class="line">    <span class="comment">/*将dispatch与commit调用的this绑定为store对象本身，否则在组件内部this.dispatch时的this会指向组件的vm*/</span></span><br><span class="line">    <span class="keyword">const</span> store = <span class="keyword">this</span></span><br><span class="line">    <span class="keyword">const</span> &#123; dispatch, commit &#125; = <span class="keyword">this</span></span><br><span class="line">    <span class="comment">/* 为dispatch与commit绑定this（Store实例本身） */</span></span><br><span class="line">    <span class="keyword">this</span>.dispatch = <span class="function"><span class="keyword">function</span> <span class="title">boundDispatch</span> (<span class="params">type, payload</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> dispatch.call(store, type, payload)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">this</span>.commit = <span class="function"><span class="keyword">function</span> <span class="title">boundCommit</span> (<span class="params">type, payload, options</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> commit.call(store, type, payload, options)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// strict mode</span></span><br><span class="line">    <span class="comment">/*严格模式(使 Vuex store 进入严格模式，在严格模式下，任何 mutation 处理函数以外修改 Vuex state 都会抛出错误)*/</span></span><br><span class="line">    <span class="keyword">this</span>.strict = strict</span><br><span class="line"></span><br><span class="line">    <span class="comment">// init root module.</span></span><br><span class="line">    <span class="comment">// this also recursively registers all sub-modules</span></span><br><span class="line">    <span class="comment">// and collects all module getters inside this._wrappedGetters</span></span><br><span class="line">    <span class="comment">/*初始化根module，这也同时递归注册了所有子modle，收集所有module的getter到_wrappedGetters中去，this._modules.root代表根module才独有保存的Module对象*/</span></span><br><span class="line">    installModule(<span class="keyword">this</span>, state, [], <span class="keyword">this</span>._modules.root)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// initialize the store vm, which is responsible for the reactivity</span></span><br><span class="line">    <span class="comment">// (also registers _wrappedGetters as computed properties)</span></span><br><span class="line">    <span class="comment">/* 通过vm重设store，新建Vue对象使用Vue内部的响应式实现注册state以及computed */</span></span><br><span class="line">    resetStoreVM(<span class="keyword">this</span>, state)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// apply plugins</span></span><br><span class="line">    <span class="comment">/* 调用插件 */</span></span><br><span class="line">    plugins.forEach(<span class="function"><span class="params">plugin</span> =&gt;</span> plugin(<span class="keyword">this</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* devtool插件 */</span></span><br><span class="line">    <span class="keyword">if</span> (Vue.config.devtools) &#123;</span><br><span class="line">      devtoolPlugin(<span class="keyword">this</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">constructor (options = {}) {
+    // Auto install if it is not done yet and `window` has `Vue`.
+    // To allow users to avoid auto-installation in some cases,
+    // this code should be placed here. See #731
+    /*
+      在浏览器环境下，如果插件还未安装（!Vue即判断是否未安装），则它会自动安装。
+      它允许用户在某些情况下避免自动安装。
+    */
+    if (!Vue &amp;&amp; typeof window !== &#39;undefined&#39; &amp;&amp; window.Vue) {
+      install(window.Vue)
+    }
+
+    if (process.env.NODE_ENV !== &#39;production&#39;) {
+      assert(Vue, `must call Vue.use(Vuex) before creating a store instance.`)
+      assert(typeof Promise !== &#39;undefined&#39;, `vuex requires a Promise polyfill in this browser.`)
+      assert(this instanceof Store, `Store must be called with the new operator.`)
+    }
+
+    const {
+      /*一个数组，包含应用在 store 上的插件方法。这些插件直接接收 store 作为唯一参数，可以监听 mutation（用于外部地数据持久化、记录或调试）或者提交 mutation （用于内部数据，例如 websocket 或 某些观察者）*/
+      plugins = [],
+      /*使 Vuex store 进入严格模式，在严格模式下，任何 mutation 处理函数以外修改 Vuex state 都会抛出错误。*/
+      strict = false
+    } = options
+
+    /*从option中取出state，如果state是function则执行，最终得到一个对象*/
+    let {
+      state = {}
+    } = options
+    if (typeof state === &#39;function&#39;) {
+      state = state()
+    }
+
+    // store internal state
+    /* 用来判断严格模式下是否是用mutation修改state的 */
+    this._committing = false
+    /* 存放action */
+    this._actions = Object.create(null)
+    /* 存放mutation */
+    this._mutations = Object.create(null)
+    /* 存放getter */
+    this._wrappedGetters = Object.create(null)
+    /* module收集器 */
+    this._modules = new ModuleCollection(options)
+    /* 根据namespace存放module */
+    this._modulesNamespaceMap = Object.create(null)
+    /* 存放订阅者 */
+    this._subscribers = []
+    /* 用以实现Watch的Vue实例 */
+    this._watcherVM = new Vue()
+
+    // bind commit and dispatch to self
+    /*将dispatch与commit调用的this绑定为store对象本身，否则在组件内部this.dispatch时的this会指向组件的vm*/
+    const store = this
+    const { dispatch, commit } = this
+    /* 为dispatch与commit绑定this（Store实例本身） */
+    this.dispatch = function boundDispatch (type, payload) {
+      return dispatch.call(store, type, payload)
+    }
+    this.commit = function boundCommit (type, payload, options) {
+      return commit.call(store, type, payload, options)
+    }
+
+    // strict mode
+    /*严格模式(使 Vuex store 进入严格模式，在严格模式下，任何 mutation 处理函数以外修改 Vuex state 都会抛出错误)*/
+    this.strict = strict
+
+    // init root module.
+    // this also recursively registers all sub-modules
+    // and collects all module getters inside this._wrappedGetters
+    /*初始化根module，这也同时递归注册了所有子modle，收集所有module的getter到_wrappedGetters中去，this._modules.root代表根module才独有保存的Module对象*/
+    installModule(this, state, [], this._modules.root)
+
+    // initialize the store vm, which is responsible for the reactivity
+    // (also registers _wrappedGetters as computed properties)
+    /* 通过vm重设store，新建Vue对象使用Vue内部的响应式实现注册state以及computed */
+    resetStoreVM(this, state)
+
+    // apply plugins
+    /* 调用插件 */
+    plugins.forEach(plugin =&gt; plugin(this))
+
+    /* devtool插件 */
+    if (Vue.config.devtools) {
+      devtoolPlugin(this)
+    }
+  }
+</code></pre>
 <p>Store的构造类除了初始化一些内部变量以外，主要执行了installModule（初始化module）以及resetStoreVM（通过VM使store“响应式”）。</p>
 <h2 id="installModule"><a href="#installModule" class="headerlink" title="installModule"></a>installModule</h2><p>installModule的作用主要是用为module加上namespace名字空间（如果有）后，注册mutation、action以及getter，同时递归安装所有子module。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*初始化module*/</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">installModule</span> (<span class="params">store, rootState, path, module, hot</span>) </span>&#123;</span><br><span class="line">  <span class="comment">/* 是否是根module */</span></span><br><span class="line">  <span class="keyword">const</span> isRoot = !path.length</span><br><span class="line">  <span class="comment">/* 获取module的namespace */</span></span><br><span class="line">  <span class="keyword">const</span> namespace = store._modules.getNamespace(path)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// register in namespace map</span></span><br><span class="line">  <span class="comment">/* 如果有namespace则在_modulesNamespaceMap中注册 */</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">module</span>.namespaced) &#123;</span><br><span class="line">    store._modulesNamespaceMap[namespace] = <span class="built_in">module</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// set state</span></span><br><span class="line">  <span class="keyword">if</span> (!isRoot &amp;&amp; !hot) &#123;</span><br><span class="line">    <span class="comment">/* 获取父级的state */</span></span><br><span class="line">    <span class="keyword">const</span> parentState = getNestedState(rootState, path.slice(<span class="number">0</span>, <span class="number">-1</span>))</span><br><span class="line">    <span class="comment">/* module的name */</span></span><br><span class="line">    <span class="keyword">const</span> moduleName = path[path.length - <span class="number">1</span>]</span><br><span class="line">    store.<span class="string">`_withCommit`</span>(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">/* 将子module设置称响应式的 */</span></span><br><span class="line">      Vue.set(parentState, moduleName, <span class="built_in">module</span>.state)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> local = <span class="built_in">module</span>.context = makeLocalContext(store, namespace, path)</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* 遍历注册mutation */</span></span><br><span class="line">  <span class="built_in">module</span>.forEachMutation(<span class="function">(<span class="params">mutation, key</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> namespacedType = namespace + key</span><br><span class="line">    registerMutation(store, namespacedType, mutation, local)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* 遍历注册action */</span></span><br><span class="line">  <span class="built_in">module</span>.forEachAction(<span class="function">(<span class="params">action, key</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> namespacedType = namespace + key</span><br><span class="line">    registerAction(store, namespacedType, action, local)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* 遍历注册getter */</span></span><br><span class="line">  <span class="built_in">module</span>.forEachGetter(<span class="function">(<span class="params">getter, key</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> namespacedType = namespace + key</span><br><span class="line">    registerGetter(store, namespacedType, getter, local)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* 递归安装mudule */</span></span><br><span class="line">  <span class="built_in">module</span>.forEachChild(<span class="function">(<span class="params">child, key</span>) =&gt;</span> &#123;</span><br><span class="line">    installModule(store, rootState, path.concat(key), child, hot)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">/*初始化module*/
+function installModule (store, rootState, path, module, hot) {
+  /* 是否是根module */
+  const isRoot = !path.length
+  /* 获取module的namespace */
+  const namespace = store._modules.getNamespace(path)
+
+  // register in namespace map
+  /* 如果有namespace则在_modulesNamespaceMap中注册 */
+  if (module.namespaced) {
+    store._modulesNamespaceMap[namespace] = module
+  }
+
+  // set state
+  if (!isRoot &amp;&amp; !hot) {
+    /* 获取父级的state */
+    const parentState = getNestedState(rootState, path.slice(0, -1))
+    /* module的name */
+    const moduleName = path[path.length - 1]
+    store.`_withCommit`(() =&gt; {
+      /* 将子module设置称响应式的 */
+      Vue.set(parentState, moduleName, module.state)
+    })
+  }
+
+  const local = module.context = makeLocalContext(store, namespace, path)
+
+  /* 遍历注册mutation */
+  module.forEachMutation((mutation, key) =&gt; {
+    const namespacedType = namespace + key
+    registerMutation(store, namespacedType, mutation, local)
+  })
+
+  /* 遍历注册action */
+  module.forEachAction((action, key) =&gt; {
+    const namespacedType = namespace + key
+    registerAction(store, namespacedType, action, local)
+  })
+
+  /* 遍历注册getter */
+  module.forEachGetter((getter, key) =&gt; {
+    const namespacedType = namespace + key
+    registerGetter(store, namespacedType, getter, local)
+  })
+
+  /* 递归安装mudule */
+  module.forEachChild((child, key) =&gt; {
+    installModule(store, rootState, path.concat(key), child, hot)
+  })
+}
+</code></pre>
 <h2 id="resetStoreVM"><a href="#resetStoreVM" class="headerlink" title="resetStoreVM"></a>resetStoreVM</h2><p>在说resetStoreVM之前，先来看一个小demo。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> globalData = &#123;</span><br><span class="line">    d: <span class="string">'hello world'</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">    data () &#123;</span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            $$state: &#123;</span><br><span class="line">                globalData</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">/* modify */</span></span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    globalData.d = <span class="string">'hi~'</span>;</span><br><span class="line">&#125;, <span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">Vue.prototype.globalData = globalData;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 任意模板中 */</span></span><br><span class="line">&lt;div&gt;&#123;&#123;globalData.d&#125;&#125;&lt;<span class="regexp">/div&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">let globalData = {
+    d: &#39;hello world&#39;
+};
+new Vue({
+    data () {
+        return {
+            $$state: {
+                globalData
+            }
+        }
+    }
+});
+
+/* modify */
+setTimeout(() =&gt; {
+    globalData.d = &#39;hi~&#39;;
+}, 1000);
+
+Vue.prototype.globalData = globalData;
+
+/* 任意模板中 */
+&lt;div&gt;{{globalData.d}}&lt;/div&gt;
+</code></pre>
 <p>上述代码在全局有一个globalData，它被传入一个Vue对象的data中，之后在任意Vue模板中对该变量进行展示，因为此时globalData已经在Vue的prototype上了所以直接通过this.prototype访问，也就是在模板中的。此时，setTimeout在1s之后将globalData.d进行修改，我们发现模板中的globalData.d发生了变化。其实上述部分就是Vuex依赖Vue核心实现数据的“响应式化”。</p>
 <p>接着来看代码。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 通过vm重设store，新建Vue对象使用Vue内部的响应式实现注册state以及computed */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">resetStoreVM</span> (<span class="params">store, state, hot</span>) </span>&#123;</span><br><span class="line">  <span class="comment">/* 存放之前的vm对象 */</span></span><br><span class="line">  <span class="keyword">const</span> oldVm = store._vm </span><br><span class="line"></span><br><span class="line">  <span class="comment">// bind store public getters</span></span><br><span class="line">  store.getters = &#123;&#125;</span><br><span class="line">  <span class="keyword">const</span> wrappedGetters = store._wrappedGetters</span><br><span class="line">  <span class="keyword">const</span> computed = &#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* 通过Object.defineProperty为每一个getter方法设置get方法，比如获取this.$store.getters.test的时候获取的是store._vm.test，也就是Vue对象的computed属性 */</span></span><br><span class="line">  forEachValue(wrappedGetters, (fn, key) =&gt; &#123;</span><br><span class="line">    <span class="comment">// use computed to leverage its lazy-caching mechanism</span></span><br><span class="line">    computed[key] = <span class="function"><span class="params">()</span> =&gt;</span> fn(store)</span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(store.getters, key, &#123;</span><br><span class="line">      <span class="keyword">get</span>: () =&gt; store._vm[key],</span><br><span class="line">      enumerable: true // for local getters</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  // use a Vue instance to store the state tree</span><br><span class="line">  // suppress warnings just in case the user has added</span><br><span class="line">  // some funky global mixins</span><br><span class="line">  const silent = Vue.config.silent</span><br><span class="line">  /* Vue.config.silent暂时设置为true的目的是在new一个Vue实例的过程中不会报出一切警告 */</span><br><span class="line">  Vue.config.silent = true</span><br><span class="line">  /*  这里new了一个Vue对象，运用Vue内部的响应式实现注册state以及computed*/</span><br><span class="line">  store._vm = new Vue(&#123;</span><br><span class="line">    data: &#123;</span><br><span class="line">      $$state: state</span><br><span class="line">    &#125;,</span><br><span class="line">    computed</span><br><span class="line">  &#125;)</span><br><span class="line">  Vue.config.silent = silent</span><br><span class="line"></span><br><span class="line">  <span class="comment">// enable strict mode for new vm</span></span><br><span class="line">  <span class="comment">/* 使能严格模式，保证修改store只能通过mutation */</span></span><br><span class="line">  <span class="keyword">if</span> (store.strict) &#123;</span><br><span class="line">    enableStrictMode(store)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (oldVm) &#123;</span><br><span class="line">    <span class="comment">/* 解除旧vm的state的引用，以及销毁旧的Vue对象 */</span></span><br><span class="line">    <span class="keyword">if</span> (hot) &#123;</span><br><span class="line">      <span class="comment">// dispatch changes in all subscribed watchers</span></span><br><span class="line">      <span class="comment">// to force getter re-evaluation for hot reloading.</span></span><br><span class="line">      store._withCommit(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        oldVm._data.$$state = <span class="literal">null</span></span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">    Vue.nextTick(<span class="function"><span class="params">()</span> =&gt;</span> oldVm.$destroy())</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">/* 通过vm重设store，新建Vue对象使用Vue内部的响应式实现注册state以及computed */
+function resetStoreVM (store, state, hot) {
+  /* 存放之前的vm对象 */
+  const oldVm = store._vm 
+
+  // bind store public getters
+  store.getters = {}
+  const wrappedGetters = store._wrappedGetters
+  const computed = {}
+
+  /* 通过Object.defineProperty为每一个getter方法设置get方法，比如获取this.$store.getters.test的时候获取的是store._vm.test，也就是Vue对象的computed属性 */
+  forEachValue(wrappedGetters, (fn, key) =&gt; {
+    // use computed to leverage its lazy-caching mechanism
+    computed[key] = () =&gt; fn(store)
+    Object.defineProperty(store.getters, key, {
+      get: () =&gt; store._vm[key],
+      enumerable: true // for local getters
+    })
+  })
+
+  // use a Vue instance to store the state tree
+  // suppress warnings just in case the user has added
+  // some funky global mixins
+  const silent = Vue.config.silent
+  /* Vue.config.silent暂时设置为true的目的是在new一个Vue实例的过程中不会报出一切警告 */
+  Vue.config.silent = true
+  /*  这里new了一个Vue对象，运用Vue内部的响应式实现注册state以及computed*/
+  store._vm = new Vue({
+    data: {
+      $$state: state
+    },
+    computed
+  })
+  Vue.config.silent = silent
+
+  // enable strict mode for new vm
+  /* 使能严格模式，保证修改store只能通过mutation */
+  if (store.strict) {
+    enableStrictMode(store)
+  }
+
+  if (oldVm) {
+    /* 解除旧vm的state的引用，以及销毁旧的Vue对象 */
+    if (hot) {
+      // dispatch changes in all subscribed watchers
+      // to force getter re-evaluation for hot reloading.
+      store._withCommit(() =&gt; {
+        oldVm._data.$$state = null
+      })
+    }
+    Vue.nextTick(() =&gt; oldVm.$destroy())
+  }
+}
+</code></pre>
 <p>resetStoreVM首先会遍历wrappedGetters，使用Object.defineProperty方法为每一个getter绑定上get方法，这样我们就可以在组件里访问this.$store.getter.test就等同于访问store._vm.test。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">forEachValue(wrappedGetters, (fn, key) =&gt; &#123;</span><br><span class="line">  <span class="comment">// use computed to leverage its lazy-caching mechanism</span></span><br><span class="line">  computed[key] = <span class="function"><span class="params">()</span> =&gt;</span> fn(store)</span><br><span class="line">  <span class="built_in">Object</span>.defineProperty(store.getters, key, &#123;</span><br><span class="line">    <span class="keyword">get</span>: () =&gt; store._vm[key],</span><br><span class="line">    enumerable: true // for local getters</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">forEachValue(wrappedGetters, (fn, key) =&gt; {
+  // use computed to leverage its lazy-caching mechanism
+  computed[key] = () =&gt; fn(store)
+  Object.defineProperty(store.getters, key, {
+    get: () =&gt; store._vm[key],
+    enumerable: true // for local getters
+  })
+})
+</code></pre>
 <p>之后Vuex采用了new一个Vue对象来实现数据的“响应式化”，运用Vue.js内部提供的数据双向绑定功能来实现store的数据与视图的同步更新。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">store._vm = <span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  data: &#123;</span><br><span class="line">    $$state: state</span><br><span class="line">  &#125;,</span><br><span class="line">  computed</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">store._vm = new Vue({
+  data: {
+    $$state: state
+  },
+  computed
+})
+</code></pre>
 <p>这时候我们访问store._vm.test也就访问了Vue实例中的属性。</p>
 <p>这两步执行完以后，我们就可以通过this.$store.getter.test访问vm中的test属性了。</p>
 <h2 id="严格模式"><a href="#严格模式" class="headerlink" title="严格模式"></a>严格模式</h2><p>Vuex的Store构造类的option有一个strict的参数，可以控制Vuex执行严格模式，严格模式下，所有修改state的操作必须通过mutation实现，否则会抛出错误。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 使能严格模式 */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">enableStrictMode</span> (<span class="params">store</span>) </span>&#123;</span><br><span class="line">  store._vm.$watch(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>._data.$$state &#125;, () =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">      <span class="comment">/* 检测store中的_committing的值，如果是true代表不是通过mutation的方法修改的 */</span></span><br><span class="line">      assert(store._committing, <span class="string">`Do not mutate vuex store state outside mutation handlers.`</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, &#123; <span class="attr">deep</span>: <span class="literal">true</span>, <span class="attr">sync</span>: <span class="literal">true</span> &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">/* 使能严格模式 */
+function enableStrictMode (store) {
+  store._vm.$watch(function () { return this._data.$$state }, () =&gt; {
+    if (process.env.NODE_ENV !== &#39;production&#39;) {
+      /* 检测store中的_committing的值，如果是true代表不是通过mutation的方法修改的 */
+      assert(store._committing, `Do not mutate vuex store state outside mutation handlers.`)
+    }
+  }, { deep: true, sync: true })
+}
+</code></pre>
 <p>首先，在严格模式下，Vuex会利用vm的$watch方法来观察$$state，也就是Store的state，在它被修改的时候进入回调。我们发现，回调中只有一句话，用assert断言来检测store._committing，当store._committing为false的时候会触发断言，抛出异常。</p>
 <p>我们发现，Store的commit方法中，执行mutation的语句是这样的。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>._withCommit(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  entry.forEach(<span class="function"><span class="keyword">function</span> <span class="title">commitIterator</span> (<span class="params">handler</span>) </span>&#123;</span><br><span class="line">    handler(payload)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">this._withCommit(() =&gt; {
+  entry.forEach(function commitIterator (handler) {
+    handler(payload)
+  })
+})
+</code></pre>
 <p>再来看看_withCommit的实现。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">_withCommit (fn) &#123;</span><br><span class="line">  <span class="comment">/* 调用withCommit修改state的值时会将store的committing值置为true，内部会有断言检查该值，在严格模式下只允许使用mutation来修改store中的值，而不允许直接修改store的数值 */</span></span><br><span class="line">  <span class="keyword">const</span> committing = <span class="keyword">this</span>._committing</span><br><span class="line">  <span class="keyword">this</span>._committing = <span class="literal">true</span></span><br><span class="line">  fn()</span><br><span class="line">  <span class="keyword">this</span>._committing = committing</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">_withCommit (fn) {
+  /* 调用withCommit修改state的值时会将store的committing值置为true，内部会有断言检查该值，在严格模式下只允许使用mutation来修改store中的值，而不允许直接修改store的数值 */
+  const committing = this._committing
+  this._committing = true
+  fn()
+  this._committing = committing
+}
+</code></pre>
 <p>我们发现，通过commit（mutation）修改state数据的时候，会再调用mutation方法之前将committing置为true，接下来再通过mutation函数修改state中的数据，这时候触发$watch中的回调断言committing是不会抛出异常的（此时committing为true）。而当我们直接修改state的数据时，触发$watch的回调执行断言，这时committing为false，则会抛出异常。这就是Vuex的严格模式的实现。</p>
 <p>接下来我们来看看Store提供的一些API。</p>
-<h2 id="commit（mutation）"><a href="#commit（mutation）" class="headerlink" title="commit（mutation）"></a>commit（mutation）</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 调用mutation的commit方法 */</span></span><br><span class="line">commit (_type, _payload, _options) &#123;</span><br><span class="line">  <span class="comment">// check object-style commit</span></span><br><span class="line">  <span class="comment">/* 校验参数 */</span></span><br><span class="line">  <span class="keyword">const</span> &#123;</span><br><span class="line">    type,</span><br><span class="line">    payload,</span><br><span class="line">    options</span><br><span class="line">  &#125; = unifyObjectStyle(_type, _payload, _options)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> mutation = &#123; type, payload &#125;</span><br><span class="line">  <span class="comment">/* 取出type对应的mutation的方法 */</span></span><br><span class="line">  <span class="keyword">const</span> entry = <span class="keyword">this</span>._mutations[type]</span><br><span class="line">  <span class="keyword">if</span> (!entry) &#123;</span><br><span class="line">    <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">      <span class="built_in">console</span>.error(<span class="string">`[vuex] unknown mutation type: <span class="subst">$&#123;type&#125;</span>`</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">/* 执行mutation中的所有方法 */</span></span><br><span class="line">  <span class="keyword">this</span>._withCommit(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    entry.forEach(<span class="function"><span class="keyword">function</span> <span class="title">commitIterator</span> (<span class="params">handler</span>) </span>&#123;</span><br><span class="line">      handler(payload)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="comment">/* 通知所有订阅者 */</span></span><br><span class="line">  <span class="keyword">this</span>._subscribers.forEach(<span class="function"><span class="params">sub</span> =&gt;</span> sub(mutation, <span class="keyword">this</span>.state))</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (</span><br><span class="line">    process.env.NODE_ENV !== <span class="string">'production'</span> &amp;&amp;</span><br><span class="line">    options &amp;&amp; options.silent</span><br><span class="line">  ) &#123;</span><br><span class="line">    <span class="built_in">console</span>.warn(</span><br><span class="line">      <span class="string">`[vuex] mutation type: <span class="subst">$&#123;type&#125;</span>. Silent option has been removed. `</span> +</span><br><span class="line">      <span class="string">'Use the filter functionality in the vue-devtools'</span></span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="commit（mutation）"><a href="#commit（mutation）" class="headerlink" title="commit（mutation）"></a>commit（mutation）</h2><pre><code class="js">/* 调用mutation的commit方法 */
+commit (_type, _payload, _options) {
+  // check object-style commit
+  /* 校验参数 */
+  const {
+    type,
+    payload,
+    options
+  } = unifyObjectStyle(_type, _payload, _options)
+
+  const mutation = { type, payload }
+  /* 取出type对应的mutation的方法 */
+  const entry = this._mutations[type]
+  if (!entry) {
+    if (process.env.NODE_ENV !== &#39;production&#39;) {
+      console.error(`[vuex] unknown mutation type: ${type}`)
+    }
+    return
+  }
+  /* 执行mutation中的所有方法 */
+  this._withCommit(() =&gt; {
+    entry.forEach(function commitIterator (handler) {
+      handler(payload)
+    })
+  })
+  /* 通知所有订阅者 */
+  this._subscribers.forEach(sub =&gt; sub(mutation, this.state))
+
+  if (
+    process.env.NODE_ENV !== &#39;production&#39; &amp;&amp;
+    options &amp;&amp; options.silent
+  ) {
+    console.warn(
+      `[vuex] mutation type: ${type}. Silent option has been removed. ` +
+      &#39;Use the filter functionality in the vue-devtools&#39;
+    )
+  }
+}
+</code></pre>
 <p>commit方法会根据type找到并调用_mutations中的所有type对应的mutation方法，所以当没有namespace的时候，commit方法会触发所有module中的mutation方法。再执行完所有的mutation之后会执行_subscribers中的所有订阅者。我们来看一下_subscribers是什么。</p>
 <p>Store给外部提供了一个subscribe方法，用以注册一个订阅函数，会push到Store实例的_subscribers中，同时返回一个从_subscribers中注销该订阅者的方法。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 注册一个订阅函数，返回取消订阅的函数 */</span></span><br><span class="line">subscribe (fn) &#123;</span><br><span class="line">  <span class="keyword">const</span> subs = <span class="keyword">this</span>._subscribers</span><br><span class="line">  <span class="keyword">if</span> (subs.indexOf(fn) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">    subs.push(fn)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> i = subs.indexOf(fn)</span><br><span class="line">    <span class="keyword">if</span> (i &gt; <span class="number">-1</span>) &#123;</span><br><span class="line">      subs.splice(i, <span class="number">1</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">/* 注册一个订阅函数，返回取消订阅的函数 */
+subscribe (fn) {
+  const subs = this._subscribers
+  if (subs.indexOf(fn) &lt; 0) {
+    subs.push(fn)
+  }
+  return () =&gt; {
+    const i = subs.indexOf(fn)
+    if (i &gt; -1) {
+      subs.splice(i, 1)
+    }
+  }
+}
+</code></pre>
 <p>在commit结束以后则会调用这些_subscribers中的订阅者，这个订阅者模式提供给外部一个监视state变化的可能。state通过mutation改变时，可以有效补获这些变化。</p>
 <h2 id="dispatch（action）"><a href="#dispatch（action）" class="headerlink" title="dispatch（action）"></a>dispatch（action）</h2><p>来看一下dispatch的实现。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 调用action的dispatch方法 */</span></span><br><span class="line">dispatch (_type, _payload) &#123;</span><br><span class="line">  <span class="comment">// check object-style dispatch</span></span><br><span class="line">  <span class="keyword">const</span> &#123;</span><br><span class="line">    type,</span><br><span class="line">    payload</span><br><span class="line">  &#125; = unifyObjectStyle(_type, _payload)</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* actions中取出type对应的ation */</span></span><br><span class="line">  <span class="keyword">const</span> entry = <span class="keyword">this</span>._actions[type]</span><br><span class="line">  <span class="keyword">if</span> (!entry) &#123;</span><br><span class="line">    <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">      <span class="built_in">console</span>.error(<span class="string">`[vuex] unknown action type: <span class="subst">$&#123;type&#125;</span>`</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* 是数组则包装Promise形成一个新的Promise，只有一个则直接返回第0个 */</span></span><br><span class="line">  <span class="keyword">return</span> entry.length &gt; <span class="number">1</span></span><br><span class="line">    ? <span class="built_in">Promise</span>.all(entry.map(<span class="function"><span class="params">handler</span> =&gt;</span> handler(payload)))</span><br><span class="line">    : entry[<span class="number">0</span>](payload)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">/* 调用action的dispatch方法 */
+dispatch (_type, _payload) {
+  // check object-style dispatch
+  const {
+    type,
+    payload
+  } = unifyObjectStyle(_type, _payload)
+
+  /* actions中取出type对应的ation */
+  const entry = this._actions[type]
+  if (!entry) {
+    if (process.env.NODE_ENV !== &#39;production&#39;) {
+      console.error(`[vuex] unknown action type: ${type}`)
+    }
+    return
+  }
+
+  /* 是数组则包装Promise形成一个新的Promise，只有一个则直接返回第0个 */
+  return entry.length &gt; 1
+    ? Promise.all(entry.map(handler =&gt; handler(payload)))
+    : entry[0](payload)
+}
+</code></pre>
 <p>以及registerAction时候做的事情。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 遍历注册action */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">registerAction</span> (<span class="params">store, type, handler, local</span>) </span>&#123;</span><br><span class="line">  <span class="comment">/* 取出type对应的action */</span></span><br><span class="line">  <span class="keyword">const</span> entry = store._actions[type] || (store._actions[type] = [])</span><br><span class="line">  entry.push(<span class="function"><span class="keyword">function</span> <span class="title">wrappedActionHandler</span> (<span class="params">payload, cb</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> res = handler.call(store, &#123;</span><br><span class="line">      dispatch: local.dispatch,</span><br><span class="line">      commit: local.commit,</span><br><span class="line">      getters: local.getters,</span><br><span class="line">      state: local.state,</span><br><span class="line">      rootGetters: store.getters,</span><br><span class="line">      rootState: store.state</span><br><span class="line">    &#125;, payload, cb)</span><br><span class="line">    <span class="comment">/* 判断是否是Promise */</span></span><br><span class="line">    <span class="keyword">if</span> (!isPromise(res)) &#123;</span><br><span class="line">      <span class="comment">/* 不是Promise对象的时候转化称Promise对象 */</span></span><br><span class="line">      res = <span class="built_in">Promise</span>.resolve(res)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (store._devtoolHook) &#123;</span><br><span class="line">      <span class="comment">/* 存在devtool插件的时候触发vuex的error给devtool */</span></span><br><span class="line">      <span class="keyword">return</span> res.catch(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">        store._devtoolHook.emit(<span class="string">'vuex:error'</span>, err)</span><br><span class="line">        <span class="keyword">throw</span> err</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> res</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">/* 遍历注册action */
+function registerAction (store, type, handler, local) {
+  /* 取出type对应的action */
+  const entry = store._actions[type] || (store._actions[type] = [])
+  entry.push(function wrappedActionHandler (payload, cb) {
+    let res = handler.call(store, {
+      dispatch: local.dispatch,
+      commit: local.commit,
+      getters: local.getters,
+      state: local.state,
+      rootGetters: store.getters,
+      rootState: store.state
+    }, payload, cb)
+    /* 判断是否是Promise */
+    if (!isPromise(res)) {
+      /* 不是Promise对象的时候转化称Promise对象 */
+      res = Promise.resolve(res)
+    }
+    if (store._devtoolHook) {
+      /* 存在devtool插件的时候触发vuex的error给devtool */
+      return res.catch(err =&gt; {
+        store._devtoolHook.emit(&#39;vuex:error&#39;, err)
+        throw err
+      })
+    } else {
+      return res
+    }
+  })
+}
+</code></pre>
 <p>因为registerAction的时候将push进_actions的action进行了一层封装（wrappedActionHandler），所以我们在进行dispatch的第一个参数中获取state、commit等方法。之后，执行结果res会被进行判断是否是Promise，不是则会进行一层封装，将其转化成Promise对象。dispatch时则从_actions中取出，只有一个的时候直接返回，否则用Promise.all处理再返回。</p>
-<h2 id="watch"><a href="#watch" class="headerlink" title="watch"></a>watch</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 观察一个getter方法 */</span></span><br><span class="line">watch (getter, cb, options) &#123;</span><br><span class="line">  <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">    assert(<span class="keyword">typeof</span> getter === <span class="string">'function'</span>, <span class="string">`store.watch only accepts a function.`</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>._watcherVM.$watch(<span class="function"><span class="params">()</span> =&gt;</span> getter(<span class="keyword">this</span>.state, <span class="keyword">this</span>.getters), cb, options)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="watch"><a href="#watch" class="headerlink" title="watch"></a>watch</h2><pre><code class="js">/* 观察一个getter方法 */
+watch (getter, cb, options) {
+  if (process.env.NODE_ENV !== &#39;production&#39;) {
+    assert(typeof getter === &#39;function&#39;, `store.watch only accepts a function.`)
+  }
+  return this._watcherVM.$watch(() =&gt; getter(this.state, this.getters), cb, options)
+}
+</code></pre>
 <p>熟悉Vue的朋友应该很熟悉watch这个方法。这里采用了比较巧妙的设计，_watcherVM是一个Vue的实例，所以watch就可以直接采用了Vue内部的watch特性提供了一种观察数据getter变动的方法。</p>
-<h2 id="registerModule"><a href="#registerModule" class="headerlink" title="registerModule"></a>registerModule</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 注册一个动态module，当业务进行异步加载的时候，可以通过该接口进行注册动态module */</span></span><br><span class="line">registerModule (path, rawModule) &#123;</span><br><span class="line">  <span class="comment">/* 转化称Array */</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> path === <span class="string">'string'</span>) path = [path]</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">    assert(<span class="built_in">Array</span>.isArray(path), <span class="string">`module path must be a string or an Array.`</span>)</span><br><span class="line">    assert(path.length &gt; <span class="number">0</span>, <span class="string">'cannot register the root module by using registerModule.'</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/*注册*/</span></span><br><span class="line">  <span class="keyword">this</span>._modules.register(path, rawModule)</span><br><span class="line">  <span class="comment">/*初始化module*/</span></span><br><span class="line">  installModule(<span class="keyword">this</span>, <span class="keyword">this</span>.state, path, <span class="keyword">this</span>._modules.get(path))</span><br><span class="line">  <span class="comment">// reset store to update getters...</span></span><br><span class="line">  <span class="comment">/* 通过vm重设store，新建Vue对象使用Vue内部的响应式实现注册state以及computed */</span></span><br><span class="line">  resetStoreVM(<span class="keyword">this</span>, <span class="keyword">this</span>.state)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="registerModule"><a href="#registerModule" class="headerlink" title="registerModule"></a>registerModule</h2><pre><code class="js">/* 注册一个动态module，当业务进行异步加载的时候，可以通过该接口进行注册动态module */
+registerModule (path, rawModule) {
+  /* 转化称Array */
+  if (typeof path === &#39;string&#39;) path = [path]
+
+  if (process.env.NODE_ENV !== &#39;production&#39;) {
+    assert(Array.isArray(path), `module path must be a string or an Array.`)
+    assert(path.length &gt; 0, &#39;cannot register the root module by using registerModule.&#39;)
+  }
+
+  /*注册*/
+  this._modules.register(path, rawModule)
+  /*初始化module*/
+  installModule(this, this.state, path, this._modules.get(path))
+  // reset store to update getters...
+  /* 通过vm重设store，新建Vue对象使用Vue内部的响应式实现注册state以及computed */
+  resetStoreVM(this, this.state)
+}
+</code></pre>
 <p>registerModule用以注册一个动态模块，也就是在store创建以后再注册模块的时候用该接口。内部实现实际上也只有installModule与resetStoreVM两个步骤，前面已经讲过，这里不再累述。</p>
-<h2 id="unregisterModule"><a href="#unregisterModule" class="headerlink" title="unregisterModule"></a>unregisterModule</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">/* 注销一个动态module */</span></span><br><span class="line">unregisterModule (path) &#123;</span><br><span class="line">  <span class="comment">/* 转化称Array */</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> path === <span class="string">'string'</span>) path = [path]</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">    assert(<span class="built_in">Array</span>.isArray(path), <span class="string">`module path must be a string or an Array.`</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/*注销*/</span></span><br><span class="line">  <span class="keyword">this</span>._modules.unregister(path)</span><br><span class="line">  <span class="keyword">this</span>._withCommit(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">/* 获取父级的state */</span></span><br><span class="line">    <span class="keyword">const</span> parentState = getNestedState(<span class="keyword">this</span>.state, path.slice(<span class="number">0</span>, <span class="number">-1</span>))</span><br><span class="line">    <span class="comment">/* 从父级中删除 */</span></span><br><span class="line">    Vue.delete(parentState, path[path.length - <span class="number">1</span>])</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="comment">/* 重制store */</span></span><br><span class="line">  resetStore(<span class="keyword">this</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="unregisterModule"><a href="#unregisterModule" class="headerlink" title="unregisterModule"></a>unregisterModule</h2><pre><code class="js"> /* 注销一个动态module */
+unregisterModule (path) {
+  /* 转化称Array */
+  if (typeof path === &#39;string&#39;) path = [path]
+
+  if (process.env.NODE_ENV !== &#39;production&#39;) {
+    assert(Array.isArray(path), `module path must be a string or an Array.`)
+  }
+
+  /*注销*/
+  this._modules.unregister(path)
+  this._withCommit(() =&gt; {
+    /* 获取父级的state */
+    const parentState = getNestedState(this.state, path.slice(0, -1))
+    /* 从父级中删除 */
+    Vue.delete(parentState, path[path.length - 1])
+  })
+  /* 重制store */
+  resetStore(this)
+}
+</code></pre>
 <p>同样，与registerModule对应的方法unregisterModule，动态注销模块。实现方法是先从state中删除模块，然后用resetStore来重制store。</p>
-<h2 id="resetStore"><a href="#resetStore" class="headerlink" title="resetStore"></a>resetStore</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 重制store */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">resetStore</span> (<span class="params">store, hot</span>) </span>&#123;</span><br><span class="line">  store._actions = <span class="built_in">Object</span>.create(<span class="literal">null</span>)</span><br><span class="line">  store._mutations = <span class="built_in">Object</span>.create(<span class="literal">null</span>)</span><br><span class="line">  store._wrappedGetters = <span class="built_in">Object</span>.create(<span class="literal">null</span>)</span><br><span class="line">  store._modulesNamespaceMap = <span class="built_in">Object</span>.create(<span class="literal">null</span>)</span><br><span class="line">  <span class="keyword">const</span> state = store.state</span><br><span class="line">  <span class="comment">// init all modules</span></span><br><span class="line">  installModule(store, state, [], store._modules.root, <span class="literal">true</span>)</span><br><span class="line">  <span class="comment">// reset vm</span></span><br><span class="line">  resetStoreVM(store, state, hot)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="resetStore"><a href="#resetStore" class="headerlink" title="resetStore"></a>resetStore</h2><pre><code class="js">/* 重制store */
+function resetStore (store, hot) {
+  store._actions = Object.create(null)
+  store._mutations = Object.create(null)
+  store._wrappedGetters = Object.create(null)
+  store._modulesNamespaceMap = Object.create(null)
+  const state = store.state
+  // init all modules
+  installModule(store, state, [], store._modules.root, true)
+  // reset vm
+  resetStoreVM(store, state, hot)
+}
+</code></pre>
 <p>这里的resetStore其实也就是将store中的_actions等进行初始化以后，重新执行installModule与resetStoreVM来初始化module以及用Vue特性使其“响应式化”，这跟构造函数中的是一致的。</p>
 <h2 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h2><p>Vue提供了一个非常好用的插件Vue.js devtools</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 从window对象的__VUE_DEVTOOLS_GLOBAL_HOOK__中获取devtool插件 */</span></span><br><span class="line"><span class="keyword">const</span> devtoolHook =</span><br><span class="line">  <span class="keyword">typeof</span> <span class="built_in">window</span> !== <span class="string">'undefined'</span> &amp;&amp;</span><br><span class="line">  <span class="built_in">window</span>.__VUE_DEVTOOLS_GLOBAL_HOOK__</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">devtoolPlugin</span> (<span class="params">store</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!devtoolHook) <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* devtoll插件实例存储在store的_devtoolHook上 */</span></span><br><span class="line">  store._devtoolHook = devtoolHook</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* 出发vuex的初始化事件，并将store的引用地址传给deltool插件，使插件获取store的实例 */</span></span><br><span class="line">  devtoolHook.emit(<span class="string">'vuex:init'</span>, store)</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* 监听travel-to-state事件 */</span></span><br><span class="line">  devtoolHook.on(<span class="string">'vuex:travel-to-state'</span>, targetState =&gt; &#123;</span><br><span class="line">    <span class="comment">/* 重制state */</span></span><br><span class="line">    store.replaceState(targetState)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* 订阅store的变化 */</span></span><br><span class="line">  store.subscribe(<span class="function">(<span class="params">mutation, state</span>) =&gt;</span> &#123;</span><br><span class="line">    devtoolHook.emit(<span class="string">'vuex:mutation'</span>, mutation, state)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">/* 从window对象的__VUE_DEVTOOLS_GLOBAL_HOOK__中获取devtool插件 */
+const devtoolHook =
+  typeof window !== &#39;undefined&#39; &amp;&amp;
+  window.__VUE_DEVTOOLS_GLOBAL_HOOK__
+
+export default function devtoolPlugin (store) {
+  if (!devtoolHook) return
+
+  /* devtoll插件实例存储在store的_devtoolHook上 */
+  store._devtoolHook = devtoolHook
+
+  /* 出发vuex的初始化事件，并将store的引用地址传给deltool插件，使插件获取store的实例 */
+  devtoolHook.emit(&#39;vuex:init&#39;, store)
+
+  /* 监听travel-to-state事件 */
+  devtoolHook.on(&#39;vuex:travel-to-state&#39;, targetState =&gt; {
+    /* 重制state */
+    store.replaceState(targetState)
+  })
+
+  /* 订阅store的变化 */
+  store.subscribe((mutation, state) =&gt; {
+    devtoolHook.emit(&#39;vuex:mutation&#39;, mutation, state)
+  })
+}
+</code></pre>
 <p>如果已经安装了该插件，则会在windows对象上暴露一个<strong>VUE_DEVTOOLS_GLOBAL_HOOK</strong>。devtoolHook用在初始化的时候会触发“vuex:init”事件通知插件，然后通过on方法监听“vuex:travel-to-state”事件来重置state。最后通过Store的subscribe方法来添加一个订阅者，在触发commit方法修改mutation数据以后，该订阅者会被通知，从而触发“vuex:mutation”事件。</p>
 <h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>Vuex是一个非常优秀的库，代码量不多且结构清晰，非常适合研究学习其内部实现。最近的一系列源码阅读也使我自己受益匪浅，写这篇文章也希望可以帮助到更多想要学习探索Vuex内部实现原理的同学。</p>
 <p><a href="https://github.com/answershuto/learnVue/blob/master/docs/Vuex%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90.MarkDown" target="_blank" rel="noopener">原文地址</a></p>
@@ -251,7 +726,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

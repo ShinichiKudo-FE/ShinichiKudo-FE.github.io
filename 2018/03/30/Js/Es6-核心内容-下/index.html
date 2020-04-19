@@ -100,13 +100,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    10k
+                    3.6k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    9 mins.
+                    3 mins.
                 </span>
                 
                 
@@ -150,20 +150,77 @@
 <blockquote>
 <p>ES6模块的设计思想，是尽量的静态化，使得编译时就能确定模块的依赖关系，以及输入和输出的变量。CommonJS和AMD模块，都只能在运行时确定这些东西。</p>
 </blockquote>
-<h3 id="传统写法"><a href="#传统写法" class="headerlink" title="传统写法"></a>传统写法</h3><p>首先我们回顾下require.js的写法。假设我们有两个js文件: index.js和content.js,现在我们想要在index.js中使用content.js返回的结果，我们要怎么做呢？<br>首先定义：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//content.js</span></span><br><span class="line">define(<span class="string">'content.js'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'A cat'</span>;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure><br><a id="more"></a><br>然后require：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//index.js</span></span><br><span class="line"><span class="built_in">require</span>([<span class="string">'./content.js'</span>], <span class="function"><span class="keyword">function</span>(<span class="params">animal</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(animal);   <span class="comment">//A cat</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>那CommonJS是怎么写的呢？<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//index.js</span></span><br><span class="line"><span class="keyword">var</span> animal = <span class="built_in">require</span>(<span class="string">'./content.js'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">//content.js</span></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="string">'A cat'</span></span><br></pre></td></tr></table></figure></p>
-<p>ES6的写法<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//index.js</span></span><br><span class="line"><span class="keyword">import</span> animal <span class="keyword">from</span> <span class="string">'./content'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//content.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="string">'A cat'</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="ES6-module的其他高级用法"><a href="#ES6-module的其他高级用法" class="headerlink" title="ES6 module的其他高级用法"></a>ES6 module的其他高级用法</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//content.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="string">'A cat'</span>    </span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">say</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'Hello!'</span></span><br><span class="line">&#125;    </span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> type = <span class="string">'dog'</span></span><br></pre></td></tr></table></figure>
+<h3 id="传统写法"><a href="#传统写法" class="headerlink" title="传统写法"></a>传统写法</h3><p>首先我们回顾下require.js的写法。假设我们有两个js文件: index.js和content.js,现在我们想要在index.js中使用content.js返回的结果，我们要怎么做呢？<br>首先定义：</p>
+<pre><code class="javascript">//content.js
+define(&#39;content.js&#39;, function(){
+    return &#39;A cat&#39;;
+})
+</code></pre>
+<a id="more"></a>
+<p>然后require：</p>
+<pre><code class="javascript">//index.js
+require([&#39;./content.js&#39;], function(animal){
+    console.log(animal);   //A cat
+})
+</code></pre>
+<p>那CommonJS是怎么写的呢？</p>
+<pre><code class="javascript">//index.js
+var animal = require(&#39;./content.js&#39;)
+
+//content.js
+module.exports = &#39;A cat&#39;
+</code></pre>
+<p>ES6的写法</p>
+<pre><code class="javascript">//index.js
+import animal from &#39;./content&#39;
+
+//content.js
+export default &#39;A cat&#39;
+</code></pre>
+<h2 id="ES6-module的其他高级用法"><a href="#ES6-module的其他高级用法" class="headerlink" title="ES6 module的其他高级用法"></a>ES6 module的其他高级用法</h2><pre><code class="javascript">//content.js
+
+export default &#39;A cat&#39;    
+export function say(){
+    return &#39;Hello!&#39;
+}    
+export const type = &#39;dog&#39; 
+</code></pre>
 <p>上面可以看出，export命令除了输出变量，还可以输出函数，甚至是类（react的模块基本都是输出类）</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//index.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123; say, type &#125; <span class="keyword">from</span> <span class="string">'./content'</span>  </span><br><span class="line"><span class="keyword">let</span> says = say()</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">`The <span class="subst">$&#123;type&#125;</span> says <span class="subst">$&#123;says&#125;</span>`</span>)  <span class="comment">//The dog says Hello</span></span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">//index.js
+
+import { say, type } from &#39;./content&#39;  
+let says = say()
+console.log(`The ${type} says ${says}`)  //The dog says Hello
+</code></pre>
 <p>这里输入的时候要注意：大括号里面的变量名，必须与被导入模块（content.js）对外接口的名称相同。</p>
 <p>如果还希望输入content.js中输出的默认<code>(default)</code>, 可以写在大括号外面。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//index.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> animal, &#123; say, type &#125; <span class="keyword">from</span> <span class="string">'./content'</span>  </span><br><span class="line"><span class="keyword">let</span> says = say()</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">`The <span class="subst">$&#123;type&#125;</span> says <span class="subst">$&#123;says&#125;</span> to <span class="subst">$&#123;animal&#125;</span>`</span>)  </span><br><span class="line"><span class="comment">//The dog says Hello to A cat</span></span><br></pre></td></tr></table></figure>
-<h3 id="修改变量名"><a href="#修改变量名" class="headerlink" title="修改变量名"></a>修改变量名</h3><p>此时我们不喜欢type这个变量名，因为它有可能重名，所以我们需要修改一下它的变量名。在es6中可以用as实现一键换名。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//index.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> animal, &#123; say, type <span class="keyword">as</span> animalType &#125; <span class="keyword">from</span> <span class="string">'./content'</span>  </span><br><span class="line"><span class="keyword">let</span> says = say()</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">`The <span class="subst">$&#123;animalType&#125;</span> says <span class="subst">$&#123;says&#125;</span> to <span class="subst">$&#123;animal&#125;</span>`</span>)  </span><br><span class="line"><span class="comment">//The dog says Hello to A cat</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="模块的整体加载"><a href="#模块的整体加载" class="headerlink" title="模块的整体加载"></a>模块的整体加载</h3><p>除了指定加载某个输出值，还可以使用整体加载，即用星号<code>（*）</code>指定一个对象，所有输出值都加载在这个对象上面。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//index.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> animal, * <span class="keyword">as</span> content <span class="keyword">from</span> <span class="string">'./content'</span>  </span><br><span class="line"><span class="keyword">let</span> says = content.say()</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">`The <span class="subst">$&#123;content.type&#125;</span> says <span class="subst">$&#123;says&#125;</span> to <span class="subst">$&#123;animal&#125;</span>`</span>)  </span><br><span class="line"><span class="comment">//The dog says Hello to A cat</span></span><br></pre></td></tr></table></figure><br>通常星号*结合as一起使用比较合适。</p>
+<pre><code class="javascript">//index.js
+
+import animal, { say, type } from &#39;./content&#39;  
+let says = say()
+console.log(`The ${type} says ${says} to ${animal}`)  
+//The dog says Hello to A cat
+</code></pre>
+<h3 id="修改变量名"><a href="#修改变量名" class="headerlink" title="修改变量名"></a>修改变量名</h3><p>此时我们不喜欢type这个变量名，因为它有可能重名，所以我们需要修改一下它的变量名。在es6中可以用as实现一键换名。</p>
+<pre><code class="javascript">//index.js
+
+import animal, { say, type as animalType } from &#39;./content&#39;  
+let says = say()
+console.log(`The ${animalType} says ${says} to ${animal}`)  
+//The dog says Hello to A cat
+</code></pre>
+<h3 id="模块的整体加载"><a href="#模块的整体加载" class="headerlink" title="模块的整体加载"></a>模块的整体加载</h3><p>除了指定加载某个输出值，还可以使用整体加载，即用星号<code>（*）</code>指定一个对象，所有输出值都加载在这个对象上面。</p>
+<pre><code class="javascript">//index.js
+
+import animal, * as content from &#39;./content&#39;  
+let says = content.say()
+console.log(`The ${content.type} says ${says} to ${animal}`)  
+//The dog says Hello to A cat
+</code></pre>
+<p>通常星号*结合as一起使用比较合适。</p>
 <h2 id="终极秘籍"><a href="#终极秘籍" class="headerlink" title="终极秘籍"></a>终极秘籍</h2><p>考虑下面的场景：上面的<code>content.js</code>一共输出了三个变量（default, say, type）,假如我们的实际项目当中只需要用到type这一个变量，其余两个我们暂时不需要。我们可以只输入一个变量：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; type &#125; <span class="keyword">from</span> <span class="string">'./content'</span></span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">import { type } from &#39;./content&#39; 
+</code></pre>
 <p>由于其他两个变量没有被使用，我们希望代码打包的时候也忽略它们，抛弃它们，这样在大项目中可以显著减少文件的体积。</p>
 <p><a href="https://segmentfault.com/a/1190000004368132" target="_blank" rel="noopener">原文地址</a></p>
 
@@ -213,7 +270,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

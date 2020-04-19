@@ -101,13 +101,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    31k
+                    9.3k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    28 mins.
+                    8 mins.
                 </span>
                 
                 
@@ -148,46 +148,234 @@
 <p>  Array.prototype.indexOf<br>  Array.prototype.lastIndexOf<br>  Array.prototype.every<br>  Array.prototype.some<br>  Array.prototype.forEach<br>  Array.prototype.map<br>  Array.prototype.filter<br>  Array.prototype.reduce<br>  Array.prototype.reduceRight<br></font></p>
 <p>在ES6即将普及的时代，我相信这些方法对FE开发者是非常实用的必备技能，接下来我将通过实例帮大家替换for循环大法，更高效的来操作数组。</p>
 <h2 id="indexOf"><a href="#indexOf" class="headerlink" title="indexOf"></a>indexOf</h2><p>indexOf()方法返回在该数组中第一个找到的元素位置，如果它不存在则返回-1。</p>
-<p><strong>使用for：</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ar arr = [<span class="string">'apple'</span>,<span class="string">'orange'</span>,<span class="string">'pear'</span>],</span><br><span class="line">    found = <span class="literal">false</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i= <span class="number">0</span>, l = arr.length; i&lt; l; i++)&#123;</span><br><span class="line">    <span class="keyword">if</span>(arr[i] === <span class="string">'orange'</span>)&#123;</span><br><span class="line">        found = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"found:"</span>,found);</span><br></pre></td></tr></table></figure></p>
-<p><strong>使用indexOf：</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [<span class="string">'apple'</span>,<span class="string">'orange'</span>,<span class="string">'pear'</span>];  </span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"found:"</span>, arr.indexOf(<span class="string">"orange"</span>) != <span class="number">-1</span>);</span><br></pre></td></tr></table></figure><br><a id="more"></a></p>
+<p><strong>使用for：</strong></p>
+<pre><code class="javascript">ar arr = [&#39;apple&#39;,&#39;orange&#39;,&#39;pear&#39;],
+    found = false;
+for(var i= 0, l = arr.length; i&lt; l; i++){
+    if(arr[i] === &#39;orange&#39;){
+        found = true;
+    }
+}
+console.log(&quot;found:&quot;,found);
+</code></pre>
+<p><strong>使用indexOf：</strong></p>
+<pre><code class="javascript">var arr = [&#39;apple&#39;,&#39;orange&#39;,&#39;pear&#39;];  
+console.log(&quot;found:&quot;, arr.indexOf(&quot;orange&quot;) != -1);
+</code></pre>
+<a id="more"></a>
 <h2 id="lastindexOf"><a href="#lastindexOf" class="headerlink" title="lastindexOf"></a>lastindexOf</h2><p>astIndexOf() 方法返回在该数组中最后一个找到的元素位置，和 indexof相反。</p>
 <h2 id="every"><a href="#every" class="headerlink" title="every()"></a>every()</h2><p>every()可是检测数组中的每一项是否符合条件</p>
-<p><strong>使用for：</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">* 是否全部大于0</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">var</span> ary = [<span class="number">12</span>,<span class="number">23</span>,<span class="number">24</span>,<span class="number">42</span>,<span class="number">1</span>];</span><br><span class="line"><span class="keyword">var</span> result = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; ary.length; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span>(ary[i] &lt; <span class="number">0</span>)&#123;</span><br><span class="line">       <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">true</span>; <span class="comment">//需全部满足</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(result()) <span class="comment">//全部满足,返回true</span></span><br></pre></td></tr></table></figure></p>
-<p><strong>使用every：</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ary = [<span class="number">12</span>,<span class="number">23</span>,<span class="number">24</span>,<span class="number">42</span>,<span class="number">1</span>];</span><br><span class="line"><span class="keyword">var</span> result = ary.every(<span class="function"><span class="keyword">function</span>(<span class="params">item, index</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> item &gt; <span class="number">0</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(result)</span><br></pre></td></tr></table></figure></p>
+<p><strong>使用for：</strong></p>
+<pre><code class="javascript">/* 
+* 是否全部大于0
+*/
+var ary = [12,23,24,42,1];
+var result = function(){
+  for (var i = 0; i &lt; ary.length; i++) {
+    if(ary[i] &lt; 0){
+       return false;
+    }
+  }
+  return true; //需全部满足
+}
+console.log(result()) //全部满足,返回true
+</code></pre>
+<p><strong>使用every：</strong></p>
+<pre><code class="javascript">var ary = [12,23,24,42,1];
+var result = ary.every(function(item, index){
+  return item &gt; 0
+})
+console.log(result)
+</code></pre>
 <h2 id="some"><a href="#some" class="headerlink" title="some()"></a>some()</h2><p>some()可以检测数组中是否有某一项符合条件</p>
-<p><strong>使用for</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">* 是否存在小于0的项</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">var</span> ary = [<span class="number">12</span>,<span class="number">23</span>,<span class="number">-24</span>,<span class="number">42</span>,<span class="number">1</span>];</span><br><span class="line"><span class="keyword">var</span> result = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; ary.length; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span>(ary[i] &lt; <span class="number">0</span>)&#123;</span><br><span class="line">       <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">false</span>; <span class="comment">//只需满足一个</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(result())  <span class="comment">//有一项小于0，返回true</span></span><br></pre></td></tr></table></figure></p>
-<p><strong>使用some</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ary = [<span class="number">12</span>,<span class="number">23</span>,<span class="number">-24</span>,<span class="number">42</span>,<span class="number">1</span>];</span><br><span class="line"><span class="keyword">var</span> result = ary.some(<span class="function"><span class="keyword">function</span>(<span class="params">item, index</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> item &lt; <span class="number">0</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(result)</span><br></pre></td></tr></table></figure></p>
+<p><strong>使用for</strong></p>
+<pre><code class="javascript">/* 
+* 是否存在小于0的项
+*/
+var ary = [12,23,-24,42,1];
+var result = function(){
+  for (var i = 0; i &lt; ary.length; i++) {
+    if(ary[i] &lt; 0){
+       return true;
+    }
+  }
+  return false; //只需满足一个
+}
+console.log(result())  //有一项小于0，返回true
+</code></pre>
+<p><strong>使用some</strong></p>
+<pre><code class="javascript">var ary = [12,23,-24,42,1];
+var result = ary.some(function(item, index){
+  return item &lt; 0
+})
+console.log(result)
+</code></pre>
 <h2 id="forEach"><a href="#forEach" class="headerlink" title="forEach()"></a>forEach()</h2><p>forEach为每个元素执行对应的方法</p>
-<p><strong>使用for：</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i= <span class="number">0</span>, l = arr.length; i&lt; l; i++)&#123;</span><br><span class="line"><span class="built_in">console</span>.log(arr[i]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><strong>使用forEach()：</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>];</span><br><span class="line"></span><br><span class="line">arr.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">item,index</span>)</span>&#123;</span><br><span class="line"><span class="built_in">console</span>.log(item);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure><br>forEach是用来替换for循环的</p>
+<p><strong>使用for：</strong></p>
+<pre><code class="javascript">var arr = [1,2,3,4,5,6,7,8];
+
+for(var i= 0, l = arr.length; i&lt; l; i++){
+console.log(arr[i]);
+}
+</code></pre>
+<p><strong>使用forEach()：</strong></p>
+<pre><code class="javascript">var arr = [1,2,3,4,5,6,7,8];
+
+arr.forEach(function(item,index){
+console.log(item);
+});
+</code></pre>
+<p>forEach是用来替换for循环的</p>
 <h2 id="map"><a href="#map" class="headerlink" title="map()"></a>map()</h2><p>map()对数组的每个元素进行一定操作（映射）后，会返回一个新的数组， </p>
-<p><strong>使用for：</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> oldArr = [&#123;<span class="attr">first_name</span>:<span class="string">"Colin"</span>,<span class="attr">last_name</span>:<span class="string">"Toh"</span>&#125;,&#123;<span class="attr">first_name</span>:<span class="string">"Addy"</span>,<span class="attr">last_name</span>:<span class="string">"Osmani"</span>&#125;,&#123;<span class="attr">first_name</span>:<span class="string">"Yehuda"</span>,<span class="attr">last_name</span>:<span class="string">"Katz"</span>&#125;];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getNewArr</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> newArr = [];</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i= <span class="number">0</span>, l = oldArr.length; i&lt; l; i++)&#123;</span><br><span class="line">    <span class="keyword">var</span> item = oldArr[i];</span><br><span class="line">    item.full_name = [item.first_name,item.last_name].join(<span class="string">" "</span>);</span><br><span class="line">    newArr[i] = item;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> newArr;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(getNewArr());</span><br></pre></td></tr></table></figure></p>
-<p><strong>使用map：</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> oldArr = [&#123;<span class="attr">first_name</span>:<span class="string">"Colin"</span>,<span class="attr">last_name</span>:<span class="string">"Toh"</span>&#125;,&#123;<span class="attr">first_name</span>:<span class="string">"Addy"</span>,<span class="attr">last_name</span>:<span class="string">"Osmani"</span>&#125;,&#123;<span class="attr">first_name</span>:<span class="string">"Yehuda"</span>,<span class="attr">last_name</span>:<span class="string">"Katz"</span>&#125;];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getNewArr</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> oldArr.map(<span class="function"><span class="keyword">function</span>(<span class="params">item,index</span>)</span>&#123;</span><br><span class="line">    item.full_name = [item.first_name,item.last_name].join(<span class="string">" "</span>);</span><br><span class="line">    <span class="keyword">return</span> item;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(getNewArr());</span><br></pre></td></tr></table></figure></p>
+<p><strong>使用for：</strong></p>
+<pre><code class="javascript">var oldArr = [{first_name:&quot;Colin&quot;,last_name:&quot;Toh&quot;},{first_name:&quot;Addy&quot;,last_name:&quot;Osmani&quot;},{first_name:&quot;Yehuda&quot;,last_name:&quot;Katz&quot;}];
+
+function getNewArr(){
+  var newArr = [];
+  for(var i= 0, l = oldArr.length; i&lt; l; i++){
+    var item = oldArr[i];
+    item.full_name = [item.first_name,item.last_name].join(&quot; &quot;);
+    newArr[i] = item;
+  }
+  return newArr;
+}
+console.log(getNewArr());
+</code></pre>
+<p><strong>使用map：</strong></p>
+<pre><code class="javascript">var oldArr = [{first_name:&quot;Colin&quot;,last_name:&quot;Toh&quot;},{first_name:&quot;Addy&quot;,last_name:&quot;Osmani&quot;},{first_name:&quot;Yehuda&quot;,last_name:&quot;Katz&quot;}];
+
+function getNewArr(){
+  return oldArr.map(function(item,index){
+    item.full_name = [item.first_name,item.last_name].join(&quot; &quot;);
+    return item;
+  });
+
+}
+console.log(getNewArr());
+</code></pre>
 <p>map()是处理服务器返回数据时是一个非常实用的函数。</p>
 <p><strong>forEach 与map的区别：</strong></p>
 <p><font color='red'>语法：</font>forEach和map都支持2个参数：一个是回调函数（item,index,list）和上下文；</p>
 <p><strong>forEach：</strong>用来遍历数组中的每一项；这个方法执行是没有返回值的，对原来数组也没有影响；数组中有几项，那么传递进去的匿名回调函数就需要执行几次；每一次执行匿名函数的时候，还给其传递了三个参数值：数组中的当前项item,当前项的索引index,原始数组list；<strong>理论上这个方法是没有返回值的，仅仅是遍历数组中的每一项，不对原来数组进行修改；但是我们可以自己</strong><font color = "red">通过数组的索引来修改原来的数组</font>；</p>
 <p>forEach方法中的this是ary,匿名回调函数中的this默认是window；</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ary = [<span class="number">12</span>,<span class="number">23</span>,<span class="number">24</span>,<span class="number">42</span>,<span class="number">1</span>];</span><br><span class="line"><span class="keyword">var</span> res = ary.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">item,index,input</span>) </span>&#123;</span><br><span class="line">  input[index] = item*<span class="number">10</span>;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(res);<span class="comment">//--&gt;undefined;</span></span><br><span class="line"><span class="built_in">console</span>.log(ary);<span class="comment">//--&gt;会对原来的数组产生改变；</span></span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">var ary = [12,23,24,42,1];
+var res = ary.forEach(function (item,index,input) {
+  input[index] = item*10;
+})
+console.log(res);//--&gt;undefined;
+console.log(ary);//--&gt;会对原来的数组产生改变；
+</code></pre>
 <p><strong>map：</strong> 和forEach非常相似，都是用来遍历数组中的每一项值的，用来遍历数组中的每一项；</p>
 <p><font color = "red">区别：</font><strong>map的回调函数中支持return返回值；return的是啥，相当于把数组中的这一项变为啥（<font color ="red">并不影响原来的数组</font>，只是相当于把原数组克隆一份，把克隆的这一份的数组中的对应项改变了</strong>）；</p>
 <p>不管是forEach还是map 都支持第二个参数值，第二个参数的意思是把匿名回调函数中的this进行修改。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ary = [<span class="number">12</span>,<span class="number">23</span>,<span class="number">24</span>,<span class="number">42</span>,<span class="number">1</span>];</span><br><span class="line"><span class="keyword">var</span> res = ary.map(<span class="function"><span class="keyword">function</span> (<span class="params">item,index,input</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> item*<span class="number">10</span>;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(res);<span class="comment">//--&gt;[120,230,240,420,10];</span></span><br><span class="line"><span class="built_in">console</span>.log(ary);<span class="comment">//--&gt;[12,23,24,42,1]；</span></span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">var ary = [12,23,24,42,1];
+var res = ary.map(function (item,index,input) {
+  return item*10;
+})
+console.log(res);//--&gt;[120,230,240,420,10];
+console.log(ary);//--&gt;[12,23,24,42,1]；
+</code></pre>
 <h2 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h2><p>该filter()方法创建一个新的匹配过滤条件的数组。<br><strong>使用for：</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [</span><br><span class="line">  &#123;<span class="string">"name"</span>:<span class="string">"apple"</span>, <span class="string">"count"</span>: <span class="number">2</span>&#125;,</span><br><span class="line">  &#123;<span class="string">"name"</span>:<span class="string">"orange"</span>, <span class="string">"count"</span>: <span class="number">5</span>&#125;,</span><br><span class="line">  &#123;<span class="string">"name"</span>:<span class="string">"pear"</span>, <span class="string">"count"</span>: <span class="number">3</span>&#125;,</span><br><span class="line">  &#123;<span class="string">"name"</span>:<span class="string">"orange"</span>, <span class="string">"count"</span>: <span class="number">16</span>&#125;,</span><br><span class="line">];</span><br><span class="line"><span class="keyword">var</span> newArr = [];</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i= <span class="number">0</span>, l = arr.length; i&lt; l; i++)&#123;</span><br><span class="line">  <span class="keyword">if</span>(arr[i].name === <span class="string">"orange"</span> )&#123;</span><br><span class="line">    newArr.push(arr[i]);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"Filter results:"</span>,newArr);</span><br></pre></td></tr></table></figure>
-<p><strong>使用 filter()：</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [</span><br><span class="line">  &#123;<span class="string">"name"</span>:<span class="string">"apple"</span>, <span class="string">"count"</span>: <span class="number">2</span>&#125;,</span><br><span class="line">  &#123;<span class="string">"name"</span>:<span class="string">"orange"</span>, <span class="string">"count"</span>: <span class="number">5</span>&#125;,</span><br><span class="line">  &#123;<span class="string">"name"</span>:<span class="string">"pear"</span>, <span class="string">"count"</span>: <span class="number">3</span>&#125;,</span><br><span class="line">  &#123;<span class="string">"name"</span>:<span class="string">"orange"</span>, <span class="string">"count"</span>: <span class="number">16</span>&#125;,</span><br><span class="line">];</span><br><span class="line"><span class="keyword">var</span> newArr = arr.filter(<span class="function"><span class="keyword">function</span>(<span class="params">item</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> item.name === <span class="string">"orange"</span>;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"Filter results:"</span>,newArr);</span><br></pre></td></tr></table></figure></p>
+<pre><code class="javascript">var arr = [
+  {&quot;name&quot;:&quot;apple&quot;, &quot;count&quot;: 2},
+  {&quot;name&quot;:&quot;orange&quot;, &quot;count&quot;: 5},
+  {&quot;name&quot;:&quot;pear&quot;, &quot;count&quot;: 3},
+  {&quot;name&quot;:&quot;orange&quot;, &quot;count&quot;: 16},
+];
+var newArr = [];
+for(var i= 0, l = arr.length; i&lt; l; i++){
+  if(arr[i].name === &quot;orange&quot; ){
+    newArr.push(arr[i]);
+  }
+}
+console.log(&quot;Filter results:&quot;,newArr);
+</code></pre>
+<p><strong>使用 filter()：</strong></p>
+<pre><code class="javascript">var arr = [
+  {&quot;name&quot;:&quot;apple&quot;, &quot;count&quot;: 2},
+  {&quot;name&quot;:&quot;orange&quot;, &quot;count&quot;: 5},
+  {&quot;name&quot;:&quot;pear&quot;, &quot;count&quot;: 3},
+  {&quot;name&quot;:&quot;orange&quot;, &quot;count&quot;: 16},
+];
+var newArr = arr.filter(function(item){
+  return item.name === &quot;orange&quot;;
+});
+console.log(&quot;Filter results:&quot;,newArr);
+
+</code></pre>
 <h2 id="reduce"><a href="#reduce" class="headerlink" title="reduce()"></a>reduce()</h2><p>reduce()可以实现一个累加器的功能，将数组的每个值（从左到右）将其降低到一个值。 说实话刚开始理解这句话有点难度，它太抽象了。 </p>
-<p>场景： 统计一个数组中有多少个不重复的单词<br><strong>使用for：</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [<span class="string">"apple"</span>,<span class="string">"orange"</span>,<span class="string">"apple"</span>,<span class="string">"orange"</span>,<span class="string">"pear"</span>,<span class="string">"orange"</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getWordCnt</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> obj = &#123;&#125;;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i= <span class="number">0</span>, l = arr.length; i&lt; l; i++)&#123;</span><br><span class="line">    <span class="keyword">var</span> item = arr[i];</span><br><span class="line">    obj[item] = (obj[item] +<span class="number">1</span> ) || <span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> obj;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(getWordCnt());</span><br></pre></td></tr></table></figure></p>
+<p>场景： 统计一个数组中有多少个不重复的单词<br><strong>使用for：</strong></p>
+<pre><code class="javascript">var arr = [&quot;apple&quot;,&quot;orange&quot;,&quot;apple&quot;,&quot;orange&quot;,&quot;pear&quot;,&quot;orange&quot;];
+
+function getWordCnt(){
+  var obj = {};
+  for(var i= 0, l = arr.length; i&lt; l; i++){
+    var item = arr[i];
+    obj[item] = (obj[item] +1 ) || 1;
+  }
+  return obj;
+}
+console.log(getWordCnt());
+</code></pre>
 <blockquote>
 <ul>
 <li>让我先解释一下我自己对reduce的理解。reduce(callback, initialValue)会传入两个变量。回调函数(callback)和初始值(initialValue)。假设函数它有个传入参数，prev和next,index和array。prev和next你是必须要了解的。一般来讲prev是从数组中第一个元素开始的，next是第二个元素。但是当你传入初始值(initialValue)后，第一个prev将是initivalValue，next将是数组中的第一个元素。</li>
 </ul>
 </blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">* 二者的区别，在console中运行一下即可知晓</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">var</span> arr = [<span class="string">"apple"</span>,<span class="string">"orange"</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">noPassValue</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> arr.reduce(<span class="function"><span class="keyword">function</span>(<span class="params">prev,next</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"prev:"</span>,prev);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"next:"</span>,next);</span><br><span class="line">    <span class="keyword">return</span> prev + <span class="string">" "</span> +next;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">passValue</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> arr.reduce(<span class="function"><span class="keyword">function</span>(<span class="params">prev,next</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"prev:"</span>,prev);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"next:"</span>,next);</span><br><span class="line">    prev[next] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> prev;</span><br><span class="line">  &#125;,&#123;&#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"No Additional parameter:"</span>,noPassValue());</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"----------------"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"With &#123;&#125; as an additional parameter:"</span>,passValue());</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">/* 
+* 二者的区别，在console中运行一下即可知晓
+*/
+var arr = [&quot;apple&quot;,&quot;orange&quot;];
+
+function noPassValue(){
+  return arr.reduce(function(prev,next){
+    console.log(&quot;prev:&quot;,prev);
+    console.log(&quot;next:&quot;,next);
+    return prev + &quot; &quot; +next;
+  });
+}
+function passValue(){
+  return arr.reduce(function(prev,next){
+    console.log(&quot;prev:&quot;,prev);
+    console.log(&quot;next:&quot;,next);
+    prev[next] = 1;
+    return prev;
+  },{});
+}
+
+console.log(&quot;No Additional parameter:&quot;,noPassValue());
+console.log(&quot;----------------&quot;);
+console.log(&quot;With {} as an additional parameter:&quot;,passValue());
+</code></pre>
 <h2 id="reduceRight"><a href="#reduceRight" class="headerlink" title="reduceRight()"></a>reduceRight()</h2><p> reduceRight的语法以及回调函数的规则和reduce方法是一样的，区别就是在与reduce是升序，即角标从0开始，而reduceRight是降序，即角标从arr.length-1开始。</p>
-<p>方法可应用于字符串。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">* 使用此方法反转字符串中的字符</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">var</span> word = <span class="string">"retupmoc"</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">AppendToArray</span>(<span class="params">previousValue, currentValue</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> previousValue + currentValue;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> result = [].reduceRight.call(word, AppendToArray, <span class="string">"the "</span>);</span><br><span class="line"><span class="built_in">console</span>.log(result); <span class="comment">// the computer</span></span><br></pre></td></tr></table></figure></p>
+<p>方法可应用于字符串。</p>
+<pre><code class="javascript">/* 
+* 使用此方法反转字符串中的字符
+*/
+var word = &quot;retupmoc&quot;;
+function AppendToArray(previousValue, currentValue) {
+  return previousValue + currentValue;
+}
+var result = [].reduceRight.call(word, AppendToArray, &quot;the &quot;);
+console.log(result); // the computer
+</code></pre>
 <h2 id="isArray"><a href="#isArray" class="headerlink" title="isArray()"></a>isArray()</h2><p>isArray()是Array对象的一个静态函数，用来判断一个对象是不是数组</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ary1 = [];</span><br><span class="line"><span class="keyword">var</span> res1 = <span class="built_in">Array</span>.isArray(ary1);  <span class="comment">// Output: true</span></span><br><span class="line"><span class="built_in">console</span>.log(res1)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> ary2 = <span class="keyword">new</span> <span class="built_in">Array</span>();</span><br><span class="line"><span class="keyword">var</span> res2 = <span class="built_in">Array</span>.isArray(ary2);  <span class="comment">// Output: true</span></span><br><span class="line"><span class="built_in">console</span>.log(res2)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> ary3 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"><span class="keyword">var</span> res3 = <span class="built_in">Array</span>.isArray(ary3);  <span class="comment">// Output: true</span></span><br><span class="line"><span class="built_in">console</span>.log(res3)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> ary4 = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="keyword">var</span> res4 = <span class="built_in">Array</span>.isArray(ary4);  <span class="comment">// Output: false</span></span><br><span class="line"><span class="built_in">console</span>.log(res4)</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">var ary1 = [];
+var res1 = Array.isArray(ary1);  // Output: true
+console.log(res1)
+
+var ary2 = new Array();
+var res2 = Array.isArray(ary2);  // Output: true
+console.log(res2)
+
+var ary3 = [1, 2, 3];
+var res3 = Array.isArray(ary3);  // Output: true
+console.log(res3)
+
+var ary4 = new Date();
+var res4 = Array.isArray(ary4);  // Output: false
+console.log(res4)
+</code></pre>
 <p><a href="https://shimo.im/doc/VXqv2bxTlOUiJJqO/" target="_blank" rel="noopener">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
@@ -236,7 +424,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

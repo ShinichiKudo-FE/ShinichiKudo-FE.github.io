@@ -99,13 +99,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    2.2k
+                    1.3k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    2 mins.
+                    1 mins.
                 </span>
                 
                 
@@ -145,7 +145,17 @@
 </blockquote>
 <h2 id="Ajax跨域的处理方法"><a href="#Ajax跨域的处理方法" class="headerlink" title="Ajax跨域的处理方法"></a>Ajax跨域的处理方法</h2><p>既然跨域问题的产生原因在于浏览器的限制，那么网页端在请求时无法主动规避，此时就需要服务端进行处理。</p>
 <p>服务端只需要在响应Ajax请求时，在请求头中加入一个<code>Access-Control-Allow-Origin</code>属性，并设置为<code>*</code>（表示全部域名）或者当前域名就可以让浏览器不再进行限制.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(req.headers.origin)</span><br><span class="line">  res.setHeader(<span class="string">'Access-Control-Allow-Origin'</span>, <span class="string">'*'</span>)</span><br><span class="line">  res.write(<span class="string">`&#123;"resultCode": "0000", "msg": "success"&#125;`</span>)</span><br><span class="line">  res.end()</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8080</span>)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const http = require(&#39;http&#39;)
+
+const server = http.createServer((req, res) =&gt; {
+  console.log(req.headers.origin)
+  res.setHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+  res.write(`{&quot;resultCode&quot;: &quot;0000&quot;, &quot;msg&quot;: &quot;success&quot;}`)
+  res.end()
+})
+
+server.listen(8080)
+</code></pre>
 <p>当然在实际项目中，不可以简单地设置<code>res.setHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)</code>，而是要通过<code>req.headers.origin</code>判断发起请求的域名是否合法，再设置<code>Access-Control-Allow-Origin</code>属性，以免出现安全问题。</p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
@@ -194,7 +204,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

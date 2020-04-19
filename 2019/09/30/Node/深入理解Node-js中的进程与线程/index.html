@@ -100,13 +100,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    25k
+                    13k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    23 mins.
+                    12 mins.
                 </span>
                 
                 
@@ -165,14 +165,45 @@
 <ul>
 <li>Node.js开启服务进程例子</li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer();</span><br><span class="line">server.listen(<span class="number">3000</span>,()=&gt;&#123;</span><br><span class="line">    process.title=<span class="string">'程序员成长指北测试进程'</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'进程id'</span>,process.pid)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const http = require(&#39;http&#39;);
+
+const server = http.createServer();
+server.listen(3000,()=&gt;{
+    process.title=&#39;程序员成长指北测试进程&#39;;
+    console.log(&#39;进程id&#39;,process.pid)
+})
+</code></pre>
 <p>运行上面代码后，以下为 Mac 系统自带的监控工具 “活动监视器” 所展示的效果，可以看到我们刚开启的 Nodejs 进程 7663</p>
 <p><img src="https://user-gold-cdn.xitu.io/2019/8/1/16c4dc0ca13fec40?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="进程1"></p>
 <h2 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h2><p>线程是操作系统能够进行运算调度的最小单位，首先我们要清楚线程是隶属于进程的，被包含于进程之中。<strong>一个线程只能隶属于一个进程，但是一个进程是可以拥有多个线程的</strong>。</p>
 <h3 id="单线程"><a href="#单线程" class="headerlink" title="单线程"></a>单线程</h3><p><strong>单线程就是一个进程只开一个线程</strong></p>
 <p>Javascript 就是属于单线程，程序顺序执行(这里暂且不提JS异步)，可以想象一下队列，前面一个执行完之后，后面才可以执行，当你在使用单线程语言编码时切勿有过多耗时的同步操作，否则线程会造成阻塞，导致后续响应无法处理。你如果采用 Javascript 进行编码时候，请尽可能的利用Javascript异步操作的特性。</p>
 <p><strong>经典计算耗时造成线程阻塞的例子</strong></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">const</span> longComputation = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> sum = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">1e10</span>; i++) &#123;</span><br><span class="line">    sum += i;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">return</span> sum;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">const</span> server = http.createServer();</span><br><span class="line">server.on(<span class="string">'request'</span>, (req, res) =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (req.url === <span class="string">'/compute'</span>) &#123;</span><br><span class="line">    <span class="built_in">console</span>.info(<span class="string">'计算开始'</span>,<span class="keyword">new</span> <span class="built_in">Date</span>());</span><br><span class="line">    <span class="keyword">const</span> sum = longComputation();</span><br><span class="line">    <span class="built_in">console</span>.info(<span class="string">'计算结束'</span>,<span class="keyword">new</span> <span class="built_in">Date</span>());</span><br><span class="line">    <span class="keyword">return</span> res.end(<span class="string">`Sum is <span class="subst">$&#123;sum&#125;</span>`</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    res.end(<span class="string">'Ok'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">3000</span>);</span><br><span class="line"><span class="comment">//打印结果</span></span><br><span class="line"><span class="comment">//计算开始 2019-07-28T07:08:49.849Z</span></span><br><span class="line"><span class="comment">//计算结束 2019-07-28T07:09:04.522Z</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">const http = require(&#39;http&#39;);
+const longComputation = () =&gt; {
+  let sum = 0;
+  for (let i = 0; i &lt; 1e10; i++) {
+    sum += i;
+  };
+  return sum;
+};
+const server = http.createServer();
+server.on(&#39;request&#39;, (req, res) =&gt; {
+  if (req.url === &#39;/compute&#39;) {
+    console.info(&#39;计算开始&#39;,new Date());
+    const sum = longComputation();
+    console.info(&#39;计算结束&#39;,new Date());
+    return res.end(`Sum is ${sum}`);
+  } else {
+    res.end(&#39;Ok&#39;)
+  }
+});
+
+server.listen(3000);
+//打印结果
+//计算开始 2019-07-28T07:08:49.849Z
+//计算结束 2019-07-28T07:09:04.522Z
+</code></pre>
 <p>查看打印结果，当我们调用<code>127.0.0.1:3000/compute</code><br>的时候，如果想要调用其他的路由地址比如<code>127.0.0.1/</code>大约需要15秒时间，也可以说一个用户请求完第一个compute接口后需要等待15秒，这对于用户来说是极其不友好的。下文我会通过创建多进程的方式child_process.fork 和cluster 来解决解决这个问题。<br><a id="more"></a></p>
 <blockquote>
 <p>单线程的一些说明</p>
@@ -223,14 +254,82 @@
 <blockquote>
 <p>fork_app.js</p>
 </blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">const</span> fork = <span class="built_in">require</span>(<span class="string">'child_process'</span>).fork;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(req.url == <span class="string">'/compute'</span>)&#123;</span><br><span class="line">        <span class="keyword">const</span> compute = fork(<span class="string">'./fork_compute.js'</span>);</span><br><span class="line">        compute.send(<span class="string">'开启一个新的子进程'</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 当一个子进程使用 process.send() 发送消息时会触发 'message' 事件</span></span><br><span class="line">        compute.on(<span class="string">'message'</span>, sum =&gt; &#123;</span><br><span class="line">            res.end(<span class="string">`Sum is <span class="subst">$&#123;sum&#125;</span>`</span>);</span><br><span class="line">            compute.kill();</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 子进程监听到一些错误消息退出</span></span><br><span class="line">        compute.on(<span class="string">'close'</span>, (code, signal) =&gt; &#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">`收到close事件，子进程收到信号 <span class="subst">$&#123;signal&#125;</span> 而终止，退出码 <span class="subst">$&#123;code&#125;</span>`</span>);</span><br><span class="line">            compute.kill();</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        res.end(<span class="string">`ok`</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line">server.listen(<span class="number">3000</span>, <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>, () =&gt; &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`server started at http://<span class="subst">$&#123;<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>&#125;</span>:<span class="subst">$&#123;<span class="number">3000</span>&#125;</span>`</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const http = require(&#39;http&#39;);
+const fork = require(&#39;child_process&#39;).fork;
+
+const server = http.createServer((req, res) =&gt; {
+    if(req.url == &#39;/compute&#39;){
+        const compute = fork(&#39;./fork_compute.js&#39;);
+        compute.send(&#39;开启一个新的子进程&#39;);
+
+        // 当一个子进程使用 process.send() 发送消息时会触发 &#39;message&#39; 事件
+        compute.on(&#39;message&#39;, sum =&gt; {
+            res.end(`Sum is ${sum}`);
+            compute.kill();
+        });
+
+        // 子进程监听到一些错误消息退出
+        compute.on(&#39;close&#39;, (code, signal) =&gt; {
+            console.log(`收到close事件，子进程收到信号 ${signal} 而终止，退出码 ${code}`);
+            compute.kill();
+        })
+    }else{
+        res.end(`ok`);
+    }
+});
+server.listen(3000, 127.0.0.1, () =&gt; {
+    console.log(`server started at http://${127.0.0.1}:${3000}`);
+});
+</code></pre>
 <blockquote>
 <p>fork_compute.js</p>
 </blockquote>
 <p>针对文初需要进行计算的的例子我们创建子进程拆分出来单独进行运算。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> computation = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">console</span>.info(<span class="string">'计算开始'</span>);</span><br><span class="line">    <span class="built_in">console</span>.time(<span class="string">'计算耗时'</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">1e10</span>; i++) &#123;</span><br><span class="line">        sum += i</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">console</span>.info(<span class="string">'计算结束'</span>);</span><br><span class="line">    <span class="built_in">console</span>.timeEnd(<span class="string">'计算耗时'</span>);</span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">process.on(<span class="string">'message'</span>, msg =&gt; &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(msg, <span class="string">'process.pid'</span>, process.pid); <span class="comment">// 子进程id</span></span><br><span class="line">    <span class="keyword">const</span> sum = computation();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果Node.js进程是通过进程间通信产生的，那么，process.send()方法可以用来给父进程发送消息</span></span><br><span class="line">    process.send(sum);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const computation = () =&gt; {
+    let sum = 0;
+    console.info(&#39;计算开始&#39;);
+    console.time(&#39;计算耗时&#39;);
+
+    for (let i = 0; i &lt; 1e10; i++) {
+        sum += i
+    };
+
+    console.info(&#39;计算结束&#39;);
+    console.timeEnd(&#39;计算耗时&#39;);
+    return sum;
+};
+
+process.on(&#39;message&#39;, msg =&gt; {
+    console.log(msg, &#39;process.pid&#39;, process.pid); // 子进程id
+    const sum = computation();
+
+    // 如果Node.js进程是通过进程间通信产生的，那么，process.send()方法可以用来给父进程发送消息
+    process.send(sum);
+})
+</code></pre>
 <h4 id="cluster模块"><a href="#cluster模块" class="headerlink" title="cluster模块"></a>cluster模块</h4><p>cluster 开启子进程Demo</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">const</span> numCPUs = <span class="built_in">require</span>(<span class="string">'os'</span>).cpus().length;</span><br><span class="line"><span class="keyword">const</span> cluster = <span class="built_in">require</span>(<span class="string">'cluster'</span>);</span><br><span class="line"><span class="keyword">if</span>(cluster.isMaster)&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'Master proces id is'</span>,process.pid);</span><br><span class="line">    <span class="comment">// fork workers</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i= <span class="number">0</span>;i&lt;numCPUs;i++)&#123;</span><br><span class="line">        cluster.fork();</span><br><span class="line">    &#125;</span><br><span class="line">    cluster.on(<span class="string">'exit'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">worker,code,signal</span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'worker process died,id'</span>,worker.process.pid)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="comment">// Worker可以共享同一个TCP连接</span></span><br><span class="line">    <span class="comment">// 这里是一个http服务器</span></span><br><span class="line">    http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req,res</span>)</span>&#123;</span><br><span class="line">        res.writeHead(<span class="number">200</span>);</span><br><span class="line">        res.end(<span class="string">'hello word'</span>);</span><br><span class="line">    &#125;).listen(<span class="number">8000</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const http = require(&#39;http&#39;);
+const numCPUs = require(&#39;os&#39;).cpus().length;
+const cluster = require(&#39;cluster&#39;);
+if(cluster.isMaster){
+    console.log(&#39;Master proces id is&#39;,process.pid);
+    // fork workers
+    for(let i= 0;i&lt;numCPUs;i++){
+        cluster.fork();
+    }
+    cluster.on(&#39;exit&#39;,function(worker,code,signal){
+        console.log(&#39;worker process died,id&#39;,worker.process.pid)
+    })
+}else{
+    // Worker可以共享同一个TCP连接
+    // 这里是一个http服务器
+    http.createServer(function(req,res){
+        res.writeHead(200);
+        res.end(&#39;hello word&#39;);
+    }).listen(8000);
+
+}
+</code></pre>
 <p>cluster原理分析</p>
 <p><img src="https://user-gold-cdn.xitu.io/2019/8/3/16c5658b2e97e9b2?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="cluster原理分析"></p>
 <p>cluster模块调用fork方法来创建子进程，该方法与child_process中的fork是同一个方法。</p>
@@ -253,11 +352,24 @@
 <h4 id="send句柄发送原理分析"><a href="#send句柄发送原理分析" class="headerlink" title="send句柄发送原理分析"></a>send句柄发送原理分析</h4><p>结合句柄的发送与还原示意图更容易理解。</p>
 <p><img src="https://user-gold-cdn.xitu.io/2019/8/4/16c5b52b15d87bbe?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="send句"></p>
 <p>send()方法在将消息发送到IPC管道前，实际将消息组装成了两个对象，一个参数是hadler，另一个是message。message参数如下所示：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    cmd:<span class="string">'NODE_HANDLE'</span>,</span><br><span class="line">    type:<span class="string">'net.Server'</span>,</span><br><span class="line">    msg:message</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">{
+    cmd:&#39;NODE_HANDLE&#39;,
+    type:&#39;net.Server&#39;,
+    msg:message
+}
+</code></pre>
 <p>发送到IPC管道中的实际上是我们要发送的句柄文件描述符。这个message对象在写入到IPC管道时，也会通过<code>JSON.stringfy()</code>进行序列化。所以最终发送到IPC通道中的信息都是字符串，send()方法能发送消息和句柄并不意味着它能发送任何对象。</p>
 <p>连接了IPC通道的子线程可以读取父进程发来的消息，将字符串通过<code>JSON.parse()</code>解析还原为对象后，才触发message事件将消息传递给应用层使用。在这个过程中，消息对象还要被进行过滤处理，message.cmd的值如果以NODE_为前缀，它将响应一个内部事件internalMessage，如果message.cmd值为NODE_HANDLE,它将取出<code>message.type</code>值和得到的文件描述符一起还原出一个对应的对象。</p>
 <p>以发送的TCP服务器句柄为例，子进程收到消息后的还原过程代码如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params">message,handle,emit</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> self = <span class="keyword">this</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> server = <span class="keyword">new</span> net.Server();</span><br><span class="line">    server.listen(handler,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">      emit(server);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">function(message,handle,emit){
+    var self = this;
+
+    var server = new net.Server();
+    server.listen(handler,function(){
+      emit(server);
+    });
+}
+</code></pre>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>多进程 vs 多线程</p>
 <p>属性<br>多进程<br>多线程<br>比较</p>
 <p>数据<br>数据共享复杂，需要用IPC；数据是分开的，同步简单<br>因为共享进程数据，数据共享简单，同步复杂<br>各有千秋</p>
@@ -313,7 +425,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

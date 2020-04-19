@@ -99,13 +99,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    29k
+                    6.8k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    26 mins.
+                    6 mins.
                 </span>
                 
                 
@@ -141,27 +141,247 @@
         <div class="content markdown animated fadeIn">
             <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Axios 是一个基于 promise 的 HTTP 库，可以用在浏览器和 node.js 中, 也是vue官方推荐使用的http库；封装axios，一方面为了以后维护方便，另一方面也可以对请求进行自定义处理，不多BB,开搞</p>
 <h2 id="设置接口请求前缀"><a href="#设置接口请求前缀" class="headerlink" title="设置接口请求前缀"></a>设置接口请求前缀</h2><p>一般我们开发都会有开发、测试、生产环境，前缀需要加以区分，我们利用node环境变量来作判断</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(process.env.NODE_ENV === <span class="string">"development"</span>)&#123;</span><br><span class="line">    axios.default.baseURL = <span class="string">"XXXX"</span></span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span>(process.env.NODE_ENV === <span class="string">"production"</span>)&#123;</span><br><span class="line">    axios.default.baseURL = <span class="string">"XXXX"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">if(process.env.NODE_ENV === &quot;development&quot;){
+    axios.default.baseURL = &quot;XXXX&quot;
+}else if(process.env.NODE_ENV === &quot;production&quot;){
+    axios.default.baseURL = &quot;XXXX&quot;
+}
+</code></pre>
 <p>在localhost调试时，直接用开发地址一般都会有跨域的问题，所以我们还需要<code>vue.config.js</code>配置代理</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  devServer: &#123;</span><br><span class="line">    proxy: &#123;</span><br><span class="line">      <span class="string">'/proxyApi'</span>: &#123;</span><br><span class="line">        target: <span class="string">'http://dev.xxx.com'</span>,</span><br><span class="line">        changeOrigin: <span class="literal">true</span>,</span><br><span class="line">        pathRewrite: &#123;</span><br><span class="line">          <span class="string">'/proxyApi'</span>: <span class="string">''</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">module.exports = {
+  devServer: {
+    proxy: {
+      &#39;/proxyApi&#39;: {
+        target: &#39;http://dev.xxx.com&#39;,
+        changeOrigin: true,
+        pathRewrite: {
+          &#39;/proxyApi&#39;: &#39;&#39;
+        }
+      }
+    }
+  }
+}
+</code></pre>
 <p>这样就成功把/proxyApi 指向了 <code>XXXX</code>，重启服务</p>
 <h2 id="拦截器"><a href="#拦截器" class="headerlink" title="拦截器"></a>拦截器</h2><p>接着设置超时时间和请求头信息</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">axios.defaults.timeout = <span class="number">10000</span></span><br><span class="line"><span class="comment">// 请求头信息是为post请求设置</span></span><br><span class="line">axios.defaults.headers.post[<span class="string">'Content-Type'</span>] = <span class="string">'application/x-www-form-urlencoded;charset=UTF-8'</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">axios.defaults.timeout = 10000
+// 请求头信息是为post请求设置
+axios.defaults.headers.post[&#39;Content-Type&#39;] = &#39;application/x-www-form-urlencoded;charset=UTF-8&#39;
+</code></pre>
 <p>axios很好用，其中之一就是它的拦截器十分强大，我们就可以为请求和响应设置拦截器，比如请求拦截器可以在每个请求里加上token，做了统一处理后维护起来也方便，响应拦截器可以在接收到响应后先做一层操作，如根据状态码判断登录状态、授权。<br><a id="more"></a></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 请求拦截器</span></span><br><span class="line">axios.interceptors.request.use(</span><br><span class="line">  config =&gt; &#123;</span><br><span class="line">    <span class="comment">// 每次发送请求之前判断是否存在token</span></span><br><span class="line">    <span class="comment">// 如果存在，则统一在http请求的header都加上token，这样后台根据token判断你的登录情况，此处token一般是用户完成登录后储存到localstorage里的</span></span><br><span class="line">    token &amp;&amp; (config.headers.Authorization = token)</span><br><span class="line">    <span class="keyword">return</span> config</span><br><span class="line">  &#125;,</span><br><span class="line">  error =&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Promise</span>.error(error)</span><br><span class="line">  &#125;)</span><br><span class="line"><span class="comment">// 响应拦截器</span></span><br><span class="line">axios.interceptors.response.use(<span class="function"><span class="params">response</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 如果返回的状态码为200，说明接口请求成功，可以正常拿到数据</span></span><br><span class="line">  <span class="comment">// 否则的话抛出错误</span></span><br><span class="line">  <span class="keyword">if</span> (response.status === <span class="number">200</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (response.data.code === <span class="number">511</span>) &#123;</span><br><span class="line">      <span class="comment">// 未授权调取授权接口</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (response.data.code === <span class="number">510</span>) &#123;</span><br><span class="line">      <span class="comment">// 未登录跳转登录页</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve(response)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Promise</span>.reject(response)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, error =&gt; &#123;</span><br><span class="line">  <span class="comment">// 我们可以在这里对异常状态作统一处理</span></span><br><span class="line">  <span class="keyword">if</span> (error.response.status) &#123;</span><br><span class="line">    <span class="comment">// 处理请求失败的情况</span></span><br><span class="line">    <span class="comment">// 对不同返回码对相应处理</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Promise</span>.reject(error.response)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// 请求拦截器
+axios.interceptors.request.use(
+  config =&gt; {
+    // 每次发送请求之前判断是否存在token
+    // 如果存在，则统一在http请求的header都加上token，这样后台根据token判断你的登录情况，此处token一般是用户完成登录后储存到localstorage里的
+    token &amp;&amp; (config.headers.Authorization = token)
+    return config
+  },
+  error =&gt; {
+    return Promise.error(error)
+  })
+// 响应拦截器
+axios.interceptors.response.use(response =&gt; {
+  // 如果返回的状态码为200，说明接口请求成功，可以正常拿到数据
+  // 否则的话抛出错误
+  if (response.status === 200) {
+    if (response.data.code === 511) {
+      // 未授权调取授权接口
+    } else if (response.data.code === 510) {
+      // 未登录跳转登录页
+    } else {
+      return Promise.resolve(response)
+    }
+  } else {
+    return Promise.reject(response)
+  }
+}, error =&gt; {
+  // 我们可以在这里对异常状态作统一处理
+  if (error.response.status) {
+    // 处理请求失败的情况
+    // 对不同返回码对相应处理
+    return Promise.reject(error.response)
+  }
+})
+</code></pre>
 <h2 id="get-post的封装"><a href="#get-post的封装" class="headerlink" title="get post的封装"></a>get post的封装</h2><p>httpGet: 一个参数是请求的url,一个就携带的请求参数，返回promise对象</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// get 请求</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">httpGet</span>(<span class="params">&#123;</span></span></span><br><span class="line"><span class="function"><span class="params">  url,</span></span></span><br><span class="line"><span class="function"><span class="params">  params = &#123;&#125;</span></span></span><br><span class="line"><span class="function"><span class="params">&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    axios.get(url, &#123;</span><br><span class="line">      params</span><br><span class="line">    &#125;).then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">      resolve(res.data)</span><br><span class="line">    &#125;).catch(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">      reject(err)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// get 请求
+export function httpGet({
+  url,
+  params = {}
+}) {
+  return new Promise((resolve, reject) =&gt; {
+    axios.get(url, {
+      params
+    }).then((res) =&gt; {
+      resolve(res.data)
+    }).catch(err =&gt; {
+      reject(err)
+    })
+  })
+}
+</code></pre>
 <p>httpPost: 原理和get差不多，需要注意，这里多了个data参数，post请求提交前需要对它进行序列号操作，这里是通过<code>transformRequest</code>做处理；另外两个参数url,params和get请求的一样；</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// post请求</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">httpPost</span>(<span class="params">&#123;</span></span></span><br><span class="line"><span class="function"><span class="params">  url,</span></span></span><br><span class="line"><span class="function"><span class="params">  data = &#123;&#125;,</span></span></span><br><span class="line"><span class="function"><span class="params">  params = &#123;&#125;</span></span></span><br><span class="line"><span class="function"><span class="params">&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    axios(&#123;</span><br><span class="line">      url,</span><br><span class="line">      method: <span class="string">'post'</span>,</span><br><span class="line">      transformRequest: [<span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">let</span> ret = <span class="string">''</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> it <span class="keyword">in</span> data) &#123;</span><br><span class="line">          ret += <span class="built_in">encodeURIComponent</span>(it) + <span class="string">'='</span> + <span class="built_in">encodeURIComponent</span>(data[it]) + <span class="string">'&amp;'</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret</span><br><span class="line">      &#125;],</span><br><span class="line">      <span class="comment">// 发送的数据</span></span><br><span class="line">      data,</span><br><span class="line">      <span class="comment">// url参数</span></span><br><span class="line">      params</span><br><span class="line"></span><br><span class="line">    &#125;).then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">      resolve(res.data)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// post请求
+export function httpPost({
+  url,
+  data = {},
+  params = {}
+}) {
+  return new Promise((resolve, reject) =&gt; {
+    axios({
+      url,
+      method: &#39;post&#39;,
+      transformRequest: [function (data) {
+        let ret = &#39;&#39;
+        for (let it in data) {
+          ret += encodeURIComponent(it) + &#39;=&#39; + encodeURIComponent(data[it]) + &#39;&amp;&#39;
+        }
+        return ret
+      }],
+      // 发送的数据
+      data,
+      // url参数
+      params
+
+    }).then(res =&gt; {
+      resolve(res.data)
+    })
+  })
+}
+</code></pre>
 <h3 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h3><p>我把所有的接口调用都在api.js文件中</p>
 <p>先引入封装好的方法，再在要调用的接口重新封装成一个方法暴露出去</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; httpGet, httpPost &#125; <span class="keyword">from</span> <span class="string">'./http'</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> getorglist = <span class="function">(<span class="params">params = &#123;&#125;</span>) =&gt;</span> httpGet(&#123; <span class="attr">url</span>: <span class="string">'apps/api/org/list'</span>, params &#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">import { httpGet, httpPost } from &#39;./http&#39;
+export const getorglist = (params = {}) =&gt; httpGet({ url: &#39;apps/api/org/list&#39;, params })
+</code></pre>
 <p>在页面中可以这样调用：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// .vue</span></span><br><span class="line"><span class="keyword">import</span> &#123; getorglist &#125; <span class="keyword">from</span> <span class="string">'@/assets/js/api'</span></span><br><span class="line"></span><br><span class="line">getorglist(&#123; <span class="attr">id</span>: <span class="number">200</span> &#125;).then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(res)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// .vue
+import { getorglist } from &#39;@/assets/js/api&#39;
+
+getorglist({ id: 200 }).then(res =&gt; {
+  console.log(res)
+})
+</code></pre>
 <p>这样可以把api统一管理起来，以后维护修改只需要在api.js文件操作即可</p>
-<h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><h3 id="http-js"><a href="#http-js" class="headerlink" title="http.js"></a>http.js</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// http.js</span></span><br><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">'axios'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 环境的切换</span></span><br><span class="line"><span class="keyword">if</span> (process.env.NODE_ENV === <span class="string">'development'</span>) &#123;</span><br><span class="line">  axios.defaults.baseURL = <span class="string">'/proxyApi'</span></span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (process.env.NODE_ENV === <span class="string">'production'</span>) &#123;</span><br><span class="line">  axios.defaults.baseURL = <span class="string">'http://prod.xxx.com'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 请求拦截器</span></span><br><span class="line">axios.interceptors.request.use(</span><br><span class="line">  config =&gt; &#123;</span><br><span class="line">    token &amp;&amp; (config.headers.Authorization = token)</span><br><span class="line">    <span class="keyword">return</span> config</span><br><span class="line">  &#125;,</span><br><span class="line">  error =&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Promise</span>.error(error)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">axios.defaults.timeout = <span class="number">10000</span></span><br><span class="line"></span><br><span class="line">axios.defaults.headers.post[<span class="string">'Content-Type'</span>] = <span class="string">'application/x-www-form-urlencoded;charset=UTF-8'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 响应拦截器</span></span><br><span class="line">axios.interceptors.response.use(<span class="function"><span class="params">response</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (response.status === <span class="number">200</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (response.data.code === <span class="number">511</span>) &#123;</span><br><span class="line">      <span class="comment">// 未授权调取授权接口</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (response.data.code === <span class="number">510</span>) &#123;</span><br><span class="line">      <span class="comment">// 未登录跳转登录页</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve(response)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Promise</span>.reject(response)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, error =&gt; &#123;</span><br><span class="line">  <span class="comment">// 我们可以在这里对异常状态作统一处理</span></span><br><span class="line">  <span class="keyword">if</span> (error.response.status) &#123;</span><br><span class="line">    <span class="comment">// 处理请求失败的情况</span></span><br><span class="line">    <span class="comment">// 对不同返回码对相应处理</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Promise</span>.reject(error.response)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// get 请求</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">httpGet</span>(<span class="params">&#123;</span></span></span><br><span class="line"><span class="function"><span class="params">  url,</span></span></span><br><span class="line"><span class="function"><span class="params">  params = &#123;&#125;</span></span></span><br><span class="line"><span class="function"><span class="params">&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    axios.get(url, &#123;</span><br><span class="line">      params</span><br><span class="line">    &#125;).then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">      resolve(res.data)</span><br><span class="line">    &#125;).catch(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">      reject(err)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// post请求</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">httpPost</span>(<span class="params">&#123;</span></span></span><br><span class="line"><span class="function"><span class="params">  url,</span></span></span><br><span class="line"><span class="function"><span class="params">  data = &#123;&#125;,</span></span></span><br><span class="line"><span class="function"><span class="params">  params = &#123;&#125;</span></span></span><br><span class="line"><span class="function"><span class="params">&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    axios(&#123;</span><br><span class="line">      url,</span><br><span class="line">      method: <span class="string">'post'</span>,</span><br><span class="line">      transformRequest: [<span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">let</span> ret = <span class="string">''</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> it <span class="keyword">in</span> data) &#123;</span><br><span class="line">          ret += <span class="built_in">encodeURIComponent</span>(it) + <span class="string">'='</span> + <span class="built_in">encodeURIComponent</span>(data[it]) + <span class="string">'&amp;'</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret</span><br><span class="line">      &#125;],</span><br><span class="line">      <span class="comment">// 发送的数据</span></span><br><span class="line">      data,</span><br><span class="line">      <span class="comment">// url参数</span></span><br><span class="line">      params</span><br><span class="line"></span><br><span class="line">    &#125;).then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">      resolve(res.data)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="api-js"><a href="#api-js" class="headerlink" title="api.js"></a>api.js</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// api.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; httpGet, httpPost &#125; <span class="keyword">from</span> <span class="string">'./http'</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> getorglist = <span class="function">(<span class="params">params = &#123;&#125;</span>) =&gt;</span> httpGet(&#123; <span class="attr">url</span>: <span class="string">'apps/api/org/list'</span>, params &#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> save = <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> httpPost(&#123;</span><br><span class="line">    url: <span class="string">'apps/wechat/api/save_member'</span>,</span><br><span class="line">    data</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="vue"><a href="#vue" class="headerlink" title="vue"></a>vue</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// .vue</span></span><br><span class="line">&lt;script&gt;</span><br><span class="line"><span class="keyword">import</span> &#123; getorglist &#125; <span class="keyword">from</span> <span class="string">'@/assets/js/api'</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  name: <span class="string">'upload-card'</span>,</span><br><span class="line">  data() &#123;&#125;,</span><br><span class="line">  mounted() &#123;</span><br><span class="line">    getorglist(&#123; <span class="attr">id</span>: <span class="number">200</span> &#125;).then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// console.log(res)</span></span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><h3 id="http-js"><a href="#http-js" class="headerlink" title="http.js"></a>http.js</h3><pre><code class="js">// http.js
+import axios from &#39;axios&#39;
+
+// 环境的切换
+if (process.env.NODE_ENV === &#39;development&#39;) {
+  axios.defaults.baseURL = &#39;/proxyApi&#39;
+} else if (process.env.NODE_ENV === &#39;production&#39;) {
+  axios.defaults.baseURL = &#39;http://prod.xxx.com&#39;
+}
+
+// 请求拦截器
+axios.interceptors.request.use(
+  config =&gt; {
+    token &amp;&amp; (config.headers.Authorization = token)
+    return config
+  },
+  error =&gt; {
+    return Promise.error(error)
+  })
+
+axios.defaults.timeout = 10000
+
+axios.defaults.headers.post[&#39;Content-Type&#39;] = &#39;application/x-www-form-urlencoded;charset=UTF-8&#39;
+
+// 响应拦截器
+axios.interceptors.response.use(response =&gt; {
+  if (response.status === 200) {
+    if (response.data.code === 511) {
+      // 未授权调取授权接口
+    } else if (response.data.code === 510) {
+      // 未登录跳转登录页
+    } else {
+      return Promise.resolve(response)
+    }
+  } else {
+    return Promise.reject(response)
+  }
+}, error =&gt; {
+  // 我们可以在这里对异常状态作统一处理
+  if (error.response.status) {
+    // 处理请求失败的情况
+    // 对不同返回码对相应处理
+    return Promise.reject(error.response)
+  }
+})
+
+// get 请求
+export function httpGet({
+  url,
+  params = {}
+}) {
+  return new Promise((resolve, reject) =&gt; {
+    axios.get(url, {
+      params
+    }).then((res) =&gt; {
+      resolve(res.data)
+    }).catch(err =&gt; {
+      reject(err)
+    })
+  })
+}
+
+// post请求
+export function httpPost({
+  url,
+  data = {},
+  params = {}
+}) {
+  return new Promise((resolve, reject) =&gt; {
+    axios({
+      url,
+      method: &#39;post&#39;,
+      transformRequest: [function (data) {
+        let ret = &#39;&#39;
+        for (let it in data) {
+          ret += encodeURIComponent(it) + &#39;=&#39; + encodeURIComponent(data[it]) + &#39;&amp;&#39;
+        }
+        return ret
+      }],
+      // 发送的数据
+      data,
+      // url参数
+      params
+
+    }).then(res =&gt; {
+      resolve(res.data)
+    })
+  })
+}
+</code></pre>
+<h3 id="api-js"><a href="#api-js" class="headerlink" title="api.js"></a>api.js</h3><pre><code class="js">// api.js
+import { httpGet, httpPost } from &#39;./http&#39;
+export const getorglist = (params = {}) =&gt; httpGet({ url: &#39;apps/api/org/list&#39;, params })
+
+export const save = (data) =&gt; {
+  return httpPost({
+    url: &#39;apps/wechat/api/save_member&#39;,
+    data
+  })
+}
+
+</code></pre>
+<h3 id="vue"><a href="#vue" class="headerlink" title="vue"></a>vue</h3><pre><code class="js">// .vue
+&lt;script&gt;
+import { getorglist } from &#39;@/assets/js/api&#39;
+export default {
+  name: &#39;upload-card&#39;,
+  data() {},
+  mounted() {
+    getorglist({ id: 200 }).then(res =&gt; {
+      // console.log(res)
+    })
+  },
+}
+&lt;/script&gt;
+
+</code></pre>
+
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
                 data-autoplay="false">
@@ -208,7 +428,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

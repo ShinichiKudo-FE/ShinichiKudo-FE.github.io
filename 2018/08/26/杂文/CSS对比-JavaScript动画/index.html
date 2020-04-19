@@ -104,13 +104,13 @@ TL;DR
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    11k
+                    4.6k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    10 mins.
+                    4 mins.
                 </span>
                 
                 
@@ -166,21 +166,90 @@ TL;DR
 <a id="more"></a>
 <h2 id="使用-CSS-编写动画"><a href="#使用-CSS-编写动画" class="headerlink" title="使用 CSS 编写动画"></a>使用 CSS 编写动画</h2><p>使用 CSS 编写动画是使内容在屏幕上移动的最简单方式。此方法被称为声明式，因为您可以指定您想要的结果。</p>
 <p>以下是一些 CSS 代码，让一个元素同时在 X 轴和 Y 轴上移动 100px。其实现方法是使用 CSS 变换，用时设置为 500 毫秒。当添加了 move 类时，transform 值被改变并且变换开始。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">.box &#123;</span><br><span class="line">  -webkit-transform: translate(<span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">  -webkit-transition: -webkit-transform <span class="number">500</span>ms;</span><br><span class="line"></span><br><span class="line">  transform: translate(<span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">  transition: transform <span class="number">500</span>ms;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.box.move &#123;</span><br><span class="line">  -webkit-transform: translate(<span class="number">100</span>px, <span class="number">100</span>px);</span><br><span class="line">  transform: translate(<span class="number">100</span>px, <span class="number">100</span>px);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">.box {
+  -webkit-transform: translate(0, 0);
+  -webkit-transition: -webkit-transform 500ms;
+
+  transform: translate(0, 0);
+  transition: transform 500ms;
+}
+
+.box.move {
+  -webkit-transform: translate(100px, 100px);
+  transform: translate(100px, 100px);
+}
+</code></pre>
 <p>除了变换的持续时间之外，还有针对缓动的选项，缓动基本上是动画表现的方式</p>
 <p>如果在上述代码段中，您创建单独的 CSS 类来管理动画，则可以使用 JavaScript 来打开和关闭每个动画：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">box.classList.add(<span class="string">'move'</span>)；</span><br></pre></td></tr></table></figure>
+<pre><code class="js">box.classList.add(&#39;move&#39;)；
+</code></pre>
 <p>此操作将给您的应用带来良好的平衡。您可以侧重于使用 JavaScript 来管理状态，只需在目标元素上设置相应的类，让浏览器去处理动画。如果您按照这种方法，则可以侦听元素的 <code>transitionend</code> 事件，但前提是您能够放弃对 Internet Explorer 较旧版本的支持；IE 10 是支持这些事件的首个版本。所有其他浏览器均已支持此事件有一段时间了。</p>
 <p>侦听变换结束所需的 JavaScript 如下所示：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> box = <span class="built_in">document</span>.querySelector(<span class="string">'.box'</span>);</span><br><span class="line">box.addEventListener(<span class="string">'transitionend'</span>, onTransitionEnd, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">onTransitionEnd</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// Handle the transition finishing.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">var box = document.querySelector(&#39;.box&#39;);
+box.addEventListener(&#39;transitionend&#39;, onTransitionEnd, false);
+
+function onTransitionEnd() {
+  // Handle the transition finishing.
+}
+</code></pre>
 <p>除了使用 CSS 变换之外，还可以使用 CSS 动画，这允许您对单个动画关键帧、持续时间和迭代进行更多控制。</p>
 <p>例如，可以使用与变换相同的方式为方框设置动画，但是设置动画时没有任何用户交互（例如点击），而是采用无限重复。还可以同时更改多个属性：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * This is a simplified version without</span></span><br><span class="line"><span class="comment"> * vendor prefixes.With them included</span></span><br><span class="line"><span class="comment"> * (which you will need), things get far</span></span><br><span class="line"><span class="comment"> * more verbose!</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="selector-class">.box</span> &#123;</span><br><span class="line">  <span class="comment">/* Choose the animation */</span></span><br><span class="line">  <span class="attribute">animation-name</span>: movingBox;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* The animation’s duration */</span></span><br><span class="line">  <span class="attribute">animation-duration</span>: <span class="number">1300ms</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* The number of times we want</span></span><br><span class="line"><span class="comment">      the animation to run */</span></span><br><span class="line">  <span class="attribute">animation-iteration-count</span>: infinite;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Causes the animation to reverse</span></span><br><span class="line"><span class="comment">      on every odd iteration */</span></span><br><span class="line">  <span class="attribute">animation-direction</span>: alternate;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@keyframes</span> movingBox &#123;</span><br><span class="line">  0% &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translate</span>(<span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    <span class="attribute">opacity</span>: <span class="number">0.3</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  25% &#123;</span><br><span class="line">    <span class="attribute">opacity</span>: <span class="number">0.9</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  50% &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translate</span>(<span class="number">100px</span>, <span class="number">100px</span>);</span><br><span class="line">    <span class="attribute">opacity</span>: <span class="number">0.2</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  100% &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translate</span>(<span class="number">30px</span>, <span class="number">30px</span>);</span><br><span class="line">    <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="css">/**
+ * This is a simplified version without
+ * vendor prefixes.With them included
+ * (which you will need), things get far
+ * more verbose!
+ */
+.box {
+  /* Choose the animation */
+  animation-name: movingBox;
+
+  /* The animation’s duration */
+  animation-duration: 1300ms;
+
+  /* The number of times we want
+      the animation to run */
+  animation-iteration-count: infinite;
+
+  /* Causes the animation to reverse
+      on every odd iteration */
+  animation-direction: alternate;
+}
+
+@keyframes movingBox {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0.3;
+  }
+
+  25% {
+    opacity: 0.9;
+  }
+
+  50% {
+    transform: translate(100px, 100px);
+    opacity: 0.2;
+  }
+
+  100% {
+    transform: translate(30px, 30px);
+    opacity: 0.8;
+  }
+}
+</code></pre>
 <p>借助 CSS 动画，可独立于目标元素来定义动画本身，并且使用 animation-name 属性来选择所需的动画。</p>
 <p>CSS 动画在某种程度上仍采用供应商前缀，在 Safari、Safari Mobile 和 Android 浏览器中使用-webkit-。Chrome、Opera、Internet Explorer 和 Firefox 均不采用前缀。许多工具可帮助您创建所需的 CSS 前缀版本，使您能够在源文件中编写无前缀的版本。</p>
 <h2 id="使用-JavaScript-和-Web-Animations-API-编写动画"><a href="#使用-JavaScript-和-Web-Animations-API-编写动画" class="headerlink" title="使用 JavaScript 和 Web Animations API 编写动画"></a>使用 JavaScript 和 Web Animations API 编写动画</h2><p>比较而言，使用 JavaScript 创建动画比编写 CSS 变换或动画更复杂，但它一般可为开发者提供更多功能。您可以使用 Web Animations API 给特定的 CSS 属性设置动画，或构建可组合的效果对象。</p>
 <p>JavaScript 动画是命令式，因为您将它们作为代码的一部分嵌入代码中。您还可以将它们封装在其他对象内。以下是在重新创建我们之前所讨论的 CSS 变换时需要编写的 JavaScript：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> target = <span class="built_in">document</span>.querySelector(<span class="string">'.box'</span>);</span><br><span class="line"><span class="keyword">var</span> player = target.animate([</span><br><span class="line">  &#123;<span class="attr">transform</span>: <span class="string">'translate(0)'</span>&#125;,</span><br><span class="line">  &#123;<span class="attr">transform</span>: <span class="string">'translate(100px, 100px)'</span>&#125;</span><br><span class="line">], <span class="number">500</span>);</span><br><span class="line">player.addEventListener(<span class="string">'finish'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  target.style.transform = <span class="string">'translate(100px, 100px)'</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">var target = document.querySelector(&#39;.box&#39;);
+var player = target.animate([
+  {transform: &#39;translate(0)&#39;},
+  {transform: &#39;translate(100px, 100px)&#39;}
+], 500);
+player.addEventListener(&#39;finish&#39;, function() {
+  target.style.transform = &#39;translate(100px, 100px)&#39;;
+});
+</code></pre>
 <p>默认情况下，Web Animations 仅修改元素的呈现形式。如果您想让您的对象保持在它已移动到的位置，则应在动画完成时，按照我们的示例修改其底层样式。</p>
 <p>Web Animations API 是来自 W3C 的新标准，在 Chrome 和 Opera 中受原生支持，且正在进行针对 Firefox 的开发。对于其他的现代浏览器，提供 polyfill。</p>
 <p>使用 JavaScript 动画，您可以完全控制元素在每个步骤的样式。这意味着您可以在您认为合适时减慢动画、暂停动画、停止动画、倒退动画和操纵元素。如果您正在构建复杂的对象导向型应用，则此方法特别有用，因为您可以正确封装您的行为。</p>
@@ -231,7 +300,7 @@ TL;DR
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

@@ -11,7 +11,8 @@
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="TriDiamond Obsidian,"> 
     <meta name="description" content="一枚前端搬砖队队员的记录册,将jQuery的ajax、axios和fetch做个简单的比较，所谓仁者见仁智者见智，最终使用哪个还是自行斟酌
-jQuery ajax12345678$.ajax(&amp;#123;   type: &#39;P,"> 
+jQuery ajax$.ajax({
+   type: &amp;#39;POST&amp;#39;,"> 
     <meta name="author" content="张白告丶"> 
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -99,13 +100,13 @@ jQuery ajax12345678$.ajax(&amp;#123;   type: &#39;P,">
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    6.9k
+                    3.6k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    6 mins.
+                    3 mins.
                 </span>
                 
                 
@@ -140,7 +141,15 @@ jQuery ajax12345678$.ajax(&amp;#123;   type: &#39;P,">
     <div class='main'>
         <div class="content markdown animated fadeIn">
             <p>将jQuery的ajax、axios和fetch做个简单的比较，所谓仁者见仁智者见智，最终使用哪个还是自行斟酌</p>
-<h1 id="jQuery-ajax"><a href="#jQuery-ajax" class="headerlink" title="jQuery ajax"></a>jQuery ajax</h1><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$.ajax(&#123;</span><br><span class="line">   type: <span class="string">'POST'</span>,</span><br><span class="line">   url: url,</span><br><span class="line">   data: data,</span><br><span class="line">   dataType: dataType,</span><br><span class="line">   success: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;,</span><br><span class="line">   error: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h1 id="jQuery-ajax"><a href="#jQuery-ajax" class="headerlink" title="jQuery ajax"></a>jQuery ajax</h1><pre><code class="js">$.ajax({
+   type: &#39;POST&#39;,
+   url: url,
+   data: data,
+   dataType: dataType,
+   success: function () {},
+   error: function () {}
+})
+</code></pre>
 <blockquote>
 <p>优缺点：</p>
 </blockquote>
@@ -154,7 +163,18 @@ jQuery ajax12345678$.ajax(&amp;#123;   type: &#39;P,">
 </ul>
 <p>尽管JQuery对我们前端的开发工作曾有着（现在也仍然有着）深远的影响，但是我们可以看到随着VUE，REACT新一代框架的兴起，以及ES规范的完善，更多API的更新，JQuery这种大而全的JS库，未来的路会越走越窄。</p>
 <h1 id="axios"><a href="#axios" class="headerlink" title="axios"></a>axios</h1><p><a href="https://www.kancloud.cn/yunye/axios/234845" target="_blank" rel="noopener">axios中文文档</a></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">axios(&#123;</span><br><span class="line">    method: <span class="string">'POST'</span>,</span><br><span class="line">    url: <span class="string">''</span></span><br><span class="line">    data:&#123;</span><br><span class="line">        name:<span class="string">'zhang'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">response</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(response)</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">error</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(error)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">axios({
+    method: &#39;POST&#39;,
+    url: &#39;&#39;
+    data:{
+        name:&#39;zhang&#39;
+    }
+}).then(function (response){
+    console.log(response)
+}).then(function (error){
+    console.log(error)
+})
+</code></pre>
 <a id="more"></a>
 <p>Vue2.0之后，尤雨溪推荐大家用axios替换JQuery ajax，想必让Axios进入了很多人的目光中。Axios本质上也是对原生XHR的封装，只不过它是Promise的实现版本，符合最新的ES规范，从它的官网上可以看到它有以下几条特性：</p>
 <blockquote>
@@ -170,7 +190,14 @@ jQuery ajax12345678$.ajax(&amp;#123;   type: &#39;P,">
 <p>Axios既提供了并发的封装，也没有下文会提到的fetch的各种问题，而且体积也较小，当之无愧现在最应该选用的请求的方式。</p>
 <h1 id="fetch"><a href="#fetch" class="headerlink" title="fetch"></a>fetch</h1><p>fetch号称是AJAX的替代品，它的好处在<a href="https://github.com/camsong/blog/issues/2" target="_blank" rel="noopener">《传统 Ajax 已死，Fetch 永生》</a>中提到有以下几点：</p>
 <p>符合关注分离，没有将输入、输出和用事件来跟踪的状态混杂在一个对象里<br>更好更方便的写法，诸如：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">  <span class="keyword">let</span> response = <span class="keyword">await</span> fetch(url);</span><br><span class="line">  <span class="keyword">let</span> data = response.json();</span><br><span class="line">  <span class="built_in">console</span>.log(data);</span><br><span class="line">&#125;<span class="keyword">catch</span> (e)&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"Oops, error"</span>, e);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">try{
+  let response = await fetch(url);
+  let data = response.json();
+  console.log(data);
+}catch (e){
+    console.log(&quot;Oops, error&quot;, e);
+}
+</code></pre>
 <blockquote>
 <p>优缺点：</p>
 </blockquote>
@@ -184,7 +211,12 @@ jQuery ajax12345678$.ajax(&amp;#123;   type: &#39;P,">
 <p>PS: fetch的具体问题大家可以参考：<a href="http://undefinedblog.com/window-fetch-is-not-as-good-as-you-imagined/?utm_source=caibaojian.com" target="_blank" rel="noopener">《fetch没有你想象的那么美》</a><a href="https://www.cnblogs.com/huilixieqi/p/6494380.html" target="_blank" rel="noopener">《fetch使用的常见问题及解决方法》</a></p>
 <p>看到这里，你心里一定有个疑问，这鬼东西就是个半拉子工程嘛，我还是回去用Jquery或者Axios算了——其实我就是这么打算的。但是，必须要提出的是，我发现fetch在前端的应用上有一项<code>xhr</code>怎么也比不上的能力：<strong>跨域的处理</strong>。</p>
 <p>我们都知道因为同源策略的问题，浏览器的请求是可能随便跨域的——一定要有跨域头或者借助JSONP，但是，<strong>fetch中可以设置mode为”no-cors”（不跨域）</strong>，如下所示：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fetch(<span class="string">'/users.json'</span>, &#123;</span><br><span class="line">    method: <span class="string">'post'</span>,</span><br><span class="line">    mode: <span class="string">'no-cors'</span>,</span><br><span class="line">    data: &#123;&#125;</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="comment">/* handle response */</span> &#125;);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">fetch(&#39;/users.json&#39;, {
+    method: &#39;post&#39;,
+    mode: &#39;no-cors&#39;,
+    data: {}
+}).then(function() { /* handle response */ });
+</code></pre>
 <h1 id="为什么要用axios"><a href="#为什么要用axios" class="headerlink" title="为什么要用axios"></a>为什么要用axios</h1><blockquote>
 <p>axios 是一个基于Promise 用于浏览器和 nodejs 的 HTTP 客户端，它本身具有以下特征：</p>
 </blockquote>
@@ -245,7 +277,7 @@ jQuery ajax12345678$.ajax(&amp;#123;   type: &#39;P,">
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

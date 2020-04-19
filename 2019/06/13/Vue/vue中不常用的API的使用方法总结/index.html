@@ -12,7 +12,7 @@
     <meta name="keywords" content="TriDiamond Obsidian,"> 
     <meta name="description" content="一枚前端搬砖队队员的记录册,errorHandler官网介绍及使用：
 指定组件的渲染和观察期间未捕获错误的处理函数。这个处理函数被调用时，可获取错误信息和 Vue 实例
-1234567Vue.config.errorHandl,"> 
+Vue.config.errorHandler = fu,"> 
     <meta name="author" content="张白告丶"> 
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -101,13 +101,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    20k
+                    6.4k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    18 mins.
+                    6 mins.
                 </span>
                 
                 
@@ -143,19 +143,100 @@
         <div class="content markdown animated fadeIn">
             <h2 id="errorHandler"><a href="#errorHandler" class="headerlink" title="errorHandler"></a>errorHandler</h2><p>官网介绍及使用：</p>
 <p>指定组件的渲染和观察期间未捕获错误的处理函数。这个处理函数被调用时，可获取错误信息和 Vue 实例</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Vue.config.errorHandler = <span class="function"><span class="keyword">function</span> (<span class="params">err, vm, info</span>) </span>&#123;</span><br><span class="line">  <span class="comment">//处理错误信息, 进行错误上报</span></span><br><span class="line">  <span class="comment">//err错误对象</span></span><br><span class="line">  <span class="comment">//vm Vue实例</span></span><br><span class="line">  <span class="comment">//`info` 是 Vue 特定的错误信息，比如错误所在的生命周期钩子</span></span><br><span class="line">  <span class="comment">//只在 2.2.0+ 可用</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">Vue.config.errorHandler = function (err, vm, info) {
+  //处理错误信息, 进行错误上报
+  //err错误对象
+  //vm Vue实例
+  //`info` 是 Vue 特定的错误信息，比如错误所在的生命周期钩子
+  //只在 2.2.0+ 可用
+}
+</code></pre>
 <h2 id="Vue-observable-object"><a href="#Vue-observable-object" class="headerlink" title="Vue.observable( object )"></a>Vue.observable( object )</h2><p>这个相当于一个简单的store管理，在不用vuex的情况下，不同组件之间通信可以用<code>Vue.observeable</code></p>
 <p>官网介绍：</p>
 <p>让一个对象可响应。Vue 内部会用它来处理 data 函数返回的对象。</p>
 <p>返回的对象可以直接用于渲染函数和计算属性内，并且会在发生改变时触发相应的更新。也可以作为最小化的跨组件状态存储器，用于简单的场景：</p>
 <p>使用：</p>
 <p>在store.js中</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">impor vue <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> store = vue.observable(&#123;<span class="attr">count</span>:<span class="number">0</span>&#125;);</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> mutation = &#123;</span><br><span class="line">    setCount(count)&#123;</span><br><span class="line">        store.count = count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">impor vue from &#39;vue&#39;;
+export const store = vue.observable({count:0});
+export const mutation = {
+    setCount(count){
+        store.count = count;
+    }
+}
+</code></pre>
 <p>在组件中使用</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"hello"</span>&gt;</span><br><span class="line">    &lt;p @click=<span class="string">"setCount(testCount + 1)"</span>&gt;+&lt;<span class="regexp">/p&gt;</span></span><br><span class="line"><span class="regexp">    &lt;p @click="setCount(testCount - 1)"&gt;-&lt;/</span>p&gt;</span><br><span class="line">    &lt;test /&gt;</span><br><span class="line">    &lt;p&gt;&#123;&#123;testCount&#125;&#125;&lt;<span class="regexp">/p&gt;</span></span><br><span class="line"><span class="regexp">  &lt;/</span>div&gt;</span><br><span class="line">&lt;<span class="regexp">/template&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">&lt;script&gt;</span></span><br><span class="line"><span class="regexp">import test from './</span>test<span class="string">'</span></span><br><span class="line"><span class="string">import &#123; store,  mutation&#125; from '</span>@/store<span class="string">'</span></span><br><span class="line"><span class="string">export default &#123;</span></span><br><span class="line"><span class="string">  name: '</span>HelloWorld<span class="string">',</span></span><br><span class="line"><span class="string">  data () &#123;</span></span><br><span class="line"><span class="string">    return &#123;</span></span><br><span class="line"><span class="string">      msg: '</span>Welcome to Your Vue.js App<span class="string">'</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">  &#125;,</span></span><br><span class="line"><span class="string">  components: &#123;</span></span><br><span class="line"><span class="string">    test</span></span><br><span class="line"><span class="string">  &#125;,</span></span><br><span class="line"><span class="string">  methods: &#123;</span></span><br><span class="line"><span class="string">    setCount: mutation.setCount</span></span><br><span class="line"><span class="string">  &#125;,</span></span><br><span class="line"><span class="string">  computed: &#123;</span></span><br><span class="line"><span class="string">    testCount()&#123;</span></span><br><span class="line"><span class="string">      return store.count</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">&lt;/script&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&lt;!-- Add "scoped" attribute to limit CSS to this component only --&gt;</span></span><br><span class="line"><span class="string">&lt;style scoped&gt;</span></span><br><span class="line"><span class="string">h1, h2 &#123;</span></span><br><span class="line"><span class="string">  font-weight: normal;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">ul &#123;</span></span><br><span class="line"><span class="string">  list-style-type: none;</span></span><br><span class="line"><span class="string">  padding: 0;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">li &#123;</span></span><br><span class="line"><span class="string">  display: inline-block;</span></span><br><span class="line"><span class="string">  margin: 0 10px;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">a &#123;</span></span><br><span class="line"><span class="string">  color: #42b983;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">&lt;/style&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">&lt;template&gt;
+  &lt;div class=&quot;hello&quot;&gt;
+    &lt;p @click=&quot;setCount(testCount + 1)&quot;&gt;+&lt;/p&gt;
+    &lt;p @click=&quot;setCount(testCount - 1)&quot;&gt;-&lt;/p&gt;
+    &lt;test /&gt;
+    &lt;p&gt;{{testCount}}&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+import test from &#39;./test&#39;
+import { store,  mutation} from &#39;@/store&#39;
+export default {
+  name: &#39;HelloWorld&#39;,
+  data () {
+    return {
+      msg: &#39;Welcome to Your Vue.js App&#39;
+    }
+  },
+  components: {
+    test
+  },
+  methods: {
+    setCount: mutation.setCount
+  },
+  computed: {
+    testCount(){
+      return store.count
+    }
+  }
+}
+&lt;/script&gt;
+
+&lt;!-- Add &quot;scoped&quot; attribute to limit CSS to this component only --&gt;
+&lt;style scoped&gt;
+h1, h2 {
+  font-weight: normal;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
+}
+&lt;/style&gt;
+
+</code></pre>
 <a id="more"></a>
 <p>test 组件</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;test&#123;&#123;testCount&#125;&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>template&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line"><span class="keyword">import</span> &#123; store &#125; <span class="keyword">from</span> <span class="string">'@/store'</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  computed: &#123;</span><br><span class="line">    testCount()&#123;</span><br><span class="line">      <span class="keyword">return</span> store.count</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br><span class="line"><span class="regexp">&lt;style scoped&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">&lt;/</span>style&gt;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">&lt;template&gt;
+  &lt;div&gt;test{{testCount}}&lt;/div&gt;
+&lt;/template&gt;
+&lt;script&gt;
+import { store } from &#39;@/store&#39;;
+export default {
+  computed: {
+    testCount(){
+      return store.count
+    }
+  }
+}
+&lt;/script&gt;
+&lt;style scoped&gt;
+
+&lt;/style&gt;
+</code></pre>
 <h1 id="errorCaptured-2-5-0新增的生命周期钩子"><a href="#errorCaptured-2-5-0新增的生命周期钩子" class="headerlink" title="errorCaptured(2.5.0新增的生命周期钩子)"></a>errorCaptured(2.5.0新增的生命周期钩子)</h1><p>官网介绍：</p>
 <p>当捕获一个来自子孙组件的错误时被调用。此钩子会收到三个参数：错误对象、发生错误的组件实例以及一个包含错误来源信息的字符串。此钩子可以返回 false 以阻止该错误继续向上传播。</p>
 <p>与errorhandler的不同之处：</p>
@@ -164,17 +245,46 @@
 <p>指定已创建的实例之父实例，在两者之间建立父子关系。子实例可以用 this.$parent 访问父实例，子实例被推入父实例的 $children 数组中。</p>
 <p>注意:节制地使用 $parent 和 $children - 它们的主要目的是作为访问组件的应急方法。更推荐用 props 和 events 实现父子组件通信</p>
 <p>使用:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.$parent.xxx() <span class="comment">//直接在子组件调用父组件中方法</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">    this.$parent.xxx() //直接在子组件调用父组件中方法
+</code></pre>
 <h1 id="mixin"><a href="#mixin" class="headerlink" title="mixin"></a>mixin</h1><p>官网介绍：</p>
 <p>mixins 选项接受一个混入对象的数组。这些混入实例对象可以像正常的实例对象一样包含选项，他们将在 Vue.extend() 里最终选择使用相同的选项合并逻辑合并。举例：如果你的混入包含一个钩子而创建组件本身也有一个，两个函数将被调用。</p>
 <p>mixins就是定义一部分公共的方法或者计算属性,然后混入到各个组件中使用,方便管理与统一修改</p>
 <p>1、在assets文件夹下创建一个js文件</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建一个需要混入的对象 </span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> mixinTest1 = &#123;</span><br><span class="line">    created() &#123;</span><br><span class="line">        <span class="keyword">this</span>.hello();</span><br><span class="line">    &#125;,</span><br><span class="line">    methods: &#123;</span><br><span class="line">        hello() &#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'mixinTest1'</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// 创建一个需要混入的对象 
+export const mixinTest1 = {
+    created() {
+        this.hello();
+    },
+    methods: {
+        hello() {
+            console.log(&#39;mixinTest1&#39;);
+        }
+    }
+};
+</code></pre>
 <p>2、在组件中使用刚刚创建的混入</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;mixinTest1&#125; <span class="keyword">from</span> <span class="string">'./../assets/js/mixin'</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    mixins:[mixinTest1],</span><br><span class="line">    name: <span class="string">'hello'</span>,</span><br><span class="line">    data () &#123;</span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            msg: <span class="string">'Welcome to Your Vue.js App'</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">import {mixinTest1} from &#39;./../assets/js/mixin&#39;;
+export default {
+    mixins:[mixinTest1],
+    name: &#39;hello&#39;,
+    data () {
+        return {
+            msg: &#39;Welcome to Your Vue.js App&#39;
+        }
+    }
+}
+</code></pre>
 <p>3、如果组件中定义的方法与混入对象中的方法/属性一样,组件中的优先级大于混入对象中的(方法会调用多次)</p>
 <p>4、混入对象中可以定义抽象方法,使用混入的组件必须重写该方法</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">methods: &#123;</span><br><span class="line">    handlePlaylist() &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'component must implement handlePlaylist method'</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<pre><code class="js">...
+methods: {
+    handlePlaylist() {
+        throw new Error(&#39;component must implement handlePlaylist method&#39;)
+    }
+}
+...
+</code></pre>
 <h1 id="provide-inject"><a href="#provide-inject" class="headerlink" title="provide / inject"></a>provide / inject</h1><p>官网介绍：</p>
 <p>这对选项需要一起使用，以允许一个祖先组件向其所有子孙后代注入一个依赖，不论组件层次有多深，并在起上下游关系成立的时间里始终生效。如果你熟悉 React，这与 React 的上下文特性很相似。</p>
 <p>provide 选项应该是一个对象或返回一个对象的函数。该对象包含可注入其子孙的属性。在该对象中你可以使用 ES2015 Symbols 作为 key，但是只在原生支持 Symbol 和 Reflect.ownKeys 的环境下可工作。</p>
@@ -186,10 +296,52 @@
 <p>我之前使用到<code>provide / inject</code>是<strong>模拟页面数据回到初始状态</strong>，相当于刷新当前页面，但是直接刷新当前页面会有几秒的空白期，体验不好，所以用到了<code>provide / inject</code></p>
 <p>使用方法：</p>
 <p>1.修改App.vue代码如下图所示</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;div id=<span class="string">"app"</span>&gt;</span><br><span class="line">        &lt;router-view v-<span class="keyword">if</span>=<span class="string">"isRouterActive"</span>/&gt;</span><br><span class="line">    &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>template&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    <span class="keyword">export</span> <span class="keyword">default</span>&#123;</span><br><span class="line">        name: <span class="string">'App'</span>,</span><br><span class="line">        provide:&#123;</span><br><span class="line">            retrun&#123;</span><br><span class="line">                reload:<span class="keyword">this</span>.reload</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        data()&#123;</span><br><span class="line">            <span class="keyword">return</span>&#123;</span><br><span class="line">                isRouterActive: <span class="literal">true</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        methods:&#123;</span><br><span class="line">            reload()&#123;</span><br><span class="line">                <span class="keyword">this</span>.isRouterActive = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">this</span>.$nextTick(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">                     <span class="keyword">this</span>.isRouterActive = <span class="literal">true</span>;</span><br><span class="line">                &#125;)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">&lt;template&gt;
+    &lt;div id=&quot;app&quot;&gt;
+        &lt;router-view v-if=&quot;isRouterActive&quot;/&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+&lt;script&gt;
+    export default{
+        name: &#39;App&#39;,
+        provide:{
+            retrun{
+                reload:this.reload
+            }
+        },
+        data(){
+            return{
+                isRouterActive: true
+            }
+        },
+        methods:{
+            reload(){
+                this.isRouterActive = false;
+                this.$nextTick(()=&gt;{
+                     this.isRouterActive = true;
+                })
+            }
+        }
+    }
+&lt;/script&gt;
+
+</code></pre>
 <p>通过声明reload方法，控制isRouterAlice属性true or false 来控制router-view的显示或隐藏，从而控制页面的再次加载</p>
 <p>2.在需要当前页面刷新的页面中注入App.vue组件提供（provide）的 reload 依赖，然后直接用this.reload来调用就行</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> defalut&#123;</span><br><span class="line">    inject:[<span class="string">'reload'</span>],</span><br><span class="line">    data()&#123;</span><br><span class="line">        <span class="keyword">return</span>&#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    methods:&#123;</span><br><span class="line">        reloadPage()&#123;</span><br><span class="line">            <span class="keyword">this</span>.reload();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">export defalut{
+    inject:[&#39;reload&#39;],
+    data(){
+        return{
+
+        }
+    },
+    methods:{
+        reloadPage(){
+            this.reload();
+        }
+    }
+}
+</code></pre>
 <h1 id="keep-alive"><a href="#keep-alive" class="headerlink" title="keep-alive"></a>keep-alive</h1><p>官网介绍：</p>
 <p><code>&lt;keep-alive&gt;</code> 包裹动态组件时，会缓存不活动的组件实例，而不是销毁它们。和 <code>&lt;transition&gt;</code> 相似，<code>&lt;keep-alive&gt;</code> 是一个抽象组件：它自身不会渲染一个 DOM 元素，也不会出现在父组件链中。</p>
 <p>当组件在 <code>&lt;keep-alive&gt;</code> 内被切换，它的 activated 和 deactivated 这两个生命周期钩子函数将会被对应执行。</p>
@@ -240,7 +392,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

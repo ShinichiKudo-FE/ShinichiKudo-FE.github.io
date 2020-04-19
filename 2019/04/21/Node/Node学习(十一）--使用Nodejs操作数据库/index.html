@@ -100,13 +100,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    24k
+                    5.9k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    22 mins.
+                    5 mins.
                 </span>
                 
                 
@@ -143,17 +143,214 @@
             <h2 id="Nodejs操作数据库"><a href="#Nodejs操作数据库" class="headerlink" title="Nodejs操作数据库"></a>Nodejs操作数据库</h2><p>Nodejs操作数据库需要用到<code>mysql</code>模块，通过<code>npm i mysql -D</code>进行安装。</p>
 <p>之后可以通过<code>mysql.createConnection</code>方法新建一个数据库连接，需要传入的参数有地址、端口、登录名、密码，以及需要连接的数据库。</p>
 <p><code>mysql.createConnection</code>会返回一个<code>connection</code>对象，可使用<code>connection.query</code>方法，传入SQL语句，对数据库进行相应操作。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> mysql = <span class="built_in">require</span>(<span class="string">'mysql'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1. 连接服务器</span></span><br><span class="line"><span class="keyword">const</span> connection = mysql.createConnection(&#123;</span><br><span class="line">  host: <span class="string">'localhost'</span>,  <span class="comment">// 地址</span></span><br><span class="line">  port: <span class="number">3306</span>,  <span class="comment">// 端口，不传则默认3306</span></span><br><span class="line">  user: <span class="string">'root'</span>,  <span class="comment">// 登录名</span></span><br><span class="line">  password: <span class="string">''</span>,  <span class="comment">// 密码</span></span><br><span class="line">  database: <span class="string">'test'</span>  <span class="comment">// 连接的数据库</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> username = <span class="string">'zzz'</span></span><br><span class="line"><span class="keyword">const</span> password = <span class="string">'888888'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 向数据库中插入数据</span></span><br><span class="line">connection.query(<span class="string">`INSERT INTO user_table (username, password) VALUES ('<span class="subst">$&#123;username&#125;</span>', '<span class="subst">$&#123;password&#125;</span>')`</span>, (err, data) =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (err) &#123;</span><br><span class="line">    <span class="built_in">console</span>.error(err)</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(data)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 查询user_table表的数据</span></span><br><span class="line">db.query(<span class="string">`SELECT * FROM User_table`</span>, (err, data) =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (err) &#123;</span><br><span class="line">    <span class="built_in">console</span>.error(err)</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(data)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const mysql = require(&#39;mysql&#39;)
+
+// 1. 连接服务器
+const connection = mysql.createConnection({
+  host: &#39;localhost&#39;,  // 地址
+  port: 3306,  // 端口，不传则默认3306
+  user: &#39;root&#39;,  // 登录名
+  password: &#39;&#39;,  // 密码
+  database: &#39;test&#39;  // 连接的数据库
+})
+
+const username = &#39;zzz&#39;
+const password = &#39;888888&#39;
+
+// 向数据库中插入数据
+connection.query(`INSERT INTO user_table (username, password) VALUES (&#39;${username}&#39;, &#39;${password}&#39;)`, (err, data) =&gt; {
+  if (err) {
+    console.error(err)
+  } else {
+    console.log(data)
+  }
+})
+
+// 查询user_table表的数据
+db.query(`SELECT * FROM User_table`, (err, data) =&gt; {
+  if (err) {
+    console.error(err)
+  } else {
+    console.log(data)
+  }
+})
+</code></pre>
 <p>INSERT语句的打印的是插入结果：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">OkPacket &#123;</span><br><span class="line">  fieldCount: <span class="number">0</span>,</span><br><span class="line">  affectedRows: <span class="number">1</span>,</span><br><span class="line">  insertId: <span class="number">8</span>,	<span class="comment">// 返回了当前插入语句的id，可以用来告知前端插入数据的id</span></span><br><span class="line">  serverStatus: <span class="number">2</span>,</span><br><span class="line">  warningCount: <span class="number">0</span>,</span><br><span class="line">  message: <span class="string">''</span>,</span><br><span class="line">  protocol41: <span class="literal">true</span>,</span><br><span class="line">  changedRows: <span class="number">0</span> &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">OkPacket {
+  fieldCount: 0,
+  affectedRows: 1,
+  insertId: 8,    // 返回了当前插入语句的id，可以用来告知前端插入数据的id
+  serverStatus: 2,
+  warningCount: 0,
+  message: &#39;&#39;,
+  protocol41: true,
+  changedRows: 0 }
+</code></pre>
 <p>SELECT语句的打印结果为查询到的所有数据：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[ RowDataPacket &#123; <span class="attr">ID</span>: <span class="number">1</span>, <span class="attr">username</span>: <span class="string">'lee'</span>, <span class="attr">password</span>: <span class="string">'123456'</span> &#125;,</span><br><span class="line">  RowDataPacket &#123; <span class="attr">ID</span>: <span class="number">3</span>, <span class="attr">username</span>: <span class="string">'chen'</span>, <span class="attr">password</span>: <span class="string">'654321'</span> &#125;,</span><br><span class="line">  RowDataPacket &#123; <span class="attr">ID</span>: <span class="number">8</span>, <span class="attr">username</span>: <span class="string">'zzz'</span>, <span class="attr">password</span>: <span class="string">'888888'</span> &#125; ]</span><br></pre></td></tr></table></figure>
+<pre><code class="js">[ RowDataPacket { ID: 1, username: &#39;lee&#39;, password: &#39;123456&#39; },
+  RowDataPacket { ID: 3, username: &#39;chen&#39;, password: &#39;654321&#39; },
+  RowDataPacket { ID: 8, username: &#39;zzz&#39;, password: &#39;888888&#39; } ]
+
+</code></pre>
 <p>但<code>mysql.createConnection</code>方法有一个缺陷，就是它一次只能创建一个连接，一旦有多个用户同时请求，就会造成请求排队等待。</p>
 <p>因此为了提高性能，可以改用<code>mysql.createPool</code>方法，创建一个连接池，它可以创建n个与服务器之间的连接，需要使用时，可以自动从中选取一个空闲的连接使用。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> connection = mysql.createPool(&#123;</span><br><span class="line">  connectionLimit: <span class="number">10</span>,  <span class="comment">// 建立的连接数量，默认为10个</span></span><br><span class="line">  host: <span class="string">'localhost'</span>,  <span class="comment">// 地址</span></span><br><span class="line">  port: <span class="number">3306</span>,  <span class="comment">// 端口，不传则默认3306</span></span><br><span class="line">  user: <span class="string">'root'</span>,  <span class="comment">// 登录名</span></span><br><span class="line">  password: <span class="string">''</span>,  <span class="comment">// 密码</span></span><br><span class="line">  database: <span class="string">'test'</span>  <span class="comment">// 连接的数据库</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const connection = mysql.createPool({
+  connectionLimit: 10,  // 建立的连接数量，默认为10个
+  host: &#39;localhost&#39;,  // 地址
+  port: 3306,  // 端口，不传则默认3306
+  user: &#39;root&#39;,  // 登录名
+  password: &#39;&#39;,  // 密码
+  database: &#39;test&#39;  // 连接的数据库
+})
+</code></pre>
 <a id="more"></a>
 <h2 id="与HTTP模块配合实现接口"><a href="#与HTTP模块配合实现接口" class="headerlink" title="与HTTP模块配合实现接口"></a>与HTTP模块配合实现接口</h2><p>完成了基本操作后，就可以实现一个完整的注册、登录流程</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>)</span><br><span class="line"><span class="keyword">const</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>)</span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</span><br><span class="line"><span class="keyword">const</span> mysql = <span class="built_in">require</span>(<span class="string">'mysql'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1. 连接服务器</span></span><br><span class="line"><span class="keyword">const</span> connection = mysql.createPool(&#123;</span><br><span class="line">  connectionLimit: <span class="number">10</span>,  <span class="comment">// 建立的连接数量，默认为10个</span></span><br><span class="line">  host: <span class="string">'localhost'</span>,  <span class="comment">// 地址</span></span><br><span class="line">  port: <span class="number">3306</span>,  <span class="comment">// 端口，不传则默认3306</span></span><br><span class="line">  user: <span class="string">'root'</span>,  <span class="comment">// 登录名</span></span><br><span class="line">  password: <span class="string">''</span>,  <span class="comment">// 密码</span></span><br><span class="line">  database: <span class="string">'test'</span>  <span class="comment">// 连接的数据库</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 与HTTP模块配合使用</span></span><br><span class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123;</span><br><span class="line">    pathname,</span><br><span class="line">    query</span><br><span class="line">  &#125; = url.parse(req.url, <span class="literal">true</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (pathname === <span class="string">'/reg'</span>) &#123;</span><br><span class="line">    <span class="comment">// 获取get请求数据</span></span><br><span class="line">    <span class="keyword">const</span> &#123;</span><br><span class="line">      username,</span><br><span class="line">      password</span><br><span class="line">    &#125; = query</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 校验参数是否正确</span></span><br><span class="line">    <span class="keyword">if</span> (!username || !password) &#123;</span><br><span class="line">      res.write(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">        error: <span class="number">1</span>,</span><br><span class="line">        msg: <span class="string">'用户名或密码不可为空'</span></span><br><span class="line">      &#125;))</span><br><span class="line">      res.end()</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (username.length &gt; <span class="number">32</span>) &#123;</span><br><span class="line">      res.write(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">        error: <span class="number">1</span>,</span><br><span class="line">        msg: <span class="string">'用户名的长度不可超过32位'</span></span><br><span class="line">      &#125;))</span><br><span class="line">      res.end()</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (password.length &gt; <span class="number">32</span>) &#123;</span><br><span class="line">      res.write(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">        error: <span class="number">1</span>,</span><br><span class="line">        msg: <span class="string">'密码的长度不可超过32位'</span></span><br><span class="line">      &#125;))</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;  <span class="comment">// 校验通过，开始注册流程</span></span><br><span class="line">      <span class="comment">// 检查用户名是否已存在</span></span><br><span class="line">      connection.query(<span class="string">`SELECT ID FROM User_table WHERE username='<span class="subst">$&#123;username&#125;</span>'`</span>, (err, data) =&gt; &#123;</span><br><span class="line">        <span class="keyword">if</span> (err) &#123;</span><br><span class="line">          res.writeHead(<span class="number">500</span>)</span><br><span class="line">          res.end()</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="keyword">if</span> (data.length) &#123;</span><br><span class="line">            res.write(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">              error: <span class="number">1</span>,</span><br><span class="line">              msg: <span class="string">'此用户名已被占用'</span></span><br><span class="line">            &#125;))</span><br><span class="line">            res.end()</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 将用户名和密码插入数据库</span></span><br><span class="line">            connection.query(<span class="string">`INSERT INTO user_table (username, password) VALUES('<span class="subst">$&#123;username&#125;</span>', '<span class="subst">$&#123;password&#125;</span>')`</span>, (err, data) =&gt; &#123;</span><br><span class="line">              <span class="keyword">if</span> (err) &#123;</span><br><span class="line">                res.writeHead(<span class="number">500</span>)</span><br><span class="line">                res.end()</span><br><span class="line">              &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                res.write(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">                  error: <span class="number">0</span>,</span><br><span class="line">                  msg: <span class="string">'注册成功'</span></span><br><span class="line">                &#125;))</span><br><span class="line">                res.end()</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;)</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (pathname === <span class="string">'/login'</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> arr = []</span><br><span class="line"></span><br><span class="line">    req.on(<span class="string">'data'</span>, (buffer) =&gt; &#123;</span><br><span class="line">      <span class="comment">// 获取POST请求的Buffer数据</span></span><br><span class="line">      arr.push(buffer)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    req.on(<span class="string">'end'</span>, () =&gt; &#123;</span><br><span class="line">      <span class="comment">// 将Buffer数据合并</span></span><br><span class="line">      <span class="keyword">let</span> buffer = Buffer.concat(arr)</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 处理接收到的POST数据</span></span><br><span class="line">      <span class="keyword">const</span> post = <span class="built_in">JSON</span>.parse(buffer.toString())</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 获取post请求数据</span></span><br><span class="line">      <span class="keyword">const</span> &#123;</span><br><span class="line">        username,</span><br><span class="line">        password</span><br><span class="line">      &#125; = post</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 根据用户名查询</span></span><br><span class="line">      connection.query(<span class="string">`SELECT username, password FROM User_table WHERE username='<span class="subst">$&#123;username&#125;</span>'`</span>, (err, data) =&gt; &#123;</span><br><span class="line">        <span class="keyword">if</span> (err) &#123;</span><br><span class="line">          <span class="built_in">console</span>.error(err)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="keyword">if</span> (!data.length) &#123;</span><br><span class="line">            <span class="comment">// 用户不存在</span></span><br><span class="line">            res.write(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">              error: <span class="number">1</span>,</span><br><span class="line">              msg: <span class="string">'用户名或密码错误'</span></span><br><span class="line">            &#125;))</span><br><span class="line">            res.end()</span><br><span class="line">          &#125; <span class="keyword">else</span> <span class="keyword">if</span> (data[<span class="number">0</span>].password !== password) &#123;</span><br><span class="line">            <span class="comment">// 密码不正确</span></span><br><span class="line">            res.write(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">              error: <span class="number">1</span>,</span><br><span class="line">              msg: <span class="string">'用户名或密码错误'</span></span><br><span class="line">            &#125;))</span><br><span class="line">            res.end()</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            res.write(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">              error: <span class="number">0</span>,</span><br><span class="line">              msg: <span class="string">'登录成功'</span></span><br><span class="line">            &#125;))</span><br><span class="line">            res.end()</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 若请求不为接口，则默认为请求文件</span></span><br><span class="line">    fs.readFile(<span class="string">`.<span class="subst">$&#123;pathname&#125;</span>`</span>, (err, buffer) =&gt; &#123;</span><br><span class="line">      <span class="keyword">if</span> (err) &#123;</span><br><span class="line">        res.writeHead(<span class="number">404</span>)</span><br><span class="line">        res.write(buffer)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        res.write(buffer)</span><br><span class="line">      &#125;</span><br><span class="line">      res.end()</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8080</span>)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const http = require(&#39;http&#39;)
+const url = require(&#39;url&#39;)
+const fs = require(&#39;fs&#39;)
+const mysql = require(&#39;mysql&#39;)
+
+// 1. 连接服务器
+const connection = mysql.createPool({
+  connectionLimit: 10,  // 建立的连接数量，默认为10个
+  host: &#39;localhost&#39;,  // 地址
+  port: 3306,  // 端口，不传则默认3306
+  user: &#39;root&#39;,  // 登录名
+  password: &#39;&#39;,  // 密码
+  database: &#39;test&#39;  // 连接的数据库
+})
+
+// 2. 与HTTP模块配合使用
+const server = http.createServer((req, res) =&gt; {
+  const {
+    pathname,
+    query
+  } = url.parse(req.url, true)
+
+  if (pathname === &#39;/reg&#39;) {
+    // 获取get请求数据
+    const {
+      username,
+      password
+    } = query
+
+    // 校验参数是否正确
+    if (!username || !password) {
+      res.write(JSON.stringify({
+        error: 1,
+        msg: &#39;用户名或密码不可为空&#39;
+      }))
+      res.end()
+    } else if (username.length &gt; 32) {
+      res.write(JSON.stringify({
+        error: 1,
+        msg: &#39;用户名的长度不可超过32位&#39;
+      }))
+      res.end()
+    } else if (password.length &gt; 32) {
+      res.write(JSON.stringify({
+        error: 1,
+        msg: &#39;密码的长度不可超过32位&#39;
+      }))
+    } else {  // 校验通过，开始注册流程
+      // 检查用户名是否已存在
+      connection.query(`SELECT ID FROM User_table WHERE username=&#39;${username}&#39;`, (err, data) =&gt; {
+        if (err) {
+          res.writeHead(500)
+          res.end()
+        } else {
+          if (data.length) {
+            res.write(JSON.stringify({
+              error: 1,
+              msg: &#39;此用户名已被占用&#39;
+            }))
+            res.end()
+          } else {
+            // 将用户名和密码插入数据库
+            connection.query(`INSERT INTO user_table (username, password) VALUES(&#39;${username}&#39;, &#39;${password}&#39;)`, (err, data) =&gt; {
+              if (err) {
+                res.writeHead(500)
+                res.end()
+              } else {
+                res.write(JSON.stringify({
+                  error: 0,
+                  msg: &#39;注册成功&#39;
+                }))
+                res.end()
+              }
+            })
+          }
+        }
+      })
+    }
+
+  } else if (pathname === &#39;/login&#39;) {
+    let arr = []
+
+    req.on(&#39;data&#39;, (buffer) =&gt; {
+      // 获取POST请求的Buffer数据
+      arr.push(buffer)
+    })
+
+    req.on(&#39;end&#39;, () =&gt; {
+      // 将Buffer数据合并
+      let buffer = Buffer.concat(arr)
+
+      // 处理接收到的POST数据
+      const post = JSON.parse(buffer.toString())
+
+      // 获取post请求数据
+      const {
+        username,
+        password
+      } = post
+
+      // 根据用户名查询
+      connection.query(`SELECT username, password FROM User_table WHERE username=&#39;${username}&#39;`, (err, data) =&gt; {
+        if (err) {
+          console.error(err)
+        } else {
+          if (!data.length) {
+            // 用户不存在
+            res.write(JSON.stringify({
+              error: 1,
+              msg: &#39;用户名或密码错误&#39;
+            }))
+            res.end()
+          } else if (data[0].password !== password) {
+            // 密码不正确
+            res.write(JSON.stringify({
+              error: 1,
+              msg: &#39;用户名或密码错误&#39;
+            }))
+            res.end()
+          } else {
+            res.write(JSON.stringify({
+              error: 0,
+              msg: &#39;登录成功&#39;
+            }))
+            res.end()
+          }
+        }
+      })
+    })
+  } else {
+    // 若请求不为接口，则默认为请求文件
+    fs.readFile(`.${pathname}`, (err, buffer) =&gt; {
+      if (err) {
+        res.writeHead(404)
+        res.write(buffer)
+      } else {
+        res.write(buffer)
+      }
+      res.end()
+    })
+  }
+})
+
+server.listen(8080)
+
+</code></pre>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -201,7 +398,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

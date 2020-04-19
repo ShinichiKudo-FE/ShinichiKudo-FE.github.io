@@ -100,13 +100,13 @@ JavaScript,">
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    22k
+                    9.4k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    20 mins.
+                    9 mins.
                 </span>
                 
                 
@@ -144,7 +144,13 @@ JavaScript,">
 <p><code>JavaScript模块化</code>是如何一步一步地发展起来的，并且也会主要对这些模块化方式做一个简单的比较。</p>
 <h2 id="第一阶段：无模块化"><a href="#第一阶段：无模块化" class="headerlink" title="第一阶段：无模块化"></a>第一阶段：无模块化</h2><p>JavaScript最初的作用仅仅是验证表单，后来会添加一些动画，但是这些js代码很多在一个文件中就可以完成了，所以，我们只需要在html文件中添加一个<code>script</code>标签。</p>
 <p>后来，随着前端复杂度提高，为了能够提高项目代码的可读性、可扩展性等，我们的js文件逐渐多了起来，不再是一个js文件就可以解决的了，而是把每一个js文件当做一个模块。那么，这时的js引入方式是怎样的呢？大概是下面这样：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"jquery.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span> 　</span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"jquery_scroller.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"main.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"other1.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span> 　</span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"other2.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"other3.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="html">&lt;script src=&quot;jquery.js&quot;&gt;&lt;/script&gt; 　
+&lt;script src=&quot;jquery_scroller.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;main.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;other1.js&quot;&gt;&lt;/script&gt; 　
+&lt;script src=&quot;other2.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;other3.js&quot;&gt;&lt;/script&gt;
+</code></pre>
 <p>即简单的将所有的js文件统统放在一起。但是这些文件的顺序还不能出错，比如jquery需要先引入，才能引入jquery插件，才能在其他的文件中使用jquery。</p>
 <ul>
 <li>优点</li>
@@ -158,13 +164,19 @@ JavaScript,">
 <h2 id="第二阶段：-CommonJS规范"><a href="#第二阶段：-CommonJS规范" class="headerlink" title="第二阶段： CommonJS规范"></a>第二阶段： CommonJS规范</h2><p><code>CommonJS</code>就是一个<code>JavaScript模块化</code>的规范，该规范最初是用在服务器端的<code>node</code>的，前端的<code>webpack</code>也是对CommonJS原生支持的。</p>
 <p>根据这个规范，<em>每一个文件就是一个模块</em>，其内部定义的变量是属于这个模块的，不会对外暴露，也就是说不会污染全局变量。</p>
 <p>CommonJS的核心思想就是通过 <strong>require 方法来同步加载所要依赖的其他模块，然后通过 exports 或者 module.exports 来导出需要暴露的接口</strong>。如下所示</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// a.js</span></span><br><span class="line"><span class="keyword">var</span> x = <span class="number">5</span>; <span class="keyword">var</span> addX = <span class="function"><span class="keyword">function</span> (<span class="params">value</span>) </span>&#123; <span class="keyword">return</span> value + x; &#125;; <span class="built_in">module</span>.exports.x = x; <span class="built_in">module</span>.exports.addX = addX;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// a.js
+var x = 5; var addX = function (value) { return value + x; }; module.exports.x = x; module.exports.addX = addX;
+</code></pre>
 <p>这里的<code>a.js</code>就是一个<code>CommonJS</code>规范的模块了。 这里的<code>module</code>就代表了这个模块，<code>module</code>的<code>exports</code>属性就是对外暴露的接口，可以对外导出外部可以访问的变量，比如这里的x和addX。</p>
 <p>exports 是对 module.exports 的引用。比如我们可以认为在一个模块的<strong>顶部</strong>有这句代码：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> = <span class="keyword">export</span>.Module;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">export = export.Module;
+</code></pre>
 <p>所以，我们不能直接给exports赋值，比如<code>number、function</code>等。</p>
 <p>然后我们就可以在其他模块中引入这个模块使用了：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="built_in">require</span>(<span class="string">'./a.js'</span>);</span><br><span class="line"> <span class="built_in">console</span>.log(example.x); <span class="comment">// 5</span></span><br><span class="line"> <span class="built_in">console</span>.log(example.addX(<span class="number">1</span>)); <span class="comment">// 6</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">var a = require(&#39;./a.js&#39;);
+ console.log(example.x); // 5
+ console.log(example.addX(1)); // 6
+</code></pre>
 <p>这里的require就会获取到a.js所暴露的module.exports变量，然后就可以使用其暴露的x和addX了。</p>
 <ul>
 <li>优点：</li>
@@ -176,10 +188,31 @@ JavaScript,">
 <p>此文主要是浏览器端js的模块化， 由于 CommonJS 是<code>同步加载模块</code>的，在服务器端，文件都是保存在硬盘上，所以同步加载没有问题，但是对于浏览器端，需要将文件从服务器端请求过来，那么同步加载就不适用了，所以，CommonJS是不适用于浏览器端的。</p>
 <h2 id="第三阶段：-AMD规范"><a href="#第三阶段：-AMD规范" class="headerlink" title="第三阶段： AMD规范"></a>第三阶段： AMD规范</h2><p>之前提到: CommonJS规范加载模块是<code>同步</code>的，也就是说，只有加载完成，才能执行后面的操作。AMD规范则是<code>非同步</code>加载模块，允许指定回调函数。由于Node.js主要用于服务器编程，模块文件一般都已经存在于本地硬盘，所以加载起来比较快，不用考虑非同步加载的方式，所以CommonJS规范比较适用。但是，如果是浏览器环境，要从服务器端加载模块，这时就必须采用非同步模式，因此浏览器端一般采用AMD规范。而AMD规范的实现，就是大名鼎鼎的<code>require.js</code>了</p>
 <p>AMD标准中，定义了下面两个API：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span><span class="built_in">require</span>([<span class="built_in">module</span>], callback)</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span>define(id, [depends], callback)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">   1.require([module], callback)
+
+   2.define(id, [depends], callback)
+</code></pre>
 <p>即通过define来定义一个模块，然后使用require来加载一个模块。 并且，require还支持CommonJS的模块导出方式。</p>
 <p>定义alert模块：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">define(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> alertName = <span class="function"><span class="keyword">function</span> (<span class="params">str</span>) </span>&#123;</span><br><span class="line">      alert(<span class="string">"I am "</span> + str);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> alertAge = <span class="function"><span class="keyword">function</span> (<span class="params">num</span>) </span>&#123;</span><br><span class="line">      alert(<span class="string">"I am "</span> + num + <span class="string">" years old"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      alertName: alertName,</span><br><span class="line">      alertAge: alertAge</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;);</span><br><span class="line"><span class="string">``</span><span class="string">`  </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">引入模块：</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">`</span><span class="string">``</span>js</span><br><span class="line"><span class="built_in">require</span>([<span class="string">'alert'</span>], <span class="function"><span class="keyword">function</span> (<span class="params">alert</span>) </span>&#123;</span><br><span class="line">  alert.alertName(<span class="string">'JohnZhu'</span>);</span><br><span class="line">  alert.alertAge(<span class="number">21</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">define(function () {
+    var alertName = function (str) {
+      alert(&quot;I am &quot; + str);
+    }
+    var alertAge = function (num) {
+      alert(&quot;I am &quot; + num + &quot; years old&quot;);
+    }
+    return {
+      alertName: alertName,
+      alertAge: alertAge
+    };
+  });
+</code></pre>
+<p>引入模块：</p>
+<pre><code class="js">require([&#39;alert&#39;], function (alert) {
+  alert.alertName(&#39;JohnZhu&#39;);
+  alert.alertAge(21);
+});
+</code></pre>
 <p>但是，在使用require.js的时候，我们必须要 <strong>提前加载所有的依赖，然后才可以使用，而不是需要使用时再加载</strong>。</p>
 <ul>
 <li>优点：</li>
@@ -190,7 +223,14 @@ JavaScript,">
 </ul>
 <p>提高了开发成本，并且不能按需加载，而是必须提前加载所有的依赖。</p>
 <h2 id="第四阶段：CMD规范"><a href="#第四阶段：CMD规范" class="headerlink" title="第四阶段：CMD规范"></a>第四阶段：CMD规范</h2><p>CMD规范是阿里的玉伯提出来的，实现js库为sea.js。 它和requirejs非常类似，即一个js文件就是一个模块，但是CMD的加载方式更加优秀，是<code>通过按需加载</code>的方式，而不是必须在模块开始就加载所有的依赖。如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">define(<span class="function"><span class="keyword">function</span>(<span class="params">require, exports, module</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> $ = <span class="built_in">require</span>(<span class="string">'jquery'</span>);</span><br><span class="line">    <span class="keyword">var</span> Spinning = <span class="built_in">require</span>(<span class="string">'./spinning'</span>);</span><br><span class="line">    exports.doSomething = ...</span><br><span class="line">    <span class="built_in">module</span>.exports = ...</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">define(function(require, exports, module) {
+    var $ = require(&#39;jquery&#39;);
+    var Spinning = require(&#39;./spinning&#39;);
+    exports.doSomething = ...
+    module.exports = ...
+})
+
+</code></pre>
 <ul>
 <li>优点：</li>
 </ul>
@@ -200,17 +240,79 @@ JavaScript,">
 </ul>
 <p>依赖SPM打包，模块的加载逻辑偏重。</p>
 <p>其实，这时我们就可以看出 <strong>AMD和CMD的区别</strong>了，<em>前者是对于依赖的模块提前执行，而后者是延迟执行。 前者推崇依赖前置，而后者推崇依赖就近</em>，即只在需要用到某个模块的时候再require。 如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// AMD</span></span><br><span class="line"> define([<span class="string">'./a'</span>, <span class="string">'./b'</span>], <span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 依赖必须一开始就写好</span></span><br><span class="line">    a.doSomething()</span><br><span class="line">    <span class="comment">// 此处略去 100 行</span></span><br><span class="line">    b.doSomething()</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// CMD</span></span><br><span class="line">define(<span class="function"><span class="keyword">function</span>(<span class="params">require, exports, module</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="built_in">require</span>(<span class="string">'./a'</span>)</span><br><span class="line">    a.doSomething()</span><br><span class="line">    <span class="comment">//此处略去100行</span></span><br><span class="line">    varb=<span class="built_in">require</span>(<span class="string">'./b'</span>)</span><br><span class="line">    <span class="comment">//依赖可以就近书写</span></span><br><span class="line">    b.doSomething()</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// AMD
+ define([&#39;./a&#39;, &#39;./b&#39;], function(a, b) {
+    // 依赖必须一开始就写好
+    a.doSomething()
+    // 此处略去 100 行
+    b.doSomething()
+    //...
+});
+// CMD
+define(function(require, exports, module) {
+    var a = require(&#39;./a&#39;)
+    a.doSomething()
+    //此处略去100行
+    varb=require(&#39;./b&#39;)
+    //依赖可以就近书写
+    b.doSomething()
+    //...
+});
+
+</code></pre>
 <h2 id="第五阶段：-ES6模块化"><a href="#第五阶段：-ES6模块化" class="headerlink" title="第五阶段： ES6模块化"></a>第五阶段： ES6模块化</h2><p>之前的几种模块化方案都是前端社区自己实现的，只是得到了大家的认可和广泛使用，而ES6的模块化方案是真正的规范。 在ES6中，我们可以使用 <code>import</code> 关键字引入模块，通过 <code>export</code> 关键字导出模块，功能较之于前几个方案更为强大，也是我们所推崇的.</p>
 <p>但是由于ES6目前无法在浏览器中执行，所以，我们只能通过<code>babel</code>将不被支持的<code>import</code>编译为当前受到广泛支持的 <code>require</code>。</p>
 <p>虽然目前import和require的区别不大，但是还是推荐使用使用es6，因为未来es6必定是主流，对于代码的迁移成本还是非常容易的。 如：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> store <span class="keyword">from</span> <span class="string">'../store/index'</span></span><br><span class="line"><span class="keyword">import</span> &#123;mapState, mapMutations, mapActions&#125; <span class="keyword">from</span> <span class="string">'vuex'</span></span><br><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">'../assets/js/request'</span></span><br><span class="line"><span class="keyword">import</span> util <span class="keyword">from</span> <span class="string">'../utils/js/util.js'</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    created () &#123;</span><br><span class="line">    <span class="keyword">this</span>.getClassify();</span><br><span class="line">    <span class="keyword">this</span>.RESET_VALUE();</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'created'</span> ,<span class="keyword">new</span> <span class="built_in">Date</span>().getTime());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">import store from &#39;../store/index&#39;
+import {mapState, mapMutations, mapActions} from &#39;vuex&#39;
+import axios from &#39;../assets/js/request&#39;
+import util from &#39;../utils/js/util.js&#39;
+export default {
+    created () {
+    this.getClassify();
+    this.RESET_VALUE();
+    console.log(&#39;created&#39; ,new Date().getTime());
+}
+</code></pre>
 <h2 id="第六阶段：-UMD"><a href="#第六阶段：-UMD" class="headerlink" title="第六阶段： UMD"></a>第六阶段： UMD</h2><p>通过一层自执行函数来兼容各种模块化规范的写法，兼容 AMD / CMD / CommonJS 等模块化规范，贴上代码胜过千言万语，需要特别注意的是 ES Module 由于会对静态代码进行分析，故这种运行时的方案无法使用，此时通过 CommonJS 进行兼容；</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params">global, factory</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> exports === <span class="string">'object'</span>) &#123;</span><br><span class="line">    <span class="built_in">module</span>.exports = factory();</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> define === <span class="string">'function'</span> &amp;&amp; define.amd) &#123;</span><br><span class="line">    define(factory);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.eventUtil = factory();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)(<span class="keyword">this</span>, <span class="function"><span class="keyword">function</span> (<span class="params">exports</span>) </span>&#123;</span><br><span class="line"> ​ <span class="comment">// Define Module</span></span><br><span class="line">  <span class="built_in">Object</span>.defineProperty(exports, <span class="string">"__esModule"</span>, &#123;</span><br><span class="line">    value: <span class="literal">true</span></span><br><span class="line">  &#125;);</span><br><span class="line">  exports.default = <span class="number">42</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">(function (global, factory) {
+  if (typeof exports === &#39;object&#39;) {
+    module.exports = factory();
+  } else if (typeof define === &#39;function&#39; &amp;&amp; define.amd) {
+    define(factory);
+  } else {
+    this.eventUtil = factory();
+  }
+})(this, function (exports) {
+ ​ // Define Module
+  Object.defineProperty(exports, &quot;__esModule&quot;, {
+    value: true
+  });
+  exports.default = 42;
+});
+</code></pre>
 <h2 id="构建工具中的实现"><a href="#构建工具中的实现" class="headerlink" title="构建工具中的实现"></a>构建工具中的实现</h2><p>为了模块化在浏览器中实现，我们可以借助一些模块化打包工具进行打包(以webpack为例)，定义了项目入口之后，会先快速地进行依赖的分析，然后将所有依赖的模块转换成浏览器兼容的对应模块化规范的实现；</p>
 <h3 id="模块化的基础"><a href="#模块化的基础" class="headerlink" title="模块化的基础"></a>模块化的基础</h3><p>从上面的介绍中，我们已经对其规范和实现有了一定的了解；在浏览器中，要实现 CommonJS 规范，只需要实现 module / exports / require / global 这几个属性，由于浏览器中是无法访问文件系统的，因此 require 过程中的文件定位需要改造为加载对应的 JS 片段（webpack 采用的方式为通过函数传参实现依赖的引入）。</p>
 <p>下面为webpack打包出来的代码快照如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params">modules</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// The module cache</span></span><br><span class="line">  <span class="keyword">var</span> installedModules = &#123;&#125;;</span><br><span class="line">  <span class="comment">// The require function</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">__webpack_require__</span>(<span class="params">moduleId</span>) </span>&#123;&#125;</span><br><span class="line">  <span class="keyword">return</span> __webpack_require__(<span class="number">0</span>); <span class="comment">// ---&gt; 0</span></span><br><span class="line">&#125;)</span><br><span class="line">(&#123;</span><br><span class="line">  <span class="number">0</span>: <span class="function"><span class="keyword">function</span> (<span class="params">module, exports, __webpack_require__</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// Define module A</span></span><br><span class="line">    <span class="keyword">var</span> moduleB = __webpack_require__(<span class="number">1</span>); <span class="comment">// ---&gt; 1</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="number">1</span>: <span class="function"><span class="keyword">function</span> (<span class="params">module, exports, __webpack_require__</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// Define module B</span></span><br><span class="line">    exports = &#123;&#125;; <span class="comment">// ---&gt; 2</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">(function (modules) {
+  // The module cache
+  var installedModules = {};
+  // The require function
+  function __webpack_require__(moduleId) {}
+  return __webpack_require__(0); // ---&gt; 0
+})
+({
+  0: function (module, exports, __webpack_require__) {
+    // Define module A
+    var moduleB = __webpack_require__(1); // ---&gt; 1
+  },
+  1: function (module, exports, __webpack_require__) {
+    // Define module B
+    exports = {}; // ---&gt; 2
+  }
+});
+
+</code></pre>
 <p>实际上，ES Module 的处理同 CommonJS 相差无几，只是在定义模块和引入模块时会去处理 __esModule 标识，从而兼容其在语法上的差异。</p>
 <h3 id="异步和扩展"><a href="#异步和扩展" class="headerlink" title="异步和扩展"></a>异步和扩展</h3><p>1、浏览器环境下，网络资源受到较大的限制，因此打包出来的文件如果体积巨大，对页面性能的损耗极大，因此需要对构建的目标文件进行拆分，同时模块也需要支持动态加载；</p>
 <p>webpack 提供了两个方法 <code>require.ensure()</code> 和 <code>import()</code> （推荐使用）进行模块的动态加载，至于其中的原理，跟上面提及的 AMD &amp; CMD 所见略同，import() 执行后返回一个 Promise 对象，其中所做的工作无非也是动态新增 script 标签，然后通过 <code>onload / onerror</code> 事件进一步处理。</p>
@@ -302,7 +404,7 @@ JavaScript,">
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

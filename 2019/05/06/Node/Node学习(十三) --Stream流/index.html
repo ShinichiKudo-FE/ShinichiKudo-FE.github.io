@@ -11,7 +11,7 @@
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="TriDiamond Obsidian,"> 
     <meta name="description" content="一枚前端搬砖队队员的记录册,File System的问题我们通常会使用File System模块对文件进行读取，如下：
-12345678fs.readFile(&#39;./test.txt&#39;, (error, buffer) =&amp;g,"> 
+fs.readFile(&amp;#39;./test.txt&amp;#39;, (error, buffer) =&amp;g,"> 
     <meta name="author" content="张白告丶"> 
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -100,13 +100,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    18k
+                    6k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    16 mins.
+                    5 mins.
                 </span>
                 
                 
@@ -141,24 +141,154 @@
     <div class='main'>
         <div class="content markdown animated fadeIn">
             <h2 id="File-System的问题"><a href="#File-System的问题" class="headerlink" title="File System的问题"></a>File System的问题</h2><p>我们通常会使用File System模块对文件进行读取，如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">fs.readFile(<span class="string">'./test.txt'</span>, (error, buffer) =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (error) &#123;</span><br><span class="line">    <span class="built_in">console</span>.error(error)</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 读取文件成功</span></span><br><span class="line">    res.write(buffer)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">fs.readFile(&#39;./test.txt&#39;, (error, buffer) =&gt; {
+  if (error) {
+    console.error(error)
+  } else {
+    // 读取文件成功
+    res.write(buffer)
+  }
+})
+</code></pre>
 <p>这样操作简单有效，但这也存在一些问题：</p>
 <p>1.占用内存<br>使用fs读取文件，它是一次性将文件的所有内容读取到内存中，再一次性发送到客户端，因此会占用大量内存。</p>
 <p>2.资源使用效率低<br>从磁盘读取文件期间，磁盘处于忙碌状态，而网络处于空闲状态。<br>磁盘读取完成后，开始发送文件时，情况正相反，网络处于忙碌状态，此时磁盘却处于空闲状态</p>
 <h2 id="Stream流"><a href="#Stream流" class="headerlink" title="Stream流"></a>Stream流</h2><p>相比File System，Stream流读取文件是读一份，发一份，Stream流的写入操作也有同样特点，因此可以解决File System在上面提到的2个问题。</p>
 <p>接下来实现一个简单的流，将1.txt文件的内容写入到2.txt中：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个可读流。</span></span><br><span class="line"><span class="keyword">const</span> readStream = fs.createReadStream(<span class="string">'./1.txt'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个可写流。</span></span><br><span class="line"><span class="keyword">const</span> writeStream = fs.createWriteStream(<span class="string">'./2.txt'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将可读流读取的数据，通过管道pipe推送到写入流中，即可将1.txt的内容，写入到2.txt中。</span></span><br><span class="line">readStream.pipe(writeStream)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 读取出现错误时会触发error事件。</span></span><br><span class="line">readStream.on(<span class="string">'error'</span>, (error) =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.error(error)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 写入完成时，触发finish事件。</span></span><br><span class="line">writeStream.on(<span class="string">'finish'</span>, () =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'finish'</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const fs = require(&#39;fs&#39;)
+
+// 创建一个可读流。
+const readStream = fs.createReadStream(&#39;./1.txt&#39;)
+
+// 创建一个可写流。
+const writeStream = fs.createWriteStream(&#39;./2.txt&#39;)
+
+// 将可读流读取的数据，通过管道pipe推送到写入流中，即可将1.txt的内容，写入到2.txt中。
+readStream.pipe(writeStream)
+
+// 读取出现错误时会触发error事件。
+readStream.on(&#39;error&#39;, (error) =&gt; {
+  console.error(error)
+})
+
+// 写入完成时，触发finish事件。
+writeStream.on(&#39;finish&#39;, () =&gt; {
+  console.log(&#39;finish&#39;)
+})
+</code></pre>
 <h2 id="使用Zlib压缩文件"><a href="#使用Zlib压缩文件" class="headerlink" title="使用Zlib压缩文件"></a>使用Zlib压缩文件</h2><p>可以使用Zlib模块，配合Stream流，实现文件压缩功能，如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</span><br><span class="line"><span class="comment">// 引入zlib模块，用于实现压缩功能</span></span><br><span class="line"><span class="keyword">const</span> zlib = <span class="built_in">require</span>(<span class="string">'zlib'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个可读流。</span></span><br><span class="line"><span class="keyword">const</span> readStream = fs.createReadStream(<span class="string">'./google.jpg'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个可写流。</span></span><br><span class="line"><span class="keyword">const</span> writeStream = fs.createWriteStream(<span class="string">'./google.jpg.gz'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个Gzip对象，用于将文件压缩成.gz文件</span></span><br><span class="line"><span class="keyword">const</span> gzip = zlib.createGzip()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将可读流读取的数据，先通过管道pipe推送到gzip中，再推送到写入流中。</span></span><br><span class="line"><span class="comment">// 也就是先将可读流的数据压缩，再推送到可写流中。</span></span><br><span class="line">readStream.pipe(gzip).pipe(writeStream)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 读取出现错误时会触发error事件。</span></span><br><span class="line">readStream.on(<span class="string">'error'</span>, (error) =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.error(error)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 写入完成时，触发finish事件。</span></span><br><span class="line">writeStream.on(<span class="string">'finish'</span>, () =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'finish'</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const fs = require(&#39;fs&#39;)
+// 引入zlib模块，用于实现压缩功能
+const zlib = require(&#39;zlib&#39;)
+
+// 创建一个可读流。
+const readStream = fs.createReadStream(&#39;./google.jpg&#39;)
+
+// 创建一个可写流。
+const writeStream = fs.createWriteStream(&#39;./google.jpg.gz&#39;)
+
+// 创建一个Gzip对象，用于将文件压缩成.gz文件
+const gzip = zlib.createGzip()
+
+// 将可读流读取的数据，先通过管道pipe推送到gzip中，再推送到写入流中。
+// 也就是先将可读流的数据压缩，再推送到可写流中。
+readStream.pipe(gzip).pipe(writeStream)
+
+// 读取出现错误时会触发error事件。
+readStream.on(&#39;error&#39;, (error) =&gt; {
+  console.error(error)
+})
+
+// 写入完成时，触发finish事件。
+writeStream.on(&#39;finish&#39;, () =&gt; {
+  console.log(&#39;finish&#39;)
+})
+</code></pre>
 <a id="more"></a>
 <h2 id="使用流传输文件到前台"><a href="#使用流传输文件到前台" class="headerlink" title="使用流传输文件到前台"></a>使用流传输文件到前台</h2><p>学习了流，我们就可以更加高效地将文件传输到前台：</p>
 <!-- more -->
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>)</span><br><span class="line"><span class="keyword">const</span> zlib = <span class="built_in">require</span>(<span class="string">'zlib'</span>)</span><br><span class="line"><span class="keyword">const</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>)</span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123;</span><br><span class="line">    pathname</span><br><span class="line">  &#125; = url.parse(req.url, <span class="literal">true</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个可读流。</span></span><br><span class="line">  <span class="keyword">const</span> readStream = fs.createReadStream(<span class="string">`./<span class="subst">$&#123;pathname&#125;</span>`</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 创建一个Gzip对象，用于将文件压缩成.gz文件</span></span><br><span class="line">  <span class="keyword">const</span> gzip = zlib.createGzip()</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 将读取的内容，在通过管道推送到res中，该方法不经过压缩</span></span><br><span class="line">  readStream.pipe(res)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 处理可读流报错，防止请求不存在的文件</span></span><br><span class="line">  readStream.on(<span class="string">'error'</span>, (error) =&gt; &#123;</span><br><span class="line">    <span class="built_in">console</span>.error(error);</span><br><span class="line">    res.writeHead(<span class="number">404</span>)</span><br><span class="line">    res.write(<span class="string">'Not Found'</span>)</span><br><span class="line">    res.end()</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8080</span>)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const http = require(&#39;http&#39;)
+const zlib = require(&#39;zlib&#39;)
+const url = require(&#39;url&#39;)
+const fs = require(&#39;fs&#39;)
+
+const server = http.createServer((req, res) =&gt; {
+  const {
+    pathname
+  } = url.parse(req.url, true)
+
+// 创建一个可读流。
+  const readStream = fs.createReadStream(`./${pathname}`)
+
+  // 创建一个Gzip对象，用于将文件压缩成.gz文件
+  const gzip = zlib.createGzip()
+
+  // 将读取的内容，在通过管道推送到res中，该方法不经过压缩
+  readStream.pipe(res)
+
+  // 处理可读流报错，防止请求不存在的文件
+  readStream.on(&#39;error&#39;, (error) =&gt; {
+    console.error(error);
+    res.writeHead(404)
+    res.write(&#39;Not Found&#39;)
+    res.end()
+  })
+})
+
+server.listen(8080)
+</code></pre>
 <p>但可以看到，在这个例子里，虽然实现了使用流传输文件，但并没有用到gzip压缩，在传输时还是更多地消耗网络资源，接下来可以引入gzip压缩。</p>
 <h2 id="文件经过gzip压缩后传输到前台"><a href="#文件经过gzip压缩后传输到前台" class="headerlink" title="文件经过gzip压缩后传输到前台"></a>文件经过gzip压缩后传输到前台</h2><p>但此时如果只是简单的用<code>readStream.pipe(gzip).pipe(res)</code>传输文件，浏览器在访问时无法直接打开，而是会触发文件下载。<br>这是因为未设置请求头属性<code>content-encoding</code>的值，导致浏览器无法识别用gzip压缩过的文件，这就需要修改请求头<code>res.setHeader(&#39;content-encoding&#39;, &#39;gzip&#39;)</code>，让浏览器可以识别。</p>
 <p>这样浏览器就可以正常打开文件了，但若浏览器访问的是不存在的文件，浏览器会报错“无法访问此网站”，这是因为请求头属性<code>content-encoding</code>已被设置为gzip，但服务端传给浏览器的是Not Found字符串，浏览器无法识别。</p>
 <p>此时可以使用<code>fs.stat</code>方法，先检查文件是否存在，若不存在则返回Not Found，若存在则继续传输。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>)</span><br><span class="line"><span class="keyword">const</span> zlib = <span class="built_in">require</span>(<span class="string">'zlib'</span>)</span><br><span class="line"><span class="keyword">const</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>)</span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123;</span><br><span class="line">    pathname</span><br><span class="line">  &#125; = url.parse(req.url, <span class="literal">true</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 文件的相对路径</span></span><br><span class="line">  <span class="keyword">const</span> filepath = <span class="string">`./<span class="subst">$&#123;pathname&#125;</span>`</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 检查文件是否存在</span></span><br><span class="line">  fs.stat(filepath, (error, stat) =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (error) &#123;</span><br><span class="line">      <span class="built_in">console</span>.error(error);</span><br><span class="line">      res.setHeader(<span class="string">'content-encoding'</span>, <span class="string">'identity'</span>)</span><br><span class="line">      res.writeHead(<span class="number">404</span>)</span><br><span class="line">      res.write(<span class="string">'Not Found'</span>)</span><br><span class="line">      res.end()</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// 创建一个可读流。</span></span><br><span class="line">      <span class="keyword">const</span> readStream = fs.createReadStream(filepath)</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 创建一个Gzip对象，用于将文件压缩成.gz文件</span></span><br><span class="line">      <span class="keyword">const</span> gzip = zlib.createGzip()</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 向浏览器发送经过gzip压缩的文件，设置响应头，否则浏览器无法识别，会自动进行下载。</span></span><br><span class="line">      res.setHeader(<span class="string">'content-encoding'</span>, <span class="string">'gzip'</span>)</span><br><span class="line">      <span class="comment">// 将读取的内容，通过gzip压缩之后，在通过管道推送到res中，由于res继承自Stream流，因此也可以接收管道的推送。</span></span><br><span class="line">      readStream.pipe(gzip).pipe(res)</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 处理可读流报错，防止文件中途被删除或出错，导致报错。</span></span><br><span class="line">      readStream.on(<span class="string">'error'</span>, (error) =&gt; &#123;</span><br><span class="line">        <span class="built_in">console</span>.error(error);</span><br><span class="line">        res.setHeader(<span class="string">'content-encoding'</span>, <span class="string">'identity'</span>)</span><br><span class="line">        res.writeHead(<span class="number">404</span>)</span><br><span class="line">        res.write(<span class="string">'Not Found'</span>)</span><br><span class="line">        res.end()</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8080</span>)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const http = require(&#39;http&#39;)
+const zlib = require(&#39;zlib&#39;)
+const url = require(&#39;url&#39;)
+const fs = require(&#39;fs&#39;)
+
+const server = http.createServer((req, res) =&gt; {
+  const {
+    pathname
+  } = url.parse(req.url, true)
+
+  // 文件的相对路径
+  const filepath = `./${pathname}`
+
+  // 检查文件是否存在
+  fs.stat(filepath, (error, stat) =&gt; {
+    if (error) {
+      console.error(error);
+      res.setHeader(&#39;content-encoding&#39;, &#39;identity&#39;)
+      res.writeHead(404)
+      res.write(&#39;Not Found&#39;)
+      res.end()
+    } else {
+      // 创建一个可读流。
+      const readStream = fs.createReadStream(filepath)
+
+      // 创建一个Gzip对象，用于将文件压缩成.gz文件
+      const gzip = zlib.createGzip()
+
+      // 向浏览器发送经过gzip压缩的文件，设置响应头，否则浏览器无法识别，会自动进行下载。
+      res.setHeader(&#39;content-encoding&#39;, &#39;gzip&#39;)
+      // 将读取的内容，通过gzip压缩之后，在通过管道推送到res中，由于res继承自Stream流，因此也可以接收管道的推送。
+      readStream.pipe(gzip).pipe(res)
+
+      // 处理可读流报错，防止文件中途被删除或出错，导致报错。
+      readStream.on(&#39;error&#39;, (error) =&gt; {
+        console.error(error);
+        res.setHeader(&#39;content-encoding&#39;, &#39;identity&#39;)
+        res.writeHead(404)
+        res.write(&#39;Not Found&#39;)
+        res.end()
+      })
+    }
+  })
+})
+
+server.listen(8080)
+
+</code></pre>
 <h2 id="启动器"><a href="#启动器" class="headerlink" title="启动器"></a>启动器</h2><p>常用的启动器有forever、pm2等，它们主要用在项目部署阶段</p>
 <p>1.使应用不间断运行，如果不使用启动器，命令行窗口一旦关闭，或者出现报错，应用就会停止运行，启动器会帮助应用自动重启。<br>2.若出现服务器重启，启动器会自动启动应用，不需要手动操作。</p>
 <p>常用的启动器有<code>forever、pm2</code>等，接下来介绍一下forever的使用。</p>
@@ -221,7 +351,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

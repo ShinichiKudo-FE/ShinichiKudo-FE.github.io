@@ -101,13 +101,13 @@ ES6Array.pr,">
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    9.3k
+                    6.7k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    8 mins.
+                    6 mins.
                 </span>
                 
                 
@@ -153,15 +153,37 @@ ES6Array.pr,">
 <p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/objentry1.png" alt="objentry1"></p>
 <p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/objentry2.png" alt="objentry2"></p>
 <h3 id="字符串追加"><a href="#字符串追加" class="headerlink" title="字符串追加"></a>字符串追加</h3><p>提供了两个字符串追加的方法<code>String.prototype.padStart</code>和<code>String.prototype.padEnd</code>，方便我们将一个新的字符串追加到某个字符串的头尾。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'someString'</span>.padStart(numberOfCharcters [,stringForPadding]);</span><br><span class="line"><span class="string">'5'</span>.padStart(<span class="number">10</span>) <span class="comment">// '          5'</span></span><br><span class="line"><span class="string">'5'</span>.padStart(<span class="number">10</span>, <span class="string">'=*'</span>) <span class="comment">//'=*=*=*=*=5'</span></span><br><span class="line"><span class="string">'5'</span>.padEnd(<span class="number">10</span>) <span class="comment">// '5         '</span></span><br><span class="line"><span class="string">'5'</span>.padEnd(<span class="number">10</span>, <span class="string">'=*'</span>) <span class="comment">//'5=*=*=*=*='</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">&#39;someString&#39;.padStart(numberOfCharcters [,stringForPadding]);
+&#39;5&#39;.padStart(10) // &#39;          5&#39;
+&#39;5&#39;.padStart(10, &#39;=*&#39;) //&#39;=*=*=*=*=5&#39;
+&#39;5&#39;.padEnd(10) // &#39;5         &#39;
+&#39;5&#39;.padEnd(10, &#39;=*&#39;) //&#39;5=*=*=*=*=&#39;
+</code></pre>
 <p>这个对于格式化输出很有用！</p>
 <h4 id="padStart例子"><a href="#padStart例子" class="headerlink" title="padStart例子"></a>padStart例子</h4><p>我们有一个不同长度元素的数组，我们可以往前面追加0来使得他们打印的长度都为10。</p>
 <p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/padStart.png" alt="padStart"></p>
 <h4 id="padEnd例子"><a href="#padEnd例子" class="headerlink" title="padEnd例子"></a>padEnd例子</h4><p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/padEnd.png" alt="padEnd例子"></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> cars = &#123;</span><br><span class="line">  <span class="string">'🚙BMW'</span>: <span class="string">'10'</span>,</span><br><span class="line">  <span class="string">'🚘Tesla'</span>: <span class="string">'5'</span>,</span><br><span class="line">  <span class="string">'🚖Lamborghini'</span>: <span class="string">'0'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">Object</span>.entries(cars).map(<span class="function">(<span class="params">[name, count]</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">//padEnd appends ' -' until the name becomes 20 characters</span></span><br><span class="line">  <span class="comment">//padStart prepends '0' until the count becomes 3 characters.</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;name.padEnd(<span class="number">20</span>, <span class="string">' -'</span>)&#125;</span> Count: <span class="subst">$&#123;count.padStart(<span class="number">3</span>, <span class="string">'0'</span>)&#125;</span>`</span>)</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//Prints..</span></span><br><span class="line"><span class="comment">// 🚙BMW - - - - - - -  Count: 010</span></span><br><span class="line"><span class="comment">// 🚘Tesla - - - - - -  Count: 005</span></span><br><span class="line"><span class="comment">// 🚖Lamborghini - - -  Count: 000</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">const cars = {
+  &#39;🚙BMW&#39;: &#39;10&#39;,
+  &#39;🚘Tesla&#39;: &#39;5&#39;,
+  &#39;🚖Lamborghini&#39;: &#39;0&#39;
+}
+Object.entries(cars).map(([name, count]) =&gt; {
+  //padEnd appends &#39; -&#39; until the name becomes 20 characters
+  //padStart prepends &#39;0&#39; until the count becomes 3 characters.
+  console.log(`${name.padEnd(20, &#39; -&#39;)} Count: ${count.padStart(3, &#39;0&#39;)}`)
+});
+//Prints..
+// 🚙BMW - - - - - - -  Count: 010
+// 🚘Tesla - - - - - -  Count: 005
+// 🚖Lamborghini - - -  Count: 000
+
+</code></pre>
 <h4 id="使用padStart和padEnd来格式化Emojis和其他宽字符"><a href="#使用padStart和padEnd来格式化Emojis和其他宽字符" class="headerlink" title="使用padStart和padEnd来格式化Emojis和其他宽字符"></a>使用padStart和padEnd来格式化Emojis和其他宽字符</h4><p>Emojis和宽字符使用多个字节来表示，因此可能使用padStart和padEnd的结果并非如你所愿。</p>
 <p>比如：我们追加❤️到heart前面：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//你会发现不仅没有5个桃心，有一个桃心还很奇怪。</span></span><br><span class="line"><span class="string">'heart'</span>.padStart(<span class="number">10</span>, <span class="string">"❤️"</span>); <span class="comment">// prints.. '❤️❤️❤heart'</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">//你会发现不仅没有5个桃心，有一个桃心还很奇怪。
+&#39;heart&#39;.padStart(10, &quot;❤️&quot;); // prints.. &#39;❤️❤️❤heart&#39;
+</code></pre>
 <p>这是因为❤️占有2个字节(‘\u2764\uFE0F’)，而heart本身有5个字节，因此只有5个字节的余地。所以只是追加了2个半的桃心。最后追加的’\u2764’会显示为小黑桃心。</p>
 <h3 id="Object-getOwnPropertyDescriptors"><a href="#Object-getOwnPropertyDescriptors" class="headerlink" title="Object.getOwnPropertyDescriptors"></a>Object.getOwnPropertyDescriptors</h3><p>该函数返回一个对象所有的属性，甚至包括get/set函数。ES2017加入这个函数的主要动机在于方便将一个对象深度拷贝给另一个对象，同时可以将getter/setter拷贝。和Object.assign不同。</p>
 <p>Object.assign将一个对象除了getter/setter以外的都深度拷贝了。</p>
@@ -242,7 +264,7 @@ ES6Array.pr,">
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

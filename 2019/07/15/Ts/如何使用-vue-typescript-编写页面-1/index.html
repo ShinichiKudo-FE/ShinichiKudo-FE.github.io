@@ -101,13 +101,13 @@ vue create demo ，demo就是创建项目的名称提示选择预设，选择 Ma
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    24k
+                    8k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    21 mins.
+                    7 mins.
                 </span>
                 
                 
@@ -146,25 +146,152 @@ vue create demo ，demo就是创建项目的名称提示选择预设，选择 Ma
 <p><code>vue create demo</code> ，demo就是创建项目的名称<br>提示选择预设，选择 <code>Manually select features</code> 回车确认<br>选择<code>typescript</code> <code>vuex</code>  <code>router</code> <code>babel</code> <code>css pre-processors</code>，不使用<code>linter</code>，不选单元测试有需要另说<br>回车后按照需要选择合适的选项<br>选择完毕后回车等待资源准备</p>
 <h2 id="编码开始"><a href="#编码开始" class="headerlink" title="编码开始"></a>编码开始</h2><p>熟悉几个vue的装饰器 <code>vue-property-decorator</code></p>
 <p>以下的装饰器的功能和原js编写的功能相同/相似，可以参照官方文档类比解读。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Vue, Component, Inject, Provide, Prop, Model, Watch, Emit, Mixins &#125; <span class="keyword">from</span> <span class="string">'vue-property-decorator'</span></span><br></pre></td></tr></table></figure>
-<h3 id="1-Vue-实际上就是-Vue-本身-继承vue相关属性和函数"><a href="#1-Vue-实际上就是-Vue-本身-继承vue相关属性和函数" class="headerlink" title="1. Vue 实际上就是 Vue 本身,继承vue相关属性和函数"></a>1. Vue 实际上就是 Vue 本身,继承vue相关属性和函数</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyComponent</span> <span class="keyword">extends</span> <span class="title">Vue</span> </span>&#123; &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">import { Vue, Component, Inject, Provide, Prop, Model, Watch, Emit, Mixins } from &#39;vue-property-decorator&#39;
+</code></pre>
+<h3 id="1-Vue-实际上就是-Vue-本身-继承vue相关属性和函数"><a href="#1-Vue-实际上就是-Vue-本身-继承vue相关属性和函数" class="headerlink" title="1. Vue 实际上就是 Vue 本身,继承vue相关属性和函数"></a>1. Vue 实际上就是 Vue 本身,继承vue相关属性和函数</h3><pre><code class="js">class MyComponent extends Vue { }
+</code></pre>
 <h3 id="2-Component-声明成一个vue的组件实例，如果不使用，则不能得到一个vue组件"><a href="#2-Component-声明成一个vue的组件实例，如果不使用，则不能得到一个vue组件" class="headerlink" title="2. @Component 声明成一个vue的组件实例，如果不使用，则不能得到一个vue组件"></a>2. @Component 声明成一个vue的组件实例，如果不使用，则不能得到一个vue组件</h3><p>第一种方式，不需要定义额外内容:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyComponent</span> <span class="keyword">extends</span> <span class="title">Vue</span> </span>&#123; &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">@Component
+class MyComponent extends Vue { }
+</code></pre>
 <p>第二种方式，定义相关内容:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">@Component(&#123;</span><br><span class="line">    <span class="comment">/* 这里和js版本编写的 vue 组件内容相同，</span></span><br><span class="line"><span class="comment">     * 凡是不能在ts里面完成的都可以在这里完成 </span></span><br><span class="line"><span class="comment">     * 最终会被合并到一个实例中。</span></span><br><span class="line"><span class="comment">     * 在这里定义的内容，不会被语法器获取到，因此必须要同步在class中声明</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    data()&#123;</span><br><span class="line">        <span class="keyword">return</span> &#123; <span class="attr">myname</span>:<span class="string">""</span>,<span class="attr">age</span>:<span class="number">18</span> &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyComponent</span> <span class="keyword">extends</span> <span class="title">Vue</span> </span>&#123;</span><br><span class="line">    private myname:string;</span><br><span class="line">    mounted()&#123;</span><br><span class="line">        <span class="keyword">this</span>.myname;    </span><br><span class="line">        <span class="keyword">this</span>.age;<span class="comment">// 语法器报错，当前类找不到age属性</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="3-Provide-向任意层级的子组件提供可访问的属性，默认为当前属性的名称，可以指定名称"><a href="#3-Provide-向任意层级的子组件提供可访问的属性，默认为当前属性的名称，可以指定名称" class="headerlink" title="3.@Provide 向任意层级的子组件提供可访问的属性，默认为当前属性的名称，可以指定名称"></a>3.@Provide 向任意层级的子组件提供可访问的属性，默认为当前属性的名称，可以指定名称</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ParentComponent</span> <span class="keyword">extends</span> <span class="title">Vue</span> </span>&#123; </span><br><span class="line">    @Provide() private info!:string;</span><br><span class="line">    @Provide(<span class="string">"next"</span>) private infoNext!:string;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="4-Inject-获取父级由Provide提供的属性，默认为当前属性的名称，可以指定名称，多个父级提供相同名称属性时，获取最近父级的名称属性"><a href="#4-Inject-获取父级由Provide提供的属性，默认为当前属性的名称，可以指定名称，多个父级提供相同名称属性时，获取最近父级的名称属性" class="headerlink" title="4. @Inject 获取父级由Provide提供的属性，默认为当前属性的名称，可以指定名称，多个父级提供相同名称属性时，获取最近父级的名称属性"></a>4. @Inject 获取父级由Provide提供的属性，默认为当前属性的名称，可以指定名称，多个父级提供相同名称属性时，获取最近父级的名称属性</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyComponent</span> <span class="keyword">extends</span> <span class="title">Vue</span> </span>&#123; </span><br><span class="line">    @Inject() private info!:string;</span><br><span class="line">    @Inject(<span class="string">"next"</span>) private infoNext!:string;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="5-Prop-由标签属性注入，获取对应标签属性上值-可配置具体prop内容，参照js版本props内容"><a href="#5-Prop-由标签属性注入，获取对应标签属性上值-可配置具体prop内容，参照js版本props内容" class="headerlink" title="5. @Prop 由标签属性注入，获取对应标签属性上值,可配置具体prop内容，参照js版本props内容"></a>5. @Prop 由标签属性注入，获取对应标签属性上值,可配置具体prop内容，参照js版本props内容</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyComponent</span> <span class="keyword">extends</span> <span class="title">Vue</span> </span>&#123; </span><br><span class="line">   @Prop() age!:number;</span><br><span class="line">   @Prop(&#123;<span class="attr">default</span>:<span class="number">1</span>&#125;) sex!:number;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">MyComponent</span> <span class="attr">:age</span>=<span class="string">"16"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">lang</span>=<span class="string">"ts"</span>&gt;</span>  </span><br><span class="line"><span class="javascript"><span class="keyword">import</span> MyComponent <span class="keyword">from</span> <span class="string">'./MyComponent.vue'</span>;</span></span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">    components:&#123; MyComponent &#125;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="actionscript"><span class="class"><span class="keyword">class</span> <span class="title">PComponent</span> <span class="keyword">extends</span> <span class="title">Vue</span> </span>&#123; &#125;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">@Component({
+    /* 这里和js版本编写的 vue 组件内容相同，
+     * 凡是不能在ts里面完成的都可以在这里完成 
+     * 最终会被合并到一个实例中。
+     * 在这里定义的内容，不会被语法器获取到，因此必须要同步在class中声明
+     */
+    data(){
+        return { myname:&quot;&quot;,age:18 }
+    }
+})
+class MyComponent extends Vue {
+    private myname:string;
+    mounted(){
+        this.myname;    
+        this.age;// 语法器报错，当前类找不到age属性
+    }
+}
+</code></pre>
+<h3 id="3-Provide-向任意层级的子组件提供可访问的属性，默认为当前属性的名称，可以指定名称"><a href="#3-Provide-向任意层级的子组件提供可访问的属性，默认为当前属性的名称，可以指定名称" class="headerlink" title="3.@Provide 向任意层级的子组件提供可访问的属性，默认为当前属性的名称，可以指定名称"></a>3.@Provide 向任意层级的子组件提供可访问的属性，默认为当前属性的名称，可以指定名称</h3><pre><code class="js">@Component
+class ParentComponent extends Vue { 
+    @Provide() private info!:string;
+    @Provide(&quot;next&quot;) private infoNext!:string;
+}
+</code></pre>
+<h3 id="4-Inject-获取父级由Provide提供的属性，默认为当前属性的名称，可以指定名称，多个父级提供相同名称属性时，获取最近父级的名称属性"><a href="#4-Inject-获取父级由Provide提供的属性，默认为当前属性的名称，可以指定名称，多个父级提供相同名称属性时，获取最近父级的名称属性" class="headerlink" title="4. @Inject 获取父级由Provide提供的属性，默认为当前属性的名称，可以指定名称，多个父级提供相同名称属性时，获取最近父级的名称属性"></a>4. @Inject 获取父级由Provide提供的属性，默认为当前属性的名称，可以指定名称，多个父级提供相同名称属性时，获取最近父级的名称属性</h3><pre><code class="js">@Component
+class MyComponent extends Vue { 
+    @Inject() private info!:string;
+    @Inject(&quot;next&quot;) private infoNext!:string;
+}
+</code></pre>
+<h3 id="5-Prop-由标签属性注入，获取对应标签属性上值-可配置具体prop内容，参照js版本props内容"><a href="#5-Prop-由标签属性注入，获取对应标签属性上值-可配置具体prop内容，参照js版本props内容" class="headerlink" title="5. @Prop 由标签属性注入，获取对应标签属性上值,可配置具体prop内容，参照js版本props内容"></a>5. @Prop 由标签属性注入，获取对应标签属性上值,可配置具体prop内容，参照js版本props内容</h3><pre><code class="js">@Component
+class MyComponent extends Vue { 
+   @Prop() age!:number;
+   @Prop({default:1}) sex!:number;
+}
+</code></pre>
+<pre><code class="html">&lt;template&gt;
+    &lt;MyComponent :age=&quot;16&quot; /&gt;
+&lt;/template&gt;
+
+&lt;script lang=&quot;ts&quot;&gt;  
+import MyComponent from &#39;./MyComponent.vue&#39;;
+
+@Component({
+    components:{ MyComponent }
+})
+class PComponent extends Vue { }
+&lt;/script&gt;
+</code></pre>
 <a id="more"></a>
-<h3 id="6-Model-是v-model的装饰器，当自定义组件想使用v-model时，可以使用这种方式，配合emit可以双向传递属性值"><a href="#6-Model-是v-model的装饰器，当自定义组件想使用v-model时，可以使用这种方式，配合emit可以双向传递属性值" class="headerlink" title="6. @Model 是v-model的装饰器，当自定义组件想使用v-model时，可以使用这种方式，配合emit可以双向传递属性值"></a>6. @Model 是v-model的装饰器，当自定义组件想使用v-model时，可以使用这种方式，配合emit可以双向传递属性值</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"checkbox"</span> <span class="attr">:checked</span>=<span class="string">"checked"</span> @<span class="attr">change</span>=<span class="string">"changed"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">lang</span>=<span class="string">"ts"</span>&gt;</span></span><br><span class="line">@Component</span><br><span class="line"><span class="actionscript"><span class="class"><span class="keyword">class</span> <span class="title">MyComponent</span> <span class="keyword">extends</span> <span class="title">Vue</span> </span>&#123; </span></span><br><span class="line"><span class="actionscript">   @Model(<span class="string">"change"</span>) checked!:number;</span></span><br><span class="line"><span class="actionscript">   changed(event:any)&#123; <span class="comment">/* 这里是偷懒写的any，在实际项目中需要避免 */</span></span></span><br><span class="line"><span class="actionscript">       <span class="keyword">this</span>.$emit(<span class="string">"change"</span>,event.target.value)</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">MyComponent</span> <span class="attr">:age</span>=<span class="string">"16"</span> <span class="attr">v-model</span>=<span class="string">"mycheck"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">lang</span>=<span class="string">"ts"</span>&gt;</span> </span><br><span class="line"><span class="javascript"><span class="keyword">import</span> MyComponent <span class="keyword">from</span> <span class="string">'./MyComponent.vue'</span>;</span></span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">    components:&#123; MyComponent &#125;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="actionscript"><span class="class"><span class="keyword">class</span> <span class="title">PComponent</span> <span class="keyword">extends</span> <span class="title">Vue</span> </span>&#123;</span></span><br><span class="line"><span class="actionscript">    <span class="keyword">private</span> mycheck:boolean = <span class="literal">false</span>;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="7-Watch-观察某个属性更新"><a href="#7-Watch-观察某个属性更新" class="headerlink" title="7. @Watch 观察某个属性更新"></a>7. @Watch 观察某个属性更新</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyComponent</span> <span class="keyword">extends</span> <span class="title">Vue</span> </span>&#123; </span><br><span class="line">   @Prop() age!:number;</span><br><span class="line">   @Watch(<span class="string">"age"</span>)</span><br><span class="line">   ageChange(newVal:number,<span class="attr">oldVal</span>:number)&#123;</span><br><span class="line">       <span class="comment">/*age属性更新时，处理相关内容*/</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="8-Emit-this-emit-的装饰器-如果没有指定名称，默认使用函数名称。有返回值时，使用返回值，没有则使用"><a href="#8-Emit-this-emit-的装饰器-如果没有指定名称，默认使用函数名称。有返回值时，使用返回值，没有则使用" class="headerlink" title="8. @Emit this.$emit 的装饰器,如果没有指定名称，默认使用函数名称。有返回值时，使用返回值，没有则使用"></a>8. @Emit this.$emit 的装饰器,如果没有指定名称，默认使用函数名称。有返回值时，使用返回值，没有则使用</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyComponent</span> <span class="keyword">extends</span> <span class="title">Vue</span> </span>&#123; </span><br><span class="line">   private myname = <span class="string">""</span>;</span><br><span class="line">   </span><br><span class="line">   @Emit()</span><br><span class="line">   ageChangeA()&#123; <span class="comment">/* 仅发送 this.$emit('ageChangeA') */</span>   &#125;</span><br><span class="line">   </span><br><span class="line">   @Emit()</span><br><span class="line">   ageChangeB(age:number)&#123; <span class="comment">/* 发送 age  this.$emit('ageChangeB',age) */</span>   &#125;</span><br><span class="line">   </span><br><span class="line">   @Emit()</span><br><span class="line">   ageChangeC(age:number)&#123;  <span class="keyword">return</span> <span class="number">1</span> <span class="comment">/* this.$emit('ageChangeC',1) 发送return 结果*/</span> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="9-Mixins"><a href="#9-Mixins" class="headerlink" title="9. Mixins"></a>9. Mixins</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// MyMixin.ts</span></span><br><span class="line">@Component</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">MyMixin</span> <span class="keyword">extends</span> <span class="title">Vue</span> </span>&#123; </span><br><span class="line">   <span class="comment">/* 如果使用private 修饰，则两个相同的 私有属性混入时，会产生冲突 */</span></span><br><span class="line">   protected myname = <span class="string">"张三"</span>;</span><br><span class="line">   created()&#123;  <span class="comment">/* 混入对象有自己的 生命周期函数*/</span> &#125;</span><br><span class="line">   getMyName()&#123; <span class="built_in">console</span>.log(<span class="string">"张三混入"</span>) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// OtherMixin.ts</span></span><br><span class="line">@Component</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">OtherMixin</span> <span class="keyword">extends</span> <span class="title">Vue</span> </span>&#123; </span><br><span class="line">   <span class="comment">/* 如果使用private 修饰，则两个相同的 私有属性混入时，会产生冲突 */</span></span><br><span class="line">   protected myname = <span class="string">"李四"</span>;</span><br><span class="line">   created()&#123;  <span class="comment">/* 混入对象有自己的 生命周期函数*/</span> &#125;</span><br><span class="line">   getMyName()&#123; <span class="built_in">console</span>.log(<span class="string">"李四混入"</span>) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyComponent</span> <span class="keyword">extends</span> <span class="title">Mixins</span>(<span class="title">MyMixin</span>,<span class="title">OtherMixin</span>) </span>&#123; </span><br><span class="line">   private myname = <span class="string">""</span>; <span class="comment">/* 混入对象已经定义，这里产生属性冲突 */</span></span><br><span class="line">   mounted()&#123;</span><br><span class="line">       <span class="keyword">this</span>.getMyName() <span class="comment">// 李四混入</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="对于computed，使用-get-替代"><a href="#对于computed，使用-get-替代" class="headerlink" title="对于computed，使用 get 替代"></a>对于computed，使用 get 替代</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyComponent</span> <span class="keyword">extends</span> <span class="title">Vue</span> </span>&#123; </span><br><span class="line">   private myname = <span class="string">""</span>; <span class="comment">/* 混入对象已经定义，这里产生属性冲突 */</span></span><br><span class="line">   <span class="keyword">get</span> upperName()&#123;</span><br><span class="line">       <span class="keyword">return</span> <span class="string">"A"</span> + <span class="keyword">this</span>.myname</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="6-Model-是v-model的装饰器，当自定义组件想使用v-model时，可以使用这种方式，配合emit可以双向传递属性值"><a href="#6-Model-是v-model的装饰器，当自定义组件想使用v-model时，可以使用这种方式，配合emit可以双向传递属性值" class="headerlink" title="6. @Model 是v-model的装饰器，当自定义组件想使用v-model时，可以使用这种方式，配合emit可以双向传递属性值"></a>6. @Model 是v-model的装饰器，当自定义组件想使用v-model时，可以使用这种方式，配合emit可以双向传递属性值</h3><pre><code class="html">&lt;template&gt;
+    &lt;input type=&quot;checkbox&quot; :checked=&quot;checked&quot; @change=&quot;changed&quot;/&gt;
+&lt;/template&gt;
+
+&lt;script lang=&quot;ts&quot;&gt;
+@Component
+class MyComponent extends Vue { 
+   @Model(&quot;change&quot;) checked!:number;
+   changed(event:any){ /* 这里是偷懒写的any，在实际项目中需要避免 */
+       this.$emit(&quot;change&quot;,event.target.value)
+   }
+}
+&lt;/script&gt;
+</code></pre>
+<pre><code class="html">&lt;template&gt;
+    &lt;MyComponent :age=&quot;16&quot; v-model=&quot;mycheck&quot; /&gt;
+&lt;/template&gt;
+
+&lt;script lang=&quot;ts&quot;&gt; 
+import MyComponent from &#39;./MyComponent.vue&#39;;
+
+@Component({
+    components:{ MyComponent }
+})
+class PComponent extends Vue {
+    private mycheck:boolean = false;
+}
+&lt;/script&gt;
+</code></pre>
+<h3 id="7-Watch-观察某个属性更新"><a href="#7-Watch-观察某个属性更新" class="headerlink" title="7. @Watch 观察某个属性更新"></a>7. @Watch 观察某个属性更新</h3><pre><code class="js">@Component
+class MyComponent extends Vue { 
+   @Prop() age!:number;
+   @Watch(&quot;age&quot;)
+   ageChange(newVal:number,oldVal:number){
+       /*age属性更新时，处理相关内容*/
+   }
+}
+</code></pre>
+<h3 id="8-Emit-this-emit-的装饰器-如果没有指定名称，默认使用函数名称。有返回值时，使用返回值，没有则使用"><a href="#8-Emit-this-emit-的装饰器-如果没有指定名称，默认使用函数名称。有返回值时，使用返回值，没有则使用" class="headerlink" title="8. @Emit this.$emit 的装饰器,如果没有指定名称，默认使用函数名称。有返回值时，使用返回值，没有则使用"></a>8. @Emit this.$emit 的装饰器,如果没有指定名称，默认使用函数名称。有返回值时，使用返回值，没有则使用</h3><pre><code class="js">@Component
+class MyComponent extends Vue { 
+   private myname = &quot;&quot;;
+
+   @Emit()
+   ageChangeA(){ /* 仅发送 this.$emit(&#39;ageChangeA&#39;) */   }
+
+   @Emit()
+   ageChangeB(age:number){ /* 发送 age  this.$emit(&#39;ageChangeB&#39;,age) */   }
+
+   @Emit()
+   ageChangeC(age:number){  return 1 /* this.$emit(&#39;ageChangeC&#39;,1) 发送return 结果*/ }
+}
+
+</code></pre>
+<h3 id="9-Mixins"><a href="#9-Mixins" class="headerlink" title="9. Mixins"></a>9. Mixins</h3><pre><code class="js">// MyMixin.ts
+@Component
+export default class MyMixin extends Vue { 
+   /* 如果使用private 修饰，则两个相同的 私有属性混入时，会产生冲突 */
+   protected myname = &quot;张三&quot;;
+   created(){  /* 混入对象有自己的 生命周期函数*/ }
+   getMyName(){ console.log(&quot;张三混入&quot;) }
+}
+</code></pre>
+<pre><code class="js">// OtherMixin.ts
+@Component
+export default class OtherMixin extends Vue { 
+   /* 如果使用private 修饰，则两个相同的 私有属性混入时，会产生冲突 */
+   protected myname = &quot;李四&quot;;
+   created(){  /* 混入对象有自己的 生命周期函数*/ }
+   getMyName(){ console.log(&quot;李四混入&quot;) }
+}
+</code></pre>
+<pre><code class="js">@Component
+class MyComponent extends Mixins(MyMixin,OtherMixin) { 
+   private myname = &quot;&quot;; /* 混入对象已经定义，这里产生属性冲突 */
+   mounted(){
+       this.getMyName() // 李四混入
+   }
+}
+</code></pre>
+<h3 id="对于computed，使用-get-替代"><a href="#对于computed，使用-get-替代" class="headerlink" title="对于computed，使用 get 替代"></a>对于computed，使用 get 替代</h3><pre><code class="js">@Component
+class MyComponent extends Vue { 
+   private myname = &quot;&quot;; /* 混入对象已经定义，这里产生属性冲突 */
+   get upperName(){
+       return &quot;A&quot; + this.myname
+   }
+}
+</code></pre>
 <p><strong>装饰器可以参照 <a href="https://link.juejin.im/?target=http%3A%2F%2Fnpm.taobao.org%2Fpackage%2Fvue-property-decorator">vue-property-decorator</a></strong></p>
 <ul>
 <li>没有filters,没有指令相关装饰器，有需要可以在@Component里面补充，或者可以直接定义函数调用计算返回值 在class里定义的属性即data属性，需要赋值初始值。</li>
@@ -174,10 +301,16 @@ vue create demo ，demo就是创建项目的名称提示选择预设，选择 Ma
 <p>可惜,大部分都是没有编写声明文件的.但是又需要使用到这个模块时,应该怎么做.</p>
 <p><strong>自定义描述文件</strong></p>
 <p>在项目的【根目录】下定义【模块相同的名称】的描述文件A.d.ts,在描述文件内编写模块声明描述</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// A.d.ts</span></span><br><span class="line">declare <span class="built_in">module</span> <span class="string">'*'</span>;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// A.d.ts
+declare module &#39;*&#39;;
+</code></pre>
 <p>这样属于一劳永逸的描述,但是无法描述到具体模块内容,因此这种方式仅仅引入的组件没有任何操作时,比如引入的是第三方开发的vue组件,可以用这种方式偷懒.</p>
 <p><strong>详细描述文件</strong></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// A.d.ts</span></span><br><span class="line">declare <span class="built_in">module</span>  <span class="string">"A"</span> &#123;</span><br><span class="line">    <span class="comment">// 添加具体的描述内容</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// A.d.ts
+declare module  &quot;A&quot; {
+    // 添加具体的描述内容
+};
+</code></pre>
 <p>可以从这里查询到<a href="http://microsoft.github.io/TypeSearch/" target="_blank" rel="noopener">@type</a>包查询，已经被编写的文件声明可以直接下载</p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
@@ -226,7 +359,7 @@ vue create demo ，demo就是创建项目的名称提示选择预设，选择 Ma
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

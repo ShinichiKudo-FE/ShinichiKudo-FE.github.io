@@ -11,7 +11,8 @@
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="TriDiamond Obsidian,"> 
     <meta name="description" content="一枚前端搬砖队队员的记录册,原文地址
-123456789101112131415var TemplateEngine = function(html, options) &amp;#123;    var re = /&amp;lt;%([^,"> 
+var TemplateEngine = function(html, options) {
+    var re = /&amp;lt;%([^%&amp;gt;]+)?%&amp;gt;/g, reExp =,"> 
     <meta name="author" content="张白告丶"> 
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -100,13 +101,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    3.1k
+                    1.1k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    3 mins.
+                    1 mins.
                 </span>
                 
                 
@@ -141,7 +142,23 @@
     <div class='main'>
         <div class="content markdown animated fadeIn">
             <p><a href="http://blog.jobbole.com/56689/" target="_blank" rel="noopener">原文地址</a></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> TemplateEngine = <span class="function"><span class="keyword">function</span>(<span class="params">html, options</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> re = <span class="regexp">/&lt;%([^%&gt;]+)?%&gt;/g</span>, reExp = <span class="regexp">/(^( )?(if|for|else|switch|case|break|&#123;|&#125;))(.*)?/g</span>, code = <span class="string">'var r=[];\n'</span>, cursor = <span class="number">0</span>; <span class="comment">//正则捕获所有以&lt;%开头，以%&gt;结尾的片段</span></span><br><span class="line">    <span class="keyword">var</span> add = <span class="function"><span class="keyword">function</span>(<span class="params">line, js</span>) </span>&#123;</span><br><span class="line">        js? (code += line.match(reExp) ? line + <span class="string">'\n'</span> : <span class="string">'r.push('</span> + line + <span class="string">');\n'</span>) :</span><br><span class="line">            (code += line != <span class="string">''</span> ? <span class="string">'r.push("'</span> + line.replace(<span class="regexp">/"/g</span>, <span class="string">'\\"'</span>) + <span class="string">'");\n'</span> : <span class="string">''</span>);</span><br><span class="line">        <span class="keyword">return</span> add;</span><br><span class="line">    &#125;<span class="comment">//使用条件判断和循环,复杂逻辑</span></span><br><span class="line">    <span class="keyword">while</span>(match = re.exec(html)) &#123;</span><br><span class="line">        add(html.slice(cursor, match.index))(match[<span class="number">1</span>], <span class="literal">true</span>);</span><br><span class="line">        cursor = match.index + match[<span class="number">0</span>].length;</span><br><span class="line">    &#125;</span><br><span class="line">    add(html.substr(cursor, html.length - cursor));</span><br><span class="line">    code += <span class="string">'return r.join("");'</span>;<span class="comment">//把所有的字符串放在一个数组里，在程序的最后把它们拼接起来。</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Function</span>(code.replace(<span class="regexp">/[\r\t\n]/g</span>, <span class="string">''</span>)).apply(options);<span class="comment">//把原本返回模板字符串的语句替换成如下的内容</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">var TemplateEngine = function(html, options) {
+    var re = /&lt;%([^%&gt;]+)?%&gt;/g, reExp = /(^( )?(if|for|else|switch|case|break|{|}))(.*)?/g, code = &#39;var r=[];\n&#39;, cursor = 0; //正则捕获所有以&lt;%开头，以%&gt;结尾的片段
+    var add = function(line, js) {
+        js? (code += line.match(reExp) ? line + &#39;\n&#39; : &#39;r.push(&#39; + line + &#39;);\n&#39;) :
+            (code += line != &#39;&#39; ? &#39;r.push(&quot;&#39; + line.replace(/&quot;/g, &#39;\\&quot;&#39;) + &#39;&quot;);\n&#39; : &#39;&#39;);
+        return add;
+    }//使用条件判断和循环,复杂逻辑
+    while(match = re.exec(html)) {
+        add(html.slice(cursor, match.index))(match[1], true);
+        cursor = match.index + match[0].length;
+    }
+    add(html.substr(cursor, html.length - cursor));
+    code += &#39;return r.join(&quot;&quot;);&#39;;//把所有的字符串放在一个数组里，在程序的最后把它们拼接起来。
+    return new Function(code.replace(/[\r\t\n]/g, &#39;&#39;)).apply(options);//把原本返回模板字符串的语句替换成如下的内容
+}
+</code></pre>
+
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
                 data-autoplay="false">
@@ -188,7 +205,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

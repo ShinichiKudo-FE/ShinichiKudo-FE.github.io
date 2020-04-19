@@ -11,7 +11,9 @@
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="TriDiamond Obsidian,"> 
     <meta name="description" content="一枚前端搬砖队队员的记录册,assert (断言)assert（断言）通常用来对代码进行校验，若出错则阻止程序运行，并抛出一个错误。
-用法12345const assert = require(&#39;assert&#39;)assert(,"> 
+用法const assert = require(&amp;#39;assert&amp;#39;)
+
+as,"> 
     <meta name="author" content="张白告丶"> 
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -100,13 +102,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    26k
+                    12k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    24 mins.
+                    11 mins.
                 </span>
                 
                 
@@ -141,42 +143,184 @@
     <div class='main'>
         <div class="content markdown animated fadeIn">
             <h2 id="assert-断言"><a href="#assert-断言" class="headerlink" title="assert (断言)"></a>assert (断言)</h2><p>assert（断言）通常用来对代码进行校验，若出错则阻止程序运行，并抛出一个错误。</p>
-<h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> assert = <span class="built_in">require</span>(<span class="string">'assert'</span>)</span><br><span class="line"></span><br><span class="line">assert(<span class="number">2</span> &gt; <span class="number">1</span>, <span class="string">'2 &gt; 1'</span>)</span><br><span class="line"></span><br><span class="line">assert(<span class="number">1</span> &gt; <span class="number">2</span>, <span class="string">'1 &gt; 2'</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><pre><code class="js">const assert = require(&#39;assert&#39;)
+
+assert(2 &gt; 1, &#39;2 &gt; 1&#39;)
+
+assert(1 &gt; 2, &#39;1 &gt; 2&#39;)
+</code></pre>
 <p>代码在运行到assert(2 &gt; 1, ‘2 &gt; 1’)时，由于2 &gt; 1为true，此时不会抛出错误。</p>
 <p>而运行到assert(1 &gt; 2, ‘1 &gt; 2’)时，由于1 &gt; 2为false，此时会抛出错误如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">AssertionError [ERR_ASSERTION]: <span class="number">1</span> &gt; <span class="number">2</span></span><br><span class="line">    at <span class="built_in">Object</span>.&lt;anonymous&gt; (C:\projects\nodejs-tutorial\lesson11\assert.js:<span class="number">5</span>:<span class="number">1</span>)</span><br><span class="line">    at Module._compile (internal/modules/cjs/loader.js:<span class="number">734</span>:<span class="number">30</span>)</span><br><span class="line">    at <span class="built_in">Object</span>.Module._extensions..js (internal/modules/cjs/loader.js:<span class="number">745</span>:<span class="number">10</span>)</span><br><span class="line">    at Module.load (internal/modules/cjs/loader.js:<span class="number">626</span>:<span class="number">32</span>)</span><br><span class="line">    at tryModuleLoad (internal/modules/cjs/loader.js:<span class="number">566</span>:<span class="number">12</span>)</span><br><span class="line">    at <span class="built_in">Function</span>.Module._load (internal/modules/cjs/loader.js:<span class="number">558</span>:<span class="number">3</span>)</span><br><span class="line">    at <span class="built_in">Function</span>.Module.runMain (internal/modules/cjs/loader.js:<span class="number">797</span>:<span class="number">12</span>)</span><br><span class="line">    at executeUserCode (internal/bootstrap/node.js:<span class="number">526</span>:<span class="number">15</span>)</span><br><span class="line">    at startMainThreadExecution (internal/bootstrap/node.js:<span class="number">439</span>:<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">AssertionError [ERR_ASSERTION]: 1 &gt; 2
+    at Object.&lt;anonymous&gt; (C:\projects\nodejs-tutorial\lesson11\assert.js:5:1)
+    at Module._compile (internal/modules/cjs/loader.js:734:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:745:10)
+    at Module.load (internal/modules/cjs/loader.js:626:32)
+    at tryModuleLoad (internal/modules/cjs/loader.js:566:12)
+    at Function.Module._load (internal/modules/cjs/loader.js:558:3)
+    at Function.Module.runMain (internal/modules/cjs/loader.js:797:12)
+    at executeUserCode (internal/bootstrap/node.js:526:15)
+    at startMainThreadExecution (internal/bootstrap/node.js:439:3)
+</code></pre>
 <h3 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h3><p>通常可以在一个模块或函数的每个阶段使用assert，或者在对函数传参进行assert校验，以保证代码运行的正确性。</p>
 <h3 id="assert-deepStrictEqual"><a href="#assert-deepStrictEqual" class="headerlink" title="assert.deepStrictEqual"></a>assert.deepStrictEqual</h3><p><code>assert.deepStrictEqual(actual, expected[, message])</code>用于对actual 参数和 expected的深度比较，即不仅校验它们是否相等，同时也要校验它们的成员之间是否相等。</p>
 <p><code>assert.deepStrictEqual</code>在校验对象或数组时比较有用。</p>
 <p><code>assert.deepStrictEqual</code>的比较相当于<code>===</code>，也就是不仅是值相等，值的类型也要相等。</p>
 <h3 id="assert-deepStrictEqual的用法"><a href="#assert-deepStrictEqual的用法" class="headerlink" title="assert.deepStrictEqual的用法"></a>assert.deepStrictEqual的用法</h3><p>1.使用<code>assert.deepStrictEqual</code>比较对象：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> assert = <span class="built_in">require</span>(<span class="string">'assert'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj1 = &#123;</span><br><span class="line">  a: <span class="number">1</span>,</span><br><span class="line">  b: <span class="number">2</span>,</span><br><span class="line">  children: &#123;</span><br><span class="line">    c: <span class="number">3</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj2 = &#123;</span><br><span class="line">  a: <span class="number">1</span>,</span><br><span class="line">  b: <span class="number">2</span>,</span><br><span class="line">  children: &#123;</span><br><span class="line">    c: <span class="number">3</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj3 = &#123;</span><br><span class="line">  a: <span class="number">1</span>,</span><br><span class="line">  b: <span class="number">2</span>,</span><br><span class="line">  children: &#123;</span><br><span class="line">    c: <span class="string">'3'</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">assert.deepStrictEqual(obj1, obj2, <span class="string">'obj1 !== obj2'</span>)</span><br><span class="line"></span><br><span class="line">assert.deepStrictEqual(obj1, obj3, <span class="string">'obj1 !== obj3'</span>)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const assert = require(&#39;assert&#39;)
+
+const obj1 = {
+  a: 1,
+  b: 2,
+  children: {
+    c: 3
+  }
+}
+
+const obj2 = {
+  a: 1,
+  b: 2,
+  children: {
+    c: 3
+  }
+}
+
+const obj3 = {
+  a: 1,
+  b: 2,
+  children: {
+    c: &#39;3&#39;
+  }
+}
+
+assert.deepStrictEqual(obj1, obj2, &#39;obj1 !== obj2&#39;)
+
+assert.deepStrictEqual(obj1, obj3, &#39;obj1 !== obj3&#39;)
+</code></pre>
 <a id="more"></a>
 <p>代码会抛出错误：obj1 !== obj3。</p>
 <p>2.使用<code>assert.deepStrictEqual</code>比较数组</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> assert = <span class="built_in">require</span>(<span class="string">'assert'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> arr1 = [&#123;</span><br><span class="line">  a: <span class="number">1</span>,</span><br><span class="line">  b: <span class="number">2</span>,</span><br><span class="line">  children: [&#123;</span><br><span class="line">    c: <span class="number">3</span></span><br><span class="line">  &#125;]</span><br><span class="line">&#125;]</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> arr2 = [&#123;</span><br><span class="line">  a: <span class="number">1</span>,</span><br><span class="line">  b: <span class="number">2</span>,</span><br><span class="line">  children: [&#123;</span><br><span class="line">    c: <span class="number">3</span></span><br><span class="line">  &#125;]</span><br><span class="line">&#125;]</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> arr3 = [&#123;</span><br><span class="line">  a: <span class="number">1</span>,</span><br><span class="line">  b: <span class="number">2</span>,</span><br><span class="line">  children: [&#123;</span><br><span class="line">    c: <span class="string">'3'</span></span><br><span class="line">  &#125;]</span><br><span class="line">&#125;]</span><br><span class="line"></span><br><span class="line">assert.deepStrictEqual(arr1, arr2, <span class="string">'arr1 !== arr2'</span>)</span><br><span class="line"></span><br><span class="line">assert.deepStrictEqual(arr1, arr3, <span class="string">'arr1 !== arr3'</span>)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const assert = require(&#39;assert&#39;)
+
+const arr1 = [{
+  a: 1,
+  b: 2,
+  children: [{
+    c: 3
+  }]
+}]
+
+const arr2 = [{
+  a: 1,
+  b: 2,
+  children: [{
+    c: 3
+  }]
+}]
+
+const arr3 = [{
+  a: 1,
+  b: 2,
+  children: [{
+    c: &#39;3&#39;
+  }]
+}]
+
+assert.deepStrictEqual(arr1, arr2, &#39;arr1 !== arr2&#39;)
+
+assert.deepStrictEqual(arr1, arr3, &#39;arr1 !== arr3&#39;)
+</code></pre>
 <h2 id="path-路径"><a href="#path-路径" class="headerlink" title="path(路径)"></a>path(路径)</h2><p>path模块主要用来对文件路径进行处理，比如提取路径、后缀，拼接路径等。</p>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> str = <span class="string">'/root/a/b/1.txt'</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(path.dirname(str))  <span class="comment">// 获取文件目录：/root/a/b</span></span><br><span class="line"><span class="built_in">console</span>.log(path.basename(str)) <span class="comment">// 获取文件名：1.txt</span></span><br><span class="line"><span class="built_in">console</span>.log(path.extname(str)) <span class="comment">// 获取文件后缀：.txt</span></span><br><span class="line"><span class="built_in">console</span>.log(path.resolve(str, <span class="string">'../c'</span>, <span class="string">'build'</span>, <span class="string">'strict'</span>)) <span class="comment">// 将路径解析为绝对路径：C:\root\a\b\c\build\strict</span></span><br><span class="line"><span class="built_in">console</span>.log(path.resolve(str, <span class="string">'../c'</span>, <span class="string">'build'</span>, <span class="string">'strict'</span>, <span class="string">'../..'</span>, <span class="string">'assets'</span>)) <span class="comment">// 将路径解析为绝对路径：C:\root\a\b\c\assets</span></span><br><span class="line"><span class="built_in">console</span>.log(path.resolve(__dirname, <span class="string">'build'</span>)) <span class="comment">// 将路径解析为绝对路径：C:\projects\nodejs-tutorial\lesson12\build</span></span><br></pre></td></tr></table></figure>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><pre><code class="js">const path = require(&#39;path&#39;)
+
+const str = &#39;/root/a/b/1.txt&#39;
+
+console.log(path.dirname(str))  // 获取文件目录：/root/a/b
+console.log(path.basename(str)) // 获取文件名：1.txt
+console.log(path.extname(str)) // 获取文件后缀：.txt
+console.log(path.resolve(str, &#39;../c&#39;, &#39;build&#39;, &#39;strict&#39;)) // 将路径解析为绝对路径：C:\root\a\b\c\build\strict
+console.log(path.resolve(str, &#39;../c&#39;, &#39;build&#39;, &#39;strict&#39;, &#39;../..&#39;, &#39;assets&#39;)) // 将路径解析为绝对路径：C:\root\a\b\c\assets
+console.log(path.resolve(__dirname, &#39;build&#39;)) // 将路径解析为绝对路径：C:\projects\nodejs-tutorial\lesson12\build
+</code></pre>
 <p>值得一提的是<code>path.resolve</code>方法，它可以接收任意个参数，然后根据每个路径参数之间的关系，将路径最终解析为一个<em>绝对路径</em>。</p>
 <p><code>__dirname</code>指的是当前模块所在的绝对路径名称，它的值会自动根据当前的绝对路径变化，等同于<code>path.dirname(__filename)</code>的结果。</p>
 <h2 id="URL模块"><a href="#URL模块" class="headerlink" title="URL模块"></a>URL模块</h2><h3 id="url-parse"><a href="#url-parse" class="headerlink" title="url.parse"></a>url.parse</h3><p>URL模块用于对URL的解析，常用的是url.parse方法。</p>
 <p>假设有一个url为<code>https://www.google.com:8080/a/b?x=1&amp;y=2&amp;y=3&amp;y=4</code>，可以用url.parse方法进行解析。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> str = <span class="string">'https://www.google.com:8080/a/b?x=1&amp;y=2&amp;y=3&amp;y=4'</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(url.parse(str))</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const url = require(&#39;url&#39;)
+
+const str = &#39;https://www.google.com:8080/a/b?x=1&amp;y=2&amp;y=3&amp;y=4&#39;
+
+console.log(url.parse(str))
+</code></pre>
 <p>打印结果如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Url &#123;</span><br><span class="line">  protocol: <span class="string">'https:'</span>,</span><br><span class="line">  slashes: <span class="literal">true</span>,</span><br><span class="line">  auth: <span class="literal">null</span>,</span><br><span class="line">  host: <span class="string">'www.google.com:8080'</span>,</span><br><span class="line">  port: <span class="string">'8080'</span>,</span><br><span class="line">  hostname: <span class="string">'www.google.com'</span>,</span><br><span class="line">  hash: <span class="literal">null</span>,</span><br><span class="line">  search: <span class="string">'?x=1&amp;y=2&amp;y=3&amp;y=4'</span>,</span><br><span class="line">  query: <span class="string">'x=1&amp;y=2&amp;y=3&amp;y=4'</span>,</span><br><span class="line">  pathname: <span class="string">'/a/b'</span>,</span><br><span class="line">  path: <span class="string">'/a/b?x=1&amp;y=2&amp;y=3&amp;y=4'</span>,</span><br><span class="line">  href: <span class="string">'https://www.google.com:8080/a/b?x=1&amp;y=2&amp;y=3&amp;y=4'</span> &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">Url {
+  protocol: &#39;https:&#39;,
+  slashes: true,
+  auth: null,
+  host: &#39;www.google.com:8080&#39;,
+  port: &#39;8080&#39;,
+  hostname: &#39;www.google.com&#39;,
+  hash: null,
+  search: &#39;?x=1&amp;y=2&amp;y=3&amp;y=4&#39;,
+  query: &#39;x=1&amp;y=2&amp;y=3&amp;y=4&#39;,
+  pathname: &#39;/a/b&#39;,
+  path: &#39;/a/b?x=1&amp;y=2&amp;y=3&amp;y=4&#39;,
+  href: &#39;https://www.google.com:8080/a/b?x=1&amp;y=2&amp;y=3&amp;y=4&#39; }
+</code></pre>
 <p>可以看到url的信息如端口号、域名、query参数等都被解析出来了。</p>
 <p>如果需要将query参数转为对象，则可以为url.parse函数的第二个参数传true，如<code>console.log(url.parse(str, true))</code>，打印结果如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Url &#123;</span><br><span class="line">  protocol: <span class="string">'https:'</span>,</span><br><span class="line">  slashes: <span class="literal">true</span>,</span><br><span class="line">  auth: <span class="literal">null</span>,</span><br><span class="line">  host: <span class="string">'www.google.com:8080'</span>,</span><br><span class="line">  port: <span class="string">'8080'</span>,</span><br><span class="line">  hostname: <span class="string">'www.google.com'</span>,</span><br><span class="line">  hash: <span class="literal">null</span>,</span><br><span class="line">  search: <span class="string">'?x=1&amp;y=2&amp;y=3&amp;y=4'</span>,</span><br><span class="line">  query: [<span class="built_in">Object</span>: <span class="literal">null</span> prototype] &#123; <span class="attr">x</span>: <span class="string">'1'</span>, <span class="attr">y</span>: [ <span class="string">'2'</span>, <span class="string">'3'</span>, <span class="string">'4'</span> ] &#125;,</span><br><span class="line">  pathname: <span class="string">'/a/b'</span>,</span><br><span class="line">  path: <span class="string">'/a/b?x=1&amp;y=2&amp;y=3&amp;y=4'</span>,</span><br><span class="line">  href: <span class="string">'https://www.google.com:8080/a/b?x=1&amp;y=2&amp;y=3&amp;y=4'</span> &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">Url {
+  protocol: &#39;https:&#39;,
+  slashes: true,
+  auth: null,
+  host: &#39;www.google.com:8080&#39;,
+  port: &#39;8080&#39;,
+  hostname: &#39;www.google.com&#39;,
+  hash: null,
+  search: &#39;?x=1&amp;y=2&amp;y=3&amp;y=4&#39;,
+  query: [Object: null prototype] { x: &#39;1&#39;, y: [ &#39;2&#39;, &#39;3&#39;, &#39;4&#39; ] },
+  pathname: &#39;/a/b&#39;,
+  path: &#39;/a/b?x=1&amp;y=2&amp;y=3&amp;y=4&#39;,
+  href: &#39;https://www.google.com:8080/a/b?x=1&amp;y=2&amp;y=3&amp;y=4&#39; }
+</code></pre>
 <p>同时可以看到y=2&amp;y=3&amp;y=4参数被解析为了y: [ ‘2’, ‘3’, ‘4’ ]。</p>
 <h3 id="new-URL"><a href="#new-URL" class="headerlink" title="new URL()"></a>new URL()</h3><p>除了用<code>url.parse</code>方法解析url，还可以通过构造函数URL，创建一个实例，其中带有解析后的数据。</p>
 <p>实例有一个toString方法，可以将实例解析为字符串url。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; URL &#125; = <span class="built_in">require</span>(<span class="string">'url'</span>)</span><br><span class="line"><span class="keyword">const</span> urlObj = <span class="keyword">new</span> URL(str)</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(urlObj)</span><br><span class="line"><span class="built_in">console</span>.log(urlObj.toString())</span><br></pre></td></tr></table></figure>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">URL &#123;</span><br><span class="line">  href: <span class="string">'https://www.google.com:8080/a/b?x=1&amp;y=2&amp;y=3&amp;y=4'</span>,</span><br><span class="line">  origin: <span class="string">'https://www.google.com:8080'</span>,</span><br><span class="line">  protocol: <span class="string">'https:'</span>,</span><br><span class="line">  username: <span class="string">''</span>,</span><br><span class="line">  password: <span class="string">''</span>,</span><br><span class="line">  host: <span class="string">'www.google.com:8080'</span>,</span><br><span class="line">  hostname: <span class="string">'www.google.com'</span>,</span><br><span class="line">  port: <span class="string">'8080'</span>,</span><br><span class="line">  pathname: <span class="string">'/a/b'</span>,</span><br><span class="line">  search: <span class="string">'?x=1&amp;y=2&amp;y=3&amp;y=4'</span>,</span><br><span class="line">  searchParams:</span><br><span class="line">   URLSearchParams &#123; <span class="string">'x'</span> =&gt; <span class="string">'1'</span>, <span class="string">'y'</span> =&gt; <span class="string">'2'</span>, <span class="string">'y'</span> =&gt; <span class="string">'3'</span>, <span class="string">'y'</span> =&gt; <span class="string">'4'</span> &#125;,</span><br><span class="line">  hash: <span class="string">''</span> &#125;</span><br><span class="line">  </span><br><span class="line">https:<span class="comment">//www.google.com:8080/a/b?x=1&amp;y=2&amp;y=3&amp;y=4	// toString方法解析出的url</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">const { URL } = require(&#39;url&#39;)
+const urlObj = new URL(str)
+
+console.log(urlObj)
+console.log(urlObj.toString())
+</code></pre>
+<pre><code class="js">URL {
+  href: &#39;https://www.google.com:8080/a/b?x=1&amp;y=2&amp;y=3&amp;y=4&#39;,
+  origin: &#39;https://www.google.com:8080&#39;,
+  protocol: &#39;https:&#39;,
+  username: &#39;&#39;,
+  password: &#39;&#39;,
+  host: &#39;www.google.com:8080&#39;,
+  hostname: &#39;www.google.com&#39;,
+  port: &#39;8080&#39;,
+  pathname: &#39;/a/b&#39;,
+  search: &#39;?x=1&amp;y=2&amp;y=3&amp;y=4&#39;,
+  searchParams:
+   URLSearchParams { &#39;x&#39; =&gt; &#39;1&#39;, &#39;y&#39; =&gt; &#39;2&#39;, &#39;y&#39; =&gt; &#39;3&#39;, &#39;y&#39; =&gt; &#39;4&#39; },
+  hash: &#39;&#39; }
+
+https://www.google.com:8080/a/b?x=1&amp;y=2&amp;y=3&amp;y=4    // toString方法解析出的url
+</code></pre>
 <h2 id="querystring模块"><a href="#querystring模块" class="headerlink" title="querystring模块"></a>querystring模块</h2><p>querystring用来对url中的query字符串进行解析，常用的方法有<code>querystring.parse</code>和<code>querystring.stringify</code>。</p>
 <h3 id="querystring-parse"><a href="#querystring-parse" class="headerlink" title="querystring.parse"></a>querystring.parse</h3><p>querystring.parse方法用于解析URL 查询字符串。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> querystring = <span class="built_in">require</span>(<span class="string">'querystring'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(querystring.parse(<span class="string">'foo=bar&amp;abc=xyz&amp;abc=123'</span>))</span><br><span class="line"><span class="comment">//&#123; foo: 'bar', abc: [ 'xyz', '123' ] &#125;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">const querystring = require(&#39;querystring&#39;)
+
+console.log(querystring.parse(&#39;foo=bar&amp;abc=xyz&amp;abc=123&#39;))
+//{ foo: &#39;bar&#39;, abc: [ &#39;xyz&#39;, &#39;123&#39; ] }
+</code></pre>
 <h3 id="querystring-stringify"><a href="#querystring-stringify" class="headerlink" title="querystring.stringify"></a>querystring.stringify</h3><p>querystring.stringify用于将对象转换为URL查询字符串。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(querystring.stringify(&#123; <span class="attr">foo</span>: <span class="string">'bar'</span>, <span class="attr">baz</span>: [<span class="string">'qux'</span>, <span class="string">'quux'</span>], <span class="attr">corge</span>: <span class="string">''</span> &#125;))</span><br><span class="line"></span><br><span class="line"><span class="comment">// foo=bar&amp;baz=qux&amp;baz=quux&amp;corge=</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">console.log(querystring.stringify({ foo: &#39;bar&#39;, baz: [&#39;qux&#39;, &#39;quux&#39;], corge: &#39;&#39; }))
+
+// foo=bar&amp;baz=qux&amp;baz=quux&amp;corge=
+</code></pre>
 <h2 id="net模块"><a href="#net模块" class="headerlink" title="net模块"></a>net模块</h2><p>net 模块用于创建基于流的 TCP 或 IPC 的服务器（net.createServer()）与客户端（net.createConnection()）。</p>
 <p>net模块是专门用于网络通信的模块，若当前的数据交互不通过HTTP协议，就可以使用net模块，如<code>WebSocket</code>。</p>
 <p>HTTP协议本质上是以文本形式传输数据，它的传输数据量较大，而且它的传输需要二进制和文本之间进行转换和解析。</p>
@@ -252,7 +396,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

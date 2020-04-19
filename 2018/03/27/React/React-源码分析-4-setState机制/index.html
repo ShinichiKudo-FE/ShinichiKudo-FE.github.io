@@ -99,13 +99,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    35k
+                    12k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    32 mins.
+                    11 mins.
                 </span>
                 
                 
@@ -141,33 +141,279 @@
         <div class="content markdown animated fadeIn">
             <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>React作为一门前端框架，虽然只是focus在MVVM中的View部分，但还是实现了View和model的绑定。修改数据的同时，可以实现View的刷新。这大大简化了我们的逻辑，只用关心数据流的变化，同时减少了代码量，使得后期维护也更加方便。这个特性则要归功于setState()方法。React中利用队列机制来管理state，避免了很多重复的View刷新。下面我们来从源码角度探寻下setState机制。</p>
 <h1 id="setState和replaceState"><a href="#setState和replaceState" class="headerlink" title="setState和replaceState"></a>setState和replaceState</h1><p>我们都知道setState是以修改和新增的方式改变state的，不会改变没有涉及到的state。而replaceState则用新的state完全替换掉老state。比如</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.state = &#123;</span><br><span class="line">  title: <span class="string">"example"</span>,</span><br><span class="line">  desc: <span class="string">"this is an example for react"</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">setState(&#123;</span><br><span class="line">  title: <span class="string">"new example"</span></span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"setState: "</span> + <span class="built_in">JSON</span>.stringify(<span class="keyword">this</span>.state));    <span class="comment">// 1 </span></span><br><span class="line"></span><br><span class="line">replaceState(&#123;</span><br><span class="line">  title: <span class="string">"new example"</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"replaceState: "</span> + <span class="built_in">JSON</span>.stringify(<span class="keyword">this</span>.state));    <span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
-<p>打印如下:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">setState: &#123;<span class="string">"title"</span>:<span class="string">"new example"</span>,<span class="string">"desc"</span>:<span class="string">"this is an example for react"</span>&#125;</span><br><span class="line">replaceState: &#123;<span class="string">"title"</span>:<span class="string">"new example"</span>&#125;</span><br></pre></td></tr></table></figure><br><a id="more"></a><br>可见，setState不会影响没有涉及到的state，而replaceState则是完完全全的替换。下面让我们进入源码来探寻究竟吧。</p>
-<h2 id="setState"><a href="#setState" class="headerlink" title="setState"></a>setState</h2><p>setState方法入口如下<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">ReactComponent.prototype.setState = <span class="function"><span class="keyword">function</span> (<span class="params">partialState, callback</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 将setState事务放入队列中</span></span><br><span class="line">  <span class="keyword">this</span>.updater.enqueueSetState(<span class="keyword">this</span>, partialState);</span><br><span class="line">  <span class="keyword">if</span> (callback) &#123;</span><br><span class="line">    <span class="keyword">this</span>.updater.enqueueCallback(<span class="keyword">this</span>, callback, <span class="string">'setState'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<pre><code class="javascript">this.state = {
+  title: &quot;example&quot;,
+  desc: &quot;this is an example for react&quot;
+};
+
+setState({
+  title: &quot;new example&quot;
+});
+console.log(&quot;setState: &quot; + JSON.stringify(this.state));    // 1 
+
+replaceState({
+  title: &quot;new example&quot;
+})
+console.log(&quot;replaceState: &quot; + JSON.stringify(this.state));    // 2
+
+</code></pre>
+<p>打印如下:</p>
+<pre><code class="javascript">setState: {&quot;title&quot;:&quot;new example&quot;,&quot;desc&quot;:&quot;this is an example for react&quot;}
+replaceState: {&quot;title&quot;:&quot;new example&quot;}
+</code></pre>
+<a id="more"></a>
+<p>可见，setState不会影响没有涉及到的state，而replaceState则是完完全全的替换。下面让我们进入源码来探寻究竟吧。</p>
+<h2 id="setState"><a href="#setState" class="headerlink" title="setState"></a>setState</h2><p>setState方法入口如下</p>
+<pre><code class="javascript">
+ReactComponent.prototype.setState = function (partialState, callback) {
+  // 将setState事务放入队列中
+  this.updater.enqueueSetState(this, partialState);
+  if (callback) {
+    this.updater.enqueueCallback(this, callback, &#39;setState&#39;);
+  }
+};
+</code></pre>
 <p>取名为partialState，有部分state的含义，可见只是影响涉及到的state，不会伤及无辜。enqueueSetState是state队列管理的入口方法，比较重要，我们之后再接着分析。</p>
-<h2 id="replaceState"><a href="#replaceState" class="headerlink" title="replaceState"></a>replaceState</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">replaceState: <span class="function"><span class="keyword">function</span> (<span class="params">newState, callback</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.updater.enqueueReplaceState(<span class="keyword">this</span>, newState);</span><br><span class="line">  <span class="keyword">if</span> (callback) &#123;</span><br><span class="line">    <span class="keyword">this</span>.updater.enqueueCallback(<span class="keyword">this</span>, callback, <span class="string">'replaceState'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<h2 id="replaceState"><a href="#replaceState" class="headerlink" title="replaceState"></a>replaceState</h2><pre><code class="javascript">replaceState: function (newState, callback) {
+  this.updater.enqueueReplaceState(this, newState);
+  if (callback) {
+    this.updater.enqueueCallback(this, callback, &#39;replaceState&#39;);
+  }
+},
+</code></pre>
 <p>replaceState中取名为newState，有完全替换的含义。同样也是以队列的形式来管理的。</p>
-<h1 id="equeueSetState"><a href="#equeueSetState" class="headerlink" title="equeueSetState"></a>equeueSetState</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">enqueueSetState: <span class="function"><span class="keyword">function</span> (<span class="params">publicInstance, partialState</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 先获取ReactComponent组件对象</span></span><br><span class="line">    <span class="keyword">var</span> internalInstance = getInternalInstanceReadyForUpdate(publicInstance, <span class="string">'setState'</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!internalInstance) &#123;</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果_pendingStateQueue为空,则创建它。可以发现队列是数组形式实现的</span></span><br><span class="line">    <span class="keyword">var</span> queue = internalInstance._pendingStateQueue || (internalInstance._pendingStateQueue = []);</span><br><span class="line">    queue.push(partialState);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将要更新的ReactComponent放入数组中</span></span><br><span class="line">    enqueueUpdate(internalInstance);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="equeueSetState"><a href="#equeueSetState" class="headerlink" title="equeueSetState"></a>equeueSetState</h1><pre><code class="javascript">enqueueSetState: function (publicInstance, partialState) {
+    // 先获取ReactComponent组件对象
+    var internalInstance = getInternalInstanceReadyForUpdate(publicInstance, &#39;setState&#39;);
+
+    if (!internalInstance) {
+      return;
+    }
+
+    // 如果_pendingStateQueue为空,则创建它。可以发现队列是数组形式实现的
+    var queue = internalInstance._pendingStateQueue || (internalInstance._pendingStateQueue = []);
+    queue.push(partialState);
+
+    // 将要更新的ReactComponent放入数组中
+    enqueueUpdate(internalInstance);
+}
+</code></pre>
 <p>其中getInternalInstanceReadyForUpdate源码如下，解释都在代码注释中</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getInternalInstanceReadyForUpdate</span>(<span class="params">publicInstance, callerName</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 从map取出ReactComponent组件,还记得mountComponent时把ReactElement作为key，将ReactComponent存入了map中了吧，ReactComponent是React组件的核心，包含各种状态，数据和操作方法。而ReactElement则仅仅是一个数据类。</span></span><br><span class="line">  <span class="keyword">var</span> internalInstance = ReactInstanceMap.get(publicInstance);</span><br><span class="line">  <span class="keyword">if</span> (!internalInstance) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> internalInstance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>enqueueUpdate源码如下<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">enqueueUpdate</span>(<span class="params">component</span>) </span>&#123;</span><br><span class="line">  ensureInjected();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 如果不是正处于创建或更新组件阶段,则处理update事务</span></span><br><span class="line">  <span class="keyword">if</span> (!batchingStrategy.isBatchingUpdates) &#123;</span><br><span class="line">    batchingStrategy.batchedUpdates(enqueueUpdate, component);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 如果正在创建或更新组件,则暂且先不处理update,只是将组件放在dirtyComponents数组中</span></span><br><span class="line">  dirtyComponents.push(component);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>enqueueUpdate包含了React避免重复render的逻辑。mountComponent和updateComponent方法在执行的最开始，会调用到batchedUpdates进行批处理更新，此时会将isBatchingUpdates设置为true，也就是将状态标记为现在正处于更新阶段了。之后React以事务的方式处理组件update，事务处理完后会调用wrapper.close(), 而TRANSACTION_WRAPPERS中包含了RESET_BATCHED_UPDATES这个wrapper，故最终会调用RESET_BATCHED_UPDATES.close(), 它最终会将isBatchingUpdates设置为false。这个过程比较麻烦，想更清晰的了解的话，建议自行分析源码。</p>
+<pre><code class="javascript">
+function getInternalInstanceReadyForUpdate(publicInstance, callerName) {
+  // 从map取出ReactComponent组件,还记得mountComponent时把ReactElement作为key，将ReactComponent存入了map中了吧，ReactComponent是React组件的核心，包含各种状态，数据和操作方法。而ReactElement则仅仅是一个数据类。
+  var internalInstance = ReactInstanceMap.get(publicInstance);
+  if (!internalInstance) {
+    return null;
+  }
+
+  return internalInstance;
+}
+</code></pre>
+<p>enqueueUpdate源码如下</p>
+<pre><code class="javascript">function enqueueUpdate(component) {
+  ensureInjected();
+
+  // 如果不是正处于创建或更新组件阶段,则处理update事务
+  if (!batchingStrategy.isBatchingUpdates) {
+    batchingStrategy.batchedUpdates(enqueueUpdate, component);
+    return;
+  }
+
+  // 如果正在创建或更新组件,则暂且先不处理update,只是将组件放在dirtyComponents数组中
+  dirtyComponents.push(component);
+}
+
+</code></pre>
+<p>enqueueUpdate包含了React避免重复render的逻辑。mountComponent和updateComponent方法在执行的最开始，会调用到batchedUpdates进行批处理更新，此时会将isBatchingUpdates设置为true，也就是将状态标记为现在正处于更新阶段了。之后React以事务的方式处理组件update，事务处理完后会调用wrapper.close(), 而TRANSACTION_WRAPPERS中包含了RESET_BATCHED_UPDATES这个wrapper，故最终会调用RESET_BATCHED_UPDATES.close(), 它最终会将isBatchingUpdates设置为false。这个过程比较麻烦，想更清晰的了解的话，建议自行分析源码。</p>
 <p>故getInitialState，componentWillMount， render，componentWillUpdate 中setState都不会引起updateComponent。但在componentDidMount和componentDidUpdate中则会。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">batchedUpdates: <span class="function"><span class="keyword">function</span> (<span class="params">callback, a, b, c, d, e</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> alreadyBatchingUpdates = ReactDefaultBatchingStrategy.isBatchingUpdates;</span><br><span class="line">  <span class="comment">// 批处理最开始时，将isBatchingUpdates设为true，表明正在更新</span></span><br><span class="line">  ReactDefaultBatchingStrategy.isBatchingUpdates = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// The code is written this way to avoid extra allocations</span></span><br><span class="line">  <span class="keyword">if</span> (alreadyBatchingUpdates) &#123;</span><br><span class="line">    callback(a, b, c, d, e);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 以事务的方式处理updates，后面详细分析transaction</span></span><br><span class="line">    transaction.perform(callback, <span class="literal">null</span>, a, b, c, d, e);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> RESET_BATCHED_UPDATES = &#123;</span><br><span class="line">  initialize: emptyFunction,</span><br><span class="line">  close: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 事务批更新处理结束时，将isBatchingUpdates设为了false</span></span><br><span class="line">    ReactDefaultBatchingStrategy.isBatchingUpdates = <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> TRANSACTION_WRAPPERS = [FLUSH_BATCHED_UPDATES, RESET_BATCHED_UPDATES];</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">batchedUpdates: function (callback, a, b, c, d, e) {
+  var alreadyBatchingUpdates = ReactDefaultBatchingStrategy.isBatchingUpdates;
+  // 批处理最开始时，将isBatchingUpdates设为true，表明正在更新
+  ReactDefaultBatchingStrategy.isBatchingUpdates = true;
+
+  // The code is written this way to avoid extra allocations
+  if (alreadyBatchingUpdates) {
+    callback(a, b, c, d, e);
+  } else {
+    // 以事务的方式处理updates，后面详细分析transaction
+    transaction.perform(callback, null, a, b, c, d, e);
+  }
+}
+
+var RESET_BATCHED_UPDATES = {
+  initialize: emptyFunction,
+  close: function () {
+    // 事务批更新处理结束时，将isBatchingUpdates设为了false
+    ReactDefaultBatchingStrategy.isBatchingUpdates = false;
+  }
+};
+var TRANSACTION_WRAPPERS = [FLUSH_BATCHED_UPDATES, RESET_BATCHED_UPDATES];
+
+</code></pre>
 <h1 id="事务transaction"><a href="#事务transaction" class="headerlink" title="事务transaction"></a>事务transaction</h1><p>事务通过wrapper进行封装。一个wrapper包含一对initialize和close方法。比如RESET_BATCHED_UPDATES</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> RESET_BATCHED_UPDATES = &#123;</span><br><span class="line">  <span class="comment">// 初始化调用</span></span><br><span class="line">  initialize: emptyFunction,</span><br><span class="line">  <span class="comment">// 事务执行完成，close时调用</span></span><br><span class="line">  close: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    ReactDefaultBatchingStrategy.isBatchingUpdates = <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">var RESET_BATCHED_UPDATES = {
+  // 初始化调用
+  initialize: emptyFunction,
+  // 事务执行完成，close时调用
+  close: function () {
+    ReactDefaultBatchingStrategy.isBatchingUpdates = false;
+  }
+};
+</code></pre>
 <p>transcation被包装在wrapper中，比如</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> TRANSACTION_WRAPPERS = [FLUSH_BATCHED_UPDATES, RESET_BATCHED_UPDATES];</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">var TRANSACTION_WRAPPERS = [FLUSH_BATCHED_UPDATES, RESET_BATCHED_UPDATES];
+</code></pre>
 <p>transaction是通过transaction.perform(callback, args…)方法进入的，它会先调用注册好的wrapper中的initialize方法，然后执行perform方法中的callback，最后再执行close方法。</p>
 <p>下面分析transaction.perform(callback, args…)</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line">perform: <span class="function"><span class="keyword">function</span> (<span class="params">method, scope, a, b, c, d, e, f</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> errorThrown;</span><br><span class="line">    <span class="keyword">var</span> ret;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">this</span>._isInTransaction = <span class="literal">true</span>;</span><br><span class="line">      errorThrown = <span class="literal">true</span>;</span><br><span class="line">      <span class="comment">// 先运行所有wrapper中的initialize方法</span></span><br><span class="line">      <span class="keyword">this</span>.initializeAll(<span class="number">0</span>);</span><br><span class="line">      </span><br><span class="line">      <span class="comment">// 再执行perform方法传入的callback</span></span><br><span class="line">      ret = method.call(scope, a, b, c, d, e, f);</span><br><span class="line">      errorThrown = <span class="literal">false</span>;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (errorThrown) &#123;</span><br><span class="line">          <span class="comment">// 最后运行wrapper中的close方法</span></span><br><span class="line">          <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">this</span>.closeAll(<span class="number">0</span>);</span><br><span class="line">          &#125; <span class="keyword">catch</span> (err) &#123;&#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="comment">// 最后运行wrapper中的close方法</span></span><br><span class="line">          <span class="keyword">this</span>.closeAll(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">this</span>._isInTransaction = <span class="literal">false</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">  &#125;,</span><br><span class="line">    </span><br><span class="line">  initializeAll: <span class="function"><span class="keyword">function</span> (<span class="params">startIndex</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> transactionWrappers = <span class="keyword">this</span>.transactionWrappers;</span><br><span class="line">    <span class="comment">// 遍历所有注册的wrapper</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = startIndex; i &lt; transactionWrappers.length; i++) &#123;</span><br><span class="line">      <span class="keyword">var</span> wrapper = transactionWrappers[i];</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">this</span>.wrapperInitData[i] = Transaction.OBSERVED_ERROR;</span><br><span class="line">        <span class="comment">// 调用wrapper的initialize方法</span></span><br><span class="line">        <span class="keyword">this</span>.wrapperInitData[i] = wrapper.initialize ? wrapper.initialize.call(<span class="keyword">this</span>) : <span class="literal">null</span>;</span><br><span class="line">      &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.wrapperInitData[i] === Transaction.OBSERVED_ERROR) &#123;</span><br><span class="line">          <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">this</span>.initializeAll(i + <span class="number">1</span>);</span><br><span class="line">          &#125; <span class="keyword">catch</span> (err) &#123;&#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">    </span><br><span class="line">  closeAll: <span class="function"><span class="keyword">function</span> (<span class="params">startIndex</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> transactionWrappers = <span class="keyword">this</span>.transactionWrappers;</span><br><span class="line">    <span class="comment">// 遍历所有wrapper</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = startIndex; i &lt; transactionWrappers.length; i++) &#123;</span><br><span class="line">      <span class="keyword">var</span> wrapper = transactionWrappers[i];</span><br><span class="line">      <span class="keyword">var</span> initData = <span class="keyword">this</span>.wrapperInitData[i];</span><br><span class="line">      <span class="keyword">var</span> errorThrown;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        errorThrown = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span> (initData !== Transaction.OBSERVED_ERROR &amp;&amp; wrapper.close) &#123;</span><br><span class="line">          <span class="comment">// 调用wrapper的close方法，如果有的话</span></span><br><span class="line">          wrapper.close.call(<span class="keyword">this</span>, initData);</span><br><span class="line">        &#125;</span><br><span class="line">        errorThrown = <span class="literal">false</span>;</span><br><span class="line">      &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (errorThrown) &#123;</span><br><span class="line">          <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">this</span>.closeAll(i + <span class="number">1</span>);</span><br><span class="line">          &#125; <span class="keyword">catch</span> (e) &#123;&#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">this</span>.wrapperInitData.length = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">perform: function (method, scope, a, b, c, d, e, f) {
+    var errorThrown;
+    var ret;
+    try {
+      this._isInTransaction = true;
+      errorThrown = true;
+      // 先运行所有wrapper中的initialize方法
+      this.initializeAll(0);
+
+      // 再执行perform方法传入的callback
+      ret = method.call(scope, a, b, c, d, e, f);
+      errorThrown = false;
+    } finally {
+      try {
+        if (errorThrown) {
+          // 最后运行wrapper中的close方法
+          try {
+            this.closeAll(0);
+          } catch (err) {}
+        } else {
+          // 最后运行wrapper中的close方法
+          this.closeAll(0);
+        }
+      } finally {
+        this._isInTransaction = false;
+      }
+    }
+    return ret;
+  },
+
+  initializeAll: function (startIndex) {
+    var transactionWrappers = this.transactionWrappers;
+    // 遍历所有注册的wrapper
+    for (var i = startIndex; i &lt; transactionWrappers.length; i++) {
+      var wrapper = transactionWrappers[i];
+      try {
+        this.wrapperInitData[i] = Transaction.OBSERVED_ERROR;
+        // 调用wrapper的initialize方法
+        this.wrapperInitData[i] = wrapper.initialize ? wrapper.initialize.call(this) : null;
+      } finally {
+        if (this.wrapperInitData[i] === Transaction.OBSERVED_ERROR) {
+          try {
+            this.initializeAll(i + 1);
+          } catch (err) {}
+        }
+      }
+    }
+  },
+
+  closeAll: function (startIndex) {
+    var transactionWrappers = this.transactionWrappers;
+    // 遍历所有wrapper
+    for (var i = startIndex; i &lt; transactionWrappers.length; i++) {
+      var wrapper = transactionWrappers[i];
+      var initData = this.wrapperInitData[i];
+      var errorThrown;
+      try {
+        errorThrown = true;
+        if (initData !== Transaction.OBSERVED_ERROR &amp;&amp; wrapper.close) {
+          // 调用wrapper的close方法，如果有的话
+          wrapper.close.call(this, initData);
+        }
+        errorThrown = false;
+      } finally {
+        if (errorThrown) {
+          try {
+            this.closeAll(i + 1);
+          } catch (e) {}
+        }
+      }
+    }
+    this.wrapperInitData.length = 0;
+</code></pre>
 <h1 id="runBatchedUpdates更新组件"><a href="#runBatchedUpdates更新组件" class="headerlink" title="runBatchedUpdates更新组件"></a>runBatchedUpdates更新组件</h1><p>前面分析到enqueueUpdate中调用transaction.perform(callback, args…)后，小伙伴们肯定会发现，callback还是enqueueUpdate方法啊，那岂不是死循环了？不是说好的setState会调用updateComponent，从而自动刷新View的吗？别急，我们还是要先从transaction事务说起。</p>
-<p>我们的wrapper中注册了两个wrapper，如下<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> TRANSACTION_WRAPPERS = [FLUSH_BATCHED_UPDATES, RESET_BATCHED_UPDATES];</span><br></pre></td></tr></table></figure></p>
+<p>我们的wrapper中注册了两个wrapper，如下</p>
+<pre><code class="javascript">var TRANSACTION_WRAPPERS = [FLUSH_BATCHED_UPDATES, RESET_BATCHED_UPDATES];
+</code></pre>
 <p>RESET_BATCHED_UPDATES用来管理isBatchingUpdates状态，我们前面在分析setState是否立即生效时已经讲解过了。那FLUSH_BATCHED_UPDATES用来干嘛呢？</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> FLUSH_BATCHED_UPDATES = &#123;</span><br><span class="line">  initialize: emptyFunction,</span><br><span class="line">  close: ReactUpdates.flushBatchedUpdates.bind(ReactUpdates)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> flushBatchedUpdates = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 循环遍历处理完所有dirtyComponents</span></span><br><span class="line">  <span class="keyword">while</span> (dirtyComponents.length || asapEnqueued) &#123;</span><br><span class="line">    <span class="keyword">if</span> (dirtyComponents.length) &#123;</span><br><span class="line">      <span class="keyword">var</span> transaction = ReactUpdatesFlushTransaction.getPooled();</span><br><span class="line">      <span class="comment">// close前执行完runBatchedUpdates方法，这是关键</span></span><br><span class="line">      transaction.perform(runBatchedUpdates, <span class="literal">null</span>, transaction);</span><br><span class="line">      ReactUpdatesFlushTransaction.release(transaction);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (asapEnqueued) &#123;</span><br><span class="line">      asapEnqueued = <span class="literal">false</span>;</span><br><span class="line">      <span class="keyword">var</span> queue = asapCallbackQueue;</span><br><span class="line">      asapCallbackQueue = CallbackQueue.getPooled();</span><br><span class="line">      queue.notifyAll();</span><br><span class="line">      CallbackQueue.release(queue);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">var FLUSH_BATCHED_UPDATES = {
+  initialize: emptyFunction,
+  close: ReactUpdates.flushBatchedUpdates.bind(ReactUpdates)
+};
+
+var flushBatchedUpdates = function () {
+  // 循环遍历处理完所有dirtyComponents
+  while (dirtyComponents.length || asapEnqueued) {
+    if (dirtyComponents.length) {
+      var transaction = ReactUpdatesFlushTransaction.getPooled();
+      // close前执行完runBatchedUpdates方法，这是关键
+      transaction.perform(runBatchedUpdates, null, transaction);
+      ReactUpdatesFlushTransaction.release(transaction);
+    }
+
+    if (asapEnqueued) {
+      asapEnqueued = false;
+      var queue = asapCallbackQueue;
+      asapCallbackQueue = CallbackQueue.getPooled();
+      queue.notifyAll();
+      CallbackQueue.release(queue);
+    }
+  }
+};
+</code></pre>
 <p>FLUSH_BATCHED_UPDATES会在一个transaction的close阶段运行runBatchedUpdates，从而执行update。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">runBatchedUpdates</span>(<span class="params">transaction</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> len = transaction.dirtyComponentsLength;</span><br><span class="line">  dirtyComponents.sort(mountOrderComparator);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">    <span class="comment">// dirtyComponents中取出一个component</span></span><br><span class="line">    <span class="keyword">var</span> component = dirtyComponents[i];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 取出dirtyComponent中的未执行的callback,下面就准备执行它了</span></span><br><span class="line">    <span class="keyword">var</span> callbacks = component._pendingCallbacks;</span><br><span class="line">    component._pendingCallbacks = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> markerName;</span><br><span class="line">    <span class="keyword">if</span> (ReactFeatureFlags.logTopLevelRenders) &#123;</span><br><span class="line">      <span class="keyword">var</span> namedComponent = component;</span><br><span class="line">      <span class="keyword">if</span> (component._currentElement.props === component._renderedComponent._currentElement) &#123;</span><br><span class="line">        namedComponent = component._renderedComponent;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 执行updateComponent</span></span><br><span class="line">    ReactReconciler.performUpdateIfNecessary(component, transaction.reconcileTransaction);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 执行dirtyComponent中之前未执行的callback</span></span><br><span class="line">    <span class="keyword">if</span> (callbacks) &#123;</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="number">0</span>; j &lt; callbacks.length; j++) &#123;</span><br><span class="line">        transaction.callbackQueue.enqueue(callbacks[j], component.getPublicInstance());</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">function runBatchedUpdates(transaction) {
+  var len = transaction.dirtyComponentsLength;
+  dirtyComponents.sort(mountOrderComparator);
+
+  for (var i = 0; i &lt; len; i++) {
+    // dirtyComponents中取出一个component
+    var component = dirtyComponents[i];
+
+    // 取出dirtyComponent中的未执行的callback,下面就准备执行它了
+    var callbacks = component._pendingCallbacks;
+    component._pendingCallbacks = null;
+
+    var markerName;
+    if (ReactFeatureFlags.logTopLevelRenders) {
+      var namedComponent = component;
+      if (component._currentElement.props === component._renderedComponent._currentElement) {
+        namedComponent = component._renderedComponent;
+      }
+    }
+    // 执行updateComponent
+    ReactReconciler.performUpdateIfNecessary(component, transaction.reconcileTransaction);
+
+    // 执行dirtyComponent中之前未执行的callback
+    if (callbacks) {
+      for (var j = 0; j &lt; callbacks.length; j++) {
+        transaction.callbackQueue.enqueue(callbacks[j], component.getPublicInstance());
+      }
+    }
+  }
+}
+</code></pre>
 <p>runBatchedUpdates循环遍历dirtyComponents数组，主要干两件事。首先执行performUpdateIfNecessary来刷新组件的view，然后执行之前阻塞的callback。下面来看performUpdateIfNecessary。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">performUpdateIfNecessary: <span class="function"><span class="keyword">function</span> (<span class="params">transaction</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>._pendingElement != <span class="literal">null</span>) &#123;</span><br><span class="line">      <span class="comment">// receiveComponent会最终调用到updateComponent，从而刷新View</span></span><br><span class="line">      ReactReconciler.receiveComponent(<span class="keyword">this</span>, <span class="keyword">this</span>._pendingElement, transaction, <span class="keyword">this</span>._context);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>._pendingStateQueue !== <span class="literal">null</span> || <span class="keyword">this</span>._pendingForceUpdate) &#123;</span><br><span class="line">      <span class="comment">// 执行updateComponent，从而刷新View。这个流程在React生命周期中讲解过</span></span><br><span class="line">      <span class="keyword">this</span>.updateComponent(transaction, <span class="keyword">this</span>._currentElement, <span class="keyword">this</span>._currentElement, <span class="keyword">this</span>._context, <span class="keyword">this</span>._context);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">performUpdateIfNecessary: function (transaction) {
+    if (this._pendingElement != null) {
+      // receiveComponent会最终调用到updateComponent，从而刷新View
+      ReactReconciler.receiveComponent(this, this._pendingElement, transaction, this._context);
+    }
+
+    if (this._pendingStateQueue !== null || this._pendingForceUpdate) {
+      // 执行updateComponent，从而刷新View。这个流程在React生命周期中讲解过
+      this.updateComponent(transaction, this._currentElement, this._currentElement, this._context, this._context);
+    }
+  },
+</code></pre>
 <p>最后惊喜的看到了receiveComponent和updateComponent吧。receiveComponent最后会调用updateComponent，而updateComponent中会执行React组件存在期的生命周期方法，如componentWillReceiveProps， shouldComponentUpdate， componentWillUpdate，render, componentDidUpdate。 从而完成组件更新的整套流程。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>setState流程还是很复杂的，设计也很精巧，避免了重复无谓的刷新组件。它的主要流程如下</p>
 <blockquote>
@@ -227,7 +473,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

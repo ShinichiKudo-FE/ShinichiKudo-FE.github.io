@@ -101,13 +101,13 @@ Props children(required)一个或,">
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    54k
+                    27k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    49 mins.
+                    24 mins.
                 </span>
                 
                 
@@ -143,7 +143,7 @@ Props children(required)一个或,">
         <div class="content markdown animated fadeIn">
             <h1 id="React-router-API接口"><a href="#React-router-API接口" class="headerlink" title="React-router API接口"></a>React-router API接口</h1><p><a href="https://reacttraining.com/react-router/web/example/basic" target="_blank" rel="noopener">demo 地址</a></p>
 <h2 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h2><h3 id="Router"><a href="#Router" class="headerlink" title="Router"></a>Router</h3><p>React Router 的重要组件。它能保持 UI 和 URL 的同步。</p>
-<h4 id="Props-children-required"><a href="#Props-children-required" class="headerlink" title="Props children(required)"></a><strong>Props</strong> <em>children(required)</em></h4><p>一个或多个的 Route 或 PlainRoute。当 history 改变时， <Router> 会匹配出 Route 的一个分支，并且渲染这个分支中配置的组件，渲染时保持父 route 组件嵌套子 route 组件。</p>
+<h4 id="Props-children-required"><a href="#Props-children-required" class="headerlink" title="Props children(required)"></a><strong>Props</strong> <em>children(required)</em></h4><p>一个或多个的 Route 或 PlainRoute。当 history 改变时， <code>&lt;Router&gt;</code> 会匹配出 Route 的一个分支，并且渲染这个分支中配置的组件，渲染时保持父 route 组件嵌套子 route 组件。</p>
 <h5 id="routes"><a href="#routes" class="headerlink" title="routes"></a><strong>routes</strong></h5><p>children 的别名。</p>
 <h5 id="history"><a href="#history" class="headerlink" title="history"></a><strong>history</strong></h5><p>Router 监听的 history 对象，由 history 包提供。<br>关于history的五个函数</p>
 <blockquote>
@@ -176,51 +176,291 @@ Props children(required)一个或,">
 </ul>
 </blockquote>
 <p>当 URL 改变时，需要更新路由的 state 时会被调用。</p>
-<h3 id="Link"><a href="#Link" class="headerlink" title="Link"></a>Link</h3><p>允许用户浏览应用的主要方式。<Link> 以适当的 href 去渲染一个可访问的锚标签。</p>
-<p><Link> 可以知道哪个 route 的链接是激活状态的，并可以自动为该链接添加 activeClassName 或 activeStyle。</p>
+<h3 id="Link"><a href="#Link" class="headerlink" title="Link"></a>Link</h3><p>允许用户浏览应用的主要方式。<code>&lt;Link&gt;</code> 以适当的 href 去渲染一个可访问的锚标签。</p>
+<p><code>&lt;Link&gt;</code> 可以知道哪个 route 的链接是激活状态的，并可以自动为该链接添加 activeClassName 或 activeStyle。</p>
 <a id="more"></a>
 <h4 id="Props"><a href="#Props" class="headerlink" title="Props"></a><strong>Props</strong></h4><h5 id="to"><a href="#to" class="headerlink" title="to"></a><em>to</em></h5><p>跳转链接的路径，如 /users/123。</p>
 <h5 id="query"><a href="#query" class="headerlink" title="query"></a><em>query</em></h5><p>已经转化成字符串的键值对的对象。</p>
-<h5 id="hash"><a href="#hash" class="headerlink" title="hash"></a><em>hash</em></h5><p>URL 的 hash 值，如 #a-hash。</p>
-<font color = "red">注意：React Router 目前还不能管理滚动条的位置，并且不会自动滚动到 hash 对应的元素上。如果需要管理滚动条位置，可以使用 <a href="https://github.com/taion/scroll-behavior" target="_blank" rel="noopener">scroll-behavior</a> 这个库。<br></font>
-
+<h5 id="hash"><a href="#hash" class="headerlink" title="hash"></a><em>hash</em></h5><p>URL 的 hash 值，如 #a-hash。<br><code>&lt;font color = &quot;red&quot;&gt;</code>注意：React Router 目前还不能管理滚动条的位置，并且不会自动滚动到 hash 对应的元素上。如果需要管理滚动条位置，可以使用 <a href="https://github.com/taion/scroll-behavior" target="_blank" rel="noopener">scroll-behavior</a> 这个库。<br><code>&lt;/font&gt;</code></p>
 <h5 id="state"><a href="#state" class="headerlink" title="state"></a><em>state</em></h5><p>保存在 location 中的 state</p>
-<h5 id="activeClassName"><a href="#activeClassName" class="headerlink" title="activeClassName"></a><em>activeClassName</em></h5><p>当某个 route 是激活状态时，<Link> 可以接收传入的 className。失活状态下是默认的 class。</p>
+<h5 id="activeClassName"><a href="#activeClassName" class="headerlink" title="activeClassName"></a><em>activeClassName</em></h5><p>当某个 route 是激活状态时，<code>&lt;Link&gt;</code> 可以接收传入的 className。失活状态下是默认的 class。</p>
 <h5 id="activeStyle"><a href="#activeStyle" class="headerlink" title="activeStyle"></a><em>activeStyle</em></h5><p>当某个 route 是激活状态时，可以将样式添加到链接元素上。</p>
-<h5 id="onClick-e"><a href="#onClick-e" class="headerlink" title="onClick(e)"></a><em>onClick(e)</em></h5><p>自定义点击事件的处理方法。如处理 <a> 标签一样 - 调用 <strong>e.preventDefault()</strong>来防止过度的点击，同时 <strong>e.stopPropagation()</strong>可以阻止冒泡的事件。</p>
-<h5 id="其他"><a href="#其他" class="headerlink" title="其他"></a><em>其他</em></h5><p>你也可以在 <a> 标签上传入一些你想要的 props，如 title，id，className 等等。</p>
-<h5 id="示例"><a href="#示例" class="headerlink" title="示例"></a><strong>示例</strong></h5><p>如 <Route path="/users/:userId" /> 这样的 route：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;Link to=&#123;<span class="string">`/users/<span class="subst">$&#123;user.id&#125;</span>`</span>&#125; activeClassName=<span class="string">"active"</span>&gt;&#123;user.name&#125;&lt;<span class="regexp">/Link&gt;</span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ 变成它们其中一个依赖在 History 上，当这个 route 是</span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ 激活状态的</span></span><br><span class="line"><span class="regexp">&lt;a href="/u</span>sers/<span class="number">123</span><span class="string">" class="</span>active<span class="string">"&gt;Michael&lt;/a&gt;</span></span><br><span class="line">&lt;a href="#/users/123"&gt;Michael&lt;/a&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 修改 activeClassName</span></span><br><span class="line">&lt;Link to=&#123;<span class="string">`/users/<span class="subst">$&#123;user.id&#125;</span>`</span>&#125; activeClassName=<span class="string">"current"</span>&gt;&#123;user.name&#125;&lt;<span class="regexp">/Link&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ 当链接激活时，修改它的样式</span></span><br><span class="line"><span class="regexp">&lt;Link to="/u</span>sers<span class="string">" style=&#123;&#123;color: 'white'&#125;&#125; activeStyle=&#123;&#123;color: 'red'&#125;&#125;&gt;Users&lt;/Link&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h5 id="onClick-e"><a href="#onClick-e" class="headerlink" title="onClick(e)"></a><em>onClick(e)</em></h5><p>自定义点击事件的处理方法。如处理 <code>&lt;a&gt;</code> 标签一样 - 调用 <strong>e.preventDefault()</strong>来防止过度的点击，同时 <strong>e.stopPropagation()</strong>可以阻止冒泡的事件。</p>
+<h5 id="其他"><a href="#其他" class="headerlink" title="其他"></a><em>其他</em></h5><p>你也可以在 <code>&lt;a&gt;</code> 标签上传入一些你想要的 props，如 title，id，className 等等。</p>
+<h5 id="示例"><a href="#示例" class="headerlink" title="示例"></a><strong>示例</strong></h5><p>如 <code>&lt;Route path=&quot;/users/:userId&quot; /&gt;</code> 这样的 route：</p>
+<pre><code class="html">&lt;Link to={`/users/${user.id}`} activeClassName=&quot;active&quot;&gt;{user.name}&lt;/Link&gt;
+// 变成它们其中一个依赖在 History 上，当这个 route 是
+// 激活状态的
+&lt;a href=&quot;/users/123&quot; class=&quot;active&quot;&gt;Michael&lt;/a&gt;
+&lt;a href=&quot;#/users/123&quot;&gt;Michael&lt;/a&gt;
+
+// 修改 activeClassName
+&lt;Link to={`/users/${user.id}`} activeClassName=&quot;current&quot;&gt;{user.name}&lt;/Link&gt;
+
+// 当链接激活时，修改它的样式
+&lt;Link to=&quot;/users&quot; style={{color: 'white'}} activeStyle={{color: 'red'}}&gt;Users&lt;/Link&gt;
+</code></pre>
 <h3 id="IndexLink"><a href="#IndexLink" class="headerlink" title="IndexLink"></a>IndexLink</h3><p>如果链接到根路由/，不要使用Link组件，而要使用IndexLink组件。</p>
-<p>这是因为对于根路由来说，activeStyle和activeClassName会失效，或者说总是生效，因为/会匹配任何子路由。而IndexLink组件会使用路径的精确匹配。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;IndexLink to=<span class="string">"/"</span> activeClassName=<span class="string">"active"</span>&gt;</span><br><span class="line">  Home</span><br><span class="line">&lt;<span class="regexp">/IndexLink&gt;</span></span><br></pre></td></tr></table></figure><br>上面代码中，根路由只会在精确匹配时，才具有activeClassName。</p>
+<p>这是因为对于根路由来说，activeStyle和activeClassName会失效，或者说总是生效，因为/会匹配任何子路由。而IndexLink组件会使用路径的精确匹配。</p>
+<pre><code class="html">&lt;IndexLink to=&quot;/&quot; activeClassName=&quot;active&quot;&gt;
+  Home
+&lt;/IndexLink&gt;
+</code></pre>
+<p>上面代码中，根路由只会在精确匹配时，才具有activeClassName。</p>
 <p>另一种方法是使用Link组件的onlyActiveOnIndex属性，也能达到同样效果。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;Link to=<span class="string">"/"</span> activeClassName=<span class="string">"active"</span> onlyActiveOnIndex=&#123;<span class="literal">true</span>&#125;&gt;</span><br><span class="line">  Home</span><br><span class="line">&lt;<span class="regexp">/Link&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="RoutingContext"><a href="#RoutingContext" class="headerlink" title="RoutingContext"></a>RoutingContext</h3><p>在 context 中给定路由的 state、设置 history 对象和当前的 location，<RoutingContext> 就会去渲染组件树。</p>
+<pre><code class="html">&lt;Link to=&quot;/&quot; activeClassName=&quot;active&quot; onlyActiveOnIndex={true}&gt;
+  Home
+&lt;/Link&gt;
+</code></pre>
+<h3 id="RoutingContext"><a href="#RoutingContext" class="headerlink" title="RoutingContext"></a>RoutingContext</h3><p>在 context 中给定路由的 state、设置 history 对象和当前的 location，<code>&lt;RoutingContext&gt;</code> 就会去渲染组件树。</p>
 <h2 id="组件配置"><a href="#组件配置" class="headerlink" title="组件配置"></a>组件配置</h2><h3 id="route"><a href="#route" class="headerlink" title="route"></a>route</h3><p>Route 是用于声明路由映射到应用程序的组件层。</p>
 <h4 id="Props-1"><a href="#Props-1" class="headerlink" title="Props"></a><strong>Props</strong></h4><h5 id="path"><a href="#path" class="headerlink" title="path"></a><em>path</em></h5><p>URL 中的路径。</p>
 <p>它会组合父 route 的路径，除非它是从 / 开始的， 将它变成一个绝对路径。</p>
 <p>注意：在动态路由中，绝对路径可能不适用于 route 配置中。</p>
 <p>如果它是 undefined，路由会去匹配子 route。</p>
-<p><em>component</em><br>当匹配到 URL 时，单个的组件会被渲染。它可以 被父 route 组件的 this.props.children 渲染。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> routes = (</span><br><span class="line">  &lt;Route component=&#123;App&#125;&gt;</span><br><span class="line">    &lt;Route path=<span class="string">"groups"</span> component=&#123;Groups&#125;/&gt;</span><br><span class="line">    &lt;Route path=<span class="string">"users"</span> component=&#123;Users&#125;/&gt;</span><br><span class="line">  &lt;<span class="regexp">/Route&gt;</span></span><br><span class="line"><span class="regexp">)</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">class App extends React.Component &#123;</span></span><br><span class="line"><span class="regexp">  render () &#123;</span></span><br><span class="line"><span class="regexp">    return (</span></span><br><span class="line"><span class="regexp">      &lt;div&gt;</span></span><br><span class="line"><span class="regexp">        &#123;/</span>* 这会是 &lt;Users&gt; 或 &lt;Groups&gt; *<span class="regexp">/&#125;</span></span><br><span class="line"><span class="regexp">        &#123;this.props.children&#125;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>div&gt;</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h5 id="components"><a href="#components" class="headerlink" title="components"></a><em>components</em></h5><p>Route 可以定义一个或多个已命名的组件，当路径匹配到 URL 时， 它们作为 name:component 对的一个对象去渲染。它们可以被 父 route 组件的 this.props[name] 渲染。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 想想路由外部的 context — 如果你可拔插</span></span><br><span class="line"><span class="comment">// `render` 的部分，你可能需要这么做：</span></span><br><span class="line"><span class="comment">// &lt;App main=&#123;&lt;Users /&gt;&#125; sidebar=&#123;&lt;UsersSidebar /&gt;&#125; /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> routes = (</span><br><span class="line">  &lt;Route component=&#123;App&#125;&gt;</span><br><span class="line">    &lt;Route path=<span class="string">"groups"</span> components=&#123;&#123;<span class="attr">main</span>: Groups, <span class="attr">sidebar</span>: GroupsSidebar&#125;&#125;/&gt;</span><br><span class="line">    &lt;Route path=<span class="string">"users"</span> components=&#123;&#123;<span class="attr">main</span>: Users, <span class="attr">sidebar</span>: UsersSidebar&#125;&#125;&gt;</span><br><span class="line">      &lt;Route path=<span class="string">"users/:userId"</span> component=&#123;Profile&#125;/&gt;</span><br><span class="line">    &lt;<span class="regexp">/Route&gt;</span></span><br><span class="line"><span class="regexp">  &lt;/</span>Route&gt;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; main, sidebar &#125; = <span class="keyword">this</span>.props</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;div className=<span class="string">"Main"</span>&gt;</span><br><span class="line">          &#123;main&#125;</span><br><span class="line">        &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">        &lt;div className="Sidebar"&gt;</span></span><br><span class="line"><span class="regexp">          &#123;sidebar&#125;</span></span><br><span class="line"><span class="regexp">        &lt;/</span>div&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">class Users extends React.Component &#123;</span></span><br><span class="line"><span class="regexp">  render () &#123;</span></span><br><span class="line"><span class="regexp">    return (</span></span><br><span class="line"><span class="regexp">      &lt;div&gt;</span></span><br><span class="line"><span class="regexp">        &#123;/</span>* 当路径是 <span class="string">"/users/123"</span> 是 <span class="string">`children`</span> 会是 &lt;Profile&gt; *<span class="regexp">/&#125;</span></span><br><span class="line"><span class="regexp">        &#123;/</span>* UsersSidebar 也可以获取作为 <span class="keyword">this</span>.props.children 的 &lt;Profile&gt; ，</span><br><span class="line">            所以这有点奇怪，但你可以决定哪一个可以</span><br><span class="line">            继续这种嵌套 *<span class="regexp">/&#125;</span></span><br><span class="line"><span class="regexp">        &#123;this.props.children&#125;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>div&gt;</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><em>component</em><br>当匹配到 URL 时，单个的组件会被渲染。它可以 被父 route 组件的 this.props.children 渲染。</p>
+<pre><code class="javascript">const routes = (
+  &lt;Route component={App}&gt;
+    &lt;Route path=&quot;groups&quot; component={Groups}/&gt;
+    &lt;Route path=&quot;users&quot; component={Users}/&gt;
+  &lt;/Route&gt;
+)
+
+class App extends React.Component {
+  render () {
+    return (
+      &lt;div&gt;
+        {/* 这会是 &lt;Users&gt; 或 &lt;Groups&gt; */}
+        {this.props.children}
+      &lt;/div&gt;
+    )
+  }
+}
+</code></pre>
+<h5 id="components"><a href="#components" class="headerlink" title="components"></a><em>components</em></h5><p>Route 可以定义一个或多个已命名的组件，当路径匹配到 URL 时， 它们作为 name:component 对的一个对象去渲染。它们可以被 父 route 组件的 <code>this.props[name]</code>渲染。</p>
+<pre><code class="javascript">// 想想路由外部的 context — 如果你可拔插
+// `render` 的部分，你可能需要这么做：
+// &lt;App main={&lt;Users /&gt;} sidebar={&lt;UsersSidebar /&gt;} /&gt;
+
+const routes = (
+  &lt;Route component={App}&gt;
+    &lt;Route path=&quot;groups&quot; components={{main: Groups, sidebar: GroupsSidebar}}/&gt;
+    &lt;Route path=&quot;users&quot; components={{main: Users, sidebar: UsersSidebar}}&gt;
+      &lt;Route path=&quot;users/:userId&quot; component={Profile}/&gt;
+    &lt;/Route&gt;
+  &lt;/Route&gt;
+)
+
+class App extends React.Component {
+  render () {
+    const { main, sidebar } = this.props
+    return (
+      &lt;div&gt;
+        &lt;div className=&quot;Main&quot;&gt;
+          {main}
+        &lt;/div&gt;
+        &lt;div className=&quot;Sidebar&quot;&gt;
+          {sidebar}
+        &lt;/div&gt;
+      &lt;/div&gt;
+    )
+  }
+}
+
+class Users extends React.Component {
+  render () {
+    return (
+      &lt;div&gt;
+        {/* 当路径是 &quot;/users/123&quot; 是 `children` 会是 &lt;Profile&gt; */}
+        {/* UsersSidebar 也可以获取作为 this.props.children 的 &lt;Profile&gt; ，
+            所以这有点奇怪，但你可以决定哪一个可以
+            继续这种嵌套 */}
+        {this.props.children}
+      &lt;/div&gt;
+    )
+  }
+}
+
+</code></pre>
 <h5 id="getComponent-location-callback"><a href="#getComponent-location-callback" class="headerlink" title="getComponent(location, callback)"></a><em>getComponent(location, callback)</em></h5><p>与 component 一样，但是是异步的，对于 code-splitting 很有用。</p>
-<p><strong>callback signature</strong><br>cb(err, component)</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;Route path=<span class="string">"courses/:courseId"</span> getComponent=&#123;(location, cb) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 做一些异步操作去查找组件</span></span><br><span class="line">  cb(<span class="literal">null</span>, Course)</span><br><span class="line">&#125;&#125;/&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>callback signature</strong><br><code>cb(err, component)</code></p>
+<pre><code class="javascript">&lt;Route path=&quot;courses/:courseId&quot; getComponent={(location, cb) =&gt; {
+  // 做一些异步操作去查找组件
+  cb(null, Course)
+}}/&gt;
+
+</code></pre>
 <h5 id="getComponents-location-callback"><a href="#getComponents-location-callback" class="headerlink" title="getComponents(location, callback)"></a><em>getComponents(location, callback)</em></h5><p>与 component 一样，但是是异步的，对于 code-splitting 很有用。</p>
-<p><strong>callback signature</strong><br>cb(err, components)</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;Route path=<span class="string">"courses/:courseId"</span> getComponent=&#123;(location, cb) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 做一些异步操作去查找组件</span></span><br><span class="line">  cb(<span class="literal">null</span>, &#123;<span class="attr">sidebar</span>: CourseSidebar, <span class="attr">content</span>: Course&#125;)</span><br><span class="line">&#125;&#125;/&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>callback signature</strong><br><code>cb(err, components)</code></p>
+<pre><code class="javascript">&lt;Route path=&quot;courses/:courseId&quot; getComponent={(location, cb) =&gt; {
+  // 做一些异步操作去查找组件
+  cb(null, {sidebar: CourseSidebar, content: Course})
+}}/&gt;
+</code></pre>
 <h5 id="children"><a href="#children" class="headerlink" title="children"></a><em>children</em></h5><p>Route 可以被嵌套，this.props.children 包含了从子 route 组件创建的元素。由于这是路由设计中非常重要的部分，请参考 Route 配置。</p>
-<p>两个路由钩子：</p>
-<font color = "red">onEnter(nextState, replaceState, callback?)</font>
-
+<p>两个路由钩子：<br><code>&lt;font color = &quot;red&quot;&gt;onEnter(nextState, replaceState, callback?)&lt;/font&gt;</code></p>
 <p>当 route 即将进入时调用。它提供了下一个路由的 state，一个函数重定向到另一个路径。this 会触发钩子去创建 route 实例。<br>当 callback 作为函数的第三个参数传入时，这个钩子将是异步执行的，并且跳转会阻塞直到 callback 被调用。</p>
-<font color = "red">onLeave()</font><br>当 route 即将退出时调用。<br><br>### PlainRoute<br>route 定义的一个普通的 JavaScript 对象。 Router 把 JSX 的 <Route> 转化到这个对象中，如果你喜欢，你可以直接使用它们。 所有的 props 都和 <Route> 的 props 一样，除了那些列在这里的。<br><br>#### <strong>props</strong><br><br>##### <em>childRoutes</em><br><br>子 route 的一个数组，与在 JSX route 配置中的 children 一样。<br><br><font color = "red">getChildRoutes(location, callback)</font>
-
+<p><code>&lt;font color = &quot;red&quot;&gt;onLeave()&lt;/font&gt;</code><br>当 route 即将退出时调用。</p>
+<h3 id="PlainRoute"><a href="#PlainRoute" class="headerlink" title="PlainRoute"></a>PlainRoute</h3><p>route 定义的一个普通的 JavaScript 对象。 Router 把 JSX 的 <code>&lt;Route&gt;</code> 转化到这个对象中，如果你喜欢，你可以直接使用它们。 所有的 props 都和 <code>&lt;Route&gt;</code> 的 props 一样，除了那些列在这里的。</p>
+<h4 id="props"><a href="#props" class="headerlink" title="props"></a><strong>props</strong></h4><h5 id="childRoutes"><a href="#childRoutes" class="headerlink" title="childRoutes"></a><em>childRoutes</em></h5><p>子 route 的一个数组，与在 JSX route 配置中的 children 一样。</p>
+<p><code>&lt;font color = &quot;red&quot;&gt;getChildRoutes(location, callback)&lt;/font&gt;</code></p>
 <p>与 childRoutes 一样，但是是异步的，并且可以接收 location。对于 code-splitting 和动态路由匹配很有用（给定一些 state 或 session 数据会返回不同的子 route）。</p>
 <p><em>callback signature</em><br>cb(err, routesArray)</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> myRoute = &#123;</span><br><span class="line">  path: <span class="string">'course/:courseId'</span>,</span><br><span class="line">  childRoutes: [</span><br><span class="line">    announcementsRoute,</span><br><span class="line">    gradesRoute,</span><br><span class="line">    assignmentsRoute</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 异步的子 route</span></span><br><span class="line"><span class="keyword">let</span> myRoute = &#123;</span><br><span class="line">  path: <span class="string">'course/:courseId'</span>,</span><br><span class="line">  getChildRoutes(location, cb) &#123;</span><br><span class="line">    <span class="comment">// 做一些异步操作去查找子 route</span></span><br><span class="line">    cb(<span class="literal">null</span>, [ announcementsRoute, gradesRoute, assignmentsRoute ])</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 可以根据一些 state</span></span><br><span class="line"><span class="comment">// 跳转到依赖的子 route</span></span><br><span class="line">&lt;Link to=<span class="string">"/picture/123"</span> state=&#123;&#123; <span class="attr">fromDashboard</span>: <span class="literal">true</span> &#125;&#125;/&gt;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> myRoute = &#123;</span><br><span class="line">  path: <span class="string">'picture/:id'</span>,</span><br><span class="line">  getChildRoutes(location, cb) &#123;</span><br><span class="line">    <span class="keyword">let</span> &#123; state &#125; = location</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (state &amp;&amp; state.fromDashboard) &#123;</span><br><span class="line">      cb(<span class="literal">null</span>, [dashboardPictureRoute])</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      cb(<span class="literal">null</span>, [pictureRoute])</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">let myRoute = {
+  path: &#39;course/:courseId&#39;,
+  childRoutes: [
+    announcementsRoute,
+    gradesRoute,
+    assignmentsRoute
+  ]
+}
+
+// 异步的子 route
+let myRoute = {
+  path: &#39;course/:courseId&#39;,
+  getChildRoutes(location, cb) {
+    // 做一些异步操作去查找子 route
+    cb(null, [ announcementsRoute, gradesRoute, assignmentsRoute ])
+  }
+}
+
+// 可以根据一些 state
+// 跳转到依赖的子 route
+&lt;Link to=&quot;/picture/123&quot; state={{ fromDashboard: true }}/&gt;
+
+let myRoute = {
+  path: &#39;picture/:id&#39;,
+  getChildRoutes(location, cb) {
+    let { state } = location
+
+    if (state &amp;&amp; state.fromDashboard) {
+      cb(null, [dashboardPictureRoute])
+    } else {
+      cb(null, [pictureRoute])
+    }
+  }
+}
+</code></pre>
 <h5 id="indexRoute"><a href="#indexRoute" class="headerlink" title="indexRoute"></a><em>indexRoute</em></h5><p>index route。这与在使用 JSX route 配置时指定一个 <IndexRoute> 子集一样。</p>
-<font color = "red">getIndexRoute(location, callback)</font><br>与 indexRoute 一样，但是是异步的，并且可以接收 location。与 getChildRoutes 一样，对于 code-splitting 和动态路由匹配很有用<br><br><em>callback signature</em><br>cb(err, route)<br><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 例如：</span></span><br><span class="line"><span class="keyword">let</span> myIndexRoute = &#123;</span><br><span class="line">  component: MyIndex</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> myRoute = &#123;</span><br><span class="line">  path: <span class="string">'courses'</span>,</span><br><span class="line">  indexRoute: myIndexRoute</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 异步的 index route</span></span><br><span class="line"><span class="keyword">let</span> myRoute = &#123;</span><br><span class="line">  path: <span class="string">'courses'</span>,</span><br><span class="line">  getIndexRoute(location, cb) &#123;</span><br><span class="line">    <span class="comment">// 做一些异步操作</span></span><br><span class="line">    cb(<span class="literal">null</span>, myIndexRoute)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><br>### Redirect<br>在应用中 <Redirect> 可以设置重定向到其他 route 而不改变旧的 URL。<br><br>#### <strong>Props</strong><br><br>##### from<br>你想由哪个路径进行重定向，包括动态段。<br><br>##### to<br>你想重定向的路径。<br><br>##### query<br>默认情况下，query 的参数只会经过，但如果你需要你可以指定它们。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 我们需要从 `/profile/123` 改变到 `/about/123`</span></span><br><span class="line"><span class="comment">// 并且由 `/get-in-touch` 重定向到 `/contact`</span></span><br><span class="line">&lt;Route component=&#123;App&#125;&gt;</span><br><span class="line">  &lt;Route path=<span class="string">"about/:userId"</span> component=&#123;UserProfile&#125;/&gt;</span><br><span class="line">  &#123;<span class="comment">/* /profile/123 -&gt; /about/123 */</span>&#125;</span><br><span class="line">  &lt;Redirect <span class="keyword">from</span>=<span class="string">"profile/:userId"</span> to=<span class="string">"about/:userId"</span> /&gt;</span><br><span class="line">&lt;<span class="regexp">/Route&gt;</span></span><br></pre></td></tr></table></figure><br><br>注意，在 route 层 <Redirect> 可以被放在任何地方，尽管<font color= "blue">正常的优先</font> 规则仍适用。如果你喜欢将下一个重定向到它各自的 route 上，from 的路径会匹配到一个与 path 一样的正常路径。<br><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;Route path=<span class="string">"course/:courseId"</span>&gt;</span><br><span class="line">  &lt;Route path=<span class="string">"dashboard"</span> /&gt;</span><br><span class="line">  &#123;<span class="comment">/* /course/123/home -&gt; /course/123/dashboard */</span>&#125;</span><br><span class="line">  &lt;Redirect <span class="keyword">from</span>=<span class="string">"home"</span> to=<span class="string">"dashboard"</span> /&gt;</span><br><span class="line">&lt;<span class="regexp">/Route&gt;</span></span><br></pre></td></tr></table></figure><br><br><br>### IndexRoute<br>当用户在父 route 的 URL 时， Index Routes 允许你为父 route 提供一个默认的 “child”， 并且为使<IndexLink> 能用提供了约定<br><br>####Props<br>与 Route 的 props 一样，除了 path。<br><br>### IndexRedirect<br>Index Redirects 允许你从一个父 route 的 URL 重定向到其他 route。 它们被用于允许子 route 作为父 route 的默认 route， 同时保持着不同的 URL。<br><br>#### Props<br>与 <strong>Redirect</strong> 的 props 一样，除了 from。<br><br>## Route Components<br>当 route 匹配到 URL 时会渲染一个 route 的组件。路由会在渲染时将以下属性注入组件中：<br><br>#### history<br>Router 的 history history。<br>对于跳转很有用的 this.props.history.pushState(state, path, query)<br><br>#### location<br>当前的 location。<br><br>#### params<br>URL 的动态段。<br><br>#### route<br>渲染组件的 route。<br><br>#### routeParams<br>this.props.params 是直接在组件中指定 route 的一个子集。例如，如果 route 的路径是 users/:userId 而 URL 是 /users/123/portfolios/345，那么 this.props.routeParams 会是 {userId: ‘123’}，并且 this.props.params 会是 {userId: ‘123’, portfolioId: 345}。<br><br>#### children<br>匹配到子 route 的元素将被渲染。如果 route 有已命名的组件，那么此属性会是 undefined，并且可用的组件会被直接替换到 this.props 上。<br><br>#### 示例<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">render((</span><br><span class="line">  &lt;Router&gt;</span><br><span class="line">    &lt;Route path=<span class="string">"/"</span> component=&#123;App&#125;&gt;</span><br><span class="line">      &lt;Route path=<span class="string">"groups"</span> component=&#123;Groups&#125; /&gt;</span><br><span class="line">      &lt;Route path=<span class="string">"users"</span> component=&#123;Users&#125; /&gt;</span><br><span class="line">    &lt;<span class="regexp">/Route&gt;</span></span><br><span class="line"><span class="regexp">  &lt;/</span>Router&gt;</span><br><span class="line">), node)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &#123;<span class="comment">/* 这可能是 &lt;Users&gt; 或 &lt;Groups&gt; */</span>&#125;</span><br><span class="line">        &#123;<span class="keyword">this</span>.props.children&#125;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure><br>### 已命名的组件<br>当一个 route 有一个或多个已命名的组件时，其子元素的可用性是通过 this.props 命名的。因此 this.props.children 将会是 undefined。那么所有的 route 组件都可以参与嵌套。<br><br>#### 示例<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">render((</span><br><span class="line">  &lt;Router&gt;</span><br><span class="line">    &lt;Route path=<span class="string">"/"</span> component=&#123;App&#125;&gt;</span><br><span class="line">      &lt;Route path=<span class="string">"groups"</span> components=&#123;&#123;<span class="attr">main</span>: Groups, <span class="attr">sidebar</span>: GroupsSidebar&#125;&#125; /&gt;</span><br><span class="line">      &lt;Route path=<span class="string">"users"</span> components=&#123;&#123;<span class="attr">main</span>: Users, <span class="attr">sidebar</span>: UsersSidebar&#125;&#125;&gt;</span><br><span class="line">        &lt;Route path=<span class="string">"users/:userId"</span> component=&#123;Profile&#125; /&gt;</span><br><span class="line">      &lt;<span class="regexp">/Route&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/</span>Route&gt;</span><br><span class="line">  &lt;<span class="regexp">/Router&gt;</span></span><br><span class="line"><span class="regexp">), node)</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">class App extends React.Component &#123;</span></span><br><span class="line"><span class="regexp">  render() &#123;</span></span><br><span class="line"><span class="regexp">    /</span><span class="regexp">/ 在父 route 中，被匹配的子 route 变成 props</span></span><br><span class="line"><span class="regexp">    return (</span></span><br><span class="line"><span class="regexp">      &lt;div&gt;</span></span><br><span class="line"><span class="regexp">        &lt;div className="Main"&gt;</span></span><br><span class="line"><span class="regexp">          &#123;/</span>* 这可能是 &lt;Groups&gt; 或 &lt;Users&gt; *<span class="regexp">/&#125;</span></span><br><span class="line"><span class="regexp">          &#123;this.props.main&#125;</span></span><br><span class="line"><span class="regexp">        &lt;/</span>div&gt;</span><br><span class="line">        &lt;div className=<span class="string">"Sidebar"</span>&gt;</span><br><span class="line">          &#123;<span class="comment">/* 这可能是 &lt;GroupsSidebar&gt; 或 &lt;UsersSidebar&gt; */</span>&#125;</span><br><span class="line">          &#123;<span class="keyword">this</span>.props.sidebar&#125;</span><br><span class="line">        &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>div&gt;</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Users</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &#123;<span class="comment">/* 如果在 "/users/123" 路径上这会是 &lt;Profile&gt; */</span>&#125;</span><br><span class="line">        &#123;<span class="comment">/* UsersSidebar 也会获取到作为 this.props.children 的 &lt;Profile&gt; 。</span></span><br><span class="line"><span class="comment">            你可以把它放这渲染 */</span>&#125;</span><br><span class="line">        &#123;<span class="keyword">this</span>.props.children&#125;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure><br><br>## Mixins<br>### 生命周期<br>在组件中添加一个钩子，当路由要从 route 组件的配置中跳转出来时被调用，并且有机会去取消这次跳转。主要用于表单的部分填写。<br><br>在常规的跳转中， <em>routerWillLeave</em> 会接收到一个单一的参数：我们正要跳转的 location。去取消此次跳转，返回 false。<br><br>提示用户确认，返回一个提示信息（字符串）。在 web 浏览器 beforeunload 事件发生时，<em>routerWillLeave</em> 不会接收到一个 location 的对象（假设你正在使用 useBeforeUnload history 的增强方法）。在此之上，我们是不可能知道要跳转的 location，因此 <em>outerWillLeave</em> 必须在用户关闭标签之前返回一个提示信息。<br>#### 生命周期方法<br><font color = "red">routerWillLeave(nextLocation)</font>
+<p><code>&lt;font color = &quot;red&quot;&gt;getIndexRoute(location, callback)&lt;/font&gt;</code><br>与 indexRoute 一样，但是是异步的，并且可以接收 location。与 getChildRoutes 一样，对于 code-splitting 和动态路由匹配很有用</p>
+<p><em>callback signature</em><br>cb(err, route)</p>
+<pre><code class="javascript">// 例如：
+let myIndexRoute = {
+  component: MyIndex
+}
+
+let myRoute = {
+  path: &#39;courses&#39;,
+  indexRoute: myIndexRoute
+}
+
+// 异步的 index route
+let myRoute = {
+  path: &#39;courses&#39;,
+  getIndexRoute(location, cb) {
+    // 做一些异步操作
+    cb(null, myIndexRoute)
+  }
+}
+</code></pre>
+<h3 id="Redirect"><a href="#Redirect" class="headerlink" title="Redirect"></a>Redirect</h3><p>在应用中 <code>&lt;Redirect&gt;</code> 可以设置重定向到其他 route 而不改变旧的 URL。</p>
+<h4 id="Props-2"><a href="#Props-2" class="headerlink" title="Props"></a><strong>Props</strong></h4><h5 id="from"><a href="#from" class="headerlink" title="from"></a>from</h5><p>你想由哪个路径进行重定向，包括动态段。</p>
+<h5 id="to-1"><a href="#to-1" class="headerlink" title="to"></a>to</h5><p>你想重定向的路径。</p>
+<h5 id="query-1"><a href="#query-1" class="headerlink" title="query"></a>query</h5><p>默认情况下，query 的参数只会经过，但如果你需要你可以指定它们。</p>
+<pre><code class="javascript">// 我们需要从 `/profile/123` 改变到 `/about/123`
+// 并且由 `/get-in-touch` 重定向到 `/contact`
+&lt;Route component={App}&gt;
+  &lt;Route path=&quot;about/:userId&quot; component={UserProfile}/&gt;
+  {/* /profile/123 -&gt; /about/123 */}
+  &lt;Redirect from=&quot;profile/:userId&quot; to=&quot;about/:userId&quot; /&gt;
+&lt;/Route&gt;
+</code></pre>
+<p>注意，在 route 层 <code>&lt;Redirect&gt;</code> 可以被放在任何地方，尽管<font color= "blue">正常的优先</font> 规则仍适用。如果你喜欢将下一个重定向到它各自的 route 上，from 的路径会匹配到一个与 path 一样的正常路径。</p>
+<pre><code class="javascript">&lt;Route path=&quot;course/:courseId&quot;&gt;
+  &lt;Route path=&quot;dashboard&quot; /&gt;
+  {/* /course/123/home -&gt; /course/123/dashboard */}
+  &lt;Redirect from=&quot;home&quot; to=&quot;dashboard&quot; /&gt;
+&lt;/Route&gt;
+</code></pre>
+<h3 id="IndexRoute"><a href="#IndexRoute" class="headerlink" title="IndexRoute"></a>IndexRoute</h3><p>当用户在父 route 的 URL 时， Index Routes 允许你为父 route 提供一个默认的 “child”， 并且为使<code>&lt;IndexLink&gt;</code> 能用提供了约定</p>
+<p>####Props<br>与 Route 的 props 一样，除了 path。</p>
+<h3 id="IndexRedirect"><a href="#IndexRedirect" class="headerlink" title="IndexRedirect"></a>IndexRedirect</h3><p>Index Redirects 允许你从一个父 route 的 URL 重定向到其他 route。 它们被用于允许子 route 作为父 route 的默认 route， 同时保持着不同的 URL。</p>
+<h4 id="Props-3"><a href="#Props-3" class="headerlink" title="Props"></a>Props</h4><p>与 <strong>Redirect</strong> 的 props 一样，除了 from。</p>
+<h2 id="Route-Components"><a href="#Route-Components" class="headerlink" title="Route Components"></a>Route Components</h2><p>当 route 匹配到 URL 时会渲染一个 route 的组件。路由会在渲染时将以下属性注入组件中：</p>
+<h4 id="history-1"><a href="#history-1" class="headerlink" title="history"></a>history</h4><p>Router 的 history history。<br>对于跳转很有用的 this.props.history.pushState(state, path, query)</p>
+<h4 id="location"><a href="#location" class="headerlink" title="location"></a>location</h4><p>当前的 location。</p>
+<h4 id="params"><a href="#params" class="headerlink" title="params"></a>params</h4><p>URL 的动态段。</p>
+<h4 id="route-1"><a href="#route-1" class="headerlink" title="route"></a>route</h4><p>渲染组件的 route。</p>
+<h4 id="routeParams"><a href="#routeParams" class="headerlink" title="routeParams"></a>routeParams</h4><p>this.props.params 是直接在组件中指定 route 的一个子集。例如，如果 route 的路径是 <code>users/:userId</code> 而 URL 是 <code>/users/123/portfolios/345</code>，那么 <code>this.props.routeParams 会是 {userId: &#39;123&#39;}</code>，并且 <code>this.props.params</code> 会是 <code>{userId: &#39;123&#39;, portfolioId: 345}</code>。</p>
+<h4 id="children-1"><a href="#children-1" class="headerlink" title="children"></a>children</h4><p>匹配到子 route 的元素将被渲染。如果 route 有已命名的组件，那么此属性会是 undefined，并且可用的组件会被直接替换到 this.props 上。</p>
+<h4 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h4><pre><code class="javascript">render((
+  &lt;Router&gt;
+    &lt;Route path=&quot;/&quot; component={App}&gt;
+      &lt;Route path=&quot;groups&quot; component={Groups} /&gt;
+      &lt;Route path=&quot;users&quot; component={Users} /&gt;
+    &lt;/Route&gt;
+  &lt;/Router&gt;
+), node)
+
+class App extends React.Component {
+  render() {
+    return (
+      &lt;div&gt;
+        {/* 这可能是 &lt;Users&gt; 或 &lt;Groups&gt; */}
+        {this.props.children}
+      &lt;/div&gt;
+    )
+  }
+}
+</code></pre>
+<h3 id="已命名的组件"><a href="#已命名的组件" class="headerlink" title="已命名的组件"></a>已命名的组件</h3><p>当一个 <code>route</code> 有一个或多个已命名的组件时，其子元素的可用性是通过 <code>this.props</code> 命名的。因此 <code>this.props.children</code> 将会是 undefined。那么所有的 <code>route</code> 组件都可以参与嵌套。</p>
+<h4 id="示例-2"><a href="#示例-2" class="headerlink" title="示例"></a>示例</h4><pre><code class="js">// 注释里的内容有效，为了解决博客打包未知错误
+/*render((
+  &lt;Router&gt;
+    &lt;Route path=&quot;/&quot; component={App}&gt;
+      &lt;Route path=&quot;groups&quot; components={{main: Groups, sidebar: GroupsSidebar}} /&gt;
+      &lt;Route path=&quot;users&quot; components={{main: Users, sidebar: UsersSidebar}}&gt;
+        &lt;Route path=&quot;users/:userId&quot; component={Profile} /&gt;
+      &lt;/Route&gt;
+    &lt;/Route&gt;
+  &lt;/Router&gt;
+), node)
+
+class App extends React.Component {
+  render() {
+    // 在父 route 中，被匹配的子 route 变成 props
+    return (
+      &lt;div&gt;
+        &lt;div className=&quot;Main&quot;&gt;
+          {// 这可能是 &lt;Groups&gt; 或 &lt;Users&gt;}
+          {this.props.main}
+        &lt;/div&gt;
+        &lt;div className=&quot;Sidebar&quot;&gt;
+          {// 这可能是 &lt;GroupsSidebar&gt; 或 &lt;UsersSidebar&gt;}
+          {this.props.sidebar}
+        &lt;/div&gt;
+      &lt;/div&gt;
+    )
+  }
+}
+
+class Users extends React.Component {
+  render() {
+    return (
+      &lt;div&gt;
+        {// 如果在 &quot;/users/123&quot; 路径上这会是 &lt;Profile&gt; }
+        {// UsersSidebar 也会获取到作为 this.props.children 的 &lt;Profile&gt; 。
+            你可以把它放这渲染 }
+        {this.props.children}
+      &lt;/div&gt;
+    )
+  }
+}*/
+</code></pre>
+<h2 id="Mixins"><a href="#Mixins" class="headerlink" title="Mixins"></a>Mixins</h2><h3 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h3><p>在组件中添加一个钩子，当路由要从 route 组件的配置中跳转出来时被调用，并且有机会去取消这次跳转。主要用于表单的部分填写。</p>
+<p>在常规的跳转中， <em>routerWillLeave</em> 会接收到一个单一的参数：我们正要跳转的 location。去取消此次跳转，返回 false。</p>
+<p>提示用户确认，返回一个提示信息（字符串）。在 web 浏览器 beforeunload 事件发生时，<em>routerWillLeave</em> 不会接收到一个 location 的对象（假设你正在使用 useBeforeUnload history 的增强方法）。在此之上，我们是不可能知道要跳转的 location，因此 <em>outerWillLeave</em> 必须在用户关闭标签之前返回一个提示信息。</p>
+<h4 id="生命周期方法"><a href="#生命周期方法" class="headerlink" title="生命周期方法"></a>生命周期方法</h4><font color = "red">routerWillLeave(nextLocation)</font>
 
 <p>当路由尝试从一个 route 跳转到另一个并且渲染这个组件时被调用。</p>
 <p><strong>arguments</strong></p>
@@ -232,17 +472,51 @@ Props children(required)一个或,">
 <h3 id="History-Mixins"><a href="#History-Mixins" class="headerlink" title="History Mixins"></a>History Mixins</h3><p>在组件中添加路由的 history 对象。<br>常用的 history 有三种形式， 但是你也可以使用 React Router 实现自定义的 history。</p>
 <blockquote>
 <ul>
-<li><p>browserHistory(Browser history 是使用 React Router 的应用推荐的 history。它使用浏览器中的 History API 用于处理 URL，创建一个像example.com/some/path这样真实的 URL 。)</p>
-</li>
-<li><p>hashHistory(路由将通过URL的hash部分（#）切换，URL的形式类似example.com/#/some/path)</p>
-</li>
-<li><p>createMemoryHistory(主要用于服务器渲染。它创建一个内存中的history对象，不与浏览器URL互动。)</p>
-</li>
+<li>browserHistory(Browser history 是使用 React Router 的应用推荐的 history。它使用浏览器中的 History API 用于处理 URL，创建一个像example.com/some/path这样真实的 URL 。)</li>
 </ul>
 </blockquote>
-<p>你可以从 React Router 中引入它们：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// JavaScript 模块导入（译者注：ES6 形式）</span></span><br><span class="line"><span class="keyword">import</span> &#123; browserHistory &#125; <span class="keyword">from</span> <span class="string">'react-router'</span></span><br></pre></td></tr></table></figure></p>
-<p>然后将它们传递给<Router>:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">render(</span><br><span class="line">  &lt;Router history=&#123;browserHistory&#125; routes=&#123;routes&#125; /&gt;,</span><br><span class="line">  <span class="built_in">document</span>.getElementById(<span class="string">'app'</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
-<p><strong>实现示例</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"><span class="keyword">import</span> &#123; render &#125; <span class="keyword">from</span> <span class="string">'react-dom'</span></span><br><span class="line"><span class="keyword">import</span> &#123; browserHistory, Router, Route, IndexRoute &#125; <span class="keyword">from</span> <span class="string">'react-router'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">'../components/App'</span></span><br><span class="line"><span class="keyword">import</span> Home <span class="keyword">from</span> <span class="string">'../components/Home'</span></span><br><span class="line"><span class="keyword">import</span> About <span class="keyword">from</span> <span class="string">'../components/About'</span></span><br><span class="line"><span class="keyword">import</span> Features <span class="keyword">from</span> <span class="string">'../components/Features'</span></span><br><span class="line"></span><br><span class="line">render(</span><br><span class="line">  &lt;Router history=&#123;browserHistory&#125;&gt;</span><br><span class="line">    &lt;Route path=<span class="string">'/'</span> component=&#123;App&#125;&gt;</span><br><span class="line">      &lt;IndexRoute component=&#123;Home&#125; /&gt;</span><br><span class="line">      &lt;Route path=<span class="string">'about'</span> component=&#123;About&#125; /&gt;</span><br><span class="line">      &lt;Route path=<span class="string">'features'</span> component=&#123;Features&#125; /&gt;</span><br><span class="line">    &lt;<span class="regexp">/Route&gt;</span></span><br><span class="line"><span class="regexp">  &lt;/</span>Router&gt;,</span><br><span class="line">  <span class="built_in">document</span>.getElementById(<span class="string">'app'</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure><br><strong>注意</strong>：你的 route components 不需要这个 mixin，它在 this.props.history 中已经是可用的了。这是为了组件更深次的渲染树中需要访问路由的 history 对象。</p>
+<blockquote>
+<ul>
+<li>hashHistory(路由将通过URL的hash部分（#）切换，URL的形式类似example.com/#/some/path)</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>createMemoryHistory(主要用于服务器渲染。它创建一个内存中的history对象，不与浏览器URL互动。)</li>
+</ul>
+</blockquote>
+<p>你可以从 React Router 中引入它们：</p>
+<pre><code class="javascript">// JavaScript 模块导入（译者注：ES6 形式）
+import { browserHistory } from &#39;react-router&#39;
+</code></pre>
+<p>然后将它们传递给<Router>:</p>
+<pre><code class="javascript">render(
+  &lt;Router history={browserHistory} routes={routes} /&gt;,
+  document.getElementById(&#39;app&#39;)
+)
+</code></pre>
+<p><strong>实现示例</strong></p>
+<pre><code class="javascript">import React from &#39;react&#39;
+import { render } from &#39;react-dom&#39;
+import { browserHistory, Router, Route, IndexRoute } from &#39;react-router&#39;
+
+import App from &#39;../components/App&#39;
+import Home from &#39;../components/Home&#39;
+import About from &#39;../components/About&#39;
+import Features from &#39;../components/Features&#39;
+
+render(
+  &lt;Router history={browserHistory}&gt;
+    &lt;Route path=&#39;/&#39; component={App}&gt;
+      &lt;IndexRoute component={Home} /&gt;
+      &lt;Route path=&#39;about&#39; component={About} /&gt;
+      &lt;Route path=&#39;features&#39; component={Features} /&gt;
+    &lt;/Route&gt;
+  &lt;/Router&gt;,
+  document.getElementById(&#39;app&#39;)
+)
+</code></pre>
+<p><strong>注意</strong>：你的 route components 不需要这个 mixin，它在 this.props.history 中已经是可用的了。这是为了组件更深次的渲染树中需要访问路由的 history 对象。</p>
 <h4 id="Methods"><a href="#Methods" class="headerlink" title="Methods"></a>Methods</h4><h5 id="pushState-state-pathname-query"><a href="#pushState-state-pathname-query" class="headerlink" title="pushState(state, pathname, query)"></a>pushState(state, pathname, query)</h5><p>跳转至一个新的 URL。</p>
 <p><strong>arguments</strong></p>
 <blockquote>
@@ -271,7 +545,21 @@ Props children(required)一个或,">
 <li>query - 如果没有指定，那会是一个包含键值对的对象，并且在当前的 query 中是激活状态的 - 在当前的 query 中明确是 undefined 的值会丢失相应的键或 undefined<br>*indexOnly - 一个 boolean（默认：false）。</li>
 </ul>
 </blockquote>
-<h5 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; History &#125; <span class="keyword">from</span> <span class="string">'react-router'</span></span><br><span class="line"></span><br><span class="line">React.createClass(&#123;</span><br><span class="line">  mixins: [ History ],</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;div onClick=&#123;() =&gt; <span class="keyword">this</span>.history.pushState(<span class="literal">null</span>, <span class="string">'/foo'</span>)&#125;&gt;Go to foo&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">        &lt;div onClick=&#123;() =&gt; this.history.replaceState(null, 'bar')&#125;&gt;Go to bar without creating a new history entry&lt;/</span>div&gt;</span><br><span class="line">        &lt;div onClick=&#123;() =&gt; <span class="keyword">this</span>.history.goBack()&#125;&gt;Go back&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">     &lt;/</span>div&gt;</span><br><span class="line">   )</span><br><span class="line"> &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h5 id="示例-3"><a href="#示例-3" class="headerlink" title="示例"></a>示例</h5><pre><code class="javascript">import { History } from &#39;react-router&#39;
+
+React.createClass({
+  mixins: [ History ],
+  render() {
+    return (
+      &lt;div&gt;
+        &lt;div onClick={() =&gt; this.history.pushState(null, &#39;/foo&#39;)}&gt;Go to foo&lt;/div&gt;
+        &lt;div onClick={() =&gt; this.history.replaceState(null, &#39;bar&#39;)}&gt;Go to bar without creating a new history entry&lt;/div&gt;
+        &lt;div onClick={() =&gt; this.history.goBack()}&gt;Go back&lt;/div&gt;
+     &lt;/div&gt;
+   )
+ }
+})
+</code></pre>
 <p>在应用中少数组件由于 History mixin 的缘故而用得不爽，此时有以下几个选项：</p>
 <blockquote>
 <ul>
@@ -279,19 +567,79 @@ Props children(required)一个或,">
 <li>使用 context</li>
 </ul>
 </blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; PropTypes &#125; <span class="keyword">from</span> <span class="string">'react-router'</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyComponent</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  doStuff() &#123;</span><br><span class="line">    <span class="keyword">this</span>.context.history.pushState(<span class="literal">null</span>, <span class="string">'/some/path'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">MyComponent.contextTypes = &#123; <span class="attr">history</span>: PropTypes.history &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">import { PropTypes } from &#39;react-router&#39;
+
+class MyComponent extends React.Component {
+  doStuff() {
+    this.context.history.pushState(null, &#39;/some/path&#39;)
+  }
+}
+
+MyComponent.contextTypes = { history: PropTypes.history }
+</code></pre>
 <blockquote>
 <ul>
 <li>确保你的 history 是一个 module</li>
 <li>创建一个高阶的组件，我们可能用它来结束跳转和阻止 history，只是没有时间去思考所有的方法。</li>
 </ul>
 </blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">connectHistory</span>(<span class="params">Component</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> React.createClass(&#123;</span><br><span class="line">    mixins: [ History ],</span><br><span class="line">    render() &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">Component</span> &#123;<span class="attr">...this.props</span>&#125; <span class="attr">history</span>=<span class="string">&#123;this.history&#125;</span> /&gt;</span></span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 其他文件</span></span><br><span class="line"><span class="keyword">import</span> connectHistory <span class="keyword">from</span> <span class="string">'./connectHistory'</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyComponent</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  doStuff() &#123;</span><br><span class="line">    <span class="keyword">this</span>.props.history.pushState(<span class="literal">null</span>, <span class="string">'/some/where'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> connectHistory(MyComponent)</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">function connectHistory(Component) {
+  return React.createClass({
+    mixins: [ History ],
+    render() {
+      return &lt;Component {...this.props} history={this.history} /&gt;
+    }
+  })
+}
+
+// 其他文件
+import connectHistory from &#39;./connectHistory&#39;
+
+class MyComponent extends React.Component {
+  doStuff() {
+    this.props.history.pushState(null, &#39;/some/where&#39;)
+  }
+}
+
+export default connectHistory(MyComponent)
+</code></pre>
 <h3 id="RouteContext-Mixins"><a href="#RouteContext-Mixins" class="headerlink" title="RouteContext Mixins"></a>RouteContext Mixins</h3><p>RouteContext mixin 提供了一个将 route 组件设置到 context 中的便捷方法。这对于 route 渲染元素并且希望用 生命周期 mixin 来阻止跳转是很有必要的。</p>
 <p>简单地将 this.context.route 添加到组件中。</p>
 <h2 id="表单处理"><a href="#表单处理" class="headerlink" title="表单处理"></a>表单处理</h2><p>Link组件用于正常的用户点击跳转，但是有时还需要表单跳转、点击按钮跳转等操作。这些情况怎么跟React Router对接呢？</p>
-<p>下面是一个表单。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;form onSubmit=&#123;<span class="keyword">this</span>.handleSubmit&#125;&gt;</span><br><span class="line">  &lt;input type=<span class="string">"text"</span> placeholder=<span class="string">"userName"</span>/&gt;</span><br><span class="line">  &lt;input type=<span class="string">"text"</span> placeholder=<span class="string">"repo"</span>/&gt;</span><br><span class="line">  &lt;button type=<span class="string">"submit"</span>&gt;Go&lt;<span class="regexp">/button&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>form&gt;</span><br></pre></td></tr></table></figure><br><strong>第一种方法是使用browserHistory.push</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; browserHistory &#125; <span class="keyword">from</span> <span class="string">'react-router'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">  handleSubmit(event) &#123;</span><br><span class="line">    event.preventDefault()</span><br><span class="line">    <span class="keyword">const</span> userName = event.target.elements[<span class="number">0</span>].value</span><br><span class="line">    <span class="keyword">const</span> repo = event.target.elements[<span class="number">1</span>].value</span><br><span class="line">    <span class="keyword">const</span> path = <span class="string">`/repos/<span class="subst">$&#123;userName&#125;</span>/<span class="subst">$&#123;repo&#125;</span>`</span></span><br><span class="line">    browserHistory.push(path)</span><br><span class="line">  &#125;,</span><br></pre></td></tr></table></figure></p>
-<p><strong>第二种方法是使用context对象。</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> React.createClass(&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ask for `router` from context</span></span><br><span class="line">  contextTypes: &#123;</span><br><span class="line">    router: React.PropTypes.object</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  handleSubmit(event) &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">this</span>.context.router.push(path)</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>下面是一个表单。</p>
+<pre><code class="javascript">
+&lt;form onSubmit={this.handleSubmit}&gt;
+  &lt;input type=&quot;text&quot; placeholder=&quot;userName&quot;/&gt;
+  &lt;input type=&quot;text&quot; placeholder=&quot;repo&quot;/&gt;
+  &lt;button type=&quot;submit&quot;&gt;Go&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+<p><strong>第一种方法是使用browserHistory.push</strong></p>
+<pre><code class="javascript">import { browserHistory } from &#39;react-router&#39;
+
+// ...
+  handleSubmit(event) {
+    event.preventDefault()
+    const userName = event.target.elements[0].value
+    const repo = event.target.elements[1].value
+    const path = `/repos/${userName}/${repo}`
+    browserHistory.push(path)
+  },
+</code></pre>
+<p><strong>第二种方法是使用context对象。</strong></p>
+<pre><code class="javascript">export default React.createClass({
+
+  // ask for `router` from context
+  contextTypes: {
+    router: React.PropTypes.object
+  },
+
+  handleSubmit(event) {
+    // ...
+    this.context.router.push(path)
+  },
+})
+</code></pre>
 <h2 id="Utilities"><a href="#Utilities" class="headerlink" title="Utilities"></a>Utilities</h2><h3 id="useRoutes-createHistory"><a href="#useRoutes-createHistory" class="headerlink" title="useRoutes(createHistory)"></a>useRoutes(createHistory)</h3><p>返回一个新的 createHistory 函数，它可以用来创建读取 route 的 history 对象。</p>
 <blockquote>
 <ul>
@@ -311,10 +659,9 @@ Props children(required)一个或,">
 </ul>
 </blockquote>
 <p>如果这三个参数都是 undefined，这就意味着在给定的 location 中没有 route 被匹配到。</p>
-<font color = "red"r>注意：你可能不想在浏览器中用它，除非你做的是异步 route 的服务端渲染。</font>
-
+<p><code>&lt;font color = &quot;red&quot;r&gt;注意：你可能不想在浏览器中用它，除非你做的是异步 route 的服务端渲染。&lt;/font&gt;</code></p>
 <h3 id="createRoutes-routes"><a href="#createRoutes-routes" class="headerlink" title="createRoutes(routes)"></a>createRoutes(routes)</h3><p>创建并返回一个从给定对象 route 的数组，它可能是 JSX 的 route，一个普通对象的 route，或是其他的数组。</p>
-<h5 id="params"><a href="#params" class="headerlink" title="params"></a>params</h5><p><em>routes</em><br>一个或多个的 Route 或 PlainRoute。</p>
+<h5 id="params-1"><a href="#params-1" class="headerlink" title="params"></a>params</h5><p><em>routes</em><br>一个或多个的 Route 或 PlainRoute。</p>
 <p><strong>更多资源</strong><br><a href="https://react-guide.github.io/react-router-cn/" target="_blank" rel="noopener">react-router中文文档</a><br><a href="http://www.ruanyifeng.com/blog/2016/05/react_router.html" target="_blank" rel="noopener">阮一峰React-router</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
@@ -363,7 +710,7 @@ Props children(required)一个或,">
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>
@@ -374,7 +721,7 @@ Props children(required)一个或,">
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#React-router-API接口"><span class="toc-number">1.</span> <span class="toc-text">React-router API接口</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#组件"><span class="toc-number">1.1.</span> <span class="toc-text">组件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Router"><span class="toc-number">1.1.1.</span> <span class="toc-text">Router</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Link"><span class="toc-number">1.1.2.</span> <span class="toc-text">Link</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IndexLink"><span class="toc-number">1.1.3.</span> <span class="toc-text">IndexLink</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RoutingContext"><span class="toc-number">1.1.4.</span> <span class="toc-text">RoutingContext</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#组件配置"><span class="toc-number">1.2.</span> <span class="toc-text">组件配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#route"><span class="toc-number">1.2.1.</span> <span class="toc-text">route</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#History-Mixins"><span class="toc-number">1.2.2.</span> <span class="toc-text">History Mixins</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RouteContext-Mixins"><span class="toc-number">1.2.3.</span> <span class="toc-text">RouteContext Mixins</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#表单处理"><span class="toc-number">1.3.</span> <span class="toc-text">表单处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Utilities"><span class="toc-number">1.4.</span> <span class="toc-text">Utilities</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#useRoutes-createHistory"><span class="toc-number">1.4.1.</span> <span class="toc-text">useRoutes(createHistory)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#matchmatch-location-cb"><span class="toc-number">1.4.2.</span> <span class="toc-text">matchmatch(location, cb)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#createRoutes-routes"><span class="toc-number">1.4.3.</span> <span class="toc-text">createRoutes(routes)</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#React-router-API接口"><span class="toc-number">1.</span> <span class="toc-text">React-router API接口</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#组件"><span class="toc-number">1.1.</span> <span class="toc-text">组件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Router"><span class="toc-number">1.1.1.</span> <span class="toc-text">Router</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Link"><span class="toc-number">1.1.2.</span> <span class="toc-text">Link</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IndexLink"><span class="toc-number">1.1.3.</span> <span class="toc-text">IndexLink</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RoutingContext"><span class="toc-number">1.1.4.</span> <span class="toc-text">RoutingContext</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#组件配置"><span class="toc-number">1.2.</span> <span class="toc-text">组件配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#route"><span class="toc-number">1.2.1.</span> <span class="toc-text">route</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PlainRoute"><span class="toc-number">1.2.2.</span> <span class="toc-text">PlainRoute</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Redirect"><span class="toc-number">1.2.3.</span> <span class="toc-text">Redirect</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IndexRoute"><span class="toc-number">1.2.4.</span> <span class="toc-text">IndexRoute</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IndexRedirect"><span class="toc-number">1.2.5.</span> <span class="toc-text">IndexRedirect</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Route-Components"><span class="toc-number">1.3.</span> <span class="toc-text">Route Components</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#已命名的组件"><span class="toc-number">1.3.1.</span> <span class="toc-text">已命名的组件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mixins"><span class="toc-number">1.4.</span> <span class="toc-text">Mixins</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#生命周期"><span class="toc-number">1.4.1.</span> <span class="toc-text">生命周期</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#History-Mixins"><span class="toc-number">1.4.2.</span> <span class="toc-text">History Mixins</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RouteContext-Mixins"><span class="toc-number">1.4.3.</span> <span class="toc-text">RouteContext Mixins</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#表单处理"><span class="toc-number">1.5.</span> <span class="toc-text">表单处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Utilities"><span class="toc-number">1.6.</span> <span class="toc-text">Utilities</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#useRoutes-createHistory"><span class="toc-number">1.6.1.</span> <span class="toc-text">useRoutes(createHistory)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#matchmatch-location-cb"><span class="toc-number">1.6.2.</span> <span class="toc-text">matchmatch(location, cb)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#createRoutes-routes"><span class="toc-number">1.6.3.</span> <span class="toc-text">createRoutes(routes)</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
             

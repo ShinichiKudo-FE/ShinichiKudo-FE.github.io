@@ -99,13 +99,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    9.8k
+                    8.2k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    9 mins.
+                    7 mins.
                 </span>
                 
                 
@@ -145,9 +145,12 @@
 <p>内存泄漏的问题。可以罗列为：</p>
 <a id="more"></a>
 <p>无意识的变量使用</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">func</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">   i = <span class="number">2</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">function func(){
+   i = 2;
+}
+</code></pre>
 <p>这种方式在严格模式下是不生效的。</p>
-<ol>
+<ol start="2">
 <li>闭包导致的问题</li>
 </ol>
 <p>其实，闭包导致的内存泄漏主要是在IE引用dom元素的时候。IE中的部分dom元素并非原生的，而是COM。这时使用，往往会导致循环引用，而导致内存泄漏。还有就是无意识的使用闭包导致的问题。1. 在函数内部添加时间时，会造成dom元素的引用，而导致内存泄漏；2. 在删除dom时，在之前不小心添加了事件等情况<a href="http://www.cnblogs.com/sprying/archive/2013/05/31/3109517.html" target="_blank" rel="noopener">内存泄漏</a></p>
@@ -156,7 +159,18 @@
 <h2 id="setTimeout和setInterval的区别，以及setTimeout的原理，setInterval会造成什么问题"><a href="#setTimeout和setInterval的区别，以及setTimeout的原理，setInterval会造成什么问题" class="headerlink" title="setTimeout和setInterval的区别，以及setTimeout的原理，setInterval会造成什么问题"></a>setTimeout和setInterval的区别，以及setTimeout的原理，setInterval会造成什么问题</h2><p>首先，我们来应该了解一下setTimeout的原理。浏览器是一个事件为主体的事物。总是有一个队列在不停的循环。当使用setTimeout时，浏览器会创建一个定时器，然后将函数中的回调函数放入handle队列里面。然后浏览器会不停的循环整个handle，一旦handle中的内容满足条件，就会调用其中的回调函数。setTimeout的满足条件就是它后面的设置的时间差。</p>
 <p>setTimeout和setInterval之间的区别主要是setTimeout是一个延迟函数，只执行一次，而setInterval会间隔一定的时间反复的执行。<a href="http://www.cnblogs.com/tugenhua0707/p/4083475.html" target="_blank" rel="noopener">setTimeout和setInterval的区别</a></p>
 <p>setInterval的原理，其实与之前的setTimeout的原理有点类似。只是在每个Event Loop之后，都会去检测是否满足条件，如果满足条件的话，就执行回调函数，如果不满足，放入下一轮的event loop中。主要的问题就是，如果一个setInterval中的回调函数不能够被执行，会引起系统阻塞的问题，之后的所有的定时器都会积累起来，之后就会直接执行，没有时间间隔。<a href="https://jeffjade.com/2016/01/10/2016-01-10-javaScript-setInterval/" target="_blank" rel="noopener">setInterval机制</a></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">interval</span>(<span class="params">func, wait</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> interv = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">         func.call(<span class="literal">null</span>);</span><br><span class="line">         setTimeout(interv, wait);</span><br><span class="line">   &#125;;</span><br><span class="line">   setTimeout(interv, wait);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">interval(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">1</span>);</span><br><span class="line">&#125;, <span class="number">1000</span>);      <span class="comment">//1 1 1</span></span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">function interval(func, wait){
+    var interv = function(){
+         func.call(null);
+         setTimeout(interv, wait);
+   };
+   setTimeout(interv, wait);
+}
+
+interval(() =&gt; {
+    console.log(1);
+}, 1000);      //1 1 1
+</code></pre>
 <h2 id="postmessage和iframe怎么结合使用"><a href="#postmessage和iframe怎么结合使用" class="headerlink" title="postmessage和iframe怎么结合使用"></a>postmessage和iframe怎么结合使用</h2><p>postmessage是html5新出的一个API，可以解决多窗口、页面与新标签、窗口和iframe之间的消息通信的跨域问题。使用方法就是postmessage(data, origin)，其中data指的就是需要传递的数据，origin指的是具体的数据源地址(包括协议+域名+端口)。然后window对message事件进行监听。<a href="http://www.cnblogs.com/dolphinX/p/3464056.html" target="_blank" rel="noopener">postMessage解决跨域</a></p>
 <h2 id="js模板引擎"><a href="#js模板引擎" class="headerlink" title="js模板引擎"></a>js模板引擎</h2><p>js模版引擎，其实就是预处理器，将一些字符串去匹配数据，然后将数据插入到固定的html模版之中。js的模版引擎主要是使用正则表达式去过滤一些字符串，然后将里面的每个语句片段都放到固定的数组之中，然后在对数组进行解析，之后拼成一个固定的js代码，将内容返回出来。著名的模版引擎<a href="http://ejs.co/" target="_blank" rel="noopener">ejs</a>。<a href="http://www.cnblogs.com/hustskyking/p/principle-of-javascript-template.html" target="_blank" rel="noopener">js模版引擎原理解析</a></p>
 <h2 id="WebSocket？长轮询和短轮询"><a href="#WebSocket？长轮询和短轮询" class="headerlink" title="WebSocket？长轮询和短轮询"></a>WebSocket？长轮询和短轮询</h2><p>webSocket是一种网络通信协议，基于TCP/IP的另一种通信协议(还有一种是http协议)。它与http的主要区别就是，http是单向通信的，客户端可以向服务器发送请求，但是，服务端如果有消息，无法向客户端推送。在没有websock之前，都是通过http定期发送请求的方式——轮询。轮询的效率是相对较低的。<a href="http://javascript.ruanyifeng.com/htmlapi/websocket.html" target="_blank" rel="noopener">websock协议</a></p>
@@ -213,7 +227,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

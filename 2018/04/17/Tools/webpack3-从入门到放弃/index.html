@@ -100,13 +100,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    87k
+                    29k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    1:19
+                    26 mins.
                 </span>
                 
                 
@@ -160,66 +160,350 @@
 <h2 id="准备开始"><a href="#准备开始" class="headerlink" title="准备开始"></a>准备开始</h2><p>先来看看一个 webpack 的一个完备的配置文件，是 <a href="https://webpack.js.org/configuration/#options" target="_blank" rel="noopener">介样</a> 的，当然啦，这里面有很多配置项是即使到这个软件被废弃你也用不上的：），所以无需担心。</p>
 <h2 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h2><p>开始之前，请确定你已经安装了当前 Node 的较新版本。</p>
 <p>然后执行以下命令以新建我们的 demo 目录：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir webpack-demo &amp;&amp; cd webpack-demo &amp;&amp; npm init -y</span><br><span class="line">$ npm i --save-dev webpack</span><br><span class="line">$ mkdir src &amp;&amp; cd src &amp;&amp; touch index.js</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">$ mkdir webpack-demo &amp;&amp; cd webpack-demo &amp;&amp; npm init -y
+$ npm i --save-dev webpack
+$ mkdir src &amp;&amp; cd src &amp;&amp; touch index.js
+</code></pre>
 <p>我们使用工具函数库 lodash 来演示我们的 demo。先安装之：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm i --save lodash</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">$ npm i --save lodash
+</code></pre>
 <p>src/index.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> _ <span class="keyword">from</span> <span class="string">'lodash'</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">component</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> element = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line"></span><br><span class="line">  element.innerHTML = _.join([<span class="string">'Hello'</span>, <span class="string">'webpack'</span>], <span class="string">' '</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> element;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">document</span>.body.appendChild(component());</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">import _ from &#39;lodash&#39;;
+
+function component() {
+  const element = document.createElement(&#39;div&#39;);
+
+  element.innerHTML = _.join([&#39;Hello&#39;, &#39;webpack&#39;], &#39; &#39;);
+
+  return element;
+}
+
+document.body.appendChild(component());
+</code></pre>
 <blockquote>
 <p>Tips<br>import 和 export 已经是 ES6 的标准，但是仍未得到大多数浏览器的支持 (可喜的是， Chrome 61 已经开始默认支持了，见 ES6 modules)，不过 webpack 提供了对这个特性的支持，但是除了这个特性，其他的 ES6 特性并不会得到 webpack 的特别支持，如有需要，须借助 Babel 进行转译 (transpile)。</p>
 </blockquote>
-<p>然后新建发布版本目录：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cd .. &amp;&amp; mkdir dist &amp;&amp; cd dist &amp;&amp; touch index.html</span><br></pre></td></tr></table></figure></p>
-<p>dist/index.html<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>webpack demo<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"bundle.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>然后新建发布版本目录：</p>
+<pre><code class="javascript">$ cd .. &amp;&amp; mkdir dist &amp;&amp; cd dist &amp;&amp; touch index.html
+</code></pre>
+<p>dist/index.html</p>
+<pre><code class="html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;webpack demo&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;script src=&quot;bundle.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
 <p>现在，我们运行 webpack 来打包 index.js 为 bundle.js，本地安装了 webpack 后可以通过 <code>node_modules/.bin/webpack</code> 来访问 webpack 的二进制版本。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd ..</span><br><span class="line">$ ./node_modules/.bin/webpack src/index.js dist/bundle.js <span class="comment">//第一个参数是打包的入口文件，第二个参数是打包的出口文件</span></span><br></pre></td></tr></table></figure>
-<p>咻咻咻，大致如下输出一波：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Hash: de8ed072e2c7b3892179</span><br><span class="line">Version: webpack <span class="number">3.4</span><span class="number">.1</span></span><br><span class="line">Time: <span class="number">390</span>ms</span><br><span class="line">    Asset    Size  Chunks                    Chunk Names</span><br><span class="line">bundle.js  <span class="number">544</span> kB       <span class="number">0</span>  [emitted]  [big]  main</span><br><span class="line">   [<span class="number">0</span>] ./src/index.js <span class="number">225</span> bytes &#123;<span class="number">0</span>&#125; [built]</span><br><span class="line">   [<span class="number">2</span>] (webpack)/buildin/global.js <span class="number">509</span> bytes &#123;<span class="number">0</span>&#125; [built]</span><br><span class="line">   [<span class="number">3</span>] (webpack)/buildin/<span class="built_in">module</span>.js <span class="number">517</span> bytes &#123;<span class="number">0</span>&#125; [built]</span><br><span class="line">    + <span class="number">1</span> hidden <span class="built_in">module</span></span><br></pre></td></tr></table></figure></p>
+<pre><code class="javascript">$ cd ..
+$ ./node_modules/.bin/webpack src/index.js dist/bundle.js //第一个参数是打包的入口文件，第二个参数是打包的出口文件
+</code></pre>
+<p>咻咻咻，大致如下输出一波：</p>
+<pre><code class="javascript">Hash: de8ed072e2c7b3892179
+Version: webpack 3.4.1
+Time: 390ms
+    Asset    Size  Chunks                    Chunk Names
+bundle.js  544 kB       0  [emitted]  [big]  main
+   [0] ./src/index.js 225 bytes {0} [built]
+   [2] (webpack)/buildin/global.js 509 bytes {0} [built]
+   [3] (webpack)/buildin/module.js 517 bytes {0} [built]
+    + 1 hidden module
+</code></pre>
 <p>现在，你已经得到了你的第一个打包文件 (bundle.js) 了。</p>
 <h2 id="使用配置文件"><a href="#使用配置文件" class="headerlink" title="使用配置文件"></a>使用配置文件</h2><p>像上面这样使用 webpack 应该是最挫的姿势了，所以我们要使用 webpack 的配置文件来提高我们的姿势水平。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ touch webpack.config.js</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">$ touch webpack.config.js
+</code></pre>
 <p>webpack.config.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  entry: <span class="string">'./src/index.js'</span>, <span class="comment">// 入口起点，可以指定多个入口起点</span></span><br><span class="line">  output: &#123; <span class="comment">// 输出，只可指定一个输出配置</span></span><br><span class="line">    filename: <span class="string">'bundle.js'</span>, <span class="comment">// 输出文件名</span></span><br><span class="line">    path: path.resolve(__dirname, <span class="string">'dist'</span>) <span class="comment">// 输出文件所在的目录</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>执行：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./node_modules/.bin/webpack --config webpack.config.js <span class="comment">//`--config` 制定 webpack 的配置文件，默认是 `webpack.config.js`</span></span><br></pre></td></tr></table></figure></p>
+<pre><code class="javascript">const path = require(&#39;path&#39;);
+
+module.exports = {
+  entry: &#39;./src/index.js&#39;, // 入口起点，可以指定多个入口起点
+  output: { // 输出，只可指定一个输出配置
+    filename: &#39;bundle.js&#39;, // 输出文件名
+    path: path.resolve(__dirname, &#39;dist&#39;) // 输出文件所在的目录
+  }
+};
+</code></pre>
+<p>执行：</p>
+<pre><code class="javascript">$ ./node_modules/.bin/webpack --config webpack.config.js //`--config` 制定 webpack 的配置文件，默认是 `webpack.config.js`
+</code></pre>
 <p>所以这里可以省却 <code>--config webpack.config.js</code>。但是每次都要写 <code>./node_modules/.bin/webpack</code> 实在让人不爽，所以我们要动用 <code>NPM Scripts</code>。</p>
-<p>package.json<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  ...</span><br><span class="line">  <span class="string">"scripts"</span>: &#123;</span><br><span class="line">    <span class="string">"build"</span>: <span class="string">"webpack"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>执行：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm run build</span><br></pre></td></tr></table></figure></p>
+<p>package.json</p>
+<pre><code class="javascript">{
+  ...
+  &quot;scripts&quot;: {
+    &quot;build&quot;: &quot;webpack&quot;
+  },
+  ...
+}
+</code></pre>
+<p>执行：</p>
+<pre><code class="javascript">$ npm run build
+</code></pre>
 <p>一波输出后便得到了打包文件。</p>
 <h2 id="打包其他类型的文件"><a href="#打包其他类型的文件" class="headerlink" title="打包其他类型的文件"></a>打包其他类型的文件</h2><p>因为其他文件和 JS 文件类型不同，要把他们加载到 JS 文件中就需要经过加载器 (loader) 的处理</p>
 <h3 id="加载-CSS"><a href="#加载-CSS" class="headerlink" title="加载 CSS"></a>加载 CSS</h3><p>我们需要安装两个 loader 来处理 CSS 文件：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm i --save-dev style-loader css-loader</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">$ npm i --save-dev style-loader css-loader
+</code></pre>
 <p>style-loader 通过插入 style 标签将 CSS 加入到 DOM 中，<code>css-loader</code> 会像解释 <code>import/require()</code> 一样解释 @import 和 url()。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  entry: <span class="string">'./src/index.js'</span>,</span><br><span class="line">  output: &#123;</span><br><span class="line">    filename: <span class="string">'bundle.js'</span>, </span><br><span class="line">    path: path.resolve(__dirname, <span class="string">'dist'</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="built_in">module</span>: &#123; <span class="comment">// 如何处理项目中不同类型的模块</span></span><br><span class="line">    rules: [ <span class="comment">// 用于规定在不同模块被创建时如何处理模块的规则数组</span></span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.css$/</span>, <span class="comment">// 匹配特定文件的正则表达式或正则表达式数组</span></span><br><span class="line">        use: [ <span class="comment">// 应用于模块的 loader 使用列表</span></span><br><span class="line">          <span class="string">'style-loader'</span>,</span><br><span class="line">          <span class="string">'css-loader'</span></span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>我们来创建一个 CSS 文件：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cd src &amp;&amp; touch style.css</span><br></pre></td></tr></table></figure></p>
-<p>src/style.css<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.hello</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<pre><code class="javascript">const path = require(&#39;path&#39;);
+
+module.exports = {
+  entry: &#39;./src/index.js&#39;,
+  output: {
+    filename: &#39;bundle.js&#39;, 
+    path: path.resolve(__dirname, &#39;dist&#39;)
+  },
+  module: { // 如何处理项目中不同类型的模块
+    rules: [ // 用于规定在不同模块被创建时如何处理模块的规则数组
+      {
+        test: /\.css$/, // 匹配特定文件的正则表达式或正则表达式数组
+        use: [ // 应用于模块的 loader 使用列表
+          &#39;style-loader&#39;,
+          &#39;css-loader&#39;
+        ]
+      }
+    ]
+  }
+};
+</code></pre>
+<p>我们来创建一个 CSS 文件：</p>
+<pre><code class="javascript">$ cd src &amp;&amp; touch style.css
+</code></pre>
+<p>src/style.css</p>
+<pre><code class="css">.hello {
+  color: red;
+}
+</code></pre>
 <p>src/index.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> _ <span class="keyword">from</span> <span class="string">'lodash'</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">'./style.css'</span>; <span class="comment">// 通过`import`引入 CSS 文件</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">component</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> element = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line">    </span><br><span class="line">  element.innerHTML = _.join([<span class="string">'Hello'</span>, <span class="string">'webpack'</span>], <span class="string">' '</span>);</span><br><span class="line">  element.classList.add(<span class="string">'hello'</span>); <span class="comment">// 在相应元素上添加类名</span></span><br><span class="line">    </span><br><span class="line">  <span class="keyword">return</span> element;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">document</span>.body.appendChild(component());</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">import _ from &#39;lodash&#39;;
+import &#39;./style.css&#39;; // 通过`import`引入 CSS 文件
+
+function component() {
+  const element = document.createElement(&#39;div&#39;);
+
+  element.innerHTML = _.join([&#39;Hello&#39;, &#39;webpack&#39;], &#39; &#39;);
+  element.classList.add(&#39;hello&#39;); // 在相应元素上添加类名
+
+  return element;
+}
+
+document.body.appendChild(component());
+</code></pre>
 <p>执行<code>npm run build</code>，然后打开<code>index.html</code>，就可以看到红色的字体了。CSS 文件此时已经被打包到 bundle.js 中。再打开浏览器控制台，就可以看到 webpack 做了些什么。</p>
-<h3 id="加载图片"><a href="#加载图片" class="headerlink" title="加载图片"></a>加载图片</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install --save-dev file-loader</span><br></pre></td></tr></table></figure>
+<h3 id="加载图片"><a href="#加载图片" class="headerlink" title="加载图片"></a>加载图片</h3><pre><code class="javascript">$ npm install --save-dev file-loader
+</code></pre>
 <p>file-loader 指示 webpack 以文件格式发出所需对象并返回文件的公共URL，可用于任何文件的加载。</p>
 <p>webpack.config.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  entry: <span class="string">'./src/index.js'</span>,</span><br><span class="line">  output: &#123;</span><br><span class="line">    filename: <span class="string">'bundle.js'</span>, </span><br><span class="line">    path: path.resolve(__dirname, <span class="string">'dist'</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.css$/</span>,</span><br><span class="line">        use: [</span><br><span class="line">          <span class="string">'style-loader'</span>,</span><br><span class="line">          <span class="string">'css-loader'</span></span><br><span class="line">        ]</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123; <span class="comment">// 增加加载图片的规则</span></span><br><span class="line">        test: <span class="regexp">/\.(png|svg|jpg|gif)$/</span>,</span><br><span class="line">        use: [</span><br><span class="line">          <span class="string">'file-loader'</span></span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">const path = require(&#39;path&#39;);
+
+module.exports = {
+  entry: &#39;./src/index.js&#39;,
+  output: {
+    filename: &#39;bundle.js&#39;, 
+    path: path.resolve(__dirname, &#39;dist&#39;)
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          &#39;style-loader&#39;,
+          &#39;css-loader&#39;
+        ]
+      },
+      { // 增加加载图片的规则
+        test: /\.(png|svg|jpg|gif)$/,
+        use: [
+          &#39;file-loader&#39;
+        ]
+      }
+    ]
+  }
+};
+</code></pre>
 <p>我们在当前项目的Src目录中如下增加图片</p>
 <p>src/index.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> _ <span class="keyword">from</span> <span class="string">'lodash'</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">'./style.css'</span>;</span><br><span class="line"><span class="keyword">import</span> Icon <span class="keyword">from</span> <span class="string">'./icon.jpg'</span>; <span class="comment">// Icon 是图片的 URL</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">component</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> element = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line">    </span><br><span class="line">  element.innerHTML = _.join([<span class="string">'Hello'</span>, <span class="string">'webpack'</span>], <span class="string">' '</span>);</span><br><span class="line">  element.classList.add(<span class="string">'hello'</span>);</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">const</span> myIcon = <span class="keyword">new</span> Image();</span><br><span class="line">  myIcon.src = Icon;</span><br><span class="line"></span><br><span class="line">  element.appendChild(myIcon);</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> element;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">document</span>.body.appendChild(component());</span><br></pre></td></tr></table></figure>
-<p>src/style.css<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.hello &#123;</span><br><span class="line">  color: red;</span><br><span class="line">  background: url(./icon.jpg);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<pre><code class="javascript">import _ from &#39;lodash&#39;;
+import &#39;./style.css&#39;;
+import Icon from &#39;./icon.jpg&#39;; // Icon 是图片的 URL
+
+function component() {
+  const element = document.createElement(&#39;div&#39;);
+
+  element.innerHTML = _.join([&#39;Hello&#39;, &#39;webpack&#39;], &#39; &#39;);
+  element.classList.add(&#39;hello&#39;);
+
+  const myIcon = new Image();
+  myIcon.src = Icon;
+
+  element.appendChild(myIcon);
+
+  return element;
+}
+
+document.body.appendChild(component());
+</code></pre>
+<p>src/style.css</p>
+<pre><code class="javascript">.hello {
+  color: red;
+  background: url(./icon.jpg);
+}
+</code></pre>
 <p>再<code>npm run build</code>之。现在你可以看到单独的图片和以图片为基础的背景图了。</p>
 <h3 id="加载字体"><a href="#加载字体" class="headerlink" title="加载字体"></a>加载字体</h3><p>加载字体用的也是 file-loader。</p>
 <p>webpack.config.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  entry: <span class="string">'./src/index.js'</span>,</span><br><span class="line">  output: &#123;</span><br><span class="line">    filename: <span class="string">'bundle.js'</span>, </span><br><span class="line">    path: path.resolve(__dirname, <span class="string">'dist'</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.css$/</span>,</span><br><span class="line">        use: [</span><br><span class="line">          <span class="string">'style-loader'</span>,</span><br><span class="line">          <span class="string">'css-loader'</span></span><br><span class="line">        ]</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.(png|svg|jpg|gif)$/</span>,</span><br><span class="line">        use: [</span><br><span class="line">          <span class="string">'file-loader'</span></span><br><span class="line">        ]</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123; <span class="comment">// 增加加载字体的规则</span></span><br><span class="line">        test: <span class="regexp">/\.(woff|woff2|eot|ttf|otf)$/</span>,</span><br><span class="line">        use: [</span><br><span class="line">          <span class="string">'file-loader'</span></span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">const path = require(&#39;path&#39;);
+
+module.exports = {
+  entry: &#39;./src/index.js&#39;,
+  output: {
+    filename: &#39;bundle.js&#39;, 
+    path: path.resolve(__dirname, &#39;dist&#39;)
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          &#39;style-loader&#39;,
+          &#39;css-loader&#39;
+        ]
+      },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: [
+          &#39;file-loader&#39;
+        ]
+      },
+      { // 增加加载字体的规则
+        test: /\.(woff|woff2|eot|ttf|otf)$/,
+        use: [
+          &#39;file-loader&#39;
+        ]
+      }
+    ]
+  }
+};
+
+</code></pre>
 <p>在当前项目的Src目录中如下增加字体：</p>
-<p>src/style.css<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@font-face</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: MyFont;</span><br><span class="line">  <span class="attribute">src</span>: <span class="built_in">url</span>(./my-font.ttf);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.hello</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: red;</span><br><span class="line">  <span class="attribute">background</span>: <span class="built_in">url</span>(./icon.jpg);</span><br><span class="line">  <span class="attribute">font-family</span>: MyFont;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>src/style.css</p>
+<pre><code class="css">@font-face {
+  font-family: MyFont;
+  src: url(./my-font.ttf);
+}
+
+.hello {
+  color: red;
+  background: url(./icon.jpg);
+  font-family: MyFont;
+}
+</code></pre>
 <p>运行打包命令之后便可以看到打包好的文件和发生改变的页面。</p>
 <h3 id="加载-JSON-文件"><a href="#加载-JSON-文件" class="headerlink" title="加载 JSON 文件"></a>加载 JSON 文件</h3><p>因为 webpack 对 JSON 文件的支持是内置的，所以可以直接添加。</p>
-<p>src/data.json<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"webpack-demo"</span>,</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</span><br><span class="line">  <span class="attr">"author"</span>: <span class="string">"Sam Yang"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>src/index.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> _ <span class="keyword">from</span> <span class="string">'lodash'</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">'./style.css'</span>;</span><br><span class="line"><span class="keyword">import</span> Icon <span class="keyword">from</span> <span class="string">'./icon.jpg'</span>;</span><br><span class="line"><span class="keyword">import</span> Data <span class="keyword">from</span> <span class="string">'./data.json'</span>; <span class="comment">// Data 变量包含可直接使用的 JSON 解析得到的对象</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">component</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> element = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line">    </span><br><span class="line">  element.innerHTML = _.join([<span class="string">'Hello'</span>, <span class="string">'webpack'</span>], <span class="string">' '</span>);</span><br><span class="line">  element.classList.add(<span class="string">'hello'</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> myIcon = <span class="keyword">new</span> Image();</span><br><span class="line">  myIcon.src = Icon;</span><br><span class="line"></span><br><span class="line">  element.appendChild(myIcon);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">console</span>.log(Data);</span><br><span class="line">    </span><br><span class="line">  <span class="keyword">return</span> element;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">document</span>.body.appendChild(component());</span><br></pre></td></tr></table></figure></p>
+<p>src/data.json</p>
+<pre><code class="json">{
+  &quot;name&quot;: &quot;webpack-demo&quot;,
+  &quot;version&quot;: &quot;1.0.0&quot;,
+  &quot;author&quot;: &quot;Sam Yang&quot;
+}
+</code></pre>
+<p>src/index.js</p>
+<pre><code class="javascript">import _ from &#39;lodash&#39;;
+import &#39;./style.css&#39;;
+import Icon from &#39;./icon.jpg&#39;;
+import Data from &#39;./data.json&#39;; // Data 变量包含可直接使用的 JSON 解析得到的对象
+
+function component() {
+  const element = document.createElement(&#39;div&#39;);
+
+  element.innerHTML = _.join([&#39;Hello&#39;, &#39;webpack&#39;], &#39; &#39;);
+  element.classList.add(&#39;hello&#39;);
+
+  const myIcon = new Image();
+  myIcon.src = Icon;
+
+  element.appendChild(myIcon);
+
+  console.log(Data);
+
+  return element;
+}
+
+document.body.appendChild(component());
+</code></pre>
 <p>关于其他文件的加载，可以寻求相应的 loader。</p>
 <h2 id="输出管理"><a href="#输出管理" class="headerlink" title="输出管理"></a>输出管理</h2><p>前面我们只有一个输入文件，但现实是我们往往有不止一个输入文件，这时我们就需要输入多个入口文件并管理输出文件。我们在 src 目录下增加一个 print.js 文件。</p>
 <p>src/print.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">printMe</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'I get called from print.js!'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">export default function printMe() {
+  console.log(&#39;I get called from print.js!&#39;);
+}
+</code></pre>
 <p>src/index.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> _ <span class="keyword">from</span> <span class="string">'lodash'</span>;</span><br><span class="line"><span class="keyword">import</span> printMe <span class="keyword">from</span> <span class="string">'./print.js'</span>;</span><br><span class="line"><span class="comment">// import './style.css';</span></span><br><span class="line"><span class="comment">// import Icon from './icon.jpg';</span></span><br><span class="line"><span class="comment">// import Data from './data.json';</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">component</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> element = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line">  <span class="keyword">const</span> btn = <span class="built_in">document</span>.createElement(<span class="string">'button'</span>);</span><br><span class="line">    </span><br><span class="line">  element.innerHTML = _.join([<span class="string">'Hello'</span>, <span class="string">'webpack'</span>], <span class="string">' '</span>);</span><br><span class="line">  <span class="comment">// element.classList.add('hello');</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// const myIcon = new Image();</span></span><br><span class="line">  <span class="comment">// myIcon.src = Icon;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// element.appendChild(myIcon);</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// console.log(Data);</span></span><br><span class="line"></span><br><span class="line">  btn.innerHTML = <span class="string">'Click me and check the console!'</span>;</span><br><span class="line">  btn.onclick = printMe;</span><br><span class="line"></span><br><span class="line">  element.appendChild(btn);</span><br><span class="line">    </span><br><span class="line">  <span class="keyword">return</span> element;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">document</span>.body.appendChild(component());</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">import _ from &#39;lodash&#39;;
+import printMe from &#39;./print.js&#39;;
+// import &#39;./style.css&#39;;
+// import Icon from &#39;./icon.jpg&#39;;
+// import Data from &#39;./data.json&#39;;
+
+function component() {
+  const element = document.createElement(&#39;div&#39;);
+  const btn = document.createElement(&#39;button&#39;);
+
+  element.innerHTML = _.join([&#39;Hello&#39;, &#39;webpack&#39;], &#39; &#39;);
+  // element.classList.add(&#39;hello&#39;);
+
+  // const myIcon = new Image();
+  // myIcon.src = Icon;
+
+  // element.appendChild(myIcon);
+
+  // console.log(Data);
+
+  btn.innerHTML = &#39;Click me and check the console!&#39;;
+  btn.onclick = printMe;
+
+  element.appendChild(btn);
+
+  return element;
+}
+
+document.body.appendChild(component());
+</code></pre>
 <p>dist/index.html</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>webpack demo<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./print.bundle.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- &lt;script src="bundle.js"&gt;&lt;/script&gt; --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./app.bundle.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;webpack demo&lt;/title&gt;
+    &lt;script src=&quot;./print.bundle.js&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;!-- &lt;script src=&quot;bundle.js&quot;&gt;&lt;/script&gt; --&gt;
+    &lt;script src=&quot;./app.bundle.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
 <p>webpack.config.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">// entry: './src/index.js',</span></span><br><span class="line">  entry: &#123;</span><br><span class="line">    app: <span class="string">'./src/index.js'</span>,</span><br><span class="line">    print: <span class="string">'./src/print.js'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  output: &#123;</span><br><span class="line">    <span class="comment">// filename: 'bundle.js',</span></span><br><span class="line">    filename: <span class="string">'[name].bundle.js'</span>, <span class="comment">// 根据入口起点名动态生成 bundle 名，可以使用像 "js/[name]/bundle.js" 这样的文件夹结构</span></span><br><span class="line">    path: path.resolve(__dirname, <span class="string">'dist'</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">const path = require(&#39;path&#39;);
+
+module.exports = {
+  // entry: &#39;./src/index.js&#39;,
+  entry: {
+    app: &#39;./src/index.js&#39;,
+    print: &#39;./src/print.js&#39;
+  },
+  output: {
+    // filename: &#39;bundle.js&#39;,
+    filename: &#39;[name].bundle.js&#39;, // 根据入口起点名动态生成 bundle 名，可以使用像 &quot;js/[name]/bundle.js&quot; 这样的文件夹结构
+    path: path.resolve(__dirname, &#39;dist&#39;)
+  },
+  // ...
+};
+</code></pre>
 <blockquote>
 <p>Tips<br>filename: ‘[name].bundle.js’中的[name]会替换为对应的入口起点名，其他可用的替换请参见 output.filename。</p>
 </blockquote>
@@ -227,23 +511,124 @@
 <blockquote>
 <p>loader 和 plugin，有什么区别？<br>loader (加载器)，重在“加载”二字，是用于预处理文件的，只用于在加载不同类型的文件时对不同类型的文件做相应的处理。而 plugin (插件)，顾名思义，是用来增加 webpack 的功能的，作用于整个 webpack 的构建过程。在 webpack 这个大公司中，loader 是保安大叔，负责对进入公司的不同人员的处理，而 plugin 则是公司里不同职位的职员，负责公司里的各种不同业务，每增加一种新型的业务需求，我们就需要增加一种 plugin。</p>
 </blockquote>
-<p>安装插件：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm i --save-dev html-webpack-plugin</span><br></pre></td></tr></table></figure></p>
+<p>安装插件：</p>
+<pre><code class="javascript">$ npm i --save-dev html-webpack-plugin
+</code></pre>
 <p>webpack.config.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">// entry: './src/index.js',</span></span><br><span class="line">  entry: &#123;</span><br><span class="line">    app: <span class="string">'./src/index.js'</span>,</span><br><span class="line">    print: <span class="string">'./src/print.js'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  output: &#123;</span><br><span class="line">    <span class="comment">// filename: 'bundle.js',</span></span><br><span class="line">    filename: <span class="string">'[name].bundle.js'</span>,</span><br><span class="line">    path: path.resolve(__dirname, <span class="string">'dist'</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [ <span class="comment">// 插件属性，是插件的实例数组</span></span><br><span class="line">    <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">      title: <span class="string">'webpack demo'</span>,  <span class="comment">// 生成 HTML 文档的标题</span></span><br><span class="line">      filename: <span class="string">'index.html'</span> <span class="comment">// 写入 HTML 文件的文件名，默认 `index.html`</span></span><br><span class="line">    &#125;)</span><br><span class="line">  ],</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">const path = require(&#39;path&#39;);
+const HtmlWebpackPlugin = require(&#39;html-webpack-plugin&#39;);
+
+module.exports = {
+  // entry: &#39;./src/index.js&#39;,
+  entry: {
+    app: &#39;./src/index.js&#39;,
+    print: &#39;./src/print.js&#39;
+  },
+  output: {
+    // filename: &#39;bundle.js&#39;,
+    filename: &#39;[name].bundle.js&#39;,
+    path: path.resolve(__dirname, &#39;dist&#39;)
+  },
+  plugins: [ // 插件属性，是插件的实例数组
+    new HtmlWebpackPlugin({
+      title: &#39;webpack demo&#39;,  // 生成 HTML 文档的标题
+      filename: &#39;index.html&#39; // 写入 HTML 文件的文件名，默认 `index.html`
+    })
+  ],
+  // ...
+};
+</code></pre>
 <p>你可以先把 dist 文件夹的index.html文件删除，然后执行打包命令。咻咻咻，我们看到 dist 目录下已经自动生成了一个index.html文件，但即使不删除原先的index.html，该插件默认生成的index.html也会替换原本的index.html。</p>
 <p>此刻，当你细细观察 dist 目录时，虽然现在生成了新的打包文件，但原本的打包文件bundle.js及其他不用的文件仍然存在在 dist 目录中，所以在每次构建前我们需要晴空 dist 目录，我们使用 <code>CleanWebpackPlugin</code> 插件。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm i clean-webpack-plugin --save-dev</span><br></pre></td></tr></table></figure>
-<p>webpack.config.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>);</span><br><span class="line"><span class="keyword">const</span> CleanWebpackPlugin = <span class="built_in">require</span>(<span class="string">'clean-webpack-plugin'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">// entry: './src/index.js',</span></span><br><span class="line">  entry: &#123;</span><br><span class="line">    app: <span class="string">'./src/index.js'</span>,</span><br><span class="line">    print: <span class="string">'./src/print.js'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  output: &#123;</span><br><span class="line">    <span class="comment">// filename: 'bundle.js',</span></span><br><span class="line">    filename: <span class="string">'[name].bundle.js'</span>,</span><br><span class="line">    path: path.resolve(__dirname, <span class="string">'dist'</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">      title: <span class="string">'webpack demo'</span>,</span><br><span class="line">      filename: <span class="string">'index.html'</span></span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="keyword">new</span> CleanWebpackPlugin([<span class="string">'dist'</span>]) <span class="comment">// 第一个参数是要清理的目录的字符串数组</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<pre><code class="javascript">$ npm i clean-webpack-plugin --save-dev
+</code></pre>
+<p>webpack.config.js</p>
+<pre><code class="javascript">const path = require(&#39;path&#39;);
+const HtmlWebpackPlugin = require(&#39;html-webpack-plugin&#39;);
+const CleanWebpackPlugin = require(&#39;clean-webpack-plugin&#39;);
+
+module.exports = {
+  // entry: &#39;./src/index.js&#39;,
+  entry: {
+    app: &#39;./src/index.js&#39;,
+    print: &#39;./src/print.js&#39;
+  },
+  output: {
+    // filename: &#39;bundle.js&#39;,
+    filename: &#39;[name].bundle.js&#39;,
+    path: path.resolve(__dirname, &#39;dist&#39;)
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: &#39;webpack demo&#39;,
+      filename: &#39;index.html&#39;
+    }),
+    new CleanWebpackPlugin([&#39;dist&#39;]) // 第一个参数是要清理的目录的字符串数组
+  ],
+  // ...
+};
+
+</code></pre>
 <p>打包之，现在，dist 中只存在打包生成的文件。</p>
 <h2 id="webpack-提供了很多便于开发时使用的功能，来一一看看吧。"><a href="#webpack-提供了很多便于开发时使用的功能，来一一看看吧。" class="headerlink" title="webpack 提供了很多便于开发时使用的功能，来一一看看吧。"></a>webpack 提供了很多便于开发时使用的功能，来一一看看吧。</h2><h3 id="使用代码映射-source-map"><a href="#使用代码映射-source-map" class="headerlink" title="使用代码映射 (source map)"></a>使用代码映射 (source map)</h3><p>当你的代码被打包后，如果打包后的代码发生了错误，你很难追踪到错误发生的原始位置，这个时候，我们就需要代码映射 (source map) 这种工具，它能将编译后的代码映射回原始的源码，你的错误是起源于打包前的b.js的某个位置，代码映射就能告诉你错误是那个模块的那个位置。webpack 默认提供了 10 种风格的代码映射，使用它们会明显影响到构建 (build) 和重构建 (rebuild，每次修改后需要重新构建) 的速度，十种风格的差异可以参看 devtool。关于如何选择映射风格可以参看 Webpack devtool source map。这里，我们为了准确显示错误位置，选择速度较慢的<code>inline-source-map</code>。</p>
 <p>webpack.config.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>);</span><br><span class="line"><span class="keyword">const</span> CleanWebpackPlugin = <span class="built_in">require</span>(<span class="string">'clean-webpack-plugin'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  devtool: <span class="string">'inline-source-map'</span>, <span class="comment">// 控制是否生成以及如何生成 source map</span></span><br><span class="line">  <span class="comment">// entry: './src/index.js',</span></span><br><span class="line">  entry: &#123;</span><br><span class="line">    app: <span class="string">'./src/index.js'</span>,</span><br><span class="line">    print: <span class="string">'./src/print.js'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">const path = require(&#39;path&#39;);
+const HtmlWebpackPlugin = require(&#39;html-webpack-plugin&#39;);
+const CleanWebpackPlugin = require(&#39;clean-webpack-plugin&#39;);
+
+module.exports = {
+  devtool: &#39;inline-source-map&#39;, // 控制是否生成以及如何生成 source map
+  // entry: &#39;./src/index.js&#39;,
+  entry: {
+    app: &#39;./src/index.js&#39;,
+    print: &#39;./src/print.js&#39;
+  },
+  // ...
+};
+</code></pre>
 <p>现在来手动制造一些错误：</p>
-<p>src/print.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">printMe</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">-   <span class="built_in">console</span>.log(<span class="string">'I get called from print.js!'</span>);</span><br><span class="line">+   cosnole.log(<span class="string">'I get called from print.js!'</span>);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
-<p>打包之后打开index.html再点击按钮，你就会看到控制台显示如下报错：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> Uncaught <span class="built_in">ReferenceError</span>: cosnole is not defined</span><br><span class="line">    at HTMLButtonElement.printMe (print.js:<span class="number">2</span>)</span><br><span class="line"><span class="string">``</span><span class="string">`    </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">现在，我们很清楚哪里发生了错误，然后轻松地改正之。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">### webpack-dev-server</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">你一定有这样的体验，开发时每次修改代码保存后都需要重新手动构建代码并手动刷新浏览器以观察修改效果，这是很麻烦的，所以，我们要实时加载代码。可喜的是，webpack 提供了对实时加载代码的支持。我们需要安装 webpack-dev-server 以获得支持。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">`</span><span class="string">``</span>javascript</span><br><span class="line">$ npm i --save-dev webpack-dev-server</span><br></pre></td></tr></table></figure></p>
+<p>src/print.js</p>
+<pre><code class="javascript">  export default function printMe() {
+-   console.log(&#39;I get called from print.js!&#39;);
++   cosnole.log(&#39;I get called from print.js!&#39;);
+  }
+</code></pre>
+<p>打包之后打开index.html再点击按钮，你就会看到控制台显示如下报错：</p>
+<pre><code class="javascript"> Uncaught ReferenceError: cosnole is not defined
+    at HTMLButtonElement.printMe (print.js:2)
+</code></pre>
+<p>现在，我们很清楚哪里发生了错误，然后轻松地改正之。</p>
+<h3 id="webpack-dev-server"><a href="#webpack-dev-server" class="headerlink" title="webpack-dev-server"></a>webpack-dev-server</h3><p>你一定有这样的体验，开发时每次修改代码保存后都需要重新手动构建代码并手动刷新浏览器以观察修改效果，这是很麻烦的，所以，我们要实时加载代码。可喜的是，webpack 提供了对实时加载代码的支持。我们需要安装 webpack-dev-server 以获得支持。</p>
+<pre><code class="javascript">$ npm i --save-dev webpack-dev-server
+</code></pre>
 <p>webpack.config.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>);</span><br><span class="line"><span class="keyword">const</span> CleanWebpackPlugin = <span class="built_in">require</span>(<span class="string">'clean-webpack-plugin'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  devtool: <span class="string">'inline-source-map'</span>,</span><br><span class="line">  devServer: &#123; <span class="comment">// 检测代码变化并自动重新编译并自动刷新浏览器</span></span><br><span class="line">    contentBase: path.resolve(__dirname, <span class="string">'dist'</span>) <span class="comment">// 设置静态资源的根目录</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// entry: './src/index.js',</span></span><br><span class="line">  entry: &#123;</span><br><span class="line">    app: <span class="string">'./src/index.js'</span>,</span><br><span class="line">    print: <span class="string">'./src/print.js'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>package.json<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  ...</span><br><span class="line">  <span class="string">"scripts"</span>: &#123;</span><br><span class="line">    <span class="string">"build"</span>: <span class="string">"webpack"</span>,</span><br><span class="line">    <span class="string">"start"</span>: <span class="string">"webpack-dev-server --open"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<pre><code class="javascript">const path = require(&#39;path&#39;);
+const HtmlWebpackPlugin = require(&#39;html-webpack-plugin&#39;);
+const CleanWebpackPlugin = require(&#39;clean-webpack-plugin&#39;);
+
+module.exports = {
+  devtool: &#39;inline-source-map&#39;,
+  devServer: { // 检测代码变化并自动重新编译并自动刷新浏览器
+    contentBase: path.resolve(__dirname, &#39;dist&#39;) // 设置静态资源的根目录
+  },
+  // entry: &#39;./src/index.js&#39;,
+  entry: {
+    app: &#39;./src/index.js&#39;,
+    print: &#39;./src/print.js&#39;
+  },
+  // ...
+};
+</code></pre>
+<p>package.json</p>
+<pre><code class="javascript">{
+  ...
+  &quot;scripts&quot;: {
+    &quot;build&quot;: &quot;webpack&quot;,
+    &quot;start&quot;: &quot;webpack-dev-server --open&quot;
+  },
+  ...
+}
+</code></pre>
 <blockquote>
 <p>Tips<br>使用 webpack-dev-server 时，webpack 并没有将所有生成的文件写入磁盘，而是放在内存中，提供更快的内存内访问，便于实时更新。</p>
 </blockquote>
@@ -253,26 +638,137 @@
 <p>Tips<br>模块热替换（HMR）只更新发生变更（替换、添加、删除）的模块，而无需重新加载整个页面（实时加载，LiveReload），这样可以显著加快开发速度，一旦打开了 webpack-dev-server 的 hot 模式，在试图重新加载整个页面之前，热模式会尝试使用 HMR 来更新。</p>
 </blockquote>
 <p>webpack.config.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>);</span><br><span class="line"><span class="keyword">const</span> CleanWebpackPlugin = <span class="built_in">require</span>(<span class="string">'clean-webpack-plugin'</span>);</span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>); <span class="comment">// 引入 webpack 便于调用其内置插件</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  devtool: <span class="string">'inline-source-map'</span>,</span><br><span class="line">  devServer: &#123;</span><br><span class="line">    contentBase: path.resolve(__dirname, <span class="string">'dist'</span>),</span><br><span class="line">    hot: <span class="literal">true</span>, <span class="comment">// 告诉 dev-server 我们在用 HMR</span></span><br><span class="line">    hotOnly: <span class="literal">true</span> <span class="comment">// 指定如果热加载失败了禁止刷新页面 (这是 webpack 的默认行为)，这样便于我们知道失败是因为何种错误</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// entry: './src/index.js',</span></span><br><span class="line">  entry: &#123;</span><br><span class="line">    app: <span class="string">'./src/index.js'</span>,</span><br><span class="line">    <span class="comment">// print: './src/print.js'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">      title: <span class="string">'webpack demo'</span>,</span><br><span class="line">      filename: <span class="string">'index.html'</span></span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="keyword">new</span> CleanWebpackPlugin([<span class="string">'dist'</span>]),</span><br><span class="line">    <span class="keyword">new</span> webpack.HotModuleReplacementPlugin(), <span class="comment">// 启用 HMR</span></span><br><span class="line">    <span class="keyword">new</span> webpack.NamedModulesPlugin() <span class="comment">// 打印日志信息时 webpack 默认使用模块的数字 ID 指代模块，不便于 debug，这个插件可以将其替换为模块的真实路径</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">const path = require(&#39;path&#39;);
+const HtmlWebpackPlugin = require(&#39;html-webpack-plugin&#39;);
+const CleanWebpackPlugin = require(&#39;clean-webpack-plugin&#39;);
+const webpack = require(&#39;webpack&#39;); // 引入 webpack 便于调用其内置插件
+
+module.exports = {
+  devtool: &#39;inline-source-map&#39;,
+  devServer: {
+    contentBase: path.resolve(__dirname, &#39;dist&#39;),
+    hot: true, // 告诉 dev-server 我们在用 HMR
+    hotOnly: true // 指定如果热加载失败了禁止刷新页面 (这是 webpack 的默认行为)，这样便于我们知道失败是因为何种错误
+  },
+  // entry: &#39;./src/index.js&#39;,
+  entry: {
+    app: &#39;./src/index.js&#39;,
+    // print: &#39;./src/print.js&#39;
+  },
+  // ...
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: &#39;webpack demo&#39;,
+      filename: &#39;index.html&#39;
+    }),
+    new CleanWebpackPlugin([&#39;dist&#39;]),
+    new webpack.HotModuleReplacementPlugin(), // 启用 HMR
+    new webpack.NamedModulesPlugin() // 打印日志信息时 webpack 默认使用模块的数字 ID 指代模块，不便于 debug，这个插件可以将其替换为模块的真实路径
+  ],
+  // ...
+};
+</code></pre>
 <blockquote>
 <p>Tips<br>webpack-dev-server 会为每个入口文件创建一个客户端脚本，这个脚本会监控该入口文件的依赖模块的更新，如果该入口文件编写了 HMR 处理函数，它就能接收依赖模块的更新，反之，更新会向上冒泡，直到客户端脚本仍没有处理函数的话，webpack-dev-server 会重新加载整个页面。如果入口文件本身发生了更新，因为向上会冒泡到客户端脚本，并且不存在 HMR 处理函数，所以会导致页面重载。</p>
 </blockquote>
 <p>我们已经开启了 HMR 的功能，HMR 的接口已经暴露在<code>module.hot</code>属性之下，我们只需要调用 HMR API 即可实现热加载。当“被加载模块”发生改变时，依赖该模块的模块便能检测到改变并接收改变之后的模块。</p>
 <p>src/index.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> _ <span class="keyword">from</span> <span class="string">'lodash'</span>;</span><br><span class="line"><span class="keyword">import</span> printMe <span class="keyword">from</span> <span class="string">'./print.js'</span>;</span><br><span class="line"><span class="comment">// import './style.css';</span></span><br><span class="line"><span class="comment">// import Icon from './icon.jpg';</span></span><br><span class="line"><span class="comment">// import Data from './data.json';</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">component</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> element = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line">  <span class="keyword">const</span> btn = <span class="built_in">document</span>.createElement(<span class="string">'button'</span>);</span><br><span class="line">    </span><br><span class="line">  element.innerHTML = _.join([<span class="string">'Hello'</span>, <span class="string">'webpack'</span>], <span class="string">' '</span>);</span><br><span class="line">  <span class="comment">// element.classList.add('hello');</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// const myIcon = new Image();</span></span><br><span class="line">  <span class="comment">// myIcon.src = Icon;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// element.appendChild(myIcon);</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// console.log(Data);</span></span><br><span class="line"></span><br><span class="line">  btn.innerHTML = <span class="string">'Click me and check the console!'</span>;</span><br><span class="line">  btn.onclick = printMe;</span><br><span class="line"></span><br><span class="line">  element.appendChild(btn);</span><br><span class="line">    </span><br><span class="line">  <span class="keyword">return</span> element;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">document</span>.body.appendChild(component());</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="built_in">module</span>.hot) &#123; <span class="comment">// 习惯上我们会检查是否可以访问 `module.hot` 属性</span></span><br><span class="line">  <span class="built_in">module</span>.hot.accept(<span class="string">'./print.js'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="comment">// 接受给定依赖模块的更新，并触发一个回调函数来对这些更新做出响应</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'Accepting the updated printMe module!'</span>);</span><br><span class="line">    printMe();</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">import _ from &#39;lodash&#39;;
+import printMe from &#39;./print.js&#39;;
+// import &#39;./style.css&#39;;
+// import Icon from &#39;./icon.jpg&#39;;
+// import Data from &#39;./data.json&#39;;
+
+function component() {
+  const element = document.createElement(&#39;div&#39;);
+  const btn = document.createElement(&#39;button&#39;);
+
+  element.innerHTML = _.join([&#39;Hello&#39;, &#39;webpack&#39;], &#39; &#39;);
+  // element.classList.add(&#39;hello&#39;);
+
+  // const myIcon = new Image();
+  // myIcon.src = Icon;
+
+  // element.appendChild(myIcon);
+
+  // console.log(Data);
+
+  btn.innerHTML = &#39;Click me and check the console!&#39;;
+  btn.onclick = printMe;
+
+  element.appendChild(btn);
+
+  return element;
+}
+
+document.body.appendChild(component());
+
+if(module.hot) { // 习惯上我们会检查是否可以访问 `module.hot` 属性
+  module.hot.accept(&#39;./print.js&#39;, function() { // 接受给定依赖模块的更新，并触发一个回调函数来对这些更新做出响应
+    console.log(&#39;Accepting the updated printMe module!&#39;);
+    printMe();
+  });
+}
+</code></pre>
 <p><code>npm start</code>之。为了演示效果，我们做如下修改：</p>
-<p>src/print.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">printMe</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">-   <span class="built_in">console</span>.log(<span class="string">'I get called from print.js!'</span>);</span><br><span class="line">+   <span class="built_in">console</span>.log(<span class="string">'Updating print.js...'</span>);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
-<p>我们会看到控制台打印出的信息中含有以下几行：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">index.js:<span class="number">33</span> Accepting the updated printMe <span class="built_in">module</span>!</span><br><span class="line">print.js:<span class="number">2</span> Updating print.js...</span><br><span class="line">log.js:<span class="number">23</span> [HMR] Updated modules:</span><br><span class="line">log.js:<span class="number">23</span> [HMR]  - ./src/print.js</span><br><span class="line">log.js:<span class="number">23</span> [HMR] App is up to date.</span><br></pre></td></tr></table></figure></p>
+<p>src/print.js</p>
+<pre><code class="javascript">  export default function printMe() {
+-   console.log(&#39;I get called from print.js!&#39;);
++   console.log(&#39;Updating print.js...&#39;);
+  }
+</code></pre>
+<p>我们会看到控制台打印出的信息中含有以下几行：</p>
+<pre><code class="javascript">index.js:33 Accepting the updated printMe module!
+print.js:2 Updating print.js...
+log.js:23 [HMR] Updated modules:
+log.js:23 [HMR]  - ./src/print.js
+log.js:23 [HMR] App is up to date.
+</code></pre>
 <blockquote>
 <p>Tips<br>webpack-dev-server 在 inline mode (此为默认模式) 时，会为每个入口起点 (entry) 创建一个客户端脚本，所以你会在上面的输出中看到有些信息重复输出两次。</p>
 </blockquote>
 <p>但是当你点击页面的按钮时，你会发现控制台输出的是旧的printMe函数输出的信息，因为onclick事件绑定的仍是原始的printMe函数。我们需要在module.hot.accept里更新绑定。</p>
 <p>src/index.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> _ <span class="keyword">from</span> <span class="string">'lodash'</span>;</span><br><span class="line"><span class="keyword">import</span> printMe <span class="keyword">from</span> <span class="string">'./print.js'</span>;</span><br><span class="line"><span class="comment">// import './style.css';</span></span><br><span class="line"><span class="comment">// import Icon from './icon.jpg';</span></span><br><span class="line"><span class="comment">// import Data from './data.json';</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// document.body.appendChild(component());</span></span><br><span class="line"><span class="keyword">var</span> element = component();</span><br><span class="line"><span class="built_in">document</span>.body.appendChild(element);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="built_in">module</span>.hot) &#123;</span><br><span class="line">  <span class="built_in">module</span>.hot.accept(<span class="string">'./print.js'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'Accepting the updated printMe module!'</span>);</span><br><span class="line">    <span class="comment">// printMe();</span></span><br><span class="line">    </span><br><span class="line">    <span class="built_in">document</span>.body.removeChild(element);</span><br><span class="line">    element = component();</span><br><span class="line">    <span class="built_in">document</span>.body.appendChild(element);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">import _ from &#39;lodash&#39;;
+import printMe from &#39;./print.js&#39;;
+// import &#39;./style.css&#39;;
+// import Icon from &#39;./icon.jpg&#39;;
+// import Data from &#39;./data.json&#39;;
+
+// ...
+
+// document.body.appendChild(component());
+var element = component();
+document.body.appendChild(element);
+
+if(module.hot) {
+  module.hot.accept(&#39;./print.js&#39;, function() {
+    console.log(&#39;Accepting the updated printMe module!&#39;);
+    // printMe();
+
+    document.body.removeChild(element);
+    element = component();
+    document.body.appendChild(element);
+  });
+}
+</code></pre>
 <p>模块热替换也可以用于样式的修改，效果跟控制台修改一样一样的。</p>
 <p>src/index.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> _ <span class="keyword">from</span> <span class="string">'lodash'</span>;</span><br><span class="line"><span class="keyword">import</span> printMe <span class="keyword">from</span> <span class="string">'./print.js'</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">'./style.css'</span>;</span><br><span class="line"><span class="comment">// import Icon from './icon.jpg';</span></span><br><span class="line"><span class="comment">// import Data from './data.json';</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
-<p><code>npm start</code>之，做如下修改：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* ... */</span></span><br><span class="line"></span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: yellow;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<pre><code class="javascript">import _ from &#39;lodash&#39;;
+import printMe from &#39;./print.js&#39;;
+import &#39;./style.css&#39;;
+// import Icon from &#39;./icon.jpg&#39;;
+// import Data from &#39;./data.json&#39;;
+
+// ...
+</code></pre>
+<p><code>npm start</code>之，做如下修改：</p>
+<pre><code class="css">/* ... */
+
+body {
+  background-color: yellow;
+}
+</code></pre>
 <p>可以发现在不重载页面的前提下我们对样式的修改进行了热加载，棒！</p>
 <h2 id="生产环境"><a href="#生产环境" class="headerlink" title="生产环境"></a>生产环境</h2><h3 id="自动方式"><a href="#自动方式" class="headerlink" title="自动方式"></a>自动方式</h3><p>我们只需要运行webpack -p (相当于 webpack –optimize-minimize –define process.env.NODE_ENV=”‘production’”)这个命令，便可以自动构建生产版本的应用，这个命令会完成以下步骤：</p>
 <ul>
@@ -281,23 +777,155 @@
 <li>设置 NodeJS 的环境变量，触发某些 package 包以不同方式编译</li>
 </ul>
 <p>值得一提的是，webpack -p设置的process.env.NODE_ENV环境变量，是用于编译后的代码的，只有在打包后的代码中，这一环境变量才是有效的。如果在 webpack 配置文件中引用此环境变量，得到的是 undefined，可以参见 #2537。但是，有时我们确实需要在 webpack 配置文件中使用 process.env.NODE_ENV，怎么办呢？一个方法是运行NODE_ENV=’production’ webpack -p命令，不过这个命令在Windows中是会出问题的。为了解决兼容问题，我们采用 <code>cross-env</code> 解决跨平台的问题。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm i --save-dev cross-env</span><br></pre></td></tr></table></figure>
-<p>package.json<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  ...</span><br><span class="line">  "scripts": &#123;</span><br><span class="line">    "build": "cross-env NODE_ENV=production webpack -p",</span><br><span class="line">    "start": "webpack-dev-server --open"</span><br><span class="line">  &#125;,</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>现在可以在配置文件中使用<code>process.env.NODE_ENV</code>了。</p>
-<p>webpack.config.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>);</span><br><span class="line"><span class="keyword">const</span> CleanWebpackPlugin = <span class="built_in">require</span>(<span class="string">'clean-webpack-plugin'</span>);</span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  output: &#123;</span><br><span class="line">    <span class="comment">// filename: 'bundle.js',</span></span><br><span class="line">    <span class="comment">// filename: '[name].bundle.js',</span></span><br><span class="line">    filename: process.env.NODE_ENV === <span class="string">'production'</span> ? <span class="string">'[name].[chunkhash].js'</span> : <span class="string">'[name].bundle.js'</span>, <span class="comment">// 在配置文件中使用`process.env.NODE_ENV`</span></span><br><span class="line">    path: path.resolve(__dirname, <span class="string">'dist'</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">      title: <span class="string">'webpack demo'</span>,</span><br><span class="line">      filename: <span class="string">'index.html'</span></span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="keyword">new</span> CleanWebpackPlugin([<span class="string">'dist'</span>]),</span><br><span class="line">    <span class="comment">// new webpack.HotModuleReplacementPlugin(), // 关闭 HMR 功能</span></span><br><span class="line">    <span class="keyword">new</span> webpack.NamedModulesPlugin()</span><br><span class="line">  ],</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<pre><code class="javascript">$ npm i --save-dev cross-env
+</code></pre>
+<p>package.json</p>
+<pre><code class="json">{
+  ...
+  &quot;scripts&quot;: {
+    &quot;build&quot;: &quot;cross-env NODE_ENV=production webpack -p&quot;,
+    &quot;start&quot;: &quot;webpack-dev-server --open&quot;
+  },
+  ...
+}
+</code></pre>
+<p>现在可以在配置文件中使用<code>process.env.NODE_ENV</code>了。</p>
+<p>webpack.config.js</p>
+<pre><code class="javascript">const path = require(&#39;path&#39;);
+const HtmlWebpackPlugin = require(&#39;html-webpack-plugin&#39;);
+const CleanWebpackPlugin = require(&#39;clean-webpack-plugin&#39;);
+const webpack = require(&#39;webpack&#39;);
+
+module.exports = {
+  // ...
+  output: {
+    // filename: &#39;bundle.js&#39;,
+    // filename: &#39;[name].bundle.js&#39;,
+    filename: process.env.NODE_ENV === &#39;production&#39; ? &#39;[name].[chunkhash].js&#39; : &#39;[name].bundle.js&#39;, // 在配置文件中使用`process.env.NODE_ENV`
+    path: path.resolve(__dirname, &#39;dist&#39;)
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: &#39;webpack demo&#39;,
+      filename: &#39;index.html&#39;
+    }),
+    new CleanWebpackPlugin([&#39;dist&#39;]),
+    // new webpack.HotModuleReplacementPlugin(), // 关闭 HMR 功能
+    new webpack.NamedModulesPlugin()
+  ],
+  // ...
+};
+</code></pre>
 <blockquote>
 <p>Tips<br>[chunkhash]不能和 HMR 一起使用，换句话说，不应该在开发环境中使用 [chunkhash] (或者 [hash])，这会导致许多问题。</p>
 </blockquote>
 <p>build 之，我们得到了生产版本的压缩好的打包文件。</p>
 <h3 id="多配置文件配置"><a href="#多配置文件配置" class="headerlink" title="多配置文件配置"></a>多配置文件配置</h3><p>有时我们会需要为不同的环境配置不同的配置文件，可以选择 简易方法，这里我们采用较为先进的方法。先准备一个基本的配置文件，包含了所有环境都包含的配置，然后用 <code>webpack-merge</code> 将它和特定环境的配置文件合并并导出，这样就减少了基本配置的重复。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm i --save-dev webpack-merge</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">$ npm i --save-dev webpack-merge
+</code></pre>
 <p>webpack.common.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>);</span><br><span class="line"><span class="keyword">const</span> CleanWebpackPlugin = <span class="built_in">require</span>(<span class="string">'clean-webpack-plugin'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  entry: &#123;</span><br><span class="line">    app: <span class="string">'./src/index.js'</span>,</span><br><span class="line">    print: <span class="string">'./src/print.js'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  output: &#123;</span><br><span class="line">    path: path.resolve(__dirname, <span class="string">'dist'</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">      title: <span class="string">'webpack demo'</span>,</span><br><span class="line">      filename: <span class="string">'index.html'</span></span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="keyword">new</span> CleanWebpackPlugin([<span class="string">'dist'</span>])</span><br><span class="line">  ],</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.css$/</span>,</span><br><span class="line">        use: [</span><br><span class="line">          <span class="string">'style-loader'</span>,</span><br><span class="line">          <span class="string">'css-loader'</span></span><br><span class="line">        ]</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.(png|svg|jpg|gif)$/</span>,</span><br><span class="line">        use: [</span><br><span class="line">          <span class="string">'file-loader'</span></span><br><span class="line">        ]</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.(woff|woff2|eot|ttf|otf)$/</span>,</span><br><span class="line">        use: [</span><br><span class="line">          <span class="string">'file-loader'</span></span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">const path = require(&#39;path&#39;);
+const HtmlWebpackPlugin = require(&#39;html-webpack-plugin&#39;);
+const CleanWebpackPlugin = require(&#39;clean-webpack-plugin&#39;);
+
+module.exports = {
+  entry: {
+    app: &#39;./src/index.js&#39;,
+    print: &#39;./src/print.js&#39;
+  },
+  output: {
+    path: path.resolve(__dirname, &#39;dist&#39;)
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: &#39;webpack demo&#39;,
+      filename: &#39;index.html&#39;
+    }),
+    new CleanWebpackPlugin([&#39;dist&#39;])
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          &#39;style-loader&#39;,
+          &#39;css-loader&#39;
+        ]
+      },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: [
+          &#39;file-loader&#39;
+        ]
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/,
+        use: [
+          &#39;file-loader&#39;
+        ]
+      }
+    ]
+  }
+};
+
+</code></pre>
 <p>webpack.dev.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>);</span><br><span class="line"><span class="keyword">const</span> Merge = <span class="built_in">require</span>(<span class="string">'webpack-merge'</span>);</span><br><span class="line"><span class="keyword">const</span> CommonConfig = <span class="built_in">require</span>(<span class="string">'./webpack.common.js'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = Merge(CommonConfig, &#123;</span><br><span class="line">  devtool: <span class="string">'cheap-module-eval-source-map'</span>,</span><br><span class="line">  devServer: &#123;</span><br><span class="line">    contentBase: path.resolve(__dirname, <span class="string">'dist'</span>),</span><br><span class="line">    hot: <span class="literal">true</span>,</span><br><span class="line">    hotOnly: <span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  output: &#123;</span><br><span class="line">    filename: <span class="string">'[name].bundle.js'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="keyword">new</span> webpack.DefinePlugin(&#123;</span><br><span class="line">      <span class="string">'process.env.NODE_ENV'</span>: <span class="built_in">JSON</span>.stringify(<span class="string">'development'</span>) <span class="comment">// 在编译的代码里设置了`process.env.NODE_ENV`变量</span></span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="keyword">new</span> webpack.HotModuleReplacementPlugin(),</span><br><span class="line">    <span class="keyword">new</span> webpack.NamedModulesPlugin()</span><br><span class="line">  ]</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">const path = require(&#39;path&#39;);
+const webpack = require(&#39;webpack&#39;);
+const Merge = require(&#39;webpack-merge&#39;);
+const CommonConfig = require(&#39;./webpack.common.js&#39;);
+
+module.exports = Merge(CommonConfig, {
+  devtool: &#39;cheap-module-eval-source-map&#39;,
+  devServer: {
+    contentBase: path.resolve(__dirname, &#39;dist&#39;),
+    hot: true,
+    hotOnly: true
+  },
+  output: {
+    filename: &#39;[name].bundle.js&#39;
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      &#39;process.env.NODE_ENV&#39;: JSON.stringify(&#39;development&#39;) // 在编译的代码里设置了`process.env.NODE_ENV`变量
+    }),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NamedModulesPlugin()
+  ]
+});
+</code></pre>
 <p>webpack.prod.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>);</span><br><span class="line"><span class="keyword">const</span> Merge = <span class="built_in">require</span>(<span class="string">'webpack-merge'</span>);</span><br><span class="line"><span class="keyword">const</span> CommonConfig = <span class="built_in">require</span>(<span class="string">'./webpack.common.js'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = Merge(CommonConfig, &#123;</span><br><span class="line">  devtool: <span class="string">'cheap-module-source-map'</span>,</span><br><span class="line">  output: &#123;</span><br><span class="line">    filename: <span class="string">'[name].[chunkhash].js'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="keyword">new</span> webpack.DefinePlugin(&#123;</span><br><span class="line">      <span class="string">'process.env.NODE_ENV'</span>: <span class="built_in">JSON</span>.stringify(<span class="string">'production'</span>)</span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="keyword">new</span> webpack.optimize.UglifyJsPlugin()</span><br><span class="line">  ]</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">const path = require(&#39;path&#39;);
+const webpack = require(&#39;webpack&#39;);
+const Merge = require(&#39;webpack-merge&#39;);
+const CommonConfig = require(&#39;./webpack.common.js&#39;);
+
+module.exports = Merge(CommonConfig, {
+  devtool: &#39;cheap-module-source-map&#39;,
+  output: {
+    filename: &#39;[name].[chunkhash].js&#39;
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      &#39;process.env.NODE_ENV&#39;: JSON.stringify(&#39;production&#39;)
+    }),
+    new webpack.optimize.UglifyJsPlugin()
+  ]
+});
+
+</code></pre>
 <p>package.json</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  ...</span><br><span class="line">  "scripts": &#123;</span><br><span class="line">    "build": "cross-env NODE_ENV=production webpack -p",</span><br><span class="line">    "start": "webpack-dev-server --open",</span><br><span class="line">    "build:dev": "webpack-dev-server --open --config webpack.dev.js",</span><br><span class="line">    "build:prod": "webpack --progress --config webpack.prod.js"</span><br><span class="line">  &#125;,</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="json">{
+  ...
+  &quot;scripts&quot;: {
+    &quot;build&quot;: &quot;cross-env NODE_ENV=production webpack -p&quot;,
+    &quot;start&quot;: &quot;webpack-dev-server --open&quot;,
+    &quot;build:dev&quot;: &quot;webpack-dev-server --open --config webpack.dev.js&quot;,
+    &quot;build:prod&quot;: &quot;webpack --progress --config webpack.prod.js&quot;
+  },
+  ...
+}
+</code></pre>
 <p>现在只需执行npm run build:dev或npm run build:prod便可以得到开发版或者生产版了！</p>
 <p><a href="https://segmentfault.com/a/1190000010871559" target="_blank" rel="noopener">原文地址</a></p>
 
@@ -347,7 +975,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>
@@ -358,7 +986,7 @@
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Webpack，何许人也？"><span class="toc-number">1.1.</span> <span class="toc-text">Webpack，何许人也？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么要用介个-Webpack"><span class="toc-number">1.2.</span> <span class="toc-text">为什么要用介个 Webpack?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#webpack，gulp-grunt，npm，它们有什么区别"><span class="toc-number">1.3.</span> <span class="toc-text">webpack，gulp&#x2F;grunt，npm，它们有什么区别?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#准备开始"><span class="toc-number">1.4.</span> <span class="toc-text">准备开始</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本配置"><span class="toc-number">1.5.</span> <span class="toc-text">基本配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用配置文件"><span class="toc-number">1.6.</span> <span class="toc-text">使用配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#打包其他类型的文件"><span class="toc-number">1.7.</span> <span class="toc-text">打包其他类型的文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#加载-CSS"><span class="toc-number">1.7.1.</span> <span class="toc-text">加载 CSS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#加载图片"><span class="toc-number">1.7.2.</span> <span class="toc-text">加载图片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#加载字体"><span class="toc-number">1.7.3.</span> <span class="toc-text">加载字体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#加载-JSON-文件"><span class="toc-number">1.7.4.</span> <span class="toc-text">加载 JSON 文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#输出管理"><span class="toc-number">1.8.</span> <span class="toc-text">输出管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#webpack-提供了很多便于开发时使用的功能，来一一看看吧。"><span class="toc-number">1.9.</span> <span class="toc-text">webpack 提供了很多便于开发时使用的功能，来一一看看吧。</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用代码映射-source-map"><span class="toc-number">1.9.1.</span> <span class="toc-text">使用代码映射 (source map)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模块热替换-HMR-Hot-Module-Replacement"><span class="toc-number">1.10.</span> <span class="toc-text">模块热替换 (HMR, Hot Module Replacement)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生产环境"><span class="toc-number">1.11.</span> <span class="toc-text">生产环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#自动方式"><span class="toc-number">1.11.1.</span> <span class="toc-text">自动方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多配置文件配置"><span class="toc-number">1.11.2.</span> <span class="toc-text">多配置文件配置</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Webpack，何许人也？"><span class="toc-number">1.1.</span> <span class="toc-text">Webpack，何许人也？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么要用介个-Webpack"><span class="toc-number">1.2.</span> <span class="toc-text">为什么要用介个 Webpack?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#webpack，gulp-grunt，npm，它们有什么区别"><span class="toc-number">1.3.</span> <span class="toc-text">webpack，gulp&#x2F;grunt，npm，它们有什么区别?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#准备开始"><span class="toc-number">1.4.</span> <span class="toc-text">准备开始</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本配置"><span class="toc-number">1.5.</span> <span class="toc-text">基本配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用配置文件"><span class="toc-number">1.6.</span> <span class="toc-text">使用配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#打包其他类型的文件"><span class="toc-number">1.7.</span> <span class="toc-text">打包其他类型的文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#加载-CSS"><span class="toc-number">1.7.1.</span> <span class="toc-text">加载 CSS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#加载图片"><span class="toc-number">1.7.2.</span> <span class="toc-text">加载图片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#加载字体"><span class="toc-number">1.7.3.</span> <span class="toc-text">加载字体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#加载-JSON-文件"><span class="toc-number">1.7.4.</span> <span class="toc-text">加载 JSON 文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#输出管理"><span class="toc-number">1.8.</span> <span class="toc-text">输出管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#webpack-提供了很多便于开发时使用的功能，来一一看看吧。"><span class="toc-number">1.9.</span> <span class="toc-text">webpack 提供了很多便于开发时使用的功能，来一一看看吧。</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用代码映射-source-map"><span class="toc-number">1.9.1.</span> <span class="toc-text">使用代码映射 (source map)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#webpack-dev-server"><span class="toc-number">1.9.2.</span> <span class="toc-text">webpack-dev-server</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模块热替换-HMR-Hot-Module-Replacement"><span class="toc-number">1.10.</span> <span class="toc-text">模块热替换 (HMR, Hot Module Replacement)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生产环境"><span class="toc-number">1.11.</span> <span class="toc-text">生产环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#自动方式"><span class="toc-number">1.11.1.</span> <span class="toc-text">自动方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多配置文件配置"><span class="toc-number">1.11.2.</span> <span class="toc-text">多配置文件配置</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
             

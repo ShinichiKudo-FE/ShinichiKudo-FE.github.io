@@ -101,13 +101,13 @@ A:根本原因是-web,">
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    18k
+                    6.4k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    16 mins.
+                    6 mins.
                 </span>
                 
                 
@@ -144,42 +144,126 @@ A:根本原因是-web,">
             <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本文是摘录整理了移动端常见的一些bug以及解决方案</p>
 <h2 id="点击样式闪烁"><a href="#点击样式闪烁" class="headerlink" title="点击样式闪烁"></a>点击样式闪烁</h2><p>Q: 当你点击一个链接或者通过Javascript定义的可点击元素的时候，它就会出现一个半透明的灰色背景。</p>
 <p>A:根本原因是-webkit-tap-highlight-color，这个属性是用于设定元素在移动设备（如Adnroid、iOS）上被触发点击事件时，响应的背景框的颜色。建议写在样式初始化中以避免所以问题：div,input(selector) {-webkit-tap-highlight-color: rgba(0,0,0,0);}另外出现蓝色边框：outline:none；</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-webkit-tap-highlight-color : rgba (<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>, <span class="number">0</span>) ;</span><br><span class="line"><span class="comment">// i.e . Nexus5/Chrome and Kindle Fire HD 7 ''</span></span><br><span class="line">-webkit-tap-highlight-color : transparent ;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">-webkit-tap-highlight-color : rgba (255, 255, 255, 0) ;
+// i.e . Nexus5/Chrome and Kindle Fire HD 7 &#39;&#39;
+-webkit-tap-highlight-color : transparent ;  
+</code></pre>
 <h2 id="屏蔽用户选择"><a href="#屏蔽用户选择" class="headerlink" title="屏蔽用户选择"></a>屏蔽用户选择</h2><p>Q: 禁止用户选择页面中的文字或者图片</p>
 <p>A:代码如下</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">-webkit-touch-callout</span>: <span class="selector-tag">none</span>;</span><br><span class="line"><span class="selector-tag">-webkit-user-select</span>: <span class="selector-tag">none</span>;</span><br><span class="line"><span class="selector-tag">-khtml-user-select</span>: <span class="selector-tag">none</span>;</span><br><span class="line"><span class="selector-tag">-moz-user-select</span>: <span class="selector-tag">none</span>;</span><br><span class="line"><span class="selector-tag">-ms-user-select</span>: <span class="selector-tag">none</span>;</span><br><span class="line"><span class="selector-tag">user-select</span>: <span class="selector-tag">none</span>;</span><br></pre></td></tr></table></figure>
+<pre><code class="css">-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+</code></pre>
 <h2 id="移动端如何清除输入框内阴影"><a href="#移动端如何清除输入框内阴影" class="headerlink" title="移动端如何清除输入框内阴影"></a>移动端如何清除输入框内阴影</h2><p>Q: 在iOS上，输入框默认有内部阴影，但无法使用 box-shadow 来清除，如果不需要阴影，可以这样关闭：</p>
 <p>A:代码如下</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">-webkit-appearance</span>: <span class="selector-tag">none</span>;</span><br></pre></td></tr></table></figure>
+<pre><code class="css">-webkit-appearance: none;
+</code></pre>
 <h2 id="禁止文本缩放"><a href="#禁止文本缩放" class="headerlink" title="禁止文本缩放"></a>禁止文本缩放</h2><p>Q: 禁止文本缩放</p>
 <p>A:代码如下</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">-webkit-text-size-adjust</span>: 100%;</span><br></pre></td></tr></table></figure>
+<pre><code class="css">-webkit-text-size-adjust: 100%;
+</code></pre>
 <a id="more"></a>
 <h2 id="如何禁止保存或拷贝图像"><a href="#如何禁止保存或拷贝图像" class="headerlink" title="如何禁止保存或拷贝图像"></a>如何禁止保存或拷贝图像</h2><p>Q: 如何禁止保存或拷贝图像</p>
 <p>A:代码如下</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">img</span>&#123;</span><br><span class="line"><span class="attribute">-webkit-touch-callout</span>: none;&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="css">img{
+-webkit-touch-callout: none;}
+</code></pre>
 <h2 id="解决字体在移动端比例缩小后出现锯齿的问题"><a href="#解决字体在移动端比例缩小后出现锯齿的问题" class="headerlink" title="解决字体在移动端比例缩小后出现锯齿的问题"></a>解决字体在移动端比例缩小后出现锯齿的问题</h2><p>Q: 解决字体在移动端比例缩小后出现锯齿的问题</p>
 <p>A:代码如下</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">-webkit-font-smoothing</span>: <span class="selector-tag">antialiased</span>;</span><br></pre></td></tr></table></figure>
+<pre><code class="css">-webkit-font-smoothing: antialiased;
+</code></pre>
 <h2 id="设置input里面placeholder字体的大小"><a href="#设置input里面placeholder字体的大小" class="headerlink" title="设置input里面placeholder字体的大小"></a>设置input里面placeholder字体的大小</h2><p>Q: 设置input里面placeholder字体的大小</p>
 <p>A:代码如下</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-pseudo">::-webkit-input-placeholder</span>&#123; <span class="attribute">font-size</span>:<span class="number">10pt</span>;&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="css">::-webkit-input-placeholder{ font-size:10pt;}
+</code></pre>
 <h2 id="audio元素和video元素在ios和andriod中无法自动播放"><a href="#audio元素和video元素在ios和andriod中无法自动播放" class="headerlink" title="audio元素和video元素在ios和andriod中无法自动播放"></a>audio元素和video元素在ios和andriod中无法自动播放</h2><p>Q: audio元素和video元素在ios和andriod中无法自动播放</p>
 <p>A:代码如下,触屏及播放</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">'html'</span>).on(<span class="string">'touchstart'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">audio.play()</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">$(&#39;html&#39;).on(&#39;touchstart&#39;,function(){
+audio.play()
+})
+</code></pre>
 <h2 id="手机拍照和上传图片"><a href="#手机拍照和上传图片" class="headerlink" title="手机拍照和上传图片"></a>手机拍照和上传图片</h2><p>Q: 针对file类型增加不同的accept字段</p>
 <p>A:代码如下</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span>&gt;</span>的accept 属性</span><br><span class="line"><span class="comment">&lt;!-- 选择照片 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">file</span> <span class="attr">accept</span>=<span class="string">"image/*"</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 选择视频 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">file</span> <span class="attr">accept</span>=<span class="string">"video/*"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="html">&lt;input type=&quot;file&quot;&gt;的accept 属性
+&lt;!-- 选择照片 --&gt;
+&lt;input type=file accept=&quot;image/*&quot;&gt;
+&lt;!-- 选择视频 --&gt;
+&lt;input type=file accept=&quot;video/*&quot;&gt;
+</code></pre>
 <h2 id="输入框自动填充颜色"><a href="#输入框自动填充颜色" class="headerlink" title="输入框自动填充颜色"></a>输入框自动填充颜色</h2><p>Q: 针对input标签已经输入过的，会针对曾经输入的内容填充黄色背景，这是webkit内核自动添加的，对应的属性是autocomplete,默认是on,另对应的样式是input:-webkit-autofill 且是不可更改的。</p>
 <p>A:方案如下 1 设置标签的autocomplete=”off”,亲测无效可能 2 设置盒子的内阴影为你常态的颜色（下面以白色为例）</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">box-shadow</span><span class="selector-pseudo">:0</span> 0  0 1000<span class="selector-tag">px</span>  <span class="selector-id">#fff</span> <span class="selector-tag">inset</span> ;</span><br><span class="line"><span class="selector-tag">-webkit-box-shadow</span>: 0 0 0<span class="selector-tag">px</span> 1000<span class="selector-tag">px</span> <span class="selector-id">#fff</span> <span class="selector-tag">inset</span>;</span><br></pre></td></tr></table></figure>
+<pre><code class="css"> box-shadow:0 0  0 1000px  #fff inset ;
+ -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+</code></pre>
 <h2 id="开启硬件加速"><a href="#开启硬件加速" class="headerlink" title="开启硬件加速"></a>开启硬件加速</h2><p>Q: 优化渲染性能</p>
 <p>A:代码如下</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">-webkit-transform</span>: <span class="selector-tag">translate3d</span>(0, 0, 0);</span><br><span class="line"><span class="selector-tag">-moz-transform</span>: <span class="selector-tag">translate3d</span>(0, 0, 0);</span><br><span class="line"><span class="selector-tag">-ms-transform</span>: <span class="selector-tag">translate3d</span>(0, 0, 0);</span><br><span class="line"><span class="selector-tag">transform</span>: <span class="selector-tag">translate3d</span>(0, 0, 0);</span><br></pre></td></tr></table></figure>
-<h2 id="用户设置字号放大或者缩小导致页面布局错误"><a href="#用户设置字号放大或者缩小导致页面布局错误" class="headerlink" title="用户设置字号放大或者缩小导致页面布局错误"></a>用户设置字号放大或者缩小导致页面布局错误</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">body</span>  </span><br><span class="line">    &#123;  </span><br><span class="line">        <span class="attribute">-webkit-text-size-adjust</span>: <span class="number">100%</span> <span class="meta">!important</span>;  </span><br><span class="line">        <span class="attribute">text-size-adjust</span>: <span class="number">100%</span> <span class="meta">!important</span>;  </span><br><span class="line">        <span class="attribute">-moz-text-size-adjust</span>: <span class="number">100%</span> <span class="meta">!important</span>;  </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<h2 id="移动端去除type为number的箭头"><a href="#移动端去除type为number的箭头" class="headerlink" title="移动端去除type为number的箭头"></a>移动端去除type为number的箭头</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">input</span><span class="selector-pseudo">::-webkit-outer-spin-button</span>,<span class="selector-tag">input</span><span class="selector-pseudo">::-webkit-inner-spin-button</span>&#123;</span><br><span class="line">     <span class="attribute">-webkit-appearance</span>: none <span class="meta">!important</span>;</span><br><span class="line">     <span class="attribute">margin</span>: <span class="number">0</span>;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-<h2 id="实现横屏竖屏的方案"><a href="#实现横屏竖屏的方案" class="headerlink" title="实现横屏竖屏的方案"></a>实现横屏竖屏的方案</h2><h3 id="css-用-css3媒体查询，缺点是宽度和高度不好控制"><a href="#css-用-css3媒体查询，缺点是宽度和高度不好控制" class="headerlink" title="css 用 css3媒体查询，缺点是宽度和高度不好控制"></a>css 用 css3媒体查询，缺点是宽度和高度不好控制</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@media</span> screen <span class="keyword">and</span> (<span class="attribute">orientation:</span> portrait) &#123;</span><br><span class="line">    <span class="selector-class">.main</span> &#123;</span><br><span class="line">        <span class="attribute">-webkit-transform</span>:<span class="built_in">rotate</span>(-<span class="number">90deg</span>);</span><br><span class="line">        <span class="attribute">-moz-transform</span>: <span class="built_in">rotate</span>(-<span class="number">90deg</span>);</span><br><span class="line">        <span class="attribute">-ms-transform</span>: <span class="built_in">rotate</span>(-<span class="number">90deg</span>);</span><br><span class="line">        <span class="attribute">transform</span>: <span class="built_in">rotate</span>(-<span class="number">90deg</span>);</span><br><span class="line">        <span class="attribute">width</span>: <span class="number">100vh</span>;</span><br><span class="line">        <span class="attribute">height</span>: <span class="number">100vh</span>;</span><br><span class="line">        <span class="comment">/*去掉overflow 微信显示正常，但是浏览器有问题，竖屏时强制横屏缩小*/</span></span><br><span class="line">        <span class="attribute">overflow</span>: hidden;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@media</span> screen <span class="keyword">and</span> (<span class="attribute">orientation:</span> landscape) &#123;</span><br><span class="line">    <span class="selector-class">.main</span> &#123;</span><br><span class="line">        <span class="attribute">-webkit-transform</span>:<span class="built_in">rotate</span>(<span class="number">0</span>);</span><br><span class="line">        <span class="attribute">-moz-transform</span>: <span class="built_in">rotate</span>(<span class="number">0</span>);</span><br><span class="line">        <span class="attribute">-ms-transform</span>: <span class="built_in">rotate</span>(<span class="number">0</span>);</span><br><span class="line">        <span class="attribute">transform</span>: <span class="built_in">rotate</span>(<span class="number">0</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="js-判断屏幕的方向或者resize事件"><a href="#js-判断屏幕的方向或者resize事件" class="headerlink" title="js 判断屏幕的方向或者resize事件"></a>js 判断屏幕的方向或者resize事件</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> evt = <span class="string">"onorientationchange"</span> <span class="keyword">in</span> <span class="built_in">window</span> ? <span class="string">"orientationchange"</span> : <span class="string">"resize"</span>;</span><br><span class="line">    <span class="built_in">window</span>.addEventListener(evt, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> width = <span class="built_in">document</span>.documentElement.clientWidth;</span><br><span class="line">         <span class="keyword">var</span> height =  <span class="built_in">document</span>.documentElement.clientHeight;</span><br><span class="line">          $print =  $(<span class="string">'#print'</span>);</span><br><span class="line">         <span class="keyword">if</span>( width &gt; height )&#123;</span><br><span class="line"></span><br><span class="line">            $print.width(width);</span><br><span class="line">            $print.height(height);</span><br><span class="line">            $print.css(<span class="string">'top'</span>,  <span class="number">0</span> );</span><br><span class="line">            $print.css(<span class="string">'left'</span>,  <span class="number">0</span> );</span><br><span class="line">            $print.css(<span class="string">'transform'</span> , <span class="string">'none'</span>);</span><br><span class="line">            $print.css(<span class="string">'transform-origin'</span> , <span class="string">'50% 50%'</span>);</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="keyword">else</span>&#123;</span><br><span class="line">            $print.width(height);</span><br><span class="line">            $print.height(width);</span><br><span class="line">            $print.css(<span class="string">'top'</span>,  (height-width)/<span class="number">2</span> );</span><br><span class="line">            $print.css(<span class="string">'left'</span>,  <span class="number">0</span>-(height-width)/<span class="number">2</span> );</span><br><span class="line">            $print.css(<span class="string">'transform'</span> , <span class="string">'rotate(90deg)'</span>);</span><br><span class="line">            $print.css(<span class="string">'transform-origin'</span> , <span class="string">'50% 50%'</span>);</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">    &#125;, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
+<pre><code class="css">-webkit-transform: translate3d(0, 0, 0);
+-moz-transform: translate3d(0, 0, 0);
+-ms-transform: translate3d(0, 0, 0);
+transform: translate3d(0, 0, 0);
+</code></pre>
+<h2 id="用户设置字号放大或者缩小导致页面布局错误"><a href="#用户设置字号放大或者缩小导致页面布局错误" class="headerlink" title="用户设置字号放大或者缩小导致页面布局错误"></a>用户设置字号放大或者缩小导致页面布局错误</h2><pre><code class="css">body  
+    {  
+        -webkit-text-size-adjust: 100% !important;  
+        text-size-adjust: 100% !important;  
+        -moz-text-size-adjust: 100% !important;  
+    }
+</code></pre>
+<h2 id="移动端去除type为number的箭头"><a href="#移动端去除type为number的箭头" class="headerlink" title="移动端去除type为number的箭头"></a>移动端去除type为number的箭头</h2><pre><code class="css"> input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{
+      -webkit-appearance: none !important;
+      margin: 0;
+  }
+</code></pre>
+<h2 id="实现横屏竖屏的方案"><a href="#实现横屏竖屏的方案" class="headerlink" title="实现横屏竖屏的方案"></a>实现横屏竖屏的方案</h2><h3 id="css-用-css3媒体查询，缺点是宽度和高度不好控制"><a href="#css-用-css3媒体查询，缺点是宽度和高度不好控制" class="headerlink" title="css 用 css3媒体查询，缺点是宽度和高度不好控制"></a>css 用 css3媒体查询，缺点是宽度和高度不好控制</h3><pre><code class="css">@media screen and (orientation: portrait) {
+    .main {
+        -webkit-transform:rotate(-90deg);
+        -moz-transform: rotate(-90deg);
+        -ms-transform: rotate(-90deg);
+        transform: rotate(-90deg);
+        width: 100vh;
+        height: 100vh;
+        /*去掉overflow 微信显示正常，但是浏览器有问题，竖屏时强制横屏缩小*/
+        overflow: hidden;
+    }
+}
+
+@media screen and (orientation: landscape) {
+    .main {
+        -webkit-transform:rotate(0);
+        -moz-transform: rotate(0);
+        -ms-transform: rotate(0);
+        transform: rotate(0)
+    }
+}
+</code></pre>
+<h3 id="js-判断屏幕的方向或者resize事件"><a href="#js-判断屏幕的方向或者resize事件" class="headerlink" title="js 判断屏幕的方向或者resize事件"></a>js 判断屏幕的方向或者resize事件</h3><pre><code class="js">var evt = &quot;onorientationchange&quot; in window ? &quot;orientationchange&quot; : &quot;resize&quot;;
+    window.addEventListener(evt, function() {
+        var width = document.documentElement.clientWidth;
+         var height =  document.documentElement.clientHeight;
+          $print =  $(&#39;#print&#39;);
+         if( width &gt; height ){
+
+            $print.width(width);
+            $print.height(height);
+            $print.css(&#39;top&#39;,  0 );
+            $print.css(&#39;left&#39;,  0 );
+            $print.css(&#39;transform&#39; , &#39;none&#39;);
+            $print.css(&#39;transform-origin&#39; , &#39;50% 50%&#39;);
+         }
+         else{
+            $print.width(height);
+            $print.height(width);
+            $print.css(&#39;top&#39;,  (height-width)/2 );
+            $print.css(&#39;left&#39;,  0-(height-width)/2 );
+            $print.css(&#39;transform&#39; , &#39;rotate(90deg)&#39;);
+            $print.css(&#39;transform-origin&#39; , &#39;50% 50%&#39;);
+         }
+
+    }, false);
+</code></pre>
 <p><a href="https://juejin.im/post/5af918636fb9a07ac5603ecb" target="_blank" rel="noopener">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
@@ -228,7 +312,7 @@ A:根本原因是-web,">
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

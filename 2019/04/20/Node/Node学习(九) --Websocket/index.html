@@ -101,13 +101,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    49k
+                    16k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    45 mins.
+                    15 mins.
                 </span>
                 
                 
@@ -152,13 +152,85 @@
 <p>接下来，尝试用<code>Socket.io</code>建立一个基于WebSocket的双向通信。</p>
 <h2 id="Socket-io"><a href="#Socket-io" class="headerlink" title="Socket.io"></a>Socket.io</h2><p><code>Socket.io</code>是在使用WebSocket时的一个常用库，它会自动判断在支持WebSocket的浏览器中使用WebSocket，在其他浏览器中，会使用如flash等方式完成通信。</p>
 <p>1.操作简单<br>2.兼容低端浏览器，如IE6<br>3.自动进行数据解析<br>4.自动重连 若出现连接断开的情况，WebSocket会进行自动重连。</p>
-<h2 id="使用Socket-io建立一个WebSocket应用"><a href="#使用Socket-io建立一个WebSocket应用" class="headerlink" title="使用Socket.io建立一个WebSocket应用"></a>使用Socket.io建立一个WebSocket应用</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>)</span><br><span class="line"><span class="keyword">const</span> io = <span class="built_in">require</span>(<span class="string">'socket.io'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1. 建立HTTP服务器。</span></span><br><span class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line"></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8080</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 建立WebSocket，让socket.io监听HTTP服务器，一旦发现是WebSocket请求，则会自动进行处理。</span></span><br><span class="line"><span class="keyword">const</span> ws = io.listen(server)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 建立连接完成后，触发connection事件。</span></span><br><span class="line"><span class="comment">// 该事件会返回一个socket对象（https://socket.io/docs/server-api/#Socket），可以利用socket对象进行发送、接收数据操作。</span></span><br><span class="line">ws.on(<span class="string">'connection'</span>, (socket) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 根据事件名，向客户端发送数据，数据数量不限。</span></span><br><span class="line">  socket.emit(<span class="string">'msg'</span>, <span class="string">'服务端向客户端发送数据第一条'</span>, <span class="string">'服务端向客户端发送数据第二条'</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 根据事件名接收客户端返回的数据</span></span><br><span class="line">  socket.on(<span class="string">'msg'</span>, (...msgs) =&gt; &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(msgs)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 使用计时器向客户端发送数据</span></span><br><span class="line">  setInterval(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    socket.emit(<span class="string">'timer'</span>, <span class="keyword">new</span> <span class="built_in">Date</span>().getTime())</span><br><span class="line">  &#125;, <span class="number">500</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 引用Socket.io的客户端js文件，由于Socket.io已在服务端监听了HTTP服务器的请求，一旦收到对该文件的请求，则会自动返回该文件，不需要开发人员配置。 --&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 该文件在服务端的位置为/node_modules/socket.io/node_modules/socket.io-client/dist/socket.io.js --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"http://localhost:8080/socket.io/socket.io.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="actionscript">    <span class="comment">// 与服务器建立WebSocket连接，该连接为ws协议，socket.io不需要担心跨域问题。</span></span></span><br><span class="line"><span class="actionscript">    <span class="keyword">const</span> socket = io.connect(<span class="string">'ws://localhost:8080/'</span>)</span></span><br><span class="line"></span><br><span class="line"><span class="actionscript">    <span class="comment">// 根据事件名，向服务端发送数据，数据数量不限。</span></span></span><br><span class="line"><span class="actionscript">    socket.emit(<span class="string">'msg'</span>, <span class="string">'客户端向服务端发送数据第一条'</span>, <span class="string">'客户端向服务端发送数据第二条'</span>)</span></span><br><span class="line"></span><br><span class="line"><span class="actionscript">    <span class="comment">// 根据事件名接收服务端返回的数据</span></span></span><br><span class="line"><span class="actionscript">    socket.on(<span class="string">'msg'</span>, (...msgs) =&gt; &#123;</span></span><br><span class="line"><span class="javascript">      <span class="built_in">console</span>.log(msgs)</span></span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line"><span class="actionscript">    <span class="comment">// 接收服务端通过计时器发送来的数据</span></span></span><br><span class="line"><span class="actionscript">    socket.on(<span class="string">'timer'</span>, (time) =&gt; &#123;</span></span><br><span class="line"><span class="javascript">      <span class="built_in">console</span>.log(time)</span></span><br><span class="line">    &#125;)</span><br><span class="line">  <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="使用Socket-io建立一个WebSocket应用"><a href="#使用Socket-io建立一个WebSocket应用" class="headerlink" title="使用Socket.io建立一个WebSocket应用"></a>使用Socket.io建立一个WebSocket应用</h2><pre><code class="js">const http = require(&#39;http&#39;)
+const io = require(&#39;socket.io&#39;)
+
+// 1. 建立HTTP服务器。
+const server = http.createServer((req, res) =&gt; {
+
+})
+
+server.listen(8080)
+
+// 2. 建立WebSocket，让socket.io监听HTTP服务器，一旦发现是WebSocket请求，则会自动进行处理。
+const ws = io.listen(server)
+
+// 建立连接完成后，触发connection事件。
+// 该事件会返回一个socket对象（https://socket.io/docs/server-api/#Socket），可以利用socket对象进行发送、接收数据操作。
+ws.on(&#39;connection&#39;, (socket) =&gt; {
+  // 根据事件名，向客户端发送数据，数据数量不限。
+  socket.emit(&#39;msg&#39;, &#39;服务端向客户端发送数据第一条&#39;, &#39;服务端向客户端发送数据第二条&#39;)
+
+  // 根据事件名接收客户端返回的数据
+  socket.on(&#39;msg&#39;, (...msgs) =&gt; {
+    console.log(msgs)
+  })
+
+  // 使用计时器向客户端发送数据
+  setInterval(() =&gt; {
+    socket.emit(&#39;timer&#39;, new Date().getTime())
+  }, 500);
+})
+</code></pre>
+<pre><code class="html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;
+  &lt;title&gt;Document&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+  &lt;!-- 引用Socket.io的客户端js文件，由于Socket.io已在服务端监听了HTTP服务器的请求，一旦收到对该文件的请求，则会自动返回该文件，不需要开发人员配置。 --&gt;
+  &lt;!-- 该文件在服务端的位置为/node_modules/socket.io/node_modules/socket.io-client/dist/socket.io.js --&gt;
+  &lt;script src=&quot;http://localhost:8080/socket.io/socket.io.js&quot;&gt;&lt;/script&gt;
+  &lt;script&gt;
+    // 与服务器建立WebSocket连接，该连接为ws协议，socket.io不需要担心跨域问题。
+    const socket = io.connect(&#39;ws://localhost:8080/&#39;)
+
+    // 根据事件名，向服务端发送数据，数据数量不限。
+    socket.emit(&#39;msg&#39;, &#39;客户端向服务端发送数据第一条&#39;, &#39;客户端向服务端发送数据第二条&#39;)
+
+    // 根据事件名接收服务端返回的数据
+    socket.on(&#39;msg&#39;, (...msgs) =&gt; {
+      console.log(msgs)
+    })
+
+    // 接收服务端通过计时器发送来的数据
+    socket.on(&#39;timer&#39;, (time) =&gt; {
+      console.log(time)
+    })
+  &lt;/script&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;
+</code></pre>
 <a id="more"></a>
 <p>用浏览器打开index.html，即可在控制台看到打印的消息。</p>
 <h1 id="原生实现WebSocket应用"><a href="#原生实现WebSocket应用" class="headerlink" title="原生实现WebSocket应用"></a>原生实现WebSocket应用</h1><p>上面使用了Socket.io实现WebSocket，也是开发中常用的方式。</p>
 <p>但这样不利于了解其原理，这里使用Nodejs的Net模块和Web端的WebSocket API实现WebSocket服务器。</p>
-<h2 id="服务端创建一个Net服务器"><a href="#服务端创建一个Net服务器" class="headerlink" title="服务端创建一个Net服务器"></a>服务端创建一个Net服务器</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 引入net模块</span></span><br><span class="line"><span class="keyword">const</span> net = <span class="built_in">require</span>(<span class="string">'net'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用net模块创建服务器，返回的是一个原始的socket对象，与Socket.io的socket对象不同。</span></span><br><span class="line"><span class="keyword">const</span> server = net.createServer(<span class="function">(<span class="params">socket</span>) =&gt;</span> &#123;</span><br><span class="line">  </span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8080</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="服务端创建一个Net服务器"><a href="#服务端创建一个Net服务器" class="headerlink" title="服务端创建一个Net服务器"></a>服务端创建一个Net服务器</h2><pre><code class="js">// 引入net模块
+const net = require(&#39;net&#39;)
+
+// 使用net模块创建服务器，返回的是一个原始的socket对象，与Socket.io的socket对象不同。
+const server = net.createServer((socket) =&gt; {
+
+})
+
+server.listen(8080)
+</code></pre>
 <h2 id="Web端创建一个WebSocket链接"><a href="#Web端创建一个WebSocket链接" class="headerlink" title="Web端创建一个WebSocket链接"></a>Web端创建一个WebSocket链接</h2><p>创建一个WebSocket连接，此时控制台的Network模块可以看到一个处于pending状态的HTTP连接。</p>
 <p><img src="https://user-gold-cdn.xitu.io/2019/3/13/16977a451448747d?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="socket"></p>
 <p>这个连接是一个HTTP请求，与普通HTTP请求的请求你头相比，增加了以下内容：</p>
@@ -168,33 +240,297 @@
 <li>Sec-WebSocket-Version: 13 // WebSocket版本</li>
 <li>Upgrade: websocket  // 告知服务器通信协议将会升级到WebSocket若服务器支持则继续下一步</li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ws = <span class="keyword">new</span> WebSocket(<span class="string">'ws://localhost:8080/'</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="服务端使用socket-once，触发一次data事件处理HTTP请求头数据"><a href="#服务端使用socket-once，触发一次data事件处理HTTP请求头数据" class="headerlink" title="服务端使用socket.once，触发一次data事件处理HTTP请求头数据"></a>服务端使用socket.once，触发一次data事件处理HTTP请求头数据</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">socket.once(<span class="string">'data'</span>, (buffer) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 接收到HTTP请求头数据</span></span><br><span class="line">  <span class="keyword">const</span> str = buffer.toString()</span><br><span class="line">  <span class="built_in">console</span>.log(str)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const ws = new WebSocket(&#39;ws://localhost:8080/&#39;)
+</code></pre>
+<h2 id="服务端使用socket-once，触发一次data事件处理HTTP请求头数据"><a href="#服务端使用socket-once，触发一次data事件处理HTTP请求头数据" class="headerlink" title="服务端使用socket.once，触发一次data事件处理HTTP请求头数据"></a>服务端使用socket.once，触发一次data事件处理HTTP请求头数据</h2><pre><code class="js">socket.once(&#39;data&#39;, (buffer) =&gt; {
+  // 接收到HTTP请求头数据
+  const str = buffer.toString()
+  console.log(str)
+})
+</code></pre>
 <p>打印结果如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">GET / HTTP/<span class="number">1.1</span></span><br><span class="line">Host: localhost:<span class="number">8080</span></span><br><span class="line">Connection: Upgrade</span><br><span class="line">Pragma: no-cache</span><br><span class="line">Cache-Control: no-cache</span><br><span class="line">Upgrade: websocket</span><br><span class="line">Origin: file:<span class="comment">//</span></span><br><span class="line">Sec-WebSocket-Version: <span class="number">13</span></span><br><span class="line">User-Agent: Mozilla/<span class="number">5.0</span> (Windows NT <span class="number">10.0</span>; Win64; x64) AppleWebKit/<span class="number">537.36</span> (KHTML,</span><br><span class="line">like Gecko) Chrome/<span class="number">72.0</span><span class="number">.3626</span><span class="number">.121</span> Safari/<span class="number">537.36</span></span><br><span class="line">Accept-Encoding: gzip, deflate, br</span><br><span class="line">Accept-Language: zh-CN,zh;q=<span class="number">0.9</span></span><br><span class="line">Cookie: _ga=GA1<span class="number">.1</span><span class="number">.1892261700</span><span class="number">.1545540050</span>; _gid=GA1<span class="number">.1</span><span class="number">.774798563</span><span class="number">.1552221410</span>; io=<span class="number">7</span>X0VY8jhwRTdRHBfAAAB</span><br><span class="line">Sec-WebSocket-Key: JStOineTIKaQskxefzer7Q==</span><br><span class="line">Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits</span><br></pre></td></tr></table></figure>
+<pre><code class="js">GET / HTTP/1.1
+Host: localhost:8080
+Connection: Upgrade
+Pragma: no-cache
+Cache-Control: no-cache
+Upgrade: websocket
+Origin: file://
+Sec-WebSocket-Version: 13
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
+like Gecko) Chrome/72.0.3626.121 Safari/537.36
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+Cookie: _ga=GA1.1.1892261700.1545540050; _gid=GA1.1.774798563.1552221410; io=7X0VY8jhwRTdRHBfAAAB
+Sec-WebSocket-Key: JStOineTIKaQskxefzer7Q==
+Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits
+</code></pre>
 <p>将回车符转换为\r\n显示，结果如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET / HTTP/<span class="number">1.1</span>\r\nHost: localhost:<span class="number">8080</span>\r\nConnection: Upgrade\r\nPragma: no-cache\r\nCache-Control: no-cache\r\nUpgrade: websocket\r\nOrigin: file:<span class="comment">//\r\nSec-WebSocket-Version: 13\r\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36\r\nAccept-Encoding: gzip, deflate, br\r\nAccept-Language: zh-CN,zh;q=0.9\r\nCookie: _ga=GA1.1.1892261700.1545540050; _gid=GA1.1.774798563.1552221410; io=7X0VY8jhwRTdRHBfAAAB\r\nSec-WebSocket-Key: dRB1xDJ/vV+IAGnG7TscNQ==\r\nSec-WebSocket-Extensions: permessage-deflate; client_max_window_bits\r\n\r\n</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">GET / HTTP/1.1\r\nHost: localhost:8080\r\nConnection: Upgrade\r\nPragma: no-cache\r\nCache-Control: no-cache\r\nUpgrade: websocket\r\nOrigin: file://\r\nSec-WebSocket-Version: 13\r\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36\r\nAccept-Encoding: gzip, deflate, br\r\nAccept-Language: zh-CN,zh;q=0.9\r\nCookie: _ga=GA1.1.1892261700.1545540050; _gid=GA1.1.774798563.1552221410; io=7X0VY8jhwRTdRHBfAAAB\r\nSec-WebSocket-Key: dRB1xDJ/vV+IAGnG7TscNQ==\r\nSec-WebSocket-Extensions: permessage-deflate; client_max_window_bits\r\n\r\n
+</code></pre>
 <h2 id="将请求头字符串转为对象"><a href="#将请求头字符串转为对象" class="headerlink" title="将请求头字符串转为对象"></a>将请求头字符串转为对象</h2><p>创建一个parseHeader方法处理请求头。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">parseHeader</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 将请求头数据按回车符切割为数组，得到每一行数据</span></span><br><span class="line">  <span class="keyword">let</span> arr = str.split(<span class="string">'\r\n'</span>).filter(<span class="function"><span class="params">item</span> =&gt;</span> item)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 第一行数据为GET / HTTP/1.1，可以丢弃。</span></span><br><span class="line">  arr.shift()</span><br><span class="line"></span><br><span class="line">  <span class="built_in">console</span>.log(arr)</span><br><span class="line">  <span class="comment">/* </span></span><br><span class="line"><span class="comment">    处理结果为：</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    [ 'Host: localhost:8080',</span></span><br><span class="line"><span class="comment">      'Connection: Upgrade',</span></span><br><span class="line"><span class="comment">      'Pragma: no-cache',</span></span><br><span class="line"><span class="comment">      'Cache-Control: no-cache',</span></span><br><span class="line"><span class="comment">      'Upgrade: websocket',</span></span><br><span class="line"><span class="comment">      'Origin: file://',</span></span><br><span class="line"><span class="comment">      'Sec-WebSocket-Version: 13',</span></span><br><span class="line"><span class="comment">      'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36',</span></span><br><span class="line"><span class="comment">      'Accept-Encoding: gzip, deflate, br',</span></span><br><span class="line"><span class="comment">      'Accept-Language: zh-CN,zh;q=0.9',</span></span><br><span class="line"><span class="comment">      'Cookie: _ga=GA1.1.1892261700.1545540050; _gid=GA1.1.774798563.1552221410; io=7X0VY8jhwRTdRHBfAAAB',</span></span><br><span class="line"><span class="comment">      'Sec-WebSocket-Key: jqxd7P0Xx9TGkdMfogptRw==',</span></span><br><span class="line"><span class="comment">      'Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits' ]</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> headers = &#123;&#125;  <span class="comment">// 存储最终处理的数据</span></span><br><span class="line"></span><br><span class="line">  arr.forEach(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 需要用":"将数组切割成key和value</span></span><br><span class="line">    <span class="keyword">let</span> [name, value] = item.split(<span class="string">':'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 去除无用的空格，将属性名转为小写</span></span><br><span class="line">    name = name.replace(<span class="regexp">/^\s|\s+$/g</span>, <span class="string">''</span>).toLowerCase()</span><br><span class="line">    value = value.replace(<span class="regexp">/^\s|\s+$/g</span>, <span class="string">''</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取所有的请求头属性</span></span><br><span class="line">    headers[name] = value</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> headers</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">function parseHeader(str) {
+  // 将请求头数据按回车符切割为数组，得到每一行数据
+  let arr = str.split(&#39;\r\n&#39;).filter(item =&gt; item)
+
+  // 第一行数据为GET / HTTP/1.1，可以丢弃。
+  arr.shift()
+
+  console.log(arr)
+  /* 
+    处理结果为：
+
+    [ &#39;Host: localhost:8080&#39;,
+      &#39;Connection: Upgrade&#39;,
+      &#39;Pragma: no-cache&#39;,
+      &#39;Cache-Control: no-cache&#39;,
+      &#39;Upgrade: websocket&#39;,
+      &#39;Origin: file://&#39;,
+      &#39;Sec-WebSocket-Version: 13&#39;,
+      &#39;User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36&#39;,
+      &#39;Accept-Encoding: gzip, deflate, br&#39;,
+      &#39;Accept-Language: zh-CN,zh;q=0.9&#39;,
+      &#39;Cookie: _ga=GA1.1.1892261700.1545540050; _gid=GA1.1.774798563.1552221410; io=7X0VY8jhwRTdRHBfAAAB&#39;,
+      &#39;Sec-WebSocket-Key: jqxd7P0Xx9TGkdMfogptRw==&#39;,
+      &#39;Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits&#39; ]
+  */
+
+  let headers = {}  // 存储最终处理的数据
+
+  arr.forEach((item) =&gt; {
+    // 需要用&quot;:&quot;将数组切割成key和value
+    let [name, value] = item.split(&#39;:&#39;)
+
+    // 去除无用的空格，将属性名转为小写
+    name = name.replace(/^\s|\s+$/g, &#39;&#39;).toLowerCase()
+    value = value.replace(/^\s|\s+$/g, &#39;&#39;)
+
+    // 获取所有的请求头属性
+    headers[name] = value
+  })
+
+  return headers
+}
+</code></pre>
 <p>打印结果如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123; <span class="attr">host</span>: <span class="string">'localhost'</span>,</span><br><span class="line">  connection: <span class="string">'Upgrade'</span>,</span><br><span class="line">  pragma: <span class="string">'no-cache'</span>,</span><br><span class="line">  <span class="string">'cache-control'</span>: <span class="string">'no-cache'</span>,</span><br><span class="line">  upgrade: <span class="string">'websocket'</span>,</span><br><span class="line">  origin: <span class="string">'file'</span>,</span><br><span class="line">  <span class="string">'sec-websocket-version'</span>: <span class="string">'13'</span>,</span><br><span class="line">  <span class="string">'user-agent'</span>:</span><br><span class="line">   <span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36'</span>,</span><br><span class="line">  <span class="string">'accept-encoding'</span>: <span class="string">'gzip, deflate, br'</span>,</span><br><span class="line">  <span class="string">'accept-language'</span>: <span class="string">'zh-CN,zh;q=0.9'</span>,</span><br><span class="line">  cookie:</span><br><span class="line">   <span class="string">'_ga=GA1.1.1892261700.1545540050; _gid=GA1.1.585339125.1552405260'</span>,</span><br><span class="line">  <span class="string">'sec-websocket-key'</span>: <span class="string">'TipyPZNW+KNvV3fePNpriw=='</span>,</span><br><span class="line">  <span class="string">'sec-websocket-extensions'</span>: <span class="string">'permessage-deflate; client_max_window_bits'</span> &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">{ host: &#39;localhost&#39;,
+  connection: &#39;Upgrade&#39;,
+  pragma: &#39;no-cache&#39;,
+  &#39;cache-control&#39;: &#39;no-cache&#39;,
+  upgrade: &#39;websocket&#39;,
+  origin: &#39;file&#39;,
+  &#39;sec-websocket-version&#39;: &#39;13&#39;,
+  &#39;user-agent&#39;:
+   &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36&#39;,
+  &#39;accept-encoding&#39;: &#39;gzip, deflate, br&#39;,
+  &#39;accept-language&#39;: &#39;zh-CN,zh;q=0.9&#39;,
+  cookie:
+   &#39;_ga=GA1.1.1892261700.1545540050; _gid=GA1.1.585339125.1552405260&#39;,
+  &#39;sec-websocket-key&#39;: &#39;TipyPZNW+KNvV3fePNpriw==&#39;,
+  &#39;sec-websocket-extensions&#39;: &#39;permessage-deflate; client_max_window_bits&#39; }
+</code></pre>
 <h2 id="根据请求头参数，判断是否WebSocket请求"><a href="#根据请求头参数，判断是否WebSocket请求" class="headerlink" title="根据请求头参数，判断是否WebSocket请求"></a>根据请求头参数，判断是否WebSocket请求</h2><p>根据<code>headers[&#39;upgrade&#39;] !== &#39;websocket&#39;</code>，判断该HTTP连接是否可升级为WebSocket，若可以升级，表示为WebSocket请求。<br>根据<code>headers[&#39;sec-websocket-version&#39;] !== &#39;13&#39;</code>，判断WebSocket的版本是否为13，以免因为版本不同出现兼容问题。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">socket.once(<span class="string">'data'</span>, (buffer) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 接收到HTTP请求头数据</span></span><br><span class="line">  <span class="keyword">const</span> str = buffer.toString()</span><br><span class="line">  <span class="built_in">console</span>.log(str)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 4. 将请求头数据转为对象</span></span><br><span class="line">  <span class="keyword">const</span> headers = parseHeader(str)</span><br><span class="line">  <span class="built_in">console</span>.log(headers)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 5. 判断请求是否为WebSocket连接</span></span><br><span class="line">  <span class="keyword">if</span> (headers[<span class="string">'upgrade'</span>] !== <span class="string">'websocket'</span>) &#123;</span><br><span class="line">    <span class="comment">// 若当前请求不是WebSocket连接，则关闭连接</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'非WebSocket连接'</span>)</span><br><span class="line">    socket.end()</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (headers[<span class="string">'sec-websocket-version'</span>] !== <span class="string">'13'</span>) &#123;</span><br><span class="line">    <span class="comment">// 判断WebSocket版本是否为13，防止是其他版本，造成兼容错误</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'WebSocket版本错误'</span>)</span><br><span class="line">    socket.end()</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 请求为WebSocket连接时，进一步处理</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">socket.once(&#39;data&#39;, (buffer) =&gt; {
+  // 接收到HTTP请求头数据
+  const str = buffer.toString()
+  console.log(str)
+
+  // 4. 将请求头数据转为对象
+  const headers = parseHeader(str)
+  console.log(headers)
+
+  // 5. 判断请求是否为WebSocket连接
+  if (headers[&#39;upgrade&#39;] !== &#39;websocket&#39;) {
+    // 若当前请求不是WebSocket连接，则关闭连接
+    console.log(&#39;非WebSocket连接&#39;)
+    socket.end()
+  } else if (headers[&#39;sec-websocket-version&#39;] !== &#39;13&#39;) {
+    // 判断WebSocket版本是否为13，防止是其他版本，造成兼容错误
+    console.log(&#39;WebSocket版本错误&#39;)
+    socket.end()
+  } else {
+    // 请求为WebSocket连接时，进一步处理
+  }
+})
+
+</code></pre>
 <h2 id="校验Sec-WebSocket-Key，完成连接"><a href="#校验Sec-WebSocket-Key，完成连接" class="headerlink" title="校验Sec-WebSocket-Key，完成连接"></a>校验Sec-WebSocket-Key，完成连接</h2><p>根据协议规定的方式，向前端返回一个请求头，完成建立WebSocket连接的过程。</p>
 <p>若客户端校验结果正确，在控制台的Network模块可以看到HTTP请求的状态码变为101 Switching Protocols，同时客户端的ws.onopen事件被触发。</p>
 <p><img src="https://user-gold-cdn.xitu.io/2019/3/13/16977a4514369b43?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="console"></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">socket.once(<span class="string">'data'</span>, (buffer) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 接收到HTTP请求头数据</span></span><br><span class="line">  <span class="keyword">const</span> str = buffer.toString()</span><br><span class="line">  <span class="built_in">console</span>.log(str)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 4. 将请求头数据转为对象</span></span><br><span class="line">  <span class="keyword">const</span> headers = parseHeader(str)</span><br><span class="line">  <span class="built_in">console</span>.log(headers)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 5. 判断请求是否为WebSocket连接</span></span><br><span class="line">  <span class="keyword">if</span> (headers[<span class="string">'upgrade'</span>] !== <span class="string">'websocket'</span>) &#123;</span><br><span class="line">    <span class="comment">// 若当前请求不是WebSocket连接，则关闭连接</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'非WebSocket连接'</span>)</span><br><span class="line">    socket.end()</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (headers[<span class="string">'sec-websocket-version'</span>] !== <span class="string">'13'</span>) &#123;</span><br><span class="line">    <span class="comment">// 判断WebSocket版本是否为13，防止是其他版本，造成兼容错误</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'WebSocket版本错误'</span>)</span><br><span class="line">    socket.end()</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// 6. 校验Sec-WebSocket-Key，完成连接</span></span><br><span class="line">      <span class="comment">/* </span></span><br><span class="line"><span class="comment">        协议中规定的校验用GUID，可参考如下链接：</span></span><br><span class="line"><span class="comment">        https://tools.ietf.org/html/rfc6455#section-5.5.2</span></span><br><span class="line"><span class="comment">        https://stackoverflow.com/questions/13456017/what-does-258eafa5-e914-47da-95ca-c5ab0dc85b11-means-in-websocket-protocol</span></span><br><span class="line"><span class="comment">      */</span></span><br><span class="line">      <span class="keyword">const</span> GUID = <span class="string">'258EAFA5-E914-47DA-95CA-C5AB0DC85B11'</span></span><br><span class="line">      <span class="keyword">const</span> key = headers[<span class="string">'sec-websocket-key'</span>]</span><br><span class="line">      <span class="keyword">const</span> hash = crypto.createHash(<span class="string">'sha1'</span>)  <span class="comment">// 创建一个签名算法为sha1的哈希对象</span></span><br><span class="line"></span><br><span class="line">      hash.update(<span class="string">`<span class="subst">$&#123;key&#125;</span><span class="subst">$&#123;GUID&#125;</span>`</span>)  <span class="comment">// 将key和GUID连接后，更新到hash</span></span><br><span class="line">      <span class="keyword">const</span> result = hash.digest(<span class="string">'base64'</span>) <span class="comment">// 生成base64字符串</span></span><br><span class="line">	  <span class="keyword">const</span> header = <span class="string">`HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-Websocket-Accept: <span class="subst">$&#123;result&#125;</span>\r\n\r\n`</span> <span class="comment">// 生成供前端校验用的请求头</span></span><br><span class="line"></span><br><span class="line">      socket.write(header)  <span class="comment">// 返回HTTP头，告知客户端校验结果，HTTP状态码101表示切换协议：https://httpstatuses.com/101。</span></span><br><span class="line">      <span class="comment">// 若客户端校验结果正确，在控制台的Network模块可以看到HTTP请求的状态码变为101 Switching Protocols，同时客户端的ws.onopen事件被触发。</span></span><br><span class="line">      <span class="built_in">console</span>.log(header)</span><br><span class="line">      </span><br><span class="line">      <span class="comment">// 处理聊天数据</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">socket.once(&#39;data&#39;, (buffer) =&gt; {
+  // 接收到HTTP请求头数据
+  const str = buffer.toString()
+  console.log(str)
+
+  // 4. 将请求头数据转为对象
+  const headers = parseHeader(str)
+  console.log(headers)
+
+  // 5. 判断请求是否为WebSocket连接
+  if (headers[&#39;upgrade&#39;] !== &#39;websocket&#39;) {
+    // 若当前请求不是WebSocket连接，则关闭连接
+    console.log(&#39;非WebSocket连接&#39;)
+    socket.end()
+  } else if (headers[&#39;sec-websocket-version&#39;] !== &#39;13&#39;) {
+    // 判断WebSocket版本是否为13，防止是其他版本，造成兼容错误
+    console.log(&#39;WebSocket版本错误&#39;)
+    socket.end()
+  } else {
+      // 6. 校验Sec-WebSocket-Key，完成连接
+      /* 
+        协议中规定的校验用GUID，可参考如下链接：
+        https://tools.ietf.org/html/rfc6455#section-5.5.2
+        https://stackoverflow.com/questions/13456017/what-does-258eafa5-e914-47da-95ca-c5ab0dc85b11-means-in-websocket-protocol
+      */
+      const GUID = &#39;258EAFA5-E914-47DA-95CA-C5AB0DC85B11&#39;
+      const key = headers[&#39;sec-websocket-key&#39;]
+      const hash = crypto.createHash(&#39;sha1&#39;)  // 创建一个签名算法为sha1的哈希对象
+
+      hash.update(`${key}${GUID}`)  // 将key和GUID连接后，更新到hash
+      const result = hash.digest(&#39;base64&#39;) // 生成base64字符串
+      const header = `HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-Websocket-Accept: ${result}\r\n\r\n` // 生成供前端校验用的请求头
+
+      socket.write(header)  // 返回HTTP头，告知客户端校验结果，HTTP状态码101表示切换协议：https://httpstatuses.com/101。
+      // 若客户端校验结果正确，在控制台的Network模块可以看到HTTP请求的状态码变为101 Switching Protocols，同时客户端的ws.onopen事件被触发。
+      console.log(header)
+
+      // 处理聊天数据
+    }
+  })
+</code></pre>
 <h2 id="建立连接后，通过data事件接收客户端的数据并处理"><a href="#建立连接后，通过data事件接收客户端的数据并处理" class="headerlink" title="建立连接后，通过data事件接收客户端的数据并处理"></a>建立连接后，通过data事件接收客户端的数据并处理</h2><p>连接开始后，可以在控制台的Network模块看到，该连接会一直保留在pending状态，直到连接断开。</p>
 <p><img src="https://user-gold-cdn.xitu.io/2019/3/13/16977a4524cc9dca?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="console1"></p>
 <p>此时可以通过data事件处理客户端的数据，但此时双方通信的数据为二进制，需要按照其格式进行处理后才可以正常使用。</p>
 <p>格式如下：</p>
 <p><img src="https://user-gold-cdn.xitu.io/2019/3/13/16977a45146a18d6?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="console2"></p>
 <p>处理收到的数据：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">decodeWsFrame</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> start = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">let</span> frame = &#123;</span><br><span class="line">    isFinal: (data[start] &amp; <span class="number">0x80</span>) === <span class="number">0x80</span>,</span><br><span class="line">    opcode: data[start++] &amp; <span class="number">0xF</span>,</span><br><span class="line">    masked: (data[start] &amp; <span class="number">0x80</span>) === <span class="number">0x80</span>,</span><br><span class="line">    payloadLen: data[start++] &amp; <span class="number">0x7F</span>,</span><br><span class="line">    maskingKey: <span class="string">''</span>,</span><br><span class="line">    payloadData: <span class="literal">null</span></span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (frame.payloadLen === <span class="number">126</span>) &#123;</span><br><span class="line">    frame.payloadLen = (data[start++] &lt;&lt; <span class="number">8</span>) + data[start++];</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (frame.payloadLen === <span class="number">127</span>) &#123;</span><br><span class="line">    frame.payloadLen = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">7</span>; i &gt;= <span class="number">0</span>; --i) &#123;</span><br><span class="line">      frame.payloadLen += (data[start++] &lt;&lt; (i * <span class="number">8</span>));</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (frame.payloadLen) &#123;</span><br><span class="line">    <span class="keyword">if</span> (frame.masked) &#123;</span><br><span class="line">      <span class="keyword">const</span> maskingKey = [</span><br><span class="line">        data[start++],</span><br><span class="line">        data[start++],</span><br><span class="line">        data[start++],</span><br><span class="line">        data[start++]</span><br><span class="line">      ];</span><br><span class="line"></span><br><span class="line">      frame.maskingKey = maskingKey;</span><br><span class="line"></span><br><span class="line">      frame.payloadData = data</span><br><span class="line">        .slice(start, start + frame.payloadLen)</span><br><span class="line">        .map(<span class="function">(<span class="params">byte, idx</span>) =&gt;</span> byte ^ maskingKey[idx % <span class="number">4</span>]);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      frame.payloadData = data.slice(start, start + frame.payloadLen);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">console</span>.dir(frame)</span><br><span class="line">  <span class="keyword">return</span> frame;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">function decodeWsFrame(data) {
+  let start = 0;
+  let frame = {
+    isFinal: (data[start] &amp; 0x80) === 0x80,
+    opcode: data[start++] &amp; 0xF,
+    masked: (data[start] &amp; 0x80) === 0x80,
+    payloadLen: data[start++] &amp; 0x7F,
+    maskingKey: &#39;&#39;,
+    payloadData: null
+  };
+
+  if (frame.payloadLen === 126) {
+    frame.payloadLen = (data[start++] &lt;&lt; 8) + data[start++];
+  } else if (frame.payloadLen === 127) {
+    frame.payloadLen = 0;
+    for (let i = 7; i &gt;= 0; --i) {
+      frame.payloadLen += (data[start++] &lt;&lt; (i * 8));
+    }
+  }
+
+  if (frame.payloadLen) {
+    if (frame.masked) {
+      const maskingKey = [
+        data[start++],
+        data[start++],
+        data[start++],
+        data[start++]
+      ];
+
+      frame.maskingKey = maskingKey;
+
+      frame.payloadData = data
+        .slice(start, start + frame.payloadLen)
+        .map((byte, idx) =&gt; byte ^ maskingKey[idx % 4]);
+    } else {
+      frame.payloadData = data.slice(start, start + frame.payloadLen);
+    }
+  }
+
+  console.dir(frame)
+  return frame;
+}
+</code></pre>
 <p>处理发出的数据：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">encodeWsFrame</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> isFinal = data.isFinal !== <span class="literal">undefined</span> ? data.isFinal : <span class="literal">true</span>,</span><br><span class="line">    opcode = data.opcode !== <span class="literal">undefined</span> ? data.opcode : <span class="number">1</span>,</span><br><span class="line">    payloadData = data.payloadData ? Buffer.from(data.payloadData) : <span class="literal">null</span>,</span><br><span class="line">    payloadLen = payloadData ? payloadData.length : <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> frame = [];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (isFinal) frame.push((<span class="number">1</span> &lt;&lt; <span class="number">7</span>) + opcode);</span><br><span class="line">  <span class="keyword">else</span> frame.push(opcode);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (payloadLen &lt; <span class="number">126</span>) &#123;</span><br><span class="line">    frame.push(payloadLen);</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (payloadLen &lt; <span class="number">65536</span>) &#123;</span><br><span class="line">    frame.push(<span class="number">126</span>, payloadLen &gt;&gt; <span class="number">8</span>, payloadLen &amp; <span class="number">0xFF</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    frame.push(<span class="number">127</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">7</span>; i &gt;= <span class="number">0</span>; --i) &#123;</span><br><span class="line">      frame.push((payloadLen &amp; (<span class="number">0xFF</span> &lt;&lt; (i * <span class="number">8</span>))) &gt;&gt; (i * <span class="number">8</span>));</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  frame = payloadData ? Buffer.concat([Buffer.from(frame), payloadData]) : Buffer.from(frame);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">console</span>.dir(decodeWsFrame(frame));</span><br><span class="line">  <span class="keyword">return</span> frame;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">function encodeWsFrame(data) {
+  const isFinal = data.isFinal !== undefined ? data.isFinal : true,
+    opcode = data.opcode !== undefined ? data.opcode : 1,
+    payloadData = data.payloadData ? Buffer.from(data.payloadData) : null,
+    payloadLen = payloadData ? payloadData.length : 0;
+
+  let frame = [];
+
+  if (isFinal) frame.push((1 &lt;&lt; 7) + opcode);
+  else frame.push(opcode);
+
+  if (payloadLen &lt; 126) {
+    frame.push(payloadLen);
+  } else if (payloadLen &lt; 65536) {
+    frame.push(126, payloadLen &gt;&gt; 8, payloadLen &amp; 0xFF);
+  } else {
+    frame.push(127);
+    for (let i = 7; i &gt;= 0; --i) {
+      frame.push((payloadLen &amp; (0xFF &lt;&lt; (i * 8))) &gt;&gt; (i * 8));
+    }
+  }
+
+  frame = payloadData ? Buffer.concat([Buffer.from(frame), payloadData]) : Buffer.from(frame);
+
+  console.dir(decodeWsFrame(frame));
+  return frame;
+}
+</code></pre>
 <p>对聊天数据进行处理：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">socket.once(<span class="string">'data'</span>, (buffer) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 接收到HTTP请求头数据</span></span><br><span class="line">  <span class="keyword">const</span> str = buffer.toString()</span><br><span class="line">  <span class="built_in">console</span>.log(str)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 4. 将请求头数据转为对象</span></span><br><span class="line">  <span class="keyword">const</span> headers = parseHeader(str)</span><br><span class="line">  <span class="built_in">console</span>.log(headers)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 5. 判断请求是否为WebSocket连接</span></span><br><span class="line">  <span class="keyword">if</span> (headers[<span class="string">'upgrade'</span>] !== <span class="string">'websocket'</span>) &#123;</span><br><span class="line">    <span class="comment">// 若当前请求不是WebSocket连接，则关闭连接</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'非WebSocket连接'</span>)</span><br><span class="line">    socket.end()</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (headers[<span class="string">'sec-websocket-version'</span>] !== <span class="string">'13'</span>) &#123;</span><br><span class="line">    <span class="comment">// 判断WebSocket版本是否为13，防止是其他版本，造成兼容错误</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'WebSocket版本错误'</span>)</span><br><span class="line">    socket.end()</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// 6. 校验Sec-WebSocket-Key，完成连接</span></span><br><span class="line">      <span class="comment">/* </span></span><br><span class="line"><span class="comment">        协议中规定的校验用GUID，可参考如下链接：</span></span><br><span class="line"><span class="comment">        https://tools.ietf.org/html/rfc6455#section-5.5.2</span></span><br><span class="line"><span class="comment">        https://stackoverflow.com/questions/13456017/what-does-258eafa5-e914-47da-95ca-c5ab0dc85b11-means-in-websocket-protocol</span></span><br><span class="line"><span class="comment">      */</span></span><br><span class="line">      <span class="keyword">const</span> GUID = <span class="string">'258EAFA5-E914-47DA-95CA-C5AB0DC85B11'</span></span><br><span class="line">      <span class="keyword">const</span> key = headers[<span class="string">'sec-websocket-key'</span>]</span><br><span class="line">      <span class="keyword">const</span> hash = crypto.createHash(<span class="string">'sha1'</span>)  <span class="comment">// 创建一个签名算法为sha1的哈希对象</span></span><br><span class="line"></span><br><span class="line">      hash.update(<span class="string">`<span class="subst">$&#123;key&#125;</span><span class="subst">$&#123;GUID&#125;</span>`</span>)  <span class="comment">// 将key和GUID连接后，更新到hash</span></span><br><span class="line">      <span class="keyword">const</span> result = hash.digest(<span class="string">'base64'</span>) <span class="comment">// 生成base64字符串</span></span><br><span class="line">	  <span class="keyword">const</span> header = <span class="string">`HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-Websocket-Accept: <span class="subst">$&#123;result&#125;</span>\r\n\r\n`</span> <span class="comment">// 生成供前端校验用的请求头</span></span><br><span class="line"></span><br><span class="line">      socket.write(header)  <span class="comment">// 返回HTTP头，告知客户端校验结果，HTTP状态码101表示切换协议：https://httpstatuses.com/101。</span></span><br><span class="line">      <span class="comment">// 若客户端校验结果正确，在控制台的Network模块可以看到HTTP请求的状态码变为101 Switching Protocols，同时客户端的ws.onopen事件被触发。</span></span><br><span class="line">      <span class="built_in">console</span>.log(header)</span><br><span class="line">      </span><br><span class="line">      <span class="comment">// 7. 建立连接后，通过data事件接收客户端的数据并处理</span></span><br><span class="line">      socket.on(<span class="string">'data'</span>, (buffer) =&gt; &#123;</span><br><span class="line">        <span class="keyword">const</span> data = decodeWsFrame(buffer)</span><br><span class="line">        <span class="built_in">console</span>.log(data)</span><br><span class="line">        <span class="built_in">console</span>.log(data.payloadData &amp;&amp; data.payloadData.toString())</span><br><span class="line"></span><br><span class="line">        <span class="comment">// opcode为8，表示客户端发起了断开连接</span></span><br><span class="line">        <span class="keyword">if</span> (data.opcode === <span class="number">8</span>) &#123;</span><br><span class="line">          socket.end()  <span class="comment">// 与客户端断开连接</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="comment">// 接收到客户端数据时的处理，此处默认为返回接收到的数据。</span></span><br><span class="line">          socket.write(encodeWsFrame(&#123; <span class="attr">payloadData</span>: <span class="string">`服务端接收到的消息为：<span class="subst">$&#123;data.payloadData ? data.payloadData.toString() : <span class="string">''</span>&#125;</span>`</span> &#125;))</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">socket.once(&#39;data&#39;, (buffer) =&gt; {
+  // 接收到HTTP请求头数据
+  const str = buffer.toString()
+  console.log(str)
+
+  // 4. 将请求头数据转为对象
+  const headers = parseHeader(str)
+  console.log(headers)
+
+  // 5. 判断请求是否为WebSocket连接
+  if (headers[&#39;upgrade&#39;] !== &#39;websocket&#39;) {
+    // 若当前请求不是WebSocket连接，则关闭连接
+    console.log(&#39;非WebSocket连接&#39;)
+    socket.end()
+  } else if (headers[&#39;sec-websocket-version&#39;] !== &#39;13&#39;) {
+    // 判断WebSocket版本是否为13，防止是其他版本，造成兼容错误
+    console.log(&#39;WebSocket版本错误&#39;)
+    socket.end()
+  } else {
+      // 6. 校验Sec-WebSocket-Key，完成连接
+      /* 
+        协议中规定的校验用GUID，可参考如下链接：
+        https://tools.ietf.org/html/rfc6455#section-5.5.2
+        https://stackoverflow.com/questions/13456017/what-does-258eafa5-e914-47da-95ca-c5ab0dc85b11-means-in-websocket-protocol
+      */
+      const GUID = &#39;258EAFA5-E914-47DA-95CA-C5AB0DC85B11&#39;
+      const key = headers[&#39;sec-websocket-key&#39;]
+      const hash = crypto.createHash(&#39;sha1&#39;)  // 创建一个签名算法为sha1的哈希对象
+
+      hash.update(`${key}${GUID}`)  // 将key和GUID连接后，更新到hash
+      const result = hash.digest(&#39;base64&#39;) // 生成base64字符串
+      const header = `HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-Websocket-Accept: ${result}\r\n\r\n` // 生成供前端校验用的请求头
+
+      socket.write(header)  // 返回HTTP头，告知客户端校验结果，HTTP状态码101表示切换协议：https://httpstatuses.com/101。
+      // 若客户端校验结果正确，在控制台的Network模块可以看到HTTP请求的状态码变为101 Switching Protocols，同时客户端的ws.onopen事件被触发。
+      console.log(header)
+
+      // 7. 建立连接后，通过data事件接收客户端的数据并处理
+      socket.on(&#39;data&#39;, (buffer) =&gt; {
+        const data = decodeWsFrame(buffer)
+        console.log(data)
+        console.log(data.payloadData &amp;&amp; data.payloadData.toString())
+
+        // opcode为8，表示客户端发起了断开连接
+        if (data.opcode === 8) {
+          socket.end()  // 与客户端断开连接
+        } else {
+          // 接收到客户端数据时的处理，此处默认为返回接收到的数据。
+          socket.write(encodeWsFrame({ payloadData: `服务端接收到的消息为：${data.payloadData ? data.payloadData.toString() : &#39;&#39;}` }))
+        }
+      })
+    }
+  })
+</code></pre>
 <p>这样，一个简单的基于WebSocket的聊天应用就创建完成了，在启动服务器后，可以打开index.html看到效果。</p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
@@ -243,7 +579,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

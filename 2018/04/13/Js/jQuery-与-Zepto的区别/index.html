@@ -102,13 +102,13 @@ jQuery 的意义是在于抹平 DOM、BOM、CSSOM 的多浏览器差异，并统
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    17k
+                    6.5k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    16 mins.
+                    6 mins.
                 </span>
                 
                 
@@ -149,14 +149,88 @@ jQuery 的意义是在于抹平 DOM、BOM、CSSOM 的多浏览器差异，并统
 <h2 id="创建DOM节点并赋与属性"><a href="#创建DOM节点并赋与属性" class="headerlink" title="创建DOM节点并赋与属性"></a>创建DOM节点并赋与属性</h2><p>使用 <code>$</code> 操作符可以轻松创建节点并赋予属性，具体代码是 <code>$(htmlString, attributes)</code> ，支持链式写法。喜欢刨根问底的同学可以看看下面的文档。</p>
 <p><a href="http://api.jquery.com/jQuery/#jQuery-html-attributes" target="_blank" rel="noopener">jquert文档</a><br><a href="http://zeptojs.com/#" target="_blank" rel="noopener">zepto文档</a></p>
 <h3 id="DOM操作的区别"><a href="#DOM操作的区别" class="headerlink" title="DOM操作的区别"></a>DOM操作的区别</h3><p><strong>jquery操作ul元素时候，添加id不会生效</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">$</span>)</span>&#123;</span><br><span class="line">    $(<span class="function"><span class="keyword">function</span>)</span>&#123;</span><br><span class="line">         <span class="keyword">var</span> $list = $(<span class="string">'&lt;ul&gt;&lt;li&gt;jQuery 插入&lt;/li&gt;&lt;/ul&gt;'</span>, &#123;</span><br><span class="line">            id: <span class="string">'insert-by-jquery'</span></span><br><span class="line">        &#125;);</span><br><span class="line">        $list.appendTo($(<span class="string">'body'</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)(<span class="built_in">window</span>.jQuery)</span><br><span class="line"><span class="comment">// Result</span></span><br><span class="line"><span class="comment">// &lt;ul&gt;&lt;li&gt;jQuery 插入&lt;/li&gt;&lt;/ul&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">(function($){
+    $(function){
+         var $list = $(&#39;&lt;ul&gt;&lt;li&gt;jQuery 插入&lt;/li&gt;&lt;/ul&gt;&#39;, {
+            id: &#39;insert-by-jquery&#39;
+        });
+        $list.appendTo($(&#39;body&#39;));
+    }
+})(window.jQuery)
+// Result
+// &lt;ul&gt;&lt;li&gt;jQuery 插入&lt;/li&gt;&lt;/ul&gt;
+</code></pre>
 <p><strong>zepto操作ul元素时候，添加id会生效</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">zepto(<span class="function"><span class="keyword">function</span>(<span class="params">$</span>)</span>&#123;</span><br><span class="line"> </span><br><span class="line">         <span class="keyword">var</span> $list = $(<span class="string">'&lt;ul&gt;&lt;li&gt;jQuery 插入&lt;/li&gt;&lt;/ul&gt;'</span>, &#123;</span><br><span class="line">            id: <span class="string">'insert-by-jquery'</span></span><br><span class="line">        &#125;);</span><br><span class="line">        $list.appendTo($(<span class="string">'body'</span>));</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// Result</span></span><br><span class="line"><span class="comment">// &lt;ul id="insert-by-zepto"&gt;&lt;li&gt;Zepto 插入&lt;/li&gt;&lt;/ul&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">zepto(function($){
+
+         var $list = $(&#39;&lt;ul&gt;&lt;li&gt;jQuery 插入&lt;/li&gt;&lt;/ul&gt;&#39;, {
+            id: &#39;insert-by-jquery&#39;
+        });
+        $list.appendTo($(&#39;body&#39;));
+})
+// Result
+// &lt;ul id=&quot;insert-by-zepto&quot;&gt;&lt;li&gt;Zepto 插入&lt;/li&gt;&lt;/ul&gt;
+</code></pre>
 <a id="more"></a>
-<h3 id="事件触发的区别"><a href="#事件触发的区别" class="headerlink" title="事件触发的区别"></a>事件触发的区别</h3><p><strong>jquery时load事件的处理函数不会执行</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">$</span>) </span>&#123;</span><br><span class="line">    $(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;    </span><br><span class="line">        $script = $(<span class="string">'&lt;script /&gt;'</span>, &#123;</span><br><span class="line">            src: <span class="string">'http://cdn.amazeui.org/amazeui/1.0.1/js/amazeui.js'</span>,</span><br><span class="line">            id: <span class="string">'ui-jquery'</span></span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        $script.appendTo($(<span class="string">'body'</span>));</span><br><span class="line"></span><br><span class="line">        $script.on(<span class="string">'load'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'jQ script loaded'</span>);<span class="comment">//没有打印出</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;)(<span class="built_in">window</span>.jQuery);</span><br></pre></td></tr></table></figure><br><strong>使用 Zepto 时 load 事件的处理函数会执行</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Zepto(<span class="function"><span class="keyword">function</span>(<span class="params">$</span>) </span>&#123;  </span><br><span class="line">    $script = $(<span class="string">'&lt;script /&gt;'</span>, &#123;</span><br><span class="line">        src: <span class="string">'http://cdn.amazeui.org/amazeui/1.0.1/js/amazeui.js'</span>,</span><br><span class="line">        id: <span class="string">'ui-zepto'</span></span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    $script.appendTo($(<span class="string">'body'</span>));</span><br><span class="line"></span><br><span class="line">    $script.on(<span class="string">'load'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'zepto script loaded'</span>); <span class="comment">//zepto script loaded</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<h3 id="事件触发的区别"><a href="#事件触发的区别" class="headerlink" title="事件触发的区别"></a>事件触发的区别</h3><p><strong>jquery时load事件的处理函数不会执行</strong></p>
+<pre><code class="javascript">(function($) {
+    $(function() {    
+        $script = $(&#39;&lt;script /&gt;&#39;, {
+            src: &#39;http://cdn.amazeui.org/amazeui/1.0.1/js/amazeui.js&#39;,
+            id: &#39;ui-jquery&#39;
+        });
+
+        $script.appendTo($(&#39;body&#39;));
+
+        $script.on(&#39;load&#39;, function() {
+            console.log(&#39;jQ script loaded&#39;);//没有打印出
+        });
+    });
+})(window.jQuery);
+</code></pre>
+<p><strong>使用 Zepto 时 load 事件的处理函数会执行</strong></p>
+<pre><code class="javascript">Zepto(function($) {  
+    $script = $(&#39;&lt;script /&gt;&#39;, {
+        src: &#39;http://cdn.amazeui.org/amazeui/1.0.1/js/amazeui.js&#39;,
+        id: &#39;ui-zepto&#39;
+    });
+
+    $script.appendTo($(&#39;body&#39;));
+
+    $script.on(&#39;load&#39;, function() {
+        console.log(&#39;zepto script loaded&#39;); //zepto script loaded
+    });
+});
+</code></pre>
 <h3 id="事件委托的区别"><a href="#事件委托的区别" class="headerlink" title="事件委托的区别"></a>事件委托的区别</h3><p><strong>在 Zepto 中，当 a 被点击后，依次弹出了内容为”a事件“和”b事件“的弹出框。说明虽然事件委托在.a上可是却也触发了.b上的委托。</strong></p>
-<p><strong>但是在 jQuery 中只会触发 .a 上面的委托。</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> $doc = $(<span class="built_in">document</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Class 'a' bind event 'a'</span></span><br><span class="line">$doc.on(<span class="string">'click'</span>, <span class="string">'.a'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    alert(<span class="string">'a事件'</span>);</span><br><span class="line">    <span class="comment">// Class 'a' change to class 'b'</span></span><br><span class="line">    $(<span class="keyword">this</span>).removeClass(<span class="string">'a'</span>).addClass(<span class="string">'b'</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Class 'b' bind event 'b'</span></span><br><span class="line">$doc.on(<span class="string">'click'</span>, <span class="string">'.b'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    alert(<span class="string">'b事件'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
-<p><strong>原理分析</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Zepto source code</span></span><br><span class="line">$.fn.on = <span class="function"><span class="keyword">function</span>(<span class="params">event, selector, data, callback, one</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> autoRemove, delegator, $<span class="keyword">this</span> = <span class="keyword">this</span></span><br><span class="line">    <span class="keyword">if</span> (event &amp;&amp; !isString(event)) &#123;</span><br><span class="line">        <span class="comment">// Core code</span></span><br><span class="line">        $.each(event, <span class="function"><span class="keyword">function</span> (<span class="params">type, fn</span>) </span>&#123;</span><br><span class="line">            $<span class="keyword">this</span>.on(type, selector, data, fn, one)</span><br><span class="line">        &#125;) <span class="keyword">return</span> $<span class="keyword">this</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>但是在 jQuery 中只会触发 .a 上面的委托。</strong></p>
+<pre><code class="javascript">var $doc = $(document);
+
+// Class &#39;a&#39; bind event &#39;a&#39;
+$doc.on(&#39;click&#39;, &#39;.a&#39;, function () {
+    alert(&#39;a事件&#39;);
+    // Class &#39;a&#39; change to class &#39;b&#39;
+    $(this).removeClass(&#39;a&#39;).addClass(&#39;b&#39;);
+});
+
+// Class &#39;b&#39; bind event &#39;b&#39;
+$doc.on(&#39;click&#39;, &#39;.b&#39;, function () {
+    alert(&#39;b事件&#39;);
+});
+</code></pre>
+<p><strong>原理分析</strong></p>
+<pre><code class="javascript">// Zepto source code
+$.fn.on = function(event, selector, data, callback, one) {
+    var autoRemove, delegator, $this = this
+    if (event &amp;&amp; !isString(event)) {
+        // Core code
+        $.each(event, function (type, fn) {
+            $this.on(type, selector, data, fn, one)
+        }) return $this
+    }
+    //...
+}
+</code></pre>
 <blockquote>
 <p>在 Zepto 中代码解析的时候，document上所有的click委托事件都依次放入到一个队列中，点击的时候先看当前元素是不是.a，符合则执行，然后查看是不是.b，符合则执行。</p>
 </blockquote>
@@ -167,28 +241,68 @@ jQuery 的意义是在于抹平 DOM、BOM、CSSOM 的多浏览器差异，并统
 <p>这样就很好的避免了在 Zepto 中的发生的情况。</p>
 <h2 id="API方面的区别"><a href="#API方面的区别" class="headerlink" title="API方面的区别"></a>API方面的区别</h2><h3 id="winth-和-height的区别"><a href="#winth-和-height的区别" class="headerlink" title="winth() 和 height的区别"></a><code>winth()</code> 和 <code>height</code>的区别</h3><blockquote>
 <ul>
-<li><p>Zepto 由盒模型(box-sizing)决定；</p>
-</li>
-<li><p>jQuery 会忽略盒模型，始终返回内容区域的宽/高(不包含padding、border)。</p>
-</li>
+<li>Zepto 由盒模型(box-sizing)决定；</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>jQuery 会忽略盒模型，始终返回内容区域的宽/高(不包含padding、border)。</li>
 </ul>
 </blockquote>
 <p>解决方式就是使用 <code>.css(&#39;width&#39;)</code> 而不是<code>.width()</code> 。下面我们举个叫做《边框三角形宽高的获取》的栗子来说明这个问题。</p>
-<p>首先用下面的 HTML 和 CSS 画了一个小三角形吧。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// html</span></span><br><span class="line">&lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"caret"</span>&gt;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ css</span></span><br><span class="line"><span class="regexp">.caret&#123;</span></span><br><span class="line"><span class="regexp">    width:0;</span></span><br><span class="line"><span class="regexp">    height:0;</span></span><br><span class="line"><span class="regexp">    border-width: 0 20px 20px;</span></span><br><span class="line"><span class="regexp">    border-color: transparent transparent blue; </span></span><br><span class="line"><span class="regexp">    border-style: none dotted solid;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>首先用下面的 HTML 和 CSS 画了一个小三角形吧。</p>
+<pre><code class="javascript">// html
+&lt;div class=&quot;caret&quot;&gt;&lt;/div&gt;
+
+// css
+.caret{
+    width:0;
+    height:0;
+    border-width: 0 20px 20px;
+    border-color: transparent transparent blue; 
+    border-style: none dotted solid;
+}
+
+</code></pre>
 <blockquote>
 <ul>
-<li><p>jQuery 使用 .width() 和 .css(‘width’) 都返回 ，高度也一样；</p>
-</li>
-<li><p>Zepto 使用 .width() 返回 ，使用 .css(‘width’) 返回 0px 。<br>所以，这种场景，jQuery 使用 <code>.outerWidth() /</code> .outerHeight() ；Zepto 使用 <code>.width() / .height()</code> 。</p>
-</li>
+<li>jQuery 使用 .width() 和 .css(‘width’) 都返回 ，高度也一样；</li>
 </ul>
 </blockquote>
-<h3 id="offSet-的区别"><a href="#offSet-的区别" class="headerlink" title="offSet()的区别"></a>offSet()的区别</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// offset() &#123;function&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @desc Zepto</span></span><br><span class="line"><span class="comment">// @return top|left|width|height</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @desc jQuery</span></span><br><span class="line"><span class="comment">// @return width|height</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li>Zepto 使用 .width() 返回 ，使用 .css(‘width’) 返回 0px 。<br>所以，这种场景，jQuery 使用 <code>.outerWidth() /</code> .outerHeight() ；Zepto 使用 <code>.width() / .height()</code> 。</li>
+</ul>
+</blockquote>
+<h3 id="offSet-的区别"><a href="#offSet-的区别" class="headerlink" title="offSet()的区别"></a>offSet()的区别</h3><pre><code class="javascript">// offset() {function}
+
+// @desc Zepto
+// @return top|left|width|height
+
+// @desc jQuery
+// @return width|height
+</code></pre>
 <h3 id="获取隐藏元素width和height的区别"><a href="#获取隐藏元素width和height的区别" class="headerlink" title="获取隐藏元素width和height的区别"></a>获取隐藏元素width和height的区别</h3><p>Zepto 无法获取隐藏元素宽高，jQuery 可以。</p>
 <h3 id="extend-的区别"><a href="#extend-的区别" class="headerlink" title="extend() 的区别"></a>extend() 的区别</h3><p><strong>jQuery 在原型上拓展方法使用的方式是：</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// For example</span></span><br><span class="line"><span class="comment">// Extend a function named 'sayHello' to the protorype of jQuery</span></span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">$</span>) </span>&#123;</span><br><span class="line">    $.fn.extend(&#123;</span><br><span class="line">        sayHello: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            $(<span class="keyword">this</span>).html(<span class="string">'Hello !'</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;)(<span class="built_in">window</span>.jQuery);</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">// For example
+// Extend a function named &#39;sayHello&#39; to the protorype of jQuery
+(function($) {
+    $.fn.extend({
+        sayHello: function() {
+            $(this).html(&#39;Hello !&#39;);
+        }
+    });
+})(window.jQuery);
+</code></pre>
 <p><strong>Zepto 中并没有为原型定义extend方法，所以如果要是要在 Zepto 的原型上拓展方法可以使用的方式是：</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// For example</span></span><br><span class="line"><span class="comment">// Extend a function named 'sayHello' to the protorype of Zepto</span></span><br><span class="line">Zepto(<span class="function"><span class="keyword">function</span>(<span class="params">$</span>) </span>&#123;</span><br><span class="line">    sayHello: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        $(<span class="keyword">this</span>).html(<span class="string">'Hello !'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">// For example
+// Extend a function named &#39;sayHello&#39; to the protorype of Zepto
+Zepto(function($) {
+    sayHello: function() {
+        $(this).html(&#39;Hello !&#39;);
+    }
+});
+</code></pre>
 <p>随着 jQuery 2.x 的发布以及未来 3.0 对浏览器支持的划分，似乎找不到再使用 Zepto 的理由了。如果你真在乎文件大小，那你可以自行打包 jQuery 中需要的模块。这和 Zepto 是一样的，Zepto 官方提供的版本只打包了很基础的模块。</p>
 <p><a href="https://segmentfault.com/a/1190000003409961" target="_blank" rel="noopener">原文地址</a></p>
 
@@ -238,7 +352,7 @@ jQuery 的意义是在于抹平 DOM、BOM、CSSOM 的多浏览器差异，并统
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

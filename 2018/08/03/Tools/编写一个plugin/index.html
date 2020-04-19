@@ -99,13 +99,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    24k
+                    9k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    22 mins.
+                    8 mins.
                 </span>
                 
                 
@@ -141,10 +141,30 @@
         <div class="content markdown animated fadeIn">
             <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Webpack 通过 Plugin 机制让其更加灵活，以适应各种应用场景。 在 Webpack 运行的生命周期中会广播出许多事件，Plugin 可以监听这些事件，在合适的时机通过 Webpack 提供的 API 改变输出结果。</p>
 <h2 id="最基础的-Plugin"><a href="#最基础的-Plugin" class="headerlink" title="最基础的 Plugin"></a>最基础的 Plugin</h2><p>一个最基础的 Plugin 的代码是这样的：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BasicPlugin</span></span>&#123;</span><br><span class="line">  <span class="comment">// 在构造函数中获取用户给该插件传入的配置</span></span><br><span class="line">  construcor(options)&#123;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">  apply(compiler)&#123;</span><br><span class="line">    <span class="comment">// Webpack 会调用 BasicPlugin 实例的 apply 方法给插件实例传入 compiler 对象  </span></span><br><span class="line">    compiler.plugin(<span class="string">'compilatio'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">compilatio</span>)</span>&#123;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 导出 Plugin</span></span><br><span class="line"><span class="built_in">module</span>.exports = BasicPlugin;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">class BasicPlugin{
+  // 在构造函数中获取用户给该插件传入的配置
+  construcor(options){
+
+  }
+  apply(compiler){
+    // Webpack 会调用 BasicPlugin 实例的 apply 方法给插件实例传入 compiler 对象  
+    compiler.plugin(&#39;compilatio&#39;,function(compilatio){
+    })
+  }
+}
+
+// 导出 Plugin
+module.exports = BasicPlugin;
+</code></pre>
 <a id="more"></a>
 <p>在使用这个 Plugin 时，相关配置代码如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> BasicPlugin = <span class="built_in">require</span>(<span class="string">'./BasicPlugin.js'</span>);</span><br><span class="line"><span class="built_in">module</span>.export = &#123;</span><br><span class="line">  plugins:[</span><br><span class="line">    <span class="keyword">new</span> BasicPlugin(options),</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const BasicPlugin = require(&#39;./BasicPlugin.js&#39;);
+module.export = {
+  plugins:[
+    new BasicPlugin(options),
+  ]
+}
+</code></pre>
 <h3 id="plugin工作原理"><a href="#plugin工作原理" class="headerlink" title="plugin工作原理"></a>plugin工作原理</h3><p>Webpack 启动后，在读取配置的过程中会先执行 <code>new BasicPlugin(options)</code> 初始化一个 <code>BasicPlugin</code> 获得其实例。 在初始化 <code>compiler</code> 对象后，再调用 <code>basicPlugin.apply(compiler)</code> 给插件实例传入 <code>compiler</code> 对象。 插件实例在获取到 <code>compiler</code> 对象后，就可以通过 <code>compiler.plugin(事件名称, 回调函数)</code> 监听到 Webpack 广播出来的事件。 并且可以通过 <code>compiler</code> 对象去操作 Webpack。</p>
 <p>通过以上最简单的 Plugin 相信你大概明白了 Plugin 的工作原理，但实际开发中还有很多细节需要注意，下面来详细介绍。</p>
 <p>在开发 Plugin 时最常用的两个对象就是 <code>Compiler</code> 和 <code>Compilation</code>，<strong>它们是 Plugin 和 Webpack 之间的桥梁</strong>。</p>
@@ -159,7 +179,21 @@
 <h2 id="事件流"><a href="#事件流" class="headerlink" title="事件流"></a>事件流</h2><p>Webpack 就像一条生产线，要经过一系列处理流程后才能将源文件转换成输出结果。 这条生产线上的每个处理流程的职责都是单一的，多个流程之间有存在依赖关系，只有完成当前处理后才能交给下一个流程去处理。 插件就像是一个插入到生产线中的一个功能，在特定的时机对生产线上的资源做处理。</p>
 <p>Webpack 通过 Tapable 来组织这条复杂的生产线。 Webpack 在运行过程中会广播事件，插件只需要监听它所关心的事件，就能加入到这条生产线中，去改变生产线的运作。 Webpack 的事件流机制保证了插件的有序性，使得整个系统扩展性很好。</p>
 <p>Webpack 的事件流机制应用了观察者模式，和 Node.js 中的 EventEmitter 非常相似。 Compiler 和 Compilation 都继承自 Tapable，可以直接在 Compiler 和 Compilation 对象上广播和监听事件，方法如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 广播出事件</span></span><br><span class="line"><span class="comment">* event-name 为事件名称，注意不要和现有的事件重名</span></span><br><span class="line"><span class="comment">* params 为附带的参数</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">compiler.apply(<span class="string">'event-name'</span>,params);</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 监听名称为 event-name 的事件，当 event-name 事件发生时，函数就会被执行。</span></span><br><span class="line"><span class="comment">* 同时函数中的 params 参数为广播事件时附带的参数。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">compiler.plugin(<span class="string">'event-name'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">params</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">/**
+* 广播出事件
+* event-name 为事件名称，注意不要和现有的事件重名
+* params 为附带的参数
+*/
+compiler.apply(&#39;event-name&#39;,params);
+
+/**
+* 监听名称为 event-name 的事件，当 event-name 事件发生时，函数就会被执行。
+* 同时函数中的 params 参数为广播事件时附带的参数。
+*/
+compiler.plugin(&#39;event-name&#39;,function(params) {
+
+});
+</code></pre>
 <p>同理，<code>compilation.apply</code> 和 <code>compilation.plugin</code> 使用方法和上面一致。</p>
 <p>在开发插件时，你可能会不知道该如何下手，因为你不知道该监听哪个事件才能完成任务。</p>
 <blockquote>
@@ -170,22 +204,120 @@
 <li>传给每个插件的 Compiler 和 Compilation 对象都是同一个引用。也就是说在一个插件中修改了 Compiler 或 Compilation 对象上的属性，会影响到后面的插件。</li>
 </ul>
 <p>有些事件是异步的，这些异步的事件会附带两个参数，第二个参数为回调函数，在插件处理完任务时需要调用回调函数通知 Webpack，才会进入下一处理流程。例如：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">  compiler.plugin(<span class="string">'emit'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">compilation, callback</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 支持处理逻辑</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 处理完毕后执行 callback 以通知 Webpack</span></span><br><span class="line">    <span class="comment">// 如果不执行 callback，运行流程将会一直卡在这不往下执行</span></span><br><span class="line">    callback();</span><br><span class="line">  &#125;);</span><br><span class="line"><span class="string">``</span><span class="string">`  </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">## 常用 API</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">### 读取输出资源、代码块、模块及其依赖</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">有些插件可能需要读取 Webpack 的处理结果，例如输出资源、代码块、模块及其依赖，以便做下一步处理。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">在 emit 事件发生时，代表源文件的转换和组装已经完成，在这里可以读取到最终将输出的资源、代码块、模块及其依赖，并且可以修改输出资源的内容。 插件代码如下：</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">`</span><span class="string">``</span>js</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Plugin</span> </span>&#123;</span><br><span class="line">  apply(compiler) &#123;</span><br><span class="line">    compiler.plugin(<span class="string">'emit'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">compilation, callback</span>) </span>&#123;</span><br><span class="line">      <span class="comment">// compilation.chunks 存放所有代码块，是一个数组</span></span><br><span class="line">      compilation.chunks.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">chunk</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// chunk 代表一个代码块</span></span><br><span class="line">        <span class="comment">// 代码块由多个模块组成，通过 chunk.forEachModule 能读取组成代码块的每个模块</span></span><br><span class="line">        chunk.forEachModule(<span class="function"><span class="keyword">function</span> (<span class="params">module</span>) </span>&#123;</span><br><span class="line">          <span class="comment">// module 代表一个模块</span></span><br><span class="line">          <span class="comment">// module.fileDependencies 存放当前模块的所有依赖的文件路径，是一个数组</span></span><br><span class="line">          <span class="built_in">module</span>.fileDependencies.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">filepath</span>) </span>&#123;</span><br><span class="line">          &#125;);</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Webpack 会根据 Chunk 去生成输出的文件资源，每个 Chunk 都对应一个及其以上的输出文件</span></span><br><span class="line">        <span class="comment">// 例如在 Chunk 中包含了 CSS 模块并且使用了 ExtractTextPlugin 时，</span></span><br><span class="line">        <span class="comment">// 该 Chunk 就会生成 .js 和 .css 两个文件</span></span><br><span class="line">        chunk.files.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">filename</span>) </span>&#123;</span><br><span class="line">          <span class="comment">// compilation.assets 存放当前所有即将输出的资源</span></span><br><span class="line">          <span class="comment">// 调用一个输出资源的 source() 方法能获取到输出资源的内容</span></span><br><span class="line">          <span class="keyword">let</span> source = compilation.assets[filename].source();</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 这是一个异步事件，要记得调用 callback 通知 Webpack 本次事件监听处理结束。</span></span><br><span class="line">      <span class="comment">// 如果忘记了调用 callback，Webpack 将一直卡在这里而不会往后执行。</span></span><br><span class="line">      callback();</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">  compiler.plugin(&#39;emit&#39;,function(compilation, callback) {
+    // 支持处理逻辑
+
+    // 处理完毕后执行 callback 以通知 Webpack
+    // 如果不执行 callback，运行流程将会一直卡在这不往下执行
+    callback();
+  });
+</code></pre>
+<h2 id="常用-API"><a href="#常用-API" class="headerlink" title="常用 API"></a>常用 API</h2><h3 id="读取输出资源、代码块、模块及其依赖"><a href="#读取输出资源、代码块、模块及其依赖" class="headerlink" title="读取输出资源、代码块、模块及其依赖"></a>读取输出资源、代码块、模块及其依赖</h3><p>有些插件可能需要读取 Webpack 的处理结果，例如输出资源、代码块、模块及其依赖，以便做下一步处理。</p>
+<p>在 emit 事件发生时，代表源文件的转换和组装已经完成，在这里可以读取到最终将输出的资源、代码块、模块及其依赖，并且可以修改输出资源的内容。 插件代码如下：</p>
+<pre><code class="js">class Plugin {
+  apply(compiler) {
+    compiler.plugin(&#39;emit&#39;, function (compilation, callback) {
+      // compilation.chunks 存放所有代码块，是一个数组
+      compilation.chunks.forEach(function (chunk) {
+        // chunk 代表一个代码块
+        // 代码块由多个模块组成，通过 chunk.forEachModule 能读取组成代码块的每个模块
+        chunk.forEachModule(function (module) {
+          // module 代表一个模块
+          // module.fileDependencies 存放当前模块的所有依赖的文件路径，是一个数组
+          module.fileDependencies.forEach(function (filepath) {
+          });
+        });
+
+        // Webpack 会根据 Chunk 去生成输出的文件资源，每个 Chunk 都对应一个及其以上的输出文件
+        // 例如在 Chunk 中包含了 CSS 模块并且使用了 ExtractTextPlugin 时，
+        // 该 Chunk 就会生成 .js 和 .css 两个文件
+        chunk.files.forEach(function (filename) {
+          // compilation.assets 存放当前所有即将输出的资源
+          // 调用一个输出资源的 source() 方法能获取到输出资源的内容
+          let source = compilation.assets[filename].source();
+        });
+      });
+
+      // 这是一个异步事件，要记得调用 callback 通知 Webpack 本次事件监听处理结束。
+      // 如果忘记了调用 callback，Webpack 将一直卡在这里而不会往后执行。
+      callback();
+    })
+  }
+}
+</code></pre>
 <h3 id="监听文件的变化"><a href="#监听文件的变化" class="headerlink" title="监听文件的变化"></a>监听文件的变化</h3><p>在开发插件时经常需要知道是哪个文件发生变化导致了新的 <code>Compilation</code>，为此可以使用如下代码：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 当依赖的文件发生变化时会触发 watch-run 事件</span></span><br><span class="line">compiler.plugin(<span class="string">'watch-run'</span>, (watching, callback) =&gt; &#123;</span><br><span class="line">    <span class="comment">// 获取发生变化的文件列表</span></span><br><span class="line">    <span class="keyword">const</span> changedFiles = watching.compiler.watchFileSystem.watcher.mtimes;</span><br><span class="line">    <span class="comment">// changedFiles 格式为键值对，键为发生变化的文件路径。</span></span><br><span class="line">    <span class="keyword">if</span> (changedFiles[filePath] !== <span class="literal">undefined</span>) &#123;</span><br><span class="line">      <span class="comment">// filePath 对应的文件发生了变化</span></span><br><span class="line">    &#125;</span><br><span class="line">    callback();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// 当依赖的文件发生变化时会触发 watch-run 事件
+compiler.plugin(&#39;watch-run&#39;, (watching, callback) =&gt; {
+    // 获取发生变化的文件列表
+    const changedFiles = watching.compiler.watchFileSystem.watcher.mtimes;
+    // changedFiles 格式为键值对，键为发生变化的文件路径。
+    if (changedFiles[filePath] !== undefined) {
+      // filePath 对应的文件发生了变化
+    }
+    callback();
+});
+</code></pre>
 <p>默认情况下 Webpack 只会监视入口和其依赖的模块是否发生变化，在有些情况下项目可能需要引入新的文件，例如引入一个 HTML 文件。 由于 JavaScript 文件不会去导入 HTML 文件，Webpack 就不会监听 HTML 文件的变化，编辑 HTML 文件时就不会重新触发新的 <code>Compilation</code>。 为了监听 HTML 文件的变化，我们需要把 HTML 文件加入到依赖列表中，为此可以使用如下代码：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">compiler.plugin(<span class="string">'after-compile'</span>, (compilation, callback) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 把 HTML 文件添加到文件依赖列表，好让 Webpack 去监听 HTML 模块文件，在 HTML 模版文件发生变化时重新启动一次编译</span></span><br><span class="line">    compilation.fileDependencies.push(filePath);</span><br><span class="line">    callback();</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">compiler.plugin(&#39;after-compile&#39;, (compilation, callback) =&gt; {
+  // 把 HTML 文件添加到文件依赖列表，好让 Webpack 去监听 HTML 模块文件，在 HTML 模版文件发生变化时重新启动一次编译
+    compilation.fileDependencies.push(filePath);
+    callback();
+})
+</code></pre>
 <h3 id="修改输出资源"><a href="#修改输出资源" class="headerlink" title="修改输出资源"></a>修改输出资源</h3><p>有些场景下插件需要修改、增加、删除输出的资源，要做到这点需要监听 emit 事件，因为发生 emit 事件时所有模块的转换和代码块对应的文件已经生成好， 需要输出的资源即将输出，因此 emit 事件是修改 Webpack 输出资源的最后时机。</p>
 <p>所有需要输出的资源会存放在 <code>compilation.assets</code> 中，<code>compilation.assets</code> 是一个键值对，键为需要输出的文件名称，值为文件对应的内容。</p>
 <p>设置 <code>compilation.assets</code> 的代码如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">compiler.plugin(<span class="string">'emit'</span>, (compilation, callback) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 设置名称为 fileName 的输出资源</span></span><br><span class="line">  compilation.assets[fileName] = &#123;</span><br><span class="line">    <span class="comment">// 返回文件内容</span></span><br><span class="line">    source: <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// fileContent 既可以是代表文本文件的字符串，也可以是代表二进制文件的 Buffer</span></span><br><span class="line">      <span class="keyword">return</span> fileContent;</span><br><span class="line">      &#125;,</span><br><span class="line">    <span class="comment">// 返回文件大小</span></span><br><span class="line">      size: <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> Buffer.byteLength(fileContent, <span class="string">'utf8'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">  callback();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">compiler.plugin(&#39;emit&#39;, (compilation, callback) =&gt; {
+  // 设置名称为 fileName 的输出资源
+  compilation.assets[fileName] = {
+    // 返回文件内容
+    source: () =&gt; {
+      // fileContent 既可以是代表文本文件的字符串，也可以是代表二进制文件的 Buffer
+      return fileContent;
+      },
+    // 返回文件大小
+      size: () =&gt; {
+      return Buffer.byteLength(fileContent, &#39;utf8&#39;);
+    }
+  };
+  callback();
+});
+</code></pre>
 <p>读取 <code>compilation.assets</code> 的代码如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">compiler.plugin(<span class="string">'emit'</span>, (compilation, callback) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 读取名称为 fileName 的输出资源</span></span><br><span class="line">  <span class="keyword">const</span> asset = compilation.assets[fileName];</span><br><span class="line">  <span class="comment">// 获取输出资源的内容</span></span><br><span class="line">  asset.source();</span><br><span class="line">  <span class="comment">// 获取输出资源的文件大小</span></span><br><span class="line">  asset.size();</span><br><span class="line">  callback();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">compiler.plugin(&#39;emit&#39;, (compilation, callback) =&gt; {
+  // 读取名称为 fileName 的输出资源
+  const asset = compilation.assets[fileName];
+  // 获取输出资源的内容
+  asset.source();
+  // 获取输出资源的文件大小
+  asset.size();
+  callback();
+});
+</code></pre>
 <h2 id="判断-Webpack-使用了哪些插件"><a href="#判断-Webpack-使用了哪些插件" class="headerlink" title="判断 Webpack 使用了哪些插件"></a>判断 Webpack 使用了哪些插件</h2><p>在开发一个插件时可能需要根据当前配置是否使用了其它某个插件而做下一步决定，因此需要读取 Webpack 当前的插件配置情况。 以判断当前是否使用了 <code>ExtractTextPlugin</code> 为例，可以使用如下代码：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 判断当前配置使用使用了 ExtractTextPlugin，</span></span><br><span class="line"><span class="comment">// compiler 参数即为 Webpack 在 apply(compiler) 中传入的参数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">hasExtractTextPlugin</span>(<span class="params">compiler</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 当前配置所有使用的插件列表</span></span><br><span class="line">  <span class="keyword">const</span> plugins = compiler.options.plugins;</span><br><span class="line">  <span class="comment">// 去 plugins 中寻找有没有 ExtractTextPlugin 的实例</span></span><br><span class="line">  <span class="keyword">return</span> plugins.find(<span class="function"><span class="params">plugin</span>=&gt;</span>plugin.__proto__.constructor === ExtractTextPlugin) != <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// 判断当前配置使用使用了 ExtractTextPlugin，
+// compiler 参数即为 Webpack 在 apply(compiler) 中传入的参数
+function hasExtractTextPlugin(compiler) {
+  // 当前配置所有使用的插件列表
+  const plugins = compiler.options.plugins;
+  // 去 plugins 中寻找有没有 ExtractTextPlugin 的实例
+  return plugins.find(plugin=&gt;plugin.__proto__.constructor === ExtractTextPlugin) != null;
+}
+</code></pre>
 <h2 id="实战"><a href="#实战" class="headerlink" title="实战"></a>实战</h2><p>下面我们举一个实际的例子，带你一步步去实现一个插件。</p>
 <p>该插件的名称取名叫 <code>EndWebpackPlugin</code>，作用<em>是在 Webpack 即将退出时再附加一些额外的操作</em>，例如在 Webpack 成功编译和输出了文件后执行发布操作把输出的文件上传到服务器。 同时该插件还能区分 Webpack 构建是否执行成功。使用该插件时方法如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  plugins:[</span><br><span class="line">    <span class="comment">// 在初始化 EndWebpackPlugin 时传入了两个参数，分别是在成功时的回调函数和失败时的回调函数；</span></span><br><span class="line">    <span class="keyword">new</span> EndWebpackPlugin(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// Webpack 构建成功，并且文件输出了后会执行到这里，在这里可以做发布文件操作</span></span><br><span class="line">    &#125;, (err) =&gt; &#123;</span><br><span class="line">      <span class="comment">// Webpack 构建失败，err 是导致错误的原因</span></span><br><span class="line">      <span class="built_in">console</span>.error(err);</span><br><span class="line">    &#125;)</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">module.exports = {
+  plugins:[
+    // 在初始化 EndWebpackPlugin 时传入了两个参数，分别是在成功时的回调函数和失败时的回调函数；
+    new EndWebpackPlugin(() =&gt; {
+      // Webpack 构建成功，并且文件输出了后会执行到这里，在这里可以做发布文件操作
+    }, (err) =&gt; {
+      // Webpack 构建失败，err 是导致错误的原因
+      console.error(err);
+    })
+  ]
+}
+</code></pre>
 <blockquote>
 <p>要实现该插件，需要借助两个事件：</p>
 </blockquote>
@@ -194,7 +326,28 @@
 <li>failed：在构建出现异常导致构建失败，Webpack 即将退出时发生；</li>
 </ul>
 <p>实现该插件非常简单，完整代码如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EndWebpackPlugin</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">constructor</span>(doneCallback, failCallback) &#123;</span><br><span class="line">    <span class="comment">// 存下在构造函数中传入的回调函数</span></span><br><span class="line">    <span class="keyword">this</span>.doneCallback = doneCallback;</span><br><span class="line">    <span class="keyword">this</span>.failCallback = failCallback;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  apply(compiler) &#123;</span><br><span class="line">    compiler.plugin(<span class="string">'done'</span>, (stats) =&gt; &#123;</span><br><span class="line">        <span class="comment">// 在 done 事件中回调 doneCallback</span></span><br><span class="line">        <span class="keyword">this</span>.doneCallback(stats);</span><br><span class="line">    &#125;);</span><br><span class="line">    compiler.plugin(<span class="string">'failed'</span>, (err) =&gt; &#123;</span><br><span class="line">        <span class="comment">// 在 failed 事件中回调 failCallback</span></span><br><span class="line">        <span class="keyword">this</span>.failCallback(err);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 导出插件</span></span><br><span class="line"><span class="built_in">module</span>.exports = EndWebpackPlugin;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">class EndWebpackPlugin {
+
+  constructor(doneCallback, failCallback) {
+    // 存下在构造函数中传入的回调函数
+    this.doneCallback = doneCallback;
+    this.failCallback = failCallback;
+  }
+
+  apply(compiler) {
+    compiler.plugin(&#39;done&#39;, (stats) =&gt; {
+        // 在 done 事件中回调 doneCallback
+        this.doneCallback(stats);
+    });
+    compiler.plugin(&#39;failed&#39;, (err) =&gt; {
+        // 在 failed 事件中回调 failCallback
+        this.failCallback(err);
+    });
+  }
+}
+// 导出插件
+module.exports = EndWebpackPlugin;
+</code></pre>
 <p>从开发这个插件可以看出，找到合适的事件点去完成功能在开发插件时显得尤为重要。 在 5-1工作原理概括 中详细介绍过 Webpack 在运行过程中广播出常用事件，你可以从中找到你需要的事件。</p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
@@ -243,7 +396,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>
@@ -254,7 +407,7 @@
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#最基础的-Plugin"><span class="toc-number">1.1.</span> <span class="toc-text">最基础的 Plugin</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#plugin工作原理"><span class="toc-number">1.1.1.</span> <span class="toc-text">plugin工作原理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#事件流"><span class="toc-number">1.2.</span> <span class="toc-text">事件流</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#监听文件的变化"><span class="toc-number">1.2.1.</span> <span class="toc-text">监听文件的变化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改输出资源"><span class="toc-number">1.2.2.</span> <span class="toc-text">修改输出资源</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#判断-Webpack-使用了哪些插件"><span class="toc-number">1.3.</span> <span class="toc-text">判断 Webpack 使用了哪些插件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实战"><span class="toc-number">1.4.</span> <span class="toc-text">实战</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#最基础的-Plugin"><span class="toc-number">1.1.</span> <span class="toc-text">最基础的 Plugin</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#plugin工作原理"><span class="toc-number">1.1.1.</span> <span class="toc-text">plugin工作原理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#事件流"><span class="toc-number">1.2.</span> <span class="toc-text">事件流</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常用-API"><span class="toc-number">1.3.</span> <span class="toc-text">常用 API</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#读取输出资源、代码块、模块及其依赖"><span class="toc-number">1.3.1.</span> <span class="toc-text">读取输出资源、代码块、模块及其依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#监听文件的变化"><span class="toc-number">1.3.2.</span> <span class="toc-text">监听文件的变化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改输出资源"><span class="toc-number">1.3.3.</span> <span class="toc-text">修改输出资源</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#判断-Webpack-使用了哪些插件"><span class="toc-number">1.4.</span> <span class="toc-text">判断 Webpack 使用了哪些插件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实战"><span class="toc-number">1.5.</span> <span class="toc-text">实战</span></a></li></ol></li></ol>
                 </div>
             </div>
             

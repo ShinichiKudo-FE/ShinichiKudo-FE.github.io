@@ -100,13 +100,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    33k
+                    8.7k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    30 mins.
+                    8 mins.
                 </span>
                 
                 
@@ -144,10 +144,78 @@
 <p>因此，Nodejs在处理POST数据时，需要通过request对象的data事件，获取每次传输的数据，并在end事件调用时，处理所有获取的数据。</p>
 <p>request对象是一个<a href="https://link.juejin.im/?target=http%3A%2F%2Fnodejs.cn%2Fapi%2Fhttp.html%23http_class_http_incomingmessage">http.IncomingMessage</a> 类，而它实现了<a href="https://link.juejin.im/?target=http%3A%2F%2Fnodejs.cn%2Fapi%2Fstream.html%23stream_class_stream_readable">可读流接口</a>，因此具有了可读流的data、end等事件。</p>
 <p>需要注意的是，data事件中传入的参数是<code>Buffer</code>，<code>Buffer</code>只是一个二进制的数据，它有可能只是一段字符串数据，也有可能是文件的一部分，所以处理Buffer数据的时候要注意这一点。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>)</span><br><span class="line"><span class="keyword">const</span> querystring = <span class="built_in">require</span>(<span class="string">'querystring'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> bufferArray = []  <span class="comment">// 用于存储data事件获取的Buffer数据。</span></span><br><span class="line"></span><br><span class="line">  req.on(<span class="string">'data'</span>, (buffer) =&gt; &#123;</span><br><span class="line">    bufferArray.push(buffer)  <span class="comment">// 将Buffer数据存储在数组中。</span></span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  req.on(<span class="string">'end'</span>, () =&gt; &#123;</span><br><span class="line">    <span class="comment">// Buffer 类是一个全局变量，使用时无需 require('buffer').Buffer。</span></span><br><span class="line">    <span class="comment">// Buffer.concat方法用于合并Buffer数组。</span></span><br><span class="line">    <span class="keyword">const</span> buffer = Buffer.concat(bufferArray)</span><br><span class="line">    <span class="comment">// 已知Buffer数据只是字符串，则可以直接用toString将其转换成字符串。</span></span><br><span class="line">    <span class="keyword">const</span> post = querystring.parse(buffer.toString())</span><br><span class="line">    <span class="built_in">console</span>.log(post)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8080</span>)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const http = require(&#39;http&#39;)
+const querystring = require(&#39;querystring&#39;)
+
+const server = http.createServer((req, res) =&gt; {
+  let bufferArray = []  // 用于存储data事件获取的Buffer数据。
+
+  req.on(&#39;data&#39;, (buffer) =&gt; {
+    bufferArray.push(buffer)  // 将Buffer数据存储在数组中。
+  })
+
+  req.on(&#39;end&#39;, () =&gt; {
+    // Buffer 类是一个全局变量，使用时无需 require(&#39;buffer&#39;).Buffer。
+    // Buffer.concat方法用于合并Buffer数组。
+    const buffer = Buffer.concat(bufferArray)
+    // 已知Buffer数据只是字符串，则可以直接用toString将其转换成字符串。
+    const post = querystring.parse(buffer.toString())
+    console.log(post)
+  })
+})
+
+server.listen(8080)
+</code></pre>
 <h2 id="同时处理GET-POST请求"><a href="#同时处理GET-POST请求" class="headerlink" title="同时处理GET/POST请求"></a>同时处理GET/POST请求</h2><p>通常在开发过程中，同一台服务器需要接收多种类型的请求，并区分不同接口，向客户端返回数据。</p>
 <p>最常用的方式，<strong>就是对请求的方法、url进行区分判断，获取到每个请求的数据后，统一由一个回调函数进行处理</strong>。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>)</span><br><span class="line"><span class="keyword">const</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>)</span><br><span class="line"><span class="keyword">const</span> querystring = <span class="built_in">require</span>(<span class="string">'querystring'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 定义公共变量，存储请求方法、路径、数据</span></span><br><span class="line">  <span class="keyword">const</span> method = req.method</span><br><span class="line">  <span class="keyword">let</span> path = <span class="string">''</span></span><br><span class="line">  <span class="keyword">let</span> <span class="keyword">get</span> = &#123;&#125;</span><br><span class="line">  <span class="keyword">let</span> post = &#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 判断请求方法为GET还是POST，区分处理数据</span></span><br><span class="line">  <span class="keyword">if</span> (method === <span class="string">'GET'</span>) &#123;</span><br><span class="line">    <span class="comment">// 使用url.parse解析get数据</span></span><br><span class="line">    <span class="keyword">const</span> &#123; pathname, query &#125; = url.parse(req.url, <span class="literal">true</span>)</span><br><span class="line"></span><br><span class="line">    path = pathname</span><br><span class="line">    <span class="keyword">get</span> = query</span><br><span class="line"></span><br><span class="line">    complete()</span><br><span class="line">  &#125; else if (method === 'POST') &#123;</span><br><span class="line">    path = req.url</span><br><span class="line">    <span class="keyword">let</span> arr = []</span><br><span class="line"></span><br><span class="line">    req.on(<span class="string">'data'</span>, (buffer) =&gt; &#123;</span><br><span class="line">      <span class="comment">// 获取POST请求的Buffer数据</span></span><br><span class="line">      arr.push(buffer)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    req.on(<span class="string">'end'</span>, () =&gt; &#123;</span><br><span class="line">      <span class="comment">// 将Buffer数据合并</span></span><br><span class="line">      <span class="keyword">let</span> buffer = Buffer.concat(arr)</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 处理接收到的POST数据</span></span><br><span class="line">      post = querystring.parse(buffer.toString())</span><br><span class="line"></span><br><span class="line">      complete()</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 在回调函数中统一处理解析后的数据</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">complete</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(method, path, <span class="keyword">get</span>, post)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">server.listen(8080)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const http = require(&#39;http&#39;)
+const url = require(&#39;url&#39;)
+const querystring = require(&#39;querystring&#39;)
+
+const server = http.createServer((req, res) =&gt; {
+  // 定义公共变量，存储请求方法、路径、数据
+  const method = req.method
+  let path = &#39;&#39;
+  let get = {}
+  let post = {}
+
+  // 判断请求方法为GET还是POST，区分处理数据
+  if (method === &#39;GET&#39;) {
+    // 使用url.parse解析get数据
+    const { pathname, query } = url.parse(req.url, true)
+
+    path = pathname
+    get = query
+
+    complete()
+  } else if (method === &#39;POST&#39;) {
+    path = req.url
+    let arr = []
+
+    req.on(&#39;data&#39;, (buffer) =&gt; {
+      // 获取POST请求的Buffer数据
+      arr.push(buffer)
+    })
+
+    req.on(&#39;end&#39;, () =&gt; {
+      // 将Buffer数据合并
+      let buffer = Buffer.concat(arr)
+
+      // 处理接收到的POST数据
+      post = querystring.parse(buffer.toString())
+
+      complete()
+    })
+  }
+
+  // 在回调函数中统一处理解析后的数据
+  function complete() {
+    console.log(method, path, get, post)
+  }
+})
+
+server.listen(8080)
+</code></pre>
 <a id="more"></a>
 <h2 id="实现一个带接口请求的简单服务器"><a href="#实现一个带接口请求的简单服务器" class="headerlink" title="实现一个带接口请求的简单服务器"></a>实现一个带接口请求的简单服务器</h2><p>虽然当前还未涉及到数据库的知识，但已经可以通过文件读写，实现一个简单的服务器，需求如下：</p>
 <ul>
@@ -162,8 +230,196 @@
 <li>服务端判断请求路径，决定是前端是通过接口校验用户数据，还是请求HTML文件。</li>
 <li>若是接口请求，则通过用户列表判断用户状态，实现注册和登录流程。</li>
 </ul>
-<h3 id="代码及示例"><a href="#代码及示例" class="headerlink" title="代码及示例"></a>代码及示例</h3><h4 id="html"><a href="#html" class="headerlink" title="html"></a>html</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  用户：<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"username"</span> <span class="attr">id</span>=<span class="string">"username"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">  密码：<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"password"</span> <span class="attr">id</span>=<span class="string">"password"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"注册"</span> <span class="attr">id</span>=<span class="string">"reg"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"登录"</span> <span class="attr">id</span>=<span class="string">"login"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="actionscript">    <span class="comment">// 注册</span></span></span><br><span class="line"><span class="javascript">    <span class="built_in">document</span>.querySelector(<span class="string">'#reg'</span>).addEventListener(<span class="string">'click'</span>, <span class="keyword">async</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">      <span class="keyword">const</span> response = <span class="keyword">await</span> fetch(<span class="string">`/reg?username=<span class="subst">$&#123;<span class="built_in">document</span>.querySelector(<span class="string">'#username'</span>).value&#125;</span>&amp;password=<span class="subst">$&#123;<span class="built_in">document</span>.querySelector(<span class="string">'#password'</span>).value&#125;</span>`</span>)</span></span><br><span class="line"><span class="javascript">      <span class="keyword">const</span> result = <span class="keyword">await</span> response.json()</span></span><br><span class="line"><span class="javascript">      <span class="built_in">console</span>.log(result)</span></span><br><span class="line">      alert(result.msg)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line"><span class="actionscript">    <span class="comment">// 登录</span></span></span><br><span class="line"><span class="javascript">    <span class="built_in">document</span>.querySelector(<span class="string">'#login'</span>).addEventListener(<span class="string">'click'</span>, <span class="keyword">async</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">      <span class="keyword">const</span> response = <span class="keyword">await</span> fetch(<span class="string">`/login`</span>, &#123;</span></span><br><span class="line"><span class="actionscript">        method: <span class="string">'POST'</span>,</span></span><br><span class="line"><span class="javascript">        body: <span class="built_in">JSON</span>.stringify(&#123;</span></span><br><span class="line"><span class="javascript">          username: <span class="built_in">document</span>.querySelector(<span class="string">'#username'</span>).value,</span></span><br><span class="line"><span class="javascript">          password: <span class="built_in">document</span>.querySelector(<span class="string">'#password'</span>).value</span></span><br><span class="line">        &#125;)</span><br><span class="line">      &#125;)</span><br><span class="line"><span class="javascript">      <span class="keyword">const</span> result = <span class="keyword">await</span> response.json()</span></span><br><span class="line"><span class="javascript">      <span class="built_in">console</span>.log(result)</span></span><br><span class="line">      alert(result.msg)</span><br><span class="line">    &#125;)</span><br><span class="line">  <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h4 id="server-js"><a href="#server-js" class="headerlink" title="server.js"></a>server.js</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>)</span><br><span class="line"><span class="keyword">const</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>)</span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</span><br><span class="line"><span class="keyword">const</span> querystring = <span class="built_in">require</span>(<span class="string">'querystring'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 定义公共变量，存储请求方法、路径、数据</span></span><br><span class="line">  <span class="keyword">const</span> method = req.method</span><br><span class="line">  <span class="keyword">let</span> path = <span class="string">''</span></span><br><span class="line">  <span class="keyword">let</span> <span class="keyword">get</span> = &#123;&#125;</span><br><span class="line">  <span class="keyword">let</span> post = &#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 判断请求方法为GET还是POST，区分处理数据</span></span><br><span class="line">  <span class="keyword">if</span> (method === <span class="string">'GET'</span>) &#123;</span><br><span class="line">    <span class="comment">// 使用url.parse解析get数据</span></span><br><span class="line">    <span class="keyword">const</span> &#123; pathname, query &#125; = url.parse(req.url, <span class="literal">true</span>)</span><br><span class="line"></span><br><span class="line">    path = pathname</span><br><span class="line">    <span class="keyword">get</span> = query</span><br><span class="line"></span><br><span class="line">    complete()</span><br><span class="line">  &#125; else if (method === 'POST') &#123;</span><br><span class="line">    path = req.url</span><br><span class="line">    <span class="keyword">let</span> arr = []</span><br><span class="line"></span><br><span class="line">    req.on(<span class="string">'data'</span>, (buffer) =&gt; &#123;</span><br><span class="line">      <span class="comment">// 获取POST请求的Buffer数据</span></span><br><span class="line">      arr.push(buffer)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    req.on(<span class="string">'end'</span>, () =&gt; &#123;</span><br><span class="line">      <span class="comment">// 将Buffer数据合并</span></span><br><span class="line">      <span class="keyword">let</span> buffer = Buffer.concat(arr)</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 处理接收到的POST数据</span></span><br><span class="line">      post = <span class="built_in">JSON</span>.parse(buffer.toString())</span><br><span class="line"></span><br><span class="line">      complete()</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 在回调函数中统一处理解析后的数据</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">complete</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (path === <span class="string">'/reg'</span>) &#123;</span><br><span class="line">        <span class="comment">// 获取get请求数据</span></span><br><span class="line">        <span class="keyword">const</span> &#123;</span><br><span class="line">          username,</span><br><span class="line">          password</span><br><span class="line">        &#125; = <span class="keyword">get</span></span><br><span class="line"></span><br><span class="line">        // 读取user.json文件</span><br><span class="line">        fs.readFile('./users.json', (error, data) =&gt; &#123;</span><br><span class="line">          <span class="keyword">if</span> (error) &#123;</span><br><span class="line">            res.writeHead(<span class="number">404</span>)</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 读取用户数据</span></span><br><span class="line">            <span class="keyword">const</span> users = <span class="built_in">JSON</span>.parse(data.toString())</span><br><span class="line">            <span class="keyword">const</span> usernameIndex = users.findIndex(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">              <span class="keyword">return</span> username === item.username</span><br><span class="line">            &#125;)</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 判断用户名是否存在</span></span><br><span class="line">            <span class="keyword">if</span> (usernameIndex &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">              res.write(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">                error: <span class="number">1</span>,</span><br><span class="line">                msg: <span class="string">'此用户名已存在'</span></span><br><span class="line">              &#125;))</span><br><span class="line">              res.end()</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">              <span class="comment">// 用户名不存在则在用户列表中增加一个用户</span></span><br><span class="line">              users.push(&#123;</span><br><span class="line">                username,</span><br><span class="line">                password</span><br><span class="line">              &#125;)</span><br><span class="line"></span><br><span class="line">              <span class="comment">// 将新的用户列表保存到user.json文件中</span></span><br><span class="line">              fs.writeFile(<span class="string">'./users.json'</span>, <span class="built_in">JSON</span>.stringify(users), (error) =&gt; &#123;</span><br><span class="line">                <span class="keyword">if</span> (error) &#123;</span><br><span class="line">                  res.writeHead(<span class="number">404</span>)</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                  res.write(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">                    error: <span class="number">0</span>,</span><br><span class="line">                    msg: <span class="string">'注册成功'</span></span><br><span class="line">                  &#125;))</span><br><span class="line">                &#125;</span><br><span class="line">                res.end()</span><br><span class="line">              &#125;)</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (path === <span class="string">'/login'</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> &#123;</span><br><span class="line">          username,</span><br><span class="line">          password</span><br><span class="line">        &#125; = post</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 读取users.json</span></span><br><span class="line">        fs.readFile(<span class="string">'./users.json'</span>, (error, data) =&gt; &#123;</span><br><span class="line">          <span class="keyword">if</span> (error) &#123;</span><br><span class="line">            res.writeHead(<span class="number">404</span>)</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 获取user列表数据</span></span><br><span class="line">            <span class="keyword">const</span> users = <span class="built_in">JSON</span>.parse(data.toString())</span><br><span class="line">            <span class="keyword">const</span> usernameIndex = users.findIndex(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">              <span class="keyword">return</span> username === item.username</span><br><span class="line">            &#125;)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (usernameIndex &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">              <span class="comment">// 用户名存在，则校验密码是否正确</span></span><br><span class="line">              <span class="keyword">if</span> (users[usernameIndex].password === password) &#123;</span><br><span class="line">                res.write(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">                  error: <span class="number">0</span>,</span><br><span class="line">                  msg: <span class="string">'登录成功'</span></span><br><span class="line">                &#125;))</span><br><span class="line">              &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                res.write(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">                  error: <span class="number">1</span>,</span><br><span class="line">                  msg: <span class="string">'密码错误'</span></span><br><span class="line">                &#125;))</span><br><span class="line">              &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">              res.write(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">                error: <span class="number">1</span>,</span><br><span class="line">                msg: <span class="string">'该用户不存在'</span></span><br><span class="line">              &#125;))</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">          res.end()</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 若不是注册或登录接口，则直接返回相应文件</span></span><br><span class="line">        fs.readFile(<span class="string">`.<span class="subst">$&#123;path&#125;</span>`</span>, (error, data) =&gt; &#123;</span><br><span class="line">          <span class="keyword">if</span> (error) &#123;</span><br><span class="line">            res.writeHead(<span class="number">404</span>)</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            res.write(data)</span><br><span class="line">          &#125;</span><br><span class="line">          res.end()</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">      <span class="built_in">console</span>.error(error);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8080</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="代码及示例"><a href="#代码及示例" class="headerlink" title="代码及示例"></a>代码及示例</h3><h4 id="html"><a href="#html" class="headerlink" title="html"></a>html</h4><pre><code class="html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;
+  &lt;title&gt;Document&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  用户：&lt;input type=&quot;text&quot; name=&quot;username&quot; id=&quot;username&quot;&gt;&lt;br/&gt;
+  密码：&lt;input type=&quot;text&quot; name=&quot;password&quot; id=&quot;password&quot;&gt;&lt;br/&gt;
+  &lt;input type=&quot;button&quot; value=&quot;注册&quot; id=&quot;reg&quot;&gt;
+  &lt;input type=&quot;button&quot; value=&quot;登录&quot; id=&quot;login&quot;&gt;
+  &lt;script&gt;
+    // 注册
+    document.querySelector(&#39;#reg&#39;).addEventListener(&#39;click&#39;, async function () {
+      const response = await fetch(`/reg?username=${document.querySelector(&#39;#username&#39;).value}&amp;password=${document.querySelector(&#39;#password&#39;).value}`)
+      const result = await response.json()
+      console.log(result)
+      alert(result.msg)
+    })
+
+    // 登录
+    document.querySelector(&#39;#login&#39;).addEventListener(&#39;click&#39;, async function () {
+      const response = await fetch(`/login`, {
+        method: &#39;POST&#39;,
+        body: JSON.stringify({
+          username: document.querySelector(&#39;#username&#39;).value,
+          password: document.querySelector(&#39;#password&#39;).value
+        })
+      })
+      const result = await response.json()
+      console.log(result)
+      alert(result.msg)
+    })
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h4 id="server-js"><a href="#server-js" class="headerlink" title="server.js"></a>server.js</h4><pre><code class="js">const http = require(&#39;http&#39;)
+const url = require(&#39;url&#39;)
+const fs = require(&#39;fs&#39;)
+const querystring = require(&#39;querystring&#39;)
+
+const server = http.createServer((req, res) =&gt; {
+  // 定义公共变量，存储请求方法、路径、数据
+  const method = req.method
+  let path = &#39;&#39;
+  let get = {}
+  let post = {}
+
+  // 判断请求方法为GET还是POST，区分处理数据
+  if (method === &#39;GET&#39;) {
+    // 使用url.parse解析get数据
+    const { pathname, query } = url.parse(req.url, true)
+
+    path = pathname
+    get = query
+
+    complete()
+  } else if (method === &#39;POST&#39;) {
+    path = req.url
+    let arr = []
+
+    req.on(&#39;data&#39;, (buffer) =&gt; {
+      // 获取POST请求的Buffer数据
+      arr.push(buffer)
+    })
+
+    req.on(&#39;end&#39;, () =&gt; {
+      // 将Buffer数据合并
+      let buffer = Buffer.concat(arr)
+
+      // 处理接收到的POST数据
+      post = JSON.parse(buffer.toString())
+
+      complete()
+    })
+  }
+
+  // 在回调函数中统一处理解析后的数据
+  function complete() {
+    try {
+      if (path === &#39;/reg&#39;) {
+        // 获取get请求数据
+        const {
+          username,
+          password
+        } = get
+
+        // 读取user.json文件
+        fs.readFile(&#39;./users.json&#39;, (error, data) =&gt; {
+          if (error) {
+            res.writeHead(404)
+          } else {
+            // 读取用户数据
+            const users = JSON.parse(data.toString())
+            const usernameIndex = users.findIndex((item) =&gt; {
+              return username === item.username
+            })
+
+            // 判断用户名是否存在
+            if (usernameIndex &gt;= 0) {
+              res.write(JSON.stringify({
+                error: 1,
+                msg: &#39;此用户名已存在&#39;
+              }))
+              res.end()
+            } else {
+              // 用户名不存在则在用户列表中增加一个用户
+              users.push({
+                username,
+                password
+              })
+
+              // 将新的用户列表保存到user.json文件中
+              fs.writeFile(&#39;./users.json&#39;, JSON.stringify(users), (error) =&gt; {
+                if (error) {
+                  res.writeHead(404)
+                } else {
+                  res.write(JSON.stringify({
+                    error: 0,
+                    msg: &#39;注册成功&#39;
+                  }))
+                }
+                res.end()
+              })
+            }
+          }
+        })
+      } else if (path === &#39;/login&#39;) {
+        const {
+          username,
+          password
+        } = post
+
+        // 读取users.json
+        fs.readFile(&#39;./users.json&#39;, (error, data) =&gt; {
+          if (error) {
+            res.writeHead(404)
+          } else {
+            // 获取user列表数据
+            const users = JSON.parse(data.toString())
+            const usernameIndex = users.findIndex((item) =&gt; {
+              return username === item.username
+            })
+
+            if (usernameIndex &gt;= 0) {
+              // 用户名存在，则校验密码是否正确
+              if (users[usernameIndex].password === password) {
+                res.write(JSON.stringify({
+                  error: 0,
+                  msg: &#39;登录成功&#39;
+                }))
+              } else {
+                res.write(JSON.stringify({
+                  error: 1,
+                  msg: &#39;密码错误&#39;
+                }))
+              }
+            } else {
+              res.write(JSON.stringify({
+                error: 1,
+                msg: &#39;该用户不存在&#39;
+              }))
+            }
+          }
+          res.end()
+        })
+      } else {
+        // 若不是注册或登录接口，则直接返回相应文件
+        fs.readFile(`.${path}`, (error, data) =&gt; {
+          if (error) {
+            res.writeHead(404)
+          } else {
+            res.write(data)
+          }
+          res.end()
+        })
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+})
+
+server.listen(8080)
+
+</code></pre>
+
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
                 data-autoplay="false">
@@ -210,7 +466,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

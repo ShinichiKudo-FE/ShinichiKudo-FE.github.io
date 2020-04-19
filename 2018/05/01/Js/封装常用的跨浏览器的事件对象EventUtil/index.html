@@ -11,7 +11,8 @@
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="TriDiamond Obsidian,"> 
     <meta name="description" content="一枚前端搬砖队队员的记录册,前言最近把《javascript高级程序设计》看完了，发现里面有很多跨浏览器的代码，总结一下，方便记录。
-跨浏览器的事件对象EventUtil(事件处理程序)12345678910111213141,"> 
+跨浏览器的事件对象EventUtil(事件处理程序)var EventUtil = {
+  ,"> 
     <meta name="author" content="张白告丶"> 
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -100,13 +101,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    13k
+                    3.4k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    12 mins.
+                    3 mins.
                 </span>
                 
                 
@@ -141,10 +142,104 @@
     <div class='main'>
         <div class="content markdown animated fadeIn">
             <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近把《javascript高级程序设计》看完了，发现里面有很多跨浏览器的代码，总结一下，方便记录。</p>
-<h2 id="跨浏览器的事件对象EventUtil-事件处理程序"><a href="#跨浏览器的事件对象EventUtil-事件处理程序" class="headerlink" title="跨浏览器的事件对象EventUtil(事件处理程序)"></a>跨浏览器的事件对象EventUtil(事件处理程序)</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> EventUtil = &#123;</span><br><span class="line">    addHandler: <span class="function"><span class="keyword">function</span>(<span class="params">element,type,handler</span>) </span>&#123; <span class="comment">//事件监听</span></span><br><span class="line">        <span class="keyword">if</span>(element.addEventListener) &#123;</span><br><span class="line">            element.addEventListener(type,handler,<span class="literal">false</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(element.attachEvent) &#123;</span><br><span class="line">            element.attachEvent(<span class="string">"on"</span>+type,handler);</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            element[<span class="string">"on"</span> +type] = handler;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    removeHandler: <span class="function"><span class="keyword">function</span>(<span class="params">element,type,handler</span>)</span>&#123; <span class="comment">//移除事件监听</span></span><br><span class="line">        <span class="keyword">if</span>(element.removeEventListener) &#123;</span><br><span class="line">            element.removeEventListener(type,handler,<span class="literal">false</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(element.detachEvent) &#123;</span><br><span class="line">            element.detachEvent(<span class="string">"on"</span>+type,handler);</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            element[<span class="string">"on"</span> +type] = <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    getEvent: <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;<span class="comment">//获取event对象，返回event对象的引用</span></span><br><span class="line">        <span class="keyword">return</span> event ? event : <span class="built_in">window</span>.event;</span><br><span class="line">    &#125;,</span><br><span class="line">    getTarget: <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;<span class="comment">//返回事件目标。</span></span><br><span class="line">        <span class="keyword">return</span> event.target || event.srcElement;</span><br><span class="line">    &#125;,</span><br><span class="line">    preventDefault: <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>&#123;<span class="comment">//取消或者阻止事件默认行为</span></span><br><span class="line">        <span class="keyword">if</span>(event.preventDefault) &#123;</span><br><span class="line">            event.preventDefault();</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            event.returnValue = <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    stopPropagation: <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;<span class="comment">//阻止事件流，阻止事件冒泡</span></span><br><span class="line">        <span class="keyword">if</span>(event.stopPropagation) &#123;</span><br><span class="line">            event.stopPropagation();</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            event.cancelBubble = <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    getRelatedTarget: <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>&#123;<span class="comment">//返回相关元素信息（仅对于mouseover和mouseout事件）</span></span><br><span class="line">        <span class="keyword">if</span> (event.relatedTarget)&#123;</span><br><span class="line">            <span class="keyword">return</span> event.relatedTarget;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (event.toElement)&#123;</span><br><span class="line">            <span class="keyword">return</span> event.toElement;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (event.fromElement)&#123;</span><br><span class="line">            <span class="keyword">return</span> event.fromElement;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    getWheelDelta: <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;<span class="comment">//获取鼠标滚轮增量值，检测是否包含WheelDelta</span></span><br><span class="line">        <span class="keyword">if</span>(event.wheelDelta) &#123;</span><br><span class="line">            <span class="keyword">return</span> event.wheelDelta;</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> -event.detail * <span class="number">40</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    getCharCode: <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;<span class="comment">//获取键盘按键键码。</span></span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">typeof</span> event.charCode == <span class="string">'number'</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> event.charCode;</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> event.keyCode;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    getButton:<span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>&#123;<span class="comment">//在mouseup或者mousedown的时候，event存在一个button属性，用于判断是按了鼠标左键，右键，还是中键，0鼠标主键按钮，1是中间，2是次键（右键）</span></span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">document</span>.implementation.hasFeature(<span class="string">"MouseEvents"</span>,<span class="string">"2.0"</span>))&#123;</span><br><span class="line">            <span class="keyword">return</span> event.button;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">switch</span>(event.button)&#123;</span><br><span class="line">                <span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">                <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">                <span class="keyword">case</span> <span class="number">3</span>:</span><br><span class="line">                <span class="keyword">case</span> <span class="number">5</span>:</span><br><span class="line">                <span class="keyword">case</span> <span class="number">7</span>:</span><br><span class="line">                  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">                <span class="keyword">case</span> <span class="number">6</span>:</span><br><span class="line">                   <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="number">4</span>:</span><br><span class="line">                  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="跨浏览器的事件对象EventUtil-事件处理程序"><a href="#跨浏览器的事件对象EventUtil-事件处理程序" class="headerlink" title="跨浏览器的事件对象EventUtil(事件处理程序)"></a>跨浏览器的事件对象EventUtil(事件处理程序)</h2><pre><code class="js">var EventUtil = {
+    addHandler: function(element,type,handler) { //事件监听
+        if(element.addEventListener) {
+            element.addEventListener(type,handler,false);
+        }else if(element.attachEvent) {
+            element.attachEvent(&quot;on&quot;+type,handler);
+        }else {
+            element[&quot;on&quot; +type] = handler;
+        }
+    },
+    removeHandler: function(element,type,handler){ //移除事件监听
+        if(element.removeEventListener) {
+            element.removeEventListener(type,handler,false);
+        }else if(element.detachEvent) {
+            element.detachEvent(&quot;on&quot;+type,handler);
+        }else {
+            element[&quot;on&quot; +type] = null;
+        }
+    },
+    getEvent: function(event) {//获取event对象，返回event对象的引用
+        return event ? event : window.event;
+    },
+    getTarget: function(event) {//返回事件目标。
+        return event.target || event.srcElement;
+    },
+    preventDefault: function(event){//取消或者阻止事件默认行为
+        if(event.preventDefault) {
+            event.preventDefault();
+        }else {
+            event.returnValue = false;
+        }
+    },
+    stopPropagation: function(event) {//阻止事件流，阻止事件冒泡
+        if(event.stopPropagation) {
+            event.stopPropagation();
+        }else {
+            event.cancelBubble = true;
+        }
+    },
+    getRelatedTarget: function(event){//返回相关元素信息（仅对于mouseover和mouseout事件）
+        if (event.relatedTarget){
+            return event.relatedTarget;
+        } else if (event.toElement){
+            return event.toElement;
+        } else if (event.fromElement){
+            return event.fromElement;
+        } else {
+            return null;
+        }
+    },
+    getWheelDelta: function(event) {//获取鼠标滚轮增量值，检测是否包含WheelDelta
+        if(event.wheelDelta) {
+            return event.wheelDelta;
+        }else {
+            return -event.detail * 40
+        }
+    },
+    getCharCode: function(event) {//获取键盘按键键码。
+        if(typeof event.charCode == &#39;number&#39;) {
+            return event.charCode;
+        }else {
+            return event.keyCode;
+        }
+    },
+    getButton:function(event){//在mouseup或者mousedown的时候，event存在一个button属性，用于判断是按了鼠标左键，右键，还是中键，0鼠标主键按钮，1是中间，2是次键（右键）
+        if(document.implementation.hasFeature(&quot;MouseEvents&quot;,&quot;2.0&quot;)){
+            return event.button;
+        }else{
+            switch(event.button){
+                case 0:
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                  return 0;
+                case 2:
+                case 6:
+                   return 2;
+                case 4:
+                  return 1;
+
+            }
+        }
+
+    }
+};
+</code></pre>
 <a id="more"></a>
 <h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><p>例如click事件</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> btn1 = <span class="built_in">document</span>.getElementById(<span class="string">"myBtn1"</span>);</span><br><span class="line"><span class="keyword">var</span> handler = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">alert(<span class="string">"hello haorooms"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">EventUtil.addHandler(btn1, <span class="string">"click"</span>, handler);</span><br><span class="line"><span class="comment">//EventUtil.removeHandler(btn1, "click", handler);</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">var btn1 = document.getElementById(&quot;myBtn1&quot;);
+var handler = function(){
+alert(&quot;hello haorooms&quot;);
+}
+
+EventUtil.addHandler(btn1, &quot;click&quot;, handler);
+//EventUtil.removeHandler(btn1, &quot;click&quot;, handler);
+</code></pre>
+
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
                 data-autoplay="false">
@@ -191,7 +286,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

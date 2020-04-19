@@ -100,13 +100,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    3.9k
+                    3.6k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    4 mins.
+                    3 mins.
                 </span>
                 
                 
@@ -150,7 +150,8 @@
 <h2 id="救星-Intersection-Observer！"><a href="#救星-Intersection-Observer！" class="headerlink" title="救星 Intersection Observer！"></a>救星 Intersection Observer！</h2><p>这就是 <code>Intersection Observer</code> 的用武之地。Intersection Observer 内置于大多数现代浏览器，可以让你知道一个被观察元素何时进入或离开了浏览器视口。这使得它很理想，因为它可以异步传输数据，并且不会影响主线程，这让它成为一个提供反馈的有效手段。</p>
 <p>在 Paul 的示例中，它展示了如何使用<br>Intersection Observer 来实现当图片进入视口时延迟加载。我使用了他的初始代码，并稍作修改让它更容易理解。在这篇文章中，我将过一遍 Intersection Observer 的基础知识并向你展示你该如何用一个超级高效的方法来延迟加载图片。</p>
 <h3 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h3><p>想象一个有三张图片的基本的 HTML 页面，就像上面那个一样，在这个网页上，你将有如下代码的图片元素：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">class</span>=<span class="string">"js-lazy-image"</span> <span class="attr">data-src</span>=<span class="string">"burger.png"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="html">&lt;img class=&quot;js-lazy-image&quot; data-src=&quot;burger.png&quot;&gt;
+</code></pre>
 <p>你也许注意到上面的代码中，图片文件没有 src 属性么。这是因为它使用了称为 data-src 的 data 属性来指向图片源。我们将使用这来加载图片，当它们进入视口时。你也许还注意到图片元素还有一个称为 js-lazy-image 的 class —— 我们将很快在 JavaScript 代码中用它来确定我们想延迟加载的元素。</p>
 <p>接下来，我们需要创建延迟加载页面中图片的代码。在我们的 JavaScript 文件中（需要在页面中引用），我们需要创建一个新的 Intersection Observer。</p>
 <p>上面的示例中看起来像是一堆代码，让我们一步一步来分解。首先，我选择了页面中所有包含 js-lazy-image 类的图片。然后我创建了一个新的 IntersectionObserver，并用它来观察所有我们已经选择的带有 js-lazy-image 类的图片。使用 IntersectionObserver 的默认选项，你的回调会在元素部分进入视区和完全离开视口时被调用。在这个例子中，我会传递一些额外的配置选项给 IntersectionObserver。使用 rootMargin 允许你指定根元素的 margin 值，让你可以扩展或者缩减 intersections 的使用区域。我们想确保如果图片进入了 Y 轴的 50px 内，我们将开始下载。</p>
@@ -212,7 +213,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

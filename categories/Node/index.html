@@ -149,13 +149,13 @@
             
             <span>
                 <b class="iconfont icon-text2"></b> <i>Words count</i>
-                25k
+                13k
             </span>
             
             
             <span>
                 <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                23 mins.
+                12 mins.
             </span>
             
             
@@ -211,13 +211,13 @@
                 
                     <span>
                         <b class="iconfont icon-text2"></b> <i>Words count</i>
-                        67k
+                        18k
                     </span>
                 
                 
                     <span>
                         <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                        1:01
+                        17 mins.
                     </span>
                 
                 
@@ -259,13 +259,13 @@
                 
                     <span>
                         <b class="iconfont icon-text2"></b> <i>Words count</i>
-                        18k
+                        6k
                     </span>
                 
                 
                     <span>
                         <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                        16 mins.
+                        5 mins.
                     </span>
                 
                 
@@ -277,9 +277,18 @@
         <div class="md-content animated fadeIn">
             
                 <p>我们通常会使用File System模块对文件进行读取，如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">fs.readFile(<span class="string">'./test.txt'</span>, (error, buffer) =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (error) &#123;</span><br><span class="line">    <span class="built_in">console</span>.error(error)</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 读取文件成功</span></span><br><span class="line">    res.write(buffer)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">fs.readFile(&#39;./test.txt&#39;, (error, buffer) =&gt; {
+  if (error) {
+    console.error(error)
+  } else {
+    // 读取文件成功
+    res.write(buffer)
+  }
+})
+</code></pre>
 <p>这样操作简单有效，但这也存在一些问题：</p>
-<p>1.占用内存<br>使用fs读取文件，它是一次性将文件的所有内容读取到内存中，...</p>
+<p>1.占用内存<br>使用fs读取文件，它是一次性将文件的所有内容读取到内存中，再一次性发送到客户端，因此会占用大量内存。</p>
+<p>2.资源使用...</p>
             
             <span class="read-more"><a href="/2019/05/06/Node/Node%E5%AD%A6%E4%B9%A0(%E5%8D%81%E4%B8%89)%20--Stream%E6%B5%81/" title="Read article" class="posttitle">Read article</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
         </div>
@@ -308,13 +317,13 @@
                 
                     <span>
                         <b class="iconfont icon-text2"></b> <i>Words count</i>
-                        24k
+                        5.3k
                     </span>
                 
                 
                     <span>
                         <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                        22 mins.
+                        5 mins.
                     </span>
                 
                 
@@ -328,7 +337,12 @@
                 <p>上一篇使用Node.js操作数据库，虽然能实现功能，但是异步操作需要不断写回调函数，代码严重冗余，而且阅读困难。</p>
 <p>可以使用<a href="https://github.com/haoxins/co-mysql" target="_blank" rel="noopener">co-mysql</a>，将<code>query</code>方法该写为返回一个<code>Promise</code>，就可以使用<code>async/await</code>进行异步处理。</p>
 <p>我们可以参考一下它的源码，看看它是如何实现将回调函数转换为</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = wrapper...</span></pre></td></tr></table></figure>
+<pre><code class="js">module.exports = wrapper;
+
+var slice = [].slice;
+
+// 该模块导出为一个包装函数，运行它的返回值是一个带有query方法的对象。
+function wrapper...</code></pre>
             
             <span class="read-more"><a href="/2019/04/29/Node/Node%E5%AD%A6%E4%B9%A0(%E5%8D%81%E4%BA%8C)%20--%E4%BD%BF%E7%94%A8async-await%E5%BC%82%E6%AD%A5%E6%93%8D%E4%BD%9C%E6%95%B0%E6%8D%AE%E5%BA%93/" title="Read article" class="posttitle">Read article</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
         </div>
@@ -357,13 +371,13 @@
                 
                     <span>
                         <b class="iconfont icon-text2"></b> <i>Words count</i>
-                        24k
+                        5.9k
                     </span>
                 
                 
                     <span>
                         <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                        22 mins.
+                        5 mins.
                     </span>
                 
                 
@@ -377,7 +391,9 @@
                 <p>Nodejs操作数据库需要用到<code>mysql</code>模块，通过<code>npm i mysql -D</code>进行安装。</p>
 <p>之后可以通过<code>mysql.createConnection</code>方法新建一个数据库连接，需要传入的参数有地址、端口、登录名、密码，以及需要连接的数据库。</p>
 <p><code>mysql.createConnection</code>会返回一个<code>connection</code>对象，可使用<code>connection.query</code>方法，传入SQL语句，对数据库进行相应操作。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30...</span></pre></td></tr></table></figure>
+<pre><code class="js">const mysql = require(&#39;mysql&#39;)
+
+// 1. 连接服务器...</code></pre>
             
             <span class="read-more"><a href="/2019/04/21/Node/Node%E5%AD%A6%E4%B9%A0(%E5%8D%81%E4%B8%80%EF%BC%89--%E4%BD%BF%E7%94%A8Nodejs%E6%93%8D%E4%BD%9C%E6%95%B0%E6%8D%AE%E5%BA%93/" title="Read article" class="posttitle">Read article</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
         </div>
@@ -387,7 +403,7 @@
 
     </div>
     
-    <div id="pager"><a href="/categories/Node/page/2/" class="more" data-loading="Loading..." data-load-more="Load more">Load more</a></div>
+    <div id="pager"><a href="/categories/Node/page/2/" class="more" data-loading="加载中..." data-load-more="Load more">Load more</a></div>
     
 </div>
 <div id="preview"></div>

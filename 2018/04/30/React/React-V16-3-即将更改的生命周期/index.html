@@ -99,13 +99,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    83k
+                    20k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    1:15
+                    18 mins.
                 </span>
                 
                 
@@ -169,10 +169,29 @@
 <li>我们介绍了两个新的生命周期，分别是getDerivedStateFromProps和getSnapshotBeforeUpdate。</li>
 </ul>
 <h3 id="新的生命周期-getDerivedStateFromProps"><a href="#新的生命周期-getDerivedStateFromProps" class="headerlink" title="新的生命周期: getDerivedStateFromProps"></a>新的生命周期: getDerivedStateFromProps</h3><a id="more"></a>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Example</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> getDerivedStateFromProps(nextProps, prevState) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">
+class Example extends React.Component {
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+
+    // ...
+
+  }
+
+}
+</code></pre>
 <p>新的静态<code>getDerivedStateFromProps</code>生命周期在组件实例化以及接收新<code>props</code>后调用。它可以返回一个对象来更新<code>state</code>，或者返回null来表示新的<code>props</code>不需要任何<code>state</code>更新。</p>
 <p>与<code>componentDidUpdate</code>一起，这个新的生命周期应该覆盖传统<code>componentWillReceiveProps</code>的所有用例。</p>
-<h3 id="新的生命周期-getSnapshotBeforeUpdate"><a href="#新的生命周期-getSnapshotBeforeUpdate" class="headerlink" title="新的生命周期: getSnapshotBeforeUpdate"></a>新的生命周期: getSnapshotBeforeUpdate</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Example</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  getSnapshotBeforeUpdate(prevProps, prevState) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="新的生命周期-getSnapshotBeforeUpdate"><a href="#新的生命周期-getSnapshotBeforeUpdate" class="headerlink" title="新的生命周期: getSnapshotBeforeUpdate"></a>新的生命周期: getSnapshotBeforeUpdate</h3><pre><code class="js">class Example extends React.Component {
+
+  getSnapshotBeforeUpdate(prevProps, prevState) {
+
+    // ...
+
+  }
+
+}
+</code></pre>
 <p>新的<code>getSnapshotBeforeUpdate</code>生命周期在更新之前被调用（例如，在DOM被更新之前）。此生命周期的返回值将作为第三个参数传递给<code>componentDidUpdate</code>。 （这个生命周期不是经常需要的，但可以用于在恢复期间手动保存滚动位置的情况。）</p>
 <p>You can find their type signatures in this gist.</p>
 <p>我们看看如何在使用这两种生命周期的，例子如下:</p>
@@ -198,35 +217,421 @@
 <p>注意<br>为简洁起见，下面的示例是使用实验类属性转换编写的，但如果没有它，则应用相同的迁移策略。</p>
 </blockquote>
 <h3 id="初始化状态："><a href="#初始化状态：" class="headerlink" title="初始化状态："></a>初始化状态：</h3><p>这个例子展示了一个调用<code>componentWillMount</code>中带有<code>setState</code>的组件：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Before</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExampleComponent</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  state = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">  componentWillMount() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;</span><br><span class="line"></span><br><span class="line">      currentColor: <span class="keyword">this</span>.props.defaultColor,</span><br><span class="line"></span><br><span class="line">      palette: <span class="string">'rgb'</span>,</span><br><span class="line"></span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// Before
+
+class ExampleComponent extends React.Component {
+
+  state = {};
+
+  componentWillMount() {
+
+    this.setState({
+
+      currentColor: this.props.defaultColor,
+
+      palette: &#39;rgb&#39;,
+
+    });
+
+  }
+
+}
+</code></pre>
 <p>这种类型的组件最简单的重构是将状态初始化移动到构造函数或属性初始值设定项，如下所示：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// After</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExampleComponent</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  state = &#123;</span><br><span class="line"></span><br><span class="line">    currentColor: <span class="keyword">this</span>.props.defaultColor,</span><br><span class="line"></span><br><span class="line">    palette: <span class="string">'rgb'</span>,</span><br><span class="line"></span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// After
+
+class ExampleComponent extends React.Component {
+
+  state = {
+
+    currentColor: this.props.defaultColor,
+
+    palette: &#39;rgb&#39;,
+
+  };
+
+}
+</code></pre>
 <h3 id="获取外部数据"><a href="#获取外部数据" class="headerlink" title="获取外部数据"></a>获取外部数据</h3><p>以下是使用componentWillMount获取外部数据的组件示例：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Before</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExampleComponent</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  state = &#123;</span><br><span class="line"></span><br><span class="line">    externalData: <span class="literal">null</span>,</span><br><span class="line"></span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  componentWillMount() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>._asyncRequest = asyncLoadData().then(</span><br><span class="line"></span><br><span class="line">      externalData =&gt; &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>._asyncRequest = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.setState(&#123;externalData&#125;);</span><br><span class="line"></span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  componentWillUnmount() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>._asyncRequest) &#123;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>._asyncRequest.cancel();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.state.externalData === <span class="literal">null</span>) &#123;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Render loading state ...</span></span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Render real UI ...</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// Before
+
+class ExampleComponent extends React.Component {
+
+  state = {
+
+    externalData: null,
+
+  };
+
+
+
+  componentWillMount() {
+
+    this._asyncRequest = asyncLoadData().then(
+
+      externalData =&gt; {
+
+        this._asyncRequest = null;
+
+        this.setState({externalData});
+
+      }
+
+    );
+
+  }
+
+
+
+  componentWillUnmount() {
+
+    if (this._asyncRequest) {
+
+      this._asyncRequest.cancel();
+
+    }
+
+  }
+
+  render() {
+
+    if (this.state.externalData === null) {
+
+      // Render loading state ...
+
+    } else {
+
+      // Render real UI ...
+
+    }
+
+  }
+
+}
+
+</code></pre>
 <p>对于大多数用例，建议的升级路径是将数据提取移入<code>componentDidMount</code>：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// After</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExampleComponent</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  state = &#123;</span><br><span class="line"></span><br><span class="line">    externalData: <span class="literal">null</span>,</span><br><span class="line"></span><br><span class="line">  &#125;;</span><br><span class="line">  componentDidMount() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>._asyncRequest = asyncLoadData().then(</span><br><span class="line"></span><br><span class="line">      externalData =&gt; &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>._asyncRequest = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.setState(&#123;externalData&#125;);</span><br><span class="line"></span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  componentWillUnmount() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>._asyncRequest) &#123;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>._asyncRequest.cancel();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.state.externalData === <span class="literal">null</span>) &#123;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Render loading state ...</span></span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Render real UI ...</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// After
+
+class ExampleComponent extends React.Component {
+
+  state = {
+
+    externalData: null,
+
+  };
+  componentDidMount() {
+
+    this._asyncRequest = asyncLoadData().then(
+
+      externalData =&gt; {
+
+        this._asyncRequest = null;
+
+        this.setState({externalData});
+
+      }
+
+    );
+
+  }
+
+  componentWillUnmount() {
+
+    if (this._asyncRequest) {
+
+      this._asyncRequest.cancel();
+
+    }
+
+  }
+
+  render() {
+
+    if (this.state.externalData === null) {
+
+      // Render loading state ...
+
+    } else {
+
+      // Render real UI ...
+
+    }
+
+  }
+
+}
+</code></pre>
 <p>有一个常见的错误观念认为，在<code>componentWillMount</code>中提取可以避免第一个空的渲染。在实践中，这从来都不是真的，因为React总是在<code>componentWillMount</code>之后立即执行渲染。如果数据在<code>componentWillMount</code>触发的时间内不可用，则无论你在哪里提取数据，第一个渲染仍将显示加载状态。这就是为什么在绝大多数情况下将提取移到<code>componentDidMount</code>没有明显效果。</p>
 <blockquote>
 <p>注意：<br>一些高级用例（例如，像Relay这样的库）可能想要尝试使用热切的预取异步数据。在这里可以找到一个这样做的例子。</p>
 </blockquote>
 <p>当支持服务器渲染时，目前需要同步提供数据 - <code>componentWillMount</code>通常用于此目的，但构造函数可以用作替换。即将到来的悬念API将使得异步数据在客户端和服务器呈现中都可以清晰地获取。</p>
 <h3 id="添加时间监听"><a href="#添加时间监听" class="headerlink" title="添加时间监听"></a>添加时间监听</h3><p>下面是一个在安装时监听外部事件调度程序的组件示例：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Before</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExampleComponent</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  componentWillMount() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;</span><br><span class="line"></span><br><span class="line">      subscribedValue: <span class="keyword">this</span>.props.dataSource.value,</span><br><span class="line"></span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// This is not safe; it can leak!</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.props.dataSource.subscribe(</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.handleSubscriptionChange</span><br><span class="line"></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  componentWillUnmount() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.props.dataSource.unsubscribe(</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.handleSubscriptionChange</span><br><span class="line"></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  handleSubscriptionChange = <span class="function"><span class="params">dataSource</span> =&gt;</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;</span><br><span class="line"></span><br><span class="line">      subscribedValue: dataSource.value,</span><br><span class="line"></span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// Before
+
+class ExampleComponent extends React.Component {
+
+  componentWillMount() {
+
+    this.setState({
+
+      subscribedValue: this.props.dataSource.value,
+
+    });
+
+
+
+    // This is not safe; it can leak!
+
+    this.props.dataSource.subscribe(
+
+      this.handleSubscriptionChange
+
+    );
+
+  }
+
+
+  componentWillUnmount() {
+
+    this.props.dataSource.unsubscribe(
+
+      this.handleSubscriptionChange
+
+    );
+
+  }
+
+  handleSubscriptionChange = dataSource =&gt; {
+
+    this.setState({
+
+      subscribedValue: dataSource.value,
+
+    });
+
+  };
+
+}
+</code></pre>
 <p>不幸的是，这会导致服务器渲染（<code>componentWillUnmount</code>永远不会被调用）和异步渲染（在渲染完成之前渲染可能被中断，导致<code>componentWillUnmount</code>不被调用）的内存泄漏。</p>
 <p>人们经常认为<code>componentWillMount</code>和<code>componentWillUnmount</code>总是配对，但这并不能保证。只有调用<code>componentDidMount</code>后，React才能保证稍后调用<code>componentWillUnmount</code>进行清理。</p>
 <p>出于这个原因，添加事件监听的推荐方式是使用<code>componentDidMount</code>生命周期：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// After</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExampleComponent</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  state = &#123;</span><br><span class="line"></span><br><span class="line">    subscribedValue: <span class="keyword">this</span>.props.dataSource.value,</span><br><span class="line"></span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  componentDidMount() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Event listeners are only safe to add after mount,</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// So they won't leak if mount is interrupted or errors.</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.props.dataSource.subscribe(</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.handleSubscriptionChange</span><br><span class="line"></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// External values could change between render and mount,</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// In some cases it may be important to handle this case.</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.state.subscribedValue !==</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.props.dataSource.value</span><br><span class="line"></span><br><span class="line">    ) &#123;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.setState(&#123;</span><br><span class="line"></span><br><span class="line">        subscribedValue: <span class="keyword">this</span>.props.dataSource.value,</span><br><span class="line"></span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  componentWillUnmount() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.props.dataSource.unsubscribe(</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.handleSubscriptionChange</span><br><span class="line"></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  handleSubscriptionChange = <span class="function"><span class="params">dataSource</span> =&gt;</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;</span><br><span class="line"></span><br><span class="line">      subscribedValue: dataSource.value,</span><br><span class="line"></span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// After
+
+class ExampleComponent extends React.Component {
+
+  state = {
+
+    subscribedValue: this.props.dataSource.value,
+
+  };
+
+
+
+  componentDidMount() {
+
+    // Event listeners are only safe to add after mount,
+
+    // So they won&#39;t leak if mount is interrupted or errors.
+
+    this.props.dataSource.subscribe(
+
+      this.handleSubscriptionChange
+
+    );
+
+
+
+    // External values could change between render and mount,
+
+    // In some cases it may be important to handle this case.
+
+    if (
+
+      this.state.subscribedValue !==
+
+      this.props.dataSource.value
+
+    ) {
+
+      this.setState({
+
+        subscribedValue: this.props.dataSource.value,
+
+      });
+
+    }
+
+  }
+
+
+
+  componentWillUnmount() {
+
+    this.props.dataSource.unsubscribe(
+
+      this.handleSubscriptionChange
+
+    );
+
+  }
+
+
+
+  handleSubscriptionChange = dataSource =&gt; {
+
+    this.setState({
+
+      subscribedValue: dataSource.value,
+
+    });
+
+  };
+
+}
+</code></pre>
 <p>有时候更新监听以响应属性变化很重要。如果您使用的是像Redux或MobX这样的库，库的容器组件会为您处理。对于应用程序作者，我们创建了一个小型库<code>create-subscription</code>来帮助解决这个问题。我们会将它与React 16.3一起发布。</p>
 <p>我们可以使用<code>create-subscription</code>来传递监听的值，而不是像上例那样传递监听 的<code>dataSource prop</code>。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;createSubscription&#125; <span class="keyword">from</span> <span class="string">'create-subscription'</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> Subscription = createSubscription(&#123;</span><br><span class="line"></span><br><span class="line">  getCurrentValue(sourceProp) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Return the current value of the subscription (sourceProp).</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> sourceProp.value;</span><br><span class="line"></span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  subscribe(sourceProp, callback) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">handleSubscriptionChange</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">      callback(sourceProp.value);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Subscribe (e.g. add an event listener) to the subscription (sourceProp).</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Call callback(newValue) whenever a subscription changes.</span></span><br><span class="line"></span><br><span class="line">    sourceProp.subscribe(handleSubscriptionChange);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Return an unsubscribe method.</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">unsubscribe</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">      sourceProp.unsubscribe(handleSubscriptionChange);</span><br><span class="line"></span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// Rather than passing the subscribable source to our ExampleComponent,</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// We could just pass the subscribed value directly:</span></span><br><span class="line"></span><br><span class="line"><span class="string">`&lt;Subscription source=&#123;dataSource&#125;&gt;`</span></span><br><span class="line"></span><br><span class="line">  &#123;value =&gt; <span class="string">`&lt;ExampleComponent subscribedValue=&#123;value&#125; /&gt;`</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="string">`&lt;/Subscription&gt;`</span>;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">import {createSubscription} from &#39;create-subscription&#39;;
+
+
+
+const Subscription = createSubscription({
+
+  getCurrentValue(sourceProp) {
+
+    // Return the current value of the subscription (sourceProp).
+
+    return sourceProp.value;
+
+  },
+
+
+
+  subscribe(sourceProp, callback) {
+
+    function handleSubscriptionChange() {
+
+      callback(sourceProp.value);
+
+    }
+
+
+
+    // Subscribe (e.g. add an event listener) to the subscription (sourceProp).
+
+    // Call callback(newValue) whenever a subscription changes.
+
+    sourceProp.subscribe(handleSubscriptionChange);
+
+
+
+    // Return an unsubscribe method.
+
+    return function unsubscribe() {
+
+      sourceProp.unsubscribe(handleSubscriptionChange);
+
+    };
+
+  },
+
+});
+
+
+
+// Rather than passing the subscribable source to our ExampleComponent,
+
+// We could just pass the subscribed value directly:
+
+`&lt;Subscription source={dataSource}&gt;`
+
+  {value =&gt; `&lt;ExampleComponent subscribedValue={value} /&gt;`}
+
+`&lt;/Subscription&gt;`;
+</code></pre>
 <blockquote>
 <p>注意<br>像Relay / Apollo这样的库应该使用与创建订阅相同的技术手动管理订阅（如此处所引用的），并采用最适合其库使用的优化方式。</p>
 </blockquote>
 <h3 id="基于props更新state"><a href="#基于props更新state" class="headerlink" title="基于props更新state"></a>基于props更新state</h3><p>以下是使用旧版<code>componentWillReceiveProps</code>生命周期基于新的道具值更新状态的组件示例：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Before</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExampleComponent</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  state = &#123;</span><br><span class="line"></span><br><span class="line">    isScrollingDown: <span class="literal">false</span>,</span><br><span class="line"></span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  componentWillReceiveProps(nextProps) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.props.currentRow !== nextProps.currentRow) &#123;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.setState(&#123;</span><br><span class="line"></span><br><span class="line">        isScrollingDown:</span><br><span class="line"></span><br><span class="line">          nextProps.currentRow &gt; <span class="keyword">this</span>.props.currentRow,</span><br><span class="line"></span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// Before
+
+class ExampleComponent extends React.Component {
+
+  state = {
+
+    isScrollingDown: false,
+
+  };
+
+
+
+  componentWillReceiveProps(nextProps) {
+
+    if (this.props.currentRow !== nextProps.currentRow) {
+
+      this.setState({
+
+        isScrollingDown:
+
+          nextProps.currentRow &gt; this.props.currentRow,
+
+      });
+
+    }
+
+  }
+
+}
+</code></pre>
 <p>尽管上面的代码本身并没有问题，但<code>componentWillReceiveProps</code>生命周期通常会被错误地用于解决问题。因此，该方法将被弃用。</p>
 <p>从版本16.3开始，<code>更新state以响应props</code>更改的推荐方法是使用新的静态<code>getDerivedStateFromProps</code>生命周期。 （生命周期在组件创建时以及每次收到新道具时调用）：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// After</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExampleComponent</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Initialize state in constructor,</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// Or with a property initializer.</span></span><br><span class="line"></span><br><span class="line">  state = &#123;</span><br><span class="line"></span><br><span class="line">    isScrollingDown: <span class="literal">false</span>,</span><br><span class="line"></span><br><span class="line">    lastRow: <span class="literal">null</span>,</span><br><span class="line"></span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> getDerivedStateFromProps(nextProps, prevState) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (nextProps.currentRow !== prevState.lastRow) &#123;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line"></span><br><span class="line">        isScrollingDown:</span><br><span class="line"></span><br><span class="line">          nextProps.currentRow &gt; prevState.lastRow,</span><br><span class="line"></span><br><span class="line">        lastRow: nextProps.currentRow,</span><br><span class="line"></span><br><span class="line">      &#125;;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Return null to indicate no change to state.</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// After
+
+class ExampleComponent extends React.Component {
+
+  // Initialize state in constructor,
+
+  // Or with a property initializer.
+
+  state = {
+
+    isScrollingDown: false,
+
+    lastRow: null,
+
+  };
+
+
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+
+    if (nextProps.currentRow !== prevState.lastRow) {
+
+      return {
+
+        isScrollingDown:
+
+          nextProps.currentRow &gt; prevState.lastRow,
+
+        lastRow: nextProps.currentRow,
+
+      };
+
+    }
+
+
+
+    // Return null to indicate no change to state.
+
+    return null;
+
+  }
+
+}
+</code></pre>
 <p>你可能会注意到在上面的例子中，<code>props.currentRow</code>是一个镜像状态（如state.lastRow）。这使得<code>getDerivedStateFromProps</code>可以像在<code>componentWillReceiveProps</code>中一样访问以前的props值。</p>
 <p>您可能想知道为什么我们不只是将先前的<code>props</code>作为参数传递给<code>getDerivedStateFromProps</code>。我们在设计API时考虑了这个选项，但最终决定反对它，原因有两个</p>
 <ul>
@@ -239,36 +644,454 @@
 <p>Note<br>如果您正在编写共享组件，那么react-lifecycles-compat polyfill可以使新的getDerivedStateFromProps生命周期与旧版本的React一起使用。详细了解如何在下面使用它。</p>
 </blockquote>
 <h3 id="调用外部回调函数"><a href="#调用外部回调函数" class="headerlink" title="调用外部回调函数"></a>调用外部回调函数</h3><p>下面是一个在内部状态发生变化时调用外部函数的组件示例：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Before</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExampleComponent</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  componentWillUpdate(nextProps, nextState) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.state.someStatefulValue !==</span><br><span class="line"></span><br><span class="line">      nextState.someStatefulValue</span><br><span class="line"></span><br><span class="line">    ) &#123;</span><br><span class="line"></span><br><span class="line">      nextProps.onChange(nextState.someStatefulValue);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// Before
+
+class ExampleComponent extends React.Component {
+
+  componentWillUpdate(nextProps, nextState) {
+
+    if (
+
+      this.state.someStatefulValue !==
+
+      nextState.someStatefulValue
+
+    ) {
+
+      nextProps.onChange(nextState.someStatefulValue);
+
+    }
+
+  }
+
+}
+</code></pre>
 <p>在异步模式下使用<code>componentWillUpdate</code>都是不安全的，因为外部回调可能会多次调用只更新一次。相反，应该使用<code>componentDidUpdate</code>生命周期，因为它保证每次更新只调用一次：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// After</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExampleComponent</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  componentDidUpdate(prevProps, prevState) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.state.someStatefulValue !==</span><br><span class="line"></span><br><span class="line">      prevState.someStatefulValue</span><br><span class="line"></span><br><span class="line">    ) &#123;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.props.onChange(<span class="keyword">this</span>.state.someStatefulValue);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// After
+
+class ExampleComponent extends React.Component {
+
+  componentDidUpdate(prevProps, prevState) {
+
+    if (
+
+      this.state.someStatefulValue !==
+
+      prevState.someStatefulValue
+
+    ) {
+
+      this.props.onChange(this.state.someStatefulValue);
+
+    }
+
+  }
+
+}
+</code></pre>
 <h3 id="props改变的副作用"><a href="#props改变的副作用" class="headerlink" title="props改变的副作用"></a>props改变的副作用</h3><p>与上述 事例类似，有时组件在道具更改时会产生副作用。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Before</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExampleComponent</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  componentWillReceiveProps(nextProps) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.props.isVisible !== nextProps.isVisible) &#123;</span><br><span class="line"></span><br><span class="line">      logVisibleChange(nextProps.isVisible);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// Before
+
+class ExampleComponent extends React.Component {
+
+  componentWillReceiveProps(nextProps) {
+
+    if (this.props.isVisible !== nextProps.isVisible) {
+
+      logVisibleChange(nextProps.isVisible);
+
+    }
+
+  }
+
+}
+</code></pre>
 <p>与<code>componentWillUpdate</code>一样，<code>componentWillReceiveProps</code>可能会多次调用但是只更新一次。出于这个原因，避免在此方法中导致的副作用非常重要。相反，应该使用<code>componentDidUpdate</code>，因为它保证每次更新只调用一次：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// After</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExampleComponent</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  componentDidUpdate(prevProps, prevState) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.props.isVisible !== prevProps.isVisible) &#123;</span><br><span class="line"></span><br><span class="line">      logVisibleChange(<span class="keyword">this</span>.props.isVisible);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// After
+
+class ExampleComponent extends React.Component {
+
+  componentDidUpdate(prevProps, prevState) {
+
+    if (this.props.isVisible !== prevProps.isVisible) {
+
+      logVisibleChange(this.props.isVisible);
+
+    }
+
+  }
+
+}
+</code></pre>
 <h3 id="props改变时获取外部数据"><a href="#props改变时获取外部数据" class="headerlink" title="props改变时获取外部数据"></a>props改变时获取外部数据</h3><p>以下是根据<code>propsvalues</code>提取外部数据的组件示例：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Before</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExampleComponent</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  state = &#123;</span><br><span class="line"></span><br><span class="line">    externalData: <span class="literal">null</span>,</span><br><span class="line"></span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  componentDidMount() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>._loadAsyncData(<span class="keyword">this</span>.props.id);</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  componentWillReceiveProps(nextProps) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (nextProps.id !== <span class="keyword">this</span>.props.id) &#123;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.setState(&#123;<span class="attr">externalData</span>: <span class="literal">null</span>&#125;);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>._loadAsyncData(nextProps.id);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  componentWillUnmount() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>._asyncRequest) &#123;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>._asyncRequest.cancel();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.state.externalData === <span class="literal">null</span>) &#123;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Render loading state ...</span></span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Render real UI ...</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  _loadAsyncData(id) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>._asyncRequest = asyncLoadData(id).then(</span><br><span class="line"></span><br><span class="line">      externalData =&gt; &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>._asyncRequest = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.setState(&#123;externalData&#125;);</span><br><span class="line"></span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// Before
+
+class ExampleComponent extends React.Component {
+
+  state = {
+
+    externalData: null,
+
+  };
+
+
+
+  componentDidMount() {
+
+    this._loadAsyncData(this.props.id);
+
+  }
+
+
+
+  componentWillReceiveProps(nextProps) {
+
+    if (nextProps.id !== this.props.id) {
+
+      this.setState({externalData: null});
+
+      this._loadAsyncData(nextProps.id);
+
+    }
+
+  }
+
+
+
+  componentWillUnmount() {
+
+    if (this._asyncRequest) {
+
+      this._asyncRequest.cancel();
+
+    }
+
+  }
+
+
+
+  render() {
+
+    if (this.state.externalData === null) {
+
+      // Render loading state ...
+
+    } else {
+
+      // Render real UI ...
+
+    }
+
+  }
+
+
+
+  _loadAsyncData(id) {
+
+    this._asyncRequest = asyncLoadData(id).then(
+
+      externalData =&gt; {
+
+        this._asyncRequest = null;
+
+        this.setState({externalData});
+
+      }
+
+    );
+
+  }
+
+}
+
+</code></pre>
 <p>此组件的推荐升级路径是将数据更新移动到<code>componentDidUpdate</code>中。在渲染新道具之前，您还可以使用新的<code>getDerivedStateFromProps</code>生命周期清除陈旧的数据：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// After</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExampleComponent</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  state = &#123;</span><br><span class="line"></span><br><span class="line">    externalData: <span class="literal">null</span>,</span><br><span class="line"></span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> getDerivedStateFromProps(nextProps, prevState) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Store prevId in state so we can compare when props change.</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Clear out previously-loaded data (so we don't render stale stuff).</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (nextProps.id !== prevState.prevId) &#123;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line"></span><br><span class="line">        externalData: <span class="literal">null</span>,</span><br><span class="line"></span><br><span class="line">        prevId: nextProps.id,</span><br><span class="line"></span><br><span class="line">      &#125;;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// No state update necessary</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  componentDidMount() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>._loadAsyncData(<span class="keyword">this</span>.props.id);</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  componentDidUpdate(prevProps, prevState) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.state.externalData === <span class="literal">null</span>) &#123;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>._loadAsyncData(<span class="keyword">this</span>.props.id);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  componentWillUnmount() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>._asyncRequest) &#123;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>._asyncRequest.cancel();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.state.externalData === <span class="literal">null</span>) &#123;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Render loading state ...</span></span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Render real UI ...</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  _loadAsyncData(id) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>._asyncRequest = asyncLoadData(id).then(</span><br><span class="line"></span><br><span class="line">      externalData =&gt; &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>._asyncRequest = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.setState(&#123;externalData&#125;);</span><br><span class="line"></span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// After
+
+class ExampleComponent extends React.Component {
+
+  state = {
+
+    externalData: null,
+
+  };
+
+
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+
+    // Store prevId in state so we can compare when props change.
+
+    // Clear out previously-loaded data (so we don&#39;t render stale stuff).
+
+    if (nextProps.id !== prevState.prevId) {
+
+      return {
+
+        externalData: null,
+
+        prevId: nextProps.id,
+
+      };
+
+    }
+
+
+
+    // No state update necessary
+
+    return null;
+
+  }
+
+
+
+  componentDidMount() {
+
+    this._loadAsyncData(this.props.id);
+
+  }
+
+
+
+  componentDidUpdate(prevProps, prevState) {
+
+    if (this.state.externalData === null) {
+
+      this._loadAsyncData(this.props.id);
+
+    }
+
+  }
+
+
+
+  componentWillUnmount() {
+
+    if (this._asyncRequest) {
+
+      this._asyncRequest.cancel();
+
+    }
+
+  }
+
+
+
+  render() {
+
+    if (this.state.externalData === null) {
+
+      // Render loading state ...
+
+    } else {
+
+      // Render real UI ...
+
+    }
+
+  }
+
+
+
+  _loadAsyncData(id) {
+
+    this._asyncRequest = asyncLoadData(id).then(
+
+      externalData =&gt; {
+
+        this._asyncRequest = null;
+
+        this.setState({externalData});
+
+      }
+
+    );
+
+  }
+
+}
+
+</code></pre>
 <blockquote>
 <p>注意<br>如果您使用支持取消的HTTP库（如axios），那么卸载时取消正在进行的请求很简单。对于原生Promise，您可以使用如下所示的方法。</p>
 </blockquote>
 <h3 id="在更新之前读取DOM属性"><a href="#在更新之前读取DOM属性" class="headerlink" title="在更新之前读取DOM属性"></a>在更新之前读取DOM属性</h3><p>下面是一个组件的例子，它在更新之前从DOM中读取属性，以便在列表中保持滚动位置：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">componentWillUpdate(nextProps, nextState) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Are we adding new items to the list?</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Capture the scroll position so we can adjust scroll later.</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.props.list.length &lt; nextProps.list.length) &#123;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.previousScrollOffset =</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.listRef.scrollHeight - <span class="keyword">this</span>.listRef.scrollTop;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  componentDidUpdate(prevProps, prevState) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// If previousScrollOffset is set, we've just added new items.</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Adjust scroll so these new items don't push the old ones out of view.</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.previousScrollOffset !== <span class="literal">null</span>) &#123;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.listRef.scrollTop =</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.listRef.scrollHeight -</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.previousScrollOffset;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.previousScrollOffset = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line"></span><br><span class="line">      <span class="string">`&lt;div&gt;`</span></span><br><span class="line"></span><br><span class="line">        &#123;<span class="comment">/* ...contents... */</span>&#125;</span><br><span class="line"></span><br><span class="line">      <span class="string">`&lt;/div&gt;`</span></span><br><span class="line"></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  setListRef = <span class="function"><span class="params">ref</span> =&gt;</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.listRef = ref;</span><br><span class="line"></span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">componentWillUpdate(nextProps, nextState) {
+
+    // Are we adding new items to the list?
+
+    // Capture the scroll position so we can adjust scroll later.
+
+    if (this.props.list.length &lt; nextProps.list.length) {
+
+      this.previousScrollOffset =
+
+        this.listRef.scrollHeight - this.listRef.scrollTop;
+
+    }
+
+  }
+
+
+
+  componentDidUpdate(prevProps, prevState) {
+
+    // If previousScrollOffset is set, we&#39;ve just added new items.
+
+    // Adjust scroll so these new items don&#39;t push the old ones out of view.
+
+    if (this.previousScrollOffset !== null) {
+
+      this.listRef.scrollTop =
+
+        this.listRef.scrollHeight -
+
+        this.previousScrollOffset;
+
+      this.previousScrollOffset = null;
+
+    }
+
+  }
+
+  render() {
+
+    return (
+
+      `&lt;div&gt;`
+
+        {/* ...contents... */}
+
+      `&lt;/div&gt;`
+
+    );
+
+  }
+
+
+
+  setListRef = ref =&gt; {
+
+    this.listRef = ref;
+
+  };
+
+}
+</code></pre>
 <p>在上面的例子中，<code>componentWillUpdate</code>被用来读取DOM属性。但是，对于异步渲染，“render”阶段生命周期（如c<code>omponentWillUpdate</code>和<code>render</code>）与“commit”阶段生命周期（如<code>componentDidUpdate</code>）之间可能存在延迟。如果用户在这段时间内做了类似调整窗口大小的操作，则从<code>componentWillUpdate</code>中读取的<code>scrollHeight</code>值将失效。</p>
 <p>解决此问题的方法是使用新的“commit”阶段生命周期<code>getSnapshotBeforeUpdate</code>。在数据发生变化之前立即调用该方法（例如，在更新DOM之前）。它可以将React的值作为参数传递给<code>componentDidUpdate</code>，在数据发生变化后立即调用它。</p>
 <p>这两个生命周期可以像这样一起使用：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ScrollingList</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  listRef = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  getSnapshotBeforeUpdate(prevProps, prevState) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Are we adding new items to the list?</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Capture the scroll position so we can adjust scroll later.</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (prevProps.list.length &lt; <span class="keyword">this</span>.props.list.length) &#123;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> (</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.listRef.scrollHeight - <span class="keyword">this</span>.listRef.scrollTop</span><br><span class="line"></span><br><span class="line">      );</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  componentDidUpdate(prevProps, prevState, snapshot) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// If we have a snapshot value, we've just added new items.</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Adjust scroll so these new items don't push the old ones out of view.</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// (snapshot here is the value returned from getSnapshotBeforeUpdate)</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (snapshot !== <span class="literal">null</span>) &#123;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.listRef.scrollTop =</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.listRef.scrollHeight - snapshot;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line"></span><br><span class="line">      <span class="string">`&lt;div&gt;`</span></span><br><span class="line"></span><br><span class="line">        &#123;<span class="comment">/* ...contents... */</span>&#125;</span><br><span class="line"></span><br><span class="line">      <span class="string">`&lt;/div&gt;`</span></span><br><span class="line"></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  setListRef = <span class="function"><span class="params">ref</span> =&gt;</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.listRef = ref;</span><br><span class="line"></span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">class ScrollingList extends React.Component {
+
+  listRef = null;
+
+
+
+  getSnapshotBeforeUpdate(prevProps, prevState) {
+
+    // Are we adding new items to the list?
+
+    // Capture the scroll position so we can adjust scroll later.
+
+    if (prevProps.list.length &lt; this.props.list.length) {
+
+      return (
+
+        this.listRef.scrollHeight - this.listRef.scrollTop
+
+      );
+
+    }
+
+    return null;
+
+  }
+
+
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+
+    // If we have a snapshot value, we&#39;ve just added new items.
+
+    // Adjust scroll so these new items don&#39;t push the old ones out of view.
+
+    // (snapshot here is the value returned from getSnapshotBeforeUpdate)
+
+    if (snapshot !== null) {
+
+      this.listRef.scrollTop =
+
+        this.listRef.scrollHeight - snapshot;
+
+    }
+
+  }
+
+
+
+  render() {
+
+    return (
+
+      `&lt;div&gt;`
+
+        {/* ...contents... */}
+
+      `&lt;/div&gt;`
+
+    );
+
+  }
+
+
+
+  setListRef = ref =&gt; {
+
+    this.listRef = ref;
+
+  };
+
+}
+</code></pre>
 <blockquote>
 <p>注意<br>如果您正在编写共享组件，那么<code>react-lifecycles-compat polyfill</code>可以使新的<code>getSnapshotBeforeUpdate</code>生命周期与旧版本的React一起使用。详细了解如何使用它。</p>
 </blockquote>
 <h2 id="其它情况"><a href="#其它情况" class="headerlink" title="其它情况"></a>其它情况</h2><p>除了以上的一些常见的例子，还可能会有别的情况本篇文章没有涵盖到，如果您以本博文未涉及的方式使用除了以上 <code>componentWillMount</code>，<code>componentWillUpdate</code>或<code>componentWillReceiveProps</code>，并且不确定如何迁移这些传统生命周期，你可以提供您的代码示例和我们的文档，并且一起提交一个新问题。我们将在更新这份文件时提供新的替代模式。</p>
 <p>当React 16.3发布时，我们还将发布一个新的npm包， react-lifecycles-compat。该npm包会填充组件，以便新的getDerivedStateFromProps和getSnapshotBeforeUpdate生命周期也可以与旧版本的React（0.14.9+）一起使用。</p>
 <p>要使用这个polyfill，首先将它作为依赖项添加到您的库中：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># Yarn</span><br><span class="line"></span><br><span class="line">yarn add react-lifecycles-compat</span><br><span class="line"></span><br><span class="line"># NPM</span><br><span class="line"></span><br><span class="line">npm install react-lifecycles-compat --save</span><br></pre></td></tr></table></figure>
+<pre><code class="js"># Yarn
+
+yarn add react-lifecycles-compat
+
+# NPM
+
+npm install react-lifecycles-compat --save
+</code></pre>
 <p>接下来，更新您的组件以使用新的生命周期（如上所述）。</p>
 <p>最后，使用polyfill将组件向后兼容旧版本的React：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123;polyfill&#125; <span class="keyword">from</span> <span class="string">'react-lifecycles-compat'</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExampleComponent</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> getDerivedStateFromProps(nextProps, prevState) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Your state update logic here ...</span></span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Polyfill your component to work with older versions of React:</span></span><br><span class="line"></span><br><span class="line">polyfill(ExampleComponent);</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> ExampleComponent;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">import React from &#39;react&#39;;
+
+import {polyfill} from &#39;react-lifecycles-compat&#39;;
+
+
+
+class ExampleComponent extends React.Component {
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+
+    // Your state update logic here ...
+
+  }
+
+}
+
+// Polyfill your component to work with older versions of React:
+
+polyfill(ExampleComponent);
+
+export default ExampleComponent;
+</code></pre>
 <p><a href="https://mp.weixin.qq.com/s/dYVdOGtcka3_ODfap1pvJQ" target="_blank" rel="noopener">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
@@ -317,7 +1140,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

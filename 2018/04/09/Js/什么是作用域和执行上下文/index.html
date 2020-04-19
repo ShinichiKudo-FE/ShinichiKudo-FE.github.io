@@ -99,13 +99,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    8.6k
+                    4.8k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    8 mins.
+                    4 mins.
                 </span>
                 
                 
@@ -146,22 +146,66 @@
 <p>作用域其实由两部分组成(全局作用域，局部作用域)<br>1.记录作用域内变量信息（我们假设变量，常量，函数等统称为变量）和代码结构信息的东西，称之为 Environment Record。<br>2.一个引用 <code>__outer__</code>，这个引用指向当前作用域的父作用域。拿上面代码为例。innerFunc 的函数作用域有一个引用指向 walk 函数作用域，walk 函数作用域有一个引用指向全局作用域。全局作用域的 <code>__outer__</code>为 null。</p>
 </blockquote>
 <h2 id="生成作用域的语法"><a href="#生成作用域的语法" class="headerlink" title="生成作用域的语法"></a>生成作用域的语法</h2><a id="more"></a>
-<p>1.函数声明<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> inner = <span class="string">'inner'</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(inner);</span><br><span class="line">&#125;</span><br><span class="line">f();<span class="comment">//inner</span></span><br><span class="line"><span class="built_in">console</span>.log( inner );<span class="comment">//Uncaught ReferenceError: inner is not defined</span></span><br></pre></td></tr></table></figure></p>
-<p>2.catch语句<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>( <span class="string">'customized error'</span> );</span><br><span class="line">&#125; <span class="keyword">catch</span>( err ) &#123;</span><br><span class="line">  <span class="keyword">var</span> iamnoterror = <span class="string">'not error'</span>;</span><br><span class="line">  <span class="built_in">console</span>.log( iamnoterror ); <span class="comment">// not error</span></span><br><span class="line">  <span class="built_in">console</span>.log( err ); <span class="comment">// Error: customized error</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log( iamnoterror ); <span class="comment">// not error</span></span><br><span class="line"><span class="built_in">console</span>.log( err ); <span class="comment">// Uncaught ReferenceError: e is not defined</span></span><br></pre></td></tr></table></figure></p>
+<p>1.函数声明</p>
+<pre><code class="javascript">function f(){
+    var inner = &#39;inner&#39;;
+    console.log(inner);
+}
+f();//inner
+console.log( inner );//Uncaught ReferenceError: inner is not defined
+</code></pre>
+<p>2.catch语句</p>
+<pre><code class="javascript">
+try {
+  throw new Error( &#39;customized error&#39; );
+} catch( err ) {
+  var iamnoterror = &#39;not error&#39;;
+  console.log( iamnoterror ); // not error
+  console.log( err ); // Error: customized error
+}
+console.log( iamnoterror ); // not error
+console.log( err ); // Uncaught ReferenceError: e is not defined
+
+</code></pre>
 <p>catch语句生成的作用域只会框住参数部分的变量，使其不能在外部访问。对于 catch 语句体里面声明的变量并不起作用</p>
-<p>3.语句块<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ( <span class="literal">true</span> ) &#123;</span><br><span class="line">  <span class="keyword">let</span> bv = <span class="string">'bv'</span>;</span><br><span class="line">  <span class="keyword">const</span> B_C = <span class="string">'BC'</span>;</span><br><span class="line">  <span class="keyword">let</span> blockFunc = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">notBlockFunc</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">console</span>.log( bv ); <span class="comment">// bv</span></span><br><span class="line">  <span class="built_in">console</span>.log( B_C ); <span class="comment">// BC</span></span><br><span class="line">  <span class="built_in">console</span>.log( notBlockFunc ); <span class="comment">// function notBlockFunc() &#123;&#125;</span></span><br><span class="line">  <span class="built_in">console</span>.log( blockFunc ); <span class="comment">// function () &#123;&#125;</span></span><br><span class="line">  </span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log( bv ); <span class="comment">// Uncaught ReferenceError: bv is not defined</span></span><br><span class="line"><span class="built_in">console</span>.log( B_C ); <span class="comment">// Uncaught ReferenceError: B_C is not defined</span></span><br><span class="line"><span class="built_in">console</span>.log( notBlockFunc ); <span class="comment">// function notBlockFunc() &#123;&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log( blockFunc ); <span class="comment">// ReferenceError: blockFunc is not defined</span></span><br></pre></td></tr></table></figure></p>
+<p>3.语句块</p>
+<pre><code class="javascript">if ( true ) {
+  let bv = &#39;bv&#39;;
+  const B_C = &#39;BC&#39;;
+  let blockFunc = function() {}
+  function notBlockFunc() {}
+
+  console.log( bv ); // bv
+  console.log( B_C ); // BC
+  console.log( notBlockFunc ); // function notBlockFunc() {}
+  console.log( blockFunc ); // function () {}
+
+}
+console.log( bv ); // Uncaught ReferenceError: bv is not defined
+console.log( B_C ); // Uncaught ReferenceError: B_C is not defined
+console.log( notBlockFunc ); // function notBlockFunc() {}
+console.log( blockFunc ); // ReferenceError: blockFunc is not defined
+</code></pre>
 <p>语句块 {} 会生成一个新的作用域，但是这个作用域只绑定块级变量，常量等，即 let，const 声明的属于块级作用域，而 var 声明的还是属于块级作用域的父作用域。</p>
 <h1 id="执行上下文（execution-context）"><a href="#执行上下文（execution-context）" class="headerlink" title="执行上下文（execution context）"></a>执行上下文（execution context）</h1><p>执行上下文是用于跟踪代码的运行情况，其特征如下:</p>
 <blockquote>
 <ul>
-<li><p>一段代码块对应一个执行上下文，被封装成函数的代码被视作一段代码块，或者全局作用域也被视作一个代码块。</p>
-</li>
-<li><p>当程序运行，进入到某段代码块时，一个新的执行上下文被创建，并被放入一个 stack 中。当程序运行到这段代码块结尾后，对应的执行上下文被弹出 stack</p>
-</li>
-<li><p>当程序在某段代码块中运行到某个点需要转到了另一个代码块时（调用了另一个函数），那么当前的可执行上下文的状态会被置为挂起，然后生成一个新的可执行上下文放入 stack 的顶部。</p>
-</li>
-<li><p>stack 最顶部的可执行上下文被称为 running execution context。当顶部的可执行上下文被弹出后，上一个挂起的可执行上下文继续执行。</p>
-</li>
+<li>一段代码块对应一个执行上下文，被封装成函数的代码被视作一段代码块，或者全局作用域也被视作一个代码块。</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>当程序运行，进入到某段代码块时，一个新的执行上下文被创建，并被放入一个 stack 中。当程序运行到这段代码块结尾后，对应的执行上下文被弹出 stack</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>当程序在某段代码块中运行到某个点需要转到了另一个代码块时（调用了另一个函数），那么当前的可执行上下文的状态会被置为挂起，然后生成一个新的可执行上下文放入 stack 的顶部。</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>stack 最顶部的可执行上下文被称为 running execution context。当顶部的可执行上下文被弹出后，上一个挂起的可执行上下文继续执行。</li>
 </ul>
 </blockquote>
 <p>我们用代码来示例下（从 outer 调用到 level1 调用，再逐层返回）：<br><img src="https://sfault-image.b0.upaiyun.com/184/331/1843310870-5923b8a26d26a_articlex" alt="outer"></p>
@@ -228,7 +272,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

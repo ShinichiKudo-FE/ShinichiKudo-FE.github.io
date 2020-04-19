@@ -99,7 +99,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    12k
+                    13k
                 </span>
                 
                 
@@ -144,22 +144,26 @@
 <p>HTTP协议的主要特点可概括如下：<br>1.支持客户/服务器模式。<br>2.简单快速：客户向服务器请求服务时，只需传送请求方法和路径。请求方法常用的有<strong>GET、HEAD、POST</strong>。每种方法规定了客户与服务器联系的类型不同。由于HTTP协议简单，使得HTTP服务器的程序规模小，因而通信速度很快。<br>3.灵活：HTTP允许传输任意类型的数据对象。正在传输的类型由Content-Type加以标记<br>4.无连接：无连接的含义是限制每次连接只处理一个请求。服务器处理完客户的请求，并收到客户的应答后，即断开连接。采用这种方式可以节省传输时间。<br>5.无状态：HTTP协议是无状态协议。无状态是指协议对于事务处理没有记忆能力。缺少状态意味着如果后续处理需要前面的信息，则它必须重传，这样可能导致每次连接传送的数据量增大。另一方面，在服务器不需要先前信息时它的应答就较快。</p>
 </blockquote>
 <h2 id="HTTP协议详解之URL篇"><a href="#HTTP协议详解之URL篇" class="headerlink" title="HTTP协议详解之URL篇"></a>HTTP协议详解之URL篇</h2><p><font color = "blue">http(超文本传输协议)</font> 是一个基于请求与响应模式的、无状态的、应用层的协议，常基于TCP的连接方式，HTTP1.1版本中给出一种持续连接的机制，绝大多数的Web开发，都是构建在HTTP协议之上的Web应用。</p>
-<p>HTTP URL (URL是一种特殊类型的URI，包含了用于查找某个资源的足够的信息)的格式如下：<br><a href="http://host[&quot;:&quot;port][abs_path">http://host[&quot;:&quot;port][abs_path</a>]</p>
+<p>HTTP URL (URL是一种特殊类型的URI，包含了用于查找某个资源的足够的信息)的格式如下：<br><a href="http://host[&quot;:&quot;port][abs_path]">http://host[&quot;:&quot;port][abs_path]</a></p>
 <p>http表示要通过HTTP协议来定位网络资源；<br><em>host</em>表示合法的Internet主机域名或者IP地址；<br><em>port</em>指定一个端口号，为空则使用缺省端口80；<br><em>abs_path</em>指定请求资源的URI；如果URL中没有给出abs_path，那么当它作为请求URI时，必须以“/”的形式给出，通常这个工作浏览器自动帮我们完成。</p>
 <a id="more"></a>
-<p>eg:<br>1、输入：www.guet.edu.cn<br>浏览器自动转换成：<a href="http://www.guet.edu.cn/" target="_blank" rel="noopener">http://www.guet.edu.cn/</a><br>2、http:192.168.0.116:8080/index.jsp </p>
+<p>eg:<br>1、输入：<a href="http://www.guet.edu.cn" target="_blank" rel="noopener">www.guet.edu.cn</a><br>浏览器自动转换成：<a href="http://www.guet.edu.cn/" target="_blank" rel="noopener">http://www.guet.edu.cn/</a><br>2、http:192.168.0.116:8080/index.jsp </p>
 <h2 id="HTTP协议详解之请求篇"><a href="#HTTP协议详解之请求篇" class="headerlink" title="HTTP协议详解之请求篇"></a>HTTP协议详解之请求篇</h2><p>http请求由三部分组成，分别是：请求行、消息报头、请求正文</p>
 <h3 id="1、请求行以一个方法符号开头，以空格分开，后面跟着请求的URI和协议的版本，格式如下：Method-Request-URI-HTTP-Version-CRLF"><a href="#1、请求行以一个方法符号开头，以空格分开，后面跟着请求的URI和协议的版本，格式如下：Method-Request-URI-HTTP-Version-CRLF" class="headerlink" title="1、请求行以一个方法符号开头，以空格分开，后面跟着请求的URI和协议的版本，格式如下：Method Request-URI HTTP-Version CRLF"></a>1、请求行以一个方法符号开头，以空格分开，后面跟着请求的URI和协议的版本，格式如下：Method Request-URI HTTP-Version CRLF</h3><p>其中 Method表示请求方法；Request-URI是一个统一资源标识符；HTTP-Version表示请求的HTTP协议版本；CRLF表示回车和换行（除了作为结尾的CRLF外，不允许出现单独的CR或LF字符）。</p>
 <blockquote>
 <p>请求方法（所有方法全为大写）有多种，各个方法的解释如下：<br>GET     请求获取Request-URI所标识的资源<br>POST    在Request-URI所标识的资源后附加新的数据<br>HEAD    请求获取由Request-URI所标识的资源的响应消息报头<br>PUT     请求服务器存储一个资源，并用Request-URI作为其标识<br>DELETE  请求服务器删除Request-URI所标识的资源<br>TRACE   请求服务器回送收到的请求信息，主要用于测试或诊断<br>CONNECT 保留将来使用<br>OPTIONS 请求查询服务器的性能，或者查询与资源相关的选项和需求</p>
+</blockquote>
+<blockquote>
 <p>应用示例<br>GET方法：在浏览器的地址栏中输入网址的方式访问网页时，浏览器采用GET方法向服务器获取资源，eg:GET /form.html HTTP/1.1 (CRLF)</p>
 </blockquote>
-<p>POST方法要求被请求服务器接受附在请求后面的数据，常用于提交表单。<br>eg：POST /reg.jsp HTTP/ (CRLF)<br>Accept:image/gif,image/x-xbit,… (CRLF)<br>…<br>HOST:www.guet.edu.cn (CRLF)<br>Content-Length:22 (CRLF)<br>Connection:Keep-Alive (CRLF)<br>Cache-Control:no-cache (CRLF)<br>(CRLF)         //该CRLF表示消息报头已经结束，在此之前为消息报头<br>user=jeffrey&amp;pwd=1234  //此行以下为提交的数据</p>
+<p>POST方法要求被请求服务器接受附在请求后面的数据，常用于提交表单。<br>eg：POST /reg.jsp HTTP/ (CRLF)<br>Accept:image/gif,image/x-xbit,… (CRLF)<br>…<br>HOST:<a href="http://www.guet.edu.cn" target="_blank" rel="noopener">www.guet.edu.cn</a> (CRLF)<br>Content-Length:22 (CRLF)<br>Connection:Keep-Alive (CRLF)<br>Cache-Control:no-cache (CRLF)<br>(CRLF)         //该CRLF表示消息报头已经结束，在此之前为消息报头<br>user=jeffrey&amp;pwd=1234  //此行以下为提交的数据</p>
 <p>HEAD方法与GET方法几乎是一样的，对于HEAD请求的回应部分来说，它的HTTP头部中包含的信息与通过GET请求所得到的信息是相同的。利用这个方法，不必传输整个资源内容，就可以得到Request-URI所标识的资源的信息。该方法常用于测试超链接的有效性，是否可以访问，以及最近是否更新。</p>
 <h3 id="2、请求报头后述"><a href="#2、请求报头后述" class="headerlink" title="2、请求报头后述"></a>2、请求报头后述</h3><h3 id="3、请求正文-略"><a href="#3、请求正文-略" class="headerlink" title="3、请求正文(略)"></a>3、请求正文(略)</h3><h2 id="HTTP协议详解之响应篇"><a href="#HTTP协议详解之响应篇" class="headerlink" title="HTTP协议详解之响应篇"></a>HTTP协议详解之响应篇</h2><p>在接收和解释请求消息后，服务器返回一个HTTP响应消息。<br>HTTP响应也是由三个部分组成，分别是：状态行、消息报头、响应正文</p>
 <h3 id="1-状态行格式如下："><a href="#1-状态行格式如下：" class="headerlink" title="1.状态行格式如下："></a>1.状态行格式如下：</h3><p>HTTP-Version Status-Code Reason-Phrase CRLF<br>其中，HTTP-Version表示服务器HTTP协议的版本；Status-Code表示服务器发回的响应状态代码；Reason-Phrase表示状态代码的文本描述。</p>
 <blockquote>
 <p>状态代码有三位数字组成，第一个数字定义了响应的类别，且有五种可能取值：<br>1xx：指示信息–表示请求已接收，继续处理<br>2xx：成功–表示请求已被成功接收、理解、接受<br>3xx：重定向–要完成请求必须进行更进一步的操作<br>4xx：客户端错误–请求有语法错误或请求无法实现<br>5xx：服务器端错误–服务器未能实现合法的请求</p>
+</blockquote>
+<blockquote>
 <p><strong>常见状态代码、状态描述</strong>、说明：<br>200 OK      //客户端请求成功<br>400 Bad Request  //客户端请求有语法错误，不能被服务器所理解<br>401 Unauthorized //请求未经授权，这个状态代码必须和WWW-Authenticate报头域一起使用<br>403 Forbidden  //服务器收到请求，但是拒绝提供服务<br>404 Not Found  //请求资源不存在，eg：输入了错误的URL<br>500 Internal Server Error //服务器发生不可预期的错误<br>503 Server Unavailable  //服务器当前不能处理客户端的请求，一段时间后可能恢复正常<br>eg：HTTP/1.1 200 OK （CRLF）</p>
 </blockquote>
 <h3 id="2-响应报头后述"><a href="#2-响应报头后述" class="headerlink" title="2.响应报头后述"></a>2.响应报头后述</h3><h3 id="3-响应正文就是服务器返回的资源的内容"><a href="#3-响应正文就是服务器返回的资源的内容" class="headerlink" title="3.响应正文就是服务器返回的资源的内容"></a>3.响应正文就是服务器返回的资源的内容</h3><h2 id="HTTP协议详解之消息报头篇"><a href="#HTTP协议详解之消息报头篇" class="headerlink" title="HTTP协议详解之消息报头篇"></a>HTTP协议详解之消息报头篇</h2><p> HTTP消息由客户端到服务器的请求和服务器到客户端的响应组成。请求消息和响应消息都是由开始行（对于请求消息，开始行就是请求行，对于响应消息，开始行就是状态行），消息报头（可选），空行（只有CRLF的行），消息正文（可选）组成。</p>
@@ -172,7 +176,7 @@
 <p>Connection普通报头域允许发送指定连接的选项。例如指定连接是连续，或者指定“close”选项，通知服务器，在响应完成后，关闭连接</p>
 <h3 id="请求报头"><a href="#请求报头" class="headerlink" title="请求报头"></a>请求报头</h3><p>请求报头允许客户端向服务器端传递请求的附加信息以及客户端自身的信息。</p>
 <blockquote>
-<p>常用的请求报头<br>1.Accept<br>Accept请求报头域用于指定客户端接受哪些类型的信息。eg：Accept：image/gif，表明客户端希望接受GIF图象格式的资源；Accept：text/html，表明客户端希望接受html文本。<br>2.Accept-Charset<br>Accept-Charset请求报头域用于指定客户端接受的字符集。eg：Accept-Charset:iso-8859-1,gb2312.如果在请求消息中没有设置这个域，缺省是任何字符集都可以接受。<br>3.Accept-Encoding<br>Accept-Encoding请求报头域类似于Accept，但是它是用于指定可接受的内容编码。eg：Accept-Encoding:gzip.deflate.如果请求消息中没有设置这个域服务器假定客户端对各种内容编码都可以接受。<br>4.Accept-Language<br>Accept-Language请求报头域类似于Accept，但是它是用于指定一种自然语言。eg：Accept-Language:zh-cn.如果请求消息中没有设置这个报头域，服务器假定客户端对各种语言都可以接受。<br>5.Authorization<br>Authorization请求报头域主要用于证明客户端有权查看某个资源。当浏览器访问一个页面时，如果收到服务器的响应代码为401（未授权），可以发送一个包含Authorization请求报头域的请求，要求服务器对其进行验证。<br>    Host（发送请求时，该报头域是必需的）<br>    Host请求报头域主要用于指定被请求资源的Internet主机和端口号，它通常从HTTP URL中提取出来的，eg：<br>    我们在浏览器中输入：<a href="http://www.guet.edu.cn/index.html" target="_blank" rel="noopener">http://www.guet.edu.cn/index.html</a><br>    浏览器发送的请求消息中，就会包含Host请求报头域，如下：<br>    Host：www.guet.edu.cn<br>    此处使用缺省端口号80，若指定了端口号，则变成：Host：www.guet.edu.cn:指定端口号<br>6.User-Agent<br>我们上网登陆论坛的时候，往往会看到一些欢迎信息，其中列出了你的操作系统的名称和版本，你所使用的浏览器的名称和版本，这往往让很多人感到很神奇，实际上，服务器应用程序就是从User-Agent这个请求报头域中获取到这些信息。User-Agent请求报头域允许客户端将它的操作系统、浏览器和其它属性告诉服务器。不过，这个报头域不是必需的，如果我们自己编写一个浏览器，不使用User-Agent请求报头域，那么服务器端就无法得知我们的信息了。</p>
+<p>常用的请求报头<br>1.Accept<br>Accept请求报头域用于指定客户端接受哪些类型的信息。eg：Accept：image/gif，表明客户端希望接受GIF图象格式的资源；Accept：text/html，表明客户端希望接受html文本。<br>2.Accept-Charset<br>Accept-Charset请求报头域用于指定客户端接受的字符集。eg：Accept-Charset:iso-8859-1,gb2312.如果在请求消息中没有设置这个域，缺省是任何字符集都可以接受。<br>3.Accept-Encoding<br>Accept-Encoding请求报头域类似于Accept，但是它是用于指定可接受的内容编码。eg：Accept-Encoding:gzip.deflate.如果请求消息中没有设置这个域服务器假定客户端对各种内容编码都可以接受。<br>4.Accept-Language<br>Accept-Language请求报头域类似于Accept，但是它是用于指定一种自然语言。eg：Accept-Language:zh-cn.如果请求消息中没有设置这个报头域，服务器假定客户端对各种语言都可以接受。<br>5.Authorization<br>Authorization请求报头域主要用于证明客户端有权查看某个资源。当浏览器访问一个页面时，如果收到服务器的响应代码为401（未授权），可以发送一个包含Authorization请求报头域的请求，要求服务器对其进行验证。<br>    Host（发送请求时，该报头域是必需的）<br>    Host请求报头域主要用于指定被请求资源的Internet主机和端口号，它通常从HTTP URL中提取出来的，eg：<br>    我们在浏览器中输入：<a href="http://www.guet.edu.cn/index.html" target="_blank" rel="noopener">http://www.guet.edu.cn/index.html</a><br>    浏览器发送的请求消息中，就会包含Host请求报头域，如下：<br>    Host：<a href="http://www.guet.edu.cn" target="_blank" rel="noopener">www.guet.edu.cn</a><br>    此处使用缺省端口号80，若指定了端口号，则变成：Host：<a href="http://www.guet.edu.cn:指定端口号">www.guet.edu.cn:指定端口号</a><br>6.User-Agent<br>我们上网登陆论坛的时候，往往会看到一些欢迎信息，其中列出了你的操作系统的名称和版本，你所使用的浏览器的名称和版本，这往往让很多人感到很神奇，实际上，服务器应用程序就是从User-Agent这个请求报头域中获取到这些信息。User-Agent请求报头域允许客户端将它的操作系统、浏览器和其它属性告诉服务器。不过，这个报头域不是必需的，如果我们自己编写一个浏览器，不使用User-Agent请求报头域，那么服务器端就无法得知我们的信息了。</p>
 </blockquote>
 <h3 id="响应报头"><a href="#响应报头" class="headerlink" title="响应报头"></a>响应报头</h3><p>响应报头允许服务器传递不能放在状态行中的附加响应信息，以及关于服务器的信息和对Request-URI所标识的资源进行下一步访问的信息。</p>
 <blockquote>
@@ -240,7 +244,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

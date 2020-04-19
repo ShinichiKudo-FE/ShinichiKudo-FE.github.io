@@ -100,13 +100,13 @@ JSON.parse()JSON.parse() 可以接受第,">
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    12k
+                    3.9k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    11 mins.
+                    4 mins.
                 </span>
                 
                 
@@ -142,7 +142,23 @@ JSON.parse()JSON.parse() 可以接受第,">
         <div class="content markdown animated fadeIn">
             <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>JSON对象的两个方法：JSON.parse() 和 JSON.stringify() 通常用做JSON对象和字符串之间的相互转换;</p>
 <h2 id="JSON-parse"><a href="#JSON-parse" class="headerlink" title="JSON.parse()"></a>JSON.parse()</h2><p>JSON.parse() 可以接受第二个参数，它可以在返回之前转换对象值。比如这例子中，将返回对象的属性值大写：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> user = &#123;</span><br><span class="line">  name: <span class="string">'John'</span>,</span><br><span class="line">  email: <span class="string">'john@awesome.com'</span>,</span><br><span class="line">  plan: <span class="string">'Pro'</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> userStr = <span class="built_in">JSON</span>.stringify(user);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> newUserStr = <span class="built_in">JSON</span>.parse(userStr, (key, value) =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> value === <span class="string">'string'</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> value.toUpperCase();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> value;</span><br><span class="line">&#125;);</span><br><span class="line"> </span><br><span class="line"><span class="built_in">console</span>.log(newUserStr); <span class="comment">//&#123;name: "JOHN", email: "JOHN@AWESOME.COM", plan: "PRO"&#125;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">const user = {
+  name: &#39;John&#39;,
+  email: &#39;john@awesome.com&#39;,
+  plan: &#39;Pro&#39;
+};
+
+const userStr = JSON.stringify(user);
+
+const newUserStr = JSON.parse(userStr, (key, value) =&gt; {
+  if (typeof value === &#39;string&#39;) {
+    return value.toUpperCase();
+  }
+  return value;
+});
+
+console.log(newUserStr); //{name: &quot;JOHN&quot;, email: &quot;JOHN@AWESOME.COM&quot;, plan: &quot;PRO&quot;}
+</code></pre>
 <p>注：尾随逗号在JSON 中无效，所以如果传递给它的字符串有尾随逗号，JSON.parse()将会抛出错误。<br><a id="more"></a></p>
 <h2 id="JSON-stringify"><a href="#JSON-stringify" class="headerlink" title="JSON.stringify()"></a>JSON.stringify()</h2><p>JSON.stringify() 可以带两个额外的参数，第一个是替换函数，第二个间隔字符串，用作隔开返回字符串。</p>
 <blockquote>
@@ -154,16 +170,73 @@ JSON.parse()JSON.parse() 可以接受第,">
 </ul>
 </blockquote>
 <p>替换函数可以用来过滤值，因为任何返回 <code>undefined</code> 的值将不在返回的字符串中：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> user = &#123;</span><br><span class="line">  id: <span class="number">229</span>,</span><br><span class="line">  name: <span class="string">'John'</span>,</span><br><span class="line">  email: <span class="string">'john@awesome.com'</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">replacer</span>(<span class="params">key, value</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">typeof</span> value);</span><br><span class="line">  <span class="keyword">if</span> (key === <span class="string">'email'</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">undefined</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> value;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> userStr = <span class="built_in">JSON</span>.stringify(user, replacer);</span><br><span class="line"><span class="comment">// "&#123;"id":229,"name":"John"&#125;"</span></span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">const user = {
+  id: 229,
+  name: &#39;John&#39;,
+  email: &#39;john@awesome.com&#39;
+};
+
+function replacer(key, value) {
+  console.log(typeof value);
+  if (key === &#39;email&#39;) {
+    return undefined;
+  }
+  return value;
+}
+
+const userStr = JSON.stringify(user, replacer);
+// &quot;{&quot;id&quot;:229,&quot;name&quot;:&quot;John&quot;}&quot;
+</code></pre>
 <p>传入一个间隔参数的示例：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> user = &#123;</span><br><span class="line">  name: <span class="string">'John'</span>,</span><br><span class="line">  email: <span class="string">'john@awesome.com'</span>,</span><br><span class="line">  plan: <span class="string">'Pro'</span></span><br><span class="line">&#125;;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> userStr = <span class="built_in">JSON</span>.stringify(user, <span class="literal">null</span>, <span class="string">'...'</span>);</span><br><span class="line"><span class="comment">// "&#123;</span></span><br><span class="line"><span class="comment">// ..."name": "John",</span></span><br><span class="line"><span class="comment">// ..."email": "john@awesome.com",</span></span><br><span class="line"><span class="comment">// ..."plan": "Pro"</span></span><br><span class="line"><span class="comment">// &#125;"</span></span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">const user = {
+  name: &#39;John&#39;,
+  email: &#39;john@awesome.com&#39;,
+  plan: &#39;Pro&#39;
+};
+
+const userStr = JSON.stringify(user, null, &#39;...&#39;);
+// &quot;{
+// ...&quot;name&quot;: &quot;John&quot;,
+// ...&quot;email&quot;: &quot;john@awesome.com&quot;,
+// ...&quot;plan&quot;: &quot;Pro&quot;
+// }&quot;
+</code></pre>
 <h2 id="toJSON方法"><a href="#toJSON方法" class="headerlink" title="toJSON方法"></a>toJSON方法</h2><p>如果一个被序列化的对象拥有 toJSON 方法，那么该 toJSON 方法就会覆盖该对象默认的序列化行为：不是那个对象被序列化，而是调用 toJSON 方法后的返回值会被序列化</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">    foo: <span class="string">'foo'</span>,</span><br><span class="line">    toJSON:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'bar'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">JSON</span>.stringify(obj);<span class="comment">//'"bar"'</span></span><br><span class="line"><span class="built_in">JSON</span>.stringify(&#123;<span class="attr">x</span>:obj&#125;);<span class="comment">//'&#123;"x":"bar"&#125;'</span></span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">var obj = {
+    foo: &#39;foo&#39;,
+    toJSON:function(){
+        return &#39;bar&#39;;
+    }
+}
+JSON.stringify(obj);//&#39;&quot;bar&quot;&#39;
+JSON.stringify({x:obj});//&#39;{&quot;x&quot;:&quot;bar&quot;}&#39;
+</code></pre>
 <p>利用toJSON方法,我们可以修改对象转换成JSON的默认行为。</p>
 <h2 id="用-JSON-stringify-来格式化对象"><a href="#用-JSON-stringify-来格式化对象" class="headerlink" title="用 JSON.stringify 来格式化对象"></a>用 JSON.stringify 来格式化对象</h2><p>在实际使用中,我们可能会格式化一些复杂的对象，这些对象往往对象内嵌套对象。直接看起来并不那么直观,结合上面的的 replacer 和 space 参数,我们可以这样格式化复杂对象：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> censor = <span class="function"><span class="keyword">function</span>(<span class="params">key,value</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">typeof</span>(value) == <span class="string">'function'</span>)&#123;</span><br><span class="line">         <span class="keyword">return</span> <span class="built_in">Function</span>.prototype.toString.call(value)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> value;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> foo = &#123;<span class="attr">bar</span>:<span class="string">"1"</span>,<span class="attr">baz</span>:<span class="number">3</span>,<span class="attr">o</span>:&#123;<span class="attr">name</span>:<span class="string">'xiaoli'</span>,<span class="attr">age</span>:<span class="number">21</span>,<span class="attr">info</span>:&#123;<span class="attr">sex</span>:<span class="string">'男'</span>,<span class="attr">getSex</span>:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="keyword">return</span> <span class="string">'sex'</span>;&#125;&#125;&#125;&#125;;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">JSON</span>.stringify(foo,censor,<span class="number">4</span>))</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">var censor = function(key,value){
+    if(typeof(value) == &#39;function&#39;){
+         return Function.prototype.toString.call(value)
+    }
+    return value;
+}
+var foo = {bar:&quot;1&quot;,baz:3,o:{name:&#39;xiaoli&#39;,age:21,info:{sex:&#39;男&#39;,getSex:function(){return &#39;sex&#39;;}}}};
+console.log(JSON.stringify(foo,censor,4))
+</code></pre>
 <p>实际返回的字符串，记住是字符串，如下:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"bar"</span>: <span class="string">"1"</span>,</span><br><span class="line">    <span class="string">"baz"</span>: <span class="number">3</span>,</span><br><span class="line">    <span class="string">"o"</span>: &#123;</span><br><span class="line">        <span class="string">"name"</span>: <span class="string">"xiaoli"</span>,</span><br><span class="line">        <span class="string">"age"</span>: <span class="number">21</span>,</span><br><span class="line">        <span class="string">"info"</span>: &#123;</span><br><span class="line">            <span class="string">"sex"</span>: <span class="string">"男"</span>,</span><br><span class="line">            <span class="string">"getSex"</span>: <span class="string">"function ()&#123;return 'sex';&#125;"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">{
+    &quot;bar&quot;: &quot;1&quot;,
+    &quot;baz&quot;: 3,
+    &quot;o&quot;: {
+        &quot;name&quot;: &quot;xiaoli&quot;,
+        &quot;age&quot;: 21,
+        &quot;info&quot;: {
+            &quot;sex&quot;: &quot;男&quot;,
+            &quot;getSex&quot;: &quot;function (){return &#39;sex&#39;;}&quot;
+        }
+    }
+}
+</code></pre>
+
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
                 data-autoplay="false">
@@ -210,7 +283,7 @@ JSON.parse()JSON.parse() 可以接受第,">
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

@@ -14,7 +14,8 @@
 
 异步编程在JavaScript中非常重要。过多的异步编程也带了回调嵌套的问题，本文会提供一些解决“回调地狱”的方法。
 
-123456setTimeout(function()&amp;#123;,"> 
+setTimeout(function(){
+    consol,"> 
     <meta name="author" content="张白告丶"> 
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -103,13 +104,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    27k
+                    9.1k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    24 mins.
+                    8 mins.
                 </span>
                 
                 
@@ -147,11 +148,25 @@
 <blockquote>
 <p>异步编程在JavaScript中非常重要。过多的异步编程也带了回调嵌套的问题，本文会提供一些解决“回调地狱”的方法。</p>
 </blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"延时触发"</span>)</span><br><span class="line">&#125;,<span class="number">2000</span>)</span><br><span class="line">fs.readFile(<span class="string">'./samp.txt'</span>,<span class="string">'utf-8'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">res,error</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(res);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">setTimeout(function(){
+    console.log(&quot;延时触发&quot;)
+},2000)
+fs.readFile(&#39;./samp.txt&#39;,&#39;utf-8&#39;,function(res,error){
+    console.log(res);
+})
+</code></pre>
 <p>上面就是典型的回调函数，不论是在浏览器中，还是在node中，JavaScript本身是单线程，因此，为了应对一些单线程带来的问题，异步编程成为了JavaScript中非常重要的一部分。</p>
 <p>不论是浏览器中最为常见的<strong>ajax、事件监听，还是node中文件读取、网络编程、数据库等操作</strong>，都离不开异步编程。在异步编程中，许多操作都会放<strong>在回调函数（callback）</strong>中。同步与异步的混杂、过多的回调嵌套都会使得代码变得难以理解与维护，这也是常受人诟病的地方。</p>
 <p>先看下面这段代码</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">fs.readFile(<span class="string">'./sample.txt'</span>, <span class="string">'utf-8'</span>, (err, content) =&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> keyword = content.substring(<span class="number">0</span>, <span class="number">5</span>);</span><br><span class="line">    db.find(<span class="string">`select * from sample where kw = <span class="subst">$&#123;keyword&#125;</span>`</span>, (err, res) =&gt; &#123;</span><br><span class="line">        <span class="keyword">get</span>(`/sampleget?count=$&#123;res.length&#125;<span class="string">`, data =&gt; &#123;</span></span><br><span class="line"><span class="string">           console.log(data);</span></span><br><span class="line"><span class="string">        &#125;);</span></span><br><span class="line"><span class="string">    &#125;);</span></span><br><span class="line"><span class="string">&#125;);</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">fs.readFile(&#39;./sample.txt&#39;, &#39;utf-8&#39;, (err, content) =&gt; {
+    let keyword = content.substring(0, 5);
+    db.find(`select * from sample where kw = ${keyword}`, (err, res) =&gt; {
+        get(`/sampleget?count=${res.length}`, data =&gt; {
+           console.log(data);
+        });
+    });
+});
+</code></pre>
 <p>首先我们读取的一个文件中的关键字keyword，然后根据该keyword进行数据库查询，最后依据查询结果请求数据。</p>
 <ul>
 <li>文件读取：fs.readFile</li>
@@ -160,38 +175,167 @@
 </ul>
 <p>可以看到，我们没增加一个异步请求，就会多添加一层回调函数的嵌套，这段代码中三个异步函数的嵌套已经开始使一段本可以语言明确的代码编程不易阅读与维护了。</p>
 <p>抽象出来这种代码会变成下面这样：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">asyncFunc1(opt, (...args1) =&gt; &#123;</span><br><span class="line">    asyncFunc2(opt, (...args2) =&gt; &#123;</span><br><span class="line">        asyncFunc3(opt, (...args3) =&gt; &#123;</span><br><span class="line">            asyncFunc4(opt, (...args4) =&gt; &#123;</span><br><span class="line">                <span class="comment">// some operation</span></span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">asyncFunc1(opt, (...args1) =&gt; {
+    asyncFunc2(opt, (...args2) =&gt; {
+        asyncFunc3(opt, (...args3) =&gt; {
+            asyncFunc4(opt, (...args4) =&gt; {
+                // some operation
+            });
+        });
+    });
+});
+</code></pre>
 <p>左侧明显出现了一个三角形的缩进区域，过多的回调也就让我们陷入<code>“回调地狱”</code>。接下来会介绍一些方法来规避回调地狱。</p>
 <h2 id="一、拆解function"><a href="#一、拆解function" class="headerlink" title="一、拆解function"></a>一、拆解function</h2><p>回调嵌套所带来的一个重要问题就是代码不易阅读与维护。因为普遍来说，过多的缩进（嵌套）会极大的影响代码的可读性。基于这一点，可以进行一个最简单的优化——将各步拆解为单个的<code>function</code></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getData</span>(<span class="params">count</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">get</span>(`/sampleget?count=$&#123;count&#125;<span class="string">`, data =&gt; &#123;</span></span><br><span class="line"><span class="string">        console.log(data);</span></span><br><span class="line"><span class="string">    &#125;);</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">function queryDB(kw) &#123;</span></span><br><span class="line"><span class="string">    db.find(`</span>select * <span class="keyword">from</span> sample where kw = $&#123;kw&#125;<span class="string">`, (err, res) =&gt; &#123;</span></span><br><span class="line"><span class="string">        getData(res.length);</span></span><br><span class="line"><span class="string">    &#125;);</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">function readFile(filepath) &#123;</span></span><br><span class="line"><span class="string">    fs.readFile(filepath, 'utf-8', (err, content) =&gt; &#123;</span></span><br><span class="line"><span class="string">        let keyword = content.substring(0, 5);</span></span><br><span class="line"><span class="string">        queryDB(keyword);</span></span><br><span class="line"><span class="string">    &#125;);</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">readFile('./sample.txt');</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">function getData(count) {
+    get(`/sampleget?count=${count}`, data =&gt; {
+        console.log(data);
+    });
+}
+
+function queryDB(kw) {
+    db.find(`select * from sample where kw = ${kw}`, (err, res) =&gt; {
+        getData(res.length);
+    });
+}
+
+function readFile(filepath) {
+    fs.readFile(filepath, &#39;utf-8&#39;, (err, content) =&gt; {
+        let keyword = content.substring(0, 5);
+        queryDB(keyword);
+    });
+}
+
+readFile(&#39;./sample.txt&#39;);
+</code></pre>
 <p>可以看到，通过上面的改写方式，代码清晰了许多。该方法非常简单，具有一定的效果，但是缺少通用性。</p>
 <h2 id="二、事件发布-监听模式"><a href="#二、事件发布-监听模式" class="headerlink" title="二、事件发布/监听模式"></a>二、事件发布/监听模式</h2><p>如果在浏览器中写过事件监听<code>addEventListener</code>，那么你对这种事件发布/监听的模式一定不陌生。</p>
-<p>借鉴这种思想，一方面，我们可以监听某一事件，当事件发生时，进行相应回调操作；另一方面，当某些操作完成后，通过发布事件触发回调。这样就可以将原本捆绑在一起的代码解耦。<br><a id="more"></a><br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> events = <span class="built_in">require</span>(<span class="string">'events'</span>);</span><br><span class="line"><span class="keyword">const</span> eventEmitter = <span class="keyword">new</span> events.EventEmitter();</span><br><span class="line"></span><br><span class="line">eventEmitter.on(<span class="string">'db'</span>, (err, kw) =&gt; &#123;</span><br><span class="line">    db.find(<span class="string">`select * from sample where kw = <span class="subst">$&#123;kw&#125;</span>`</span>, (err, res) =&gt; &#123;</span><br><span class="line">        eventEmitter(<span class="string">'get'</span>, res.length);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">eventEmitter.on(<span class="string">'get'</span>, (err, count) =&gt; &#123;</span><br><span class="line">    <span class="keyword">get</span>(`/sampleget?count=$&#123;count&#125;<span class="string">`, data =&gt; &#123;</span></span><br><span class="line"><span class="string">        console.log(data);</span></span><br><span class="line"><span class="string">    &#125;);</span></span><br><span class="line"><span class="string">&#125;);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">fs.readFile('./sample.txt', 'utf-8', (err, content) =&gt; &#123;</span></span><br><span class="line"><span class="string">    let keyword = content.substring(0, 5);</span></span><br><span class="line"><span class="string">    eventEmitter. emit('db', keyword);</span></span><br><span class="line"><span class="string">&#125;);</span></span><br></pre></td></tr></table></figure></p>
+<p>借鉴这种思想，一方面，我们可以监听某一事件，当事件发生时，进行相应回调操作；另一方面，当某些操作完成后，通过发布事件触发回调。这样就可以将原本捆绑在一起的代码解耦。<br><a id="more"></a></p>
+<pre><code class="js">const events = require(&#39;events&#39;);
+const eventEmitter = new events.EventEmitter();
+
+eventEmitter.on(&#39;db&#39;, (err, kw) =&gt; {
+    db.find(`select * from sample where kw = ${kw}`, (err, res) =&gt; {
+        eventEmitter(&#39;get&#39;, res.length);
+    });
+});
+
+eventEmitter.on(&#39;get&#39;, (err, count) =&gt; {
+    get(`/sampleget?count=${count}`, data =&gt; {
+        console.log(data);
+    });
+});
+
+fs.readFile(&#39;./sample.txt&#39;, &#39;utf-8&#39;, (err, content) =&gt; {
+    let keyword = content.substring(0, 5);
+    eventEmitter. emit(&#39;db&#39;, keyword);
+});
+</code></pre>
 <p>使用这种模式的实现需要一个事件发布/监听的库。上面代码中使用node原生的events模块，当然你可以使用任何你喜欢的库。</p>
 <h2 id="三、Promise"><a href="#三、Promise" class="headerlink" title="三、Promise"></a>三、Promise</h2><p><code>Promise</code>是一种异步解决方案，最早由社区提出并实现，后来写进了es6规范。</p>
 <p>目前一些主流的浏览器已经原生实现了Promise的API，可以在Can I use里查看浏览器的支持情况。当然，如果想要做浏览器的兼容，可以考虑使用一些<code>Promise</code>的实现库，例如bluebird、 Q等。下面以bluebird为例：</p>
 <p>首先，我们需要将异步方法改写为<code>Promise</code>，对于符合node规范的回调函数（第一个参数必须是Error），可以使用<code>bluebird</code>的promisify方法。该方法接收一个标准的异步方法并返回一个<code>Promise</code>对象。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> bluebird = <span class="built_in">require</span>(<span class="string">'bluebird'</span>);</span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">"fs"</span>);</span><br><span class="line"><span class="keyword">const</span> readFile = bluebird.promisify(fs.readFile);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const bluebird = require(&#39;bluebird&#39;);
+const fs = require(&quot;fs&quot;);
+const readFile = bluebird.promisify(fs.readFile);
+</code></pre>
 <p>这样，readFile就变成了一个Promise对象。</p>
 <p>但是，有的异步方法无法进行转换，或者我们需要使用原生<code>Promise</code>，这就需要我们手动进行一些改造。下面提供一种改造的方法。</p>
 <p>以fs.readFile为例，借助原生<code>Promise</code>来改造该方法：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> readFile = <span class="function"><span class="keyword">function</span> (<span class="params">filepath</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> resolve,</span><br><span class="line">        reject;</span><br><span class="line">    <span class="keyword">let</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">_resolve, _reject</span>) =&gt;</span> &#123;</span><br><span class="line">        resolve = _resolve;</span><br><span class="line">        reject = _reject;</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">let</span> deferred = &#123;</span><br><span class="line">        resolve,</span><br><span class="line">        reject,</span><br><span class="line">        promise</span><br><span class="line">    &#125;;</span><br><span class="line">    fs.readFile(filepath, <span class="string">'utf-8'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, ...args</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (err) &#123;</span><br><span class="line">            deferred.reject(err);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            deferred.resolve(...args);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> deferred.promise;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const readFile = function (filepath) {
+    let resolve,
+        reject;
+    let promise = new Promise((_resolve, _reject) =&gt; {
+        resolve = _resolve;
+        reject = _reject;
+    });
+    let deferred = {
+        resolve,
+        reject,
+        promise
+    };
+    fs.readFile(filepath, &#39;utf-8&#39;, function (err, ...args) {
+        if (err) {
+            deferred.reject(err);
+        }
+        else {
+            deferred.resolve(...args);
+        }
+    });
+    return deferred.promise;
+}
+</code></pre>
 <p>我们在方法中创建了一个Promise对象，并在异步回调中根据不同的情况使用reject与resolve来改变Promise对象的状态。该方法返回这个Promise对象。其他的一些异步方法也可以参照这种方式进行改造。</p>
 <p>假设通过改造，readFile、queryDB与getData方法均会返回一个Promise对象。代码就变为了:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">readFile(<span class="string">'./sample.txt'</span>).then(<span class="function"><span class="params">content</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> keyword = content.substring(<span class="number">0</span>, <span class="number">5</span>);</span><br><span class="line">    <span class="keyword">return</span> queryDB(keyword);</span><br><span class="line">&#125;).then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> getData(res.length);</span><br><span class="line">&#125;).then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(data);</span><br><span class="line">&#125;).catch(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.warn(err);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">readFile(&#39;./sample.txt&#39;).then(content =&gt; {
+    let keyword = content.substring(0, 5);
+    return queryDB(keyword);
+}).then(res =&gt; {
+    return getData(res.length);
+}).then(data =&gt; {
+    console.log(data);
+}).catch(err =&gt; {
+    console.warn(err);
+});
+</code></pre>
 <p>可以看到，之前的嵌套操作编程了通过then连接的链式操作。代码的整洁度上有了一个较大的提高。</p>
 <h2 id="四、generator"><a href="#四、generator" class="headerlink" title="四、generator"></a>四、generator</h2><p><code>generator</code>是es6中的一个新的语法。在function关键字后添加*即可将函数变为<code>generator</code>。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> gen = <span class="function"><span class="keyword">function</span>* (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">yield</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">yield</span> <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">3</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const gen = function* () {
+    yield 1;
+    yield 2;
+    return 3;
+}
+</code></pre>
 <p>执行<code>generator</code>将会返回一个遍历器对象，用于遍历<code>generator</code>内部的状态</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> g = gen();</span><br><span class="line">g.next(); <span class="comment">// &#123; value: 1, done: false &#125;</span></span><br><span class="line">g.next(); <span class="comment">// &#123; value: 2, done: false &#125;</span></span><br><span class="line">g.next(); <span class="comment">// &#123; value: 3, done: true &#125;</span></span><br><span class="line">g.next(); <span class="comment">// &#123; value: undefined, done: true &#125;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">let g = gen();
+g.next(); // { value: 1, done: false }
+g.next(); // { value: 2, done: false }
+g.next(); // { value: 3, done: true }
+g.next(); // { value: undefined, done: true }
+</code></pre>
 <p>可以看到，<code>generator</code>函数有一个最大的特点，可以在内部执行的过程中交出程序的控制权，<code>yield</code>相当于起到了一个暂停的作用；而当一定情况下，外部又将控制权再移交回来。</p>
 <p>想象一下，我们用<code>generator</code>来封装代码，在异步任务处使用<code>yield</code>关键词，此时<code>generator</code>会将程序执行权交给其他代码，而在异步任务完成后，调用next方法来恢复<code>yield</code>下方代码的执行。以readFile为例，大致流程如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 我们的主任务——显示关键字</span></span><br><span class="line"><span class="comment">// 使用yield暂时中断下方代码执行</span></span><br><span class="line"><span class="comment">// yield后面为promise对象</span></span><br><span class="line"><span class="keyword">const</span> showKeyword = <span class="function"><span class="keyword">function</span>* (<span class="params">filepath</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'开始读取'</span>);</span><br><span class="line">    <span class="keyword">let</span> keyword = <span class="keyword">yield</span> readFile(filepath);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`关键字为<span class="subst">$&#123;filepath&#125;</span>`</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// generator的流程控制</span></span><br><span class="line"><span class="keyword">let</span> gen = showKeyword();</span><br><span class="line"><span class="keyword">let</span> res = gen.next();</span><br><span class="line">res.value.then(<span class="function"><span class="params">res</span> =&gt;</span> gen.next(res));</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// 我们的主任务——显示关键字
+// 使用yield暂时中断下方代码执行
+// yield后面为promise对象
+const showKeyword = function* (filepath) {
+    console.log(&#39;开始读取&#39;);
+    let keyword = yield readFile(filepath);
+    console.log(`关键字为${filepath}`);
+}
+
+// generator的流程控制
+let gen = showKeyword();
+let res = gen.next();
+res.value.then(res =&gt; gen.next(res));
+</code></pre>
 <p>在主任务部分，原本<code>readFile</code>异步的部分变成了类似同步的写法，代码变得非常清晰。而在下半部分，则是对于什么时候需要移交回控制权给<code>generator</code>的流程控制。</p>
 <p>然而，我们需要手动控制<code>generator</code>的流程，如果能够自动执行<code>generator</code>——在需要的时候自动移交控制权，那么会更加具有实用性。<br>为此，我们可以使用 co 这个库。它可以是省去我们对于<code>generator</code>流程控制的代码</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> co = reuqire(<span class="string">'co'</span>);</span><br><span class="line"><span class="comment">// 我们的主任务——显示关键字</span></span><br><span class="line"><span class="comment">// 使用yield暂时中断下方代码执行</span></span><br><span class="line"><span class="comment">// yield后面为promise对象</span></span><br><span class="line"><span class="keyword">const</span> showKeyword = <span class="function"><span class="keyword">function</span>* (<span class="params">filepath</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'开始读取'</span>);</span><br><span class="line">    <span class="keyword">let</span> keyword = <span class="keyword">yield</span> readFile(filepath);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`关键字为<span class="subst">$&#123;filepath&#125;</span>`</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用co</span></span><br><span class="line">co(showKeyword);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const co = reuqire(&#39;co&#39;);
+// 我们的主任务——显示关键字
+// 使用yield暂时中断下方代码执行
+// yield后面为promise对象
+const showKeyword = function* (filepath) {
+    console.log(&#39;开始读取&#39;);
+    let keyword = yield readFile(filepath);
+    console.log(`关键字为${filepath}`);
+}
+
+// 使用co
+co(showKeyword);
+</code></pre>
 <p>其中，yeild关键字后面需要是<code>functio, promise, generator, array或object</code>。可以改写文章一开始的例子：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> co = reuqire(<span class="string">'co'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> task = <span class="function"><span class="keyword">function</span>* (<span class="params">filepath</span>) </span>&#123;</span><br><span class="line">   <span class="keyword">let</span> keyword = <span class="keyword">yield</span> readFile(filepath);</span><br><span class="line">   <span class="keyword">let</span> count = <span class="keyword">yield</span> queryDB(keyword);</span><br><span class="line">   <span class="keyword">let</span> data = <span class="keyword">yield</span> getData(res.length);</span><br><span class="line">   <span class="built_in">console</span>.log(data);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">co(task, <span class="string">'./sample.txt'</span>);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const co = reuqire(&#39;co&#39;);
+
+const task = function* (filepath) {
+   let keyword = yield readFile(filepath);
+   let count = yield queryDB(keyword);
+   let data = yield getData(res.length);
+   console.log(data);
+});
+
+co(task, &#39;./sample.txt&#39;);
+</code></pre>
 <p>五、async/await</p>
 <p>可以看到，上面的方法虽然都在一定程度上解决了异步编程中回调带来的问题。然而</p>
 <ul>
@@ -202,12 +346,28 @@
 </ul>
 <p>因此，这里再介绍一个方法，它就是es7中的async/await。</p>
 <p>简单介绍一下async/await。基本上，任何一个函数都可以成为async函数，以下都是合法的书写形式：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">foo</span> (<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line"><span class="keyword">const</span> foo = <span class="keyword">async</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line"><span class="keyword">const</span> foo = <span class="keyword">async</span> () =&gt; &#123;&#125;;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">async function foo () {};
+const foo = async function () {};
+const foo = async () =&gt; {};
+</code></pre>
 <p>在async函数中可以使用await语句。await后一般是一个Promise对象。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">foo</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'开始'</span>);</span><br><span class="line">    <span class="keyword">let</span> res = <span class="keyword">await</span> post(data);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`post已完成，结果为：<span class="subst">$&#123;res&#125;</span>`</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">async function foo () {
+    console.log(&#39;开始&#39;);
+    let res = await post(data);
+    console.log(`post已完成，结果为：${res}`);
+};
+</code></pre>
 <p>当上面的函数执行到await时，可以简单理解为，函数挂起，等待<code>await</code>后的<code>Promise</code>返回，再执行下面的语句。</p>
 <p>值得注意的是，这段异步操作的代码，看起来就像是“同步操作”。这就大大方便了异步代码的编写与阅读。下面改写我们的例子。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> printData = <span class="keyword">async</span> <span class="function"><span class="keyword">function</span> (<span class="params">filepath</span>) </span>&#123;</span><br><span class="line">   <span class="keyword">let</span> keyword = <span class="keyword">await</span> readFile(filepath);</span><br><span class="line">   <span class="keyword">let</span> count = <span class="keyword">await</span> queryDB(keyword);</span><br><span class="line">   <span class="keyword">let</span> data = <span class="keyword">await</span> getData(res.length);</span><br><span class="line">   <span class="built_in">console</span>.log(data);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">printData(<span class="string">'./sample.txt'</span>);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const printData = async function (filepath) {
+   let keyword = await readFile(filepath);
+   let count = await queryDB(keyword);
+   let data = await getData(res.length);
+   console.log(data);
+});
+
+printData(&#39;./sample.txt&#39;);
+</code></pre>
 <p>可以看到，代码简洁清晰，异步代码也具有了“同步”代码的结构。</p>
 <p>注意，其中<code>readFile、queryDB与getData</code>方法都需要返回一个<code>Promise</code>对象。这可以通过在第三部分Promise里提供的方式进行改写。</p>
 <h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>异步编程作为JavaScript中的一部分，具有非常重要的位置，它帮助我们避免同步代码带来的线程阻塞的同时，也为编码与阅读带来了一定的困难。过多的回调嵌套很容易会让我们陷入“回调地狱”中，使代码变成一团乱麻。为了解决“回调地狱”，我们可以使用文中所述的这五种常用方法：</p>
@@ -266,7 +426,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

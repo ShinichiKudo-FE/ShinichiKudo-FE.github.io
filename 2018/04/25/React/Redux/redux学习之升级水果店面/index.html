@@ -100,13 +100,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    20k
+                    7.2k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    18 mins.
+                    7 mins.
                 </span>
                 
                 
@@ -143,31 +143,154 @@
             <h2 id="优雅的处理-async-action"><a href="#优雅的处理-async-action" class="headerlink" title="优雅的处理 async action"></a>优雅的处理 async action</h2><p>阿大通过请了一个采购员完成了耗时的进口商品的售卖。</p>
 <p>但是，阿大同时也发现了一个问题：顾客要买水果生鲜的话需要找<strong>销售员</strong>，要买进口水果生鲜的话要找<strong>采购员</strong>，这样的话，顾客需要找不同的人，很麻烦。阿大想了想，能不能让顾客只找<strong>销售员</strong>，然后<strong>销售员</strong>如果有需求再找<strong>采购员</strong>采购呢。</p>
 <p>阿大想到了办法，让<strong>销售员</strong>把所有的需求都告诉采购员，然后<strong>采购员</strong>再传递给<strong>收银员</strong>，这样，如果是需要采购的水果生鲜，就可以独自去处理了，这样就需要把<strong>采购员</strong>改成这样了：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> API = <span class="function"><span class="params">store</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 和 收银员 对接的方式</span></span><br><span class="line">  <span class="keyword">const</span> next = store.dispatch;</span><br><span class="line">  <span class="comment">// 接管销售员传来的顾客需求</span></span><br><span class="line">  store.dispatch = <span class="function"><span class="params">action</span> =&gt;</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 处理完了之后再对接 收银员</span></span><br><span class="line">    <span class="keyword">switch</span> (action.type) &#123;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'BUY_IMPORTED_APPLE'</span>: fetching(<span class="number">2000</span>, () =&gt; next(action)); <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'BUY_IMPORTED_EGG'</span>: fetching(<span class="number">3000</span>, () =&gt; next(action)); <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">default</span>: next(action);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">API(store);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const API = store =&gt; {
+  // 和 收银员 对接的方式
+  const next = store.dispatch;
+  // 接管销售员传来的顾客需求
+  store.dispatch = action =&gt; {
+
+    // 处理完了之后再对接 收银员
+    switch (action.type) {
+      case &#39;BUY_IMPORTED_APPLE&#39;: fetching(2000, () =&gt; next(action)); break;
+      case &#39;BUY_IMPORTED_EGG&#39;: fetching(3000, () =&gt; next(action)); break;
+      default: next(action);
+    }
+  }
+}
+
+API(store);
+</code></pre>
 <p>然后顾客来了之后就都只用找销售员了：<br><a id="more"></a></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">store.dispatch(buyApple(<span class="number">3</span>));</span><br><span class="line">store.dispatch(buyImportedApple(<span class="number">10</span>));</span><br><span class="line">store.dispatch(buyEgg(<span class="number">1</span>));</span><br><span class="line">store.dispatch(buyImportedEgg(<span class="number">10</span>));</span><br><span class="line">store.dispatch(buyApple(<span class="number">4</span>));</span><br><span class="line">store.dispatch(buyImportedApple(<span class="number">10</span>));</span><br><span class="line">store.dispatch(buyEgg(<span class="number">8</span>));</span><br><span class="line">store.dispatch(buyImportedEgg(<span class="number">10</span>));</span><br><span class="line"><span class="comment">// &#123;"fruit":&#123;"apple":3,"importedApple":0&#125;,"fresh":&#123;"egg":0,"importedEgg":0&#125;&#125;</span></span><br><span class="line"><span class="comment">// &#123;"fruit":&#123;"apple":3,"importedApple":0&#125;,"fresh":&#123;"egg":1,"importedEgg":0&#125;&#125;</span></span><br><span class="line"><span class="comment">// &#123;"fruit":&#123;"apple":7,"importedApple":0&#125;,"fresh":&#123;"egg":1,"importedEgg":0&#125;&#125;</span></span><br><span class="line"><span class="comment">// &#123;"fruit":&#123;"apple":7,"importedApple":0&#125;,"fresh":&#123;"egg":9,"importedEgg":0&#125;&#125;</span></span><br><span class="line"><span class="comment">// &#123;"fruit":&#123;"apple":7,"importedApple":10&#125;,"fresh":&#123;"egg":9,"importedEgg":0&#125;&#125;</span></span><br><span class="line"><span class="comment">// &#123;"fruit":&#123;"apple":7,"importedApple":20&#125;,"fresh":&#123;"egg":9,"importedEgg":0&#125;&#125;</span></span><br><span class="line"><span class="comment">// &#123;"fruit":&#123;"apple":7,"importedApple":20&#125;,"fresh":&#123;"egg":9,"importedEgg":10&#125;&#125;</span></span><br><span class="line"><span class="comment">// &#123;"fruit":&#123;"apple":7,"importedApple":20&#125;,"fresh":&#123;"egg":9,"importedEgg":20&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">store.dispatch(buyApple(3));
+store.dispatch(buyImportedApple(10));
+store.dispatch(buyEgg(1));
+store.dispatch(buyImportedEgg(10));
+store.dispatch(buyApple(4));
+store.dispatch(buyImportedApple(10));
+store.dispatch(buyEgg(8));
+store.dispatch(buyImportedEgg(10));
+// {&quot;fruit&quot;:{&quot;apple&quot;:3,&quot;importedApple&quot;:0},&quot;fresh&quot;:{&quot;egg&quot;:0,&quot;importedEgg&quot;:0}}
+// {&quot;fruit&quot;:{&quot;apple&quot;:3,&quot;importedApple&quot;:0},&quot;fresh&quot;:{&quot;egg&quot;:1,&quot;importedEgg&quot;:0}}
+// {&quot;fruit&quot;:{&quot;apple&quot;:7,&quot;importedApple&quot;:0},&quot;fresh&quot;:{&quot;egg&quot;:1,&quot;importedEgg&quot;:0}}
+// {&quot;fruit&quot;:{&quot;apple&quot;:7,&quot;importedApple&quot;:0},&quot;fresh&quot;:{&quot;egg&quot;:9,&quot;importedEgg&quot;:0}}
+// {&quot;fruit&quot;:{&quot;apple&quot;:7,&quot;importedApple&quot;:10},&quot;fresh&quot;:{&quot;egg&quot;:9,&quot;importedEgg&quot;:0}}
+// {&quot;fruit&quot;:{&quot;apple&quot;:7,&quot;importedApple&quot;:20},&quot;fresh&quot;:{&quot;egg&quot;:9,&quot;importedEgg&quot;:0}}
+// {&quot;fruit&quot;:{&quot;apple&quot;:7,&quot;importedApple&quot;:20},&quot;fresh&quot;:{&quot;egg&quot;:9,&quot;importedEgg&quot;:10}}
+// {&quot;fruit&quot;:{&quot;apple&quot;:7,&quot;importedApple&quot;:20},&quot;fresh&quot;:{&quot;egg&quot;:9,&quot;importedEgg&quot;:20}}
+
+</code></pre>
 <h3 id="图解"><a href="#图解" class="headerlink" title="图解"></a>图解</h3><p><img src="https://user-gold-cdn.xitu.io/2018/4/20/162e3327a35fb0a4?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="asyncAction"></p>
 <h2 id="编写和使用中间件"><a href="#编写和使用中间件" class="headerlink" title="编写和使用中间件"></a>编写和使用中间件</h2><p>阿大通过改善流程对接完成了水果店的升级。</p>
 <p>但是阿大又有一个新的想法，他想详细的看看每一个顾客的<code>购买需求</code>来了之后，账本的前后变化。看来又要加一个新角色<strong>记录员</strong>了。难道要像加采购员那样手动的一个个的加吗？那可太麻烦了。正好阿大发现 redux 里有一个功能就是<strong>中间件</strong>。中间件是干嘛的呢？简而言之，就是把顾客的需求从销售员到收银员之间加上各种角色来处理。每一个角色就是一个中间件。接下来阿大就开始来写中间件了。</p>
 <p>redux 中间件写起来其实很简单，就是一个函数而已。按照它的要求。这个函数接受一个<strong>{ dispatch, getState }</strong>对象作为参数，然后返回一个 <strong>action</strong></p>
 <p>那这样，就可以把原来的<code>采购员也改造成中间件</code>了，其实采购员就是拿到了顾客需求之后让顾客的需求延迟 <strong>dispatch</strong>，这用<code>延迟用函数</code>就可以做到了:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// next 是用中间件增强之后的 dispatch</span></span><br><span class="line"><span class="comment">// dispatch 是最原始的 store.dispatch</span></span><br><span class="line"><span class="keyword">const</span> thunkMiddleware = <span class="function">(<span class="params">&#123; dispatch &#125;</span>) =&gt;</span> <span class="function"><span class="params">next</span> =&gt;</span> <span class="function"><span class="params">action</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> action === <span class="string">'function'</span>) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 函数形式的 action 就把 dispatch 给这个 action，让 action 决定什么时候 dispatch （控制反转）</span></span><br><span class="line">    <span class="keyword">return</span> action(dispatch);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 普通的 action 就直接传递给下一个中间件处理</span></span><br><span class="line">  <span class="keyword">return</span> next(action);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// next 是用中间件增强之后的 dispatch
+// dispatch 是最原始的 store.dispatch
+const thunkMiddleware = ({ dispatch }) =&gt; next =&gt; action =&gt; {
+  if (typeof action === &#39;function&#39;) {
+
+    // 函数形式的 action 就把 dispatch 给这个 action，让 action 决定什么时候 dispatch （控制反转）
+    return action(dispatch);
+  }
+
+  // 普通的 action 就直接传递给下一个中间件处理
+  return next(action);
+}
+</code></pre>
 <p>然后我们就需要把原来的顾客需求改一下了：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 买水果 - 进口苹果</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">buyImportedApple</span>(<span class="params">num</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 返回一个函数类型的 action，这个函数接受 dispatch，可以决定什么时候 dispatch</span></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="params">dispatch</span> =&gt;</span> API.fetchImportedApple(<span class="function"><span class="params">()</span> =&gt;</span> dispatch(&#123;</span><br><span class="line">    type: <span class="string">'BUY_IMPORTED_APPLE'</span>,</span><br><span class="line">    payload: num</span><br><span class="line">  &#125;));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 买生鲜 - 进口鸡蛋</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">buyImportedEgg</span>(<span class="params">num</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="params">dispatch</span> =&gt;</span> API.fetchImportedEgg(<span class="function"><span class="params">()</span> =&gt;</span> dispatch(&#123;</span><br><span class="line">    type: <span class="string">'BUY_IMPORTED_EGG'</span>,</span><br><span class="line">    payload: num</span><br><span class="line">  &#125;));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// 买水果 - 进口苹果
+function buyImportedApple(num) {
+
+  // 返回一个函数类型的 action，这个函数接受 dispatch，可以决定什么时候 dispatch
+  return dispatch =&gt; API.fetchImportedApple(() =&gt; dispatch({
+    type: &#39;BUY_IMPORTED_APPLE&#39;,
+    payload: num
+  }));
+}
+
+// 买生鲜 - 进口鸡蛋
+function buyImportedEgg(num) {
+  return dispatch =&gt; API.fetchImportedEgg(() =&gt; dispatch({
+    type: &#39;BUY_IMPORTED_EGG&#39;,
+    payload: num
+  }));
+}
+</code></pre>
 <p>然后<code>采购员</code>就可以只负责采购了，改回去：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 采购商品生成器，不同的商品需要不同的时间采购</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fetching</span>(<span class="params">time, callback</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 用延时模拟采购时间</span></span><br><span class="line">  <span class="keyword">const</span> timer = setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    clearTimeout(timer);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 采购完成，通知销售员</span></span><br><span class="line">    callback();</span><br><span class="line">  &#125;, time);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 采购进口苹果需要 2 天（2s）</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fetchImportedApple</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">  fetching(<span class="number">2000</span>, callback);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 采购进口苹果需要 3 天（3s）</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fetchImportedEgg</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">  fetching(<span class="number">3000</span>, callback);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 采购员</span></span><br><span class="line"><span class="keyword">const</span> API = &#123;</span><br><span class="line">  fetchImportedApple, <span class="comment">// 采购进口苹果</span></span><br><span class="line">  fetchImportedEgg <span class="comment">// 采购进口鸡蛋</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// 采购商品生成器，不同的商品需要不同的时间采购
+function fetching(time, callback) {
+
+  // 用延时模拟采购时间
+  const timer = setTimeout(() =&gt; {
+    clearTimeout(timer);
+
+    // 采购完成，通知销售员
+    callback();
+  }, time);
+}
+
+// 采购进口苹果需要 2 天（2s）
+function fetchImportedApple(callback) {
+  fetching(2000, callback);
+}
+
+// 采购进口苹果需要 3 天（3s）
+function fetchImportedEgg(callback) {
+  fetching(3000, callback);
+}
+
+// 采购员
+const API = {
+  fetchImportedApple, // 采购进口苹果
+  fetchImportedEgg // 采购进口鸡蛋
+}
+</code></pre>
 <p>然后，我们在添加一个<code>记录员</code>的中间件：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> loggerMiddleware = <span class="function">(<span class="params">&#123; getState &#125;</span>) =&gt;</span> <span class="function"><span class="params">next</span> =&gt;</span> <span class="function"><span class="params">action</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`state before: <span class="subst">$&#123;<span class="built_in">JSON</span>.stringify(getState())&#125;</span>`</span>);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`action: <span class="subst">$&#123;<span class="built_in">JSON</span>.stringify(action)&#125;</span>`</span>);</span><br><span class="line">  <span class="keyword">const</span> result = next(action);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`state after: <span class="subst">$&#123;<span class="built_in">JSON</span>.stringify(getState())&#125;</span>`</span>);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'================================================'</span>);</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const loggerMiddleware = ({ getState }) =&gt; next =&gt; action =&gt; {
+  console.log(`state before: ${JSON.stringify(getState())}`);
+  console.log(`action: ${JSON.stringify(action)}`);
+  const result = next(action);
+  console.log(`state after: ${JSON.stringify(getState())}`);
+  console.log(&#39;================================================&#39;);
+  return result;
+}
+</code></pre>
 <p>删除掉原来的监听：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//- store.subscribe(() =&gt; console.log(JSON.stringify(store.getState())));</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">//- store.subscribe(() =&gt; console.log(JSON.stringify(store.getState())));
+</code></pre>
 <p>好了，接下来就可以通过 redux 的 <strong>applyMiddleware</strong> 来串联起这些中间件啦。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; createStore, combineReducers, applyMiddleware &#125; = <span class="built_in">require</span>(<span class="string">'redux'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 中间件的调用顺序是从右到左</span></span><br><span class="line"><span class="keyword">const</span> store = createStore(reducer, applyMiddleware(thunkMiddleware, loggerMiddleware));</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const { createStore, combineReducers, applyMiddleware } = require(&#39;redux&#39;);
+
+// 中间件的调用顺序是从右到左
+const store = createStore(reducer, applyMiddleware(thunkMiddleware, loggerMiddleware));
+</code></pre>
 <p>好了，大功告成，开始服务顾客：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">store.dispatch(buyApple(<span class="number">3</span>));</span><br><span class="line">store.dispatch(buyImportedApple(<span class="number">10</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// state before: &#123;"fruit":&#123;"apple":0,"importedApple":0&#125;,"fresh":&#123;"egg":0,"importedEgg":0&#125;&#125;</span></span><br><span class="line"><span class="comment">// action: &#123;"type":"BUY_APPLE","payload":3&#125;</span></span><br><span class="line"><span class="comment">// state after: &#123;"fruit":&#123;"apple":3,"importedApple":0&#125;,"fresh":&#123;"egg":0,"importedEgg":0&#125;&#125;</span></span><br><span class="line"><span class="comment">// ================================================</span></span><br><span class="line"><span class="comment">// state before: &#123;"fruit":&#123;"apple":3,"importedApple":0&#125;,"fresh":&#123;"egg":0,"importedEgg":0&#125;&#125;</span></span><br><span class="line"><span class="comment">// action: &#123;"type":"BUY_EGG","payload":1&#125;</span></span><br><span class="line"><span class="comment">// state after: &#123;"fruit":&#123;"apple":3,"importedApple":0&#125;,"fresh":&#123;"egg":1,"importedEgg":0&#125;&#125;</span></span><br><span class="line"><span class="comment">// ================================================</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">store.dispatch(buyApple(3));
+store.dispatch(buyImportedApple(10));
+
+// state before: {&quot;fruit&quot;:{&quot;apple&quot;:0,&quot;importedApple&quot;:0},&quot;fresh&quot;:{&quot;egg&quot;:0,&quot;importedEgg&quot;:0}}
+// action: {&quot;type&quot;:&quot;BUY_APPLE&quot;,&quot;payload&quot;:3}
+// state after: {&quot;fruit&quot;:{&quot;apple&quot;:3,&quot;importedApple&quot;:0},&quot;fresh&quot;:{&quot;egg&quot;:0,&quot;importedEgg&quot;:0}}
+// ================================================
+// state before: {&quot;fruit&quot;:{&quot;apple&quot;:3,&quot;importedApple&quot;:0},&quot;fresh&quot;:{&quot;egg&quot;:0,&quot;importedEgg&quot;:0}}
+// action: {&quot;type&quot;:&quot;BUY_EGG&quot;,&quot;payload&quot;:1}
+// state after: {&quot;fruit&quot;:{&quot;apple&quot;:3,&quot;importedApple&quot;:0},&quot;fresh&quot;:{&quot;egg&quot;:1,&quot;importedEgg&quot;:0}}
+// ================================================
+
+</code></pre>
 <p>上面我们写的两个中间件其实就是 <code>redux-thunk</code> 和 <code>redux-logger</code> 的简版。在实际中，推荐使用它们，会更可信。</p>
 <h3 id="图解-1"><a href="#图解-1" class="headerlink" title="图解"></a>图解</h3><p><img src="https://user-gold-cdn.xitu.io/2018/4/23/162f0a03fc97dbca?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="redux-chunk"></p>
 <p>编写 redux 中间件需要按照要求来，返回这样的函数</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 中间件接受一个对象，里面有原始的 dispatch，和 getState 方法用于获取 state</span></span><br><span class="line"><span class="comment">// 中间件函数返回一个函数，这个函数接受一个 next 参数，这个 next 是下一个中间件要做的事情 action =&gt; &#123; ... &#125;</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">thunkMiddleware</span>(<span class="params">&#123; dispatch, getState &#125;</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">next</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">action</span>) </span>&#123;</span><br><span class="line">      <span class="comment">// 做你的事情</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// 中间件接受一个对象，里面有原始的 dispatch，和 getState 方法用于获取 state
+// 中间件函数返回一个函数，这个函数接受一个 next 参数，这个 next 是下一个中间件要做的事情 action =&gt; { ... }
+function thunkMiddleware({ dispatch, getState }) {
+  return function(next) {
+    return function(action) {
+      // 做你的事情
+    }
+  }
+}
+</code></pre>
 <p><a href="https://juejin.im/user/57d8a928d203090069c13a21/likes" target="_blank" rel="noopener">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
@@ -216,7 +339,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

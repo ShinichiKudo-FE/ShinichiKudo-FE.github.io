@@ -100,13 +100,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    17k
+                    6.1k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    16 mins.
+                    6 mins.
                 </span>
                 
                 
@@ -147,13 +147,41 @@
 <li>在函数中声明变量时没有var关键字，就代表是 <strong>全局变量</strong></li>
 <li>在函数中声明变量带有var关键字的即是 <strong>局部变量</strong>，局部变量只能&lt;在函数内才能访问到&gt;</li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">110</span>;     <span class="comment">// a为局部变量</span></span><br><span class="line">    <span class="built_in">console</span>.log(a);  <span class="comment">// 110</span></span><br><span class="line">&#125;</span><br><span class="line">fn();</span><br><span class="line"><span class="built_in">console</span>.log(a);     <span class="comment">// a is not defined  外部访问不到内部的变量</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">function fn() {
+    var a = 110;     // a为局部变量
+    console.log(a);  // 110
+}
+fn();
+console.log(a);     // a is not defined  外部访问不到内部的变量
+</code></pre>
 <p>上面代码展示了在函数中声明的局部变量a在函数外部确实无法拿到。小样儿的还挺嚣张，对于迎难而上的coder来说，还不信拿不下a了</p>
 <p>函数可以创造函数作用域，在函数作用域中如果要查找一个变量的时候，如果在该函数内没有声明这个变量，就会向该函数的外层继续查找，一直查到全局变量为止</p>
 <p>所以变量的查找是<code>由内而外</code>的，这也形成了所谓的<code>作用域链</code><br><a id="more"></a></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">7</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">outer</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> b = <span class="number">9</span>;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">inner</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> c = <span class="number">8</span>;</span><br><span class="line">        alert(b);</span><br><span class="line">        alert(a);</span><br><span class="line">    &#125;</span><br><span class="line">    inner();</span><br><span class="line">    alert(c);   <span class="comment">// c is not defined</span></span><br><span class="line">&#125;</span><br><span class="line">outer();    <span class="comment">// 调用函数</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">var a = 7;
+function outer() {
+    var b = 9;
+    function inner() {
+        var c = 8;
+        alert(b);
+        alert(a);
+    }
+    inner();
+    alert(c);   // c is not defined
+}
+outer();    // 调用函数
+</code></pre>
 <p>利用作用域链，我们试着去拿到a，改造一下 <strong>fn函数</strong></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">110</span>;     <span class="comment">// a为局部变量</span></span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(a);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">console</span>.log(a);  <span class="comment">// 110</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> fn2 = fn();</span><br><span class="line">fn2();      <span class="comment">// 110</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">function fn() {
+    var a = 110;     // a为局部变量
+    return function() {
+        console.log(a);
+    }
+    console.log(a);  // 110
+}
+var fn2 = fn();
+fn2();      // 110
+
+</code></pre>
 <p>如此这般，这般如此，轻而易举，小case的事，就可以从外面访问到局部变量a了</p>
 <p>那么到此为止，我们已经发现了闭包的其中一个意义：<strong>闭包就是能够读取其他函数内部变量的函数</strong>，嗯，没毛病，继续往下看</p>
 <h2 id="变量声明周期"><a href="#变量声明周期" class="headerlink" title="变量声明周期"></a>变量声明周期</h2><blockquote>
@@ -164,28 +192,104 @@
 <li>而对于在函数中通过var声明的局部变量来说，就没那么幸运了，当函数执行完毕，局部变量们就失去了价值，就被垃圾回收机制给当成垃圾处理掉了</li>
 </ul>
 <p>比如像下面这样的代码就很可怜</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">123</span>;    <span class="comment">// fn执行完毕后，变量a就将被销毁了</span></span><br><span class="line">    <span class="built_in">console</span>.log(a);</span><br><span class="line">&#125;</span><br><span class="line">fn();</span><br></pre></td></tr></table></figure>
+<pre><code class="js">function fn() {
+    var a = 123;    // fn执行完毕后，变量a就将被销毁了
+    console.log(a);
+}
+fn();
+</code></pre>
 <p>虽然以上垃圾回收的过程我们无法亲眼看见，但是听者伤心闻者流泪啊。可不可以不要如此残忍，我愿倾其所有，换你三生三世。</p>
 <p>悲伤的到来，我们无法拒绝，那就让我们想办法去改变这一切。现在再让我们来看下这段代码：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        a++;</span><br><span class="line">        <span class="built_in">console</span>.log(a);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> fn = add();</span><br><span class="line">fn();   <span class="comment">// 2</span></span><br><span class="line">fn();   <span class="comment">// 3</span></span><br><span class="line">fn();   <span class="comment">// 4</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">function add() {
+    var a = 1;
+    return function() {
+        a++;
+        console.log(a);
+    }
+}
+var fn = add();
+fn();   // 2
+fn();   // 3
+fn();   // 4
+</code></pre>
 <p>这段代码最神奇的地方就是，当add函数执行完后，局部变量a并没有被销毁，而是依然存在，这其中到底发生了什么？让我们慢慢分析一下：</p>
 <ul>
 <li>当fn = add()时，fn返回了一个函数的引用，这个函数里有局部变量a</li>
 <li>既然这个局部变量还能被外部访问fn()，就没有必要把它给销毁了，于是就保留了下来</li>
 </ul>
 <p>闭包是个好东西，可以完成很多工作，其中就包括一道网上常考的经典题目</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;ul&gt;</span><br><span class="line">    &lt;li&gt;<span class="number">1</span>&lt;<span class="regexp">/li&gt;</span></span><br><span class="line"><span class="regexp">    &lt;li&gt;2&lt;/</span>li&gt;</span><br><span class="line">    &lt;li&gt;<span class="number">3</span>&lt;<span class="regexp">/li&gt;</span></span><br><span class="line"><span class="regexp">    &lt;li&gt;4&lt;/</span>li&gt;</span><br><span class="line">&lt;<span class="regexp">/ul&gt;</span></span><br><span class="line"><span class="regexp">&lt;script&gt;</span></span><br><span class="line"><span class="regexp">    var aLi = document.getElementsByTagName('li');</span></span><br><span class="line"><span class="regexp">    for (var i = 0; i &lt; aLi.length; i++) &#123;</span></span><br><span class="line"><span class="regexp">        aLi[i].onclick = function() &#123;</span></span><br><span class="line"><span class="regexp">            console.log(i);     /</span><span class="regexp">/ ?</span></span><br><span class="line"><span class="regexp">        &#125;;</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">&lt;/</span>script&gt;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">    &lt;ul&gt;
+        &lt;li&gt;1&lt;/li&gt;
+        &lt;li&gt;2&lt;/li&gt;
+        &lt;li&gt;3&lt;/li&gt;
+        &lt;li&gt;4&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;script&gt;
+        var aLi = document.getElementsByTagName(&#39;li&#39;);
+        for (var i = 0; i &lt; aLi.length; i++) {
+            aLi[i].onclick = function() {
+                console.log(i);     // ?
+            };
+        }
+    &lt;/script&gt;
+
+</code></pre>
 <p>过这道题的观众请举手，确实这道题的目的就是为了考对闭包的理解。上面的答案无论怎么点结果都是4。</p>
 <p>这是因为li节点的onclick事件属于异步的，在click被触发的时候，for循环以迅雷不及掩耳盗铃的速度就执行完毕了，此时变量i的值已经是4了</p>
 <p>因此在li的click事件函数顺着作用域链从内向外开始找i的时候，发现i的值已经全是4了</p>
 <p><strong>解决方法</strong><br>就需要通过闭包，把每次循环的i值都存下来。然后当click事件继续顺着作用域链查找的时候，会先找到被存下来的i，这样每一个li点击都可以找到对应的i值了</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> &lt;script&gt;</span><br><span class="line">        <span class="keyword">var</span> aLi = <span class="built_in">document</span>.getElementsByTagName(<span class="string">'li'</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; aLi.length; i++) &#123;</span><br><span class="line">            (<span class="function"><span class="keyword">function</span>(<span class="params">n</span>) </span>&#123;    <span class="comment">// n为对应的索引值</span></span><br><span class="line">                aLi[i].onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;  </span><br><span class="line">                    <span class="built_in">console</span>.log(n);     <span class="comment">// 0, 1, 2, 3</span></span><br><span class="line">                &#125;;</span><br><span class="line">            &#125;)(i);  <span class="comment">// 这里i每循环一次都存一下，然后把0,1,2,3传给上面的形参n</span></span><br><span class="line">        &#125;</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js"> &lt;script&gt;
+        var aLi = document.getElementsByTagName(&#39;li&#39;);
+        for (var i = 0; i &lt; aLi.length; i++) {
+            (function(n) {    // n为对应的索引值
+                aLi[i].onclick = function() {  
+                    console.log(n);     // 0, 1, 2, 3
+                };
+            })(i);  // 这里i每循环一次都存一下，然后把0,1,2,3传给上面的形参n
+        }
+&lt;/script&gt;
+</code></pre>
 <h2 id="其他作用"><a href="#其他作用" class="headerlink" title="其他作用"></a>其他作用</h2><p>闭包应用非常广泛，我们这里就说一下大家熟知的，比如可以 <strong>封装私有变量</strong>，可以把一些不需要暴露在全局的变量封装成私有变量，这样可以防止造成变量的全局污染</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sum = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> cache = &#123;&#125;;     <span class="comment">// 将cache放入函数内部，避免被其他地方修改</span></span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> args = <span class="built_in">Array</span>.prototype.join.call(<span class="built_in">arguments</span>, <span class="string">','</span>);</span><br><span class="line">        <span class="keyword">if</span> (args <span class="keyword">in</span> cache) &#123;</span><br><span class="line">            <span class="keyword">return</span> cache[args];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">var</span> a = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="built_in">arguments</span>.length; i++) &#123;</span><br><span class="line">            a += <span class="built_in">arguments</span>[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> cache[args] = a;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+<pre><code class="js">var sum = (function() {
+    var cache = {};     // 将cache放入函数内部，避免被其他地方修改
+    return function() {
+        var args = Array.prototype.join.call(arguments, &#39;,&#39;);
+        if (args in cache) {
+            return cache[args];
+        }
+        var a = 0;
+        for (var i = 0; i &lt; arguments.length; i++) {
+            a += arguments[i];
+        }
+        return cache[args] = a;
+    }
+})();
+
+</code></pre>
 <p>除此之外相信很多人都见过一些库如<code>jQuery</code>,<code>underscore</code>他们的最外层都是类似如下样子的代码</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">win, undefined</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">var</span> obj = &#123;&#125;;</span><br><span class="line">    obj.fn = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 最后把想要暴露出去的内容可以挂载到window上</span></span><br><span class="line">    win.obj = obj;</span><br><span class="line">&#125;)(<span class="built_in">window</span>);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">(function(win, undefined) {
+    var a = 1;
+    var obj = {};
+    obj.fn = function() {};
+
+    // 最后把想要暴露出去的内容可以挂载到window上
+    win.obj = obj;
+})(window);
+
+</code></pre>
 <p>是的，没错，利用闭包也可以做到<code>模块化</code>。另外还可以将<code>变量的使用延长</code>，再来看一个例子</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> monitor = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> imgs = [];</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">src</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">var</span> img = <span class="keyword">new</span> Image();</span><br><span class="line">        imgs.push(img);</span><br><span class="line">        img.src = src;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)();</span><br><span class="line"></span><br><span class="line">monitor(<span class="string">'http://dd.com/srp.gif'</span>);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">var monitor = (function() {
+    var imgs = [];
+    return function(src){
+        var img = new Image();
+        imgs.push(img);
+        img.src = src;
+    }
+})();
+
+monitor(&#39;http://dd.com/srp.gif&#39;);
+
+</code></pre>
 <p>上面的代码是用于打点进行统计数据的情形，在之前的一些浏览器中，会出现打点丢失的情况，因为img是函数内的局部变量，当函数执行完后img就被销毁了，而此时可能http请求还没有发出。</p>
 <p>所以遇到这种情况的时候，把img变量用闭包封装起来，就可以解决了</p>
 <h2 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h2><p>很多人都听过一个版本，就是闭包会造成内存泄漏，所以要尽量减少闭包的使用</p>
@@ -262,7 +366,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

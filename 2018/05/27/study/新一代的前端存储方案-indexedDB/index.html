@@ -99,13 +99,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    25k
+                    12k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    23 mins.
+                    11 mins.
                 </span>
                 
                 
@@ -169,13 +169,28 @@
 <p>使用IndexedDB，你可以存储或者获取数据，使用一个key索引的。 你可以在事务(transaction)中完成对数据的修改。和大多数web存储解决方案相同，indexedDB也遵从同源协议(same-origin policy). 所以你只能访问同域中存储的数据，而不能访问其他域的。<br>API包含异步(asynchronous) API 和同步(synchronous)API两种。  异步API适合大多数情况, 同步API必须同 WebWorkers一同使用. 目前，没有主流浏览器支持同步API。 即使同步API被支持了，你也会在大多数的情况使用异步API。<br>IndexedDB 是 WebSQL 数据库的取代品, W3C组织在2010年11月18日废弃了webSql.  IndexedDB 和WebSQL的不同点在于WebSQL 是关系型数据库（复杂）IndexedDB 是key-value型数据库（简单好使）.</p>
 </blockquote>
 <p>上面是<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/IndexedDB_API/Basic_Concepts_Behind_IndexedDB" target="_blank" rel="noopener">MDN</a>上对于IndexedDB的介绍.其简单而言,indexedDB就是一个基于事务操作的key-value型数前端数据库.其API大多是异步的</p>
-<h2 id="indexedDB的使用"><a href="#indexedDB的使用" class="headerlink" title="indexedDB的使用"></a>indexedDB的使用</h2><h3 id="创建一个indexedDB数据库"><a href="#创建一个indexedDB数据库" class="headerlink" title="创建一个indexedDB数据库"></a>创建一个indexedDB数据库</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> request = indexedDB.open(<span class="string">'myDatabase'</span>,<span class="number">1</span>);</span><br><span class="line">request.addEventListener(<span class="string">'success'</span>, e =&gt; &#123;</span><br><span class="line">   <span class="built_in">console</span>.log(<span class="string">"连接数据库成功"</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">request.addEventListener(<span class="string">'error'</span>, e =&gt; &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"连接数据库失败"</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="indexedDB的使用"><a href="#indexedDB的使用" class="headerlink" title="indexedDB的使用"></a>indexedDB的使用</h2><h3 id="创建一个indexedDB数据库"><a href="#创建一个indexedDB数据库" class="headerlink" title="创建一个indexedDB数据库"></a>创建一个indexedDB数据库</h3><pre><code class="js">const request = indexedDB.open(&#39;myDatabase&#39;,1);
+request.addEventListener(&#39;success&#39;, e =&gt; {
+   console.log(&quot;连接数据库成功&quot;);
+});
+
+request.addEventListener(&#39;error&#39;, e =&gt; {
+    console.log(&quot;连接数据库失败&quot;);
+});
+</code></pre>
 <p>在上面代码中我们使用<code>indexedDB.open()</code>创建一个<code>indexedDB</code>数据库<code>.open()</code>方法接受可以接受两个参数.</p>
 <p>第一个是数据库名,第二个是数据库的版本号.<br>同时返回一个<code>IDBOpenDBRequest对象</code>用于操作数据库.其中对于open()的第一个参数数据库名,open()会先去查找本地是否已有这个数据库,如果有则直接将这个数据库返回,如果没有,则先创建这个数据库,再返回.对于第二个参数版本号,则是一个可选参数,如果不传,默认为1.但如果传入就必须是一个整数.</p>
 <p>在通过对<code>indexedDB.open()</code>方法拿到一个数据库对象<code>IDBOpenDBRequest</code>我们可以通过监听这个对象的success事件和error事件来执行相应的操作.</p>
 <h3 id="创建一个对象仓库"><a href="#创建一个对象仓库" class="headerlink" title="创建一个对象仓库"></a>创建一个对象仓库</h3><p>再有了一个数据库之后,我们获取就想要去存储数据了,但是单只有数据库还不够,我们还需要有<code>对象仓库(object store)</code>.<code>对象仓库(object store)</code>是indexedDB数据库的基础,其类似于MySQL中表的概念.</p>
 <p>要创建一个对象仓库必须在<code>upgradeneeded</code>事件中,而<code>upgradeneeded</code>事件只会在版本号更新的时候触发.这是因为<em>indexedDB API中不允许数据库中的数据仓库在同一版本中发生变化</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> request = indexedDB.open(<span class="string">'myDatabase'</span>,<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">request.addEventListener(<span class="string">'upgradeneeded'</span>,e =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> db = e.target.result;</span><br><span class="line">    <span class="keyword">const</span> store = db.createObjectStore(<span class="string">'User'</span>,&#123;<span class="attr">keyPath</span>: <span class="string">'userId'</span>,<span class="attr">autoIncrement</span>: <span class="literal">false</span>&#125;);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'创建对象仓库成功'</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const request = indexedDB.open(&#39;myDatabase&#39;,2);
+
+request.addEventListener(&#39;upgradeneeded&#39;,e =&gt; {
+    const db = e.target.result;
+    const store = db.createObjectStore(&#39;User&#39;,{keyPath: &#39;userId&#39;,autoIncrement: false});
+    console.log(&#39;创建对象仓库成功&#39;);
+})
+</code></pre>
 <p>在上述代码中我们监听<code>upgradeneeded</code>事件,并在这个事件触发时使用<code>createObjectStore()</code>方法创建了一个对象仓库.</p>
 <p><code>createObjectStore()</code>方法接受两个参数,第一个是对象仓库的名字,在同一数据库中,<strong>仓库名不能重复</strong>.第二个是可选参数.用于指定数据的主键,以及是否自增主键.</p>
 <h3 id="创建事务"><a href="#创建事务" class="headerlink" title="创建事务"></a>创建事务</h3><p>  OK现在我们有了数据库和对象仓库了,我们是否就可以存储数据了了.很抱歉,还是不行.我们还差最后一样东西—-事务.</p>
@@ -185,6 +200,8 @@
 <li>为数据库操作序列提供了一个从失败中恢复到正常状态的方法，同时提供了数据库即使在异常状态下仍能保持一致性的方法。</li>
 <li>当多个应用程序在并发访问数据库时，可以在这些应用程序之间提供一个隔离方法，以防止彼此的操作互相干扰。</li>
 </ul>
+</blockquote>
+<blockquote>
 <p>并非任意的对数据库的操作序列都是数据库事务。数据库事务拥有以下四个特性，习惯上被称之为ACID特性。</p>
 <ul>
 <li>原子性（Atomicity）：事务作为一个整体被执行，包含在其中的对数据库的操作要么全部被执行，要么都不执行</li>
@@ -194,7 +211,14 @@
 </ul>
 </blockquote>
 <p>上面是维基百科上对数据库事务的解释.简单来说事务就是用来保证数据库操作要么全部成功,要么全部失败的一个限制.比如,在修改多条数据时,前面几条已经成功了.,在中间的某一条是失败了.那么在这时,如果是基于事务的数据库操作,那么这时数据库就应该重置前面数据的修改,放弃后面的数据修改.直接返回错误,一条数据也不修改.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> request = indexedDB.open(<span class="string">'myDatabase'</span>, <span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">request.addEventListener(<span class="string">'success'</span>, e =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> db = e.target.result;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> tx = db.transaction(<span class="string">'Users'</span>,<span class="string">'readwrite'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const request = indexedDB.open(&#39;myDatabase&#39;, 3);
+
+request.addEventListener(&#39;success&#39;, e =&gt; {
+    const db = e.target.result;
+
+    const tx = db.transaction(&#39;Users&#39;,&#39;readwrite&#39;);
+});
+</code></pre>
 <p>上述代码中我们使用<code>transaction()</code>来创建一个事务.</p>
 <p><code>transaction()</code>接受两个参数,第一个是你要操作的对象仓库名称,第二个是你创建的事务模式.传入 <code>readonly</code>时只能对对象仓库进行读操作,无法写操作.可以传入<code>readwrite</code>进行读写操作.</p>
 <h3 id="操作数据"><a href="#操作数据" class="headerlink" title="操作数据"></a>操作数据</h3><blockquote>
@@ -207,18 +231,93 @@
 </ul>
 </blockquote>
 <p>add 和 put 的作用类似，区别<em>在于 put 保存数据时，如果该数据的主键在数据库中已经有相同主键的时候，则会修改数据库中对应主键的对象，而使用 add 保存数据，如果该主键已经存在，则保存失败</em>。</p>
-<h4 id="添加数据"><a href="#添加数据" class="headerlink" title="添加数据"></a>添加数据</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> request = indexedDB.open(<span class="string">'myDatabase'</span>, <span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">request.addEventListener(<span class="string">'success'</span>, e =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> db = e.target.result;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> tx = db.transaction(<span class="string">'Users'</span>,<span class="string">'readwrite'</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> store = tx.objectStore(<span class="string">'Users'</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 保存数据</span></span><br><span class="line">    <span class="keyword">const</span> reqAdd = store.add(&#123;<span class="string">'userId'</span>: <span class="number">1</span>, <span class="string">'userName'</span>: <span class="string">'李白'</span>, <span class="string">'age'</span>: <span class="number">24</span>&#125;);</span><br><span class="line"></span><br><span class="line">    reqAdd.addEventListener(<span class="string">'success'</span>, e =&gt; &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'保存成功'</span>)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取数据</span></span><br><span class="line">    <span class="keyword">const</span> reqGet = store.get(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    reqGet.addEventListener(<span class="string">'success'</span>, e =&gt; &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span>.result.userName);    <span class="comment">// 李白</span></span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">//删除数据</span></span><br><span class="line">    <span class="keyword">const</span> reqDelete = store.delete(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    reqDelete.addEventListener(<span class="string">'success'</span>, e =&gt; &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'删除数据成功'</span>);    <span class="comment">// 李白</span></span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="添加数据"><a href="#添加数据" class="headerlink" title="添加数据"></a>添加数据</h4><pre><code class="js">const request = indexedDB.open(&#39;myDatabase&#39;, 3);
+
+request.addEventListener(&#39;success&#39;, e =&gt; {
+    const db = e.target.result;
+
+    const tx = db.transaction(&#39;Users&#39;,&#39;readwrite&#39;);
+
+    const store = tx.objectStore(&#39;Users&#39;);
+
+    // 保存数据
+    const reqAdd = store.add({&#39;userId&#39;: 1, &#39;userName&#39;: &#39;李白&#39;, &#39;age&#39;: 24});
+
+    reqAdd.addEventListener(&#39;success&#39;, e =&gt; {
+      console.log(&#39;保存成功&#39;)
+    })
+
+    // 获取数据
+    const reqGet = store.get(1);
+
+    reqGet.addEventListener(&#39;success&#39;, e =&gt; {
+      console.log(this.result.userName);    // 李白
+    })
+
+    //删除数据
+    const reqDelete = store.delete(1);
+
+    reqDelete.addEventListener(&#39;success&#39;, e =&gt; {
+      console.log(&#39;删除数据成功&#39;);    // 李白
+    })
+
+});
+
+</code></pre>
 <h3 id="使用游标"><a href="#使用游标" class="headerlink" title="使用游标"></a>使用游标</h3><p>  在上面当中我们使用<code>get()</code>方法传入一个主键来获取数据,但是这样只能够获取到一条数据.如果我们想要获取多条数据了怎么办.我们可以<strong>使用游标,来获取一个区间内的数据</strong>.</p>
 <p>要使用游标,我们需要使用对象仓库上的<code>openCursor()</code>方法创建币打开.<code>openCursor()</code>方法接受两个参数.</p>
 <blockquote>
 <p>openCursor(range?: IDBKeyRange | number | string | Date | IDBArrayKey, direction?: IDBCursorDirection): IDBRequest;</p>
 </blockquote>
 <p>  第一个是范围,范围可以是一个<code>IDBKeyRange</code>对象.用以下方式创建.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// boundRange 表示主键值从1到10(包含1和10)的集合。</span></span><br><span class="line"><span class="comment">// 如果第三个参数为true，则表示不包含最小键值1，如果第四参数为true，则表示不包含最大键值10，默认都为false</span></span><br><span class="line"><span class="keyword">var</span> boundRange = IDBKeyRange.bound(<span class="number">1</span>, <span class="number">10</span>, <span class="literal">false</span>, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// onlyRange 表示由一个主键值的集合。only() 参数则为主键值，整数类型。</span></span><br><span class="line"><span class="keyword">var</span> onlyRange = IDBKeyRange.only(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// lowerRaneg 表示大于等于1的主键值的集合。</span></span><br><span class="line"><span class="comment">// 第二个参数可选，为true则表示不包含最小主键1，false则包含，默认为false</span></span><br><span class="line"><span class="keyword">var</span> lowerRange = IDBKeyRange.lowerBound(<span class="number">1</span>, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// upperRange 表示小于等于10的主键值的集合。</span></span><br><span class="line"><span class="comment">// 第二个参数可选，为true则表示不包含最大主键10，false则包含，默认为false</span></span><br><span class="line"><span class="keyword">var</span> upperRange = IDBKeyRange.upperBound(<span class="number">10</span>, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// boundRange 表示主键值从1到10(包含1和10)的集合。
+// 如果第三个参数为true，则表示不包含最小键值1，如果第四参数为true，则表示不包含最大键值10，默认都为false
+var boundRange = IDBKeyRange.bound(1, 10, false, false);
+
+// onlyRange 表示由一个主键值的集合。only() 参数则为主键值，整数类型。
+var onlyRange = IDBKeyRange.only(1);
+
+// lowerRaneg 表示大于等于1的主键值的集合。
+// 第二个参数可选，为true则表示不包含最小主键1，false则包含，默认为false
+var lowerRange = IDBKeyRange.lowerBound(1, false);
+
+// upperRange 表示小于等于10的主键值的集合。
+// 第二个参数可选，为true则表示不包含最大主键10，false则包含，默认为false
+var upperRange = IDBKeyRange.upperBound(10, false);
+
+</code></pre>
 <p>  第二个参数是方向.主要有一下几种</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">next : 游标中的数据按主键值升序排列，主键值相等的数据都被读取</span><br><span class="line">nextunique : 游标中的数据按主键值升序排列，主键值相等只读取第一条数据</span><br><span class="line">prev : 游标中的数据按主键值降序排列，主键值相等的数据都被读取</span><br><span class="line">prevunique : 游标中的数据按主键值降序排列，主键值相等只读取第一条数据</span><br></pre></td></tr></table></figure>
+<pre><code class="js">next : 游标中的数据按主键值升序排列，主键值相等的数据都被读取
+nextunique : 游标中的数据按主键值升序排列，主键值相等只读取第一条数据
+prev : 游标中的数据按主键值降序排列，主键值相等的数据都被读取
+prevunique : 游标中的数据按主键值降序排列，主键值相等只读取第一条数据
+</code></pre>
 <p>  下面让我们来看一个完整的例子</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> request = indexedDB.open(<span class="string">'myDatabase'</span>, <span class="number">4</span>);</span><br><span class="line"></span><br><span class="line">request.addEventListener(<span class="string">'success'</span>, e =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> db = e.target.result;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> tx = db.transaction(<span class="string">'Users'</span>,<span class="string">'readwrite'</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> store = tx.objectStore(<span class="string">'Users'</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> range = IDBKeyRange.bound(<span class="number">1</span>,<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> req = store.openCursor(range, <span class="string">'next'</span>);</span><br><span class="line"></span><br><span class="line">    req.addEventListener(<span class="string">'success'</span>, e =&gt; &#123;</span><br><span class="line">      <span class="keyword">const</span> cursor = <span class="keyword">this</span>.result;</span><br><span class="line">        <span class="keyword">if</span>(cursor)&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(cursor.value.userName);</span><br><span class="line">            cursor.continue();</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'检索结束'</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const request = indexedDB.open(&#39;myDatabase&#39;, 4);
+
+request.addEventListener(&#39;success&#39;, e =&gt; {
+    const db = e.target.result;
+
+    const tx = db.transaction(&#39;Users&#39;,&#39;readwrite&#39;);
+
+    const store = tx.objectStore(&#39;Users&#39;);
+
+    const range = IDBKeyRange.bound(1,10);
+
+    const req = store.openCursor(range, &#39;next&#39;);
+
+    req.addEventListener(&#39;success&#39;, e =&gt; {
+      const cursor = this.result;
+        if(cursor){
+            console.log(cursor.value.userName);
+            cursor.continue();
+        }else{
+            console.log(&#39;检索结束&#39;);
+        }
+    })
+});
+
+</code></pre>
 <p>  在上面的代码中如果检索到符合条件的数据时,我们可以:</p>
 <blockquote>
 <p>使用<code>cursor.value</code>拿到数据.<br>使用<code>cursor.updata()</code>更新数据.<br>使用<code>cursor.delete()</code>删除数据.<br>使用<code>cursor.continue()</code>读取下一条数据.</p>
@@ -235,12 +334,43 @@
 <li>第三个参数optionalParameters是一个可选的对象参数{unique, multiEntry}</li>
 </ul>
 <p>1.<code>unique</code>: 用来指定索引值是否可以重复,为true代表不能相同,为false时代表可以相同<br>2.<code>multiEntry</code>: 当第二个参数keyPath为一个数组时.如果multiEntry是true,则会以数组中的每个元素建立一条索引.如果是false,则以整个数组为keyPath值,添加一条索引.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> request = indexedDB.open(<span class="string">'myDatabase'</span>, <span class="number">5</span>);</span><br><span class="line"></span><br><span class="line">request.addEventListener(<span class="string">'upgradeneeded'</span>, e =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> db = e.target.result;</span><br><span class="line">    <span class="keyword">const</span>  store = db.createObjectStore(<span class="string">'Users'</span>, &#123;<span class="attr">keyPath</span>: <span class="string">'userId'</span>, <span class="attr">autoIncrement</span>: <span class="literal">false</span>&#125;);</span><br><span class="line">    <span class="keyword">const</span> idx = store.createIndex(<span class="string">'ageIndex'</span>,<span class="string">'age'</span>,&#123;<span class="attr">unique</span>: <span class="literal">false</span>&#125;)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const request = indexedDB.open(&#39;myDatabase&#39;, 5);
+
+request.addEventListener(&#39;upgradeneeded&#39;, e =&gt; {
+    const db = e.target.result;
+    const  store = db.createObjectStore(&#39;Users&#39;, {keyPath: &#39;userId&#39;, autoIncrement: false});
+    const idx = store.createIndex(&#39;ageIndex&#39;,&#39;age&#39;,{unique: false})
+});
+</code></pre>
 <p>  这样我们就创建了一条索引.</p>
 <h4 id="使用索引"><a href="#使用索引" class="headerlink" title="使用索引"></a>使用索引</h4><p>  这在创建了一条索引之后我们就可以来使用它了.我们使用对象仓库上的<code>index</code>方法,通过传入一个索引名.来拿到一个索引对象.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> index = store.index(<span class="string">'ageIndex'</span>);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const index = store.index(&#39;ageIndex&#39;);
+</code></pre>
 <p>  然后我们就可以使用这个索引了.比如说我们要拿到年龄在20岁以上的数据,升序排列.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> request = indexedDB.open(<span class="string">'myDatabase'</span>, <span class="number">4</span>);</span><br><span class="line"></span><br><span class="line">request.addEventListener(<span class="string">'success'</span>, e =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> db = e.target.result;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> tx = db.transaction(<span class="string">'Users'</span>,<span class="string">'readwrite'</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> store = tx.objectStore(<span class="string">'Users'</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> index = store.index(<span class="string">'ageIndex'</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> req = index.openCursor(IDBKeyRange.lowerBound(<span class="number">20</span>), <span class="string">'next'</span>);<span class="comment">//20岁以上的数据,升序排列</span></span><br><span class="line"></span><br><span class="line">    req.addEventListener(<span class="string">'success'</span>, e =&gt; &#123;</span><br><span class="line">      <span class="keyword">const</span> cursor = e.target.result;</span><br><span class="line">        <span class="keyword">if</span>(cursor)&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(cursor.value.age);</span><br><span class="line">            cursor.continue();</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'检索结束'</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const request = indexedDB.open(&#39;myDatabase&#39;, 4);
+
+request.addEventListener(&#39;success&#39;, e =&gt; {
+    const db = e.target.result;
+
+    const tx = db.transaction(&#39;Users&#39;,&#39;readwrite&#39;);
+
+    const store = tx.objectStore(&#39;Users&#39;);
+
+    const index = store.index(&#39;ageIndex&#39;);
+
+    const req = index.openCursor(IDBKeyRange.lowerBound(20), &#39;next&#39;);//20岁以上的数据,升序排列
+
+    req.addEventListener(&#39;success&#39;, e =&gt; {
+      const cursor = e.target.result;
+        if(cursor){
+            console.log(cursor.value.age);
+            cursor.continue();
+        }else{
+            console.log(&#39;检索结束&#39;);
+        }
+    })
+});
+</code></pre>
 <h2 id="indexedDB的兼容性"><a href="#indexedDB的兼容性" class="headerlink" title="indexedDB的兼容性"></a>indexedDB的兼容性</h2><p><img src="https://user-gold-cdn.xitu.io/2018/5/27/163a05e409de5bd7?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="indexedDB兼容性"></p>
 <p><a href="https://juejin.im/post/5b09a641f265da0dcd0b674f?utm_source=gold_browser_extension" target="_blank" rel="noopener">原文地址</a></p>
 
@@ -290,7 +420,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

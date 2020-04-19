@@ -104,13 +104,13 @@ componentWillReceiveProps,">
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    21k
+                    12k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    19 mins.
+                    11 mins.
                 </span>
                 
                 
@@ -186,7 +186,19 @@ componentWillReceiveProps,">
 <li>初始化state对象</li>
 <li>给自定义方法绑定this</li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span></span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(props)&#123;</span><br><span class="line">        <span class="keyword">super</span>(props);</span><br><span class="line">        <span class="keyword">this</span>.state = &#123;</span><br><span class="line">            select,</span><br><span class="line">            height: <span class="string">'atuo'</span>,</span><br><span class="line">            externalClass,</span><br><span class="line">            externalClassText</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.handleClick = <span class="keyword">this</span>.handleClick.bind(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">class App extends React.Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            select,
+            height: &#39;atuo&#39;,
+            externalClass,
+            externalClassText
+        }
+        this.handleClick = this.handleClick.bind(this);
+    }
+}
+</code></pre>
 <p><strong>禁止在构造函数中调用setState，可以直接给state设置初始值</strong></p>
 <h2 id="getDerivedStateFromProps"><a href="#getDerivedStateFromProps" class="headerlink" title="getDerivedStateFromProps"></a>getDerivedStateFromProps</h2><p><code>static getDerivedStateFromProps(nextProps,prevState)</code></p>
 <p>一个静态方法，所以不能在这个函数里面使用this，这个函数有两个参数props和state，分别指接收到的新参数和当前的state对象，这个函数会返回一个对象用来更新当前的state对象，如果不需要更新可以返回null</p>
@@ -194,7 +206,23 @@ componentWillReceiveProps,">
 <p>在React v16.3时只有在挂载时和接收到新的props被调用，据说这是官方的失误，后来修复了</p>
 <p>这个方法就是为了取代之前的<del>componentWillMount、componentWillReceiveProps和componentWillUpdate</del></p>
 <p>当我们接收到新的属性想去修改我们state，可以使用<code>getDerivedStateFromProps</code></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExampleComponent</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  state = &#123;</span><br><span class="line">    isScrollingDown: <span class="literal">false</span>,</span><br><span class="line">    lastRow: <span class="literal">null</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">static</span> getDerivedStateFromProps(nextProps,prevState)&#123;</span><br><span class="line">      <span class="keyword">if</span>(nextProps.currentRow !== prevState.lastRow)&#123;</span><br><span class="line">          <span class="keyword">return</span> &#123;</span><br><span class="line">            isScrollingDown:</span><br><span class="line">            nextProps.currentRow &gt; prevState.lastRow,</span><br><span class="line">            lastRow: nextProps.currentRow</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">class ExampleComponent extends React.Component {
+  state = {
+    isScrollingDown: false,
+    lastRow: null
+  }
+  static getDerivedStateFromProps(nextProps,prevState){
+      if(nextProps.currentRow !== prevState.lastRow){
+          return {
+            isScrollingDown:
+            nextProps.currentRow &gt; prevState.lastRow,
+            lastRow: nextProps.currentRow
+        }
+      }
+      return null;
+  }
+}
+</code></pre>
 <h2 id="componentWillMount-UNSAFE-componentWillMount"><a href="#componentWillMount-UNSAFE-componentWillMount" class="headerlink" title="componentWillMount/UNSAFE_componentWillMount"></a><del>componentWillMount/UNSAFE_componentWillMount</del></h2><p>在16版本这两个方法并存，但是在17版本中<del>componentWillMount</del>被删除，只保留<del>UNSAFE_componentWillMount</del>，目的是为了做向下兼容，对于新的应用，用<del>getDerivedStateFromProps</del>代替它们<br>由于<del>componentWillMount/ UNSAFE_componentWillMount</del>是在render之前调用，所以就算在这个方法中调用setState也不会触发重新渲染（re-render）</p>
 <h2 id="render"><a href="#render" class="headerlink" title="render"></a>render</h2><p>render方法是react中最核心的方法，一个组件中必须要这个方法：</p>
 <blockquote>
@@ -213,7 +241,40 @@ componentWillReceiveProps,">
 </blockquote>
 <p>render函数是纯函数，里面只做一件事，就是返回需要渲染的东西，不应该包含其它的业务逻辑，如数据请求，对于这些业务逻辑请移到<code>componentDidMount</code>和<code>componentDidUpdate</code>中</p>
 <h2 id="componentDidMount"><a href="#componentDidMount" class="headerlink" title="componentDidMount"></a>componentDidMount</h2><p>组件卸载之后调用，此时我们可以获取到DOM节点并操作，比如对canvas，svg的操作，服务器请求，订阅都可以写在这个里面，但是记得在<code>componentWillUnmount</code>中取消订阅</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">componentDidMount() &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; progressCanvas, progressSVG &#125; = <span class="keyword">this</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> canvas = progressCanvas.current</span><br><span class="line">    <span class="keyword">const</span> ctx = canvas.getContext(<span class="string">'2d'</span>)</span><br><span class="line">    canvas.width = canvas.getBoundingClientRect().width</span><br><span class="line">    canvas.height = canvas.getBoundingClientRect().height</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> svg = progressSVG.current</span><br><span class="line">    <span class="keyword">const</span> rect = <span class="built_in">document</span>.createElementNS(<span class="string">'http://www.w3.org/2000/svg'</span>, <span class="string">'rect'</span>)</span><br><span class="line">    rect.setAttribute(<span class="string">'x'</span>, <span class="number">0</span>)</span><br><span class="line">    rect.setAttribute(<span class="string">'y'</span>, <span class="number">0</span>)</span><br><span class="line">    rect.setAttribute(<span class="string">'width'</span>, <span class="number">0</span>)</span><br><span class="line">    rect.setAttribute(<span class="string">'height'</span>, svg.getBoundingClientRect().height)</span><br><span class="line">    rect.setAttribute(<span class="string">'style'</span>, <span class="string">'fill:red'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> animate = <span class="built_in">document</span>.createElementNS(<span class="string">'http://www.w3.org/2000/svg'</span>, <span class="string">'animate'</span>)</span><br><span class="line">    animate.setAttribute(<span class="string">'attributeName'</span>, <span class="string">'width'</span>)</span><br><span class="line">    animate.setAttribute(<span class="string">'from'</span>, <span class="number">0</span>)</span><br><span class="line">    animate.setAttribute(<span class="string">'to'</span>, svg.getBoundingClientRect().width)</span><br><span class="line">    animate.setAttribute(<span class="string">'begin'</span>, <span class="string">'0ms'</span>)</span><br><span class="line">    animate.setAttribute(<span class="string">'dur'</span>, <span class="string">'1684ms'</span>)</span><br><span class="line">    animate.setAttribute(<span class="string">'repeatCount'</span>, <span class="string">'indefinite'</span>)</span><br><span class="line">    animate.setAttribute(<span class="string">'calcMode'</span>, <span class="string">'linear'</span>)</span><br><span class="line">    rect.appendChild(animate)</span><br><span class="line">    svg.appendChild(rect)</span><br><span class="line">    svg.pauseAnimations()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.canvas = canvas</span><br><span class="line">    <span class="keyword">this</span>.svg = svg</span><br><span class="line">    <span class="keyword">this</span>.ctx = ctx</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">componentDidMount() {
+    const { progressCanvas, progressSVG } = this
+
+    const canvas = progressCanvas.current
+    const ctx = canvas.getContext(&#39;2d&#39;)
+    canvas.width = canvas.getBoundingClientRect().width
+    canvas.height = canvas.getBoundingClientRect().height
+
+    const svg = progressSVG.current
+    const rect = document.createElementNS(&#39;http://www.w3.org/2000/svg&#39;, &#39;rect&#39;)
+    rect.setAttribute(&#39;x&#39;, 0)
+    rect.setAttribute(&#39;y&#39;, 0)
+    rect.setAttribute(&#39;width&#39;, 0)
+    rect.setAttribute(&#39;height&#39;, svg.getBoundingClientRect().height)
+    rect.setAttribute(&#39;style&#39;, &#39;fill:red&#39;)
+
+    const animate = document.createElementNS(&#39;http://www.w3.org/2000/svg&#39;, &#39;animate&#39;)
+    animate.setAttribute(&#39;attributeName&#39;, &#39;width&#39;)
+    animate.setAttribute(&#39;from&#39;, 0)
+    animate.setAttribute(&#39;to&#39;, svg.getBoundingClientRect().width)
+    animate.setAttribute(&#39;begin&#39;, &#39;0ms&#39;)
+    animate.setAttribute(&#39;dur&#39;, &#39;1684ms&#39;)
+    animate.setAttribute(&#39;repeatCount&#39;, &#39;indefinite&#39;)
+    animate.setAttribute(&#39;calcMode&#39;, &#39;linear&#39;)
+    rect.appendChild(animate)
+    svg.appendChild(rect)
+    svg.pauseAnimations()
+
+    this.canvas = canvas
+    this.svg = svg
+    this.ctx = ctx
+ }
+
+</code></pre>
 <p>在<code>componentDidMount</code>中调用setState会触发一次额外的渲染，多调用了一次render函数，但是用户对此没有感知，因为它是在浏览器刷新屏幕前执行的，但是我们应该在开发中避免它，因为它会带来一定的性能问题，我们应该在constructor中初始化我们的state对象，而不应该在componentDidMount调用state方法</p>
 <h1 id="更新阶段"><a href="#更新阶段" class="headerlink" title="更新阶段"></a>更新阶段</h1><p>更新阶段，当组件的props改变了，或组件内部调用了setState或者forceUpdate发生，会发生多次</p>
 <p>这个阶段生命周期函数如下：</p>
@@ -251,7 +312,39 @@ componentWillReceiveProps,">
 <p>还有这个方法一定要和componentDidUpdate一起使用，否则控制台也会有警告</p>
 <p><img src="https://user-gold-cdn.xitu.io/2018/8/12/1652d5bf732e3ff3?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="componentDidUpdate1"></p>
 <p>前面说过这个方法时用来代替<del>componentWillUpdate/UNSAVE_componentWillUpdate</del>，下面举个例子说明下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ScrollingList</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(props) &#123;</span><br><span class="line">    <span class="keyword">super</span>(props);</span><br><span class="line">    <span class="keyword">this</span>.listRef = React.createRef();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  getSnapshotBeforeUpdate(prevProps, prevState) &#123;</span><br><span class="line">    <span class="comment">// Are we adding new items to the list?</span></span><br><span class="line">    <span class="comment">// Capture the scroll position so we can adjust scroll later.</span></span><br><span class="line">    <span class="keyword">if</span> (prevProps.list.length &lt; <span class="keyword">this</span>.props.list.length) &#123;</span><br><span class="line">      <span class="keyword">const</span> list = <span class="keyword">this</span>.listRef.current;</span><br><span class="line">      <span class="keyword">return</span> list.scrollHeight - list.scrollTop;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  componentDidUpdate(prevProps, prevState, snapshot) &#123;</span><br><span class="line">    <span class="comment">// If we have a snapshot value, we've just added new items.</span></span><br><span class="line">    <span class="comment">// Adjust scroll so these new items don't push the old ones out of view.</span></span><br><span class="line">    <span class="comment">// (snapshot here is the value returned from getSnapshotBeforeUpdate)</span></span><br><span class="line">    <span class="keyword">if</span> (snapshot !== <span class="literal">null</span>) &#123;</span><br><span class="line">      <span class="keyword">const</span> list = <span class="keyword">this</span>.listRef.current;</span><br><span class="line">      list.scrollTop = list.scrollHeight - snapshot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div ref=&#123;<span class="keyword">this</span>.listRef&#125;&gt;&#123;<span class="comment">/* ...contents... */</span>&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">class ScrollingList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.listRef = React.createRef();
+  }
+
+  getSnapshotBeforeUpdate(prevProps, prevState) {
+    // Are we adding new items to the list?
+    // Capture the scroll position so we can adjust scroll later.
+    if (prevProps.list.length &lt; this.props.list.length) {
+      const list = this.listRef.current;
+      return list.scrollHeight - list.scrollTop;
+    }
+    return null;
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    // If we have a snapshot value, we&#39;ve just added new items.
+    // Adjust scroll so these new items don&#39;t push the old ones out of view.
+    // (snapshot here is the value returned from getSnapshotBeforeUpdate)
+    if (snapshot !== null) {
+      const list = this.listRef.current;
+      list.scrollTop = list.scrollHeight - snapshot;
+    }
+  }
+
+  render() {
+    return (
+      &lt;div ref={this.listRef}&gt;{/* ...contents... */}&lt;/div&gt;
+    );
+  }
+}
+</code></pre>
 <h2 id="componentDidUpdate"><a href="#componentDidUpdate" class="headerlink" title="componentDidUpdate"></a>componentDidUpdate</h2><p><code>componentDidUpdate(prevProps, prevState, snapshot)</code></p>
 <p>该方法在getSnapshotBeforeUpdate方法之后被调用，有三个参数<code>prevProps，prevState，snapshot</code>，<strong>表示之前的props，之前的state，和snapshot</strong>。第三个参数是<code>getSnapshotBeforeUpdate</code>返回的</p>
 <h1 id="卸载阶段"><a href="#卸载阶段" class="headerlink" title="卸载阶段"></a>卸载阶段</h1><p>卸载阶段，当我们的组件被卸载或者销毁了</p>
@@ -309,7 +402,7 @@ componentWillReceiveProps,">
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

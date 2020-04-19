@@ -99,13 +99,13 @@ token是一种身份验证的机制，初始时用户提交账号数据给服务
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    21k
+                    9.3k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    19 mins.
+                    8 mins.
                 </span>
                 
                 
@@ -179,11 +179,134 @@ token是一种身份验证的机制，初始时用户提交账号数据给服务
 <h3 id="Token刷新"><a href="#Token刷新" class="headerlink" title="Token刷新"></a>Token刷新</h3><p>当token过期，用户需要刷新token。刷新token本质上是这样的：</p>
 <p>客户端需要把token、摘要、ua都传给服务端，服务端对token重新生成摘要，通过判断两个摘要是否相同来验证这次请求刷新token的客户端，是不是上次请求生成token的客户端。验证通过，服务端需要使用用户数据重新生成token，用户数据则来自用ua解析token的结果。</p>
 <h2 id="HTML-amp-JS等前端知识系列之Ajax-post请求带有token向Django请求"><a href="#HTML-amp-JS等前端知识系列之Ajax-post请求带有token向Django请求" class="headerlink" title="HTML&amp;JS等前端知识系列之Ajax post请求带有token向Django请求"></a>HTML&amp;JS等前端知识系列之Ajax post请求带有token向Django请求</h2><p>我们 在母板上写入这段代码：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line">        <span class="comment">// 个人定义大函数，不是重点，可以忽略</span></span><br><span class="line">        $(<span class="built_in">document</span>).ready(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            get_sys_load();</span><br><span class="line">            <span class="keyword">var</span> csrftoken = getCookie(<span class="string">'csrftoken'</span>);</span><br><span class="line">            <span class="keyword">var</span> active_node = $(<span class="string">"#mainnav-menu a[href='&#123;&#123; request.path &#125;&#125;']"</span>);</span><br><span class="line">            active_node.parent().addClass(<span class="string">"active-link"</span>);</span><br><span class="line">            <span class="keyword">if</span> (active_node.parent().parent().hasClass(<span class="string">"collapse"</span>))&#123;</span><br><span class="line">                active_node.parent().parent().addClass(<span class="string">"in"</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;);<span class="comment">//end doc ready</span></span><br><span class="line">        <span class="comment">// 个人定义大函数，不是重点，可以忽略</span></span><br><span class="line">        <span class="function"><span class="keyword">function</span>  <span class="title">get_sys_load</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            $.ajax(&#123;</span><br><span class="line">                url: <span class="string">"&#123;% url 'get_server_host_status' %&#125;"</span>,</span><br><span class="line">                type: <span class="string">"GET"</span>,</span><br><span class="line">                dataType: <span class="string">"json"</span>,</span><br><span class="line">                success: <span class="function"><span class="keyword">function</span>(<span class="params">callback</span>)</span>&#123;</span><br><span class="line">                    <span class="keyword">for</span>( i <span class="keyword">in</span> callback)&#123;</span><br><span class="line">                            <span class="built_in">console</span>.log(i,callback[i]);</span><br><span class="line">                            $(<span class="string">'#'</span>+ i +<span class="string">'_display'</span>).text(callback[i]);</span><br><span class="line">                            $(<span class="string">'#'</span>+ i +<span class="string">'_width'</span>).text(callback[i]);</span><br><span class="line">                            $(<span class="string">'#'</span>+ i +<span class="string">'_attr'</span>).css(<span class="string">'width'</span>,callback[i]+<span class="string">'%'</span>)</span><br><span class="line"></span><br><span class="line">                    &#125;<span class="comment">// end for</span></span><br><span class="line">                &#125;,<span class="comment">// end sucess func</span></span><br><span class="line">                error: <span class="function"><span class="keyword">function</span>(<span class="params">callback</span>)</span>&#123;</span><br><span class="line">                    alert(callback)</span><br><span class="line">                &#125;<span class="comment">// end error func</span></span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 这个才是重点的代码，必须写</span></span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">getCookie</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> cookieValue = <span class="literal">null</span>;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">document</span>.cookie &amp;&amp; <span class="built_in">document</span>.cookie !== <span class="string">''</span>) &#123;</span><br><span class="line">                <span class="keyword">var</span> cookies = <span class="built_in">document</span>.cookie.split(<span class="string">';'</span>);</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; cookies.length; i++) &#123;</span><br><span class="line">                    <span class="keyword">var</span> cookie = jQuery.trim(cookies[i]);</span><br><span class="line">                    <span class="comment">// Does this cookie string begin with the name we want?</span></span><br><span class="line">                    <span class="keyword">if</span> (cookie.substring(<span class="number">0</span>, name.length + <span class="number">1</span>) === (name + <span class="string">'='</span>)) &#123;</span><br><span class="line">                        cookieValue = <span class="built_in">decodeURIComponent</span>(cookie.substring(name.length + <span class="number">1</span>));</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> cookieValue;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 这个才是重点的代码，必须写</span></span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">csrfSafeMethod</span>(<span class="params">method</span>) </span>&#123;</span><br><span class="line">            <span class="comment">// these HTTP methods do not require CSRF protection</span></span><br><span class="line">            <span class="keyword">return</span> (<span class="regexp">/^(GET|HEAD|OPTIONS|TRACE)$/</span>.test(method));</span><br><span class="line">        &#125;</span><br><span class="line">        $.ajaxSetup(&#123;</span><br><span class="line">            beforeSend: <span class="function"><span class="keyword">function</span>(<span class="params">xhr, settings</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">if</span> (!csrfSafeMethod(settings.type) &amp;&amp; !<span class="keyword">this</span>.crossDomain) &#123;</span><br><span class="line">                    xhr.setRequestHeader(<span class="string">"X-CSRFToken"</span>, csrftoken);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &lt;<span class="regexp">/script&gt;</span></span><br><span class="line"><span class="regexp">    &#123;% block  bottom-js %&#125;</span></span><br><span class="line"><span class="regexp">    &#123;% endblock %&#125;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">&lt;script type=&quot;text/javascript&quot;&gt;
+        // 个人定义大函数，不是重点，可以忽略
+        $(document).ready(function(){
+            get_sys_load();
+            var csrftoken = getCookie(&#39;csrftoken&#39;);
+            var active_node = $(&quot;#mainnav-menu a[href=&#39;{{ request.path }}&#39;]&quot;);
+            active_node.parent().addClass(&quot;active-link&quot;);
+            if (active_node.parent().parent().hasClass(&quot;collapse&quot;)){
+                active_node.parent().parent().addClass(&quot;in&quot;);
+            }
+
+        });//end doc ready
+        // 个人定义大函数，不是重点，可以忽略
+        function  get_sys_load(){
+            $.ajax({
+                url: &quot;{% url 'get_server_host_status' %}&quot;,
+                type: &quot;GET&quot;,
+                dataType: &quot;json&quot;,
+                success: function(callback){
+                    for( i in callback){
+                            console.log(i,callback[i]);
+                            $(&#39;#&#39;+ i +&#39;_display&#39;).text(callback[i]);
+                            $(&#39;#&#39;+ i +&#39;_width&#39;).text(callback[i]);
+                            $(&#39;#&#39;+ i +&#39;_attr&#39;).css(&#39;width&#39;,callback[i]+&#39;%&#39;)
+
+                    }// end for
+                },// end sucess func
+                error: function(callback){
+                    alert(callback)
+                }// end error func
+            })
+        }
+        // 这个才是重点的代码，必须写
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie &amp;&amp; document.cookie !== &#39;&#39;) {
+                var cookies = document.cookie.split(&#39;;&#39;);
+                for (var i = 0; i &lt; cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + &#39;=&#39;)) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // 这个才是重点的代码，必须写
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) &amp;&amp; !this.crossDomain) {
+                    xhr.setRequestHeader(&quot;X-CSRFToken&quot;, csrftoken);
+                }
+            }
+        });
+    &lt;/script&gt;
+    {% block  bottom-js %}
+    {% endblock %}
+</code></pre>
 <p>我们在子板上调用这端js代码，调用的前提是子板的html页面必须嵌套了这个 csrf_token, 代码如下</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">html页面的代码：</span><br><span class="line">==================</span><br><span class="line">&lt;span&gt;&#123;% csrf_token %&#125;&lt;<span class="regexp">/span&gt;</span></span><br><span class="line"><span class="regexp">==================</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">======JQuery代码 =======</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">&#123;% block  bottom-js %&#125;</span></span><br><span class="line"><span class="regexp">&lt;script&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">    function run_cmd()&#123;</span></span><br><span class="line"><span class="regexp">        var csrftoken = getCookie('csrftoken');     /</span><span class="regexp">/ 调用获取token的方法来获取token，getCookie是前面定义好的函数。</span></span><br><span class="line"><span class="regexp">        var input_cmd = $('textarea').val();</span></span><br><span class="line"><span class="regexp">        $.ajax(&#123;</span></span><br><span class="line"><span class="regexp">            url:"&#123;% url 'put_cmd' %&#125;",</span></span><br><span class="line"><span class="regexp">            type:'POST',</span></span><br><span class="line"><span class="regexp">            dataType:'json',</span></span><br><span class="line"><span class="regexp">            token: csrftoken,                  /</span><span class="regexp">/ 把token塞入头部</span></span><br><span class="line"><span class="regexp">            data:&#123;'host_id':$('#host_id').text(),'minion_name':$('#minion_id').text(),'cmd':input_cmd&#125;,</span></span><br><span class="line"><span class="regexp">            success: function(callback)&#123;</span></span><br><span class="line"><span class="regexp">                console.log(callback)</span></span><br><span class="line"><span class="regexp">            &#125;, /</span><span class="regexp">/ end success</span></span><br><span class="line"><span class="regexp">            error: function (callback) &#123;</span></span><br><span class="line"><span class="regexp">                console.log(callback);</span></span><br><span class="line"><span class="regexp">                $('code').append(callback)</span></span><br><span class="line"><span class="regexp">            &#125;</span></span><br><span class="line"><span class="regexp">        &#125;)</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">    function show_result(content)&#123;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">&lt;/</span>script&gt;</span><br><span class="line"></span><br><span class="line">&#123;% endblock %&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">html页面的代码：
+==================
+&lt;span&gt;{% csrf_token %}&lt;/span&gt;
+==================
+
+
+
+======JQuery代码 =======
+
+{% block  bottom-js %}
+<script>
+
+    function run_cmd(){
+        var csrftoken = getCookie('csrftoken');     // 调用获取token的方法来获取token，getCookie是前面定义好的函数。
+        var input_cmd = $('textarea').val();
+        $.ajax({
+            url:"{% url 'put_cmd' %}",
+            type:'POST',
+            dataType:'json',
+            token: csrftoken,                  // 把token塞入头部
+            data:{'host_id':$('#host_id').text(),'minion_name':$('#minion_id').text(),'cmd':input_cmd},
+            success: function(callback){
+                console.log(callback)
+            }, // end success
+            error: function (callback) {
+                console.log(callback);
+                $('code').append(callback)
+            }
+        })
+    }
+
+    function show_result(content){
+
+    }
+
+</script>
+
+{% endblock %}
+</code></pre>
 <p>此时，我们在提交post请求，就能够正常提交了，可以参考官网的信息：<br><a href="https://docs.djangoproject.com/en/dev/ref/csrf/#ajax" target="_blank" rel="noopener">ajax token</a>。</p>
-<h2 id="登录后保存token到cookie中"><a href="#登录后保存token到cookie中" class="headerlink" title="登录后保存token到cookie中"></a>登录后保存token到cookie中</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1.引入相应JS</span></span><br><span class="line"></span><br><span class="line">　　&lt;script src=<span class="string">"web/js/jquery-1.9.1.min.js"</span>&gt;&lt;<span class="regexp">/script&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">　　&lt;script src="web/</span>js/jquery.cookie.js<span class="string">"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">// 2.保存cookie</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">　　$.cookie("</span>名称<span class="string">","</span>值<span class="string">") //$.cookie('cookieName', 'cookieValue');</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">　　$.cookie("</span>名称<span class="string">","</span>值<span class="string">",&#123;expires:失效时间&#125;)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">// 3.获取cookie</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">　　$.cookie("</span>名称<span class="string">") //$.cookie('cookieName');</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">// 4.删除cookie</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">　　$.cookie("</span>名称<span class="string">",null)</span></span><br></pre></td></tr></table></figure>
+<h2 id="登录后保存token到cookie中"><a href="#登录后保存token到cookie中" class="headerlink" title="登录后保存token到cookie中"></a>登录后保存token到cookie中</h2><pre><code class="js">// 1.引入相应JS
+
+　　&lt;script src=&quot;web/js/jquery-1.9.1.min.js&quot;&gt;&lt;/script&gt;
+
+　　&lt;script src=&quot;web/js/jquery.cookie.js&quot;&gt;&lt;/script&gt;
+
+// 2.保存cookie
+
+　　$.cookie(&quot;名称&quot;,&quot;值&quot;) //$.cookie(&#39;cookieName&#39;, &#39;cookieValue&#39;);
+
+　　$.cookie(&quot;名称&quot;,&quot;值&quot;,{expires:失效时间})
+
+// 3.获取cookie
+
+　　$.cookie(&quot;名称&quot;) //$.cookie(&#39;cookieName&#39;);
+
+// 4.删除cookie
+
+　　$.cookie(&quot;名称&quot;,null)
+
+
+</code></pre>
 <h2 id="Token机制相比Cookie机制的优点"><a href="#Token机制相比Cookie机制的优点" class="headerlink" title="Token机制相比Cookie机制的优点"></a>Token机制相比Cookie机制的优点</h2><ul>
 <li><p><strong>支持跨域访问:</strong>cookie是不允许跨域访问的，这一点对token机制是不存在的，前提是传输的用户认证信息通过HTTP头传输.</p>
 </li>
@@ -249,7 +372,7 @@ token是一种身份验证的机制，初始时用户提交账号数据给服务
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

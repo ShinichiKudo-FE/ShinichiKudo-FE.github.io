@@ -101,13 +101,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    7.7k
+                    4.2k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    7 mins.
+                    4 mins.
                 </span>
                 
                 
@@ -144,14 +144,35 @@
             <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>有时候我们需要在用户离开页面的时候，做一些上报来记录用户行为。又或者是发送服务器ajax请求，通知服务器用户已经离开，比如直播间内的退房操作。</p>
 <p>本文主要分两部分来讲解怎么完成退出行为的上报。</p>
 <h2 id="事件监听"><a href="#事件监听" class="headerlink" title="事件监听"></a>事件监听</h2><p>浏览器有两个事件可以用来监听页面关闭，<code>beforeunload</code>和<code>unload</code>。<br><code>beforeunload</code>是在文档和资源将要关闭的时候调用的， 这时候文档还是可见的，并且在这个关闭的事件还是可以取消的。比如下面这种写法就会让用户导致在刷新或者关闭页面时候，有个弹窗提醒用户是否关闭。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">"beforeunload"</span>, <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// Cancel the event as stated by the standard.</span></span><br><span class="line">  event.preventDefault();</span><br><span class="line">  <span class="comment">// Chrome requires returnValue to be set.</span></span><br><span class="line">  event.returnValue = <span class="string">''</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">window.addEventListener(&quot;beforeunload&quot;, function (event) {
+  // Cancel the event as stated by the standard.
+  event.preventDefault();
+  // Chrome requires returnValue to be set.
+  event.returnValue = &#39;&#39;;
+});
+</code></pre>
 <blockquote>
 <p>unload则是在页面已经正在被卸载时发生，此时文档所处的状态是：<br>1.所有资源仍存在（图片，iframe等）；<br>2.对于用户所有资源不可见；<br>3.界面交互无效（window.open, alert, confirm 等）；<br>4.错误不会停止卸载文档的过程。</p>
 </blockquote>
 <p>基于以上两个方法就可以实现对页面关闭的事件监听了，为了稳妥，可以两个事件都监听。然后对监听函数做处理，让关闭事件只调用一次。</p>
 <h2 id="请求发送"><a href="#请求发送" class="headerlink" title="请求发送"></a>请求发送</h2><p>有了上面的监听，事情只完成了一半，如果我们在监听中直接发送ajax请求，就会发现请求被浏览器abort了，无法发送出去。在页面卸载的时候，浏览器并不能保证异步的请求能够成功发出去。</p>
 <p>我们有几种方式可以解决这个问题：</p>
-<h3 id="方案1-发送同步的ajax请求"><a href="#方案1-发送同步的ajax请求" class="headerlink" title="方案1: 发送同步的ajax请求"></a>方案1: 发送同步的ajax请求</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> oAjax = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line"></span><br><span class="line">oAjax.open(<span class="string">'POST'</span>, url + <span class="string">'/user/register'</span>, <span class="literal">false</span>);<span class="comment">//false表示同步请求</span></span><br><span class="line"></span><br><span class="line">oAjax.setRequestHeader(<span class="string">"Content-type"</span>, <span class="string">"application/x-www-form-urlencoded"</span>);</span><br><span class="line"></span><br><span class="line">oAjax.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (oAjax.readyState == <span class="number">4</span> &amp;&amp; oAjax.status == <span class="number">200</span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> data = <span class="built_in">JSON</span>.parse(oAjax.responseText);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(oAjax);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">oAjax.send(<span class="string">'a=1&amp;b=2'</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="方案1-发送同步的ajax请求"><a href="#方案1-发送同步的ajax请求" class="headerlink" title="方案1: 发送同步的ajax请求"></a>方案1: 发送同步的ajax请求</h3><pre><code class="js">var oAjax = new XMLHttpRequest();
+
+oAjax.open(&#39;POST&#39;, url + &#39;/user/register&#39;, false);//false表示同步请求
+
+oAjax.setRequestHeader(&quot;Content-type&quot;, &quot;application/x-www-form-urlencoded&quot;);
+
+oAjax.onreadystatechange = function() {
+    if (oAjax.readyState == 4 &amp;&amp; oAjax.status == 200) {
+        var data = JSON.parse(oAjax.responseText);
+    } else {
+        console.log(oAjax);
+    }
+};
+
+oAjax.send(&#39;a=1&amp;b=2&#39;);
+</code></pre>
 <p>这种方式虽然有效，但是用户需要等待请求结束才可以关闭页面。对用户的体验不好。</p>
 <a id="more"></a>
 <h3 id="发送异步请求，并且在服务端忽略ajax的abort"><a href="#发送异步请求，并且在服务端忽略ajax的abort" class="headerlink" title="发送异步请求，并且在服务端忽略ajax的abort"></a>发送异步请求，并且在服务端忽略ajax的abort</h3><p>虽然异步请求会被浏览器abort，但是如果服务端可以忽略abort，仍然正常执行，也是可以的。比如PHP有<code>ignore_user_abort</code>函数可以忽略abort。这样需要改造后台，一般不太可行..</p>
@@ -159,17 +180,25 @@
 <blockquote>
 <p>这个方法主要用于满足 统计和诊断代码 的需要，这些代码通常尝试在卸载（unload）文档之前向web服务器发送数据。过早的发送数据可能导致错过收集数据的机会。然而， 对于开发者来说保证在文档卸载期间发送数据一直是一个困难。因为用户代理通常会忽略在卸载事件处理器中产生的异步 <code>XMLHttpRequest</code> 。</p>
 </blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">navigator.sendBeacon(url [, data]);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">navigator.sendBeacon(url [, data]);
+</code></pre>
 <p><code>sendBeacon</code>支持发送的data可以是<code>ArrayBufferView, Blob, DOMString</code>, 或者 <code>FormData</code> 类型的数据。</p>
 <p>下面是几种使用<code>sendBeacon</code>发送请求的方式，可以修改header和内容的格式，因为一般和服务器的通信方式都是固定的，如果修改了header或者内容，服务器就无法正常识别出来了。</p>
 <p>（1）使用Blob来发送 使用blob发送的好处是可以自己定义内容的格式和header。比如下面这种设置方式，就是可以设置content-type为application/x-www-form-urlencoded。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">blob = <span class="keyword">new</span> Blob([<span class="string">`room_id=123`</span>], &#123;<span class="attr">type</span> : <span class="string">'application/x-www-form-urlencoded'</span>&#125;);</span><br><span class="line">navigator.sendBeacon(<span class="string">"/cgi-bin/leave_room"</span>, blob);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">blob = new Blob([`room_id=123`], {type : &#39;application/x-www-form-urlencoded&#39;});
+navigator.sendBeacon(&quot;/cgi-bin/leave_room&quot;, blob);
+</code></pre>
 <p><img src="https://user-gold-cdn.xitu.io/2019/3/5/1694d78d66686fa5?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="1"></p>
 <p>（2）使用FormData对象，但是这时<code>content-type</code>会被设置成<code>&quot;multipart/form-data&quot;</code>。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fd = <span class="keyword">new</span> FormData();</span><br><span class="line">fd.append(<span class="string">'room_id'</span>, <span class="number">123</span>);</span><br><span class="line">navigator.sendBeacon(<span class="string">"/cgi-bin/leave_room"</span>, fd);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">var fd = new FormData();
+fd.append(&#39;room_id&#39;, 123);
+navigator.sendBeacon(&quot;/cgi-bin/leave_room&quot;, fd);
+</code></pre>
 <p><img src="https://user-gold-cdn.xitu.io/2019/3/5/1694d78d632c79f3?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="2"></p>
 <p>（3）数据也可以使用<code>URLSearchParams</code> 对象，content-type会被设置成”text/plain;charset=UTF-8” 。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> params = <span class="keyword">new</span> URLSearchParams(&#123; <span class="attr">room_id</span>: <span class="number">123</span> &#125;)</span><br><span class="line">navigator.sendBeacon(<span class="string">"/cgi-bin/leave_room"</span>, params);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">var params = new URLSearchParams({ room_id: 123 })
+navigator.sendBeacon(&quot;/cgi-bin/leave_room&quot;, params);
+</code></pre>
 <p><img src="https://user-gold-cdn.xitu.io/2019/3/5/1694d78d64c21552?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="3"><br>通过尝试，可以发现使用blob发送比较方便，内容的设置也比较灵活，如果发送的消息抓包后发现后台没有识别出来，可以尝试修改内容的string或者header，来找到合适的方式发送请求。</p>
 <p><a href="https://juejin.im/post/5c7e541b6fb9a049e06415a5#comment" target="_blank" rel="noopener">原文地址</a></p>
 
@@ -219,7 +248,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

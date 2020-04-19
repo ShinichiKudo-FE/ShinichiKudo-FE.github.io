@@ -100,13 +100,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    15k
+                    5.6k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    13 mins.
+                    5 mins.
                 </span>
                 
                 
@@ -154,7 +154,39 @@
 <li>当数据有变化的时候，通知订阅者</li>
 </ul>
 <a id="more"></a>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createStore</span>(<span class="params">reducer, initialState</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// currentState就是那个数据</span></span><br><span class="line">  <span class="keyword">let</span> currentState = initialState;</span><br><span class="line">  <span class="keyword">let</span> listener = <span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">getState</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> currentState;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">dispatch</span>(<span class="params">action</span>) </span>&#123;</span><br><span class="line">    currentState = reducer(currentState, action); <span class="comment">// 更新数据</span></span><br><span class="line">    listener(); <span class="comment">// 执行订阅函数</span></span><br><span class="line">    <span class="keyword">return</span> action;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">subscribe</span>(<span class="params">newListener</span>) </span>&#123;</span><br><span class="line">    listener = newListener;</span><br><span class="line">    <span class="comment">// 取消订阅函数</span></span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">unsubscribe</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      listener = <span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    getState,</span><br><span class="line">    dispatch,</span><br><span class="line">    subscribe</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> store = createStore(reducer);</span><br><span class="line">store.getState(); <span class="comment">// 获取数据</span></span><br><span class="line">store.dispatch(&#123;<span class="attr">type</span>: <span class="string">'ADD_TODO'</span>&#125;); <span class="comment">// 更新数据</span></span><br><span class="line">store.subscribe(<span class="function"><span class="params">()</span> =&gt;</span> &#123;<span class="comment">/* update UI */</span>&#125;); <span class="comment">// 注册订阅函数</span></span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">function createStore(reducer, initialState) {
+  // currentState就是那个数据
+  let currentState = initialState;
+  let listener = () =&gt; {};
+
+  function getState() {
+    return currentState;
+  }
+  function dispatch(action) {
+    currentState = reducer(currentState, action); // 更新数据
+    listener(); // 执行订阅函数
+    return action;
+  }
+  function subscribe(newListener) {
+    listener = newListener;
+    // 取消订阅函数
+    return function unsubscribe() {
+      listener = () =&gt; {};
+    };
+  }
+  return {
+    getState,
+    dispatch,
+    subscribe
+  };
+}
+
+const store = createStore(reducer);
+store.getState(); // 获取数据
+store.dispatch({type: &#39;ADD_TODO&#39;}); // 更新数据
+store.subscribe(() =&gt; {/* update UI */}); // 注册订阅函数
+
+</code></pre>
 <p>更新数据执行的步骤：</p>
 <ul>
 <li>What：想干什么 — dispatch(action)</li>
@@ -164,11 +196,77 @@
 <p>这样就实现了一个store，提供一个数据存储中心，可以供外部访问、修改等，这就是Redux的主要思想。<br>所以，Redux确实和React没有什么本质关系，Redux可以结合其他库正常使用。只不过Redux这种数据管理方式，跟React的数据驱动视图理念很合拍，它俩结合在一起，开发非常便利。</p>
 <p>现在既然有了一个安全的地方存取数据，怎么结合到React里面呢？<br>我们可以在应用初始化的时候，创建一个<code>window.store = createStore(reducer)</code>，然后在需要的地方通过<code>store.getState()</code>去获取数据，通过<code>store.dispatch</code>去更新数据，通过<code>store.subscribe</code>去订阅数据变化然后进行<code>setState...</code>如果很多地方都这样做一遍，实在是不堪其重，而且，还是没有避免掉全局变量的不优雅。</p>
 <h2 id="React-Redux"><a href="#React-Redux" class="headerlink" title="React-Redux"></a>React-Redux</h2><p><a href="https://github.com/reactjs/react-redux" target="_blank" rel="noopener">React-Redux</a></p>
-<p>由于全局变量有诸多的缺点，那就换个思路，把store直接集成到React应用的顶层props里面，只要各个子组件能访问到顶层props就行了，比如这样：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;TopWrapComponent store=&#123;store&#125;&gt;</span><br><span class="line">  &lt;App /&gt;</span><br><span class="line">&lt;<span class="regexp">/TopWrapComponent&gt;,</span></span><br></pre></td></tr></table></figure></p>
+<p>由于全局变量有诸多的缺点，那就换个思路，把store直接集成到React应用的顶层props里面，只要各个子组件能访问到顶层props就行了，比如这样：</p>
+<pre><code class="javascript">&lt;TopWrapComponent store={store}&gt;
+  &lt;App /&gt;
+&lt;/TopWrapComponent&gt;,
+</code></pre>
 <p>React恰好提供了这么一个钩子，<a href="https://reactjs.org/docs/context.html" target="_blank" rel="noopener">Context</a>，用法很简单，看一下官方demo就明了。现在各个子组件已经能够轻易地访问到store了，接下来就是子组件把store中用到的数据取出来、修改、以及订阅更新UI等。每个子组件都需要这样做一遍，显然，肯定有更便利的方法：<a href="https://reactjs.org/docs/higher-order-components.html" target="_blank" rel="noopener">高阶组件</a>。通过高阶组件把<code>store.getState()</code>、<code>store.dispatch</code>、<code>store.subscribe</code>封装起来，子组件对store就无感知了，子组件正常使用props获取数据以及正常使用callback触发回调，相当于没有store存在一样。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">connect</span>(<span class="params">mapStateToProps, mapDispatchToProps</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">WrappedComponent</span>) </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Connect</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">      componentDidMount() &#123;</span><br><span class="line">        <span class="comment">// 组件加载完成后订阅store变化，如果store有变化则更新UI</span></span><br><span class="line">        <span class="keyword">this</span>.unsubscribe = <span class="keyword">this</span>.context.store.subscribe(<span class="keyword">this</span>.handleStoreChange.bind(<span class="keyword">this</span>));</span><br><span class="line">      &#125;</span><br><span class="line">      componentWillUnmount() &#123;</span><br><span class="line">        <span class="comment">// 组件销毁后，取消订阅事件</span></span><br><span class="line">        <span class="keyword">this</span>.unsubscribe();</span><br><span class="line">      &#125;</span><br><span class="line">      handleStoreChange() &#123;</span><br><span class="line">        <span class="comment">// 更新UI</span></span><br><span class="line">        <span class="keyword">this</span>.forceUpdate();</span><br><span class="line">      &#125;</span><br><span class="line">      render() &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">          &lt;WrappedComponent</span><br><span class="line">            &#123;...this.props&#125;</span><br><span class="line">            &#123;...mapStateToProps(<span class="keyword">this</span>.context.store.getState())&#125; <span class="comment">// 参数是store里面的数据</span></span><br><span class="line">            &#123;...mapDispatchToProps(<span class="keyword">this</span>.context.store.dispatch)&#125; <span class="comment">// 参数是store.dispatch</span></span><br><span class="line">          /&gt;</span><br><span class="line">        );</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    Connect.contextTypes = &#123;</span><br><span class="line">      store: PropTypes.object</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">return</span> Connect;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">function connect(mapStateToProps, mapDispatchToProps) {
+  return function(WrappedComponent) {
+    class Connect extends React.Component {
+      componentDidMount() {
+        // 组件加载完成后订阅store变化，如果store有变化则更新UI
+        this.unsubscribe = this.context.store.subscribe(this.handleStoreChange.bind(this));
+      }
+      componentWillUnmount() {
+        // 组件销毁后，取消订阅事件
+        this.unsubscribe();
+      }
+      handleStoreChange() {
+        // 更新UI
+        this.forceUpdate();
+      }
+      render() {
+        return (
+          &lt;WrappedComponent
+            {...this.props}
+            {...mapStateToProps(this.context.store.getState())} // 参数是store里面的数据
+            {...mapDispatchToProps(this.context.store.dispatch)} // 参数是store.dispatch
+          /&gt;
+        );
+      }
+    }
+    Connect.contextTypes = {
+      store: PropTypes.object
+    };
+    return Connect;
+  };
+}
+</code></pre>
 <p>使用connect的时候，我们知道要写一些样板化的代码，比如<code>mapStateToProps</code>、<code>mapDispatchToProps</code>这两个函数：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> mapStateToProps = <span class="function"><span class="params">state</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    count: state.count</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> mapDispatchToProps = <span class="function"><span class="params">dispatch</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    dispatch</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> connect(mapStateToProps, mapDispatchToProps)(Child);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 上述代码执行之后，可以看到connect函数里面的</span></span><br><span class="line">  &lt;WrappedComponent</span><br><span class="line">    &#123;...this.props&#125;</span><br><span class="line">    &#123;...mapStateToProps(<span class="keyword">this</span>.context.store.getState())&#125;</span><br><span class="line">    &#123;...mapDispatchToProps(<span class="keyword">this</span>.context.store.dispatch)&#125;</span><br><span class="line">  /&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 就变成了</span></span><br><span class="line">  &lt;WrappedComponent</span><br><span class="line">    &#123;...this.props&#125;</span><br><span class="line">    &#123;<span class="attr">count</span>: store.getState().count&#125;</span><br><span class="line">    &#123;<span class="attr">dispatch</span>: store.dispatch&#125;</span><br><span class="line">  /&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 这样，子组件Child的props里面就多了count和dispatch两个属性</span></span><br><span class="line"><span class="comment">// count可以用来渲染UI，dispatch可以用来触发回调</span></span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">const mapStateToProps = state =&gt; {
+  return {
+    count: state.count
+  };
+};
+
+const mapDispatchToProps = dispatch =&gt; {
+  return {
+    dispatch
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Child);
+
+// 上述代码执行之后，可以看到connect函数里面的
+  &lt;WrappedComponent
+    {...this.props}
+    {...mapStateToProps(this.context.store.getState())}
+    {...mapDispatchToProps(this.context.store.dispatch)}
+  /&gt;
+
+// 就变成了
+  &lt;WrappedComponent
+    {...this.props}
+    {count: store.getState().count}
+    {dispatch: store.dispatch}
+  /&gt;
+
+// 这样，子组件Child的props里面就多了count和dispatch两个属性
+// count可以用来渲染UI，dispatch可以用来触发回调
+
+</code></pre>
 <p>So，这样就OK了？OK了。<br>通过一个闭包生成一个数据中心store，然后把这个store绑定到React的顶层props里面，子组件通过HOC建立与顶层props.store的联系，进而获取数据、修改数据、更新UI。<br>这里主要讲了一下三者怎么窜在一起的，如果想了解更高级的功能，比如redux中间件、reducer拆分、connect的其他参数等，可以去看一下对应的源码。</p>
 <p><a href="https://juejin.im/post/5acce5ac5188257cc20da02d" target="_blank" rel="noopener">原文链接：</a></p>
 
@@ -218,7 +316,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

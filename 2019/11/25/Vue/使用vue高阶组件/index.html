@@ -99,13 +99,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    37k
+                    11k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    33 mins.
+                    10 mins.
                 </span>
                 
                 
@@ -149,22 +149,172 @@
 <h2 id="预备知识"><a href="#预备知识" class="headerlink" title="预备知识"></a>预备知识</h2><p>在我们开始教程之前，需要了解以下几点：</p>
 <p>使用 Vue 框架的经验。<br>知道如何使用 vue-cli 设置应用程序。<br>JavaScript 和 Vue 的基本知识<br>Node (8)<br>npm (5.2.0)</p>
 <h2 id="Vue-中的高阶组件模式"><a href="#Vue-中的高阶组件模式" class="headerlink" title="Vue 中的高阶组件模式"></a>Vue 中的高阶组件模式</h2><p>虽然高阶组件通常与 React 相关联，但是为 Vue 组件创建高阶组件是很有可能的。在 Vue 中创建高阶组件的模式如下所示。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// hoccomponent.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">"vue"</span></span><br><span class="line"><span class="keyword">import</span> ComponentExample <span class="keyword">from</span> <span class="string">'@/components/ComponentExample.vue'</span></span><br><span class="line"><span class="keyword">const</span> HoComponent = <span class="function">(<span class="params">component</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> Vue.component(<span class="string">'withSubscription'</span>, &#123;</span><br><span class="line">        render(createElement) &#123;</span><br><span class="line">            <span class="keyword">return</span> createElement(component)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> HoComponentEnhanced = HoComponent(ComponentExample);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// hoccomponent.js
+
+import Vue from &quot;vue&quot;
+import ComponentExample from &#39;@/components/ComponentExample.vue&#39;
+const HoComponent = (component) =&gt; {
+    return Vue.component(&#39;withSubscription&#39;, {
+        render(createElement) {
+            return createElement(component)
+        }
+    }
+}
+const HoComponentEnhanced = HoComponent(ComponentExample);
+
+</code></pre>
 <p>如上面的代码块所示，<code>HoComponent</code> 函数接受一个组件作为参数，并创建一个新组件来渲染传进来的组件。</p>
 <h2 id="一个简单的-HOC-示例"><a href="#一个简单的-HOC-示例" class="headerlink" title="一个简单的 HOC 示例"></a>一个简单的 HOC 示例</h2><p>在本教程中，我们将介绍一个使用高阶组件的示例。在介绍高阶组件之前，我们将了解在没有高阶组件的情况下，当前的代码库是如何工作的，然后了解如何进行抽象。</p>
 <p><a href="https://codesandbox.io/embed/llvq04nx4l" target="_blank" rel="noopener">https://codesandbox.io/embed/llvq04nx4l</a></p>
 <p>正如上面的 CodeSandbox 所示，该应用程序会显示一个纸业公司及其净资产的列表，以及《办公室》(美国)中的人物及其获奖情况。</p>
 <p>我们获得应用程序所需的所有数据来源只有一个，那就是<code>mockData.js</code>文件。</p>
 <a id="more"></a>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/components/mockData.js</span></span><br><span class="line"><span class="keyword">const</span> staff = [</span><br><span class="line">  &#123;</span><br><span class="line">    name: <span class="string">"Michael Scott"</span>,</span><br><span class="line">    id: <span class="number">0</span>,</span><br><span class="line">    awards: <span class="number">2</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    name: <span class="string">"Toby Flenderson"</span>,</span><br><span class="line">    id: <span class="number">1</span>,</span><br><span class="line">    awards: <span class="number">0</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    name: <span class="string">"Dwight K. Schrute"</span>,</span><br><span class="line">    id: <span class="number">2</span>,</span><br><span class="line">    awards: <span class="number">10</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    name: <span class="string">"Jim Halpert"</span>,</span><br><span class="line">    id: <span class="number">3</span>,</span><br><span class="line">    awards: <span class="number">1</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    name: <span class="string">"Andy Bernard"</span>,</span><br><span class="line">    id: <span class="number">4</span>,</span><br><span class="line">    awards: <span class="number">0</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    name: <span class="string">"Phyllis Vance"</span>,</span><br><span class="line">    id: <span class="number">5</span>,</span><br><span class="line">    awards: <span class="number">0</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    name: <span class="string">"Stanley Hudson"</span>,</span><br><span class="line">    id: <span class="number">6</span>,</span><br><span class="line">    awards: <span class="number">0</span></span><br><span class="line">  &#125;</span><br><span class="line">];</span><br><span class="line"><span class="keyword">const</span> paperCompanies = [</span><br><span class="line">  &#123;</span><br><span class="line">    id: <span class="number">0</span>,</span><br><span class="line">    name: <span class="string">"Staples"</span>,</span><br><span class="line">    net: <span class="number">10000000</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    id: <span class="number">1</span>,</span><br><span class="line">    name: <span class="string">"Dundler Mufflin"</span>,</span><br><span class="line">    net: <span class="number">5000000</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    id: <span class="number">2</span>,</span><br><span class="line">    name: <span class="string">"Michael Scott Paper Company"</span>,</span><br><span class="line">    net: <span class="number">300000</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    id: <span class="number">3</span>,</span><br><span class="line">    name: <span class="string">"Prince Family Paper"</span>,</span><br><span class="line">    net: <span class="number">30000</span></span><br><span class="line">  &#125;</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  getStaff() &#123;</span><br><span class="line">    <span class="keyword">return</span> staff;</span><br><span class="line">  &#125;,</span><br><span class="line">  getCompanies() &#123;</span><br><span class="line">    <span class="keyword">return</span> paperCompanies;</span><br><span class="line">  &#125;,</span><br><span class="line">  increaseAward(id) &#123;</span><br><span class="line">    staff[id].awards++;</span><br><span class="line">  &#125;,</span><br><span class="line">  decreaseAward(id) &#123;</span><br><span class="line">    staff[id].awards--;</span><br><span class="line">  &#125;,</span><br><span class="line">  setNetWorth(id) &#123;</span><br><span class="line">    paperCompanies[id].net = <span class="built_in">Math</span>.random() * (<span class="number">5000000</span> - <span class="number">50000</span>) + <span class="number">50000</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// src/components/mockData.js
+const staff = [
+  {
+    name: &quot;Michael Scott&quot;,
+    id: 0,
+    awards: 2
+  },
+  {
+    name: &quot;Toby Flenderson&quot;,
+    id: 1,
+    awards: 0
+  },
+  {
+    name: &quot;Dwight K. Schrute&quot;,
+    id: 2,
+    awards: 10
+  },
+  {
+    name: &quot;Jim Halpert&quot;,
+    id: 3,
+    awards: 1
+  },
+  {
+    name: &quot;Andy Bernard&quot;,
+    id: 4,
+    awards: 0
+  },
+  {
+    name: &quot;Phyllis Vance&quot;,
+    id: 5,
+    awards: 0
+  },
+  {
+    name: &quot;Stanley Hudson&quot;,
+    id: 6,
+    awards: 0
+  }
+];
+const paperCompanies = [
+  {
+    id: 0,
+    name: &quot;Staples&quot;,
+    net: 10000000
+  },
+  {
+    id: 1,
+    name: &quot;Dundler Mufflin&quot;,
+    net: 5000000
+  },
+  {
+    id: 2,
+    name: &quot;Michael Scott Paper Company&quot;,
+    net: 300000
+  },
+  {
+    id: 3,
+    name: &quot;Prince Family Paper&quot;,
+    net: 30000
+  }
+];
+
+export default {
+  getStaff() {
+    return staff;
+  },
+  getCompanies() {
+    return paperCompanies;
+  },
+  increaseAward(id) {
+    staff[id].awards++;
+  },
+  decreaseAward(id) {
+    staff[id].awards--;
+  },
+  setNetWorth(id) {
+    paperCompanies[id].net = Math.random() * (5000000 - 50000) + 50000;
+  }
+};
+</code></pre>
 <p>在上面的代码片段中，有几个 const 变量保存了公司和员工列表的信息。我们也导出了一些函数，</p>
 <blockquote>
 <p>实现以下功能：<br>返回员工列表<br>返回公司列表<br>增加和减少对特定员工的奖励，最后<br>最后，设定公司的净值</p>
 </blockquote>
 <p>接下来，我们看看 <code>Staff.vue</code> 和 <code>Companies.vue</code> 组件。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">// src/components/Staff.vue</span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">main</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span>&gt;</span>Staff List<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">v-for</span>=<span class="string">"(staff, i) in staffList"</span> <span class="attr">:key</span>=<span class="string">"i"</span>&gt;</span></span><br><span class="line">      &#123;&#123; staff.name &#125;&#125;: &#123;&#123; staff.awards &#125;&#125; Salesman of the year Award 🎉</span><br><span class="line">      <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">"increaseAwards(staff.id);"</span>&gt;</span>+<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">"decreaseAwards(staff.id);"</span>&gt;</span>-<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">main</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">  <span class="keyword">import</span> mockData <span class="keyword">from</span> <span class="string">"./mockData.js"</span>;</span></span><br><span class="line"><span class="javascript">  <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line">    data() &#123;</span><br><span class="line"><span class="actionscript">      <span class="keyword">return</span> &#123;</span></span><br><span class="line">        staffList: mockData.getStaff()</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;,</span><br><span class="line">    methods: &#123;</span><br><span class="line">      increaseAwards(id) &#123;</span><br><span class="line">        mockData.increaseAward(id);</span><br><span class="line"><span class="actionscript">        <span class="keyword">this</span>.staffList = mockData.getStaff();</span></span><br><span class="line">      &#125;,</span><br><span class="line">      decreaseAwards(id) &#123;</span><br><span class="line">        mockData.decreaseAward(id);</span><br><span class="line"><span class="actionscript">        <span class="keyword">this</span>.staffList = mockData.getStaff();</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="html">// src/components/Staff.vue
+&lt;template&gt;
+  &lt;main&gt;
+    &lt;h3&gt;Staff List&lt;/h3&gt;
+    &lt;div v-for=&quot;(staff, i) in staffList&quot; :key=&quot;i&quot;&gt;
+      {{ staff.name }}: {{ staff.awards }} Salesman of the year Award 🎉
+      &lt;button @click=&quot;increaseAwards(staff.id);&quot;&gt;+&lt;/button&gt;
+      &lt;button @click=&quot;decreaseAwards(staff.id);&quot;&gt;-&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+&lt;/template&gt;
+&lt;script&gt;
+  import mockData from &quot;./mockData.js&quot;;
+  export default {
+    data() {
+      return {
+        staffList: mockData.getStaff()
+      };
+    },
+    methods: {
+      increaseAwards(id) {
+        mockData.increaseAward(id);
+        this.staffList = mockData.getStaff();
+      },
+      decreaseAwards(id) {
+        mockData.decreaseAward(id);
+        this.staffList = mockData.getStaff();
+      }
+    }
+  };
+&lt;/script&gt;
+</code></pre>
 <p>在上面的代码块中，数据实例变量staffList被赋值为函数mockData.getStaff()返回的内容。我们也有increaseAwards和decreaseAwards函数，分别调用mockData.increaseAward 和 mockData.decreaseAward。传递给这些函数的id 是从渲染的模板中获得的。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">// src/components/Companies.vue</span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">main</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span>&gt;</span>Paper Companies<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">v-for</span>=<span class="string">"(companies, i) in companies"</span> <span class="attr">:key</span>=<span class="string">"i"</span>&gt;</span></span><br><span class="line">      &#123;&#123; companies.name &#125;&#125; - $&#123;&#123; companies.net</span><br><span class="line">      &#125;&#125;<span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">"setWorth(companies.id);"</span>&gt;</span>Set Company Value<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">main</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">  <span class="keyword">import</span> mockData <span class="keyword">from</span> <span class="string">"./mockData.js"</span>;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line">    data() &#123;</span><br><span class="line"><span class="actionscript">      <span class="keyword">return</span> &#123;</span></span><br><span class="line">        companies: mockData.getCompanies()</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;,</span><br><span class="line">    methods: &#123;</span><br><span class="line">      setWorth(id) &#123;</span><br><span class="line">        mockData.setNetWorth(id);</span><br><span class="line"><span class="actionscript">        <span class="keyword">this</span>.companies = mockData.getCompanies();</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="html">    // src/components/Companies.vue
+    &lt;template&gt;
+      &lt;main&gt;
+        &lt;h3&gt;Paper Companies&lt;/h3&gt;
+        &lt;div v-for=&quot;(companies, i) in companies&quot; :key=&quot;i&quot;&gt;
+          {{ companies.name }} - ${{ companies.net
+          }}&lt;button @click=&quot;setWorth(companies.id);&quot;&gt;Set Company Value&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/main&gt;
+    &lt;/template&gt;
+
+    &lt;script&gt;
+      import mockData from &quot;./mockData.js&quot;;
+        export default {
+        data() {
+          return {
+            companies: mockData.getCompanies()
+          };
+        },
+        methods: {
+          setWorth(id) {
+            mockData.setNetWorth(id);
+            this.companies = mockData.getCompanies();
+          }
+        }
+      };
+    &lt;/script&gt;
+
+</code></pre>
 <p>在上面的代码块中，数据实例变量companies 被赋值为函数mockData.getCompanies()的返回内容。我们还有setWorth函数，它通过将公司的 id 传递给mockData.setNetWorth来设置一个随机值作为净值。传递给函数的id是从渲染的模板中获得的。</p>
 <p>现在我们已经看到了这两个组件是如何工作的，我们可以</p>
 <blockquote>
@@ -175,20 +325,134 @@
 <p>HoComponent 函数接受两个参数，一个组件和fetchData。fetchData方法用于确定要在表示组件中显示什么。这意味着无论在哪里使用高阶组件，作为fetchData 传递的函数都将被用来从mockData 中获取数据。</p>
 <p>然后将数据实例returnedData 设置为fetchData的内容，然后作为props 传递给在高阶组件中创建的新组件。</p>
 <p>让我们看看新创建的高阶组件如何在应用程序中使用。我们需要编辑Staff.vue 和Companies.vue。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">// src/components/Staff.vue</span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">main</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span>&gt;</span>Staff List<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">v-for</span>=<span class="string">"(staff, i) in returnedData"</span> <span class="attr">:key</span>=<span class="string">"i"</span>&gt;</span></span><br><span class="line">      &#123;&#123; staff.name &#125;&#125;: &#123;&#123; staff.awards &#125;&#125; Salesman of the year Award 🎉</span><br><span class="line">      <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">"increaseAwards(staff.id);"</span>&gt;</span>+<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">"decreaseAwards(staff.id);"</span>&gt;</span>-<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">main</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">  <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="actionscript">    props: [<span class="string">"returnedData"</span>]</span></span><br><span class="line">  &#125;;</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// src/components/Companies.vue</span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">main</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span>&gt;</span>Paper Companies<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">v-for</span>=<span class="string">"(companies, i) in returnedData"</span> <span class="attr">:key</span>=<span class="string">"i"</span>&gt;</span></span><br><span class="line">      &#123;&#123; companies.name &#125;&#125; - $&#123;&#123; companies.net</span><br><span class="line">      &#125;&#125;<span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">"setWorth(companies.id);"</span>&gt;</span>Set Company Value<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">main</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">  <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="actionscript">    props: [<span class="string">"returnedData"</span>]</span></span><br><span class="line">  &#125;;</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="html">    // src/components/Staff.vue
+    &lt;template&gt;
+      &lt;main&gt;
+        &lt;h3&gt;Staff List&lt;/h3&gt;
+        &lt;div v-for=&quot;(staff, i) in returnedData&quot; :key=&quot;i&quot;&gt;
+          {{ staff.name }}: {{ staff.awards }} Salesman of the year Award 🎉
+          &lt;button @click=&quot;increaseAwards(staff.id);&quot;&gt;+&lt;/button&gt;
+          &lt;button @click=&quot;decreaseAwards(staff.id);&quot;&gt;-&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/main&gt;
+    &lt;/template&gt;
+    &lt;script&gt;
+      export default {
+        props: [&quot;returnedData&quot;]
+      };
+    &lt;/script&gt;
+
+</code></pre>
+<pre><code class="html">    // src/components/Companies.vue
+    &lt;template&gt;
+      &lt;main&gt;
+        &lt;h3&gt;Paper Companies&lt;/h3&gt;
+        &lt;div v-for=&quot;(companies, i) in returnedData&quot; :key=&quot;i&quot;&gt;
+          {{ companies.name }} - ${{ companies.net
+          }}&lt;button @click=&quot;setWorth(companies.id);&quot;&gt;Set Company Value&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/main&gt;
+    &lt;/template&gt;
+    &lt;script&gt;
+      export default {
+        props: [&quot;returnedData&quot;]
+      };
+    &lt;/script&gt;
+
+</code></pre>
 <p>正如你在上面的代码块中看到的，对于这两个组件，我们去掉了函数和数据实例变量，显示内容所需的所有数据现在都将从这些props中获得。对于删掉的函数，我们将很快会讲到。</p>
 <p>在 App.vue 组件中，用以下代码编辑script 标签中的现有内容：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">// src/App.vue</span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="actionscript">  <span class="comment">// import the Companies component</span></span></span><br><span class="line"><span class="javascript">  <span class="keyword">import</span> Companies <span class="keyword">from</span> <span class="string">"./components/Companies"</span>;</span></span><br><span class="line"><span class="actionscript">  <span class="comment">// import the Staff component</span></span></span><br><span class="line"><span class="javascript">  <span class="keyword">import</span> Staff <span class="keyword">from</span> <span class="string">"./components/Staff"</span>;</span></span><br><span class="line"><span class="actionscript">  <span class="comment">// import the higher order component</span></span></span><br><span class="line"><span class="javascript">  <span class="keyword">import</span> HoComponent <span class="keyword">from</span> <span class="string">"./components/HoComponent.js"</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="actionscript">  <span class="comment">// Create a const variable which contains the Companies component wrapped in the higher order component</span></span></span><br><span class="line"><span class="actionscript">  <span class="keyword">const</span> CompaniesComponent = HoComponent(Companies, mockData =&gt; mockData.getCompanies()</span></span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line"><span class="actionscript">  <span class="comment">// Create a const variable which contains the Staff component wrapped in the higher order component</span></span></span><br><span class="line"><span class="actionscript">  <span class="keyword">const</span> StaffComponent = HoComponent(Staff, mockData =&gt; mockData.getStaff());</span></span><br><span class="line"></span><br><span class="line"><span class="javascript">  <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="actionscript">    name: <span class="string">"App"</span>,</span></span><br><span class="line">    components: &#123;</span><br><span class="line">      CompaniesComponent,</span><br><span class="line">      StaffComponent</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="html">    // src/App.vue
+    &lt;script&gt;
+      // import the Companies component
+      import Companies from &quot;./components/Companies&quot;;
+      // import the Staff component
+      import Staff from &quot;./components/Staff&quot;;
+      // import the higher order component
+      import HoComponent from &quot;./components/HoComponent.js&quot;;
+
+      // Create a const variable which contains the Companies component wrapped in the higher order component
+      const CompaniesComponent = HoComponent(Companies, mockData =&gt; mockData.getCompanies()
+      );
+
+      // Create a const variable which contains the Staff component wrapped in the higher order component
+      const StaffComponent = HoComponent(Staff, mockData =&gt; mockData.getStaff());
+
+      export default {
+        name: &quot;App&quot;,
+        components: {
+          CompaniesComponent,
+          StaffComponent
+        }
+      };
+    &lt;/script&gt;
+
+</code></pre>
 <p>在上面的代码块中，HoComponent用于包装 Staff 和 Companies 组件。</p>
 <p>每个组件作为HoComponent 的第一个参数传入，第二个参数是一个函数，它返回另一个函数，指定应该从mockData获取什么数据。这是我们之前创建的高阶组件(HoComponent.js)中的fetchData 函数。</p>
 <p>如果你现在刷新应用程序，你应该仍然可以看到来自mockData 文件的数据像往常一样呈现。唯一的区别是，这些按钮无法工作，因为它们还没有绑定到任何函数。让我们解决这个问题。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">// src/App.vue</span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">CompaniesComponent</span> @<span class="attr">click</span>=<span class="string">"onEventHappen"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">StaffComponent</span> @<span class="attr">click</span>=<span class="string">"onEventHappen"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="actionscript">  <span class="comment">// import the Companies component</span></span></span><br><span class="line"><span class="javascript">  <span class="keyword">import</span> Companies <span class="keyword">from</span> <span class="string">"./components/Companies"</span>;</span></span><br><span class="line"><span class="actionscript">  <span class="comment">// import the Staff component</span></span></span><br><span class="line"><span class="javascript">  <span class="keyword">import</span> Staff <span class="keyword">from</span> <span class="string">"./components/Staff"</span>;</span></span><br><span class="line"><span class="actionscript">  <span class="comment">// import the higher order component</span></span></span><br><span class="line"><span class="javascript">  <span class="keyword">import</span> HoComponent <span class="keyword">from</span> <span class="string">"./components/HoComponent.js"</span>;</span></span><br><span class="line"><span class="actionscript">  <span class="comment">// import the source data from mockData only to be used for event handlers</span></span></span><br><span class="line"><span class="javascript">  <span class="keyword">import</span> sourceData <span class="keyword">from</span> <span class="string">"./components/mockData.js"</span>;</span></span><br><span class="line"><span class="actionscript">  <span class="comment">// Create a const variable which contains the Companies component wrapped in the higher order component</span></span></span><br><span class="line"><span class="actionscript">  <span class="keyword">const</span> CompaniesComponent = HoComponent(Companies, mockData =&gt;</span></span><br><span class="line">  mockData.getCompanies()</span><br><span class="line">  );</span><br><span class="line"><span class="actionscript">  <span class="comment">// Create a const variable which contains the Staff component wrapped in the higher order component</span></span></span><br><span class="line"><span class="actionscript">  <span class="keyword">const</span> StaffComponent = HoComponent(Staff, mockData =&gt; mockData.getStaff());</span></span><br><span class="line"></span><br><span class="line"><span class="javascript">  <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="actionscript">    name: <span class="string">"App"</span>,</span></span><br><span class="line">    components: &#123;</span><br><span class="line">      CompaniesComponent,</span><br><span class="line">      StaffComponent</span><br><span class="line">      &#125;,</span><br><span class="line">    methods: &#123;</span><br><span class="line">      onEventHappen(value) &#123;</span><br><span class="line"><span class="actionscript">        <span class="comment">// set the variable setFunction to the name of the function that was passed iin the value emitted from child component i.e. if value.name is 'increaseAward', setFunction is set to increaseAward()</span></span></span><br><span class="line"><span class="javascript">        <span class="keyword">let</span> setFunction = sourceData[value.name];</span></span><br><span class="line"><span class="actionscript">        <span class="comment">// call the corresponding function with the id passed as an argument.</span></span></span><br><span class="line">        setFunction(value.id);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="css"><span class="selector-id">#app</span> &#123;</span></span><br><span class="line">  font-family: "Avenir", Helvetica, Arial, sans-serif;</span><br><span class="line">  -webkit-font-smoothing: antialiased;</span><br><span class="line">  -moz-osx-font-smoothing: grayscale;</span><br><span class="line">  text-align: center;</span><br><span class="line"><span class="css">  <span class="selector-tag">color</span>: <span class="selector-id">#2c3e50</span>;</span></span><br><span class="line">  margin-top: 60px;</span><br><span class="line">&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="html">    // src/App.vue
+    &lt;template&gt;
+      &lt;div id=&quot;app&quot;&gt;
+        &lt;CompaniesComponent @click=&quot;onEventHappen&quot; /&gt;
+        &lt;StaffComponent @click=&quot;onEventHappen&quot; /&gt;
+      &lt;/div&gt;
+    &lt;/template&gt;
+
+    &lt;script&gt;
+      // import the Companies component
+      import Companies from &quot;./components/Companies&quot;;
+      // import the Staff component
+      import Staff from &quot;./components/Staff&quot;;
+      // import the higher order component
+      import HoComponent from &quot;./components/HoComponent.js&quot;;
+      // import the source data from mockData only to be used for event handlers
+      import sourceData from &quot;./components/mockData.js&quot;;
+      // Create a const variable which contains the Companies component wrapped in the higher order component
+      const CompaniesComponent = HoComponent(Companies, mockData =&gt;
+      mockData.getCompanies()
+      );
+      // Create a const variable which contains the Staff component wrapped in the higher order component
+      const StaffComponent = HoComponent(Staff, mockData =&gt; mockData.getStaff());
+
+      export default {
+        name: &quot;App&quot;,
+        components: {
+          CompaniesComponent,
+          StaffComponent
+          },
+        methods: {
+          onEventHappen(value) {
+            // set the variable setFunction to the name of the function that was passed iin the value emitted from child component i.e. if value.name is &#39;increaseAward&#39;, setFunction is set to increaseAward()
+            let setFunction = sourceData[value.name];
+            // call the corresponding function with the id passed as an argument.
+            setFunction(value.id);
+          }
+        }
+      };
+    &lt;/script&gt;
+
+    &lt;style&gt;
+    #app {
+      font-family: &quot;Avenir&quot;, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-align: center;
+      color: #2c3e50;
+      margin-top: 60px;
+    }
+    &lt;/style&gt;
+</code></pre>
 <p>在上面的代码块中，我们在App.vue组件中添加了一个事件监听器。</p>
 <p>vue的组件。每当Staff.vue 或Companies.vue 组件被点击时，onEventHappen 方法将会被调用。</p>
 <p>在onEventHappen方法中，我们将变量setFunction 设置为从子组件发出的值中传递的函数名，也就是说，如果value.name是’increaseAward’，那么setFunction设置为increaseAward()。setFunction 将以id作为参数执行。</p>
 <p>最后，为了将事件监听器传递给封装在高阶组件中的组件，我们需要在 HoComponent.js文件中添加下面这行代码。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">props: &#123;</span><br><span class="line">returnedData: <span class="keyword">this</span>.returnedData</span><br><span class="line">&#125;,</span><br><span class="line">on: &#123; ...this.$listeners &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">    props: {
+    returnedData: this.returnedData
+    },
+    on: { ...this.$listeners }
+
+</code></pre>
 <h2 id="vue-hoc"><a href="#vue-hoc" class="headerlink" title="vue-hoc"></a>vue-hoc</h2><p>或者，您可以使用<a href="https://github.com/jackmellis/vue-hoc" target="_blank" rel="noopener">vue-hoc</a>库来帮助创建高阶组件。vue-hoc帮助你轻松地创建高阶组件，你要做的就是传递基本组件、应用于HOC的一系列组件选项和在渲染阶段传递给组件的数据属性。<br>vue-hoc 可用如下命令安装：<br>    <code>npm install --save vue-hoc</code></p>
 <p>复制代码vue-hoc插件有一些例子可以让你开始创建更高阶的组件，你可以<a href="https://github.com/jackmellis/vue-hoc/blob/master/packages/vue-hoc/README.md" target="_blank" rel="noopener">查看这里</a>.</p>
 
@@ -238,7 +502,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

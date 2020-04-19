@@ -100,13 +100,13 @@ Demo地址,">
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    7.1k
+                    2.6k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    6 mins.
+                    2 mins.
                 </span>
                 
                 
@@ -143,14 +143,59 @@ Demo地址,">
             <p>React在版本<code>16.3-alpha</code>里引入了新的Context API，社区一片期待之声。我们先通过简单的例子，看下新的Context API长啥样，然后再简单探讨下新的API的意义。</p>
 <p><a href="https://github.com/chyingp/blog/tree/master/demo/2018.02.08-react-16.3" target="_blank" rel="noopener">Demo地址</a></p>
 <h1 id="看下新的Context-API"><a href="#看下新的Context-API" class="headerlink" title="看下新的Context API"></a>看下新的Context API</h1><p>需要安装16.3-alpha版本的react。<br>下面，直接来看代码，如果用过<code>react-redux</code>应该会觉得很眼熟。<br>首先，创建<code>context</code>实例：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="keyword">import</span> ReactDOM <span class="keyword">from</span> <span class="string">'react-dom'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建context实例</span></span><br><span class="line"><span class="keyword">const</span> ThemeContext = React.createContext(&#123;</span><br><span class="line">  background: <span class="string">'red'</span>,</span><br><span class="line">  color: <span class="string">'white'</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">import React from &#39;react&#39;;
+import ReactDOM from &#39;react-dom&#39;;
+
+// 创建context实例
+const ThemeContext = React.createContext({
+  background: &#39;red&#39;,
+  color: &#39;white&#39;
+});
+
+</code></pre>
 <p>然后，定义App组件，注意这里用到了<code>Provider</code>组件，类似<code>react-redux</code>的Provider组件</p>
 <a id="more"></a>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;ThemeContext.Provider value=&#123;&#123;<span class="attr">background</span>: <span class="string">'green'</span>, <span class="attr">color</span>: <span class="string">'white'</span>&#125;&#125;&gt;</span><br><span class="line">        &lt;Header /&gt;</span><br><span class="line">       &lt;<span class="regexp">/ThemeContext.Provider&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">class App extends React.Component {
+
+  render () {
+    return (
+      &lt;ThemeContext.Provider value={{background: 'green', color: 'white'}}&gt;
+        &lt;Header /&gt;
+       &lt;/ThemeContext.Provider&gt;
+    );
+  }
+}
+</code></pre>
 <p>接下来，定义<code>Header</code>、<code>Title</code>组件。注意：</p>
 <p>Title组件用到了<code>Consumer</code>组件，表示要消费<code>Provider</code>传递的数据。<br>Title组件是App的孙组件，但跳过了<code>Header</code>消费数据。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Header</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;Title&gt;Hello React Context API&lt;<span class="regexp">/Title&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">class Title extends React.Component &#123;</span></span><br><span class="line"><span class="regexp">  render () &#123;</span></span><br><span class="line"><span class="regexp">    return (</span></span><br><span class="line"><span class="regexp">      &lt;ThemeContext.Consumer&gt;</span></span><br><span class="line"><span class="regexp">        &#123;context =&gt; (</span></span><br><span class="line"><span class="regexp">          &lt;h1 style=&#123;&#123;background: context.background, color: context.color&#125;&#125;&gt;</span></span><br><span class="line"><span class="regexp">            &#123;this.props.children&#125;</span></span><br><span class="line"><span class="regexp">          &lt;/</span>h1&gt;</span><br><span class="line">        )&#125;</span><br><span class="line">      &lt;<span class="regexp">/ThemeContext.Consumer&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
-<p>最后常规操作<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ReactDOM.render(</span><br><span class="line">  &lt;App /&gt;, </span><br><span class="line">  <span class="built_in">document</span>.getElementById(<span class="string">'container'</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
+<pre><code class="javascript">class Header extends React.Component {
+  render () {
+    return (
+      &lt;Title&gt;Hello React Context API&lt;/Title&gt;
+    );
+  }
+}
+
+class Title extends React.Component {
+  render () {
+    return (
+      &lt;ThemeContext.Consumer&gt;
+        {context =&gt; (
+          &lt;h1 style={{background: context.background, color: context.color}}&gt;
+            {this.props.children}
+          &lt;/h1&gt;
+        )}
+      &lt;/ThemeContext.Consumer&gt;
+    );
+  }
+}
+</code></pre>
+<p>最后常规操作</p>
+<pre><code class="javascript">ReactDOM.render(
+  &lt;App /&gt;, 
+  document.getElementById(&#39;container&#39;)
+);
+</code></pre>
 <h1 id="为什么有新的Context-API"><a href="#为什么有新的Context-API" class="headerlink" title="为什么有新的Context API"></a>为什么有新的Context API</h1><p>过<code>redux + react-redux</code>的同学，应该会觉得新的Context API很眼熟。而有看过<code>react-redux</code>源码的同学就知道，react-redux本身就是基于旧版本的Context API实现的。</p>
 <p>既然已经有了现成的解决方案，为什么还会有新的Context API呢？</p>
 <blockquote>
@@ -204,7 +249,7 @@ Demo地址,">
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

@@ -99,13 +99,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    25k
+                    9.5k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    23 mins.
+                    9 mins.
                 </span>
                 
                 
@@ -142,12 +142,66 @@
             <h1 id="组件之间通信"><a href="#组件之间通信" class="headerlink" title="组件之间通信"></a>组件之间通信</h1><h2 id="父组件向子组件通信"><a href="#父组件向子组件通信" class="headerlink" title="父组件向子组件通信"></a>父组件向子组件通信</h2><p>React规定了明确的单向数据流，利用props将数据从父组件传递给子组件。故我们可以利用props，让父组件给子组件通信。故父组件向子组件通信还是很容易实现的。引申一点，父组件怎么向孙子组件通信呢？可以利用props进行层层传递，使用ES6的…运算符可以用很简洁的方式把props传递给孙子组件。这里我们就不举例了。</p>
 <p>要注意的一点是，setProps,replaceProps两个API已经被废弃了，React建议我们在顶层使用ReactDOM.reader()进行props更新。</p>
 <h2 id="子组件向父组件通信"><a href="#子组件向父组件通信" class="headerlink" title="子组件向父组件通信"></a>子组件向父组件通信</h2><p>React数据流是单向的，只能从父组件传递到子组件。那么子组件怎么向父组件通信呢？其实仍然可以利用props。父组件利用props传递方法给子组件，子组件回调这个方法的同时，将数据传递进去，使得父组件的相关方法得到回调，这个时候就可以把数据从子组件传递给父组件了。看一个例子。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Parent</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  handleChildMsg(msg) &#123;</span><br><span class="line">    <span class="comment">// 父组件处理消息</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"parent: "</span> + msg);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">          &lt;Child transferMsg = &#123;msg =&gt; <span class="keyword">this</span>.handleChildMsg(msg)&#125; /&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">class Child extends React.Component &#123;</span></span><br><span class="line"><span class="regexp">  componentDidMount() &#123;</span></span><br><span class="line"><span class="regexp">    /</span><span class="regexp">/ 子组件中调用父组件的方法，将数据以参数的方式传递给父组件，这样父组件方法就得到回调了，也收到数据了</span></span><br><span class="line"><span class="regexp">    this.props.transferMsg("child has mounted");</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">  </span></span><br><span class="line"><span class="regexp">  render() &#123;</span></span><br><span class="line"><span class="regexp">    return (</span></span><br><span class="line"><span class="regexp">      &lt;div&gt;child&lt;/</span>div&gt;</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">class Parent extends React.Component {
+  handleChildMsg(msg) {
+    // 父组件处理消息
+    console.log(&quot;parent: &quot; + msg);
+  }
+
+  render() {
+    return (
+      &lt;div&gt;
+          &lt;Child transferMsg = {msg =&gt; this.handleChildMsg(msg)} /&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+
+class Child extends React.Component {
+  componentDidMount() {
+    // 子组件中调用父组件的方法，将数据以参数的方式传递给父组件，这样父组件方法就得到回调了，也收到数据了
+    this.props.transferMsg(&quot;child has mounted&quot;);
+  }
+
+  render() {
+    return (
+      &lt;div&gt;child&lt;/div&gt;
+    )
+  }
+}
+</code></pre>
 <a id="more"></a>
 <p>这个例子应该很清楚了，通过回调的方式，可以将数据从子组件传递给父组件。引申一下，孙子组件怎么把数据传递给父组件呢？同样可以利用props层层回调。利用ES6的<strong>…运算符</strong>也可以用比较简洁的方式完成props层层回调。</p>
 <h2 id="兄弟组件通信-发布-订阅"><a href="#兄弟组件通信-发布-订阅" class="headerlink" title="兄弟组件通信 - 发布/订阅"></a>兄弟组件通信 - 发布/订阅</h2><p>兄弟组件可以利用父组件进行中转，将数据先由child1传给parent，然后parent传给child2. 这个方法显然耦合比较严重，传递次数过多，容易引发父组件不必要的生命周期回调，甚至影响其他子组件，故强烈建议不要使用这个方式。</p>
 <p>我们可以利用观察者模式来解决这个问题。观察者模式采用发布/订阅的方法，可以将消息发送者和接收者完美解耦。React中可以引入eventProxy模块，利用eventProxy.trigger()方法发布消息，eventProxy.on()方法监听并接收消息。eventProxy我们就不展开讲了。下面看一个例子</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> eventProxy <span class="keyword">from</span> <span class="string">'../eventProxy'</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Child1</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  componentDidMount() &#123;</span><br><span class="line">    <span class="comment">// 发布者，发出消息</span></span><br><span class="line">    eventProxy.trigger(<span class="string">'msg'</span>, <span class="string">'child1 has been mounted'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;child1&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">class Child2 extends React.Component &#123;</span></span><br><span class="line"><span class="regexp">  componentDidMount() &#123;</span></span><br><span class="line"><span class="regexp">    /</span><span class="regexp">/ 订阅者，监听并接收消息</span></span><br><span class="line"><span class="regexp">    eventProxy.on('msg', (msg) =&gt; &#123;console.log('msg: ' + msg)&#125;);</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">  </span></span><br><span class="line"><span class="regexp">  render() &#123;</span></span><br><span class="line"><span class="regexp">    return (</span></span><br><span class="line"><span class="regexp">      &lt;div&gt;child2&lt;/</span>div&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">import eventProxy from &#39;../eventProxy&#39;
+
+class Child1 extends React.Component {
+  componentDidMount() {
+    // 发布者，发出消息
+    eventProxy.trigger(&#39;msg&#39;, &#39;child1 has been mounted&#39;);
+  }
+  render() {
+    return (
+      &lt;div&gt;child1&lt;/div&gt;
+    );
+  }
+}
+
+class Child2 extends React.Component {
+  componentDidMount() {
+    // 订阅者，监听并接收消息
+    eventProxy.on(&#39;msg&#39;, (msg) =&gt; {console.log(&#39;msg: &#39; + msg)});
+  }
+
+  render() {
+    return (
+      &lt;div&gt;child2&lt;/div&gt;
+    );
+  } 
+}
+
+</code></pre>
 <h2 id="嵌套层级深组件-context"><a href="#嵌套层级深组件-context" class="headerlink" title="嵌套层级深组件 - context"></a>嵌套层级深组件 - context</h2><p>祖父组件和孙子组件通信时，我们有时候还是觉得通过props有点繁琐了。此时可以考虑使用context全局变量。</p>
 <blockquote>
 <p>使用方法：<br>1.祖父组件中定义getChildContext()方法，将要传递给孙子的数据放在其中<br>2.祖父组件中childContextTypes申明要传递的数据类型<br>3.孙子组件中contextTypes申明可以接收的数据类型<br>4.孙子组件通过this.context访问祖父传递进来的数据。</p>
@@ -155,30 +209,135 @@
 <p>采用全局变量的方式，容易导致数据混乱，分不清数据是从哪儿来的，不容易控制。建议少用这种方式。</p>
 <h2 id="Redux"><a href="#Redux" class="headerlink" title="Redux"></a>Redux</h2><p>还可以利用Flux和Redux架构来进行组件通信，这个我们以后再专门详细分析。</p>
 <h1 id="refs"><a href="#refs" class="headerlink" title="refs"></a>refs</h1><h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><p>我们在getRender()返回的JSX中，可以在标签中加入ref属性，然后通过refs.ref就可以访问到我们的Component了，例如。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Parent</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  getRender() &#123;</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;Child ref = <span class="string">'child'</span> /&gt;</span><br><span class="line">    &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">  </span></span><br><span class="line"><span class="regexp">  componentDidMount() &#123;</span></span><br><span class="line"><span class="regexp">    /</span><span class="regexp">/ 通过refs可以拿到子元素,然后就可以访问到子元素的方法了</span></span><br><span class="line"><span class="regexp">    let child = this.refs.child;</span></span><br><span class="line"><span class="regexp">    child.test();</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">class Child extends React.Component &#123;</span></span><br><span class="line"><span class="regexp">  test() &#123;</span></span><br><span class="line"><span class="regexp">    console.log("child method called by ref");</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">
+class Parent extends React.Component {
+  getRender() {
+    &lt;div&gt;
+      &lt;Child ref = &#39;child&#39; /&gt;
+    &lt;/div&gt;
+  }
+
+  componentDidMount() {
+    // 通过refs可以拿到子元素,然后就可以访问到子元素的方法了
+    let child = this.refs.child;
+    child.test();
+  }
+}
+
+class Child extends React.Component {
+  test() {
+    console.log(&quot;child method called by ref&quot;);
+  }
+}
+
+</code></pre>
 <h2 id="attachRef-将子组件引用保存到父组件refs对象中"><a href="#attachRef-将子组件引用保存到父组件refs对象中" class="headerlink" title="attachRef 将子组件引用保存到父组件refs对象中"></a>attachRef 将子组件引用保存到父组件refs对象中</h2><p>refs的用法很简单，只需要JSX中定义好ref属性即可。那么首先一个问题来了，refs这个对象在哪儿定义的呢？还记得createClass方法的constructor吧，它里面会定义并初始化refs对象。源码如下</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">createClass: <span class="function"><span class="keyword">function</span> (<span class="params">spec</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 自定义React类的构造方法，通过它创建一个React.Component对象</span></span><br><span class="line">    <span class="keyword">var</span> Constructor = identity(<span class="function"><span class="keyword">function</span> (<span class="params">props, context, updater</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Wire up auto-binding</span></span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.__reactAutoBindPairs.length) &#123;</span><br><span class="line">        bindAutoBindMethods(<span class="keyword">this</span>);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.props = props;</span><br><span class="line">      <span class="keyword">this</span>.context = context;</span><br><span class="line">      <span class="comment">// refs初始化为一个空对象</span></span><br><span class="line">      <span class="keyword">this</span>.refs = emptyObject;</span><br><span class="line">      <span class="keyword">this</span>.updater = updater || ReactNoopUpdateQueue;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 调用getInitialState初始化state</span></span><br><span class="line">      <span class="keyword">this</span>.state = <span class="literal">null</span>;</span><br><span class="line">      <span class="keyword">var</span> initialState = <span class="keyword">this</span>.getInitialState ? <span class="keyword">this</span>.getInitialState() : <span class="literal">null</span>;</span><br><span class="line">      <span class="keyword">this</span>.state = initialState;</span><br><span class="line">    &#125;);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">createClass: function (spec) {
+    // 自定义React类的构造方法，通过它创建一个React.Component对象
+    var Constructor = identity(function (props, context, updater) {
+
+      // Wire up auto-binding
+      if (this.__reactAutoBindPairs.length) {
+        bindAutoBindMethods(this);
+      }
+
+      this.props = props;
+      this.context = context;
+      // refs初始化为一个空对象
+      this.refs = emptyObject;
+      this.updater = updater || ReactNoopUpdateQueue;
+
+      // 调用getInitialState初始化state
+      this.state = null;
+      var initialState = this.getInitialState ? this.getInitialState() : null;
+      this.state = initialState;
+    });
+    ...
+}
+</code></pre>
 <p>从上面代码可见，每次创建自定义组件的时候，都会初始化一个为空的refs对象。那么第二个问题来了，ref字符串所指向的对象的引用，是什么时候加入到refs对象中的呢？答案就在ReactCompositeComponent的attachRef方法中，源码如下</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">attachRef: <span class="function"><span class="keyword">function</span>(<span class="params">ref, component</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// getPublicInstance返回我们的父组件</span></span><br><span class="line">  <span class="keyword">var</span> inst = <span class="keyword">this</span>.getPublicInstance();</span><br><span class="line">  <span class="keyword">var</span> publicComponentInstance = component.getPublicInstance();</span><br><span class="line">  <span class="keyword">var</span> refs = inst.refs === emptyObject ? (inst.refs = &#123;&#125;) : inst.refs;</span><br><span class="line">  <span class="comment">// 将子元素的引用，以ref属性为key,保存到父元素的refs对象中</span></span><br><span class="line">  refs[ref] = publicComponentInstance;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">  attachRef: function(ref, component) {
+    // getPublicInstance返回我们的父组件
+    var inst = this.getPublicInstance();
+    var publicComponentInstance = component.getPublicInstance();
+    var refs = inst.refs === emptyObject ? (inst.refs = {}) : inst.refs;
+    // 将子元素的引用，以ref属性为key,保存到父元素的refs对象中
+    refs[ref] = publicComponentInstance;
+  },
+</code></pre>
 <p>attachRef方法又是什么时候被调用的呢？我们这儿就不源码分析了。大概说下，mountComponent中，如果element的ref属性不为空，则会以transaction事务的方式调用attachRefs方法，而attachRefs方法中则会调用attachRef方法，将子组件的引用保存到父组件的refs对象中。</p>
 <h2 id="detachRef-从父组件refs对象中删除子组件引用"><a href="#detachRef-从父组件refs对象中删除子组件引用" class="headerlink" title="detachRef 从父组件refs对象中删除子组件引用"></a>detachRef 从父组件refs对象中删除子组件引用</h2><p>对内存管理有些了解的同学肯定会有疑惑，既然父组件的refs中保存了子组件引用，那么当子组件被unmountComponent而销毁时，子组件的引用仍然保存在refs对象中，岂不是会导致内存泄漏？React当然不会有这个bug了，秘密就在detachRef方法中，源码如下</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">detachRef: <span class="function"><span class="keyword">function</span>(<span class="params">ref</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> refs = <span class="keyword">this</span>.getPublicInstance().refs;</span><br><span class="line">  <span class="comment">// 从refs对象中删除key为ref子元素,防止内存泄漏</span></span><br><span class="line">  <span class="keyword">delete</span> refs[ref];</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">  detachRef: function(ref) {
+    var refs = this.getPublicInstance().refs;
+    // 从refs对象中删除key为ref子元素,防止内存泄漏
+    delete refs[ref];
+  },
+</code></pre>
 <p>代码很简单，delete掉ref字符串指向的成员即可。至于detachRef的调用链，我们还得从unmountComponent方法说起。unmountComponent会调用detachRefs方法，而detachRefs中则会调用detachRef，从而将子元素引用从refs中释放掉，防止内存泄漏。也就是说在unmountComponent时，React自动帮我们完成了子元素ref删除，防止内存泄漏。</p>
 <h1 id="key"><a href="#key" class="headerlink" title="key"></a>key</h1><p>当我们的子组件是一个数组时，比如类似于Android中的ListView，一个列表中有很多样式一致的项，此时给每个项加上key这个属性就很有作用了。key可以标示当前项的唯一性。</p>
 <p>对于数组，其内部包含长度不确定的子项。当组件state变化时，需要重新渲染组件。那么有个问题来了，React是更新组件，还是先销毁再新建组件呢。key就是用来解决这个问题的。如果前后两次key不变，则只需要更新，否则先销毁再更新。</p>
 <p>对于子项的key，必须是唯一不重复的。并且尽量传不变的属性，千万不要传无意义的index或者随机值。这样才能尽量以更新的方式来重新渲染。React源码中判断更新方式的源码如下</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">shouldUpdateReactComponent</span>(<span class="params">prevElement, nextElement</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 前后两次ReactElement中任何一个为null，则必须另一个为null才返回true。这种情况一般不会碰到</span></span><br><span class="line">  <span class="keyword">var</span> prevEmpty = prevElement === <span class="literal">null</span> || prevElement === <span class="literal">false</span>;</span><br><span class="line">  <span class="keyword">var</span> nextEmpty = nextElement === <span class="literal">null</span> || nextElement === <span class="literal">false</span>;</span><br><span class="line">  <span class="keyword">if</span> (prevEmpty || nextEmpty) &#123;</span><br><span class="line">    <span class="keyword">return</span> prevEmpty === nextEmpty;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> prevType = <span class="keyword">typeof</span> prevElement;</span><br><span class="line">  <span class="keyword">var</span> nextType = <span class="keyword">typeof</span> nextElement;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// React DOM diff算法</span></span><br><span class="line">  <span class="keyword">if</span> (prevType === <span class="string">'string'</span> || prevType === <span class="string">'number'</span>) &#123;</span><br><span class="line">    <span class="comment">// 如果前后两次为数字或者字符,则认为只需要update(处理文本元素)，返回true</span></span><br><span class="line">    <span class="keyword">return</span> (nextType === <span class="string">'string'</span> || nextType === <span class="string">'number'</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// 如果前后两次为DOM元素或React元素,则必须type和key不变(key用于listView等组件,很多时候我们没有设置key，故只需type相同)才update,否则先unmount再重新mount。返回false</span></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      nextType === <span class="string">'object'</span> &amp;&amp;</span><br><span class="line">      prevElement.type === nextElement.type &amp;&amp;</span><br><span class="line">      prevElement.key === nextElement.key</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">function shouldUpdateReactComponent(prevElement, nextElement) {
+  // 前后两次ReactElement中任何一个为null，则必须另一个为null才返回true。这种情况一般不会碰到
+  var prevEmpty = prevElement === null || prevElement === false;
+  var nextEmpty = nextElement === null || nextElement === false;
+  if (prevEmpty || nextEmpty) {
+    return prevEmpty === nextEmpty;
+  }
+
+  var prevType = typeof prevElement;
+  var nextType = typeof nextElement;
+
+  // React DOM diff算法
+  if (prevType === &#39;string&#39; || prevType === &#39;number&#39;) {
+    // 如果前后两次为数字或者字符,则认为只需要update(处理文本元素)，返回true
+    return (nextType === &#39;string&#39; || nextType === &#39;number&#39;);
+  } else {
+      // 如果前后两次为DOM元素或React元素,则必须type和key不变(key用于listView等组件,很多时候我们没有设置key，故只需type相同)才update,否则先unmount再重新mount。返回false
+    return (
+      nextType === &#39;object&#39; &amp;&amp;
+      prevElement.type === nextElement.type &amp;&amp;
+      prevElement.key === nextElement.key
+    );
+  }
+}
+</code></pre>
 <p>看到key这个属性的重要性了吧。对于数组组件，我们一定要在每个子项上设置一个key，这样可以大大提高DOM diff的性能。</p>
 <p>那为什么数组组件之外的其他组件，不用设置key呢？因为他们的type或者在父组件中的位置不同，完全可以区分开，所以不需要key就可以完全确定是哪个组件</p>
 <h1 id="无状态组件"><a href="#无状态组件" class="headerlink" title="无状态组件"></a>无状态组件</h1><p>无状态组件其实本质上就是一个函数，传入props即可，没有state，也没有生命周期方法。组件本身对应的就是render方法。例子如下</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Title</span>(<span class="params">&#123;color = <span class="string">'red'</span>, text = <span class="string">'标题'</span>&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> style = &#123;</span><br><span class="line">    <span class="string">'color'</span>: color</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;div style = &#123;style&#125;&gt;&#123;text&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">  )</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">function Title({color = &#39;red&#39;, text = &#39;标题&#39;}) {
+  let style = {
+    &#39;color&#39;: color
+  }
+  return (
+    &lt;div style = {style}&gt;{text}&lt;/div&gt;
+  )
+}
+</code></pre>
 <p>无状态组件不会创建对象，故比较省内存。没有复杂的生命周期方法调用，故流程比较简单。没有state，也不会重复渲染。它本质上就是一个函数而已。</p>
 <p>对于没有状态变化的组件，React建议我们使用无状态组件。总之，能用无状态组件的地方，就用无状态组件。</p>
 <h1 id="react-DOM"><a href="#react-DOM" class="headerlink" title="react DOM"></a>react DOM</h1><p>React通过findDOMNode()可以找到组件实例对应的DOM节点，但需要注意的是，我们只能在render()之后，也就是componentDidMount()和componentDidUpdate()中调用。因为只有render后，DOM对象才生成了。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">example</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  componentDidMount() &#123;</span><br><span class="line">    <span class="comment">// 只有render后才生成了DOM node，才能调用findDOMNode</span></span><br><span class="line">    <span class="keyword">let</span> dom = ReactDOM.findDOMNode(<span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">class example extends React.Component {
+  componentDidMount() {
+    // 只有render后才生成了DOM node，才能调用findDOMNode
+    let dom = ReactDOM.findDOMNode(this);
+  }
+}
+</code></pre>
 <p>那为什么render后DOM才生成呢，我们可以从源码角度来分析。React源码分析3 — React组件插入DOM流程一文中，我们知道mountComponent解析得到了markup，也就是React组件对应的HTML，会由_mountImageIntoNode方法插入到真实DOM中，故这个事务结束后，才生成了真正的DOM。故肯定只有render之后，才有真实的DOM可以被访问。</p>
 <p>那为什么componentDidMount()能访问DOM呢？它不是也在mountComponent()方法流程中吗？这是因为React采用异步事务的方式来调用componentDidMount的，它把componentDidMount放到一个事务队列中，只有当前mountComponent这个事务处理完了，才会回过头去处理componentDidMount，故在componentDidMount中可以拿到真实的DOM。这个设计得给React点赞。这一点可以从源码来分析。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mountComponent: <span class="function"><span class="keyword">function</span> (<span class="params">transaction, nativeParent, nativeContainerInfo, context</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 省略一段代码</span></span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (inst.componentDidMount) &#123;</span><br><span class="line">      <span class="comment">// 调用componentDidMount，以事务的形式。放到queue中，异步的方式，有那么点Android MessageQueue的感觉</span></span><br><span class="line">      transaction.getReactMountReady().enqueue(inst.componentDidMount, inst);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> markup;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">mountComponent: function (transaction, nativeParent, nativeContainerInfo, context) {
+    // 省略一段代码
+    ...
+
+    if (inst.componentDidMount) {
+      // 调用componentDidMount，以事务的形式。放到queue中，异步的方式，有那么点Android MessageQueue的感觉
+      transaction.getReactMountReady().enqueue(inst.componentDidMount, inst);
+    }
+
+    return markup;
+},
+</code></pre>
 <p>另外值得注意的是，React不建议我们碰底层的DOM，因为React有一套性能比较高的DOM diff方式来更新真实DOM。并且容易导致DOM引用忘记释放等内存泄漏问题。一句话，除非不得已，不要碰DOM。</p>
 <p><a href="https://yq.aliyun.com/articles/72750?spm=a2c4e.11153940.blogcont72329.29.51012a71kVn38v" target="_blank" rel="noopener">原文地址</a></p>
 
@@ -228,7 +387,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

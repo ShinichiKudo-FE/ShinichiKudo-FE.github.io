@@ -100,13 +100,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    7.9k
+                    2.8k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    7 mins.
+                    3 mins.
                 </span>
                 
                 
@@ -143,11 +143,66 @@
             <p><a href="https://github.com/answershuto/learnVue/blob/master/docs/%E4%BB%8E%E6%BA%90%E7%A0%81%E8%A7%92%E5%BA%A6%E5%86%8D%E7%9C%8B%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A.MarkDown" target="_blank" rel="noopener">原文地址</a></p>
 <h1 id="关于Vue-js"><a href="#关于Vue-js" class="headerlink" title="关于Vue.js"></a>关于Vue.js</h1><p>Vue.js是一款MVVM框架，上手快速简单易用，通过响应式在修改数据的时候更新视图。Vue.js的响应式原理依赖于<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty" target="_blank" rel="noopener">Object.defineProperty</a>，尤大大在Vue.js文档中就已经提到过，这也是Vue.js不支持IE8 以及更低版本浏览器的原因。Vue通过设定对象属性的 <code>setter/getter</code> 方法来监听数据的变化，通过<code>getter</code>进行依赖收集，而每个<code>setter</code>方法就是一个观察者，在数据变更的时候通知订阅者更新视图。</p>
 <h2 id="将数据data变成可观察（observable）的"><a href="#将数据data变成可观察（observable）的" class="headerlink" title="将数据data变成可观察（observable）的"></a>将数据data变成可观察（observable）的</h2><p>那么Vue是如何将所有data下面的所有属性变成可观察的（observable）呢？</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">observable</span>(<span class="params">value,cb</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">Object</span>.keys(value).forEach(<span class="function">(<span class="params">key</span>)=&gt;</span> defineReactive(value, key, value[key] , cb));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">defineReactive</span> (<span class="params">obj, key, val, cb</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(obj, key, &#123;</span><br><span class="line">        enumerable: <span class="literal">true</span>,</span><br><span class="line">        configurable: <span class="literal">true</span>,</span><br><span class="line">        <span class="keyword">get</span>: ()=&gt;&#123;</span><br><span class="line">            <span class="comment">/*....依赖收集等....*/</span></span><br><span class="line">            <span class="comment">/*Github:https://github.com/answershuto*/</span></span><br><span class="line">            <span class="keyword">return</span> val</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="keyword">set</span>:newVal=&gt; &#123;</span><br><span class="line">            val = newVal;</span><br><span class="line">            cb();<span class="comment">/*订阅者收到消息的回调*/</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Vue</span>()</span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(options)&#123;</span><br><span class="line">        <span class="keyword">this</span>._data = options.data;</span><br><span class="line">        observe(<span class="keyword">this</span>._data, options.render)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> app = <span class="keyword">new</span> Vue(&#123;</span><br><span class="line">    el: <span class="string">'#app'</span>,</span><br><span class="line">    data: &#123;</span><br><span class="line">        text: <span class="string">'text'</span>,</span><br><span class="line">        text2: <span class="string">'text2'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    render()&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"render"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">function observable(value,cb){
+    Object.keys(value).forEach((key)=&gt; defineReactive(value, key, value[key] , cb));
+}
+
+function defineReactive (obj, key, val, cb) {
+    Object.defineProperty(obj, key, {
+        enumerable: true,
+        configurable: true,
+        get: ()=&gt;{
+            /*....依赖收集等....*/
+            /*Github:https://github.com/answershuto*/
+            return val
+        },
+        set:newVal=&gt; {
+            val = newVal;
+            cb();/*订阅者收到消息的回调*/
+        }
+    })
+}
+
+class Vue(){
+    constructor(options){
+        this._data = options.data;
+        observe(this._data, options.render)
+    }
+}
+
+let app = new Vue({
+    el: &#39;#app&#39;,
+    data: {
+        text: &#39;text&#39;,
+        text2: &#39;text2&#39;
+    },
+    render(){
+        console.log(&quot;render&quot;);
+    }
+})
+</code></pre>
 <p>为了便于理解，首先考虑一种最简单的情况，不考虑数组等情况，代码如上所示。在initData中会调用observe这个函数将Vue的数据设置成observable的。当_data数据发生改变的时候就会触发set，对订阅者进行回调（在这里是render）。</p>
 <p>那么问题来了，需要对app._data.text操作才会触发set。为了偷懒，我们需要一种方便的方法通过app.text直接设置就能触发set对视图进行重绘。那么就需要用到代理。</p>
 <h2 id="代理"><a href="#代理" class="headerlink" title="代理"></a>代理</h2><p>我们可以在Vue的构造函数constructor中为data执行一个代理<a href="https://github.com/vuejs/vue/blob/dev/src/core/instance/state.js#L33" target="_blank" rel="noopener">proxy</a>。这样我们就把data上面的属性代理到了vm实例上。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">_proxy.call(<span class="keyword">this</span>, options.data);<span class="comment">/*构造函数中*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*代理*/</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">_proxy</span> (<span class="params">data</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> that = <span class="keyword">this</span>;</span><br><span class="line">    <span class="built_in">Object</span>.keys(data).forEach(<span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">Object</span>.defineProperty(that, key, &#123;</span><br><span class="line">            configurable: <span class="literal">true</span>,</span><br><span class="line">            enumerable: <span class="literal">true</span>,</span><br><span class="line">            <span class="keyword">get</span>: function proxyGetter () &#123;</span><br><span class="line">                <span class="keyword">return</span> that._data[key];</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="keyword">set</span>: function proxySetter (val) &#123;</span><br><span class="line">                that._data[key] = val;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">_proxy.call(this, options.data);/*构造函数中*/
+
+/*代理*/
+function _proxy (data) {
+    const that = this;
+    Object.keys(data).forEach(key =&gt; {
+        Object.defineProperty(that, key, {
+            configurable: true,
+            enumerable: true,
+            get: function proxyGetter () {
+                return that._data[key];
+            },
+            set: function proxySetter (val) {
+                that._data[key] = val;
+            }
+        })
+    });
+}
+</code></pre>
 <p>我们可以使用app.text代替app._data.text了。</p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
@@ -196,7 +251,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

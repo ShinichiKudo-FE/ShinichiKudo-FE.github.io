@@ -12,7 +12,8 @@
     <meta name="keywords" content="TriDiamond Obsidian,"> 
     <meta name="description" content="一枚前端搬砖队队员的记录册,准备1.创建一个www目录，存储静态文件1.html、1.jpg。
 * html文件内容如下：
-12345678910111213&amp;lt;!DOCTYPE html&amp;gt;&amp;lt;html lang,"> 
+&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html lang=&amp;quot;en&amp;quot;&amp;,"> 
     <meta name="author" content="张白告丶"> 
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -101,13 +102,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    5.4k
+                    1.8k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    5 mins.
+                    2 mins.
                 </span>
                 
                 
@@ -143,14 +144,44 @@
         <div class="content markdown animated fadeIn">
             <h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><p>1.创建一个www目录，存储静态文件1.html、1.jpg。</p>
 <pre><code>* html文件内容如下：
-</code></pre><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  网页内容</span><br><span class="line">  <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"/1.jpg"</span> <span class="attr">alt</span>=<span class="string">""</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<ol>
+</code></pre><pre><code class="html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;
+  &lt;title&gt;Document&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  网页内容
+  &lt;img src=&quot;/1.jpg&quot; alt=&quot;&quot;&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<ol start="2">
 <li><p>预期实现的结果为：<br> a. 在浏览器访问<code>http://localhost:8080/1.html</code>。<br> b. 读取到<code>www/1.html</code>，由<code>HTML</code>文件发起对<code>www/1.jpg</code>的请求。<br> c. 网页中显示<code>HTML</code>内容和图片。</p>
 </li>
 <li><p>使用Nodejs实现服务端代码：</p>
 </li>
 </ol>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>)</span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">request, response</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(request.url)  <span class="comment">// 在request对象中，可以获取请求的URL，通过URL判断请求的资源。</span></span><br><span class="line">  fs.readFile(<span class="string">`./www<span class="subst">$&#123;request.url&#125;</span>`</span>, (error, buffer) =&gt; &#123; <span class="comment">// 根据URL查找读取相应的文件。</span></span><br><span class="line">    <span class="keyword">if</span> (error) &#123;  <span class="comment">// 若读取错误，则向前端返回404状态码，以及内容Not Found。</span></span><br><span class="line">      response.writeHead(<span class="number">404</span>)</span><br><span class="line">      response.write(<span class="string">'Not Found'</span>)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;  <span class="comment">// 若读取成功，则向前端返回读取到的文件。</span></span><br><span class="line">      response.write(buffer)</span><br><span class="line">    &#125;</span><br><span class="line">    response.end()  <span class="comment">// 关闭连接。</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8080</span>)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const http = require(&#39;http&#39;)
+const fs = require(&#39;fs&#39;)
+
+const server = http.createServer((request, response) =&gt; {
+  console.log(request.url)  // 在request对象中，可以获取请求的URL，通过URL判断请求的资源。
+  fs.readFile(`./www${request.url}`, (error, buffer) =&gt; { // 根据URL查找读取相应的文件。
+    if (error) {  // 若读取错误，则向前端返回404状态码，以及内容Not Found。
+      response.writeHead(404)
+      response.write(&#39;Not Found&#39;)
+    } else {  // 若读取成功，则向前端返回读取到的文件。
+      response.write(buffer)
+    }
+    response.end()  // 关闭连接。
+  })
+})
+
+server.listen(8080)
+</code></pre>
 <h2 id="服务器需要具备的基本功能"><a href="#服务器需要具备的基本功能" class="headerlink" title="服务器需要具备的基本功能"></a>服务器需要具备的基本功能</h2><p>1.响应请求<br>    如上面的例子，可以根据客户端的请求做出回应，如返回静态文件。<br>2 数据交互<br>    定义接口，客户端根据接口，与服务端进行数据交互。<br>    例如在一个购物流程中，客户端向服务端请求商品数据，展现给客户，客户在购买时，客户端将购买的商品信息发送给服务端处理。<br>    数据库<br>3.对数据库中存储的数据进行读写操作。</p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
@@ -199,7 +230,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

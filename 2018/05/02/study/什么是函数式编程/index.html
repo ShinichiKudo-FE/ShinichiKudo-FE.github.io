@@ -101,13 +101,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    31k
+                    12k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    28 mins.
+                    11 mins.
                 </span>
                 
                 
@@ -179,7 +179,16 @@
 </ul>
 </blockquote>
 <p>下面我们使用代码，定义一个简单的范畴。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Category</span></span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(val)&#123;</span><br><span class="line">        <span class="keyword">this</span>.val = val;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    addOne(x)&#123;</span><br><span class="line">        <span class="keyword">return</span> x +<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">class Category{
+    constructor(val){
+        this.val = val;
+    }
+
+    addOne(x){
+        return x +1;
+    }
+}
+</code></pre>
 <p>上面代码中，<code>Category</code>是一个类，也是一个容器，里面包含一个值（<code>this.val</code>）和一种变形关系（addOne）。你可能已经看出来了，这里的范畴，就是所有彼此之间<code>相差1</code>的数字。</p>
 <p>注意，本文后面的部分，凡是提到”容器”的地方，全部都是指”范畴”。</p>
 <h3 id="范畴论与函数编程式的关系"><a href="#范畴论与函数编程式的关系" class="headerlink" title="范畴论与函数编程式的关系"></a>范畴论与函数编程式的关系</h3><p>范畴论使用函数，表达范畴之间的关系<br><strong>本质上，函数式编程只是范畴论的运算方法，跟数理逻辑、微积分、行列式是同一类东西，都是数学方法，只是碰巧它能用来写程序。</strong><br>所以，你明白了吗，为什么函数式编程要求函数必须是纯的，不能有副作用？因为<font color = "red">它是一种数学运算，原始目的就是求值，不做其他事情，否则就无法满足函数运算法则了，总之，在函数式编程中，函数就是一个管道（pipe）。这头进去一个值，那头就会出来一个新的值，没有其他作用。<br></font></p>
@@ -188,15 +197,39 @@
 <p><img src="http://www.ruanyifeng.com/blogimg/asset/2017/bg2017022204.png" alt="compose"></p>
 <p>上图中，X和Y之间的变形关系是<code>函数f</code>，Y和Z之间的变形关系是<code>函数g</code>，那么X和Z之间的关系，就是g和f的合成<code>函数g·f</code>。</p>
 <p>合成两个函数的简单代码如下。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> compose = <span class="function"><span class="keyword">function</span>(<span class="params">f,g</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">x</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> f(g(x));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const compose = function(f,g){
+    return function(x){
+        return f(g(x));
+    }
+}
+</code></pre>
 <p>函数的合成还必须满足结合律。</p>
 <p><img src="http://www.ruanyifeng.com/blogimg/asset/2017/bg2017022209.png" alt="结合律"></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">compose(f, compose(g, h))</span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line">compose(compose(f, g), h)</span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line">compose(f, g, h)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">compose(f, compose(g, h))
+// 等同于
+compose(compose(f, g), h)
+// 等同于
+compose(f, g, h)
+</code></pre>
 <p><font color = "red">合成也是函数必须是纯的一个原因</font>。因为一个不纯的函数，怎么跟其他函数合成？怎么保证各种合成以后，它会达到预期的行为？</p>
 <p>前面说过，<em>函数就像数据的管道（pipe）。那么，函数合成就是将这些管道连了起来，让数据一口气从多个管道中穿过</em>。</p>
 <h3 id="柯里化"><a href="#柯里化" class="headerlink" title="柯里化"></a>柯里化</h3><p><code>f(x)</code>和<code>g(x)</code>合成为<code>f(g(x))</code>，有一个隐藏的前提，就是f和g都只能接受一个参数。如果可以接受多个参数，比如<code>f(x, y)</code>和<code>g(a, b, c)</code>，函数合成就非常麻烦。</p>
 <p>这时候就需要柯里化，所谓“柯里化”就是把一个多参数的函数，转化为单参数的函数</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 柯里化之前</span></span><br><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params">x,y</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x + y;</span><br><span class="line">&#125;</span><br><span class="line">add (<span class="number">1</span>,<span class="number">2</span>) <span class="comment">// 3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 柯里化之后</span></span><br><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params">y</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">x</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> x + y;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">add(<span class="number">2</span>)(<span class="number">1</span>); <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">// 柯里化之前
+function(x,y){
+    return x + y;
+}
+add (1,2) // 3
+
+// 柯里化之后
+function(y){
+    return function(x){
+        return x + y;
+    }
+}
+
+add(2)(1); // 3
+</code></pre>
 <p>有了柯里化以后，我们就能做到，所有函数只接受一个参数。后文的内容除非另有说明，都默认函数只有一个参数，就是所要处理的那个值。</p>
 <h2 id="函子（functor）"><a href="#函子（functor）" class="headerlink" title="函子（functor）"></a>函子（functor）</h2><p>函数不仅可以用于同一个范畴之中值的转换，还可以用于将一个范畴转成另一个范畴。这就涉及到了函子（Functor）。</p>
 <h3 id="函子的概念"><a href="#函子的概念" class="headerlink" title="函子的概念"></a>函子的概念</h3><p>函子是函数式编程里面最重要的数据类型，也是基本的运算单位和功能单位。</p>
@@ -207,62 +240,196 @@
 <p><img src="http://www.ruanyifeng.com/blogimg/asset/2017/bg2017022211.jpg" alt="functor-1"></p>
 <p>上图中，函数f完成值的转换<code>（a到b）</code>，将它传入<code>函子</code>，就可以实现范畴的转换<code>（Fa到Fb）</code>。</p>
 <h3 id="函子的代码实现"><a href="#函子的代码实现" class="headerlink" title="函子的代码实现"></a>函子的代码实现</h3><p>任何具有<code>map</code>方法的数据结构，都可以当作函子的实现。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Functor</span></span>&#123;</span><br><span class="line">    construcor(val)&#123;</span><br><span class="line">        <span class="keyword">this</span>.val = val;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    map(f)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Functor(f(<span class="keyword">this</span>.val));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">class Functor{
+    construcor(val){
+        this.val = val;
+    }
+
+    map(f){
+        return new Functor(f(this.val));
+    }
+}
+
+</code></pre>
 <p>上面代码中，<code>Functor</code>是一个函子，它的<code>map</code>方法接受函数<code>f</code>作为参数，然后返回一个新的函子，里面包含的值是被f处理过的<code>（f(this.val)）</code>。<br><strong>一般约定，函子的标志就是容器具有<code>map</code>方法。该方法将容器里面的每一个值，映射到另一个容器</strong>。</p>
 <p>下面是一些用法的示例。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">new</span> Functot(<span class="number">2</span>)).map(<span class="function"><span class="keyword">function</span>(<span class="params">two</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> two + <span class="number">2</span>;</span><br><span class="line">&#125;); <span class="comment">//Functor(4)</span></span><br><span class="line"></span><br><span class="line">(<span class="keyword">new</span> Functor(<span class="string">'flamethrowers'</span>)).map(<span class="function"><span class="keyword">function</span>(<span class="params">s</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> s.toUpperCase();</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// Functor('FLAMETHROWERS')</span></span><br><span class="line"></span><br><span class="line">(<span class="keyword">new</span> Functor(<span class="string">'bombs'</span>)).map(_.concat(<span class="string">' away'</span>)).map(_.prop(<span class="string">'length'</span>));</span><br><span class="line"><span class="comment">// Functor(10)</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">(new Functot(2)).map(function(two){
+    return two + 2;
+}); //Functor(4)
+
+(new Functor(&#39;flamethrowers&#39;)).map(function(s) {
+  return s.toUpperCase();
+});
+// Functor(&#39;FLAMETHROWERS&#39;)
+
+(new Functor(&#39;bombs&#39;)).map(_.concat(&#39; away&#39;)).map(_.prop(&#39;length&#39;));
+// Functor(10)
+</code></pre>
 <p>上面的例子说明，函数式编程里面的运算，都是通过函子完成，即运算不直接针对值，而是针对这个值的容器—-函子。函子本身具有对外接口（<code>map方法</code>），各种函数就是运算符，通过接口接入容器，引发容器里面的值的变形。</p>
 <p>因此，学习函数式编程，<strong>实际上就是学习函子的各种运算</strong>。由于可以把运算方法封装在函子里面，所以又衍生出各种不同类型的函子，有多少种运算，就有多少种函子。函数式编程就变成了运用不同的函子，解决实际问题。</p>
 <h2 id="of方法"><a href="#of方法" class="headerlink" title="of方法"></a>of方法</h2><p>你可能注意到了，上面生成新的函子的时候，用了new命令。这实在太不像函数式编程了，因为new命令是面向对象编程的标志。</p>
 <p><strong>函数式编程一般约定，函子有一个of方法，用来生成新的容器。</strong></p>
 <p>下面就用<code>of</code>方法替换掉<code>new</code>。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Functor.of = <span class="function"><span class="keyword">function</span>(<span class="params">val</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> Functor(val);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">Functor.of = function(val) {
+  return new Functor(val);
+};
+</code></pre>
 <p>这就更像函数式编程了。</p>
 <h2 id="Maybe-函子"><a href="#Maybe-函子" class="headerlink" title="Maybe 函子"></a>Maybe 函子</h2><p>函子接受各种函数，处理容器内部的值。这里就有一个问题，容器内部的值可能是一个空值（比如<code>null</code>），而外部函数未必有处理空值的机制，如果传入空值，很可能就会出错。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Functor.of(<span class="literal">null</span>).map(<span class="function"><span class="keyword">function</span> (<span class="params">s</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> s.toUpperCase();</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// TypeError</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">Functor.of(null).map(function (s) {
+  return s.toUpperCase();
+});
+// TypeError
+</code></pre>
 <p>上面代码中，函子里面的值是<code>null</code>，结果小写变成大写的时候就出错了。</p>
 <p>Maybe 函子就是为了解决这一类问题而设计的。简单说，<strong>它的map方法里面设置了空值检查</strong>。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Maybe</span> <span class="keyword">extends</span> <span class="title">Functor</span> </span>&#123;</span><br><span class="line">  map(f) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.val ? Maybe.of(f(<span class="keyword">this</span>.val)) : Maybe.of(<span class="literal">null</span>);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">class Maybe extends Functor {
+  map(f) {
+    return this.val ? Maybe.of(f(this.val)) : Maybe.of(null);
+  }
+</code></pre>
 <p>有了 Maybe 函子，处理空值就不会出错了。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Maybe.of(<span class="literal">null</span>).map(<span class="function"><span class="keyword">function</span> (<span class="params">s</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> s.toUpperCase();</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// Maybe(null)</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">Maybe.of(null).map(function (s) {
+  return s.toUpperCase();
+});
+// Maybe(null)
+
+</code></pre>
 <h2 id="Either函子"><a href="#Either函子" class="headerlink" title="Either函子"></a>Either函子</h2><p>条件运算<code>if...else</code>是最常见的运算之一，函数式编程里面，使用<code>Either</code>函子表达。</p>
 <p>Either 函子内部有两个值：<code>左值（Left）</code>和<code>右值（Right）</code>。右值是正常情况下使用的值，左值是右值不存在时使用的默认值。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Either</span> <span class="keyword">extends</span> <span class="title">Functor</span></span>&#123;</span><br><span class="line">    construcor(left,right)&#123;</span><br><span class="line">        <span class="keyword">this</span>.left = left;</span><br><span class="line">        <span class="keyword">this</span>.right = right;</span><br><span class="line">    &#125;</span><br><span class="line">    map(f)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.right ? Either.of(<span class="keyword">this</span>.left,f(<span class="keyword">this</span>.right)) : Either.of(f(<span class="keyword">this</span>.left),<span class="keyword">this</span>.right);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Either.of = <span class="function"><span class="keyword">function</span>(<span class="params">left,right</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Either(left,right);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 下面是用法。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> addOne = <span class="function"><span class="keyword">function</span> (<span class="params">x</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> x + <span class="number">1</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Either.of(<span class="number">5</span>, <span class="number">6</span>).map(addOne);</span><br><span class="line"><span class="comment">// Either(5, 7);</span></span><br><span class="line"></span><br><span class="line">Either.of(<span class="number">1</span>, <span class="literal">null</span>).map(addOne);</span><br><span class="line"><span class="comment">// Either(2, null);</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">class Either extends Functor{
+    construcor(left,right){
+        this.left = left;
+        this.right = right;
+    }
+    map(f){
+        return this.right ? Either.of(this.left,f(this.right)) : Either.of(f(this.left),this.right);
+    }
+}
+
+Either.of = function(left,right){
+    return new Either(left,right);
+}
+// 下面是用法。
+
+var addOne = function (x) {
+  return x + 1;
+};
+
+Either.of(5, 6).map(addOne);
+// Either(5, 7);
+
+Either.of(1, null).map(addOne);
+// Either(2, null);
+</code></pre>
 <p>上面代码中，如果右值有值，就使用右值，否则使用左值。通过这种方式，Either 函子表达了条件运算。</p>
 <p><strong>Either 函子的常见用途是提供默认值</strong>。下面是一个例子。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Either</span><br><span class="line">.of(&#123;<span class="attr">address</span>: <span class="string">'xxx'</span>&#125;, currentUser.address)</span><br><span class="line">.map(updateField);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">Either
+.of({address: &#39;xxx&#39;}, currentUser.address)
+.map(updateField);
+</code></pre>
 <p>上面代码中，如果用户没有提供地址，Either 函子就会使用左值的默认地址。</p>
 <p>Either 函子的另一个用途是代替<code>try...catch</code>，使用左值表示错误。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">parseJSON</span>(<span class="params">json</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> Either.of(<span class="literal">null</span>, <span class="built_in">JSON</span>.parse(json));</span><br><span class="line">  &#125; <span class="keyword">catch</span> (e: <span class="built_in">Error</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> Either.of(e, <span class="literal">null</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">function parseJSON(json) {
+  try {
+    return Either.of(null, JSON.parse(json));
+  } catch (e: Error) {
+    return Either.of(e, null);
+  }
+}
+</code></pre>
 <h2 id="ap函子"><a href="#ap函子" class="headerlink" title="ap函子"></a>ap函子</h2><p>函子里面包含的值，完全可能是函数。我们可以想象这样一种情况，一个函子的值是数值，另一个函子的值是函数。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">addTwo</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> x + <span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> A = Functor.of(<span class="number">2</span>);</span><br><span class="line"><span class="keyword">const</span> B = Functor.of(addTwo)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">function addTwo(x) {
+  return x + 2;
+}
+
+const A = Functor.of(2);
+const B = Functor.of(addTwo)
+</code></pre>
 <p>上面代码中，函子A内部的值是2，函子B内部的值是函数addTwo。</p>
 <p>有时，我们想让函子B内部的函数，可以使用函子A内部的值进行运算。这时就需要用到 <strong>ap 函子</strong>。</p>
 <p><strong>ap 是 applicative（应用）的缩写</strong>。凡是部署了ap方法的函子，就是 ap 函子。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Ap</span> <span class="keyword">extends</span> <span class="title">Functor</span></span>&#123;</span><br><span class="line">    ap(F)&#123;</span><br><span class="line">        <span class="keyword">return</span> Ap.of(<span class="keyword">this</span>.val(F.val));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">class Ap extends Functor{
+    ap(F){
+        return Ap.of(this.val(F.val));
+    }
+}
+</code></pre>
 <blockquote>
 <p>注意，ap方法的参数不是函数，而是另一个函子。</p>
 </blockquote>
 <p>因此，前面例子可以写成下面的形式。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ap.of(addTwo).ap(Functor.of(<span class="number">2</span>))<span class="comment">//Ap(4)</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">Ap.of(addTwo).ap(Functor.of(2))//Ap(4)
+</code></pre>
 <p>ap 函子的意义在于，<strong>对于那些多参数的函数，就可以从多个容器之中取值，实现函子的链式操作</strong>。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span> (<span class="params">y</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">y</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> x + y;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Ap.of(add).ap(Maybe.of(<span class="number">2</span>)).ap(Maybe.of(<span class="number">3</span>)); <span class="comment">//Ap(5)</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">function add (y){
+    return function(y){
+        return x + y;
+    }
+}
+
+Ap.of(add).ap(Maybe.of(2)).ap(Maybe.of(3)); //Ap(5)
+</code></pre>
 <p>上面代码中，函数add是柯里化以后的形式，一共需要两个参数。通过 ap 函子，我们就可以实现从两个容器之中取值。它还有另外一种写法。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ap.of(add(<span class="number">2</span>).ap(Maybe.of(<span class="number">3</span>)));</span><br></pre></td></tr></table></figure>
+<pre><code class="js">Ap.of(add(2).ap(Maybe.of(3)));
+</code></pre>
 <h2 id="Monad-函子"><a href="#Monad-函子" class="headerlink" title="Monad 函子"></a>Monad 函子</h2><p>函子是一个容器，可以包含任何值。函子之中再包含一个函子，也是完全合法的。但是，这样就会出现多层嵌套的函子。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Maybe.of(</span><br><span class="line">  Maybe.of(</span><br><span class="line">    Maybe.of(&#123;<span class="attr">name</span>: <span class="string">'Mulburry'</span>, <span class="attr">number</span>: <span class="number">8402</span>&#125;)</span><br><span class="line">  )</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">Maybe.of(
+  Maybe.of(
+    Maybe.of({name: &#39;Mulburry&#39;, number: 8402})
+  )
+)
+</code></pre>
 <p>上面这个函子，一共有三个<code>Maybe嵌套</code>。如果要取出内部的值，就要连续取三次<code>this.val</code>。这当然很不方便，因此就出现了 <strong>Monad 函子</strong>。</p>
 <p><font color = "red">Monad 函子的作用是，总是返回一个单层的函子</font>。它有一个flatMap方法，与map方法作用相同，唯一的区别是<code>如果生成了一个嵌套函子，它会取出后者内部的值，保证返回的永远是一个单层的容器，不会出现嵌套的情况</code>。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Monad</span> <span class="keyword">extends</span> <span class="title">Functor</span> </span>&#123;</span><br><span class="line">  join() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.val;</span><br><span class="line">  &#125;</span><br><span class="line">  flatMap(f) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.map(f).join();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">class Monad extends Functor {
+  join() {
+    return this.val;
+  }
+  flatMap(f) {
+    return this.map(f).join();
+  }
+}
+</code></pre>
 <p>上面代码中，如果函数<code>f</code>返回的是一个函子，那么<code>this.map(f)</code>就会生成一个嵌套的函子。所以，<code>join</code>方法保证了<code>flatMap</code>方法总是返回一个单层的函子。这意味着嵌套的函子会被铺平（<code>flatten</code>）。</p>
 <h2 id="IO-操作"><a href="#IO-操作" class="headerlink" title="IO 操作"></a>IO 操作</h2><p>Monad 函子的重要应用，就是<strong>实现 I/O （输入输出）操作</strong>。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> readFile = <span class="function"><span class="keyword">function</span>(<span class="params">filename</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> IO(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> fs.readFileSync(filename,<span class="string">'utf-8'</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> print = <span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> IO(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(x);</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">var fs = require(&#39;fs&#39;);
+
+var readFile = function(filename){
+    return new IO(function(){
+        return fs.readFileSync(filename,&#39;utf-8&#39;);
+    });
+}
+
+var print = function(x) {
+  return new IO(function() {
+    console.log(x);
+    return x;
+  });
+}
+</code></pre>
 <p>上面代码中，读取文件和打印本身都是不纯的操作，但是readFile和print却是纯函数，因为它们总是返回 IO 函子。</p>
 <p>如果 IO 函子是一个<code>Monad</code>，具有<code>flatMap</code>方法，那么我们就可以像下面这样调用这两个函数。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">readFile(<span class="string">'./user.txt'</span>)</span><br><span class="line">.flatMap(print)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">readFile(&#39;./user.txt&#39;)
+.flatMap(print)
+</code></pre>
 <p>这就是神奇的地方，上面的代码完成了不纯的操作，但是因为<code>flatMap</code>返回的还是一个 IO 函子，所以这个表达式是纯的。我们通过一个纯的表达式，完成带有副作用的操作，这就是 Monad 的作用。</p>
 <p>由于返回还是 IO 函子，所以可以实现<em>链式操作</em>。因此，在大多数库里面，<code>flatMap</code>方法被改名成<code>chain</code>。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> tail = <span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> IO(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x[x.length - <span class="number">1</span>];</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">readFile(<span class="string">'./user.txt'</span>)</span><br><span class="line">.flatMap(tail)</span><br><span class="line">.flatMap(print)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line">readFile(<span class="string">'./user.txt'</span>)</span><br><span class="line">.chain(tail)</span><br><span class="line">.chain(print)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">var tail = function(x) {
+  return new IO(function() {
+    return x[x.length - 1];
+  });
+}
+
+readFile(&#39;./user.txt&#39;)
+.flatMap(tail)
+.flatMap(print)
+
+// 等同于
+readFile(&#39;./user.txt&#39;)
+.chain(tail)
+.chain(print)
+</code></pre>
 <p>上面代码读取了文件<code>user.txt</code>，然后选取最后一行输出。</p>
 <p><a href="http://www.ruanyifeng.com/blog/2017/02/fp-tutorial.html" target="_blank" rel="noopener">原文地址</a></p>
 
@@ -312,7 +479,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

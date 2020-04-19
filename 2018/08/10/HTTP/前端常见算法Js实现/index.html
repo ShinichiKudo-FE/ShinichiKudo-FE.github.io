@@ -10,9 +10,10 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="TriDiamond Obsidian,"> 
-    <meta name="description" content="一枚前端搬砖队队员的记录册,快速排序1var arr = [2,53,53.2,1,1223,5,2,675,967,2,1231,9344,3855,1];
+    <meta name="description" content="一枚前端搬砖队队员的记录册,快速排序var arr = [2,53,53.2,1,1223,5,2,675,967,2,1231,9344,3855,1];
+
 冒泡排序原理：比较相邻的两个元素，比较大的放置右端
-1234567,"> 
+functio,"> 
     <meta name="author" content="张白告丶"> 
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -101,13 +102,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    12k
+                    2.9k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    11 mins.
+                    3 mins.
                 </span>
                 
                 
@@ -141,20 +142,110 @@
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <h1 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h1><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [<span class="number">2</span>,<span class="number">53</span>,<span class="number">53.2</span>,<span class="number">1</span>,<span class="number">1223</span>,<span class="number">5</span>,<span class="number">2</span>,<span class="number">675</span>,<span class="number">967</span>,<span class="number">2</span>,<span class="number">1231</span>,<span class="number">9344</span>,<span class="number">3855</span>,<span class="number">1</span>];</span><br></pre></td></tr></table></figure>
+            <h1 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h1><pre><code class="js">var arr = [2,53,53.2,1,1223,5,2,675,967,2,1231,9344,3855,1];
+</code></pre>
 <h2 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h2><p><strong>原理</strong>：<br>比较相邻的两个元素，比较大的放置右端</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bubbleSort</span>(<span class="params">arr</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> i = j =<span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">1</span>;i &lt; arr.length;i++)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="number">0</span>;j &lt;= arr.length - i;j++)&#123;</span><br><span class="line">            <span class="keyword">var</span> temp = <span class="number">0</span></span><br><span class="line">            <span class="keyword">if</span>(arr[j] &gt; arr[j+<span class="number">1</span>])&#123;</span><br><span class="line">                temp = arr[j];</span><br><span class="line">                arr[j] = arr[j+<span class="number">1</span>];</span><br><span class="line">                arr[j+<span class="number">1</span>] = temp;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// bubbleSort(arr);</span></span><br><span class="line"><span class="comment">// console.log(arr)</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">function bubbleSort(arr){
+    var i = j =0
+    for(var i = 1;i &lt; arr.length;i++){
+        for(var j = 0;j &lt;= arr.length - i;j++){
+            var temp = 0
+            if(arr[j] &gt; arr[j+1]){
+                temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+            }
+        }
+    }
+}
+
+// bubbleSort(arr);
+// console.log(arr)
+</code></pre>
 <h2 id="快排"><a href="#快排" class="headerlink" title="快排"></a>快排</h2><p><strong>原理：</strong><br>根据基数将分为两部分，一部分的数据要比另一部分的所有数据都要小，然后进行递归调用，直到最后一个元素<br><a id="more"></a></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">quickSort</span>(<span class="params">arr</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (arr.length &lt;= <span class="number">1</span>) &#123; <span class="keyword">return</span> arr; &#125;</span><br><span class="line"></span><br><span class="line">　　<span class="keyword">var</span> pivotIndex = <span class="built_in">Math</span>.floor(arr.length / <span class="number">2</span>) ;</span><br><span class="line"></span><br><span class="line">　　<span class="keyword">var</span> pivot = arr.splice(pivotIndex, <span class="number">1</span>)[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">　　<span class="keyword">var</span> left = [];</span><br><span class="line"></span><br><span class="line">　　<span class="keyword">var</span> right = [];</span><br><span class="line"></span><br><span class="line">　　<span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; arr.length; i++)&#123;</span><br><span class="line"></span><br><span class="line">　　　　<span class="keyword">if</span> (arr[i] &lt; pivot) &#123;</span><br><span class="line"></span><br><span class="line">　　　　　　left.push(arr[i]);</span><br><span class="line"></span><br><span class="line">　　　　&#125; <span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">　　　　　　right.push(arr[i]);</span><br><span class="line"></span><br><span class="line">　　　　&#125;</span><br><span class="line"></span><br><span class="line">　　&#125;</span><br><span class="line"></span><br><span class="line">   　<span class="keyword">return</span> quickSort(left).concat([pivot], quickSort(right));</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// console.log(quickSort(arr));</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">function quickSort(arr){
+    if (arr.length &lt;= 1) { return arr; }
+
+　　var pivotIndex = Math.floor(arr.length / 2) ;
+
+　　var pivot = arr.splice(pivotIndex, 1)[0];
+
+　　var left = [];
+
+　　var right = [];
+
+　　for (var i = 0; i &lt; arr.length; i++){
+
+　　　　if (arr[i] &lt; pivot) {
+
+　　　　　　left.push(arr[i]);
+
+　　　　} else {
+
+　　　　　　right.push(arr[i]);
+
+　　　　}
+
+　　}
+
+   　return quickSort(left).concat([pivot], quickSort(right));
+
+}
+
+// console.log(quickSort(arr));
+</code></pre>
 <h2 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h2><p><strong>原理</strong><br>1） 从第一个元素开始，该元素可以认为已经被排序</p>
 <p>2） 取出下一个元素，在已经排序的元素序列中从后向前扫描</p>
 <p>3） 如果该元素（已排序）大于新元素，将该元素移到下一位置</p>
 <p>4） 重复步骤3，直到找到已排序的元素小于或者等于新元素的位置</p>
 <p>5）将新元素插入到下一位置中</p>
 <p>6） 重复步骤2</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">insertSort</span>(<span class="params">arr</span>)</span>&#123;</span><br><span class="line"><span class="comment">// 假设第0个元素开始是有序排序，第1个元素之后是无序排序</span></span><br><span class="line"><span class="comment">// 所以从第1个元素将无需数列的元素插入有序数列中</span></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">1</span>; i &lt; arr.length; i++)&#123;</span><br><span class="line">    <span class="comment">// 升序</span></span><br><span class="line">    <span class="keyword">if</span>(arr[i] &lt; arr[i - <span class="number">1</span>])&#123;</span><br><span class="line">        <span class="comment">// 取出无序数组中弟i个元素作为被插入元素</span></span><br><span class="line">        <span class="keyword">var</span> guard = arr[i];</span><br><span class="line">        <span class="comment">// 记住有序数列的最后一个元素位置，并将数列位置扩大一个</span></span><br><span class="line">        <span class="keyword">var</span> j = i - <span class="number">1</span>;</span><br><span class="line">        arr[i] = arr[j];</span><br><span class="line">        <span class="comment">// 比大小找到被插入元素的位置</span></span><br><span class="line">        <span class="keyword">while</span> (j &gt;= <span class="number">0</span> &amp;&amp; guard &lt; arr[j]) &#123;</span><br><span class="line">            arr[j + <span class="number">1</span>] = arr[j];</span><br><span class="line">            j--;</span><br><span class="line">        &#125;</span><br><span class="line">        arr[j + <span class="number">1</span>] = guard; <span class="comment">// 插入</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">insertSort(arr);</span><br><span class="line"><span class="built_in">console</span>.log(arr)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">function insertSort(arr){
+// 假设第0个元素开始是有序排序，第1个元素之后是无序排序
+// 所以从第1个元素将无需数列的元素插入有序数列中
+for(var i = 1; i &lt; arr.length; i++){
+    // 升序
+    if(arr[i] &lt; arr[i - 1]){
+        // 取出无序数组中弟i个元素作为被插入元素
+        var guard = arr[i];
+        // 记住有序数列的最后一个元素位置，并将数列位置扩大一个
+        var j = i - 1;
+        arr[i] = arr[j];
+        // 比大小找到被插入元素的位置
+        while (j &gt;= 0 &amp;&amp; guard &lt; arr[j]) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = guard; // 插入
+    }
+}
+}
+insertSort(arr);
+console.log(arr)
+</code></pre>
 <h2 id="二分查找"><a href="#二分查找" class="headerlink" title="二分查找"></a>二分查找</h2><p><strong>原理</strong><br>二分查找，也为折半查找。首先要找到一个中间值，通过与中间值比较，大的放又，小的放在左边。<br>再在两边中寻找中间值，持续以上操作，直到找到所在位置为止。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">binarySort</span>(<span class="params">left,right</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> result = [],</span><br><span class="line">        il = <span class="number">0</span>,</span><br><span class="line">        ir = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (il &lt; left.length &amp;&amp; ir &lt; right.length) &#123;</span><br><span class="line">        <span class="keyword">if</span> (left[il] &lt; right[ir]) &#123;</span><br><span class="line">            result.push(left[il++]);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            result.push(right[ir++]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>(left[il])&#123;</span><br><span class="line">        result.push(left[il++]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>(right[ir])&#123;</span><br><span class="line">        result.push(right[ir++]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(binarySort(arr,<span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+<pre><code class="js">function binarySort(left,right){
+    var result = [],
+        il = 0,
+        ir = 0;
+
+    while (il &lt; left.length &amp;&amp; ir &lt; right.length) {
+        if (left[il] &lt; right[ir]) {
+            result.push(left[il++]);
+        } else {
+            result.push(right[ir++]);
+        }
+    }
+    while(left[il]){
+        result.push(left[il++]);
+    }
+    while(right[ir]){
+        result.push(right[ir++]);
+    }
+    return result;
+}
+console.log(binarySort(arr,1))
+</code></pre>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -202,7 +293,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

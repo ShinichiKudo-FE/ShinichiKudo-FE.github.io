@@ -104,13 +104,13 @@ How Browser Cache Works首先，我们要搞清楚浏览器缓存是怎么工作
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    15k
+                    7.6k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    14 mins.
+                    7 mins.
                 </span>
                 
                 
@@ -171,35 +171,99 @@ How Browser Cache Works首先，我们要搞清楚浏览器缓存是怎么工作
 <p>所以，<code>code splitting</code> 的作用除了”减少文件大小”之外，还能更充分地利用缓存。所以，下面就让我们用 webpack 来实现持久性缓存吧。</p>
 <h2 id="Webpack-amp-Caching"><a href="#Webpack-amp-Caching" class="headerlink" title="Webpack &amp; Caching"></a>Webpack &amp; Caching</h2><p>首先，把我们的 <a href="https://link.zhihu.com/?target=https%3A//github.com/lyyourc/webpack-code-splitting-demo">demo 项目</a>（已经实现了 code splitting ）下载并安装好依赖。</p>
 <p>接着，修改 webpack 配置文件，给我们打包后的静态文件生成随机的唯一的名字。（ changed files ）</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  output: &#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    filename: <span class="string">'[name].[chunkhash:8].js'</span>,</span><br><span class="line">    chunkFilename: <span class="string">'[name].[chunkhash:8].chunk.js'</span>,</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// webpack.config.js
+module.exports = {
+  output: {
+    //...
+    filename: &#39;[name].[chunkhash:8].js&#39;,
+    chunkFilename: &#39;[name].[chunkhash:8].chunk.js&#39;,
+    //...
+  },
+}
+</code></pre>
 <p>我们使用了 <code>[chunkhash]</code> 这个占位符，并且为了更好地分辨和展示 demo ，我们截取了他的前 8 个字符 <code>[chunkhash:8]</code>，但是在实际生产中我们不要那么做！</p>
 <p>好咯，现在来看看我们的打包后的文件：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">                    Asset            Size    Chunk Names</span><br><span class="line">common-<span class="keyword">in</span>-lazy.fa79d198.chunk.js    <span class="number">11.6</span> kB  common-<span class="keyword">in</span>-lazy</span><br><span class="line">    used-twice.c2c4927c.chunk.js    <span class="number">17.1</span> kB  used-twice</span><br><span class="line">        Photos<span class="number">.28</span>d663ec.chunk.js    <span class="number">8.57</span> kB  Photos</span><br><span class="line">         Emoji.d3ea8991.chunk.js    <span class="number">1.15</span> kB  Emoji</span><br><span class="line">                 app<span class="number">.724</span>a238a.js    <span class="number">2.53</span> kB  app</span><br><span class="line">              vendor<span class="number">.05</span>be8f94.js     <span class="number">104</span> kB  vendor</span><br></pre></td></tr></table></figure>
+<pre><code class="js">                    Asset            Size    Chunk Names
+common-in-lazy.fa79d198.chunk.js    11.6 kB  common-in-lazy
+    used-twice.c2c4927c.chunk.js    17.1 kB  used-twice
+        Photos.28d663ec.chunk.js    8.57 kB  Photos
+         Emoji.d3ea8991.chunk.js    1.15 kB  Emoji
+                 app.724a238a.js    2.53 kB  app
+              vendor.05be8f94.js     104 kB  vendor
+</code></pre>
 <p>那么，现在我们来修改一下 App.vue ，添加个 <code>&lt;footer&gt;</code> 标签（ changed files ） :</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- old codes --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">footer</span>&gt;</span> A Footer <span class="tag">&lt;/<span class="name">footer</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="html">&lt;template&gt;
+&lt;div id=&quot;app&quot;&gt;
+  &lt;!-- old codes --&gt;
+  &lt;footer&gt; A Footer &lt;/footer&gt;
+&lt;/div&gt;
+&lt;/template&gt;
+</code></pre>
 <a id="more"></a>
 <p>此时的打包变成了：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">                        Asset       Size  Chunk Names</span><br><span class="line">common-<span class="keyword">in</span>-lazy.fa79d198.chunk.js    <span class="number">11.6</span> kB  common-<span class="keyword">in</span>-lazy</span><br><span class="line">    used-twice.c2c4927c.chunk.js    <span class="number">17.1</span> kB  used-twice</span><br><span class="line">        Photos<span class="number">.28</span>d663ec.chunk.js    <span class="number">8.57</span> kB  Photos</span><br><span class="line">         Emoji.d3ea8991.chunk.js    <span class="number">1.15</span> kB  Emoji</span><br><span class="line">                 app.fdc2eedb.js    <span class="number">2.57</span> kB  app</span><br><span class="line">              vendor.b611a5da.js     <span class="number">104</span> kB  vendor</span><br></pre></td></tr></table></figure>
+<pre><code class="js">                        Asset       Size  Chunk Names
+common-in-lazy.fa79d198.chunk.js    11.6 kB  common-in-lazy
+    used-twice.c2c4927c.chunk.js    17.1 kB  used-twice
+        Photos.28d663ec.chunk.js    8.57 kB  Photos
+         Emoji.d3ea8991.chunk.js    1.15 kB  Emoji
+                 app.fdc2eedb.js    2.57 kB  app
+              vendor.b611a5da.js     104 kB  vendor
+</code></pre>
 <p>注意到，我们的 app chunk 的 hash 从 724a238a 变成了 fdc2eedb ，这是我们所希望看到的东西。但是，与此同时 vendor chunk 的 hash 也变了（05be8f94 -&gt; b611a5da）。然而，我们并没有修改 vendor chunk 的代码，为什么他的 hash 也变了呢？?</p>
 <p>原因是 <code>vendor chunk</code> 里面包含了 <code>webpack</code> 的 <code>runtime</code> 代码（用来解析和加载模块之类的运行时代码）：</p>
 <p>解决办法就是把 webpack 的 runtime 代码提取出来（ changed files ）：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> webpack.optimize.CommonsChunkPlugin(&#123; </span><br><span class="line">  name: [<span class="string">'manifast'</span>] </span><br><span class="line">&#125;),</span><br></pre></td></tr></table></figure>
+<pre><code class="js">new webpack.optimize.CommonsChunkPlugin({ 
+  name: [&#39;manifast&#39;] 
+}),
+</code></pre>
 <p>把之前 App.vue 更新了的代码暂时去掉，也就是上面添加的 <code>&lt;footer&gt;</code> 标签去掉：</p>
-<p>接着按照之前的，修改 App.vue ，添加 `` 标签（ changed files ）：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- old codes --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">footer</span>&gt;</span> A Footer <span class="tag">&lt;/<span class="name">footer</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>接着按照之前的，修改 App.vue ，添加 <code></code> 标签（ changed files ）：</p>
+<pre><code class="html">&lt;template&gt;
+&lt;div id=&quot;app&quot;&gt;
+  &lt;!-- old codes --&gt;
+  &lt;footer&gt; A Footer &lt;/footer&gt;
+&lt;/div&gt;
+&lt;/template&gt;
+</code></pre>
 <p>而此时的打包：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">                        Asset       Size  Chunk Names</span><br><span class="line">common-<span class="keyword">in</span>-lazy.fa79d198.chunk.js    <span class="number">11.6</span> kB  common-<span class="keyword">in</span>-lazy</span><br><span class="line">    used-twice.c2c4927c.chunk.js    <span class="number">17.1</span> kB  used-twice</span><br><span class="line">        Photos<span class="number">.28</span>d663ec.chunk.js    <span class="number">8.57</span> kB  Photos</span><br><span class="line">         Emoji.d3ea8991.chunk.js    <span class="number">1.15</span> kB  Emoji</span><br><span class="line">                 app.fdc2eedb.js    <span class="number">2.57</span> kB  app</span><br><span class="line">              vendor<span class="number">.3</span>b70f9d8.js     <span class="number">103</span> kB  vendor</span><br><span class="line">            manifast<span class="number">.1442e3</span>f3.js    <span class="number">1.54</span> kB  manifast</span><br></pre></td></tr></table></figure>
+<pre><code class="js">                        Asset       Size  Chunk Names
+common-in-lazy.fa79d198.chunk.js    11.6 kB  common-in-lazy
+    used-twice.c2c4927c.chunk.js    17.1 kB  used-twice
+        Photos.28d663ec.chunk.js    8.57 kB  Photos
+         Emoji.d3ea8991.chunk.js    1.15 kB  Emoji
+                 app.fdc2eedb.js    2.57 kB  app
+              vendor.3b70f9d8.js     103 kB  vendor
+            manifast.1442e3f3.js    1.54 kB  manifast
+</code></pre>
 <p>很开心，此时只有 <code>app.js</code> 和 <code>manifast.js</code> 这 2 个 chunk 的文件名的 hash 发生了改变，vendor.js chunk 和其他 chunk 都没变，舒服。</p>
 <p>但是，假如我们给 App.vue 随便引入一个模块的话，比如（ changed files ）：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="keyword">import</span> noop <span class="keyword">from</span> <span class="string">'./shared/utils.js'</span></span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">&lt;script&gt;
+//...
+import noop from &#39;./shared/utils.js&#39;
+&lt;/script&gt;
+</code></pre>
 <p>而此时的打包：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">                        Asset       Size  Chunk Names</span><br><span class="line">common-<span class="keyword">in</span>-lazy<span class="number">.30</span>b1e9b6.chunk.js    <span class="number">11.6</span> kB  common-<span class="keyword">in</span>-lazy</span><br><span class="line">    used-twice<span class="number">.9</span>eccbe5a.chunk.js    <span class="number">17.1</span> kB  used-twice</span><br><span class="line">        Photos<span class="number">.6096611</span>c.chunk.js    <span class="number">8.57</span> kB  Photos</span><br><span class="line">         Emoji<span class="number">.6208</span>da60.chunk.js    <span class="number">1.15</span> kB  Emoji</span><br><span class="line">                 app<span class="number">.4675</span>a374.js    <span class="number">2.61</span> kB  app</span><br><span class="line">              vendor<span class="number">.8</span>b538297.js     <span class="number">103</span> kB  vendor</span><br><span class="line">            manifast<span class="number">.25580296</span>.js    <span class="number">1.54</span> kB  manifast</span><br></pre></td></tr></table></figure>
+<pre><code class="js">                        Asset       Size  Chunk Names
+common-in-lazy.30b1e9b6.chunk.js    11.6 kB  common-in-lazy
+    used-twice.9eccbe5a.chunk.js    17.1 kB  used-twice
+        Photos.6096611c.chunk.js    8.57 kB  Photos
+         Emoji.6208da60.chunk.js    1.15 kB  Emoji
+                 app.4675a374.js    2.61 kB  app
+              vendor.8b538297.js     103 kB  vendor
+            manifast.25580296.js    1.54 kB  manifast
+</code></pre>
 <p>卧槽居然所有 chunk 的 hash 都发生了改变，这是为什么？</p>
 <p><strong>原因是在 webpack 里每个模块都有一个 module id </strong>，module id 是该模块在<a href="https://link.zhihu.com/?target=https%3A//webpack.js.org/concepts/dependency-graph/">模块依赖关系图</a>里按顺序分配的序号，如果这个 module id 发生了变化，那么他的 chunkhash 也会发生变化。（不确定这里是否正确，希望大佬指出错误）</p>
 <p><img src="https://pic4.zhimg.com/80/v2-5a4b6bef5809e00512873d481a3670e7_hd.png" alt="pic5"></p>
 <p>所以呢，我们需要用一种新的方式来计算 module id 。 <strong>HashedModuleIdsPlugin</strong> 这个插件，他是根据模块所在路径来映射其 module id ，这样就算引入了新的模块，也不会影响 module id 的值，只要模块的路径不改变的话。</p>
 <p>修改我们的 webpack 配置。并且，去掉上面 App.vue 引入的 noop 模块。（ changed files ）</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line"></span><br><span class="line">plugins: [</span><br><span class="line">  <span class="keyword">new</span> webpack.HashedModuleIdsPlugin(),</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">],</span><br></pre></td></tr></table></figure>
+<pre><code class="js">// webpack.config.js
+
+plugins: [
+  new webpack.HashedModuleIdsPlugin(),
+  // ...
+],
+</code></pre>
 <p>可以看到，只有 app chunk 和 manifast chunk 的 hash 发生了改变，其他 chunk 不变所以他们的缓存就没被破坏。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>用 webpack 实现 long term cache ：</p>
 <ul>
@@ -257,7 +321,7 @@ How Browser Cache Works首先，我们要搞清楚浏览器缓存是怎么工作
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

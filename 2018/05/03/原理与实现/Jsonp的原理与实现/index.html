@@ -102,13 +102,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    14k
+                    4.9k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    13 mins.
+                    4 mins.
                 </span>
                 
                 
@@ -149,22 +149,110 @@
 <li>3.由于使用script的src属性，所以只支持get方法</li>
 </ul>
 <h2 id="实现流程"><a href="#实现流程" class="headerlink" title="实现流程"></a>实现流程</h2><p>1.设定一个script标签</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">"http://jsonp.js?callback=xxx"</span>&gt;&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">&lt;script src=&quot;http://jsonp.js?callback=xxx&quot;&gt;&lt;/script&gt;
+</code></pre>
 <p>2.callback定义了一个函数名，而远程服务端通过调用指定的函数并传入参数实现参数传递，将fn(response)传递回客户端</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$callback = !empty($_GET[<span class="string">'callback'</span>]) ? $_GET[<span class="string">'callback'</span>]: <span class="string">'callback'</span>;</span><br><span class="line">echo $callback.<span class="string">'(.json_encode($data))'</span>;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">$callback = !empty($_GET[&#39;callback&#39;]) ? $_GET[&#39;callback&#39;]: &#39;callback&#39;;
+echo $callback.&#39;(.json_encode($data))&#39;;
+</code></pre>
 <p>3.客户端接收到返回的js脚本，开始解析和执行fn(response)<br><a id="more"></a></p>
 <h2 id="jsonp的简单实现"><a href="#jsonp的简单实现" class="headerlink" title="jsonp的简单实现"></a>jsonp的简单实现</h2><p>一个简单的jsonp实现，其实就是拼接url字符串，动态的添加到script元素的头部</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">jsonp</span>(<span class="params">req</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> script = <span class="built_in">document</span>.createElement(<span class="string">'script'</span>);</span><br><span class="line">    <span class="keyword">var</span> url = req.url + <span class="string">'?callback='</span> + req.callback.name;</span><br><span class="line">    script.src = url;</span><br><span class="line">    <span class="built_in">document</span>.getElementsByTagName(<span class="string">'head'</span>)[<span class="number">0</span>].appendChild(<span class="string">'script'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">function jsonp(req){
+    var script = document.createElement(&#39;script&#39;);
+    var url = req.url + &#39;?callback=&#39; + req.callback.name;
+    script.src = url;
+    document.getElementsByTagName(&#39;head&#39;)[0].appendChild(&#39;script&#39;);
+}
+</code></pre>
 <p>前端js示例</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">hello</span>(<span class="params">res</span>)</span>&#123;</span><br><span class="line">    alert(<span class="string">'hello'</span> + res.data);</span><br><span class="line">&#125;</span><br><span class="line">jsonp(&#123;</span><br><span class="line">    url:<span class="string">''</span>,</span><br><span class="line">    callback: hello</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">function hello(res){
+    alert(&#39;hello&#39; + res.data);
+}
+jsonp({
+    url:&#39;&#39;,
+    callback: hello
+})
+</code></pre>
 <p>服务器端代码</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> http = requrie(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">var</span> urllib = <span class="built_in">require</span>(<span class="string">'url'</span>);</span><br><span class="line"><span class="keyword">var</span> port = <span class="number">8080</span>;</span><br><span class="line"><span class="keyword">var</span> data = &#123;<span class="string">'data'</span>:<span class="string">'world'</span>&#125;;</span><br><span class="line"></span><br><span class="line">http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req,res</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> params = urllib.parse(req.url,<span class="literal">true</span>);</span><br><span class="line">    <span class="keyword">if</span>(params.query.callback)&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(params.query.callback);</span><br><span class="line">        <span class="comment">//jsonp</span></span><br><span class="line">        <span class="keyword">var</span> str = params.query.callback + <span class="string">'('</span> + <span class="built_in">JSON</span>.stringify(data) + <span class="string">')'</span>;</span><br><span class="line">        res.end(str);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        res.end();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;).listen(port,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'jsonp server is on'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">var http = requrie(&#39;http&#39;);
+var urllib = require(&#39;url&#39;);
+var port = 8080;
+var data = {&#39;data&#39;:&#39;world&#39;};
+
+http.createServer(function(req,res){
+    var params = urllib.parse(req.url,true);
+    if(params.query.callback){
+        console.log(params.query.callback);
+        //jsonp
+        var str = params.query.callback + &#39;(&#39; + JSON.stringify(data) + &#39;)&#39;;
+        res.end(str);
+    } else {
+        res.end();
+    }
+}).listen(port,function(){
+    console.log(&#39;jsonp server is on&#39;);
+});
+
+</code></pre>
 <p>然而，这个实现虽然简单，但有一些不足的地方：</p>
 <p>1.我们传递的回调必须是一个全局方法，我们都知道要尽量减少全局的方法。<br>2.需要加入一些参数校验，确保接口可以正常执行。</p>
 <h2 id="可靠的jsonp实现"><a href="#可靠的jsonp实现" class="headerlink" title="可靠的jsonp实现"></a>可靠的jsonp实现</h2><p>jsonp部分源码</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params">global</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> id = <span class="number">0</span>,</span><br><span class="line">        container = <span class="built_in">document</span>.getElementsByTagName(<span class="string">"head"</span>)[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">jsonp</span>(<span class="params">options</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!options || !options.url) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> scriptNode = <span class="built_in">document</span>.createElement(<span class="string">"script"</span>),</span><br><span class="line">            data = options.data || &#123;&#125;,</span><br><span class="line">            url = options.url,</span><br><span class="line">            callback = options.callback,</span><br><span class="line">            fnName = <span class="string">"jsonp"</span> + id++;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 添加回调函数</span></span><br><span class="line">        data[<span class="string">"callback"</span>] = fnName;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 拼接url</span></span><br><span class="line">        <span class="keyword">var</span> params = [];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> data) &#123;</span><br><span class="line">            params.push(<span class="built_in">encodeURIComponent</span>(key) + <span class="string">"="</span> + <span class="built_in">encodeURIComponent</span>(data[key]));</span><br><span class="line">        &#125;</span><br><span class="line">        url = url.indexOf(<span class="string">"?"</span>) &gt; <span class="number">0</span> ? (url + <span class="string">"&amp;"</span>) : (url + <span class="string">"?"</span>);</span><br><span class="line">        url += params.join(<span class="string">"&amp;"</span>);</span><br><span class="line">        scriptNode.src = url;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 传递的是一个匿名的回调函数，要执行的话，暴露为一个全局方法</span></span><br><span class="line">        global[fnName] = <span class="function"><span class="keyword">function</span> (<span class="params">ret</span>) </span>&#123;</span><br><span class="line">            callback &amp;&amp; callback(ret);</span><br><span class="line">            container.removeChild(scriptNode);</span><br><span class="line">            <span class="keyword">delete</span> global[fnName];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 出错处理</span></span><br><span class="line">        scriptNode.onerror = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            callback &amp;&amp; callback(&#123;<span class="attr">error</span>:<span class="string">"error"</span>&#125;);</span><br><span class="line">            container.removeChild(scriptNode);</span><br><span class="line">            global[fnName] &amp;&amp; <span class="keyword">delete</span> global[fnName];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        scriptNode.type = <span class="string">"text/javascript"</span>;</span><br><span class="line">        container.appendChild(scriptNode)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    global.jsonp = jsonp;</span><br><span class="line"></span><br><span class="line">&#125;)(<span class="keyword">this</span>);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">(function (global) {
+    var id = 0,
+        container = document.getElementsByTagName(&quot;head&quot;)[0];
+
+    function jsonp(options) {
+        if(!options || !options.url) return;
+
+        var scriptNode = document.createElement(&quot;script&quot;),
+            data = options.data || {},
+            url = options.url,
+            callback = options.callback,
+            fnName = &quot;jsonp&quot; + id++;
+
+        // 添加回调函数
+        data[&quot;callback&quot;] = fnName;
+
+        // 拼接url
+        var params = [];
+        for (var key in data) {
+            params.push(encodeURIComponent(key) + &quot;=&quot; + encodeURIComponent(data[key]));
+        }
+        url = url.indexOf(&quot;?&quot;) &gt; 0 ? (url + &quot;&amp;&quot;) : (url + &quot;?&quot;);
+        url += params.join(&quot;&amp;&quot;);
+        scriptNode.src = url;
+
+        // 传递的是一个匿名的回调函数，要执行的话，暴露为一个全局方法
+        global[fnName] = function (ret) {
+            callback &amp;&amp; callback(ret);
+            container.removeChild(scriptNode);
+            delete global[fnName];
+        }
+
+        // 出错处理
+        scriptNode.onerror = function () {
+            callback &amp;&amp; callback({error:&quot;error&quot;});
+            container.removeChild(scriptNode);
+            global[fnName] &amp;&amp; delete global[fnName];
+        }
+
+        scriptNode.type = &quot;text/javascript&quot;;
+        container.appendChild(scriptNode)
+    }
+
+    global.jsonp = jsonp;
+
+})(this);
+</code></pre>
 <p>使用示例</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">jsonp(&#123;</span><br><span class="line">    url: <span class="string">'www.example.com'</span>,</span><br><span class="line">    data: &#123;<span class="attr">id</span> :<span class="number">1</span>&#125;,</span><br><span class="line">    callback: <span class="function"><span class="keyword">function</span>(<span class="params">ret</span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(ret)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">jsonp({
+    url: &#39;www.example.com&#39;,
+    data: {id :1},
+    callback: function(ret){
+        console.log(ret)
+    }
+})
+</code></pre>
 <h2 id="JSONP的优缺点"><a href="#JSONP的优缺点" class="headerlink" title="JSONP的优缺点"></a>JSONP的优缺点</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
 <li>它不像XMLHttpRequest对象实现的Ajax请求那样受到同源策略的限制，JSONP可以跨越同源策略；</li>
 <li>它的兼容性更好，在更加古老的浏览器中都可以运行，不需要XMLHttpRequest或ActiveX的支持</li>
@@ -228,7 +316,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

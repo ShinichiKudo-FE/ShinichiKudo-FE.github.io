@@ -100,13 +100,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    6.4k
+                    4.2k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    6 mins.
+                    4 mins.
                 </span>
                 
                 
@@ -149,32 +149,62 @@
 <p><em>快应用开发者论坛</em> <a href="http://bbs.quickapp.cn/" target="_blank" rel="noopener">http://bbs.quickapp.cn/</a></p>
 <h2 id="搭建环境"><a href="#搭建环境" class="headerlink" title="搭建环境"></a>搭建环境</h2><h3 id="安装nodejs"><a href="#安装nodejs" class="headerlink" title="安装nodejs"></a>安装nodejs</h3><p>需安装<font color = "red">6.0以上版本</font>的nodejs，请从NodeJS官网下载，<font color = "red">推荐v6.11.3 LTS</font></p>
 <p><strong>注意: 不要使用8.0.*版本．这个版本内部ZipStream实现与node-archive包不兼容，会引起报错</strong></p>
-<h3 id="安装hap-toolkit-快应用命令"><a href="#安装hap-toolkit-快应用命令" class="headerlink" title="安装hap-toolkit (快应用命令)"></a>安装hap-toolkit (快应用命令)</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install - g hap-toolkit</span><br></pre></td></tr></table></figure>
+<h3 id="安装hap-toolkit-快应用命令"><a href="#安装hap-toolkit-快应用命令" class="headerlink" title="安装hap-toolkit (快应用命令)"></a>安装hap-toolkit (快应用命令)</h3><pre><code class="javascript">npm install - g hap-toolkit
+</code></pre>
 <a id="more"></a>
-<p>在命令行中执行hap -V会输出版本信息表示hap-toolkit安装成功，如下命令所示：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hap -V</span><br></pre></td></tr></table></figure><br>目前版本是0.0.26</p>
-<h2 id="创建新的项目"><a href="#创建新的项目" class="headerlink" title="创建新的项目"></a>创建新的项目</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hap init &lt;ProjectName&gt;</span><br></pre></td></tr></table></figure>
-<p>成功后即显示项目目录结构<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">├── node_modules              npm 包</span><br><span class="line">├── sign                      rpk包签名模块</span><br><span class="line">│   └── debug                 调试环境</span><br><span class="line">│       ├── certificate.pem   证书文件</span><br><span class="line">│       └── private.pem       私钥文件</span><br><span class="line">├── src                       项目资源文件夹</span><br><span class="line">│   ├── Common                公用的资源文件和组件文件</span><br><span class="line">│   │   └── logo.png          manifest.json中配置的icon</span><br><span class="line">│   ├── Demo                  页面目录</span><br><span class="line">│   |   └── index.ux          页面文件，文件名不必与父文件夹相同</span><br><span class="line">│   ├── app.ux                APP文件（用于包括公用资源）</span><br><span class="line">│   └── manifest.json         项目配置文件（如：应用描述、接口申明、页面路由等）</span><br><span class="line">└── package.json              定义项目需要的各种模块及配置信息，npm install根据这个配置文件，自动下载所需的运行和开发环境</span><br></pre></td></tr></table></figure></p>
-<h2 id="编译项目"><a href="#编译项目" class="headerlink" title="编译项目"></a>编译项目</h2><p>1.在项目根目录下，运行如下命令安装依赖包（webpack，babel等）<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br></pre></td></tr></table></figure></p>
-<ol>
-<li>在项目的根目录下，运行如下命令进行编译打包，生成rpk包<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run build</span><br></pre></td></tr></table></figure>
+<p>在命令行中执行hap -V会输出版本信息表示hap-toolkit安装成功，如下命令所示：</p>
+<pre><code class="javascript">hap -V
+</code></pre>
+<p>目前版本是0.0.26</p>
+<h2 id="创建新的项目"><a href="#创建新的项目" class="headerlink" title="创建新的项目"></a>创建新的项目</h2><pre><code class="javascript">hap init &lt;ProjectName&gt;
+</code></pre>
+<p>成功后即显示项目目录结构</p>
+<pre><code class="html">├── node_modules              npm 包
+├── sign                      rpk包签名模块
+│   └── debug                 调试环境
+│       ├── certificate.pem   证书文件
+│       └── private.pem       私钥文件
+├── src                       项目资源文件夹
+│   ├── Common                公用的资源文件和组件文件
+│   │   └── logo.png          manifest.json中配置的icon
+│   ├── Demo                  页面目录
+│   |   └── index.ux          页面文件，文件名不必与父文件夹相同
+│   ├── app.ux                APP文件（用于包括公用资源）
+│   └── manifest.json         项目配置文件（如：应用描述、接口申明、页面路由等）
+└── package.json              定义项目需要的各种模块及配置信息，npm install根据这个配置文件，自动下载所需的运行和开发环境
+</code></pre>
+<h2 id="编译项目"><a href="#编译项目" class="headerlink" title="编译项目"></a>编译项目</h2><p>1.在项目根目录下，运行如下命令安装依赖包（webpack，babel等）</p>
+<pre><code class="javascript">npm install
+</code></pre>
+<ol start="2">
+<li>在项目的根目录下，运行如下命令进行编译打包，生成rpk包<pre><code class="javascript">npm run build
+</code></pre>
 </li>
 </ol>
 <blockquote>
 <p>编译打包成功后，项目根目录下会生成文件夹：build、dist</p>
+</blockquote>
+<blockquote>
 <ul>
 <li>build：临时产出，包含编译后的页面js，图片等</li>
 <li>dist：最终产出，包含rpk文件。其实是将build目录下的资源打包压缩为一个文件，后缀名为rpk，这个rpk文件就是项目编译后的最终产出</li>
 </ul>
 </blockquote>
-<p>3.自动重新编译<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run watch</span><br></pre></td></tr></table></figure></p>
+<p>3.自动重新编译</p>
+<pre><code class="javascript">npm run watch
+</code></pre>
 <font color = "red">注意：npm run watch后还需要另外运行npm run server来运行server才能实现热更新</font>
 
 <font color = "red"><br><strong>注意</strong>：<br><br>如果报错遇到Cannot find module ‘…/webpack.config.js’，请重新执行一次hap update –force。这是由于高版本的npm在npm install时，会校验并删除了node_modules下部分文件夹，导致报错。而hap update –force会重新复制hap-toolkit文件夹到node_modules中</font>
 
 <h2 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h2><p>需要安装两个APP应用程序(必须！需要在真机上调试预览)</p>
 <p><a href="https://statres.quickapp.cn/quickapp/quickapp/201803/file/201803200129552999556.apk" target="_blank" rel="noopener">快应用调试器</a><br><a href="https://statres.quickapp.cn/quickapp/quickapp/201803/file/201803200130021102030.apk" target="_blank" rel="noopener">平台预览版</a></p>
-<h3 id="二维码预览"><a href="#二维码预览" class="headerlink" title="二维码预览"></a>二维码预览</h3><p>在终端输入,启动本地服务器<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run server</span><br></pre></td></tr></table></figure></p>
-<p>自定义端口（如：8080）<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run server -- --port <span class="number">8080</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="二维码预览"><a href="#二维码预览" class="headerlink" title="二维码预览"></a>二维码预览</h3><p>在终端输入,启动本地服务器</p>
+<pre><code class="javascript">npm run server
+</code></pre>
+<p>自定义端口（如：8080）</p>
+<pre><code class="javascript">npm run server -- --port 8080
+</code></pre>
 <p>在调试器APP选择扫描二维码；</p>
 <p>如果提示安装失败，建议重新起一遍npm run server 重新来过。</p>
 <h2 id="本地安装"><a href="#本地安装" class="headerlink" title="本地安装"></a>本地安装</h2><p>选择dist目录下的.rpk文件传输到手机 在调试器中选择手动安装找到你的.rpk即可安装<br>出现了这个，代表你安装成功，这就是Demo效果<br><img src="https://doc.quickapp.cn/tutorial/getting-started/hello-world.2.png" alt="qck"></p>
@@ -227,7 +257,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

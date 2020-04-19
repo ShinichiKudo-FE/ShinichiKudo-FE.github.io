@@ -11,7 +11,10 @@
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="TriDiamond Obsidian,"> 
     <meta name="description" content="一枚前端搬砖队队员的记录册,为什么要依赖收集？先看这段代码
-123456789101112new Vue(&amp;#123;    template:         `&amp;lt;div&amp;gt;            &amp;lt;span,"> 
+new Vue({
+    template: 
+        `&amp;lt;div&amp;gt;
+            &amp;lt;span&amp;gt;text1:&amp;lt;/sp,"> 
     <meta name="author" content="张白告丶"> 
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -100,13 +103,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    11k
+                    3.5k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    10 mins.
+                    3 mins.
                 </span>
                 
                 
@@ -141,15 +144,100 @@
     <div class='main'>
         <div class="content markdown animated fadeIn">
             <h1 id="为什么要依赖收集？"><a href="#为什么要依赖收集？" class="headerlink" title="为什么要依赖收集？"></a>为什么要依赖收集？</h1><p>先看这段代码</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">    template: </span><br><span class="line">        <span class="string">`&lt;div&gt;</span></span><br><span class="line"><span class="string">            &lt;span&gt;text1:&lt;/span&gt; &#123;&#123;text1&#125;&#125;</span></span><br><span class="line"><span class="string">            &lt;span&gt;text2:&lt;/span&gt; &#123;&#123;text2&#125;&#125;</span></span><br><span class="line"><span class="string">        &lt;div&gt;`</span>,</span><br><span class="line">    data: &#123;</span><br><span class="line">        text1: <span class="string">'text1'</span>,</span><br><span class="line">        text2: <span class="string">'text2'</span>,</span><br><span class="line">        text3: <span class="string">'text3'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">new Vue({
+    template: 
+        `&lt;div&gt;
+            &lt;span&gt;text1:&lt;/span&gt; {{text1}}
+            &lt;span&gt;text2:&lt;/span&gt; {{text2}}
+        &lt;div&gt;`,
+    data: {
+        text1: &#39;text1&#39;,
+        text2: &#39;text2&#39;,
+        text3: &#39;text3&#39;
+    }
+});
+</code></pre>
 <p>按照之前<a href="https://github.com/answershuto/learnVue/blob/master/docs/%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86.MarkDown" target="_blank" rel="noopener">《响应式原理》</a>中的方法绑定则会出现一个问题——text3在实际模板中并没有被用到，然而当text3的数据被修改的时候（this.text3 = ‘test’）的时候，同样会触发text3的setter导致重新执行渲染，这显然不正确。</p>
 <h2 id="先说说Dep"><a href="#先说说Dep" class="headerlink" title="先说说Dep"></a>先说说Dep</h2><p>当对data上的对象进行修改值的时候会触发它的<code>setter</code>，那么取值的时候自然就会触发<code>getter</code>事件，所以我们只要在最开始进行一次render，那么所有被渲染所依赖的data中的数据就会被<code>getter</code>收集到<code>Dep</code>的<code>subs</code>中去。在对data中的数据进行修改的时候<code>setter</code>只会触发<code>Dep</code>的<code>subs</code>的函数。</p>
 <p>定义一个依赖收集类Dep。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span> () &#123;</span><br><span class="line">        <span class="keyword">this</span>.subs = [];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    addSub (sub: Watcher) &#123;</span><br><span class="line">        <span class="keyword">this</span>.subs.push(sub)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    removeSub (sub: Watcher) &#123;</span><br><span class="line">        remove(<span class="keyword">this</span>.subs, sub)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*Github:https://github.com/answershuto*/</span></span><br><span class="line">    notify () &#123;</span><br><span class="line">        <span class="comment">// stabilize the subscriber list first</span></span><br><span class="line">        <span class="keyword">const</span> subs = <span class="keyword">this</span>.subs.slice()</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>, l = subs.length; i &lt; l; i++) &#123;</span><br><span class="line">            subs[i].update()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">remove</span> (<span class="params">arr, item</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (arr.length) &#123;</span><br><span class="line">        <span class="keyword">const</span> index = arr.indexOf(item)</span><br><span class="line">        <span class="keyword">if</span> (index &gt; <span class="number">-1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> arr.splice(index, <span class="number">1</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">class Dep {
+    constructor () {
+        this.subs = [];
+    }
+
+    addSub (sub: Watcher) {
+        this.subs.push(sub)
+    }
+
+    removeSub (sub: Watcher) {
+        remove(this.subs, sub)
+    }
+    /*Github:https://github.com/answershuto*/
+    notify () {
+        // stabilize the subscriber list first
+        const subs = this.subs.slice()
+        for (let i = 0, l = subs.length; i &lt; l; i++) {
+            subs[i].update()
+        }
+    }
+}
+function remove (arr, item) {
+    if (arr.length) {
+        const index = arr.indexOf(item)
+        if (index &gt; -1) {
+            return arr.splice(index, 1)
+    }
+}
+</code></pre>
 <h2 id="Watcher"><a href="#Watcher" class="headerlink" title="Watcher"></a>Watcher</h2><p>订阅者，当依赖收集的时候会<code>addSub</code>到sub中，在修改data中数据的时候会触发dep对象的<code>notify</code>，通知所有<code>Watcher</code>对象去修改对应视图。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Watcher</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span> (vm, expOrFn, cb, options) &#123;</span><br><span class="line">        <span class="keyword">this</span>.cb = cb;</span><br><span class="line">        <span class="keyword">this</span>.vm = vm;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*在这里将观察者本身赋值给全局的target，只有被target标记过的才会进行依赖收集*/</span></span><br><span class="line">        Dep.target = <span class="keyword">this</span>;</span><br><span class="line">        <span class="comment">/*Github:https://github.com/answershuto*/</span></span><br><span class="line">        <span class="comment">/*触发渲染操作进行依赖收集*/</span></span><br><span class="line">        <span class="keyword">this</span>.cb.call(<span class="keyword">this</span>.vm);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    update () &#123;</span><br><span class="line">        <span class="keyword">this</span>.cb.call(<span class="keyword">this</span>.vm);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">class Watcher {
+    constructor (vm, expOrFn, cb, options) {
+        this.cb = cb;
+        this.vm = vm;
+
+        /*在这里将观察者本身赋值给全局的target，只有被target标记过的才会进行依赖收集*/
+        Dep.target = this;
+        /*Github:https://github.com/answershuto*/
+        /*触发渲染操作进行依赖收集*/
+        this.cb.call(this.vm);
+    }
+
+    update () {
+        this.cb.call(this.vm);
+    }
+}
+</code></pre>
 <a id="more"></a>
-<h2 id="开始依赖收集"><a href="#开始依赖收集" class="headerlink" title="开始依赖收集"></a>开始依赖收集</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Vue</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(options) &#123;</span><br><span class="line">        <span class="keyword">this</span>._data = options.data;</span><br><span class="line">        observer(<span class="keyword">this</span>._data, options.render);</span><br><span class="line">        <span class="keyword">let</span> watcher = <span class="keyword">new</span> Watcher(<span class="keyword">this</span>, );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">defineReactive</span> (<span class="params">obj, key, val, cb</span>) </span>&#123;</span><br><span class="line">    <span class="comment">/*在闭包内存储一个Dep对象*/</span></span><br><span class="line">    <span class="keyword">const</span> dep = <span class="keyword">new</span> Dep();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(obj, key, &#123;</span><br><span class="line">        enumerable: <span class="literal">true</span>,</span><br><span class="line">        configurable: <span class="literal">true</span>,</span><br><span class="line">        <span class="keyword">get</span>: ()=&gt;&#123;</span><br><span class="line">            <span class="keyword">if</span> (Dep.target) &#123;</span><br><span class="line">                <span class="comment">/*Watcher对象存在全局的Dep.target中*/</span></span><br><span class="line">                dep.addSub(Dep.target);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="keyword">set</span>:newVal=&gt; &#123;</span><br><span class="line">            <span class="comment">/*只有之前addSub中的函数才会触发*/</span></span><br><span class="line">            dep.notify();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Dep.target = <span class="literal">null</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="开始依赖收集"><a href="#开始依赖收集" class="headerlink" title="开始依赖收集"></a>开始依赖收集</h2><pre><code class="js">class Vue {
+    constructor(options) {
+        this._data = options.data;
+        observer(this._data, options.render);
+        let watcher = new Watcher(this, );
+    }
+}
+
+function defineReactive (obj, key, val, cb) {
+    /*在闭包内存储一个Dep对象*/
+    const dep = new Dep();
+
+    Object.defineProperty(obj, key, {
+        enumerable: true,
+        configurable: true,
+        get: ()=&gt;{
+            if (Dep.target) {
+                /*Watcher对象存在全局的Dep.target中*/
+                dep.addSub(Dep.target);
+            }
+        },
+        set:newVal=&gt; {
+            /*只有之前addSub中的函数才会触发*/
+            dep.notify();
+        }
+    })
+}
+
+Dep.target = null;
+</code></pre>
 <p>将观察者Watcher实例赋值给全局的Dep.target，然后触发render操作只有被Dep.target标记过的才会进行依赖收集。有Dep.target的对象会将Watcher的实例push到subs中，在对象被修改出发setter操作的时候dep会调用subs中的Watcher实例的update方法进行渲染。</p>
 <p><a href="https://github.com/answershuto/learnVue/blob/master/docs/%E4%BE%9D%E8%B5%96%E6%94%B6%E9%9B%86.MarkDown" target="_blank" rel="noopener">原文地址</a></p>
 
@@ -199,7 +287,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

@@ -102,13 +102,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    17k
+                    8.1k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    15 mins.
+                    7 mins.
                 </span>
                 
                 
@@ -148,54 +148,118 @@
 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>如果你曾使用JavaScript库做过开发，那么你可能已经注意到一个名为 this的特定关键字。虽然 this在JavaScript中非常常见，但是完全理解this关键字的原理以及在代码中如何使用对相当一部分的开发者来说着实不易。在这篇文章中，我将帮你深入理解 this及其工作机制。<br>在开始之前，请确保已安装 Node。然后，打开命令行终端并运行 node 命令。</p>
 <h2 id="全局环境中的“this”"><a href="#全局环境中的“this”" class="headerlink" title="全局环境中的“this”"></a>全局环境中的“this”</h2><p>this的工作机制理解起来并不是很容易。我们通过将 this置于不同环境下，分别来理解 this是如何工作的。首先看一下 global环境。</p>
 <p>在全局环境中， this相当于全局对象 global。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span> === global;</span><br><span class="line"><span class="literal">true</span>;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">this === global;
+true;
+</code></pre>
 <p>但这只在 <strong>node中才有效。如果我们将相同的代码放在js文件中运行，得到的输出为false</strong>。</p>
 <p>如果想测试效果，可以创建一个名为 index.js的文件，包含以下代码：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="keyword">this</span> === global);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">console.log(this === global);
+</code></pre>
 <p>然后使用 node命令运行此文件：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ node index.js</span><br><span class="line"><span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">$ node index.js
+false
+</code></pre>
 <p>原因是在JavaScript文件中， this等同于 <code>module.exports</code>而不是 global 。</p>
 <h2 id="函数中的“this”"><a href="#函数中的“this”" class="headerlink" title="函数中的“this”"></a>函数中的“this”</h2><p>函数中的 this值通常是由函数的调用方来定义。因此，每次执行函数，函数内的 this值可能都不一样。</p>
 <p>在 index.js文件中，编写一个非常简单的函数，来检查 this是否等于global对象。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">rajat</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span> === global)</span><br><span class="line">&#125;</span><br><span class="line">rajat()</span><br></pre></td></tr></table></figure>
+<pre><code class="js">function rajat() {
+  console.log(this === global)
+}
+rajat()
+</code></pre>
 <a id="more"></a>
 <p>如果我们使用 node运行此代码，得到的输出为 true 。如果在文件的顶部添加 “use strict”，并再次运行它，将会得到一个 false输出，因为现在的 this值为 undefined 。<br>为了进一步解释这一点，让我们创建一个简单的函数来定义超级英雄的真实姓名和英雄名字</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Hero</span>(<span class="params">heroName, realName</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.realName = realName;</span><br><span class="line">  <span class="keyword">this</span>.heroName = heroName;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> superman= Hero(<span class="string">"Superman"</span>, <span class="string">"Clark Kent"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(superman);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">function Hero(heroName, realName) {
+  this.realName = realName;
+  this.heroName = heroName;
+}
+const superman= Hero(&quot;Superman&quot;, &quot;Clark Kent&quot;);
+console.log(superman);
+</code></pre>
 <p>请注意，这个函数并不是以<code>严格模式</code>编写的。 node运行此代码，并不会得到我们预期的“Superman”和“Clark Kent”，但它只会给我们一个 undefined 。</p>
 <p>背后的原因是，<strong>由于函数不是以严格模式编写的， this指向global对象</strong>。<br>如果在<code>严格模式</code>下运行此代码，我们会收到报错，因为JavaScript不允许将属性 realName和 heroName赋给 undefined 。其实这是一件好事，因为它阻止我们创建全局变量。</p>
 <p>另外，以大写形式书写函数名意味着我们需要将它视为构造函数，使用 new运算符来调用。用下面的代码替换上面代码段的最后两行</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">onst superman = <span class="keyword">new</span> Hero(<span class="string">"Superman"</span>, <span class="string">"Clark Kent"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(superman);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">onst superman = new Hero(&quot;Superman&quot;, &quot;Clark Kent&quot;);
+console.log(superman);
+</code></pre>
 <p>再次运行 node index.js命令，现在会得到你预期的输出。</p>
 <h2 id="构造函数中的“this”"><a href="#构造函数中的“this”" class="headerlink" title="构造函数中的“this”"></a>构造函数中的“this”</h2><p>JavaScript没有特定的构造函数。我们所能做的就是使用 new运算符将函数调用转换为构造函数调用，如上一节所示。<br>构造函数被调用时，会创建一个新对象并将其设置为函数的 this参数。构造函数会隐式的返回这个对象，除非我们明确的返回了另外一个对象。<br>在 hero函数内部添加下面的 return语句：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> &#123;</span><br><span class="line">  heroName: <span class="string">"Batman"</span>,</span><br><span class="line">  realName: <span class="string">"Bruce Wayne"</span>,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">return {
+  heroName: &quot;Batman&quot;,
+  realName: &quot;Bruce Wayne&quot;,
+};
+</code></pre>
 <p>如果我们再次运行 node命令，我们会看到 上面的 return语句覆盖了构造函数调用。</p>
 <p>return语句不会覆盖构造函数调用的唯一情形是，<strong>return语句返回的不是一个对象</strong>。在这种情况下，对象将包含原始值。</p>
 <h2 id="方法中的“this”"><a href="#方法中的“this”" class="headerlink" title="方法中的“this”"></a>方法中的“this”</h2><p>当函数作为对象的方法被调用时， this指向的是该对象，也称为函数调用的接收器(receiver)。<br>假设 hero对象有一个 dialogue方法 ，那么 dialogue中的 this值指向 hero本身。此时的 hero也被称为 dialogue方法调用的接收者。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> hero = &#123;</span><br><span class="line">  heroName: <span class="string">"Batman"</span>,</span><br><span class="line">  dialogue() &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`I am <span class="subst">$&#123;<span class="keyword">this</span>.heroName&#125;</span>!`</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">hero.dialogue();</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const hero = {
+  heroName: &quot;Batman&quot;,
+  dialogue() {
+    console.log(`I am ${this.heroName}!`);
+  }
+};
+hero.dialogue();
+
+</code></pre>
 <p>这个例子非常简单，但在实际情况中，我们的方法很难跟踪接收器。在 index.js的末尾添加以下代码段。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> saying = hero.dialogue;</span><br><span class="line">saying();</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const saying = hero.dialogue;
+saying();
+</code></pre>
 <p>如果我将 dialogue的引用存储在另一个变量中，并将该变量作为函数调用。 node运行代码 ， this将返回 undefined ，因为该方法已经丢失了接收器。 this此时指向 global ，而不是 hero 。</p>
 <p>当我们将一个方法作为回调传递给另一个方法时，通常会丢失接收器。我们可以通过添加包装函数或使用 <code>bind</code>方法将 this与特定对象绑定来解决这个问题。</p>
 <h2 id="call-和-apply"><a href="#call-和-apply" class="headerlink" title="call() 和 apply()"></a>call() 和 apply()</h2><p>虽然函数的 this值是隐式设置的，我们在调用函数时也可以使用 call()和 apply()明确设置 this参数。</p>
 <p>我们重构一下前面章节的代码片段，如下所示：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dialogue</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log (<span class="string">`I am <span class="subst">$&#123;<span class="keyword">this</span>.heroName&#125;</span>`</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> hero = &#123;</span><br><span class="line">  heroName: <span class="string">'Batman'</span>,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre><code class="js">function dialogue () {
+  console.log (`I am ${this.heroName}`);
+}
+const hero = {
+  heroName: &#39;Batman&#39;,
+};
+
+</code></pre>
 <p>如果要将 hero对象作为 dialogue函数的接收器，我们可以这样使用 call()或 apply() ：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dialogue.call(hero)</span><br><span class="line"><span class="comment">// or</span></span><br><span class="line">dialogue.apply(hero)</span><br></pre></td></tr></table></figure>
+<pre><code class="js">dialogue.call(hero)
+// or
+dialogue.apply(hero)
+</code></pre>
 <p>如果你是在非严格模式下使用 call或 apply ，JavaScript引擎会忽略传递给 call或 apply的 null或 undefined （译者注：被替换为global）。这也是为什么建议始终以严格模式编写代码的原因之一。</p>
 <h2 id="bind"><a href="#bind" class="headerlink" title="bind()"></a>bind()</h2><p>当我们将一个方法作为回调函数传递给另一个函数时，总是存在丢失方法的原有接收器的风险，使得 this参数指向全局对象。</p>
 <p><code>bind()</code>方法可以将 this参数固定的绑定到一个值上。下面的代码片段， bind会创建一个新的 dialogue函数，并将 this值设置为 hero 。（译者注：<code>bind()</code>方法会创建一个新函数，称为绑定函数-bound function-BF，当调用这个绑定函数时，绑定函数会以创建它时传入 <code>bind()</code>方法的第一个参数作为 this，传入 <code>bind()</code>方法的第二个以及以后的参数加上绑定函数运行时本身的参数按照顺序作为原函数的参数来调用原函数。）</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> hero = &#123;</span><br><span class="line">  heroName: <span class="string">"Batman"</span>,</span><br><span class="line">  dialogue() &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`I am <span class="subst">$&#123;<span class="keyword">this</span>.heroName&#125;</span>`</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">setTimeOut(hero.dialogue.bind(hero), <span class="number">1000</span>);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const hero = {
+  heroName: &quot;Batman&quot;,
+  dialogue() {
+    console.log(`I am ${this.heroName}`);
+  }
+};
+setTimeOut(hero.dialogue.bind(hero), 1000);
+
+</code></pre>
 <p>这样的话，即使使用 call或 apply方法也无法改变 this的值 。</p>
 <h2 id="箭头函数中的“this”"><a href="#箭头函数中的“this”" class="headerlink" title="箭头函数中的“this”"></a>箭头函数中的“this”</h2><p>箭头函数内的 this与其他类型的JavaScript函数有很大的不同。An arrow function uses the this value from its enclosing execution context, since it does have one of its own.</p>
 <p>箭头函数会<strong>永久地捕获 this值，阻止 apply或 call后续更改它</strong>。</p>
 <p>为了解释箭头函数中的 this是如何工作的，我们来写一个箭头函数：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> batman = <span class="keyword">this</span>;</span><br><span class="line"><span class="keyword">const</span> bruce = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span> === batman);</span><br><span class="line">&#125;;</span><br><span class="line">bruce(); <span class="comment">//  true</span></span><br></pre></td></tr></table></figure>
+<pre><code class="js">const batman = this;
+const bruce = () =&gt; {
+  console.log(this === batman);
+};
+bruce(); //  true
+
+</code></pre>
 <p>这里，我们将 this值存储在变量中，然后将该值与箭头函数内的 this值进行比较。在终端中运行 node index.js，输出应该为 true 。</p>
 <p>箭头函数内的 this值无法明确设置。此外，使用 call 、 apply或 bind等方法给 this传值，箭头函数会忽略。<strong>箭头函数引用的是箭头函数在创建时设置的 this值</strong>。（译者注：<strong>箭头函数中没有this绑定，必须通过查找作用域链来决定它的值，如果箭头函数被非箭头函数包裹，那么this值由外围最近一层非箭头函数决定，否则为undefined。</strong>）</p>
 <p>箭头函数也不能用作构造函数。因此，我们也不能在箭头函数内给 this设置属性。</p>
 <p>那么箭头函数对 this 可以做什么呢？</p>
 <p>箭头函数 <strong>可以使我们在回调函数中访问this</strong> 。通过下面的 counter对象来看看如何做到的：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> counter = &#123;</span><br><span class="line">  count: <span class="number">0</span>,</span><br><span class="line">  increase() &#123;</span><br><span class="line">    setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(++<span class="keyword">this</span>.count);</span><br><span class="line">    &#125;, <span class="number">1000</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">counter.increase();</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const counter = {
+  count: 0,
+  increase() {
+    setInterval(function() {
+      console.log(++this.count);
+    }, 1000);
+  }
+}
+counter.increase();
+</code></pre>
 <p>使用 node index.js运行此代码，只会得到一个 NaN的列表。这是因为 this.count已经不是指向 counter对象了。它实际上指向的为 global对象。</p>
 <p>如果想让计数器正常工作，可以使用箭头函数重写它。</p>
 <p>回调函数使用 this与 increase方法绑定， counter现在可以正常工作了。</p>
@@ -204,12 +268,26 @@
 <p>类通常包含一个 constructor ， <strong>this可以指向任何新创建的对象</strong>。</p>
 <p>不过在作为方法时，如果该方法作为普通函数被调用， this也可以指向任何其他值。与方法一样，类也可能失去对接收器的跟踪。</p>
 <p>我们将之前创建的 Hero函数改造为类。该类包含一个构造函数和一个 dialogue()方法。最后，创建一个类的实例并调用 dialogue方法。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Hero</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(heroName) &#123;</span><br><span class="line">    <span class="keyword">this</span>.heroName = heroName;</span><br><span class="line">  &#125;</span><br><span class="line">  dialogue() &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`I am <span class="subst">$&#123;<span class="keyword">this</span>.heroName&#125;</span>`</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> batman = <span class="keyword">new</span> Hero(<span class="string">"Batman"</span>);</span><br><span class="line">batman.dialogue();</span><br></pre></td></tr></table></figure>
+<pre><code class="js">class Hero {
+  constructor(heroName) {
+    this.heroName = heroName;
+  }
+  dialogue() {
+    console.log(`I am ${this.heroName}`)
+  }
+}
+const batman = new Hero(&quot;Batman&quot;);
+batman.dialogue();
+</code></pre>
 <p>构造函数里的 this指向新创建的 类实例。当我们调用 <code>batman.dialogue()</code>时， dialogue()作为方法被调用， batman是它的接收器。</p>
 <p>但是如果我们将 <code>dialogue()</code>方法的引用存储起来，并稍后将其作为函数调用，我们会丢失该方法的接收器，此时 this参数指向 <code>undefined</code></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> say = batman.dialogue;</span><br><span class="line">say();</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const say = batman.dialogue;
+say();
+</code></pre>
 <p>出现错误的原因是JavaScript 类是隐式的运行在严格模式下的。我们是在没有任何自动绑定的情况下调用 say()函数的。要解决这个问题，我们需要手动使用 bind()将 dialogue()函数与 batman绑定在一起。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> say = batman.dialogue.bind(batman);</span><br><span class="line">say();</span><br></pre></td></tr></table></figure>
+<pre><code class="js">const say = batman.dialogue.bind(batman);
+say();
+</code></pre>
 <p>我们也可以在 构造函数方法中做这个绑定。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>我们需要在JavaScript中使用 this ，就像我们需要在英语中使用代词一样。以这两句话为例：</p>
 <blockquote>
@@ -273,7 +351,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

@@ -102,13 +102,13 @@ A call stack is a mechanism for an interpreter (like the JavaSc,">
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    4.4k
+                    2.9k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    4 mins.
+                    3 mins.
                 </span>
                 
                 
@@ -154,9 +154,23 @@ A call stack is a mechanism for an interpreter (like the JavaSc,">
 <li>If the stack takes up more space than it had assigned to it, it results in a “stack overflow” error.</li>
 </ul>
 <h2 id="调用栈"><a href="#调用栈" class="headerlink" title="调用栈"></a>调用栈</h2><p>调用栈是一种数据结构。他记录了我们在程序中的位置；如果我们调用一个函数时，他就会将这个函数推入栈顶，当执行完这个函数后，就会从栈顶弹出，这就是调用栈所做的事情；</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">multiply</span>(<span class="params">x,y</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x * y;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">printSquare</span>(<span class="params">x</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> s = multiply(x,x);</span><br><span class="line">    <span class="built_in">console</span>.log(s)</span><br><span class="line">&#125;</span><br><span class="line">printSquare(<span class="number">5</span>);</span><br></pre></td></tr></table></figure>
+<pre><code class="js">function multiply(x,y){
+    return x * y;
+}
+function printSquare(x){
+    var s = multiply(x,x);
+    console.log(s)
+}
+printSquare(5);
+
+</code></pre>
 <p>每一个进入调用栈的称为<code>调用帧</code>。<br><a id="more"></a><br>“堆栈溢出”，当你达到调用栈的最大的大小的时候就会发生这种情况；而且这相当容易发生，特别是在你写递归的时候却没有全方位的测试它。我们来看看下面的代码：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    foo();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">foo()</span><br></pre></td></tr></table></figure>
+<pre><code class="js">function foo(){
+    foo();
+}
+
+foo()
+</code></pre>
 <h2 id="什么是执行上下文？"><a href="#什么是执行上下文？" class="headerlink" title="什么是执行上下文？"></a>什么是执行上下文？</h2><p>简而言之，执行上下文就是评估和执行JavaScript代码环境的抽象概念。每当JavaScript代码在运行时，他都是在执行上下文中运行的；</p>
 <h3 id="执行上下文的类型"><a href="#执行上下文的类型" class="headerlink" title="执行上下文的类型"></a>执行上下文的类型</h3><ul>
 <li><p>全局执行上下文  这是默认或者说基础的上下文，任何不在函数内部的代码都在全局上下文中。它会执行两件事：创建一个全局的 window 对象（浏览器的情况下），并且设置 this 的值等于这个全局对象。<strong>一个程序中只会有一个全局执行上下文</strong>。</p>
@@ -218,7 +232,7 @@ A call stack is a mechanism for an interpreter (like the JavaSc,">
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>

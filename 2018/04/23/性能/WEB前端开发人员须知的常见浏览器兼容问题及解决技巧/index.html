@@ -99,13 +99,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    19k
+                    11k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    17 mins.
+                    10 mins.
                 </span>
                 
                 
@@ -160,7 +160,20 @@
 <p>display:block; //可以为内嵌元素模拟为块元素</p>
 <p>display:inline; //实现同一行排列的的效果</p>
 <p>display:table; //for FF,模拟table的效果</p>
-<h3 id="技巧四：怎样使一个div层居中于浏览器中？"><a href="#技巧四：怎样使一个div层居中于浏览器中？" class="headerlink" title="技巧四：怎样使一个div层居中于浏览器中？"></a>技巧四：怎样使一个div层居中于浏览器中？</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">div &#123;</span><br><span class="line"></span><br><span class="line"><span class="css"><span class="selector-tag">position</span><span class="selector-pseudo">:absolute</span>;</span></span><br><span class="line"><span class="css"><span class="selector-tag">top</span><span class="selector-pseudo">:50</span>%;</span></span><br><span class="line"><span class="css"><span class="selector-tag">left</span><span class="selector-pseudo">:50</span>%;</span></span><br><span class="line"><span class="css"><span class="selector-tag">margin</span><span class="selector-pseudo">:-100px</span> 0 0 <span class="selector-tag">-100px</span>;</span></span><br><span class="line"><span class="css"><span class="selector-tag">width</span><span class="selector-pseudo">:200px</span>;</span></span><br><span class="line"><span class="css"><span class="selector-tag">height</span><span class="selector-pseudo">:200px</span>;</span></span><br><span class="line"><span class="css"><span class="selector-tag">border</span><span class="selector-pseudo">:1px</span> <span class="selector-tag">solid</span> <span class="selector-tag">red</span>; &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="技巧四：怎样使一个div层居中于浏览器中？"><a href="#技巧四：怎样使一个div层居中于浏览器中？" class="headerlink" title="技巧四：怎样使一个div层居中于浏览器中？"></a>技巧四：怎样使一个div层居中于浏览器中？</h3><pre><code class="html">&lt;style type=&quot;text/css&quot;&gt;
+
+div {
+
+position:absolute;
+top:50%;
+left:50%;
+margin:-100px 0 0 -100px;
+width:200px;
+height:200px;
+border:1px solid red; }
+
+&lt;/style&gt;
+</code></pre>
 <p>2）div里的内容，IE默认为居中，而FF默认为左对齐，可以尝试增加代码margin: 0 auto;</p>
 <h3 id="技巧五：float的div闭合-清除浮动-自适应高度"><a href="#技巧五：float的div闭合-清除浮动-自适应高度" class="headerlink" title="技巧五：float的div闭合;清除浮动;自适应高度"></a>技巧五：float的div闭合;清除浮动;自适应高度</h3><p>① 例如：＜div id=”floatA”&gt;＜div id=”floatB”&gt;＜div id=”NOTfloatC”&gt;</p>
 <p>②作为外部 wrapper 的 div 不要定死高度,为了让高度能自适应，要在wrapper里面加上overflow:hidden; 当包含float的box的时候，高度自适应在IE下无效，这时候应该触发IE的layout私有属性(万恶的IE啊！)用zoom:1;可以做到，这样就达到了兼容。 </p>
@@ -168,23 +181,79 @@
 <p>④万能float 闭合(非常重要!)</p>
 <p>关于 clear float 的原理可参见 [How To ClearFloats Without Structural Markup],将以下代码加入Global CSS 中,给需要闭合的div加上class=”clearfix”即可,屡试不爽。</p>
 <h3 id="html5shiv-js"><a href="#html5shiv-js" class="headerlink" title="html5shiv.js"></a>html5shiv.js</h3><p>解决 ie9 以下浏览器对 html5 新增标签不识别的问题。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--[<span class="keyword">if</span> lt IE <span class="number">9</span>]&gt;</span><br><span class="line">  &lt;script type=<span class="string">"text/javascript"</span> src=<span class="string">"https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"</span>&gt;&lt;<span class="regexp">/script&gt;</span></span><br><span class="line"><span class="regexp">&lt;![endif]--&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">&lt;!--[if lt IE 9]&gt;
+  &lt;script type=&quot;text/javascript&quot; src=&quot;https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js&quot;&gt;&lt;/script&gt;
+&lt;![endif]--&gt;
+</code></pre>
 <h3 id="BFC-解决边距重叠问题"><a href="#BFC-解决边距重叠问题" class="headerlink" title="BFC 解决边距重叠问题"></a>BFC 解决边距重叠问题</h3><p>当相邻元素都设置了 margin 边距时，margin 将取最大值，舍弃小值。为了不让边距重叠，可以给子元素加一个父元素，并设置该父元素为 BFC：overflow: hidden;</p>
 <h3 id="IE6-双倍边距的问题"><a href="#IE6-双倍边距的问题" class="headerlink" title="IE6 双倍边距的问题"></a>IE6 双倍边距的问题</h3><p>设置 ie6 中设置浮动，同时又设置 margin，会出现双倍边距的问题<br>display: inline;</p>
 <h3 id="解决-IE9-以下浏览器不能使用-opacity"><a href="#解决-IE9-以下浏览器不能使用-opacity" class="headerlink" title="解决 IE9 以下浏览器不能使用 opacity"></a>解决 IE9 以下浏览器不能使用 opacity</h3><p>opacity: 0.5;<br>filter: alpha(opacity = 50);<br>filter: progid:DXImageTransform.Microsoft.Alpha(style = 0, opacity = 50);</p>
-<h3 id="解决-IE6-不支持-fixed-绝对定位以及IE6下被绝对定位的元素在滚动的时候会闪动的问题"><a href="#解决-IE6-不支持-fixed-绝对定位以及IE6下被绝对定位的元素在滚动的时候会闪动的问题" class="headerlink" title="解决 IE6 不支持 fixed 绝对定位以及IE6下被绝对定位的元素在滚动的时候会闪动的问题"></a>解决 IE6 不支持 fixed 绝对定位以及IE6下被绝对定位的元素在滚动的时候会闪动的问题</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* IE6 hack */</span></span><br><span class="line">*<span class="selector-tag">html</span>, *<span class="selector-tag">html</span> <span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">background-image</span>: <span class="built_in">url</span>(about:blank);</span><br><span class="line">  <span class="attribute">background-attachment</span>: fixed;</span><br><span class="line">&#125;</span><br><span class="line">*<span class="selector-tag">html</span> <span class="selector-id">#menu</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">top</span>: <span class="built_in">expression</span>(((e=document.documentElement.scrollTop) ? e : document.body.scrollTop) + <span class="number">100</span> + <span class="string">'px'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="解决-IE6-不支持-fixed-绝对定位以及IE6下被绝对定位的元素在滚动的时候会闪动的问题"><a href="#解决-IE6-不支持-fixed-绝对定位以及IE6下被绝对定位的元素在滚动的时候会闪动的问题" class="headerlink" title="解决 IE6 不支持 fixed 绝对定位以及IE6下被绝对定位的元素在滚动的时候会闪动的问题"></a>解决 IE6 不支持 fixed 绝对定位以及IE6下被绝对定位的元素在滚动的时候会闪动的问题</h3><pre><code class="css">/* IE6 hack */
+*html, *html body {
+  background-image: url(about:blank);
+  background-attachment: fixed;
+}
+*html #menu {
+  position: absolute;
+  top: expression(((e=document.documentElement.scrollTop) ? e : document.body.scrollTop) + 100 + &#39;px&#39;);
+}
+</code></pre>
 <h3 id="IE6-背景闪烁的问题"><a href="#IE6-背景闪烁的问题" class="headerlink" title="IE6 背景闪烁的问题"></a>IE6 背景闪烁的问题</h3><p>问题：链接、按钮用 CSSsprites 作为背景，在 ie6 下会有背景图闪烁的现象。原因是 IE6 没有将背景图缓存，每次触发 hover 的时候都会重新加载</p>
 <p>解决：可以用 JavaScript 设置 ie6 缓存这些图片：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">document</span><span class="selector-class">.execCommand</span>("<span class="selector-tag">BackgroundImageCache</span>", <span class="selector-tag">false</span>, <span class="selector-tag">true</span>);</span><br></pre></td></tr></table></figure>
+<pre><code class="css">document.execCommand(&quot;BackgroundImageCache&quot;, false, true);
+</code></pre>
 <h3 id="解决在-IE6-下，列表与日期错位的问题"><a href="#解决在-IE6-下，列表与日期错位的问题" class="headerlink" title="解决在 IE6 下，列表与日期错位的问题"></a>解决在 IE6 下，列表与日期错位的问题</h3><p>日期<code>span</code> 标签放在标题 <code>a</code> 标签之前即可</p>
 <h3 id="解决-IE6-不支持-min-height-属性的问题"><a href="#解决-IE6-不支持-min-height-属性的问题" class="headerlink" title="解决 IE6 不支持 min-height 属性的问题"></a>解决 IE6 不支持 min-height 属性的问题</h3><p>min-height: 350px;<br>_height: 350px;</p>
-<h3 id="让-IE7-IE8-支持-CSS3-background-size属性"><a href="#让-IE7-IE8-支持-CSS3-background-size属性" class="headerlink" title="让 IE7 IE8 支持 CSS3 background-size属性"></a>让 IE7 IE8 支持 CSS3 background-size属性</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">html</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100%</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">background-image</span>: <span class="built_in">url</span>(<span class="string">'img/37.png'</span>);</span><br><span class="line">  <span class="attribute">background-repeat</span>: no-repeat;</span><br><span class="line">  <span class="attribute">background-size</span>: cover;</span><br><span class="line">  <span class="attribute">-ms-behavior</span>: <span class="built_in">url</span>(<span class="string">'css/backgroundsize.min.htc'</span>);</span><br><span class="line">  <span class="attribute">behavior</span>: <span class="built_in">url</span>(<span class="string">'css/backgroundsize.min.htc'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="让-IE7-IE8-支持-CSS3-background-size属性"><a href="#让-IE7-IE8-支持-CSS3-background-size属性" class="headerlink" title="让 IE7 IE8 支持 CSS3 background-size属性"></a>让 IE7 IE8 支持 CSS3 background-size属性</h3><pre><code class="css">html {
+  height: 100%;
+}
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-image: url(&#39;img/37.png&#39;);
+  background-repeat: no-repeat;
+  background-size: cover;
+  -ms-behavior: url(&#39;css/backgroundsize.min.htc&#39;);
+  behavior: url(&#39;css/backgroundsize.min.htc&#39;);
+}
+</code></pre>
 <h3 id="IE6-7-line-height-失效的问题"><a href="#IE6-7-line-height-失效的问题" class="headerlink" title="IE6-7 line-height 失效的问题"></a>IE6-7 line-height 失效的问题</h3><p>问题：在ie 中 img 与文字放一起时，line-height 不起作用</p>
 <p>解决：都设置成 float</p>
 <h3 id="td-自动换行的问题"><a href="#td-自动换行的问题" class="headerlink" title="td 自动换行的问题"></a>td 自动换行的问题</h3><p>问题：table 宽度固定，td 自动换行</p>
 <p>解决：设置 Table 为 table-layout: fixed，td 为 word-wrap: break-word</p>
-<h3 id="键盘事件-keyCode-兼容性写法"><a href="#键盘事件-keyCode-兼容性写法" class="headerlink" title="键盘事件 keyCode 兼容性写法"></a>键盘事件 keyCode 兼容性写法</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> inp = <span class="built_in">document</span>.getElementById(<span class="string">'inp'</span>)</span><br><span class="line"><span class="keyword">var</span> result = <span class="built_in">document</span>.getElementById(<span class="string">'result'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getKeyCode</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">  e = e ? e : (<span class="built_in">window</span>.event ? <span class="built_in">window</span>.event : <span class="string">""</span>)</span><br><span class="line">  <span class="keyword">return</span> e.keyCode ? e.keyCode : e.which</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">inp.onkeypress = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">  result.innerHTML = getKeyCode(e)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="求窗口大小的兼容写法"><a href="#求窗口大小的兼容写法" class="headerlink" title="求窗口大小的兼容写法"></a>求窗口大小的兼容写法</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 浏览器窗口可视区域大小（不包括工具栏和滚动条等边线）</span></span><br><span class="line"><span class="comment">// 1600 * 525</span></span><br><span class="line"><span class="keyword">var</span> client_w = <span class="built_in">document</span>.documentElement.clientWidth || <span class="built_in">document</span>.body.clientWidth;</span><br><span class="line"><span class="keyword">var</span> client_h = <span class="built_in">document</span>.documentElement.clientHeight || <span class="built_in">document</span>.body.clientHeight;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 网页内容实际宽高（包括工具栏和滚动条等边线）</span></span><br><span class="line"><span class="comment">// 1600 * 8</span></span><br><span class="line"><span class="keyword">var</span> scroll_w = <span class="built_in">document</span>.documentElement.scrollWidth || <span class="built_in">document</span>.body.scrollWidth;</span><br><span class="line"><span class="keyword">var</span> scroll_h = <span class="built_in">document</span>.documentElement.scrollHeight || <span class="built_in">document</span>.body.scrollHeight;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 网页内容实际宽高 (不包括工具栏和滚动条等边线）</span></span><br><span class="line"><span class="comment">// 1600 * 8</span></span><br><span class="line"><span class="keyword">var</span> offset_w = <span class="built_in">document</span>.documentElement.offsetWidth || <span class="built_in">document</span>.body.offsetWidth;</span><br><span class="line"><span class="keyword">var</span> offset_h = <span class="built_in">document</span>.documentElement.offsetHeight || <span class="built_in">document</span>.body.offsetHeight;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 滚动的高度</span></span><br><span class="line"><span class="keyword">var</span> scroll_Top = <span class="built_in">document</span>.documentElement.scrollTop||<span class="built_in">document</span>.body.scrollTop;</span><br></pre></td></tr></table></figure>
+<h3 id="键盘事件-keyCode-兼容性写法"><a href="#键盘事件-keyCode-兼容性写法" class="headerlink" title="键盘事件 keyCode 兼容性写法"></a>键盘事件 keyCode 兼容性写法</h3><pre><code class="js">var inp = document.getElementById(&#39;inp&#39;)
+var result = document.getElementById(&#39;result&#39;)
+
+function getKeyCode(e) {
+  e = e ? e : (window.event ? window.event : &quot;&quot;)
+  return e.keyCode ? e.keyCode : e.which
+}
+
+inp.onkeypress = function(e) {
+  result.innerHTML = getKeyCode(e)
+}
+</code></pre>
+<h3 id="求窗口大小的兼容写法"><a href="#求窗口大小的兼容写法" class="headerlink" title="求窗口大小的兼容写法"></a>求窗口大小的兼容写法</h3><pre><code class="js">// 浏览器窗口可视区域大小（不包括工具栏和滚动条等边线）
+// 1600 * 525
+var client_w = document.documentElement.clientWidth || document.body.clientWidth;
+var client_h = document.documentElement.clientHeight || document.body.clientHeight;
+
+// 网页内容实际宽高（包括工具栏和滚动条等边线）
+// 1600 * 8
+var scroll_w = document.documentElement.scrollWidth || document.body.scrollWidth;
+var scroll_h = document.documentElement.scrollHeight || document.body.scrollHeight;
+
+// 网页内容实际宽高 (不包括工具栏和滚动条等边线）
+// 1600 * 8
+var offset_w = document.documentElement.offsetWidth || document.body.offsetWidth;
+var offset_h = document.documentElement.offsetHeight || document.body.offsetHeight;
+
+// 滚动的高度
+var scroll_Top = document.documentElement.scrollTop||document.body.scrollTop;
+
+</code></pre>
+
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
                 data-autoplay="false">
@@ -231,7 +300,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">150 <p>Articles</p></a></li>
+                    <li><a href="/">151 <p>Articles</p></a></li>
                     <li><a href="/categories">24 <p>Categories</p></a></li>
                     <li><a href="/tags">48 <p>Tags</p></a></li>
                 </ul>
