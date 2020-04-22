@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://zhanghao-web.github.io/"/>
-  <updated>2020-04-20T12:30:10.931Z</updated>
+  <updated>2020-04-22T14:40:47.596Z</updated>
   <id>https://zhanghao-web.github.io/</id>
   
   <author>
@@ -15,6 +15,109 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>尤雨溪在Vue3.0 Beta直播里聊到了这些…</title>
+    <link href="https://zhanghao-web.github.io/2020/04/22/Vue/%E5%B0%A4%E9%9B%A8%E6%BA%AA%E5%9C%A8Vue3-0-Beta%E7%9B%B4%E6%92%AD%E9%87%8C%E8%81%8A%E5%88%B0%E4%BA%86%E8%BF%99%E4%BA%9B%E2%80%A6/"/>
+    <id>https://zhanghao-web.github.io/2020/04/22/Vue/尤雨溪在Vue3-0-Beta直播里聊到了这些…/</id>
+    <published>2020-04-22T14:07:49.000Z</published>
+    <updated>2020-04-22T14:40:47.596Z</updated>
+    
+    <content type="html"><![CDATA[<p><a href="https://juejin.im/post/5e9f6b3251882573a855cd52?utm_source=gold_browser_extension#heading-15" target="_blank" rel="noopener">原文地址(https://juejin.im/post/5e9f6b3251882573a855cd52?utm_source=gold_browser_extension#heading-15)</a></p><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>4月21日晚，Vue作者尤雨溪在哔哩哔哩直播分享了Vue.js 3.0 Beta最新进展。 以下是直播内容整理</p><h2 id="全新文档RFCs"><a href="#全新文档RFCs" class="headerlink" title="全新文档RFCs"></a>全新文档RFCs</h2><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719da838e76e8c7?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="全新文档RFCs"></p><p><code>Vue.js 3.0 Beta</code>发布后的工作重点是保证稳定性和推进各类库集成</p><p>所有的进度和文档都将在全新<code>RFCs</code>文档可以看到。</p><h2 id="六大亮点"><a href="#六大亮点" class="headerlink" title="六大亮点"></a>六大亮点</h2><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719daca80f3b7c2?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="六大亮点"></p><blockquote><ul><li>Performance：性能更比Vue 2.0强。</li><li>Tree shaking support：可以将无用模块“剪辑”，仅打包需要的。</li><li>Composition API：组合API</li><li>Fragment, Teleport, Suspense：“碎片”，Teleport即Protal传送门，“悬念”</li><li>Better TypeScript support：更优秀的Ts支持</li><li>Custom Renderer API：暴露了自定义渲染API</li></ul></blockquote><h3 id="Performance"><a href="#Performance" class="headerlink" title="Performance"></a>Performance</h3><p><img src="https://user-gold-cdn.xitu.io/2020/4/21/1719d6747e723d03?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="Performance"></p><ul><li><ol><li>重写了虚拟Dom的实现（且保证了兼容性，脱离模版的渲染需求旺盛）。</li></ol></li><li><ol start="2"><li>编译模板的优化。</li></ol></li><li><ol start="3"><li>更高效的组件初始化。</li></ol></li><li><ol start="4"><li>update性能提高1.3~2倍。</li></ol></li><li><ol start="5"><li>SSR速度提高了2~3倍。</li></ol></li></ul><p>下面是各项性能对比</p><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719db04999e3890?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="性能对比"></p><h4 id="要点1：编译模板的优化"><a href="#要点1：编译模板的优化" class="headerlink" title="要点1：编译模板的优化"></a>要点1：编译模板的优化</h4><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719e59cd0f2b668?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="编译模板的优化"></p><p>假设要编译以下代码</p><pre><code class="js">&lt;div&gt;  &lt;span/&gt;  &lt;span&gt;{{ msg }}&lt;/span&gt;&lt;/div&gt;</code></pre><pre><code class="js">import { createVNode as _createVNode, toDisplayString as _toDisplayString, openBlock as _openBlock, createBlock as _createBlock } from &quot;vue&quot;export function render(_ctx, _cache) {  return (_openBlock(), _createBlock(&quot;div&quot;, null, [    _createVNode(&quot;span&quot;, null, &quot;static&quot;),    _createVNode(&quot;span&quot;, null, _toDisplayString(_ctx.msg), 1 /* TEXT */)  ]))}// Check the console for the AST</code></pre><p>注意看第二个<code>_createVNode</code>结尾的“1”：</p><p>Vue在运行时会生成number（大于0）值的<code>PatchFlag</code>，用作标记。</p><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719e69419edbc4d?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="标记"></p><p>仅带有<code>PatchFlag</code>标记的节点会被真正追踪，且无论层级嵌套多深，它的动态节点都直接与<code>Block</code>根节点绑定，无需再去遍历静态节点</p><p>再看以下例子：</p><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719e6d7d3efe7f1?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="例子2"></p><pre><code class="js">&lt;div&gt;  &lt;span&gt;static&lt;/span&gt;  &lt;span :id=&quot;hello&quot; class=&quot;bar&quot;&gt;{{ msg }}   &lt;/span&gt;&lt;/div&gt;</code></pre><pre><code class="js">import { createVNode as _createVNode, toDisplayString as _toDisplayString, openBlock as _openBlock, createBlock as _createBlock } from &quot;vue&quot;export function render(_ctx, _cache) {  return (_openBlock(), _createBlock(&quot;div&quot;, null, [    _createVNode(&quot;span&quot;, null, &quot;static&quot;),    _createVNode(&quot;span&quot;, {      id: _ctx.hello,      class: &quot;bar&quot;    }, _toDisplayString(_ctx.msg), 9 /* TEXT, PROPS */, [&quot;id&quot;])  ]))}</code></pre><a id="more"></a><p><code>PatchFlag</code> 变成了<code>9 /* TEXT, PROPS */, [&quot;id&quot;]</code><br>它会告知我们不光有TEXT变化，还有PROPS变化（id）<br>这样既跳出了<code>virtual dom</code>性能的瓶颈，又保留了可以手写<code>render</code>的灵活性。<br>等于是：既有react的灵活性，又有基于模板的性能保证。</p><h4 id="要点2-事件监听缓存：cacheHandlers"><a href="#要点2-事件监听缓存：cacheHandlers" class="headerlink" title="要点2: 事件监听缓存：cacheHandlers"></a>要点2: 事件监听缓存：cacheHandlers</h4><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719e775146d5a84?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="cacheHandlers"></p><p>假设我们要绑定一个事件：</p><pre><code class="html">&lt;div&gt;  &lt;span @click=&quot;onClick&quot;&gt;    {{msg}}  &lt;/span&gt;&lt;/div&gt;</code></pre><p>关闭<code>cacheHandlers</code>后：</p><pre><code class="js">import { toDisplayString as _toDisplayString, createVNode as _createVNode, openBlock as _openBlock, createBlock as _createBlock } from &quot;vue&quot;export function render(_ctx, _cache) {  return (_openBlock(), _createBlock(&quot;div&quot;, null, [    _createVNode(&quot;span&quot;, { onClick: _ctx.onClick }, _toDisplayString(_ctx.msg), 9 /* TEXT, PROPS */, [&quot;onClick&quot;])  ]))}</code></pre><p><code>onClick</code>会被视为<code>PROPS</code>动态绑定，后续替换点击事件时需要进行更新。</p><p>开启<code>cacheHandlers</code>后：</p><pre><code class="js">import { toDisplayString as _toDisplayString, createVNode as _createVNode, openBlock as _openBlock, createBlock as _createBlock } from &quot;vue&quot;export function render(_ctx, _cache) {  return (_openBlock(), _createBlock(&quot;div&quot;, null, [    _createVNode(&quot;span&quot;, {      onClick: _cache[1] || (_cache[1] = $event =&gt; (_ctx.onClick($event)))    }, _toDisplayString(_ctx.msg), 1 /* TEXT */)  ]))}</code></pre><p><code>cache[1]</code>，会自动生成并缓存一个内联函数，“神奇”的变为一个静态节点。 Ps：相当于<code>React中useCallback</code>自动化。</p><p>并且支持手写内联函数：</p><pre><code class="html">&lt;div&gt;  &lt;span @click=&quot;()=&gt;foo()&quot;&gt;    {{msg}}  &lt;/span&gt;&lt;/div&gt;</code></pre><p>补充：<code>PatchFlags</code>枚举定义</p><p>而通过查询Ts枚举定义，我们可以看到分别定义了以下的追踪标记：</p><pre><code class="js">export const enum PatchFlags {  TEXT = 1,// 表示具有动态textContent的元素  CLASS = 1 &lt;&lt; 1,  // 表示有动态Class的元素  STYLE = 1 &lt;&lt; 2,  // 表示动态样式（静态如style=&quot;color: red&quot;，也会提升至动态）  PROPS = 1 &lt;&lt; 3,  // 表示具有非类/样式动态道具的元素。  FULL_PROPS = 1 &lt;&lt; 4,  // 表示带有动态键的道具的元素，与上面三种相斥  HYDRATE_EVENTS = 1 &lt;&lt; 5,  // 表示带有事件监听器的元素  STABLE_FRAGMENT = 1 &lt;&lt; 6,   // 表示其子顺序不变的片段（没懂）。   KEYED_FRAGMENT = 1 &lt;&lt; 7, // 表示带有键控或部分键控子元素的片段。  UNKEYED_FRAGMENT = 1 &lt;&lt; 8, // 表示带有无key绑定的片段  NEED_PATCH = 1 &lt;&lt; 9,   // 表示只需要非属性补丁的元素，例如ref或hooks  DYNAMIC_SLOTS = 1 &lt;&lt; 10,  // 表示具有动态插槽的元素  // 特殊 FLAGS -------------------------------------------------------------  HOISTED = -1,  // 特殊标志是负整数表示永远不会用作diff,只需检查 patchFlag === FLAG.  BAIL = -2 // 一个特殊的标志，指代差异算法（没懂）}</code></pre><p>感兴趣的可以看源码：<code>packages/shared/src/patchFlags.ts</code></p><h3 id="Tree-shaking-support"><a href="#Tree-shaking-support" class="headerlink" title="Tree shaking support"></a>Tree shaking support</h3><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719db10e9e06382?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="Tree shaking support"></p><ul><li>可以将无用模块“剪辑”，仅打包需要的（比如<code>v-model</code>,<code>&lt;transition&gt;</code>，用不到就不会打包）。</li><li>一个简单“HelloWorld”大小仅为：13.5kb11.75kb，仅Composition API。</li><li>包含运行时完整功能：22.5kb,拥有更多的功能，却比Vue 2更迷你。</li></ul><p>很多时候，我们并不需要 vue提供的所有功能，在 vue 2 并没有方式排除掉，但是 3.0 都可能做成了按需引入。</p><h3 id="Composition-API"><a href="#Composition-API" class="headerlink" title="Composition API"></a>Composition API</h3><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719dc2469bd375c?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="Composition API"></p><p>与React Hooks 类似的东西，实现方式不同。</p><ul><li>可与现有的 Options API一起使用</li><li>灵活的逻辑组合与复用</li><li>vue 3的响应式模块可以和其他框架搭配使用</li></ul><p>混入<code>(mixin)</code> 将不再作为推荐使用， <code>Composition API</code>可以实现更灵活且无副作用的复用代码。</p><p>感兴趣的可以查看：<a href="https://composition-api.vuejs.org/#summary" target="_blank" rel="noopener">composition-api.vuejs.org/#summary</a></p><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719dc20717835c1?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="omposition-api.vuejs.org"></p><p>Composition API包含了六个主要API</p><p><a href="https://composition-api.vuejs.org/api.html#setup" target="_blank" rel="noopener">composition-api.vuejs.org/api.html#setup</a></p><p>Ps：其它的均为常见的工具函数，可先忽略不看。</p><h3 id="Fragment"><a href="#Fragment" class="headerlink" title="Fragment"></a>Fragment</h3><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719dcd5c5f2b631?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="Fragment"></p><p>Fragment翻译为：“碎片”</p><ul><li>不再限于模板中的单个根节点</li><li>render 函数也可以返回数组了，类似实现了 React.Fragments 的功能 。</li><li>‘Just works’</li></ul><h4 id=""><a href="#" class="headerlink" title=""></a><Teleport></h4><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719dd2d18fe0d55?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="Teleport"></p><ul><li>以前称为<code>&lt;Portal&gt;</code>，译作传送门。</li><li>更多细节将由@<code>Linusborg</code> 分享</li></ul><p><code>&lt;Teleport&gt;</code>原先是对标 <code>React Portal</code>（增加多个新功能，更强）</p><p>但因为Chrome有个提案，会增加一个名为<code>Portal</code>的原生<code>element</code>，为避免命名冲突，改为<code>Teleport</code></p><h4 id="-1"><a href="#-1" class="headerlink" title=""></a><Suspense></h4><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719ddbaf6d0f226?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="Suspense"></p><p>Suspense翻译为：“悬念”</p><ul><li>可在嵌套层级中等待嵌套的异步依赖项</li><li>支持async setup()</li><li>支持异步组件</li></ul><p>虽然React 16引入了<code>Suspense</code>，但直至现在都不太能用。如何将其与异步数据结合，还没完整设计出来。<br>Vue 3 的<code>&lt;Suspense&gt;</code>更加轻量：<br><strong>仅5%应用能感知运行时的调度差异，综合考虑下，Vue3 的<code>&lt;Suspense&gt;</code> 没和React一样做运行调度处理</strong></p><h3 id="更好的TypeScript支持"><a href="#更好的TypeScript支持" class="headerlink" title="更好的TypeScript支持"></a>更好的TypeScript支持</h3><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719de6ad581aa38?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="TypeScript"></p><ul><li>Vue 3是用TypeScript编写的库，可以享受到自动的类型定义提示</li><li>JavaScript和TypeScript中的API是相同的。事实上，代码也基本相同</li><li>支持TSX,class组件还会继续支持，但是需要引入<code>vue-class-component@next</code>，该模块目前还处在 alpha 阶段。</li></ul><p>还有<code>Vue 3 + TypeScript</code> 插件正在开发，有类型检查，自动补全等功能。目前进展可喜。</p><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719deb6563506b7?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="Vue 3 + TypeScript"></p><h3 id="Custom-Renderer-API：自定义渲染器API"><a href="#Custom-Renderer-API：自定义渲染器API" class="headerlink" title="Custom Renderer API：自定义渲染器API"></a>Custom Renderer API：自定义渲染器API</h3><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719df0e878dbeb3?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="Custom Renderer API"></p><ul><li>正在进行NativeScript Vue集成</li><li>用户可以尝试WebGL自定义渲染器，与普通Vue应用程序一起使用（Vugel）。</li></ul><p>意味着以后可以通过 <code>vue</code>， <code>Dom</code> 编程的方式来进行 <code>webgl</code> 编程 。感兴趣可以看这里：<a href="https://vugel.planning.nl/#application" target="_blank" rel="noopener">Getting started vugel</a></p><h3 id="剩余工作"><a href="#剩余工作" class="headerlink" title="剩余工作"></a>剩余工作</h3><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719df667b34919f?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="剩余工作"></p><h4 id="Docs-amp-Migration-Guides"><a href="#Docs-amp-Migration-Guides" class="headerlink" title="Docs &amp; Migration Guides"></a>Docs &amp; Migration Guides</h4><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719df8c7c95f9b9?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="Docs &amp; Migration Guides"></p><ul><li>新的文档编写交由<code>@NataliaTepluhina, @sdras, @bencodezen &amp; @phanan</code> 负责</li><li><code>@sdras</code> 正在做自动升级迁移工具</li><li><code>@sodatea</code> 已经开始研究<code>CodeMods</code></li></ul><h4 id="Router"><a href="#Router" class="headerlink" title="Router"></a>Router</h4><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719dfcab0e73db6?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="Router"></p><ul><li>下一代 Router：<code>vue-router@next</code>已在alpha阶段，感谢<code>@posva</code></li></ul><p>有部分的<code>API</code>变动，可到<code>RFC</code>上看。</p><h4 id="Vuex"><a href="#Vuex" class="headerlink" title="Vuex"></a>Vuex</h4><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719dfed3afd961b?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="Vuex"></p><ul><li>下一代Vuex：，<code>vuex@next</code>（与Vue 3 compat相同的API），已在alpha阶段，感谢<code>@KiaKing</code>。</li><li>团队正在为下一次迭代试验Vuex API的简化</li></ul><p>目前以兼容Vue 3为主，基本上没有API变动，莫慌。</p><h4 id="CLI"><a href="#CLI" class="headerlink" title="CLI"></a>CLI</h4><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719e043616c018f?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="CLI"></p><ul><li>CLI插件：<code>vue-cli-plugin-vue-next</code> by <code>@sodatea</code></li><li>（wip）CodeMods支持升级Vue 2应用</li></ul><h4 id="新工具：vite（法语-“快”）"><a href="#新工具：vite（法语-“快”）" class="headerlink" title="新工具：vite（法语 “快”）"></a>新工具：vite（法语 “快”）</h4><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719e0c133c3367f?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="vite"></p><p>地址：<a href="https://github.com/vuejs/vite" target="_blank" rel="noopener">github.com/vuejs/vite</a></p><p>一个简易的http服务器，无需<code>webpack</code>编译打包，根据请求的Vue文件，直接发回渲染，且支持热更新（非常快）</p><h4 id="vue-test-utils"><a href="#vue-test-utils" class="headerlink" title="vue-test-utils"></a>vue-test-utils</h4><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719e0d602d57dc6?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="vue-test-utils"></p><h4 id="DevTools"><a href="#DevTools" class="headerlink" title="DevTools"></a>DevTools</h4><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719e0d0e479ec8b?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="devtools"></p><h4 id="IDE-Support-Vetur"><a href="#IDE-Support-Vetur" class="headerlink" title="IDE Support (Vetur)"></a>IDE Support (Vetur)</h4><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719e12c5bfa38e3?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="IDE"></p><h4 id="Nuxt"><a href="#Nuxt" class="headerlink" title="Nuxt"></a>Nuxt</h4><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719e15306126103?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="Nuxt"></p><h4 id="Vue-2-x还有2-7版本"><a href="#Vue-2-x还有2-7版本" class="headerlink" title="Vue 2.x还有2.7版本"></a>Vue 2.x还有2.7版本</h4><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719e16b0eaabdd2?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="Vue 2.x还有2.7版本"></p><ul><li>将有最后一个小版本（2.7）</li><li>从Vue 3向后移植兼容的改进(不损坏兼容性前提下)</li><li>加上在Vue 3中删除的功能的弃用警告</li><li>LTS1 18个月。</li></ul><p><strong>最后建议：Vue 3虽好，如果你的项目很稳定，且对新功能无过多的要求或者迁移成本过高，则不建议升级。</strong></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;a href=&quot;https://juejin.im/post/5e9f6b3251882573a855cd52?utm_source=gold_browser_extension#heading-15&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;原文地址(https://juejin.im/post/5e9f6b3251882573a855cd52?utm_source=gold_browser_extension#heading-15)&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h1&gt;&lt;p&gt;4月21日晚，Vue作者尤雨溪在哔哩哔哩直播分享了Vue.js 3.0 Beta最新进展。 以下是直播内容整理&lt;/p&gt;
+&lt;h2 id=&quot;全新文档RFCs&quot;&gt;&lt;a href=&quot;#全新文档RFCs&quot; class=&quot;headerlink&quot; title=&quot;全新文档RFCs&quot;&gt;&lt;/a&gt;全新文档RFCs&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;https://user-gold-cdn.xitu.io/2020/4/22/1719da838e76e8c7?imageView2/0/w/1280/h/960/format/webp/ignore-error/1&quot; alt=&quot;全新文档RFCs&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Vue.js 3.0 Beta&lt;/code&gt;发布后的工作重点是保证稳定性和推进各类库集成&lt;/p&gt;
+&lt;p&gt;所有的进度和文档都将在全新&lt;code&gt;RFCs&lt;/code&gt;文档可以看到。&lt;/p&gt;
+&lt;h2 id=&quot;六大亮点&quot;&gt;&lt;a href=&quot;#六大亮点&quot; class=&quot;headerlink&quot; title=&quot;六大亮点&quot;&gt;&lt;/a&gt;六大亮点&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;https://user-gold-cdn.xitu.io/2020/4/22/1719daca80f3b7c2?imageView2/0/w/1280/h/960/format/webp/ignore-error/1&quot; alt=&quot;六大亮点&quot;&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Performance：性能更比Vue 2.0强。&lt;/li&gt;
+&lt;li&gt;Tree shaking support：可以将无用模块“剪辑”，仅打包需要的。&lt;/li&gt;
+&lt;li&gt;Composition API：组合API&lt;/li&gt;
+&lt;li&gt;Fragment, Teleport, Suspense：“碎片”，Teleport即Protal传送门，“悬念”&lt;/li&gt;
+&lt;li&gt;Better TypeScript support：更优秀的Ts支持&lt;/li&gt;
+&lt;li&gt;Custom Renderer API：暴露了自定义渲染API&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;Performance&quot;&gt;&lt;a href=&quot;#Performance&quot; class=&quot;headerlink&quot; title=&quot;Performance&quot;&gt;&lt;/a&gt;Performance&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;https://user-gold-cdn.xitu.io/2020/4/21/1719d6747e723d03?imageView2/0/w/1280/h/960/format/webp/ignore-error/1&quot; alt=&quot;Performance&quot;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;ol&gt;
+&lt;li&gt;重写了虚拟Dom的实现（且保证了兼容性，脱离模版的渲染需求旺盛）。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;ol start=&quot;2&quot;&gt;
+&lt;li&gt;编译模板的优化。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;ol start=&quot;3&quot;&gt;
+&lt;li&gt;更高效的组件初始化。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;ol start=&quot;4&quot;&gt;
+&lt;li&gt;update性能提高1.3~2倍。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;ol start=&quot;5&quot;&gt;
+&lt;li&gt;SSR速度提高了2~3倍。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;下面是各项性能对比&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://user-gold-cdn.xitu.io/2020/4/22/1719db04999e3890?imageView2/0/w/1280/h/960/format/webp/ignore-error/1&quot; alt=&quot;性能对比&quot;&gt;&lt;/p&gt;
+&lt;h4 id=&quot;要点1：编译模板的优化&quot;&gt;&lt;a href=&quot;#要点1：编译模板的优化&quot; class=&quot;headerlink&quot; title=&quot;要点1：编译模板的优化&quot;&gt;&lt;/a&gt;要点1：编译模板的优化&lt;/h4&gt;&lt;p&gt;&lt;img src=&quot;https://user-gold-cdn.xitu.io/2020/4/22/1719e59cd0f2b668?imageView2/0/w/1280/h/960/format/webp/ignore-error/1&quot; alt=&quot;编译模板的优化&quot;&gt;&lt;/p&gt;
+&lt;p&gt;假设要编译以下代码&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;js&quot;&gt;&amp;lt;div&amp;gt;
+  &amp;lt;span/&amp;gt;
+  &amp;lt;span&amp;gt;{{ msg }}&amp;lt;/span&amp;gt;
+&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;js&quot;&gt;import { createVNode as _createVNode, toDisplayString as _toDisplayString, openBlock as _openBlock, createBlock as _createBlock } from &amp;quot;vue&amp;quot;
+
+export function render(_ctx, _cache) {
+  return (_openBlock(), _createBlock(&amp;quot;div&amp;quot;, null, [
+    _createVNode(&amp;quot;span&amp;quot;, null, &amp;quot;static&amp;quot;),
+    _createVNode(&amp;quot;span&amp;quot;, null, _toDisplayString(_ctx.msg), 1 /* TEXT */)
+  ]))
+}
+
+// Check the console for the AST
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;注意看第二个&lt;code&gt;_createVNode&lt;/code&gt;结尾的“1”：&lt;/p&gt;
+&lt;p&gt;Vue在运行时会生成number（大于0）值的&lt;code&gt;PatchFlag&lt;/code&gt;，用作标记。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://user-gold-cdn.xitu.io/2020/4/22/1719e69419edbc4d?imageView2/0/w/1280/h/960/format/webp/ignore-error/1&quot; alt=&quot;标记&quot;&gt;&lt;/p&gt;
+&lt;p&gt;仅带有&lt;code&gt;PatchFlag&lt;/code&gt;标记的节点会被真正追踪，且无论层级嵌套多深，它的动态节点都直接与&lt;code&gt;Block&lt;/code&gt;根节点绑定，无需再去遍历静态节点&lt;/p&gt;
+&lt;p&gt;再看以下例子：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://user-gold-cdn.xitu.io/2020/4/22/1719e6d7d3efe7f1?imageView2/0/w/1280/h/960/format/webp/ignore-error/1&quot; alt=&quot;例子2&quot;&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;js&quot;&gt;&amp;lt;div&amp;gt;
+  &amp;lt;span&amp;gt;static&amp;lt;/span&amp;gt;
+  &amp;lt;span :id=&amp;quot;hello&amp;quot; class=&amp;quot;bar&amp;quot;&amp;gt;{{ msg }}   &amp;lt;/span&amp;gt;
+&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;js&quot;&gt;import { createVNode as _createVNode, toDisplayString as _toDisplayString, openBlock as _openBlock, createBlock as _createBlock } from &amp;quot;vue&amp;quot;
+
+export function render(_ctx, _cache) {
+  return (_openBlock(), _createBlock(&amp;quot;div&amp;quot;, null, [
+    _createVNode(&amp;quot;span&amp;quot;, null, &amp;quot;static&amp;quot;),
+    _createVNode(&amp;quot;span&amp;quot;, {
+      id: _ctx.hello,
+      class: &amp;quot;bar&amp;quot;
+    }, _toDisplayString(_ctx.msg), 9 /* TEXT, PROPS */, [&amp;quot;id&amp;quot;])
+  ]))
+}
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+      <category term="Vue" scheme="https://zhanghao-web.github.io/categories/Vue/"/>
+    
+    
+      <category term="Vue3.x" scheme="https://zhanghao-web.github.io/tags/Vue3-x/"/>
+    
+  </entry>
   
   <entry>
     <title>关于SaaS产品的一些思考和总结</title>
@@ -397,7 +500,7 @@ const HoComponentEnhanced = HoComponent(ComponentExample);
     <link href="https://zhanghao-web.github.io/2019/10/29/Vue/%E4%B8%80%E5%BC%A0%E5%9B%BE%E7%90%86%E6%B8%85-Vue-3-0-%E7%9A%84%E5%93%8D%E5%BA%94%E5%BC%8F%E7%B3%BB%E7%BB%9F/"/>
     <id>https://zhanghao-web.github.io/2019/10/29/Vue/一张图理清-Vue-3-0-的响应式系统/</id>
     <published>2019-10-29T09:03:11.000Z</published>
-    <updated>2020-01-28T10:04:15.071Z</updated>
+    <updated>2020-04-22T14:08:43.412Z</updated>
     
     <content type="html"><![CDATA[<p>转自</p><p>作者：Jrain<br><a href="https://juejin.im/post/5d9da45af265da5b8072de5d" target="_blank" rel="noopener">链接</a></p><p><img src="https://user-gold-cdn.xitu.io/2019/10/9/16dafca37b2e0534?imageslim" alt="vue reactive"></p><h2 id="一个基本的例子"><a href="#一个基本的例子" class="headerlink" title="一个基本的例子"></a>一个基本的例子</h2><p>Vue 3.0 的响应式系统是独立的模块，可以完全脱离 Vue 而使用，所以我们在 clone 了源码下来以后，可以直接在 <code>packages/reactivity</code> 模块下调试。</p><p>1.在项目根目录运行 <code>yarn dev reactivity</code>，然后进入 <code>packages/reactivity</code> 目录找到产出的 <code>dist/reactivity.global.js</code> 文件。<br>2.新建一个 <code>index.html</code>，写入如下代码：</p><pre><code class="html">&lt;script src=&quot;./dist/reactivity.global.js&quot;&gt;&lt;/script&gt;&lt;script&gt;const { reactive, effect } = VueObserverconst origin = {  count: 0}const state = reactive(origin)const fn = () =&gt; {  const count = state.count  console.log(`set count to ${count}`)}effect(fn)&lt;/script&gt;</code></pre><ol start="3"><li>在浏览器打开该文件，于控制台执行 <code>state.count++</code>，便可看到输出 <code>set count to 1</code>。</li></ol><p>在上述的例子中，我们使用 <code>reactive()</code> 函数把 <code>origin</code> 对象转化成了<code>Proxy</code> 对象 <code>state</code>；使用 <code>effect()</code> 函数把 <code>fn()</code> 作为响应式回调。当 <code>state.count</code> 发生变化时，便触发了 <code>fn()</code>。接下来我们将以这个例子结合上文的流程图，来讲解这套响应式系统是怎么运行的。</p><h3 id="初始化阶段"><a href="#初始化阶段" class="headerlink" title="初始化阶段"></a>初始化阶段</h3><blockquote><p>在初始化阶段，主要做了两件事。</p></blockquote><p>1.把 origin 对象转化成响应式的 Proxy 对象 state。<br>2.把函数 fn() 作为一个响应式的 effect 函数。</p><p>大家都知道，Vue 3.0 使用了 <code>Proxy</code> 来代替之前的 <code>Object.defineProperty()</code>，改写了对象的 <code>getter/setter</code>，完成依赖收集和响应触发。但是在这一阶段中，我们暂时先不管它是如何改写对象的 <code>getter/setter</code> 的，这个在后续的”<strong>依赖收集阶段</strong>“会详细说明。为了简单起见，我们可以把这部分的内容浓缩成一个只有两行代码的 <code>reactive()</code> 函数：</p><pre><code class="js">    export default reactive (target){        const observed = new Proxy(target,handler);        return observed;    }</code></pre><p>当一个普通的函数 <code>fn()</code> 被 <code>effect()</code> 包裹之后，就会变成一个响应式的 effect 函数，而 <code>fn()</code> 也会被立即执行一次。</p><p><strong>由于在 fn() 里面有引用到 Proxy 对象的属性，所以这一步会触发对象的 getter，从而启动依赖收集</strong>。</p><p>除此之外，这个 effect 函数也会被压入一个名为”<code>activeReactiveEffectStack</code>“（此处为 <code>effectStack</code>）的栈中，供后续依赖收集的时候使用。</p><pre><code class="js">export function effect (fn) {  // 构造一个 effect  const effect = function effect(...args) {    return run(effect, fn, args)  }  // 立即执行一次  effect()  return effect}export function run(effect, fn, args) {  if (effectStack.indexOf(effect) === -1) {    try {      // 往池子里放入当前 effect      effectStack.push(effect)      // 立即执行一遍 fn()      // fn() 执行过程会完成依赖收集，会用到 effect      return fn(...args)    } finally {      // 完成依赖收集后从池子中扔掉这个 effect      effectStack.pop()    }  }}</code></pre><p>至此，初始化阶段已经完成。接下来就是整个系统最关键的一步——依赖收集阶段。<br><a id="more"></a></p><h3 id="依赖收集阶段"><a href="#依赖收集阶段" class="headerlink" title="依赖收集阶段"></a>依赖收集阶段</h3><p>这个阶段的触发时机，就是在 <code>effect</code> 被立即执行，其内部的 <code>fn()</code> 触发了 <code>Proxy</code> 对象的 <code>getter</code> 的时候。简单来说，只要执行到类似 <code>state.count</code> 的语句，就会触发 <code>state 的 getter</code>。</p><p>依赖收集阶段最重要的目的，就是建立一份”依赖收集表“，也就是图示的”<code>targetMap</code>“。<code>targetMap</code> 是一个 <code>WeakMap</code>，其 key 值是<del>当前的 <code>Prox</code>y 对象 <code>state</code></del>代理前的对象origin，而 value 则是该对象所对应的 <code>depsMap</code>。</p><p><code>depsMap</code> 是一个 Map，key 值为触发 <code>getter</code> 时的属性值（此处为 count），而 value 则是触发过该属性值所对应的各个 effect。</p><p>还是有点绕？那么我们再举个例子。假设有个 Proxy 对象和 effect 如下：</p><pre><code class="js">const state = reactive({  count: 0,  age: 18})const effect1 = effect(() =&gt; {  console.log(&#39;effect1: &#39; + state.count)})const effect2 = effect(() =&gt; {  console.log(&#39;effect2: &#39; + state.age)})const effect3 = effect(() =&gt; {  console.log(&#39;effect3: &#39; + state.count, state.age)})</code></pre><p>这样，<code>{ target -&gt; key -&gt; dep }</code> 的对应关系就建立起来了，依赖收集也就完成了</p><pre><code class="js">export function track (target, operationType, key) {  const effect = effectStack[effectStack.length - 1]  if (effect) {    let depsMap = targetMap.get(target)    if (depsMap === void 0) {      targetMap.set(target, (depsMap = new Map()))    }    let dep = depsMap.get(key)    if (dep === void 0) {      depsMap.set(key, (dep = new Set()))    }    if (!dep.has(effect)) {      dep.add(effect)    }  }}</code></pre><p>弄明白依赖收集表 targetMap 是非常重要的，因为这是整个响应式系统核心中的核心。</p><h3 id="响应阶段"><a href="#响应阶段" class="headerlink" title="响应阶段"></a>响应阶段</h3><p>回顾上一章节的例子，我们得到了一个 <code>{ count: 0, age: 18 }</code> 的 Proxy，并构造了三个 effect。在控制台上看看效果：</p><p><img src="https://user-gold-cdn.xitu.io/2019/10/9/16dafca37dadf75d?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="effect"></p><p>当修改对象的某个属性值的时候，会触发对应的 <code>setter</code>。</p><p>setter 里面的 <code>trigger()</code> 函数会从依赖收集表里找到当前属性对应的各个 <code>dep</code>，然后把它们推入到 <code>effects</code> 和 <code>computedEffects</code>（计算属性） 队列中，最后通过 <code>scheduleRun()</code> 挨个执行里面的 effect。</p><p>由于已经建立了依赖收集表，所以要找到属性所对应的 dep 也就轻而易举了</p><pre><code class="js">export function trigger (target, operationType, key) {  // 取得对应的 depsMap  const depsMap = targetMap.get(target)  if (depsMap === void 0) {    return  }  // 取得对应的各个 dep  const effects = new Set()  if (key !== void 0) {    const dep = depsMap.get(key)    dep &amp;&amp; dep.forEach(effect =&gt; {      effects.add(effect)    })  }  // 简化版 scheduleRun，挨个执行 effect  effects.forEach(effect =&gt; {    effect()  })}</code></pre><p>至此，响应式阶段完成。</p>]]></content>
     
@@ -470,10 +573,10 @@ export function run(effect, fn, args) {
     
     </summary>
     
-      <category term="Vue3.x" scheme="https://zhanghao-web.github.io/categories/Vue3-x/"/>
+      <category term="Vue" scheme="https://zhanghao-web.github.io/categories/Vue/"/>
     
     
-      <category term="Vue" scheme="https://zhanghao-web.github.io/tags/Vue/"/>
+      <category term="Vue3.x" scheme="https://zhanghao-web.github.io/tags/Vue3-x/"/>
     
   </entry>
   
@@ -1245,91 +1348,6 @@ module.exports = {
 }
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h2 id=&quot;连接数据库&quot;&gt;&lt;a href=&quot;#连接数据库&quot; class=&quot;headerlink&quot; title=&quot;连接数据库&quot;&gt;&lt;/a&gt;连接数据库&lt;/h2&gt;&lt;p&gt;在lib文件夹下，创建database.js，用于连接数据库。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="Node" scheme="https://zhanghao-web.github.io/categories/Node/"/>
-    
-    
-      <category term="Node" scheme="https://zhanghao-web.github.io/tags/Node/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Node学习(十三) --Stream流</title>
-    <link href="https://zhanghao-web.github.io/2019/05/06/Node/Node%E5%AD%A6%E4%B9%A0(%E5%8D%81%E4%B8%89)%20--Stream%E6%B5%81/"/>
-    <id>https://zhanghao-web.github.io/2019/05/06/Node/Node学习(十三) --Stream流/</id>
-    <published>2019-05-06T07:50:06.000Z</published>
-    <updated>2020-01-28T10:04:15.047Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="File-System的问题"><a href="#File-System的问题" class="headerlink" title="File System的问题"></a>File System的问题</h2><p>我们通常会使用File System模块对文件进行读取，如下：</p><pre><code class="js">fs.readFile(&#39;./test.txt&#39;, (error, buffer) =&gt; {  if (error) {    console.error(error)  } else {    // 读取文件成功    res.write(buffer)  }})</code></pre><p>这样操作简单有效，但这也存在一些问题：</p><p>1.占用内存<br>使用fs读取文件，它是一次性将文件的所有内容读取到内存中，再一次性发送到客户端，因此会占用大量内存。</p><p>2.资源使用效率低<br>从磁盘读取文件期间，磁盘处于忙碌状态，而网络处于空闲状态。<br>磁盘读取完成后，开始发送文件时，情况正相反，网络处于忙碌状态，此时磁盘却处于空闲状态</p><h2 id="Stream流"><a href="#Stream流" class="headerlink" title="Stream流"></a>Stream流</h2><p>相比File System，Stream流读取文件是读一份，发一份，Stream流的写入操作也有同样特点，因此可以解决File System在上面提到的2个问题。</p><p>接下来实现一个简单的流，将1.txt文件的内容写入到2.txt中：</p><pre><code class="js">const fs = require(&#39;fs&#39;)// 创建一个可读流。const readStream = fs.createReadStream(&#39;./1.txt&#39;)// 创建一个可写流。const writeStream = fs.createWriteStream(&#39;./2.txt&#39;)// 将可读流读取的数据，通过管道pipe推送到写入流中，即可将1.txt的内容，写入到2.txt中。readStream.pipe(writeStream)// 读取出现错误时会触发error事件。readStream.on(&#39;error&#39;, (error) =&gt; {  console.error(error)})// 写入完成时，触发finish事件。writeStream.on(&#39;finish&#39;, () =&gt; {  console.log(&#39;finish&#39;)})</code></pre><h2 id="使用Zlib压缩文件"><a href="#使用Zlib压缩文件" class="headerlink" title="使用Zlib压缩文件"></a>使用Zlib压缩文件</h2><p>可以使用Zlib模块，配合Stream流，实现文件压缩功能，如下：</p><pre><code class="js">const fs = require(&#39;fs&#39;)// 引入zlib模块，用于实现压缩功能const zlib = require(&#39;zlib&#39;)// 创建一个可读流。const readStream = fs.createReadStream(&#39;./google.jpg&#39;)// 创建一个可写流。const writeStream = fs.createWriteStream(&#39;./google.jpg.gz&#39;)// 创建一个Gzip对象，用于将文件压缩成.gz文件const gzip = zlib.createGzip()// 将可读流读取的数据，先通过管道pipe推送到gzip中，再推送到写入流中。// 也就是先将可读流的数据压缩，再推送到可写流中。readStream.pipe(gzip).pipe(writeStream)// 读取出现错误时会触发error事件。readStream.on(&#39;error&#39;, (error) =&gt; {  console.error(error)})// 写入完成时，触发finish事件。writeStream.on(&#39;finish&#39;, () =&gt; {  console.log(&#39;finish&#39;)})</code></pre><a id="more"></a><h2 id="使用流传输文件到前台"><a href="#使用流传输文件到前台" class="headerlink" title="使用流传输文件到前台"></a>使用流传输文件到前台</h2><p>学习了流，我们就可以更加高效地将文件传输到前台：</p><!-- more --><pre><code class="js">const http = require(&#39;http&#39;)const zlib = require(&#39;zlib&#39;)const url = require(&#39;url&#39;)const fs = require(&#39;fs&#39;)const server = http.createServer((req, res) =&gt; {  const {    pathname  } = url.parse(req.url, true)// 创建一个可读流。  const readStream = fs.createReadStream(`./${pathname}`)  // 创建一个Gzip对象，用于将文件压缩成.gz文件  const gzip = zlib.createGzip()  // 将读取的内容，在通过管道推送到res中，该方法不经过压缩  readStream.pipe(res)  // 处理可读流报错，防止请求不存在的文件  readStream.on(&#39;error&#39;, (error) =&gt; {    console.error(error);    res.writeHead(404)    res.write(&#39;Not Found&#39;)    res.end()  })})server.listen(8080)</code></pre><p>但可以看到，在这个例子里，虽然实现了使用流传输文件，但并没有用到gzip压缩，在传输时还是更多地消耗网络资源，接下来可以引入gzip压缩。</p><h2 id="文件经过gzip压缩后传输到前台"><a href="#文件经过gzip压缩后传输到前台" class="headerlink" title="文件经过gzip压缩后传输到前台"></a>文件经过gzip压缩后传输到前台</h2><p>但此时如果只是简单的用<code>readStream.pipe(gzip).pipe(res)</code>传输文件，浏览器在访问时无法直接打开，而是会触发文件下载。<br>这是因为未设置请求头属性<code>content-encoding</code>的值，导致浏览器无法识别用gzip压缩过的文件，这就需要修改请求头<code>res.setHeader(&#39;content-encoding&#39;, &#39;gzip&#39;)</code>，让浏览器可以识别。</p><p>这样浏览器就可以正常打开文件了，但若浏览器访问的是不存在的文件，浏览器会报错“无法访问此网站”，这是因为请求头属性<code>content-encoding</code>已被设置为gzip，但服务端传给浏览器的是Not Found字符串，浏览器无法识别。</p><p>此时可以使用<code>fs.stat</code>方法，先检查文件是否存在，若不存在则返回Not Found，若存在则继续传输。</p><pre><code class="js">const http = require(&#39;http&#39;)const zlib = require(&#39;zlib&#39;)const url = require(&#39;url&#39;)const fs = require(&#39;fs&#39;)const server = http.createServer((req, res) =&gt; {  const {    pathname  } = url.parse(req.url, true)  // 文件的相对路径  const filepath = `./${pathname}`  // 检查文件是否存在  fs.stat(filepath, (error, stat) =&gt; {    if (error) {      console.error(error);      res.setHeader(&#39;content-encoding&#39;, &#39;identity&#39;)      res.writeHead(404)      res.write(&#39;Not Found&#39;)      res.end()    } else {      // 创建一个可读流。      const readStream = fs.createReadStream(filepath)      // 创建一个Gzip对象，用于将文件压缩成.gz文件      const gzip = zlib.createGzip()      // 向浏览器发送经过gzip压缩的文件，设置响应头，否则浏览器无法识别，会自动进行下载。      res.setHeader(&#39;content-encoding&#39;, &#39;gzip&#39;)      // 将读取的内容，通过gzip压缩之后，在通过管道推送到res中，由于res继承自Stream流，因此也可以接收管道的推送。      readStream.pipe(gzip).pipe(res)      // 处理可读流报错，防止文件中途被删除或出错，导致报错。      readStream.on(&#39;error&#39;, (error) =&gt; {        console.error(error);        res.setHeader(&#39;content-encoding&#39;, &#39;identity&#39;)        res.writeHead(404)        res.write(&#39;Not Found&#39;)        res.end()      })    }  })})server.listen(8080)</code></pre><h2 id="启动器"><a href="#启动器" class="headerlink" title="启动器"></a>启动器</h2><p>常用的启动器有forever、pm2等，它们主要用在项目部署阶段</p><p>1.使应用不间断运行，如果不使用启动器，命令行窗口一旦关闭，或者出现报错，应用就会停止运行，启动器会帮助应用自动重启。<br>2.若出现服务器重启，启动器会自动启动应用，不需要手动操作。</p><p>常用的启动器有<code>forever、pm2</code>等，接下来介绍一下forever的使用。</p><h3 id="forever"><a href="#forever" class="headerlink" title="forever"></a>forever</h3><p>forever文档可参考：<a href="https://github.com/foreverjs/forever#readme" target="_blank" rel="noopener">github.com/foreverjs/f…</a></p><blockquote><p>使用forever启动一个服务：</p></blockquote><ul><li>安装forever：<code>npm install forever -g</code></li><li>在命令行运行<code>forever start server.js</code>，替代<code>node server.js</code>命令。</li><li>命令行窗口提示<code>info: Forever processing file: server.js</code>，表示启动成功，此时如果将窗口关闭，应用照样可以访问。</li><li>如果需要关闭服务，可以运行<code>forever stop server.js</code>。还有一个命令是<code>forever stopall</code>，停止全部在运行的任务，但使用要慎重。</li></ul><p>forever启动时，还可以添加一些配置，例如<code>forever start xxx.js -l c:/xxx.log -e c:/xxx_err.log -a，forever start xxx.js</code>表示启动xxx.js。</p><p>-l c:/xxx.log表示将log信息输出到c:/xxx.log文件。<br>-e c:/xxx_err.log表示将错误信息输出到c:/xxx_err.log文件。<br>-a 表示新的日志添加到旧日志之后，即保留旧日志。</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;File-System的问题&quot;&gt;&lt;a href=&quot;#File-System的问题&quot; class=&quot;headerlink&quot; title=&quot;File System的问题&quot;&gt;&lt;/a&gt;File System的问题&lt;/h2&gt;&lt;p&gt;我们通常会使用File System模块对文件进行读取，如下：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;js&quot;&gt;fs.readFile(&amp;#39;./test.txt&amp;#39;, (error, buffer) =&amp;gt; {
-  if (error) {
-    console.error(error)
-  } else {
-    // 读取文件成功
-    res.write(buffer)
-  }
-})
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;这样操作简单有效，但这也存在一些问题：&lt;/p&gt;
-&lt;p&gt;1.占用内存&lt;br&gt;使用fs读取文件，它是一次性将文件的所有内容读取到内存中，再一次性发送到客户端，因此会占用大量内存。&lt;/p&gt;
-&lt;p&gt;2.资源使用效率低&lt;br&gt;从磁盘读取文件期间，磁盘处于忙碌状态，而网络处于空闲状态。&lt;br&gt;磁盘读取完成后，开始发送文件时，情况正相反，网络处于忙碌状态，此时磁盘却处于空闲状态&lt;/p&gt;
-&lt;h2 id=&quot;Stream流&quot;&gt;&lt;a href=&quot;#Stream流&quot; class=&quot;headerlink&quot; title=&quot;Stream流&quot;&gt;&lt;/a&gt;Stream流&lt;/h2&gt;&lt;p&gt;相比File System，Stream流读取文件是读一份，发一份，Stream流的写入操作也有同样特点，因此可以解决File System在上面提到的2个问题。&lt;/p&gt;
-&lt;p&gt;接下来实现一个简单的流，将1.txt文件的内容写入到2.txt中：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;js&quot;&gt;const fs = require(&amp;#39;fs&amp;#39;)
-
-// 创建一个可读流。
-const readStream = fs.createReadStream(&amp;#39;./1.txt&amp;#39;)
-
-// 创建一个可写流。
-const writeStream = fs.createWriteStream(&amp;#39;./2.txt&amp;#39;)
-
-// 将可读流读取的数据，通过管道pipe推送到写入流中，即可将1.txt的内容，写入到2.txt中。
-readStream.pipe(writeStream)
-
-// 读取出现错误时会触发error事件。
-readStream.on(&amp;#39;error&amp;#39;, (error) =&amp;gt; {
-  console.error(error)
-})
-
-// 写入完成时，触发finish事件。
-writeStream.on(&amp;#39;finish&amp;#39;, () =&amp;gt; {
-  console.log(&amp;#39;finish&amp;#39;)
-})
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;使用Zlib压缩文件&quot;&gt;&lt;a href=&quot;#使用Zlib压缩文件&quot; class=&quot;headerlink&quot; title=&quot;使用Zlib压缩文件&quot;&gt;&lt;/a&gt;使用Zlib压缩文件&lt;/h2&gt;&lt;p&gt;可以使用Zlib模块，配合Stream流，实现文件压缩功能，如下：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;js&quot;&gt;const fs = require(&amp;#39;fs&amp;#39;)
-// 引入zlib模块，用于实现压缩功能
-const zlib = require(&amp;#39;zlib&amp;#39;)
-
-// 创建一个可读流。
-const readStream = fs.createReadStream(&amp;#39;./google.jpg&amp;#39;)
-
-// 创建一个可写流。
-const writeStream = fs.createWriteStream(&amp;#39;./google.jpg.gz&amp;#39;)
-
-// 创建一个Gzip对象，用于将文件压缩成.gz文件
-const gzip = zlib.createGzip()
-
-// 将可读流读取的数据，先通过管道pipe推送到gzip中，再推送到写入流中。
-// 也就是先将可读流的数据压缩，再推送到可写流中。
-readStream.pipe(gzip).pipe(writeStream)
-
-// 读取出现错误时会触发error事件。
-readStream.on(&amp;#39;error&amp;#39;, (error) =&amp;gt; {
-  console.error(error)
-})
-
-// 写入完成时，触发finish事件。
-writeStream.on(&amp;#39;finish&amp;#39;, () =&amp;gt; {
-  console.log(&amp;#39;finish&amp;#39;)
-})
-&lt;/code&gt;&lt;/pre&gt;
     
     </summary>
     
