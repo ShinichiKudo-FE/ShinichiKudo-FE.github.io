@@ -137,40 +137,37 @@
     <div id="post0" class="else">
         <p class="animated fadeInDown">
             
-            <a href="/categories/Js"><b>「
-                </b>JS<b> 」</b></a>
+            <a href="javascript:;"><b>「 </b>Article<b> 」</b></a>
             
-            June 03, 2018
+            June 21, 2018
         </p>
         <h3 class="post-title animated fadeInDown">
-            <a href="/2018/06/03/study/%E6%95%99%E7%A7%91%E4%B9%A6%E5%BC%8F%E7%9A%84%E6%AD%A3%E5%88%99%E5%8C%B9%E9%85%8D/" title="教科书式的正则匹配" class="posttitle">教科书式的正则匹配</a></h3>
+            <a href="/2018/06/21/study/%E5%89%8D%E7%AB%AF%E8%B7%AF%E7%94%B1%E5%AE%9E%E7%8E%B0%E4%B8%8Ereact-router%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" title="前端路由实现与react-router源码分析" class="posttitle">前端路由实现与react-router源码分析</a></h3>
         
         <p class="post-count animated fadeInDown">
             
             <span>
                 <b class="iconfont icon-text2"></b> <i>Words count</i>
-                6.1k
+                10k
             </span>
             
             
             <span>
                 <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                6 mins.
+                9 mins.
             </span>
             
             
         </p>
         
         
-        <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/RegExp/" rel="tag">RegExp</a></li></ul>
+        <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E8%B7%AF%E7%94%B1/" rel="tag">路由</a></li></ul>
         
         <div class="md-content animated fadeIn">
             
-            <p></p>
-<blockquote>
-<p>正则在js中是一类比较特殊的对象，它<strong>可以匹配各个场景需要的格式验证，例如邮箱、手机号、用户登录名、密码等等</strong>，似乎无处不在，在常见的字符串检索或替换中，我们需要提供一种模式表示检索或替换的规则，来匹...</p></blockquote>
+            <p>在单页应用上，前端路由并不陌生。很多前端框架也会有独立开发或推荐配套使用的路由系统。那么，当我们在谈前端路由的时候，还可以谈些什么？本文将简要分析并实现一个的前端路由，并对 react-router ...</p>
             
-            <span class="read-more"><a href="/2018/06/03/study/%E6%95%99%E7%A7%91%E4%B9%A6%E5%BC%8F%E7%9A%84%E6%AD%A3%E5%88%99%E5%8C%B9%E9%85%8D/" title="Read article" class="posttitle">Read article</a>
+            <span class="read-more"><a href="/2018/06/21/study/%E5%89%8D%E7%AB%AF%E8%B7%AF%E7%94%B1%E5%AE%9E%E7%8E%B0%E4%B8%8Ereact-router%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" title="Read article" class="posttitle">Read article</a>
                 <b class="iconfont icon-arrow-right- gradient-text"></b></span>
         </div>
     </div>
@@ -191,6 +188,101 @@
 
     <div id="primary">
         
+<div class="post" id="post">
+    <div class="post-cover animated fadeIn" style="
+            background-image:
+            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+            url(/img/welcome-cover.jpg);">
+    </div>
+    <div class="else">
+        <p class="animated fadeInDown">
+            
+                <a href="javascript:;"><b>「 </b>Article<b> 」</b></a>
+            
+            June 21, 2018
+        </p>
+        <h3 class="post-title animated fadeInDown"><a href="/2018/06/21/study/%E5%89%8D%E7%AB%AF%E8%B7%AF%E7%94%B1%E5%AE%9E%E7%8E%B0%E4%B8%8Ereact-router%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" title="前端路由实现与react-router源码分析" class="posttitle">前端路由实现与react-router源码分析</a></h3>
+        
+            <p class="post-count animated fadeInDown">
+                
+                    <span>
+                        <b class="iconfont icon-text2"></b> <i>Words count</i>
+                        10k
+                    </span>
+                
+                
+                    <span>
+                        <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                        9 mins.
+                    </span>
+                
+                
+            </p>
+            
+                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E8%B7%AF%E7%94%B1/" rel="tag">路由</a></li></ul>
+            
+        
+        <div class="md-content animated fadeIn">
+            
+                <p>在单页应用上，前端路由并不陌生。很多前端框架也会有独立开发或推荐配套使用的路由系统。那么，当我们在谈前端路由的时候，还可以谈些什么？本文将简要分析并实现一个的前端路由，并对 react-router 进行分析。</p>
+<p>谈一下前端路由的简要原理，以hash形式（也可以使用History API做处理）为例，当url的hash发生变化时，触发hashchange注册的回调，在回调中进行不同的操作，展示不同的页面。直接看代码比较直观。</p>
+<pre><code class="js">    function Router(){
+        this.routes = {}...</code></pre>
+            
+            <span class="read-more"><a href="/2018/06/21/study/%E5%89%8D%E7%AB%AF%E8%B7%AF%E7%94%B1%E5%AE%9E%E7%8E%B0%E4%B8%8Ereact-router%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" title="Read article" class="posttitle">Read article</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+        </div>
+    </div>
+</div>
+
+
+<div class="post" id="post">
+    <div class="post-cover animated fadeIn" style="
+            background-image:
+            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+            url(/img/welcome-cover.jpg);">
+    </div>
+    <div class="else">
+        <p class="animated fadeInDown">
+            
+                <a href="/categories/Bug">
+                  <b>「 </b>BUG<b> 」</b>
+                </a>
+            
+            June 08, 2018
+        </p>
+        <h3 class="post-title animated fadeInDown"><a href="/2018/06/08/Mobile/%E7%A7%BB%E5%8A%A8%E7%AB%AF%E5%B8%B8%E8%A7%81Bug%E6%B1%87%E6%80%BB/" title="移动端常见Bug汇总" class="posttitle">移动端常见Bug汇总</a></h3>
+        
+            <p class="post-count animated fadeInDown">
+                
+                    <span>
+                        <b class="iconfont icon-text2"></b> <i>Words count</i>
+                        6.4k
+                    </span>
+                
+                
+                    <span>
+                        <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                        6 mins.
+                    </span>
+                
+                
+            </p>
+            
+                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Mobile/" rel="tag">Mobile</a></li></ul>
+            
+        
+        <div class="md-content animated fadeIn">
+            
+                <p>本文是摘录整理了移动端常见的一些bug以及解决方案</p>
+<p>Q: 当你点击一个链接或者通过Javascript定义的可点击元素的时候，它就会出现一个半透明的灰色背景。</p>
+<p>A:根本原因是-webkit-tap-highlight-color，这个属性是用于设定元素在移动设备（如Adnroid、iOS）上被触发点击事件时，响应的背景框的颜色。建议写在样式初始化中以避免所以问题：div,input(selector) {-webkit-tap-highlight-color: rgba(0,0,0,0);}另外...</p>
+            
+            <span class="read-more"><a href="/2018/06/08/Mobile/%E7%A7%BB%E5%8A%A8%E7%AB%AF%E5%B8%B8%E8%A7%81Bug%E6%B1%87%E6%80%BB/" title="Read article" class="posttitle">Read article</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+        </div>
+    </div>
+</div>
+
+
 <div class="post" id="post">
     <div class="post-cover animated fadeIn" style="
             background-image:
@@ -335,119 +427,6 @@
 <li>如何根据token获取用户的信...</li></ul></blockquote>
             
             <span class="read-more"><a href="/2018/05/23/study/Token%EF%BC%9A%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%9A%84%E6%B5%81%E8%A1%8C%E6%96%B9%E6%A1%88/" title="Read article" class="posttitle">Read article</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
-        </div>
-    </div>
-</div>
-
-
-<div class="post" id="post">
-    <div class="post-cover animated fadeIn" style="
-            background-image:
-            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
-            url(/img/welcome-cover.jpg);">
-    </div>
-    <div class="else">
-        <p class="animated fadeInDown">
-            
-                <a href="/categories/原理与实现">
-                  <b>「 </b>原理与实现<b> 」</b>
-                </a>
-            
-            May 21, 2018
-        </p>
-        <h3 class="post-title animated fadeInDown"><a href="/2018/05/21/%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0/promise%E7%9A%84%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0/" title="promise的原理" class="posttitle">promise的原理</a></h3>
-        
-            <p class="post-count animated fadeInDown">
-                
-                    <span>
-                        <b class="iconfont icon-text2"></b> <i>Words count</i>
-                        12k
-                    </span>
-                
-                
-                    <span>
-                        <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                        11 mins.
-                    </span>
-                
-                
-            </p>
-            
-                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Promise/" rel="tag">Promise</a></li></ul>
-            
-        
-        <div class="md-content animated fadeIn">
-            
-                <p>先上一图!<br></p>
-<p>本文的promise源码是按照<a href="https://promisesaplus.com/" target="_blank" rel="noopener">Promise/A+规范</a>来编写的（不想看英文版的移步<a href="http://www.ituring.com.cn/article/66566" target="_blank" rel="noopener">Promise/A+规范中文翻译</a>）</p>
-<p>为了让大家更容易理解，我们从一个场景开始讲解，让大家一步一步跟着思路思考，相信你一定会更容易看懂。</p>
-<p>考虑下面一种获取用户id的请求处理</p>
-<pre><code class="js">function getUrlId() {
-    return new Promise(function(resolve) {
-        //异步请求
-        http.get(url,function(results) {
-            resolve(results....</code></pre>
-            
-            <span class="read-more"><a href="/2018/05/21/%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0/promise%E7%9A%84%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0/" title="Read article" class="posttitle">Read article</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
-        </div>
-    </div>
-</div>
-
-
-<div class="post" id="post">
-    <div class="post-cover animated fadeIn" style="
-            background-image:
-            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
-            url(/img/welcome-cover.jpg);">
-    </div>
-    <div class="else">
-        <p class="animated fadeInDown">
-            
-                <a href="/categories/Js">
-                  <b>「 </b>JS<b> 」</b>
-                </a>
-            
-            May 20, 2018
-        </p>
-        <h3 class="post-title animated fadeInDown"><a href="/2018/05/20/Js/%E5%85%AB%E6%AE%B5%E4%BB%A3%E7%A0%81%E5%BD%BB%E5%BA%95%E6%8E%8C%E6%8F%A1-Promise/" title="八段代码彻底掌握 Promise" class="posttitle">八段代码彻底掌握 Promise</a></h3>
-        
-            <p class="post-count animated fadeInDown">
-                
-                    <span>
-                        <b class="iconfont icon-text2"></b> <i>Words count</i>
-                        9.8k
-                    </span>
-                
-                
-                    <span>
-                        <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                        9 mins.
-                    </span>
-                
-                
-            </p>
-            
-                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Promise/" rel="tag">Promise</a></li></ul>
-            
-        
-        <div class="md-content animated fadeIn">
-            
-                <pre><code class="js">//1
-var p = new Promise(function(resolve, reject){
-  console.log(&quot;create a promise&quot;);
-  resolve(&quot;success&quot;);
-});
-//2
-console.log(&quot;after new Promise&quot;);
-//3
-p.then(function(value){
-  console.log(value);
-});
-</code></pre>
-<p>控制台输出：</p>
-<pre><code class="js">&quot;create a...</code></pre>
-            
-            <span class="read-more"><a href="/2018/05/20/Js/%E5%85%AB%E6%AE%B5%E4%BB%A3%E7%A0%81%E5%BD%BB%E5%BA%95%E6%8E%8C%E6%8F%A1-Promise/" title="Read article" class="posttitle">Read article</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
         </div>
     </div>
 </div>
