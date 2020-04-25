@@ -140,22 +140,22 @@
             <a href="/categories/Vue"><b>「
                 </b>VUE<b> 」</b></a>
             
-            December 09, 2018
+            January 01, 2019
         </p>
         <h3 class="post-title animated fadeInDown">
-            <a href="/2018/12/09/Vue/vue%E6%BA%90%E7%A0%81%E4%B9%8B%E4%BB%8E%E6%BA%90%E7%A0%81%E8%A7%92%E5%BA%A6%E5%86%8D%E7%9C%8B%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A/" title="vue源码之从源码角度再看数据绑定" class="posttitle">vue源码之从源码角度再看数据绑定</a></h3>
+            <a href="/2019/01/01/Vue/Vue-js%E5%BC%82%E6%AD%A5%E6%9B%B4%E6%96%B0DOM%E7%AD%96%E7%95%A5%E5%8F%8AnextTick/" title="Vue.js异步更新DOM策略及nextTick" class="posttitle">Vue.js异步更新DOM策略及nextTick</a></h3>
         
         <p class="post-count animated fadeInDown">
             
             <span>
                 <b class="iconfont icon-text2"></b> <i>Words count</i>
-                20k
+                13k
             </span>
             
             
             <span>
                 <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                18 mins.
+                12 mins.
             </span>
             
             
@@ -166,13 +166,12 @@
         
         <div class="md-content animated fadeIn">
             
-            <p><a href="https://github.com/answershuto/learnVue/blob/master/docs/%E4%BB%8E%E6%BA%90%E7%A0%81%E8%A7%92%E5%BA%A6%E5%86%8D%E7%9C%8B%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A.MarkDown" target="_blank" rel="noopener">原文地址</a></p>
-<p>前面已经讲过Vue数据绑定的原理了，现在从源码来看一下数据绑定在Vue中是如何实现的。</p>
-<p>首先看一下Vue.js官网介绍响应式原理的这张图。</p>
-<p></p>
-<p>这张图比较清晰地展示了整个流程，首先通过一次渲染...</p>
+            <p>在使用vue.js的时候，有时候因为一些特定的业务场景，不得不去操作DOM，比如这样：</p>
+<pre><code class="html">&lt;template&gt;
+  &lt;div&gt;
+    &lt;div ref=&quot;test&quot...</code></pre>
             
-            <span class="read-more"><a href="/2018/12/09/Vue/vue%E6%BA%90%E7%A0%81%E4%B9%8B%E4%BB%8E%E6%BA%90%E7%A0%81%E8%A7%92%E5%BA%A6%E5%86%8D%E7%9C%8B%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A/" title="Read article" class="posttitle">Read article</a>
+            <span class="read-more"><a href="/2019/01/01/Vue/Vue-js%E5%BC%82%E6%AD%A5%E6%9B%B4%E6%96%B0DOM%E7%AD%96%E7%95%A5%E5%8F%8AnextTick/" title="Read article" class="posttitle">Read article</a>
                 <b class="iconfont icon-arrow-right- gradient-text"></b></span>
         </div>
     </div>
@@ -193,6 +192,119 @@
 
     <div id="primary">
         
+<div class="post" id="post">
+    <div class="post-cover animated fadeIn" style="
+            background-image:
+            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+            url(/img/welcome-cover.jpg);">
+    </div>
+    <div class="else">
+        <p class="animated fadeInDown">
+            
+                <a href="/categories/Vue">
+                  <b>「 </b>VUE<b> 」</b>
+                </a>
+            
+            January 01, 2019
+        </p>
+        <h3 class="post-title animated fadeInDown"><a href="/2019/01/01/Vue/Vue-js%E5%BC%82%E6%AD%A5%E6%9B%B4%E6%96%B0DOM%E7%AD%96%E7%95%A5%E5%8F%8AnextTick/" title="Vue.js异步更新DOM策略及nextTick" class="posttitle">Vue.js异步更新DOM策略及nextTick</a></h3>
+        
+            <p class="post-count animated fadeInDown">
+                
+                    <span>
+                        <b class="iconfont icon-text2"></b> <i>Words count</i>
+                        13k
+                    </span>
+                
+                
+                    <span>
+                        <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                        12 mins.
+                    </span>
+                
+                
+            </p>
+            
+                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Vue/" rel="tag">Vue</a></li></ul>
+            
+        
+        <div class="md-content animated fadeIn">
+            
+                <p>在使用vue.js的时候，有时候因为一些特定的业务场景，不得不去操作DOM，比如这样：</p>
+<pre><code class="html">&lt;template&gt;
+  &lt;div&gt;
+    &lt;div ref=&quot;test&quot;&gt;{{test}}&lt;/div&gt;
+    &lt;button @click=&quot;handleClick&quot;&gt;tet&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+</code></pre>
+<pre><code class="js">export default {
+    data () {
+        return...</code></pre>
+            
+            <span class="read-more"><a href="/2019/01/01/Vue/Vue-js%E5%BC%82%E6%AD%A5%E6%9B%B4%E6%96%B0DOM%E7%AD%96%E7%95%A5%E5%8F%8AnextTick/" title="Read article" class="posttitle">Read article</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+        </div>
+    </div>
+</div>
+
+
+<div class="post" id="post">
+    <div class="post-cover animated fadeIn" style="
+            background-image:
+            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+            url(/img/welcome-cover.jpg);">
+    </div>
+    <div class="else">
+        <p class="animated fadeInDown">
+            
+                <a href="/categories/Vue">
+                  <b>「 </b>VUE<b> 」</b>
+                </a>
+            
+            December 16, 2018
+        </p>
+        <h3 class="post-title animated fadeInDown"><a href="/2018/12/16/Vue/Vue%E4%BA%8B%E4%BB%B6API/" title="Vue事件API" class="posttitle">Vue事件API</a></h3>
+        
+            <p class="post-count animated fadeInDown">
+                
+                    <span>
+                        <b class="iconfont icon-text2"></b> <i>Words count</i>
+                        4.4k
+                    </span>
+                
+                
+                    <span>
+                        <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                        4 mins.
+                    </span>
+                
+                
+            </p>
+            
+                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Vue/" rel="tag">Vue</a></li></ul>
+            
+        
+        <div class="md-content animated fadeIn">
+            
+                <p>众所周知，Vue.js为我们提供了四个事件API，分别是<code>$on，$once，$off，$emit</code>。</p>
+<p>初始化事件在vm上创建一个_events对象，用来存放事件。_events的内容如下：</p>
+<pre><code class="js">{
+    eventName: [func1, func2, func3]
+}
+</code></pre>
+<p>存放事件名以及对应执行方法。</p>
+<pre><code class="js">/*初始化事件*/
+export function initEvents (vm: Component) {
+  /*在vm上创建一个_events对象，用来存放事件。*/
+  vm._events = Object...</code></pre>
+            
+            <span class="read-more"><a href="/2018/12/16/Vue/Vue%E4%BA%8B%E4%BB%B6API/" title="Read article" class="posttitle">Read article</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+        </div>
+    </div>
+</div>
+
+
 <div class="post" id="post">
     <div class="post-cover animated fadeIn" style="
             background-image:
@@ -351,117 +463,9 @@
 </div>
 
 
-<div class="post" id="post">
-    <div class="post-cover animated fadeIn" style="
-            background-image:
-            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
-            url(/img/welcome-cover.jpg);">
-    </div>
-    <div class="else">
-        <p class="animated fadeInDown">
-            
-                <a href="/categories/Js">
-                  <b>「 </b>JS<b> 」</b>
-                </a>
-            
-            November 18, 2018
-        </p>
-        <h3 class="post-title animated fadeInDown"><a href="/2018/11/18/Js/JavaScript-%E5%A4%8D%E6%9D%82%E5%88%A4%E6%96%AD%E7%9A%84%E6%9B%B4%E4%BC%98%E9%9B%85%E5%86%99%E6%B3%95/" title="JavaScript 复杂判断的更优雅写法" class="posttitle">JavaScript 复杂判断的更优雅写法</a></h3>
-        
-            <p class="post-count animated fadeInDown">
-                
-                    <span>
-                        <b class="iconfont icon-text2"></b> <i>Words count</i>
-                        9.2k
-                    </span>
-                
-                
-                    <span>
-                        <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                        8 mins.
-                    </span>
-                
-                
-            </p>
-            
-                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Js/" rel="tag">Js</a></li></ul>
-            
-        
-        <div class="md-content animated fadeIn">
-            
-                <p><a href="https://juejin.im/post/5bdfef86e51d453bf8051bf8?utm_source=gold_browser_extension" target="_blank" rel="noopener">原文地址</a></p>
-<p>我们编写js代码时经常遇到复杂逻辑判断的情况，通常大家可以用if/else或者switch来实现多个条件判断，但这样会有个问题，随着逻辑复杂度的增加，代码中的if/else/switch会变得越来越臃肿，越来越看不懂，那么如何更优雅的写判断逻辑，本文带你试一下。</p>
-<pre><code class="js">/**
- * 按钮点击事件
- * @param {number} status 活动状态：1 开团进行中 2 开团失败 3 商品售罄 4 开团成功 5 系统取消
- */
-const onButtonClick = (status)=...</code></pre>
-            
-            <span class="read-more"><a href="/2018/11/18/Js/JavaScript-%E5%A4%8D%E6%9D%82%E5%88%A4%E6%96%AD%E7%9A%84%E6%9B%B4%E4%BC%98%E9%9B%85%E5%86%99%E6%B3%95/" title="Read article" class="posttitle">Read article</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
-        </div>
-    </div>
-</div>
-
-
-<div class="post" id="post">
-    <div class="post-cover animated fadeIn" style="
-            background-image:
-            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
-            url(/img/welcome-cover.jpg);">
-    </div>
-    <div class="else">
-        <p class="animated fadeInDown">
-            
-                <a href="/categories/HTTP">
-                  <b>「 </b>HTTP<b> 」</b>
-                </a>
-            
-            November 04, 2018
-        </p>
-        <h3 class="post-title animated fadeInDown"><a href="/2018/11/04/HTTP/websocket%E9%80%9A%E4%BF%A1%E4%BA%86%E8%A7%A3/" title="websocket通信了解" class="posttitle">websocket通信了解</a></h3>
-        
-            <p class="post-count animated fadeInDown">
-                
-                    <span>
-                        <b class="iconfont icon-text2"></b> <i>Words count</i>
-                        1.6k
-                    </span>
-                
-                
-                    <span>
-                        <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                        1 mins.
-                    </span>
-                
-                
-            </p>
-            
-                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li></ul>
-            
-        
-        <div class="md-content animated fadeIn">
-            
-                <p>websocket是HTML5出的协议，他是一个持久化的协议。</p>
-<p>首先websocket是一个持久化的协议，在HTTP中一个request只能有一个response,而且这个response也是被动的，不能主动发起。</p>
-<p>下面是用websocket请求的header头</p>
-<pre><code class="js">GET /chat HTTP/1.1
-Host: server.example.com
-
-//告知服务器是使用websocket的协议
-Upgrade: websocket   
-Connection: Upgrade
-
-Sec-WebSocket...</code></pre>
-            
-            <span class="read-more"><a href="/2018/11/04/HTTP/websocket%E9%80%9A%E4%BF%A1%E4%BA%86%E8%A7%A3/" title="Read article" class="posttitle">Read article</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
-        </div>
-    </div>
-</div>
-
-
     </div>
     
-    <div id="pager"><a href="/page/11/" class="more" data-loading="Loading..." data-load-more="Load more">Load more</a></div>
+    <div id="pager"><a href="/page/11/" class="more" data-loading="加载中..." data-load-more="Load more">Load more</a></div>
     
 </div>
 <div id="preview"></div>
