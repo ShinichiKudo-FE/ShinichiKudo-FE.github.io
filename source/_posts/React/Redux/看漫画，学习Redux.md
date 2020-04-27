@@ -1,0 +1,241 @@
+---
+title: 看漫画，学习Redux
+date: 2018-03-05 17:31:22
+tags: "Redux"
+categories: "Redux"
+---
+
+React 只是 DOM 的一个抽象层，并不是 Web 应用的完整解决方案。有两个方面，它没涉及。
+
+* 代码结构
+* 组件之间的通信
+
+对于大型的复杂应用来说，这两方面恰恰是最关键的。因此，只用 React 没法写大型应用。
+
+为了解决这个问题，2014年 Facebook 提出了[Flux](http://www.ruanyifeng.com/blog/2016/01/flux.html)架构的概念，引发了很多的实现。2015年，Redux 出现，将 Flux 与函数式编程结合一起，很短时间内就成为了最热门的前端架构。
+
+Redux 的设计思想很简单，就两句话。
+
+*（1）<font color="red">Web 应用是一个状态机，视图与状态是一一对应的。</font> *
+
+*（2）<font color="red">所有的状态，保存在一个对象里面。</font> *
+
+
+
+Flux 架构已然让人觉得有些迷惑，而比 Flux 更让人摸不着头脑的是 Flux 与 Redux 的区别。Redux 是一个基于 Flux 思想的新架构方式，本文将探讨它们的区别。
+
+--------------
+
+## 为什么要改变 Flux？
+Redux 解决的问题和 Flux 一样，但 Redux 能做的还有更多。
+<!-- more -->
+和 Flux 一样，Redux 让应用的状态变化变得更加可预测。如果你想改变应用的状态，就必须 dispatch 一个 action。你没有办法直接改变应用的状态，因为保存这些状态的东西（称为 store）只有 getter 而没有 setter。对于 Flux 和 Redux 来说，这些概念都是相似的。
+
+那么为什么要新设计一种架构呢？Redux 的创造者 Dan Abramov 发现了改进 Flux 架构的可能。他想要一个更好的开发者工具来调试 Flux 应用。他发现如果稍微对 Flux 架构进行一些调整，就可以开发出一款更好用的开发者工具，同时依然能享受 Flux 架构带给你的可预测性。
+
+确切的说，他想要的开发者工具包含了代码热替换（hot reload）和时间旅行（time travel）功能。然而要想在 Flux 架构上实现这些功能，确实有些麻烦。
+
+### 问题1：store 的代码无法被热替换，除非清空当前的状态
+
+在 Flux 中，store 包含了两样东西：
+
+> 改变状态的逻辑
+  当前的状态
+
+在一个 store 中同时保存这两样东西将会导致代码热替换功能出现问题。当你热替换掉 store 的代码想要看看新的状态改变逻辑是否生效时，你就丢失了 store 中保存的当前状态。此外，你还把 store 与 Flux 架构中其它组件产生关系的事件系统搞乱了。
+
+![redux-img-1](https://camo.githubusercontent.com/6de7496b7a2cd09a391e2e35ab05b9163c9cca7d/68747470733a2f2f64323632696c623531686c7478302e636c6f756466726f6e742e6e65742f6d61782f313630302f312a4c36364b397543516a6a486d704177542d61394335512e706e67)
+
+**解决方案**
+
+将这两样东西分开处理。让一个对象来保存状态，这个对象在热替换代码的时候不会受到影响。让另一个对象包含所有改变状态的逻辑，这个对象可以被热替换因为它不用关心任何保存状态相关的事情。
+
+![redux-img-2](https://camo.githubusercontent.com/c56fe4af77a013cc07809e18255936dfe7d25c56/68747470733a2f2f64323632696c623531686c7478302e636c6f756466726f6e742e6e65742f6d61782f313630302f312a6e42734743576d4a54522d5a6a3761586549453879672e706e67)
+
+### 问题2：每次触发 action 时状态对象都被直接改写了
+时间旅行调试法的特性是：你能掌握状态对象的每一次变化，这样的话，你就能轻松的跳回到这个对象之前的某个状态（想象一个撤销功能）。
+
+要实现这样的功能，每次状态改变之后，你都需要把旧的状态保存在一个数组中。但是由于 JavaScript 的对象引用特性，简单的把一个对象放进数组中并不能实现我们需要的功能。这样做不能创建一个快照（snapshot），而只是创建了一个新的指针指向同一个对象。
+
+所以要想实现时间旅行特性，每一个状态改变的版本都需要保存在不同的 JavaScript 对象中，这样你才不会不小心改变了某个历史版本的状态。
+
+![redux-img-3](https://camo.githubusercontent.com/f86631450bf5c015d8f378fafd932e12e74596b7/68747470733a2f2f64323632696c623531686c7478302e636c6f756466726f6e742e6e65742f6d61782f313630302f312a347a4f4476357667764b736936547337546968736f412e706e67)
+
+**解决方案**
+
+当一个 action 需要 store 响应时，不要直接修改 store 中的状态，而是将状态拷贝一份并在这份拷贝的状态上做出修改。
+
+![redux-img-4](https://camo.githubusercontent.com/f41ce7a53d59f43f6bf9318590a500f6892d6d6d/68747470733a2f2f64323632696c623531686c7478302e636c6f756466726f6e742e6e65742f6d61782f313630302f312a774c52685a307774493064754c73696764784c3143412e706e67)
+
+### 问题3：没有合适的位置引入第三方插件
+
+当你在写一些调试性工具时，你希望它们能够更加通用。一个使用该工具的用户应该可以直接引入这个工具而不需要做额外的包装或桥接。
+
+要实现这样的特性，Flux 架构需要一个扩展点。
+
+一个简单的例子就是日志。比如说你希望 console.log() 每一个触发的 action 同时 console.log() 这个 action 被响应完成后的状态。在 Flux 中，你只能订阅（subscribe） dispatcher 的更新和每一个 store 的变动。但是这样就侵入了业务代码，这样的日志功能不是一个第三方插件能够轻易实现的。
+
+![redux-img-5](https://camo.githubusercontent.com/bbb508730d3e3c634dd1c054934d3b802d715bc2/68747470733a2f2f64323632696c623531686c7478302e636c6f756466726f6e742e6e65742f6d61782f313630302f312a4d473733367a47744c4d4262536b68777534443363412e706e67)
+
+**解决方案**
+
+将这个架构的部分功能包装进其他的对象中将使得我们的需求变得更容易实现。这些「其他对象」在架构原有的功能基础之上添加了自己的功能。你可以把这种扩展点看做是一个增强器（enhancers）或者高阶对象（higher order objects），亦或者中间件（middleware）。
+
+此外，使用一个树形结构来组织所有改变状态的逻辑，这样当状态发生改变的时候 store 只会触发一个事件来通知视图层（view），而这一个事件会被整棵树中的所有逻辑处理（译者注：「处理」不代表一定会改变状态，这些改变状态的逻辑本质上是函数，函数内部会根据 action 的类型等来确定是否对状态进行改变）。
+
+![redux-img-6](https://camo.githubusercontent.com/ae8d5c840e44a7e05b29f10539896e8eaa09726a/68747470733a2f2f64323632696c623531686c7478302e636c6f756466726f6e742e6e65742f6d61782f313630302f312a354a615a5363334a736e39504a5937646145445644412e706e67)
+
+> 注意：就上述这些问题和解决方案来说，我主要在关注开发者工具这一使用场景。实际上，对 Flux 做出的这些改变在其他场景中也非常有帮助。在上述三点之外，Flux 和 Redux 还有更多的不同点。比如，相比于 Flux，Redux 精简了整个架构的冗余代码，并且复用 store 的逻辑变得更加简单。这里有一个 [Redux 优点的列表](https://stackoverflow.com/questions/32461229/why-use-redux-over-facebook-flux/32920459#32920459)可供参考。
+
+那么让我们来看看 Redux 是怎么让这些特性变为现实的。
+
+## 新的角色
+从 Flux 演进到 Redux，整个架构中的角色发生了些许的变化。
+
+### Action creators
+![redux-img-7](https://camo.githubusercontent.com/8da1995413187f344a236796df578e1d09fe9a1d/68747470733a2f2f64323632696c623531686c7478302e636c6f756466726f6e742e6e65742f6d61782f313230302f312a556c6a727268345a37556955776b38416a554f3950412e706e67)
+Redux 保留了 Flux 中 action creator 的概念。每当你想要改变应用中的状态时，你就要 dispatch 一个 action，这也是唯一改变状态的方法。
+
+就像我在这篇关于 Flux 的文章中提到的一样，我把 action creator 看做是一个报务员（负责发电报的人，telegraph operator），你找到 action creator 告诉他你大致上想要传达什么信息，action creator 则会把这些信息格式化为一种标准的格式，以便系统中的其他部分能够理解。
+
+与 Flux 不同的是，Redux 中的 action creator 不会直接把 action 发送给 dispatcher，而是返回一个格式化好的 JavaScript 对象。
+
+### The store
+
+我把 Flux 中的 store 描述为一种过度控制的官僚机制。不能简单直接的修改状态，而是要求所有的状态改变都必须由 store 亲自产生，还必须要经历 action 分发那种套路。在 Redux 中，store 依然是这么的充满控制欲和官僚主义，但是又有些不一样。
+
+![redux-img-8](https://camo.githubusercontent.com/f28fbec52ba810806df9a4fbb497e936515fc506/68747470733a2f2f64323632696c623531686c7478302e636c6f756466726f6e742e6e65742f6d61782f313230302f312a477a74633754487a787a4f674a6d47764a39354951412e706e67)
+
+在 Flux 中，你可以拥有多个 store，每一个 store 都有自己的统治权。每个 store 都保存着自己对应的那部分状态，以及所有修改这些状态的逻辑。
+
+而 Redux 中的 store 更喜欢将权力下放，而且不得不这么做。因为在 Redux 中，你只能有一个 store……所以如果你打算像 Flux 那样 store 完全独立处理自己的事情，那么 Redux 中的 store 将变得工作量巨大。
+
+因此，Redux 中的 store 首先会保存整个应用的所有状态，然后将判断哪一部分状态需要改变的任务分配下去。而以根 reducer（root reducer）为首的 reducer 们将会承担这个任务。
+
+你可能发现这里好像没有 dispatcher 什么事，看起来有点越权，但 store 已经完全接管了 dispatch 相关的工作。
+
+### The reducers
+当 store 需要知道一个 action 触发后状态需要怎么改变时，他会去询问 reducer。根 reducer 会根据状态对象的键（key）将整个状态树进行拆分，然后将拆分后的每一块子状态传到知道该怎么响应的子 reducer 那里进行处理。
+![redux-img-9](https://camo.githubusercontent.com/dec23aa9ceed12be5d715504cf28e290c0b423cc/68747470733a2f2f64323632696c623531686c7478302e636c6f756466726f6e742e6e65742f6d61782f313230302f312a566f63795f36476c395062466c43494a7345397233412e706e67)
+
+我把 reducers 看做是有点格外热衷复印的白领。他们不希望把任何事搞砸，因此他们不会修改任何传递给他们的文件。取而代之的是，他们会对这些文件进行复印，然后在复印件上进行修改。（译者注：当然，当这些修改后的复印件定稿后，他们也不会再去修改这些复印件。）
+
+这是 Redux 的核心思想之一。不直接修改整个应用的状态树，而是将状态树的每一部分进行拷贝并修改拷贝后的部分，然后将这些部分重新组合成一颗新的状态树。
+
+子 reducers 会把他们创建的副本传回给根 reducer，而根 reducer 会把这些副本组合起来形成一颗新的状态树。最后根 reducer 将新的状态树传回给 store，store 再将新的状态树设为最终的状态。
+
+如果你有一个小型应用，你可能只有一个 reducer 对整个状态树进行拷贝并作出修改。又或者你有一个超大的应用，你可能会有若干个 reducers 对整个状态树进行修改。这也是 Flux 和 Redux 的另一处区别。在 Flux 中，store 并不需要与其他 store 产生关联，而且 store 的结构是扁平的。而在 Redux 中，reducers 是有层级结构的。这种层级结构可以有若干层，就像组件的层级结构那样。
+
+### The views: 智能组件（smart components）和木偶组件(dumb components)
+Flux 拥有控制型视图（controller views） 和常规型视图（regular views）。控制型视图就像是一个经理一样，管理着 store 和子视图（child views）之间的通信。
+![redux-img-10](https://camo.githubusercontent.com/47a677ab402c5ebe20828858ae6d95c5cb60b73a/68747470733a2f2f64323632696c623531686c7478302e636c6f756466726f6e742e6e65742f6d61782f313230302f312a5467436b46636a6c4439537853724d765658334472412e706e67)
+
+在 Redux 中，也有一个类似的概念：<font color="red">智能组件和木偶组件</font>。（译者注：在最新的 Redux 文档中，它们分别叫做容器型组件 Container component 和展示型组件 Presentational component）智能组件的职责就像经理一样，但是比起 Flux 中的角色，Redux 对经理的职责有更多的定义：
+
+智能组件负责所有的 action。如果智能组件里包含的一个木偶组件需要触发一个 action，智能组件会通过 props 传给一个 function 给木偶组件，而木偶组件可以把这个 function 当做一个回调。
+智能组件不能定义 CSS 样式。
+智能组件几乎不会产生自己的 DOM 节点，他的工作是组织若干的木偶组件，由木偶组件来生成最终的 DOM 节点。
+木偶组件不会直接依赖 action 的触发，因为所有的 action 都会当做 props 传下来。这意味着木偶组件可以被任何一个逻辑不同的 App 拿去使用。同时木偶组件也需要有一定的样式来让自己变得好看一些（当然你可以让木偶组件接受某些 props 作为设置样式的变量）。
+
+### 视图层绑定
+![redux-img-11](https://camo.githubusercontent.com/95e3000085989bb3065f1d47990d5f48914c5313/68747470733a2f2f64323632696c623531686c7478302e636c6f756466726f6e742e6e65742f6d61782f313230302f312a4431526356724d5632727036414839686b35785a38672e706e67)
+
+要把 store 绑定到视图上，Redux 需要一点帮助。如果你在使用 React，那么你需要使用 <font color="red">react-redux</font>。
+
+视图绑定工作有点像为组件树服务的 IT 部门。IT 部门确保所有的组件都正确的绑定到 store 上，并处理各种技术上的细节，以确保余下层级的组件对绑定相关的操作毫无感知。
+
+视图层绑定引入了三个概念：
+> <Provider> 组件： 这个组件需要包裹在整个组件树的最外层。这个组件让根组件的所有子孙组件能够轻松的使用 connect() 方法绑定 store。
+connect()：这是 react-redux 提供的一个方法。如果一个组件想要响应状态的变化，就把自己作为参数传给 connect() 的结果（译者注：connect() 返回的依然是一个函数），connect() 方法会处理与 store 绑定的细节，并通过 selector 确定该绑定 store 中哪一部分的数据。
+selector：这是你自己编写的一个函数。这个函数声明了你的组件需要整个 store 中的哪一部分数据作为自己的 props。
+
+### 根组件
+
+![redux-img-12](https://camo.githubusercontent.com/6a5e8da8d98687a377c8e7b29c7d14d32c81048e/68747470733a2f2f64323632696c623531686c7478302e636c6f756466726f6e742e6e65742f6d61782f313230302f312a4a585065694e502d697436302d51594b622d703265512e706e67)
+所有的 React 应用都存在一个根组件（root component）。他其实就是整个组件树最外层的那个组件，但是在 Redux 中，根组件还要承担额外的任务。
+
+根组件承担的角色有点像企业中的高管，他将整个团队整合到一起来完成某项任务。他会创建 store，并告诉 store 使用哪些 reducers，并最终完成视图层的绑定。
+
+当完成整个应用的初始化工作后，根组件的就不再插手整个应用的运行过程了。每一次重新渲染（re-render）都没有根组件什么事，这些活儿都由根组件下面的子组件完成，当然也少不了视图层绑定的功劳。
+
+## Redux 完成的运行流程
+让我们看看上述各个部分是怎样组合成一个可以运行的应用的。
+
+### 配置环节
+应用中的不同部分需要在配置环节中整合到一起。
+
+> **准备好 store** 根组件会创建 store，并通过 createStore(reducer) 方法告诉 store 该使用哪个根 reducer。与此同时，根 reducer 也通过 combineReducers() 方法组建了一只向自己汇报的 reducer 团队。
+
+![redux-img-13](https://camo.githubusercontent.com/7e1ba50705e323adfa3d041418f619b856597396/68747470733a2f2f64323632696c623531686c7478302e636c6f756466726f6e742e6e65742f6d61782f313630302f312a385f665533312d6a4e516e513064702d77706c6d35772e706e67)
+
+> **设置 store 和组件之间的通信** 根组件将它所有的子组件包裹在 <Provider> 组件中，并建立了 Provider 与 store 之间的联系。
+
+Provider 本质上创建了一个用于更新视图组件的网络。那些智能组件通过 connect() 方法连入这个网络，以此确保他们能够获取到状态的更新。
+
+![redux-img-14](https://camo.githubusercontent.com/f83563c5057dc1aa1e7a25732d2abe198d587103/68747470733a2f2f64323632696c623531686c7478302e636c6f756466726f6e742e6e65742f6d61782f313630302f312a4e594d7574514c573854634567624f38564e657148412e706e67)
+
+> **准备好 action callback** 为了让木偶组件更好的处理 action，智能组件可以用 bindActionCreators() 方法来创建 action callback。这样做之后，智能组件就能给木偶组件传入一个回调（callback）。对应的 action 会在木偶组件调用这个回调时被自动 dispatch。（译者注：使用 bindActionCreators() 使得木偶组件无需关心 action 的 type 等信息，只用调用 props 中的某个方法传入需要的参数作为 action 的 payload 即可）
+
+![redux-img-15](https://camo.githubusercontent.com/53630fd5a1d93636347dbfa6c73946992ba3a30d/68747470733a2f2f64323632696c623531686c7478302e636c6f756466726f6e742e6e65742f6d61782f313630302f312a61566f4433674764644b55793356437877796c7468512e706e67)
+
+### 数据流
+现在我们的应用已经配置完成，用户可以开始操作了。让我们触发一个 action，看看数据是怎样流动的。
+
+![redux-img-16](https://camo.githubusercontent.com/bae37967eb63e79ff7adaa575be4aa23e0e4c2ba/68747470733a2f2f64323632696c623531686c7478302e636c6f756466726f6e742e6e65742f6d61782f313630302f312a474e447337535935336c456870376d58385632356c772e706e67)
+
+(1) 视图发出了一个 action，action creator 将这个 action 格式化并返回
+![redux-img-17](https://camo.githubusercontent.com/8d6473306f2b880a6000f737e15f8715b754b995/68747470733a2f2f64323632696c623531686c7478302e636c6f756466726f6e742e6e65742f6d61782f313630302f312a7034456b57455f3875705a39375a304961704b4463512e706e67)
+
+(2) 这个 action 要么被自动 dispatch（如果我们在配置阶段使用了 bindActionCreators()），要么由视图层手动 dispatch。
+![redux-img-18](https://camo.githubusercontent.com/0c6c16ed880307bdd765261663f129a9943b5077/68747470733a2f2f64323632696c623531686c7478302e636c6f756466726f6e742e6e65742f6d61782f313630302f312a7a6d467033626d447137623642766c6f38496e6561672e706e67)
+
+(3) store 接受到这个 action 后，将当前的状态树和这个 action 传给根 reducer。
+![redux-img-19](https://camo.githubusercontent.com/da19548a8e70a461d0acb9478b96eda6c9dab1a6/68747470733a2f2f64323632696c623531686c7478302e636c6f756466726f6e742e6e65742f6d61782f313630302f312a7a7273536f41417966347071544d48694136503857772e706e67)
+
+(4) 根 reducer 将整个状态树切分成一个个小块，然后将某一个小块分发给知道怎么处理这部分内容的子 reducer。
+![redux-img-20](https://camo.githubusercontent.com/0c83b852e5b369952f7c309dc1e79ab9460517f4/68747470733a2f2f64323632696c623531686c7478302e636c6f756466726f6e742e6e65742f6d61782f313630302f312a2d535f64596536426f514267775352704637487269772e706e67)
+
+(5) 子 reducer 将传入的一小块状态树进行拷贝，然后在副本上进行修改，并最终将修改后的副本返回根 reducer。
+![redux-img-21](https://camo.githubusercontent.com/5475fd281a7dfd8f542afedb8d5a61f2790fff99/68747470733a2f2f64323632696c623531686c7478302e636c6f756466726f6e742e6e65742f6d61782f313630302f312a5f522d72474e664b7232587532466c584e5a4e504a672e706e67)
+
+(6) 当所有的子 reducer 返回他们修改的副本之后，根 reducer 将这些部分再次组合起来形成一颗新的状态树。然后根 reducer 将这个新的状态树交还给 store，store 再把自己的状态置为这个最新的状态树。
+![redux-img-22](https://camo.githubusercontent.com/113b778ffbfef33d3f0e47cd339085c897dc9cb3/68747470733a2f2f64323632696c623531686c7478302e636c6f756466726f6e742e6e65742f6d61782f313630302f312a62554d656b4938516c45664678534243755675496b772e706e67)
+
+(7) store 告诉视图层绑定：「状态更新啦」
+![redux-img-23](https://camo.githubusercontent.com/5cc81069fe6420579f965f76c2d8090dbd41b49b/68747470733a2f2f64323632696c623531686c7478302e636c6f756466726f6e742e6e65742f6d61782f313630302f312a7836764276556c464a6b744a71747935366a723051512e706e67)
+
+(8) 视图层绑定让 store 把更新的状态传过来
+![redux-img-24](https://camo.githubusercontent.com/2aba7ead74724ca04cd042dea40e94841a86de11/68747470733a2f2f64323632696c623531686c7478302e636c6f756466726f6e742e6e65742f6d61782f313630302f312a714761747a6e563451756a75784765343959665835412e706e67)
+
+(9) 视图层绑定触发了一个重新渲染的操作（re-render）
+![redux-img-25](https://camo.githubusercontent.com/2487145c781995bd8f204a861f211727c5aa908f/68747470733a2f2f64323632696c623531686c7478302e636c6f756466726f6e742e6e65742f6d61782f313630302f312a4a65326d6f77386d6a594c6e6758726547476c4945672e706e67)
+
+这就是我所理解的 Redux，希望对你有所帮助。
+
+更多资源
+[Redux 官方文档](https://redux.js.org/)
+[Redux 官方文档中文版](http://cn.redux.js.org/)
+[The Evolution of Flux Frameworks](https://medium.com/@dan_abramov/the-evolution-of-flux-frameworks-6c16ad26bb31)
+[Smart and Dumb Components](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0)
+[The upsides of using Redux](https://stackoverflow.com/questions/32461229/why-use-redux-over-facebook-flux/32920459#32920459)
+[The downsides of using Redux](https://stackoverflow.com/questions/32021763/what-could-be-the-downsides-of-using-redux-instead-of-flux/32916602#32916602)
+[如何评价数据流管理架构 Redux?](https://www.zhihu.com/question/38591713/answer/77634014)
+
+[原文地址](https://github.com/jasonslyvia/a-cartoon-intro-to-redux-cn)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
