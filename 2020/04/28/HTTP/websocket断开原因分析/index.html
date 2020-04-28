@@ -1,0 +1,600 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>websocket断开原因分析 - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,原文地址
+把错误打印出来WebSocket断开的原因有很多，最好在WebSocket断开时，将错误打印出来。
+
+ws.onclose = function (e) {
+  console.log(&amp;,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://zhanghao-web.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">websocket断开原因分析</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/HTTP"><b>「
+                    </b>HTTP<b> 」</b></a>
+                
+                April 28, 2020
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2020/04/28/HTTP/websocket%E6%96%AD%E5%BC%80%E5%8E%9F%E5%9B%A0%E5%88%86%E6%9E%90/" title="websocket断开原因分析" class="">websocket断开原因分析</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    4.7k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    4 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/websocket/" rel="tag">websocket</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <p><a href="https://segmentfault.com/a/1190000014582485" target="_blank" rel="noopener">原文地址</a></p>
+<h1 id="把错误打印出来"><a href="#把错误打印出来" class="headerlink" title="把错误打印出来"></a>把错误打印出来</h1><p>WebSocket断开的原因有很多，最好在WebSocket断开时，将错误打印出来。</p>
+<p><img src="https://segmentfault.com/img/remote/1460000014582490?w=812&amp;h=408" alt="demo"></p>
+<pre><code class="js">ws.onclose = function (e) {
+  console.log(&#39;websocket 断开: &#39; + e.code + &#39; &#39; + e.reason + &#39; &#39; + e.wasClean)
+  console.log(e)
+}
+</code></pre>
+<p>如果你想自己玩玩<code>WebSocket</code>, 但是你又不想自己部署一个<code>WebSocket</code>服务器，你可以使用<code>ws = new WebSocket(&#39;wss://echo.websocket.org/&#39;)</code>, 你向echo.websocket.org发送消息，它会回复你同样的消息。</p>
+<h1 id="重要信息错误状态码"><a href="#重要信息错误状态码" class="headerlink" title="重要信息错误状态码"></a>重要信息错误状态码</h1><p><code>WebSocket</code>断开时，会触发<code>CloseEvent</code>, <code>CloseEvent</code>会在连接关闭时发送给使用 <code>WebSockets</code> 的客户端. 它在 <code>WebSocket</code> 对象的 onclose 事件监听器中使用。<code>CloseEvent</code>的code字段表示了<code>WebSocket</code>断开的原因。可以从该字段中分析断开的原因。</p>
+<p><code>CloseEvent</code>有三个字段需要注意, 通过分析这三个字段，一般就可以找到断开原因</p>
+<blockquote>
+<ul>
+<li><code>CloseEvent.code</code>: code是错误码，是整数类型</li>
+<li><code>CloseEvent.reason</code>: reason是断开原因，是字符串</li>
+<li><code>CloseEvent.wasClean</code>: wasClean表示是否正常断开，是布尔值。一般异常断开时，该值为false</li>
+</ul>
+</blockquote>
+<p><img src="https://segmentfault.com/img/remote/1460000014074898?w=1768&amp;h=732" alt="closed-code"></p>
+<h1 id="关闭状态码表"><a href="#关闭状态码表" class="headerlink" title="关闭状态码表"></a>关闭状态码表</h1><p>一般来说<code>1006</code>的错误码出现的情况比较常见，该错误码一般出现在断网时。</p>
+<table>
+<thead>
+<tr>
+<th>状态码</th>
+<th style="text-align:right">名称</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0–999</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">保留段, 未使用</td>
+</tr>
+<tr>
+<td>1000</td>
+<td style="text-align:right">CLOSE_NORMAL</td>
+<td style="text-align:center">正常关闭; 无论为何目的而创建, 该链接都已成功完成任务.</td>
+</tr>
+<tr>
+<td>1001</td>
+<td style="text-align:right">CLOSE_GOING_AWAY</td>
+<td style="text-align:center">终端离开, 可能因为服务端错误, 也可能因为浏览器正从打开连接的页面跳转离开.</td>
+</tr>
+<tr>
+<td>1002</td>
+<td style="text-align:right">CLOSE_PROTOCOL_ERROR</td>
+<td style="text-align:center">由于协议错误而中断连接.</td>
+</tr>
+<tr>
+<td>1003</td>
+<td style="text-align:right">CLOSE_UNSUPPORTED</td>
+<td style="text-align:center">由于接收到不允许的数据类型而断开连接 (如仅接收文本数据的终端接收到了二进制数据).</td>
+</tr>
+<tr>
+<td>1004</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">保留. 其意义可能会在未来定义.</td>
+</tr>
+<tr>
+<td>1005</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">CLOSE_NO_STATUS</td>
+</tr>
+<tr>
+<td>1006</td>
+<td style="text-align:right">CLOSE_ABNORMAL</td>
+<td style="text-align:center">保留. 用于期望收到状态码时连接非正常关闭 (也就是说, 没有发送关闭帧).</td>
+</tr>
+<tr>
+<td>1007</td>
+<td style="text-align:right">Unsupported Data</td>
+<td style="text-align:center">由于收到了格式不符的数据而断开连接 (如文本消息中包含了非 UTF-8 数据).</td>
+</tr>
+<tr>
+<td>1008</td>
+<td style="text-align:right">Policy Violation</td>
+<td style="text-align:center">由于收到不符合约定的数据而断开连接. 这是一个通用状态码, 用于不适合使用 1003 和 1009 状态码的场景.</td>
+</tr>
+<tr>
+<td>1009</td>
+<td style="text-align:right">CLOSE_TOO_LARGE</td>
+<td style="text-align:center">由于收到过大的数据帧而断开连接.</td>
+</tr>
+<tr>
+<td>1010</td>
+<td style="text-align:right">Missing Extension</td>
+<td style="text-align:center">客户端期望服务器商定一个或多个拓展, 但服务器没有处理, 因此客户端断开连接.</td>
+</tr>
+<tr>
+<td>1011</td>
+<td style="text-align:right">Internal Error</td>
+<td style="text-align:center">客户端由于遇到没有预料的情况阻止其完成请求, 因此服务端断开连接.</td>
+</tr>
+<tr>
+<td>1012</td>
+<td style="text-align:right">Service Restart</td>
+<td style="text-align:center">服务器由于重启而断开连接.</td>
+</tr>
+<tr>
+<td>1013</td>
+<td style="text-align:right">Try Again Later</td>
+<td style="text-align:center">服务器由于临时原因断开连接, 如服务器过载因此断开一部分客户端连接.</td>
+</tr>
+<tr>
+<td>1014</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">由 WebSocket标准保留以便未来使用.</td>
+</tr>
+<tr>
+<td>1015</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">TLS Handshake    保留. 表示连接由于无法完成 TLS 握手而关闭 (例如无法验证服务器证书).</td>
+</tr>
+<tr>
+<td>1016–1999</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">由 WebSocket标准保留以便未来使用.</td>
+</tr>
+<tr>
+<td>2000–2999</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">由 WebSocket拓展保留使用.</td>
+</tr>
+<tr>
+<td>3000–3999</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">可以由库或框架使用.? 不应由应用使用. 可以在 IANA 注册, 先到先得.</td>
+</tr>
+<tr>
+<td>4000–4999</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">可以由应用使用.</td>
+</tr>
+</tbody>
+</table>
+<h1 id="其他注意事项"><a href="#其他注意事项" class="headerlink" title="其他注意事项"></a>其他注意事项</h1><p>如果你的服务所在的域是HTTPS的，那么使用的WebSocket协议也必须是wss, 而不能是ws</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="https://res.cloudinary.com/tridiamond/image/upload/v1573019751/TriDiamond_logo_ui_xeublz.jpg" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd>
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">156 <p>Articles</p></a></li>
+                    <li><a href="/categories">25 <p>Categories</p></a></li>
+                    <li><a href="/tags">52 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#把错误打印出来"><span class="toc-number">1.</span> <span class="toc-text">把错误打印出来</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#重要信息错误状态码"><span class="toc-number">2.</span> <span class="toc-text">重要信息错误状态码</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#关闭状态码表"><span class="toc-number">3.</span> <span class="toc-text">关闭状态码表</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他注意事项"><span class="toc-number">4.</span> <span class="toc-text">其他注意事项</span></a></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.3" target="_blank" rel="noopener">v1.4.3</a></small>
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+
+
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>
