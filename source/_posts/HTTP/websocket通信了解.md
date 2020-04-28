@@ -1,7 +1,7 @@
 ---
 title: websocket通信了解
 date: 2018-11-04 23:15:50
-tags: "HTTP"
+tags: "websocket"
 categories: "HTTP"
 ---
 # websocket
