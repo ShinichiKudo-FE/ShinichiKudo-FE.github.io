@@ -1,0 +1,1188 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>吃透Vue项目开发实践(中) - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,原文地址
+概览
+问题
+本节内容主要围绕下列问题展开：
+
+
+如何编写原生组件，以及组件编写的思考与原则？
+组件怎么通信？有哪些方式？
+如何使用vuex 以及它的应用场景和原理
+如何使用过滤器，编写自己,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://zhanghao-web.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">吃透Vue项目开发实践(中)</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/Vue"><b>「
+                    </b>VUE<b> 」</b></a>
+                
+                May 09, 2020
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2020/05/09/Vue/%E5%90%83%E9%80%8FVue%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%AE%9E%E8%B7%B5-%E4%B8%AD/" title="吃透Vue项目开发实践(中)" class="">吃透Vue项目开发实践(中)</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    31k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    28 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Vue/" rel="tag">Vue</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <p><a href="https://juejin.im/post/5e15932ee51d4540f02fae27" target="_blank" rel="noopener">原文地址</a></p>
+<h1 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h1><p><img src="https://user-gold-cdn.xitu.io/2019/12/30/16f5676f7940d72a?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="概览"></p>
+<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><blockquote>
+<p>本节内容主要围绕下列问题展开：</p>
+</blockquote>
+<ul>
+<li>如何编写原生组件，以及组件编写的思考与原则？</li>
+<li>组件怎么通信？有哪些方式？</li>
+<li>如何使用vuex 以及它的应用场景和原理</li>
+<li>如何使用过滤器，编写自己的过滤器</li>
+<li>如何使用 Jest 测试你的代码？TDD 与 BDD 的比较</li>
+</ul>
+<h2 id="如何编写原生组件"><a href="#如何编写原生组件" class="headerlink" title="如何编写原生组件"></a>如何编写原生组件</h2><h3 id="组件编写原理"><a href="#组件编写原理" class="headerlink" title="组件编写原理"></a>组件编写原理</h3><p>vue 编写组件有两种方式，一种是单文件组件，另外一种函数组件。根据组件引入和创建还可以分为动态组件和异步组件。</p>
+<p>动态组件<code>keep-alive</code>使之缓存。异步组件原理和异步路由一样，使用<code>import()</code>实现异步加载也就是按需加载。</p>
+<p>所谓 vue 单文件组件，就是我们最常见的这种形式：</p>
+<pre><code class="js">&lt;template lang=&quot;pug&quot;&gt;    
+.demo      h1 hello
+&lt;/template&gt;
+&lt;script&gt;
+export default {
+  name: &#39;demo&#39;,
+  data() {
+    return {}
+  }
+}
+&lt;/script&gt;&lt;style lang=&quot;scss&quot; scoped&gt;
+.demo {
+  h1 {
+    color: #f00;
+  }
+}
+&lt;/style&gt;
+</code></pre>
+<p>这里的template 也可以使用 <code>render</code> 函数来编写</p>
+<pre><code class="js">Vue.component(&#39;demo&#39;, {
+    render: function (createElement) {
+      return createElement(
+        &#39;h1&#39;,      &#39;hello&#39;, 
+        // ...    
+      )  
+    }
+})
+</code></pre>
+<p>我们可以发现<code>render</code>函数写模版让我们更有编程的感觉。<br>对模版也可以编程，在vue 里面我们可以很容易联想到，很多地方都有两种写法，一种是 <code>template</code> ， 一种是<code>js</code>。<br>比如：对于路由，我们既可以使用<code>:to=&quot;&quot;</code>，又可以使用<code>$router.push</code>，这也许是 vue 用起来比较爽的原因。</p>
+<h4 id="函数式组件是什么呢？"><a href="#函数式组件是什么呢？" class="headerlink" title="函数式组件是什么呢？"></a>函数式组件是什么呢？</h4><p><code>functional</code>，这意味它<strong>无状态 (没有响应式数据)</strong>，也没有<strong>实例</strong> (没有 this 上下文)</p>
+<ul>
+<li>单文件形式 2.5.0+</li>
+</ul>
+<pre><code class="html">&lt;template functional&gt;&lt;/template&gt;
+</code></pre>
+<ul>
+<li>Render 函数形式</li>
+</ul>
+<pre><code class="js">Vue.component(&#39;my-component&#39;, {
+  functional: true,
+  render function (createElement, context) {
+    return createElement(&#39;div&#39;)    
+  }
+}
+</code></pre>
+<h4 id="为什么要使用函数组件呢？"><a href="#为什么要使用函数组件呢？" class="headerlink" title="为什么要使用函数组件呢？"></a>为什么要使用函数组件呢？</h4><p>最重要的原因就是<strong>函数组件开销低</strong>，也就是对性能有好处，在不需要响应式和this的情况下，写成函数式组件算是一种优化方案。</p>
+<p>组件写好了，需要将组件注册才能使用</p>
+<h3 id="组件注册的两种方式"><a href="#组件注册的两种方式" class="headerlink" title="组件注册的两种方式"></a>组件注册的两种方式</h3><p>组件注册分为两种，一种是全局注册，一种是局部注册</p>
+<p><code>局部注册</code>就是我们常用的 <code>Vue.component(&#39;s-button&#39;, { /* ... */ })</code>，比较简单不详细论述</p>
+<p><code>全局注册</code>上节已经提到，在<code>new Vue</code> 之前在 <code>mian.js</code>注册，这里还提到一种自动全局注册的方法 <code>**require.text**</code></p>
+<pre><code class="js">import Vue from &#39;vue&#39;
+import upperFirst from &#39;lodash/upperFirst&#39;
+import camelCase from &#39;lodash/camelCase&#39;
+const requireComponent = require.context(  &#39;./components&#39;,  
+// 是否查询其子目录
+  false,  /Base[A-Z]\w+\.(vue|js)$/
+)
+requireComponent.keys().forEach(fileName =&gt; {
+    // 获取组件配置 
+    const componentConfig = requireComponent(fileName)
+    const componentName = upperFirst( 
+         camelCase(      
+           // 获取和目录深度无关的文件名
+            fileName.split(&#39;/&#39;).pop().replace(/\.\w+$/, &#39;&#39;)
+          )
+    )  
+    // 全局注册组件
+    Vue.component(
+      componentName,
+      componentConfig.default || componentConfig  
+    )
+})
+</code></pre>
+<p>基本原理和全局注册一样，就是将 <code>components</code> 中的组件文件名，<code>appButton</code>变成 <code>AppButton</code> 作为注册的组件名。<br>把原来需要手动复制的，变成之间使用 <code>keys</code> 方法批量注册。</p>
+<h3 id="实践开发一个-button-组件"><a href="#实践开发一个-button-组件" class="headerlink" title="实践开发一个 button 组件"></a>实践开发一个 button 组件</h3><p>现在，我们以写一个简单的原生 <code>button</code>组件为例，探讨一下组件开发的一些关键点。 写之前，我们需要抓住 4 个核心的要点：</p>
+<ul>
+<li><strong>用哪个标签作为组件主体， <code>button</code> 还是 <code>div</code> 标签</strong></li>
+<li><strong>如何根据属性控制 <code>button</code> 组件的颜色 <code>color</code> 、形状 <code>type</code> 、大小 <code>size</code></strong></li>
+<li><strong>如何处理 <code>button</code> 组件的点击事件</strong></li>
+<li>*<em>如何去扩展 <code>button</code> 组件的内容</em></li>
+</ul>
+<blockquote>
+<p>这些思考点在其他原生组件开发和高阶组件封装里面也需要考虑到</p>
+</blockquote>
+<p>首先看第一个问题，大部分原生组件第一考虑的地方，就是主要标签用原生 <code>&lt;button&gt;&lt;/button&gt;</code>标签还是用 去模拟。</p>
+<blockquote>
+<p>为什么不考虑 <code>&lt;input&gt;</code>呢，因为 <code>&lt;button&gt;&lt;/button&gt;</code> 元素比 <code>&lt;input&gt;</code> 元素更容易添加内部元素。你可以在元素内添加HTML内容（像 、 甚至 <code>&lt;img&gt;</code>），以及 <code>::after</code> 和 <code>::before</code> 伪元素来实现复杂的效果，而 <code>&lt;input&gt;</code> 只支持文本内容。</p>
+</blockquote>
+<p>下面分析这两种写法的优劣</p>
+<p><strong>使用原生 <code>button</code> 标签的优势：</strong></p>
+<ol>
+<li>更好的标签语义化</li>
+<li>原生标签自带的 <code>buff</code> ，一些自带的键盘事件行为等</li>
+</ol>
+<blockquote>
+<p>为什么说更好的语义化呢？有人可能会说，可以使用 <code>role</code> 来增强 <code>div</code> 的语义化。确实可以，但是可能存在问题——有些爬虫并不会根据 <code>role</code> 来确定这个标签的含义。</p>
+</blockquote>
+<blockquote>
+<p>另外一点，对开发者来说， <code>&lt;button&gt;&lt;/button&gt;</code> 比 阅读起来更好。</p>
+</blockquote>
+<p><strong>使用 <code>div</code> 模拟的优势：</strong></p>
+<ol>
+<li>不需要关心 <code>button</code> 原生样式带来的一些干扰，少写一些覆盖原生 <code>css</code> 的代码，更干净纯粹。</li>
+<li>全部用 <code>div</code> ，不需要再去找原生标签、深入了解原生标签的一些兼容相关的诡异问题。</li>
+<li>可塑性更强，也就是拓展性和兼容性更好。这也是大多数组件都会选择使用 <code>div</code> 作为组件主体的原因。</li>
+</ol>
+<blockquote>
+<p>貌似 div 除了语义不是很好以外，其他方面都还行，但是具体用哪一种其实都可以，只要代码写的健壮适配性强，基本都没啥大问题。</p>
+</blockquote>
+<p>我们这里使用原生 <code>&lt;button&gt;&lt;/button&gt;</code>作为主要标签，使用 <code>s-xx</code>作为 <code>class</code>前缀</p>
+<blockquote>
+<p>为什么需要使用前缀，因为在有些时候，比如使用第三方组件，多个组件之间的 class 可能会产生冲突，前缀用来充当组件 css 的一个命名空间，不同组件之间不会干扰。</p>
+</blockquote>
+<pre><code class="html">&lt;template lang=&quot;pug&quot;&gt;   
+button.s-button(:class=&quot;xxx&quot; :style=&quot;xxx&quot; )
+     slot
+&lt;/template&gt;
+</code></pre>
+<p>然后，我们看第二个问题：</p>
+<p><strong>如何根据属性来控制 <code>button</code> 的样式</strong> 其实这个很简单，基本原理就是：</p>
+<ol>
+<li>使用 <code>props</code> 获取父组件传过来的属性。</li>
+<li>根据相关属性，生成不同的 <code>class</code>，使用 <code>:class=&quot;{xxx: true, xxx: &#39;s-button--&#39; + size}&quot;</code> 这种形式，在 <code>style</code> 里面对不同的 <code>s-button--xxx</code> 做出不同的处理。</li>
+</ol>
+<pre><code class="html">&lt;template lang=&quot;pug&quot;&gt;
+  button.s-button(:class=&quot;&quot; :style=&quot;&quot; )    slot
+&lt;/template&gt;
+&lt;script&gt;
+export default {  
+  name: &#39;s-button&#39;  
+  data: return {}  
+  props: {    
+    theme: {},    
+    size: {},    
+    type: {}  
+  }
+}
+&lt;/script&gt;  
+</code></pre>
+<p><strong>如何使用事件以及如何扩展组件</strong></p>
+<p>扩展组件的原理，主要就是使用 <code>props</code> 控制组件属性，模版中使用 <code>v-if/v-show</code> 增加组件功，比如增加内部 ICON，使用 <code>:style class</code>控制组件样式。</p>
+<p><img src="https://user-gold-cdn.xitu.io/2020/1/13/16f9d9414f682625?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="type"> </p>
+<p>还要注意的是我们还要控制原生 <code>type</code> 类型，原生默认是 <code>submit</code>，这里我们默认设置为 <code>button</code></p>
+<pre><code class="html">&lt;template lang=&quot;pug&quot;&gt; 
+button.s-button(:class=&quot;&quot; :style=&quot;&quot; :type=&quot;nativeType&quot;)   
+slot   
+s-icon(v-if=&quot;icon &amp;&amp; $slots.icon&quot; name=&quot;loading&quot;)
+&lt;/template&gt;
+&lt;script&gt;
+export default {  
+  name: &#39;s-button&#39;  
+  data: return {}  
+  props: {    
+    nativeType: {      
+      type: String,      
+      default: &#39;button&#39;    
+    },    
+    theme: {},    
+    size: {},    
+    type: {}  
+  }
+}
+&lt;/script&gt;
+</code></pre>
+<p>控制事件，直接使用 <code>@click=&quot;&quot;</code> + <code>emit</code></p>
+<pre><code class="html">&lt;template lang=&quot;pug&quot;&gt;  
+button.s-button(@click=&quot;handleClick&quot;)
+&lt;/template&gt;
+&lt;script&gt;
+export default {  
+  methods: {    
+    handleClick (evt) {      
+      this.$emit(&#39;click&#39;, evt)    
+      }  
+    }
+}
+&lt;/script&gt;
+</code></pre>
+<h4 id="最后总结下："><a href="#最后总结下：" class="headerlink" title="最后总结下："></a>最后总结下：</h4><blockquote>
+<p>一般就直接使用 <code>template</code>单文件编写组件，需要增强 js编写能力可以使用 <code>render()</code><br>常规编写组件需要考虑：1. 使用什么标签 2. 如何控制各种属性的表现 3. 如何增强组件扩展性 4. 如何处理组件事件</p>
+</blockquote>
+<blockquote>
+<p>对响应式 <code>this</code>要求不高，使用函数 <code>functional</code>组件优化性能。</p>
+</blockquote>
+<blockquote>
+<p>基础组件通常全局注册，业务组件通常局部注册</p>
+</blockquote>
+<blockquote>
+<p>使用 <code>keys()</code>遍历文件来实现自动批量全局注册</p>
+</blockquote>
+<blockquote>
+<p>使用 <code>import()</code> 异步加载组件提升减少首次加载开销，使用 <code>keep-alive + is</code>缓存组件减少二次加载开销</p>
+</blockquote>
+<h2 id="如何使用-vuex-以及它的应用"><a href="#如何使用-vuex-以及它的应用" class="headerlink" title="如何使用 vuex 以及它的应用"></a>如何使用 vuex 以及它的应用</h2><h3 id="由来以及原理"><a href="#由来以及原理" class="headerlink" title="由来以及原理"></a>由来以及原理</h3><p>我们知道组件中通信有以下几种方式：</p>
+<h4 id="1-父组件通过-props-传递给子组件，不详细论述"><a href="#1-父组件通过-props-传递给子组件，不详细论述" class="headerlink" title="1. 父组件通过 props 传递给子组件，不详细论述"></a>1. 父组件通过 <code>props</code> 传递给子组件，不详细论述</h4><h4 id="2-子组件通过-emit-事件传递数据给父组件-父组件通过-on-监听，也就是一个典型的-订阅-发布模型"><a href="#2-子组件通过-emit-事件传递数据给父组件-父组件通过-on-监听，也就是一个典型的-订阅-发布模型" class="headerlink" title="2. 子组件通过 emit 事件传递数据给父组件,父组件通过 on 监听，也就是一个典型的 订阅-发布模型"></a>2. 子组件通过 <code>emit</code> 事件传递数据给父组件,父组件通过 <code>on</code> 监听，也就是一个典型的 <strong>订阅-发布</strong>模型</h4><blockquote>
+<p><code>@</code> 为 <code>v-on:</code> 的简写</p>
+</blockquote>
+<pre><code class="html">&lt;template lang=&quot;pug&quot;&gt;
+&lt;!--子组件--&gt;    
+div.component-1
+&lt;template&gt;
+&lt;script&gt;
+export default {  
+  mounted() {    
+    this.$emit(&#39;eventName&#39;, params)  
+    }}
+&lt;/script&gt;
+</code></pre>
+<pre><code class="html">&lt;!-- 父组件--&gt;
+&lt;template lang=&quot;pug&quot;&gt;    
+Component-1(@eventName=&quot;handleEventName&quot;)
+&lt;template&gt;
+&lt;script&gt;
+export default {  
+  methods: {    
+    handleEventName (params) {      
+      console.log(params)    
+    }  
+}
+&lt;/script&gt;
+</code></pre>
+<h4 id="3-集中式通信事件，主要用于简单的非父子组件通信"><a href="#3-集中式通信事件，主要用于简单的非父子组件通信" class="headerlink" title="3. 集中式通信事件，主要用于简单的非父子组件通信"></a>3. 集中式通信事件，主要用于简单的非父子组件通信</h4><p>原理很简单其实就是在 <code>emit</code> 与 <code>on</code> 的基础上加了一个事件中转站 “bus”。我觉得更像是现实生活中的集线器。</p>
+<p>普遍的实现原理大概是这样的 “bus” 为 <code>vue</code> 的一个实例，实例里面可以调用 <code>emit</code>, <code>off</code>, <code>on</code> 这些方法。</p>
+<pre><code class="js">var eventHub = new Vue()
+// 发布
+eventHub.$emit(&#39;add&#39;, params)
+// 订阅/响应
+eventHub.$on(&#39;add&#39;, params)
+// 销毁
+eventHub.$off(&#39;add&#39;, params)
+</code></pre>
+<p>但是稍微复杂点的情况，使用这种方式就太繁锁了。还是使用 vuex 比较好。</p>
+<p>从某种意义而言，我觉得 vuex 不仅仅是它的一种进化版。</p>
+<ol>
+<li>使用 <code>store</code> 作为 <strong>状态管理</strong> 的仓库，并且引入了 <strong>状态</strong> 这个概念</li>
+<li>它的模型完全不一样了， <code>bus</code> 模型感觉像一个电话中转站<br><img src="https://user-gold-cdn.xitu.io/2020/1/13/16f9ddf76fc5b0fa?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="中转站"></li>
+</ol>
+<p>而 vuex 的模型更像是集中式的代码仓库。</p>
+<blockquote>
+<p>与 <code>git</code> 类似，它不能直接修改代码，需要参与者提交 <code>commit</code>，提交完的 <code>commit</code>修改仓库，仓库更新，参与者 <code>fetch</code> 代码更新自己的代码。不同的是代码仓库需要合并，而 <code>vuex</code> 是直接覆盖之前的状态。</p>
+</blockquote>
+<p><img src="https://user-gold-cdn.xitu.io/2020/1/10/16f8ede3d74ab245?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="state"></p>
+<h3 id="管理-vuex"><a href="#管理-vuex" class="headerlink" title="管理 vuex"></a>管理 vuex</h3><h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><blockquote>
+<p>“store”基本上就是一个容器，它包含着你的应用中大部分的状态 (<code>state</code>)。Vuex 和单纯的全局对象有以下两点不同</p>
+</blockquote>
+<ul>
+<li><strong>响应式</strong> （改变属性后，触发组件中的状态改变，触发 <code>dom</code> ）</li>
+<li><strong>不能直接改变状态</strong> （唯一途径是提交 <code>mutation</code> )</li>
+</ul>
+<p><img src="https://user-gold-cdn.xitu.io/2020/1/13/16f9deb7be3845f5?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="store"></p>
+<p><strong>基本用法</strong>：就是在 <code>state</code> 里面定义各种属性，页面或组件组件中，直接使用 <code>$store.state</code>或者 <code>$store.getters</code>来使用。如果想要改变状态 <code>state</code>呢，就 <code>commit</code> 一个 <code>mutation</code></p>
+<p>但是假如我想提交一连串动作呢？可以定义一个 <code>action</code>，然后使用 <code>$store.dispatch</code> 执行这个 <code>action</code></p>
+<p>使用 <code>action</code> 不仅能省略不少代码，而且关键是 <code>action</code> 中可以使用异步相关函数，还可以直接返回一个 <code>promise</code></p>
+<p>而为什么不直接到 <code>mutation</code>中写异步呢？ 因为 <code>mutation</code> 一定是个同步，它是唯一能改变 state 的，一旦提交了 <code>mutation</code>， <code>mutation</code> 必须给定一个明确结果。否则会阻塞状态的变化。</p>
+<p>下面给出常用 vuex 的使用方式</p>
+<h4 id="新建-Store"><a href="#新建-Store" class="headerlink" title="新建 Store"></a>新建 Store</h4><p>新建一个 <code>store</code>并将其他各个功能化分文件管理</p>
+<pre><code class="js">import Vue from &#39;vue&#39;
+import Vuex from &#39;vuex&#39;
+import state from &#39;./states&#39;
+import getters from &#39;./getters&#39;
+import mutations from &#39;./mutations&#39;
+import actions from &#39;./actions&#39;
+import user from &#39;./modules/user&#39;
+Vue.use(Vuex)
+export default new Vuex.Store({    
+  //在非生产环境下，使用严格模式    
+  strict: process.env.NODE_ENV !== &#39;production&#39;,     
+  state,    
+  getters,    
+  mutations,    
+  actions,    
+  modules: {        
+    user    
+  }
+})
+</code></pre>
+<p><strong>操作状态两种方式</strong></p>
+<ol>
+<li>获取状态</li>
+</ol>
+<pre><code class="js">console.log(store.state.count)
+</code></pre>
+<ol start="2">
+<li>改变状态</li>
+</ol>
+<pre><code class="js">store.commit(&#39;xxx&#39;)
+</code></pre>
+<h4 id="管理状态-states"><a href="#管理状态-states" class="headerlink" title="管理状态 states"></a>管理状态 states</h4><blockquote>
+<p>单一状态树, 这也意味着，每个应用将仅仅包含一个 store 实例。单一状态树让我们能够直接地定位任一特定的状态片段，在调试的过程中也能轻易地取得整个当前应用状态的快照。</p>
+</blockquote>
+<pre><code class="js">// states 文件
+export default {    
+  count: 0
+}
+</code></pre>
+<p>计算属性中返回，每当 <code>state</code> 中属性变化的时候, 其他组件都会重新求取计算属性，并且触发更新相关联的 DOM</p>
+<pre><code class="js">const Counter = {    
+  template: &#39;&lt;div&gt;{{count}}&lt;div&gt;&#39;,    
+  computed: {        
+    count() {            
+      return store.state.count        
+    }    
+  }
+}
+</code></pre>
+<h4 id="管理取值器-getters"><a href="#管理取值器-getters" class="headerlink" title="管理取值器 getters"></a>管理取值器 getters</h4><blockquote>
+<p><code>getters</code> 相当于 <code>store</code> 的计算属性。不需要每次都要在计算属性中过滤一下，也是一种代码复用。 我们在 <code>getters</code>文件中管理</p>
+</blockquote>
+<pre><code class="js">export default {    
+  count: (state) =&gt; Math.floor(state.count)
+}
+</code></pre>
+<h4 id="管理-mutations"><a href="#管理-mutations" class="headerlink" title="管理 mutations"></a>管理 mutations</h4><blockquote>
+<p>更改 Vuex 的 store 中的状态的唯一方法是提交 mutation。Vuex 中的 mutation 非常类似于事件：每个 mutation 都有一个字符串的 事件类型 (type) 和 一个 回调函数 (handler)。这个回调函数就是我们实际进行状态更改的地方</p>
+</blockquote>
+<p>使用 types 大写用于调试，在 <code>mutationTypes</code> 文件中 <code>export const ROUTE_ADD = &#39;ROUTE_ADD&#39;</code></p>
+<p>然后在 <code>mutations</code> 文件中管理</p>
+<pre><code class="js">import * as MutationTypes from &#39;./mutationTypes&#39;
+export default {    
+  [MutationTypes.ADDONE]: function(state) {
+    state.count = state.count + 1    
+  },    
+  //...
+}
+</code></pre>
+<pre><code class="js">this.$store.commit(MutationTypes.ADDONE)
+</code></pre>
+<h4 id="管理-actions"><a href="#管理-actions" class="headerlink" title="管理 actions"></a>管理 actions</h4><p>和 <code>mutations</code> 类似， <code>actions</code> 对应的是 <code>dispatch</code>，不同的是 <code>action</code>可以使用异步函数，有种更高一级的封装。</p>
+<pre><code class="js">// 简化
+actions: {  
+  increment ({ commit }) {    
+    setTimeout(() =&gt; {        
+      commit(MutationTypes.ADDONE)    }
+    , 1000)  
+  }
+}
+// 触发
+store.dispatch(&#39;increment&#39;)
+</code></pre>
+<blockquote>
+<p>上述用法都可以使用 <strong>载荷</strong>的形式，引入也可以使用 <code>mapXxxx</code> 进行批量引入，这里不详细论述，有兴趣可以查看官网。</p>
+</blockquote>
+<h4 id="分模块管理状态"><a href="#分模块管理状态" class="headerlink" title="分模块管理状态"></a>分模块管理状态</h4><p>状态太多太杂，分模块管理是一个良好的代码组织方式。</p>
+<pre><code class="js">import count from &#39;./modules/count&#39;
+export default new Vuex.Store({    
+  modules: {        
+    count    
+  }
+})
+</code></pre>
+<p>每一个模块都可以有独立的相关属性</p>
+<pre><code class="js">import * as ActionTypes from &#39;./../actionTypes&#39;
+export default {    
+  state: {        
+    count: 0    
+  },    
+  mutations: {        
+    ADD_ONE: function(state) {             
+      state.count = state.count + 1        
+      }    
+  },    
+  actions: {        
+    [ActionTypes.INIT_INTENT_ORDER]: function({ commit }) {            
+      commit(&#39;ADD_ONE&#39;)        
+    }    
+  },    
+  getters: {        
+    pageBackToLoan: (state) =&gt; Math.floor(state.count)    
+  }
+}
+</code></pre>
+<p><img src="https://user-gold-cdn.xitu.io/2020/1/13/16f9e11d627d9b4d?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="如图所示"></p>
+<h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><p><code>vuex</code> 主要有几个应用场景，一个是用于 <strong>组件通信</strong>和 <strong>状态共享</strong>，一个是用于 <strong>数据缓存</strong>，还有就是用于 <strong>减少请求</strong>。这些场景归根节点都是对于 <strong>缓存</strong>和 <strong>共享</strong>来说的。</p>
+<h4 id="组件通信"><a href="#组件通信" class="headerlink" title="组件通信"></a>组件通信</h4><p>首先，状态统一管理在仓库，就实现了组件通信的可能性。</p>
+<p>当一个组件通过 <code>commit</code> 提交 <code>mutation</code> 就改了 <code>state</code>，其他组件就可以通过 <code>store.state</code>获取最新的 <code>state</code>，这样一来就相当于 <strong>更新的值通过 <code>store</code> 传递给了其他组件</strong>，不仅实现了一对一的通信，还实现了一对多的通信。</p>
+<h4 id="状态共享"><a href="#状态共享" class="headerlink" title="状态共享"></a>状态共享</h4><p>我们经常使用的一个场景就是 <strong>权限管理</strong>。</p>
+<p>写权限管理时候，首次进入页面就要将权限全部拿到，然后需要分发给各个页面使用，来控制各个路由、按钮的权限。</p>
+<pre><code class="js">/** * 
+ * 判断用户有没有权限访问页面 
+ */
+function hasPermission(routeItem, menus) {  
+  return menus.some(menuItem =&gt; {    
+    return menuItem.name === routeItem.name  
+  })
+}
+/** * 
+ * 递归过滤异步路由表，返回符合用户角色权限的路由表 * 
+ * @param {*} routes 路由表 * 
+ * @param {*} menus 菜单信息 
+ * */
+function filterRoutes(routes, menus) {  
+  return routes.filter(routeItem =&gt; {    
+    if (routeItem.hidden) {      
+      return true    
+    } else if (hasPermission(routeItem, menus)) {      
+      const menuItem = menus.find(item =&gt; item.name === routeItem.name)      
+      if (menuItem &amp;&amp; menuItem.children &amp;&amp; menuItem.children.length &gt; 0) {        
+        routeItem.children = filterRoutes(routeItem.children, menuItem.children)        
+        if (!routeItem.children.length) return false      
+        }      
+        return true    
+        } else {      
+          return false    
+          }  
+      })
+  }
+  const permission = {  
+    state: {    
+      routers: constantRouterMap,    
+      addRouters: [],    
+      roles: [],    
+      user_name: &#39;&#39;,    
+      avatar_url: &#39;&#39;,    
+      onlyEditor: false,    
+      menus: null,    
+      personal: true,    
+      teamList: []  
+    },  
+    mutations: {}
+  }
+  export default permission
+</code></pre>
+<p>而且权限还可以被更改，更改后的权限直接分发到其他页面组件中。这个场景要是不使用 <code>vuex</code> ，代码将会比较复杂。</p>
+<h4 id="数据缓存"><a href="#数据缓存" class="headerlink" title="数据缓存"></a>数据缓存</h4><p><code>store</code> 是一个仓库，它从创建开始就一直存在，只有页面 <code>Vuex.store</code> 实例被销毁，state 才会被清空。具体表现就是刷新页面。</p>
+<p>这个数据缓存适用于：页面加载后缓存数据，刷新页面请求数据的场景。在一般 <code>Hybrid</code>中，一般不存在刷新页面这个按钮，所以使用 vuex 缓存数据可以应对大多数场景。</p>
+<pre><code class="js">export default {    
+  state: {        
+    // 缓存修改手机号需要的信息        
+    changePhoneInfo: {            
+      nameUser: &#39;&#39;,            
+      email: &#39;&#39;,            
+      phone: &#39;&#39;        
+    },    
+  }
+}
+</code></pre>
+<p>如果需要持久化缓存，结合浏览器或 APP 缓存更佳。</p>
+<pre><code class="js">export default {    
+  // 登陆成功后，vuex 写入token，并写入app缓存，存储持久化    
+  [ActionTypes.LOGIN_SUCCESS]: function(store, token) {        
+    store.commit(MutationTypes.SET_TOKEN, token)        
+    setStorage(&#39;token&#39;, token)        
+    router.replace({ name: &#39;Home&#39;, params: { source: &#39;login&#39; } })    
+  }
+}
+</code></pre>
+<h4 id="减少请求-数据缓存的变种"><a href="#减少请求-数据缓存的变种" class="headerlink" title="减少请求(数据缓存的变种)"></a>减少请求(数据缓存的变种)</h4><p>在写后台管理平台时候，经常会有 <code>list</code> 选型组件，里面数据从服务端拿的数据。如果我们把这个 <code>list</code> 数据存储起来，下次再次使用，直接从 <code>store</code> 里面拿，这样我们就不用再去请求数据了。相当于减少了一次请求。</p>
+<h2 id="如何使用过滤器，编写自己的过滤器"><a href="#如何使用过滤器，编写自己的过滤器" class="headerlink" title="如何使用过滤器，编写自己的过滤器"></a>如何使用过滤器，编写自己的过滤器</h2><h3 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h3><p>假设我现在有个需求，需要将性别0、1、2，分别转换成男、女、不确定这三个汉字展示。页面中多处地方需要使用。</p>
+<pre><code class="html">&lt;template lang=&quot;pug&quot;&gt;  
+.user-info    
+.gender      
+  label(for=&quot;性别&quot;) 性别      
+  span {{gender}}
+&lt;/template&gt;
+</code></pre>
+<p>完成这个需求，我们知道有 <strong>4</strong> 种方式：</p>
+<ol>
+<li>使用 computed 方法</li>
+<li>使用 methods 方法</li>
+<li>使用 utils 工具类</li>
+<li>使用 filters</li>
+</ol>
+<p><strong>应该选择哪种方式呢？</strong></p>
+<p>我从下面三个方面来论述这个问题</p>
+<p><strong>1. 可实现性</strong></p>
+<ul>
+<li>使用 <code>computed</code> 实现成功，我们知道 <code>computed</code> 不是一个函数是无法传参的，这里有个技巧， <code>return</code> 一个函数接受传过来的参数</li>
+</ul>
+<pre><code class="js">    // ...  
+    computed: {    
+      convertIdToName() {      
+        return function(value) {        
+          const item = list.find(function(item) {          
+              return item.id === value        
+            })        
+            return item.name      
+          }    
+        }  
+    }
+</code></pre>
+<p><img src="https://user-gold-cdn.xitu.io/2020/1/13/16f9eb7a20ecdcdf?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="如图所示"></p>
+<ul>
+<li>使用 <code>methods</code> 实现成功，这里直接可以传参数，一种常规的写法。</li>
+</ul>
+<blockquote>
+<p>注意 <code>methods</code>、 <code>computed</code>和 <code>data</code> 相互之前是不能同名的</p>
+</blockquote>
+<pre><code class="js">  // ...  
+  methods: {    
+    convertIdToName(value) {      
+      const item = list.find(function(item) {        
+        return item.id === value      
+      })      
+      return item.name    
+    }  
+  }
+</code></pre>
+<ul>
+<li>使用 <code>utils</code> 和 <code>methods</code> 差不多基本上也可以实现</li>
+<li>使用 <code>filter</code> 也是实现的，有个可以和 <code>methods</code> 、 <code>computed</code> 同名哦</li>
+</ul>
+<pre><code class="js">    filters: {    
+      console.log(this.render)    
+      convertIdToName(value) {      
+        const item = list.find(function(item) {        
+          return item.id === value      
+        })      
+        return item.name    
+      }  
+    },
+</code></pre>
+<p><strong>总的来说他们全部都可以实现这个需求</strong></p>
+<p><strong>2. 局限性</strong></p>
+<ul>
+<li><code>computed</code> 、 <code>methods</code> 和 <code>data</code> 三者互不同名，他们没办法被其他组件使用，除非通过 <code>mixins</code></li>
+<li><code>filters</code> 与 <code>utils</code> 无法访问 <code>this</code> ，也就是于响应式绝缘。但是通过定义全局 <code>filters</code> ，可以其他地方使用，另外还可以直接加载第三方 <code>filter</code> 和 <code>utils</code></li>
+</ul>
+<p><strong>3. 总结比较</strong></p>
+<p><code>filters</code> 与 <code>utils</code> 归属一对，他们既是脱离了 <code>this</code>，获得了自由，又是被 <code>this</code> 弃之门外。相反 <code>methods</code> 与 <code>computed</code> 与 <code>this</code> 紧紧站在一起，但又是无法获得自由。</p>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><h4 id="编写一个简单的千分位过滤器"><a href="#编写一个简单的千分位过滤器" class="headerlink" title="编写一个简单的千分位过滤器"></a>编写一个简单的千分位过滤器</h4><pre><code class="js">export const thousandBitSeparator = (value) =&gt; {  
+  return 
+  value &amp;&amp; (value.toString().indexOf(&#39;.&#39;) !== -1 ? value.toString().replace(/(\d)(?=(\d{3})+\.)/g, function($0, $1) {      
+    return $1 + &#39;,&#39;;    
+  }) : 
+  value.toString().replace(/(\d)(?=(\d{3})+$)/g, function($0, $1) {      
+    return $1 + &#39;,&#39;;    
+  })
+  );
+}
+</code></pre>
+<h4 id="使用-vue-filter-插件"><a href="#使用-vue-filter-插件" class="headerlink" title="使用 vue-filter 插件"></a>使用 vue-filter 插件</h4><p>两款插件</p>
+<p><a href="https://www.npmjs.com/package/vue-filter" target="_blank" rel="noopener">vue-filter</a> 使用 <code>use</code> 引入</p>
+<p><a href="https://www.npmjs.com/package/vue-filters" target="_blank" rel="noopener">vue2-filters</a> 使用 <code>mixins</code> 引入</p>
+<blockquote>
+<p>有需要的话，我一般就用第二个了，大多数都是自己写一下小过滤器</p>
+</blockquote>
+<p>自定义过滤器之后，直接全局自动注册，其他地方都可以使用</p>
+<h4 id="注册全局过滤器"><a href="#注册全局过滤器" class="headerlink" title="注册全局过滤器"></a>注册全局过滤器</h4><p>遍历过滤属性值，一次性全部注册</p>
+<pre><code class="js">for (const key in filters) {    
+  Vue.filter(key, filters[key])
+}
+</code></pre>
+<h2 id="如何使用-Jest-测试你的代码"><a href="#如何使用-Jest-测试你的代码" class="headerlink" title="如何使用 Jest 测试你的代码"></a>如何使用 Jest 测试你的代码</h2><h3 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a>原理</h3><p>我们思考一下测试 js 代码需要哪些东西</p>
+<ol>
+<li>浏览器运行环境</li>
+<li>断言库</li>
+</ol>
+<p>如果是测试 vue 代码呢？ 那得再加一个 vue 测试容器</p>
+<h3 id="Jest-Vue"><a href="#Jest-Vue" class="headerlink" title="Jest + Vue"></a>Jest + Vue</h3><h4 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h4><pre><code class="json">{    
+  &quot;@vue/cli-plugin-unit-jest&quot;: &quot;^4.0.5&quot;,    
+  &quot;@vue/test-utils&quot;: &quot;1.0.0-beta.29&quot;,    
+  &quot;jest&quot;: &quot;^24.9.0&quot;,    
+  // ...
+}
+</code></pre>
+<h3 id="项目配置"><a href="#项目配置" class="headerlink" title="项目配置"></a>项目配置</h3><pre><code class="js">// For a detailed explanation regarding each configuration property, visit:// https://jestjs.io/docs/en/configuration.html
+module.exports = {  
+  preset: &#39;@vue/cli-plugin-unit-jest&#39;,  
+  automock: false, &quot;/private/var/folders/10/bb2hb93j34999j9cqr587ts80000gn/T/jest_dx&quot;,  
+  clearMocks: true,  
+  // collectCoverageFrom: null,  
+  coverageDirectory: &#39;tests/coverage&#39;  
+  //...
+}
+</code></pre>
+<h3 id="单元测试"><a href="#单元测试" class="headerlink" title="单元测试"></a>单元测试</h3><h4 id="测试-utils-工具类"><a href="#测试-utils-工具类" class="headerlink" title="测试 utils 工具类"></a>测试 utils 工具类</h4><blockquote>
+<p>对我们之前写的一个性别名称转换工具进行测试</p>
+</blockquote>
+<pre><code class="js">import { convertIdToName } from &#39;./convertIdToName&#39;
+describe(&#39;测试convertIdToName方法&#39;, () =&gt; {  
+  const list = [    
+    { id: 0, name: &#39;男&#39; },    
+    { id: 1, name: &#39;女&#39; },    
+    { id: 2, name: &#39;未知&#39; }  
+  ]  
+  it(&#39;测试正常输入&#39;, () =&gt; {    
+    const usage = list    
+    usage.forEach((item) =&gt; {      
+      expect(convertIdToName(item.id, list)).toBe(item.name)    
+    })
+  })  
+  it(&#39;测试非正常输入&#39;, () =&gt; {    
+    const usage = [&#39;a&#39;, null, undefined, NaN]    
+    usage.forEach((item) =&gt; {      
+      expect(convertIdToName(item, list)).toBe(&#39;&#39;)    
+    })  
+  })
+})
+</code></pre>
+<p><img src="https://user-gold-cdn.xitu.io/2020/1/13/16f9eda87016bfe2?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="如图所示"><br>这样一测试，发现原来我们之前写的工具有这么多漏洞 测试正常输入全部通过了，非正常输入失败了，根据测试用例改进我们的代码</p>
+<pre><code class="js">export const convertIdToName = (value, list) =&gt; {  
+  if (value !== 0 &amp;&amp; value !== 1 &amp;&amp; value !== 2) return &#39;&#39;  
+  const item = list.find(function(item) {    
+    return item.id === value  
+  }) 
+  return item.name
+}
+</code></pre>
+<p>现在测试都通过了呢</p>
+<h4 id="测试-components-单文件组件"><a href="#测试-components-单文件组件" class="headerlink" title="测试 components 单文件组件"></a>测试 components 单文件组件</h4><blockquote>
+<p>对我们最简单的 <code>hello world</code> 进行测试</p>
+</blockquote>
+<pre><code class="html">&lt;template lang=&quot;pug&quot;&gt;  
+.hello    h1 {{ msg }}
+&lt;/template&gt;
+&lt;script&gt;
+export default {  
+  props: {    
+    msg: String  
+  }
+}
+&lt;/script&gt;
+</code></pre>
+<pre><code class="js">import { shallowMount } from &#39;@vue/test-utils&#39;
+import HelloWorld from &#39;@/components/HelloWorld.vue&#39;
+describe(&#39;HelloWorld.vue&#39;, () =&gt; {  
+  it(&#39;renders props.msg when passed&#39;, () =&gt; {    
+    const msg = &#39;new message&#39;    
+    const wrapper = shallowMount(HelloWorld, {      
+      propsData: { msg }    
+    })    
+    expect(wrapper.text()).toMatch(msg)  
+  })
+})
+</code></pre>
+<h4 id="测试-api-请求"><a href="#测试-api-请求" class="headerlink" title="测试 api 请求"></a>测试 api 请求</h4><p>异步测试有几种常见写法</p>
+<ul>
+<li><code>async</code> 与 <code>await</code></li>
+<li><code>done()</code></li>
+</ul>
+<blockquote>
+<p>简单的异步测试，测试一个简单的登陆请求</p>
+</blockquote>
+<pre><code class="js">export const login = (data) =&gt; post(&#39;/user/login&#39;, data)
+</code></pre>
+<p>测试代码</p>
+<pre><code class="js">import { login } from &#39;@/api/index&#39;
+describe(&#39;login api&#39;, () =&gt; {  
+  const response = {    
+    code: &#39;1000&#39;,    
+    data: {}  
+  }  
+  const errorResponse = {    
+    code: &#39;5000&#39;,    
+    data: {},   
+    message: &#39;用户名或密码错误&#39;  
+  }  
+  it(&#39;测试正常登陆&#39;, async () =&gt; {    
+    const params = {      
+      user: &#39;admin&#39;,      
+      password: &#39;123456&#39;    
+    }    
+    expect(await login(params)).toEqual(response)  
+  })  
+  it(&#39;测试异常登陆&#39;, async () =&gt; {    
+    const params = {      
+      user: &#39;admin&#39;,     
+      password: &#39;123123&#39;    
+    }    
+    expect(await login(params)).toEqual(errorResponse)  
+  })
+})
+</code></pre>
+<p><img src="https://user-gold-cdn.xitu.io/2020/1/13/16f9efc734a64747?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="如图所示"></p>
+<h3 id="功能模块测试"><a href="#功能模块测试" class="headerlink" title="功能模块测试"></a>功能模块测试</h3><p>组件， <code>api</code>，工具这些零零碎碎都测试了，而且这些都是比较通用、和业务关系不大的代码，它们改动较少，测试到这里其实已经足够了，已经达到了 <code>20%</code> 的测试工作量了很大一部分代码的目的。</p>
+<blockquote>
+<p>为什么我说只有 20% 的工作量呢？因为这些都是不怎么变化的逻辑，是一劳永逸的事情。长远来说占用的工作量确实很少。</p>
+</blockquote>
+<p>但是有些情况业务还是必须得测，也就是必须要功能模块集成测试。</p>
+<p>经常得回归的业务，那种迭代对原有的系统比较大，避免改动之后使旧的代码各种新的问题。这种经常回归测试，采用 <code>BDD</code> + 集成测试，比不停改 <code>bug</code> 要轻松的多。</p>
+<h3 id="快照测试"><a href="#快照测试" class="headerlink" title="快照测试"></a>快照测试</h3><p>像版本一样，每次测试之后生成一个版本，比较与上一个版本的区别。 这是一种粒度及其小的测试，可以测试到每一个符号。</p>
+<h4 id="比如我用它来测试一个配置文件的变动"><a href="#比如我用它来测试一个配置文件的变动" class="headerlink" title="比如我用它来测试一个配置文件的变动"></a>比如我用它来测试一个配置文件的变动</h4><p>这是我们一个配置文件</p>
+<pre><code class="js">export const api = {  
+  develop: &#39;http://xxxx:8080&#39;,  
+  mock: &#39;http://xxxx&#39;,  
+  feature: &#39;http://xxxx&#39;,  
+  test: &#39;http://xxxx&#39;,  
+  production: &#39;http://xxxx&#39;
+}
+export default api[process.env.NODE_ENV || &#39;dev&#39;]
+</code></pre>
+<p>使用快照测试</p>
+<pre><code class="js">import { api } from &#39;./config&#39;
+describe(&#39;配置文件测试&#39;, () =&gt; {  
+  it(&#39;测试配置文件是否变动&#39;, () =&gt; {    
+    expect(api).toMatchSnapshot({      
+      develop: &#39;http://xxxx:8080&#39;,     
+       mock: &#39;http://xxxx&#39;,      
+       feature: &#39;http://xxxx&#39;,      
+       test: &#39;http://xxxx&#39;,      
+       production: &#39;http://xxxx&#39;    
+      })  
+  })
+})
+</code></pre>
+<p>使用快照第一次测试后，通过测试，代码被写入快照<br><img src="https://user-gold-cdn.xitu.io/2020/1/13/16f9f1b5e3b2e64f?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="快照测试1"><br><img src="https://user-gold-cdn.xitu.io/2020/1/13/16f9f1d9415200e8?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="快照测试2"><br>改动配置再次测试，未通过测试 这时如果要改变配置怎么办呢？ 只需同时改一下用例就好了。快照将再次写入快照生成版本2，这样配置改动也有根据了<br><img src="https://user-gold-cdn.xitu.io/2020/1/13/16f9f1eeb7396fdc?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="快照测试3"></p>
+<h3 id="TDD-与-BDD"><a href="#TDD-与-BDD" class="headerlink" title="TDD 与 BDD"></a>TDD 与 BDD</h3><p>最近讨论比较多的算是 <strong>测试驱动开发</strong>和 <strong>行为驱动开发</strong>，其实总得来说是 4 种</p>
+<ol>
+<li>不写测试。好处是省时间，坏处当然就 <code>bug</code> 多，代码质量低。</li>
+<li>先写测试和测试用例，再写代码，也就是测试驱动开发。这样好处是代码比较健全，考虑的因素比较多。固定模块健壮性高，bug少。</li>
+<li>先写代码，再通过模拟用户的行为写测试。好处是思路清晰，如果测试用例够全面，基本上线基本没太大问题，回归测试也很好做。</li>
+<li>写代码之前写测试和用例，写完代码之后再写用户行为测试。这种代码质量就太高了，当然缺点就是费时间。</li>
+</ol>
+<blockquote>
+<p>那么你是哪一种？ 反正我比较佛系哈，有的不写测试，也有的写满测试。</p>
+</blockquote>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/favicon.png" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <!-- <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd> -->
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">159 <p>Articles</p></a></li>
+                    <li><a href="/categories">25 <p>Categories</p></a></li>
+                    <li><a href="/tags">52 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概览"><span class="toc-number">1.</span> <span class="toc-text">概览</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#问题"><span class="toc-number">2.</span> <span class="toc-text">问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#如何编写原生组件"><span class="toc-number">2.1.</span> <span class="toc-text">如何编写原生组件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#组件编写原理"><span class="toc-number">2.1.1.</span> <span class="toc-text">组件编写原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#组件注册的两种方式"><span class="toc-number">2.1.2.</span> <span class="toc-text">组件注册的两种方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实践开发一个-button-组件"><span class="toc-number">2.1.3.</span> <span class="toc-text">实践开发一个 button 组件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何使用-vuex-以及它的应用"><span class="toc-number">2.2.</span> <span class="toc-text">如何使用 vuex 以及它的应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#由来以及原理"><span class="toc-number">2.2.1.</span> <span class="toc-text">由来以及原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#管理-vuex"><span class="toc-number">2.2.2.</span> <span class="toc-text">管理 vuex</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#应用场景"><span class="toc-number">2.2.3.</span> <span class="toc-text">应用场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何使用过滤器，编写自己的过滤器"><span class="toc-number">2.3.</span> <span class="toc-text">如何使用过滤器，编写自己的过滤器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#原理-1"><span class="toc-number">2.3.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例子"><span class="toc-number">2.3.2.</span> <span class="toc-text">例子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何使用-Jest-测试你的代码"><span class="toc-number">2.4.</span> <span class="toc-text">如何使用 Jest 测试你的代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#原理-2"><span class="toc-number">2.4.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Jest-Vue"><span class="toc-number">2.4.2.</span> <span class="toc-text">Jest + Vue</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#项目配置"><span class="toc-number">2.4.3.</span> <span class="toc-text">项目配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#单元测试"><span class="toc-number">2.4.4.</span> <span class="toc-text">单元测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#功能模块测试"><span class="toc-number">2.4.5.</span> <span class="toc-text">功能模块测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#快照测试"><span class="toc-number">2.4.6.</span> <span class="toc-text">快照测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TDD-与-BDD"><span class="toc-number">2.4.7.</span> <span class="toc-text">TDD 与 BDD</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.3" target="_blank" rel="noopener">v1.4.3</a></small>
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+
+
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>
