@@ -4,7 +4,7 @@ tags: 'Vue'
 categories: 'Vue'
 date: 2020-05-06 17:37:11
 ---
-[原文地址](https://github.com/suoyuesmile/suo-blog/blob/master/articals/vue/0002.md)
+[原文地址](https://juejin.im/post/5e0202fc6fb9a0165721e39a)
 ## 概览
 
 ![概览](https://user-gold-cdn.xitu.io/2019/12/30/16f5676f7940d72a?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
