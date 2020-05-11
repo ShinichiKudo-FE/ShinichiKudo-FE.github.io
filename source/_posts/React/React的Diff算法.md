@@ -52,7 +52,7 @@ React 仅仅是尝试把树按照层级分解. 这彻底简化了复杂度,
 而且也不会失去很多, 因为 Web 应用很少有 component 移动到树的另一个层级去.
 它们大部分只是在相邻的子节点之间移动.
 
-![diff1](http://jiyinyiyong.u.qiniudn.com/react-diff/d1.png)
+![diff1](https://segmentfault.com/img/remote/1460000004844002)
 
 ## 列表
 假设我们有个 component, 一个循环渲染了 5 个 component,
@@ -63,7 +63,7 @@ React 仅仅是尝试把树按照层级分解. 这彻底简化了复杂度,
 你可以写一个 key 属性帮助 React 来处理它们之间的对应关系.
 实际中, 在子元素中找到唯一的 <font color = "red">key</font> 通常很容易.
 
-![diff2](http://jiyinyiyong.u.qiniudn.com/react-diff/d2.png)
+![diff2](https://segmentfault.com/img/remote/1460000004844003)
 
 ## Components
 React app 通常由用户定义的 component 组合而成,
@@ -74,7 +74,7 @@ React app 通常由用户定义的 component 组合而成,
 React 会删除掉 header 再创建一个 example block.
 我们不需要化宝贵的时间去匹配两个不大可能有相似之处的 component.
 
-![diff3](http://jiyinyiyong.u.qiniudn.com/react-diff/d3.png)
+![diff3](https://segmentfault.com/img/remote/1460000004844005)
 
 # 事件代理
 往 DOM 节点上绑事件慢得人心碎啊, 而且很费内存.
@@ -120,7 +120,7 @@ React 在启动时就为那些对象分配了一个内存池.
 这个特性是构建高性能应用的关键, 而且用通常的 JavaScript 代码难以实现.
 而在 React 应用里, 你默认就能实现.
 
-![diff4](http://jiyinyiyong.u.qiniudn.com/react-diff/d4.png)
+![diff4](https://segmentfault.com/img/remote/1460000004851132   )
 
 ## 子树渲染操作
 调用 <font color = "red">setState</font> 方法时, component 会重新构建包括子节点的 virtual DOM.
@@ -136,7 +136,7 @@ JavaScript 对于能处理的整个界面, 在业务逻辑上已经足够快了.
 你会在需要接收对应更新的 component 上调用, 或者在上面的几个 component.
 你很少要一直到根节点上. 就是说界面更新只出现在用户产生交互的局部.
 
-![diff5](http://jiyinyiyong.u.qiniudn.com/react-diff/d5.png)
+![diff5](https://segmentfault.com/img/remote/1460000004851134)
 ## 选择性子树渲染
 
 最后, 你还有可能去掉一些子树的重新渲染.
@@ -158,7 +158,7 @@ boolean shouldComponentUpdate(object nextProps, object nextState)
 比 React 的做法时间少, 还有比计算 component 需要的时间少,
 即便重新绘制并不是必要的.
 
-![diff6](http://jiyinyiyong.u.qiniudn.com/react-diff/d6.png)
+![diff6](https://segmentfault.com/img/remote/1460000004851138)
 
 
 # 结论
@@ -174,13 +174,12 @@ React 消耗性能的模型很简单, 很好理解: 每次调用 setState 会重
 还有用 shouldComponentUpdate 减少大的子树的重新计算.
 
 react的一大特点就是虚拟DOM的diff算法，下图为diff实现流程图。
-![diff7](https://sfault-image.b0.upaiyun.com/321/760/321760932-5707797107835_articlex)
+![diff7](https://segmentfault.com/img/bVuHXW)
 传统算法的理解画的流程图
-![diff8](https://sfault-image.b0.upaiyun.com/179/272/1792722120-57065fae74fa9_articlex)
+![diff8](https://segmentfault.com/img/bVuGgm)
 React 通过制定大胆的策略，将 O(n^3) 复杂度的问题转换成 O(n) 复杂度的问题。
-![diff9](https://sfault-image.b0.upaiyun.com/277/884/2778846299-5707849bd3992_articlex)
+![diff9](https://segmentfault.com/img/bVuH57)
 
-[原文地址](http://blog.csdn.net/yczz/article/details/49585283)
 
 更多关于React源码链接
 [react源码分析](http://purplebamboo.github.io/2015/09/15/reactjs_source_analyze_part_one/)

@@ -187,8 +187,6 @@ CSS Grid 今年也获得了主流浏览器（Safari，Chrome，Firefox，Edge）
 
 CSS Grid(网格) 布局（又称为 “Grid(网格)” ），是一个二维的基于网格的布局系统它的目标是完全改变我们基于网格的用户界面的布局方式。CSS 一直用来布局我们的网页，但一直以来都存在这样或那样的问题。一开始我们用表格（table），然后是浮动（float），再是定位（postion）和内嵌块（inline-block），但是所有这些方法本质上都是只是 hack 而已，并且遗漏了很多重要的功能（例如垂直居中）。Flexbox 的出现很大程度上改善了我们的布局方式，但它的目的是为了解决更简单的一维布局，而不是复杂的二维布局（实际上 Flexbox 和 Grid 能结合在一起工作，而且配合得非常好）。Grid(网格) 布局是第一个专门为解决布局问题而创建的 CSS 模块，我们终于不需要想尽办法hack 页面布局样式了。
 
-![grid](http://newimg88.b0.upaiyun.com/newimg88/2017/12/1_Oc88rInEcNuY-xCN3e1iPQ.png)
-
 ### 网格容器(Grid Container)
 
 应用 display: grid 的元素。这是所有网格项（Grid Items）的直接父级元素。在这个例子中，container 就是 网格容器(Grid Container)。
@@ -229,7 +227,7 @@ subgrid ：如果你的网格容器本身是另一个网格的网格项（即嵌
 ```
 
 **示例：**
-![grid3](http://newimg88.b0.upaiyun.com/newimg88/2017/12/grid-numbers.png)
+![grid3](https://www.html.cn/newimg88/2018/12/template-columns-rows-01.svg)
 ```css
 .container{
     grid-template-columns: 40px 50px auto 50px 40px;
@@ -316,7 +314,7 @@ none：不定义网格区域
 }
 ```
 上面的代码将创建一个 4 列 3 行的网格。整个顶行将由 header 区域 组成。中间一排将由两个 main 区域，一个是空单元格，一个 sidebar 区域组成。最后一行全是 footer 区域组成。
-![grid4](http://newimg88.b0.upaiyun.com/newimg88/2017/12/grid-template-areas.png)
+![grid4](https://www.html.cn/newimg88/2018/12/dddgrid-template-areas.svg)
 
 你可以使用任意数量的相邻的 <font color="red">点.</font> 来声明单个空单元格。 只要这些点.之间没有空隙隔开，他们就表示一个单一的单元格。
 
@@ -375,7 +373,7 @@ subgrid：将grid-template-rows，grid-template-columns 的值设为  subgrid，
   grid-row-gap: 15px;
 }
 ```
-![grid5](http://newimg88.b0.upaiyun.com/newimg88/2017/12/grid-column-row-gap.png)
+![grid5](https://www.html.cn/newimg88/2018/12/dddgrid-gap.svg)
 只能在 列/行 之间创建间距，网格外部边缘不会有这个间距。
 
 #### grid-gap
@@ -457,8 +455,6 @@ space-evenly：在每个栅格项目之间放置一个均匀的空间，左右�
 }
 ```
 
-![justify-content: start](http://newimg88.b0.upaiyun.com/newimg88/2017/12/grid-justify-content-start.png)
-
 #### align-content
 
 有时，你的网格合计大小可能小于其 网格容器(grid container) 大小。 如果你的所有 网格项(grid items) 都使用像 px 这样的非灵活单位设置大小，在这种情况下，您可以设置网格容器内的网格的对齐方式。 此属性沿着 列轴线(column axis) 对齐网格（相反的属性是 justify-content ，沿着行轴线对齐网格）。
@@ -476,7 +472,6 @@ space-evenly：在每个栅格项目之间放置一个均匀的空间，上下�
   align-content: start | end | center | stretch | space-around | space-between | space-evenly;  
 }
 ```
-![align-content: start](http://newimg88.b0.upaiyun.com/newimg88/2017/12/grid-align-content-start.png)
 
 #### grid-auto-columns / grid-auto-rows
 
@@ -498,7 +493,7 @@ space-evenly：在每个栅格项目之间放置一个均匀的空间，上下�
   grid-template-rows: 90px 90px
 }
 ```
-![grid7](http://newimg88.b0.upaiyun.com/newimg88/2017/12/grid-auto.png)
+![grid7](https://www.html.cn/newimg88/2018/12/grid-auto-columns-rows-01.svg)
 
 但现在想象一下，你使用 grid-column 和 grid-row 来定位你的网格项（grid items），像这样：
 ```css
@@ -511,7 +506,7 @@ space-evenly：在每个栅格项目之间放置一个均匀的空间，上下�
   grid-row: 2 / 3;
 }
 ```
-![grid8](http://newimg88.b0.upaiyun.com/newimg88/2017/12/implicit-tracks.png)
+![grid8](https://www.html.cn/newimg88/2018/12/grid-auto-columns-rows-01.svg)
 
 因为我们引用的网格线不存在，所以创建宽度为 0 的隐式网格轨道以填补空缺。我们可以使用  grid-auto-columns 和 grid-auto-rows 来指定这些隐式轨道的大小：
 
@@ -520,7 +515,7 @@ space-evenly：在每个栅格项目之间放置一个均匀的空间，上下�
   grid-auto-columns: 60px;
 }
 ```
-![grid9](http://newimg88.b0.upaiyun.com/newimg88/2017/12/implicit-tracks-with-widths.png)
+![grid9](https://www.html.cn/newimg88/2018/12/grid-auto-columns-rows-01.svg)
 
 #### grid-auto-flow
 如果你有一些没有明确放置在网格上的网格项(grid items)，自动放置算法 会自动放置这些网格项。该属性控制自动布局算法如何工作。
@@ -622,21 +617,21 @@ auto ：表示自动放置，自动跨度，默认会扩展一个网格轨道的
 .item-a {
     grid-column-start: 2;
     grid-column-end: five;
-    grid-row-start: row1-start
-    grid-row-end: 3
+    grid-row-start: row1-start;
+    grid-row-end: 3;
 }
 ```
-![grid10](http://newimg88.b0.upaiyun.com/newimg88/2017/12/grid-start-end-a.png)
+![grid10](https://www.html.cn/newimg88/2018/12/grid-column-row-start-end-01.svg)
 
 ```css
 .item-b {
     grid-column-start: 1;
     grid-column-end: span col4-start;
-    grid-row-start: 2
-    grid-row-end: span 2
+    grid-row-start: 2;
+    grid-row-end: span 2;
 }
 ```
-![grid11](https://cdn.css-tricks.com/wp-content/uploads/2016/11/grid-start-end-b.png)
+![grid11](https://www.html.cn/newimg88/2018/12/grid-column-row-start-end-02.svg)
 如果没有声明指定 grid-column-end / grid-row-end，默认情况下，该网格项将占据1个轨道。
 
 项目可以相互重叠。您可以使用 z-index 来控制它们的重叠顺序。
@@ -660,7 +655,7 @@ auto ：表示自动放置，自动跨度，默认会扩展一个网格轨道的
     grid-row: third-line / 4;
 }
 ```
-![grid12](http://newimg88.b0.upaiyun.com/newimg88/2017/12/grid-start-end-c.png)
+![grid12](https://www.html.cn/newimg88/2018/12/grid-column-row.svg)
 如果没有声明分隔线结束位置，则该网格项默认占据 1 个网格轨道。
 
 #### grid-area
@@ -689,7 +684,6 @@ stretch：填充整个网格区域的宽度（这是默认值）
     justify-self: start;
 }
 ```
-![justify-self: start](http://newimg88.b0.upaiyun.com/newimg88/2017/12/grid-justify-self-start.png)
 
 #### align-self
 沿着 列轴线(column axis) 对齐 网格项 内的内容（ 相反的属性是 justify-self ，沿着 行轴线(row axis) 对齐）。此值适用于单个网格项内的内容。
@@ -707,20 +701,20 @@ stretch：填充整个网格区域的高度（这是默认值）
 
 ### 网格线(Grid Line)
 构成网格结构的分界线。它们既可以是垂直的（“列网格线(column grid lines)”），也可以是水平的（“行网格线(row grid lines)”），并位于行或列的任一侧。例如，这里的黄线就是一条列网格线。
-![grid2](http://newimg88.b0.upaiyun.com/newimg88/2017/12/grid-line.png)
+![grid2](https://www.html.cn/newimg88/2018/12/terms-grid-line.svg)
 
 
 ### 网格轨道(Grid Track)
 两条相邻网格线之间的空间。你可以把它们想象成网格的列或行。下图是第二条和第三条 行网格线 之间的 网格轨道(Grid Track)。
-![grid3](http://newimg88.b0.upaiyun.com/newimg88/2017/12/grid-track.png)
+![grid3](https://www.html.cn/newimg88/2018/12/terms-grid-track.svg)
 
 ### 网格单元格(Grid Cell)
 两个相邻的行和两个相邻的列网格线之间的空间。这是 Grid(网格) 系统的一个“单元”。下图是第1至第2条 行网格线 和第2至第3条 列网格线 交汇构成的 网格单元格(Grid Cell)。
-![grid4](http://newimg88.b0.upaiyun.com/newimg88/2017/12/grid-cell.png)
+![grid4](https://www.html.cn/newimg88/2018/12/terms-grid-track.svg)
 
 ### 网格区域(Grid Area)
 4条网格线包围的总空间。一个 网格区域(Grid Area) 可以由任意数量的 网格单元格(Grid Cell) 组成。下图是 行网格线1和3，以及列网格线1和3 之间的网格区域。
-![grid5](http://newimg88.b0.upaiyun.com/newimg88/2017/12/grid-area.png)
+![grid5](https://www.html.cn/newimg88/2018/12/terms-grid-area.svg)
 
 更多关于 CSS Grid 布局的优秀文章
 [5分钟学会 CSS Grid 布局](http://www.css88.com/archives/8506)

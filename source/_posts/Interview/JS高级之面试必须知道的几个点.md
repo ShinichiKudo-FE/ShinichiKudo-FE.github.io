@@ -336,14 +336,14 @@ let sandboxModel=(function(){
 
 ### 构造函数,实例与原型对象的关系
 
-[构造函数,实例与原型对象的关系](https://sfault-image.b0.upaiyun.com/425/132/4251326904-5ad1d715e4939_articlex)
+[构造函数,实例与原型对象的关系](https://user-gold-cdn.xitu.io/2018/6/8/163deceaab1052c8?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
 ```javascript
 var Person = function (name) { this.name = name; }//person是构造函数
 var o3personTwo = new Person('personTwo')//personTwo是实例
 ```
 
-[构造函数,实例与原型对象的关系例子](https://sfault-image.b0.upaiyun.com/187/926/1879268198-5ad1d87845b9d_articlex)
+[构造函数,实例与原型对象的关系例子](https://user-gold-cdn.xitu.io/2018/6/8/163decf026f2d9d7?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
 原型对象都有一个默认的constructor属性指向构造函数
 
@@ -406,7 +406,7 @@ var new2 = function (func) {
 
 ## 对象的原型链
 
-[对象的原型链](https://sfault-image.b0.upaiyun.com/416/875/4168756668-5ad1deb66d66a_articlex)
+[对象的原型链](https://user-gold-cdn.xitu.io/2018/6/8/163ded0dad3145ec?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
 ## 继承的方式
 
