@@ -1,7 +1,8 @@
 ---
 title: 前端路由实现与react-router源码分析
 date: 2018-06-21 14:47:26
-tags: "路由"
+tags: ["React-router","路由"]
+categories: "React-router"
 ---
 
 # 前言
