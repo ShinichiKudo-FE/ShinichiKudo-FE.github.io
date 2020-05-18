@@ -1,5 +1,5 @@
 ---
-title: 了解xiadeno，与node的区别是什么？
+title: 了解下deno，与node的区别是什么？
 tags: 'Deno'
 categories: 'Deno'
 date: 2020-05-17 21:37:07
