@@ -137,25 +137,25 @@
     <div id="post0" class="else">
         <p class="animated fadeInDown">
             
-            <a href="/categories/Js"><b>「
-                </b>JS<b> 」</b></a>
+            <a href="/categories/原理与实现"><b>「
+                </b>原理与实现<b> 」</b></a>
             
-            May 20, 2018
+            May 21, 2018
         </p>
         <h3 class="post-title animated fadeInDown">
-            <a href="/2018/05/20/Js/%E5%85%AB%E6%AE%B5%E4%BB%A3%E7%A0%81%E5%BD%BB%E5%BA%95%E6%8E%8C%E6%8F%A1-Promise/" title="八段代码彻底掌握 Promise" class="posttitle">八段代码彻底掌握 Promise</a></h3>
+            <a href="/2018/05/21/%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0/promise%E7%9A%84%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0/" title="promise的原理" class="posttitle">promise的原理</a></h3>
         
         <p class="post-count animated fadeInDown">
             
             <span>
                 <b class="iconfont icon-text2"></b> <i>Words count</i>
-                9.8k
+                12k
             </span>
             
             
             <span>
                 <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                9 mins.
+                11 mins.
             </span>
             
             
@@ -166,12 +166,11 @@
         
         <div class="md-content animated fadeIn">
             
-            <pre><code class="js">//1
-var p = new Promise(function(resolve, reject){
-  console.log(&quot;create a promise&quot;);
-  resolve...</code></pre>
+            <p>先上一图!<br></p>
+<p>本文的promise源码是按照<a href="https://promisesaplus.com/" target="_blank" rel="noopener">Promise/A+规范</a>来编写的（不想看英文版的移步<a href="http://www.ituring.com.cn/article/66566" target="_blank" rel="noopener">Promise/A+规范中文翻译</a>）</p>
+<p>为了让大家更容易理解，我们从一个场景开始讲解，让大家一步一步跟着思路思...</p>
             
-            <span class="read-more"><a href="/2018/05/20/Js/%E5%85%AB%E6%AE%B5%E4%BB%A3%E7%A0%81%E5%BD%BB%E5%BA%95%E6%8E%8C%E6%8F%A1-Promise/" title="Read article" class="posttitle">Read article</a>
+            <span class="read-more"><a href="/2018/05/21/%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0/promise%E7%9A%84%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0/" title="Read article" class="posttitle">Read article</a>
                 <b class="iconfont icon-arrow-right- gradient-text"></b></span>
         </div>
     </div>
@@ -192,6 +191,60 @@ var p = new Promise(function(resolve, reject){
 
     <div id="primary">
         
+<div class="post" id="post">
+    <div class="post-cover animated fadeIn" style="
+            background-image:
+            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+            url(/img/welcome-cover.jpg);">
+    </div>
+    <div class="else">
+        <p class="animated fadeInDown">
+            
+                <a href="/categories/原理与实现">
+                  <b>「 </b>原理与实现<b> 」</b>
+                </a>
+            
+            May 21, 2018
+        </p>
+        <h3 class="post-title animated fadeInDown"><a href="/2018/05/21/%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0/promise%E7%9A%84%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0/" title="promise的原理" class="posttitle">promise的原理</a></h3>
+        
+            <p class="post-count animated fadeInDown">
+                
+                    <span>
+                        <b class="iconfont icon-text2"></b> <i>Words count</i>
+                        12k
+                    </span>
+                
+                
+                    <span>
+                        <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                        11 mins.
+                    </span>
+                
+                
+            </p>
+            
+                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Promise/" rel="tag">Promise</a></li></ul>
+            
+        
+        <div class="md-content animated fadeIn">
+            
+                <p>先上一图!<br></p>
+<p>本文的promise源码是按照<a href="https://promisesaplus.com/" target="_blank" rel="noopener">Promise/A+规范</a>来编写的（不想看英文版的移步<a href="http://www.ituring.com.cn/article/66566" target="_blank" rel="noopener">Promise/A+规范中文翻译</a>）</p>
+<p>为了让大家更容易理解，我们从一个场景开始讲解，让大家一步一步跟着思路思考，相信你一定会更容易看懂。</p>
+<p>考虑下面一种获取用户id的请求处理</p>
+<pre><code class="js">function getUrlId() {
+    return new Promise(function(resolve) {
+        //异步请求
+        http.get(url,function(results) {
+            resolve(results....</code></pre>
+            
+            <span class="read-more"><a href="/2018/05/21/%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0/promise%E7%9A%84%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0/" title="Read article" class="posttitle">Read article</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+        </div>
+    </div>
+</div>
+
+
 <div class="post" id="post">
     <div class="post-cover animated fadeIn" style="
             background-image:
@@ -405,59 +458,9 @@ p.then(function(value){
 </div>
 
 
-<div class="post" id="post">
-    <div class="post-cover animated fadeIn" style="
-            background-image:
-            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
-            url(/img/welcome-cover.jpg);">
-    </div>
-    <div class="else">
-        <p class="animated fadeInDown">
-            
-                <a href="/categories/原理与实现">
-                  <b>「 </b>原理与实现<b> 」</b>
-                </a>
-            
-            May 04, 2018
-        </p>
-        <h3 class="post-title animated fadeInDown"><a href="/2018/05/04/%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0/Ajax%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0/" title="Ajax原理与实现" class="posttitle">Ajax原理与实现</a></h3>
-        
-            <p class="post-count animated fadeInDown">
-                
-                    <span>
-                        <b class="iconfont icon-text2"></b> <i>Words count</i>
-                        3.5k
-                    </span>
-                
-                
-                    <span>
-                        <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                        3 mins.
-                    </span>
-                
-                
-            </p>
-            
-                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Ajax/" rel="tag">Ajax</a></li></ul>
-            
-        
-        <div class="md-content animated fadeIn">
-            
-                <p>AJAX全称为“Asynchronous JavaScript and XML”（异步JavaScript和XML），是一种创建交互式网页应用的网页开发技术。</p>
-<blockquote>
-<p>原理：Ajax的原理简单来说通过XmlHttpRequest对象来向服务器发异步请求，从服务器获得数据，然后用javascript来操作DOM而更新页面。</p>
-</blockquote>
-<p>把服务器端看成一个数据接口(只负责吐数据)，它返回的是一个<code>纯文本流</code>，当然，这个文本流可以是<code>XML格式</code>，可以是<code>Html</code>，可以是<code>Javascript代码</code>，也可以只是一个字符串。这时候，...</p>
-            
-            <span class="read-more"><a href="/2018/05/04/%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0/Ajax%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0/" title="Read article" class="posttitle">Read article</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
-        </div>
-    </div>
-</div>
-
-
     </div>
     
-    <div id="pager"><a href="/page/20/" class="more" data-loading="Loading..." data-load-more="Load more">Load more</a></div>
+    <div id="pager"><a href="/page/20/" class="more" data-loading="加载中..." data-load-more="Load more">Load more</a></div>
     
 </div>
 <div id="preview"></div>
