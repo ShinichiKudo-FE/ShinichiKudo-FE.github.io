@@ -143,20 +143,20 @@ preserveAspectRatio="[defer] <align> [<meetOrSlice>]"
 
 例子1：`preserveAspectRatio="xMidYMid meet"` 表示 绿色框框 与 显示器的 x 方向、y方向的 中心点 对齐；
 
-![](https://user-gold-cdn.xitu.io/2020/6/23/172dff2a71a181c0?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+![demo](https://user-gold-cdn.xitu.io/2020/6/23/172dff2a71a181c0?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
 例子2：`preserveAspectRatio="xMidYMin slice"` 表示 绿色框框 与 显示器的 x 方向 中心点 对齐，Y 方向 上边缘对齐，保持比例放大填满 显示屏 后超出部分隐藏；
 
-![](https://user-gold-cdn.xitu.io/2020/6/23/172dff2aa4bade91?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+![demo](https://user-gold-cdn.xitu.io/2020/6/23/172dff2aa4bade91?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
 例子3：preserveAspectRatio="xMidYMid slice" 表示 绿色框框 与 显示器的 x 方向、y方向的 中心点 对齐，保持比例放大填满显示屏 后超出部分隐藏；
 
-![](https://user-gold-cdn.xitu.io/2020/6/23/172dff2adcb56f90?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+![demo](https://user-gold-cdn.xitu.io/2020/6/23/172dff2adcb56f90?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
 例子4：preserveAspectRatio="none" 不管三七二十一，随意缩放绿色框框，填满 显示屏即可；这就是非比例缩放的答案了。
 
-![](https://user-gold-cdn.xitu.io/2020/6/23/172dff2b10f609f4?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+![demo](https://user-gold-cdn.xitu.io/2020/6/23/172dff2b10f609f4?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
 ## SVG vs Image, SVG vs Iconfont
 
-[原文地址](https://blog.csdn.net/cpongo3/article/details/90258990?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-7.nonecase&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-7.nonecase)
+SVG vs Image, SVG vs Iconfont 对比文章地址 [原文地址](https://blog.csdn.net/cpongo3/article/details/90258990?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-7.nonecase&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-7.nonecase)
