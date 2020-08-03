@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://zhanghao-web.github.io/"/>
-  <updated>2020-07-30T03:42:30.821Z</updated>
+  <updated>2020-08-03T05:54:08.146Z</updated>
   <id>https://zhanghao-web.github.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>如何规范你的git提交?</title>
+    <link href="https://zhanghao-web.github.io/2020/08/03/Tools/%E5%A6%82%E4%BD%95%E8%A7%84%E8%8C%83%E4%BD%A0%E7%9A%84git%E6%8F%90%E4%BA%A4/"/>
+    <id>https://zhanghao-web.github.io/2020/08/03/Tools/如何规范你的git提交/</id>
+    <published>2020-08-03T05:33:53.000Z</published>
+    <updated>2020-08-03T05:54:08.146Z</updated>
+    
+    <content type="html"><![CDATA[<p><a href="https://www.jianshu.com/p/5522df15c9ec" target="_blank" rel="noopener">原文地址</a></p><h1 id="一、为什么需要规范？"><a href="#一、为什么需要规范？" class="headerlink" title="一、为什么需要规范？"></a>一、为什么需要规范？</h1><p>无规矩不成方圆，编程也一样。</p><p>如果你有一个项目，从始至终都是自己写，那么你想怎么写都可以，没有人可以干预你。可是如果在团队协作中，大家都张扬个性，那么代码将会是一团糟，好好的项目就被糟践了。不管是开发还是日后维护，都将是灾难。</p><p>这时候，有人提出了何不统一标准，大家都按照这个标准来。于是 ESLint，JSHint 等代码工具如雨后春笋般涌现，成为了项目构建的必备良品。</p><p><code>Git Commit</code> 规范可能并没有那么夸张，但如果你在版本回退的时候看到一大段糟心的 Commit，恐怕会懊恼不已吧。所以，严格遵守规范，利人利己。</p><p>二、具体规则</p><p>先来看看公式：</p><p><strong><code>&lt;type&gt;(&lt;scope&gt;): &lt;subject&gt;</code></strong></p><blockquote><p>type 用于说明 commit 的类别，只允许使用下面7个标识。</p><ul><li>feat：新功能(feature)</li><li>fix：修补</li><li>bugdocs：文档(documentation)</li><li>style：格式(不影响代码运行的变动);</li><li>refactor：重构(即不是新增功能，也不是修改bug的代码变动)</li><li>test：增加测试</li><li>chore：构建过程或辅助工具的变动</li></ul></blockquote><blockquote><p>scope 用于说明 commit 影响的范围，比如<code>数据层、控制层、视图层</code>等等，视项目不同而不同。</p></blockquote><blockquote><p>subject 是 commit 目的的简短描述，不超过50个字符。</p></blockquote><ul><li>以动词开头，使用第一人称现在时，比如change，而不是changed或changes</li><li>第一个字母小写</li><li>结尾不加句号(.)</li></ul><h1 id="三、异常处理"><a href="#三、异常处理" class="headerlink" title="三、异常处理"></a>三、异常处理</h1><p>我们先来看看这个异常提醒：</p><pre><code class="js">INVALID COMMIT MSG: does not match &quot;&lt;type&gt;(&lt;scope&gt;): &lt;subject&gt;&quot; ! jartto:fix bug </code></pre><p>这里之所以报出这个警告，是因为我的提交出现了两个问题：</p><ul><li>其一，使用了规范外的关键字;</li><li>其二，很细节的问题，<code>jartto：</code>后少了空格;</li></ul><p>这时候我才回忆起来，当时提交一直失败，情急之下直接强制提交，所以以后的提交都会抱出这个异常。大致意思就是：</p><blockquote><p>你的之前的 Commit 不合格～你的之前的 Commit 不合格～你的之前的 Commit 不合格</p></blockquote><p>这时候就很烦了，我们只能去将之前的错误修正，那么如何操作呢?</p><h1 id="四、如何修改之前的-commit-信息？"><a href="#四、如何修改之前的-commit-信息？" class="headerlink" title="四、如何修改之前的 commit 信息？"></a>四、如何修改之前的 commit 信息？</h1><p>其实并不复杂，我们只需要这样做:</p><ul><li>1、将当前分支无关的工作状态进行暂存 <code>git stash</code></li><li>2、将 HEAD 移动到需要修改的 commit 上 <code>git rebase 9633cf0919^ --interactive</code></li><li>3、找到需要修改的 commit ,将首行的 pick 改成 edit</li><li>4、开始着手解决你的 bug</li><li>5、<code>git add</code>将改动文件添加到暂存</li><li>6、<code>git commit –amend</code> 追加改动到提交</li><li>7、<code>git rebase –continue</code> 移动 HEAD 回最新的 commit</li><li>8、恢复之前的工作状态 <code>git stash pop</code></li></ul><p>大功告成，是不是想把整个 Commit 都修改一遍</p><h1 id="五、项目中使用"><a href="#五、项目中使用" class="headerlink" title="五、项目中使用"></a>五、项目中使用</h1><p>这时候问题又来了，为什么我提交的时候会有警告，这个又是如何做到的呢?</p><p>这时候，我们需要一款 Node 插件 <code>validate-commit-msg</code> 来检查项目中 <code>Commit message</code> 是否规范。</p><ul><li>1.首先，安装插件：</li></ul><pre><code class="js">npm install --save-dev validate-commit-msg </code></pre><ul><li><p>2.使用方式一，建立 .vcmrc 文件：</p><pre><code class="js">{ &quot;types&quot;: [&quot;feat&quot;, &quot;fix&quot;, &quot;docs&quot;, &quot;style&quot;, &quot;refactor&quot;, &quot;perf&quot;, &quot;test&quot;, &quot;build&quot;, &quot;ci&quot;, &quot;chore&quot;, &quot;revert&quot;], &quot;scope&quot;: {   &quot;required&quot;: false,   &quot;allowed&quot;: [&quot;*&quot;],   &quot;validate&quot;: false,   &quot;multiple&quot;: false }, &quot;warnOnFail&quot;: false, &quot;maxSubjectLength&quot;: 100, &quot;subjectPattern&quot;: &quot;.+&quot;, &quot;subjectPatternErrorMsg&quot;: &quot;subject does not match subject pattern!&quot;, &quot;helpMessage&quot;: &quot;&quot;, &quot;autoFix&quot;: false }</code></pre></li><li><p>3.使用方式二：写入 package.json</p></li></ul><pre><code class="json">{   &quot;config&quot;: {     &quot;validate-commit-msg&quot;: {       /* your config here */     }   } }</code></pre><ul><li>4.可是我们如果想自动使用 ghooks 钩子函数呢？</li></ul><pre><code class="js">{   …   &quot;config&quot;: {     &quot;ghooks&quot;: {       &quot;pre-commit&quot;: &quot;gulp lint&quot;,       &quot;commit-msg&quot;: &quot;validate-commit-msg&quot;,       &quot;pre-push&quot;: &quot;make test&quot;,       &quot;post-merge&quot;: &quot;npm install&quot;,       &quot;post-rewrite&quot;: &quot;npm install&quot;,       …     }   }   … } </code></pre><p>在 ghooks 中我们可以做很多事情，当然不只是 <code>validate-commit-msg</code>哦。</p><h1 id="六、Commit-规范的作用"><a href="#六、Commit-规范的作用" class="headerlink" title="六、Commit 规范的作用"></a>六、Commit 规范的作用</h1><ul><li>提供更多的信息，方便排查与回退;</li><li>过滤关键字，迅速定位;</li><li>方便生成文档;</li></ul><h1 id="七、生成-Change-log"><a href="#七、生成-Change-log" class="headerlink" title="七、生成 Change log"></a>七、生成 Change log</h1><p>正如上文提到的生成文档，如果我们的提交都按照规范的话，那就很简单了。生成的文档包括以下三个部分：</p><p><strong>New features</strong></p><p><strong>Bug fixes</strong></p><p><strong>Breaking changes</strong></p><p>每个部分都会罗列相关的 <code>commit</code> ，并且有指向这些 <code>commit</code> 的链接。当然，生成的文档允许手动修改，所以发布前，你还可以添加其他内容。</p><p>这里需要使用工具 <code>Conventional Changelog</code> 生成 <code>Change log</code>：</p><pre><code class="js">npm install -g conventional-changelog cd jartto-domo conventional-changelog -p angular -i CHANGELOG.md -w</code></pre><p>为了方便使用，可以将其写入 <code>package.json</code> 的 scripts 字段。</p><pre><code class="js">{   &quot;scripts&quot;: {     &quot;changelog&quot;: &quot;conventional-changelog -p angular -i CHANGELOG.md -w -r 0&quot;   } }</code></pre><p>这样，使用起来就很简单了：</p><pre><code class="js"> npm run changelog</code></pre><h1 id="八、总结"><a href="#八、总结" class="headerlink" title="八、总结"></a>八、总结</h1><p>看完文章，你还会如此放荡不羁吗?你还会随心所欲的编写 Commit 吗?你还会如此 git commit -m “hello world”提交吗?</p><p>答案是否定的，因为使用了钩子函数，你没有机会了，否则将是无穷无尽的恢复 Commit。这倒可以养成良好的提交习惯。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;a href=&quot;https://www.jianshu.com/p/5522df15c9ec&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;原文地址&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&quot;一、为什么需要规范？&quot;&gt;&lt;a href=&quot;#一、为什么需要规范？&quot; cl
+      
+    
+    </summary>
+    
+      <category term="Tools" scheme="https://zhanghao-web.github.io/categories/Tools/"/>
+    
+    
+      <category term="git" scheme="https://zhanghao-web.github.io/tags/git/"/>
+    
+  </entry>
   
   <entry>
     <title>响应式布局新方案</title>
@@ -663,101 +689,6 @@ module.exports = {
     
     
       <category term="Vue" scheme="https://zhanghao-web.github.io/tags/Vue/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>&lt;深入理解TypeScript读书笔记&gt;（一）</title>
-    <link href="https://zhanghao-web.github.io/2020/03/25/Ts/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3TypeScript%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%EF%BC%88%E4%B8%80%EF%BC%89/"/>
-    <id>https://zhanghao-web.github.io/2020/03/25/Ts/深入理解TypeScript读书笔记-（一）/</id>
-    <published>2020-03-25T13:07:50.000Z</published>
-    <updated>2020-03-25T14:41:04.000Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="书本地址"><a href="#书本地址" class="headerlink" title="书本地址"></a>书本地址</h1><p><a href="https://jkchao.github.io/typescript-book-chinese/#why" target="_blank" rel="noopener">https://jkchao.github.io/typescript-book-chinese/#why</a></p><h2 id="什么是TypeScript-为什么要使用TypeScript"><a href="#什么是TypeScript-为什么要使用TypeScript" class="headerlink" title="什么是TypeScript,为什么要使用TypeScript?"></a>什么是TypeScript,为什么要使用TypeScript?</h2><p>根据TypeScript官网中的介绍，TypeScript - JavaScript the scales (属于Js的超集)，Ts发展至今已经是很多大型项目的标配，它提供的静态类型检查，大大的提高了代码的可维护性及可读性；同时提供最新和不断发展的Javascript特性，让我们能建立更加强壮的组件。</p><h2 id="从tsconfig-json配置看ts整体"><a href="#从tsconfig-json配置看ts整体" class="headerlink" title="从tsconfig.json配置看ts整体"></a>从tsconfig.json配置看ts整体</h2><h3 id="创建tsconfig-json文件，配置信息"><a href="#创建tsconfig-json文件，配置信息" class="headerlink" title="创建tsconfig.json文件，配置信息"></a>创建tsconfig.json文件，配置信息</h3><p>通过compilerOption来定制你的编译选项</p><pre><code class="json">{  &quot;compilerOptions&quot;: {    /* 基本选项 */    &quot;target&quot;: &quot;es5&quot;,                       // 指定 ECMAScript 目标版本: &#39;ES3&#39; (default), &#39;ES5&#39;, &#39;ES2015&#39;, &#39;ES2016&#39;, &#39;ES2017&#39;, or &#39;ESNEXT&#39;    &quot;module&quot;: &quot;commonjs&quot;,                  // 指定使用模块: &#39;commonjs&#39;, &#39;amd&#39;, &#39;system&#39;, &#39;umd&#39; or &#39;es2015&#39;    &quot;lib&quot;: [],                             // 指定要包含在编译中的库文件    &quot;allowJs&quot;: true,                       // 允许编译 javascript 文件    &quot;checkJs&quot;: true,                       // 报告 javascript 文件中的错误    &quot;jsx&quot;: &quot;preserve&quot;,                     // 指定 jsx 代码的生成: &#39;preserve&#39;, &#39;react-native&#39;, or &#39;react&#39;    &quot;declaration&quot;: true,                   // 生成相应的 &#39;.d.ts&#39; 文件    &quot;sourceMap&quot;: true,                     // 生成相应的 &#39;.map&#39; 文件    &quot;outFile&quot;: &quot;./&quot;,                       // 将输出文件合并为一个文件    &quot;outDir&quot;: &quot;./&quot;,                        // 指定输出目录    &quot;rootDir&quot;: &quot;./&quot;,                       // 用来控制输出目录结构 --outDir.    &quot;removeComments&quot;: true,                // 删除编译后的所有的注释    &quot;noEmit&quot;: true,                        // 不生成输出文件    &quot;importHelpers&quot;: true,                 // 从 tslib 导入辅助工具函数    &quot;isolatedModules&quot;: true,               // 将每个文件做为单独的模块 （与 &#39;ts.transpileModule&#39; 类似）.    /* 严格的类型检查选项 */    &quot;strict&quot;: true,                        // 启用所有严格类型检查选项    &quot;noImplicitAny&quot;: true,                 // 在表达式和声明上有隐含的 any类型时报错    &quot;strictNullChecks&quot;: true,              // 启用严格的 null 检查    &quot;noImplicitThis&quot;: true,                // 当 this 表达式值为 any 类型的时候，生成一个错误    &quot;alwaysStrict&quot;: true,                  // 以严格模式检查每个模块，并在每个文件里加入 &#39;use strict&#39;    /* 额外的检查 */    &quot;noUnusedLocals&quot;: true,                // 有未使用的变量时，抛出错误    &quot;noUnusedParameters&quot;: true,            // 有未使用的参数时，抛出错误    &quot;noImplicitReturns&quot;: true,             // 并不是所有函数里的代码都有返回值时，抛出错误    &quot;noFallthroughCasesInSwitch&quot;: true,    // 报告 switch 语句的 fallthrough 错误。（即，不允许 switch 的 case 语句贯穿）    /* 模块解析选项 */    &quot;moduleResolution&quot;: &quot;node&quot;,            // 选择模块解析策略： &#39;node&#39; (Node.js) or &#39;classic&#39; (TypeScript pre-1.6)    &quot;baseUrl&quot;: &quot;./&quot;,                       // 用于解析非相对模块名称的基目录    &quot;paths&quot;: {},                           // 模块名到基于 baseUrl 的路径映射的列表    &quot;rootDirs&quot;: [],                        // 根文件夹列表，其组合内容表示项目运行时的结构内容    &quot;typeRoots&quot;: [],                       // 包含类型声明的文件列表    &quot;types&quot;: [],                           // 需要包含的类型声明文件名列表    &quot;allowSyntheticDefaultImports&quot;: true,  // 允许从没有设置默认导出的模块中默认导入。    /* Source Map Options */    &quot;sourceRoot&quot;: &quot;./&quot;,                    // 指定调试器应该找到 TypeScript 文件而不是源文件的位置    &quot;mapRoot&quot;: &quot;./&quot;,                       // 指定调试器应该找到映射文件而不是生成文件的位置    &quot;inlineSourceMap&quot;: true,               // 生成单个 soucemaps 文件，而不是将 sourcemaps 生成不同的文件    &quot;inlineSources&quot;: true,                 // 将代码与 sourcemaps 生成到一个文件中，要求同时设置了 --inlineSourceMap 或 --sourceMap 属性    /* 其他选项 */    &quot;experimentalDecorators&quot;: true,        // 启用装饰器    &quot;emitDecoratorMetadata&quot;: true          // 为装饰器提供元数据的支持  }}</code></pre><h3 id="Ts编译生成Js文件"><a href="#Ts编译生成Js文件" class="headerlink" title="Ts编译生成Js文件"></a>Ts编译生成Js文件</h3><p>在目录下运行 <code>tsc</code>命令，会在当前目录或者父级目录下找<code>tsconfig.json</code>文件<br>运行 <code>tsc -p ./path-to-project-directory</code> 。当然，这个路径可以是绝对路径，也可以是相对于当前目录的相对路径。<br>使用 <code>tsc -w</code> 来启用 TypeScript 编译器的观测模式，在检测到文件改动之后，它将重新编译。</p><h3 id="显示的指定编译文件"><a href="#显示的指定编译文件" class="headerlink" title="显示的指定编译文件"></a>显示的指定编译文件</h3><pre><code class="js">{  &quot;files&quot;: [    &quot;./some/file.ts&quot;  ]}</code></pre><h2 id="声明空间"><a href="#声明空间" class="headerlink" title="声明空间"></a>声明空间</h2><h3 id="类型声明空间（class-interface-type）"><a href="#类型声明空间（class-interface-type）" class="headerlink" title="类型声明空间（class interface type）"></a>类型声明空间（class interface type）</h3><pre><code class="js">class Foo{}interface Bar{}type Bas{}</code></pre><p><strong>注意：</strong>尽管你定义了 interface Bar，却并不能够把它作为一个变量来使用，因为它没有定义在变量声明空间中。</p><h3 id="变量声明空间"><a href="#变量声明空间" class="headerlink" title="变量声明空间"></a>变量声明空间</h3><pre><code class="js">class Foo {}const someOne = Fooconst someOneVar = 123</code></pre><p><strong>注意</strong> 一些用 var 声明的变量，也只能在变量声明空间使用，不能用作类型注解。</p><a id="more"></a><h2 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h2><h3 id="全局模块"><a href="#全局模块" class="headerlink" title="全局模块"></a>全局模块</h3><p>类似js的中全局对象，是一种不安全的方式，可使用文件模块代替</p><pre><code class="js">const Foo = 123const Bar = Foo</code></pre><h3 id="文件模块"><a href="#文件模块" class="headerlink" title="文件模块"></a>文件模块</h3><p>文件模块也可以叫做外部模块，通过import,export导入导出，从而才能使用</p><pre><code class="js">//foo.jsexport const foo = 123//bar.jsimport {foo} from &#39;./foo.js&#39;const bar = foo</code></pre><h4 id="文件模块详情"><a href="#文件模块详情" class="headerlink" title="文件模块详情"></a>文件模块详情</h4><h5 id="ES模块语法"><a href="#ES模块语法" class="headerlink" title="ES模块语法"></a>ES模块语法</h5><p>导出</p><pre><code class="js">//使用 export 关键字导出一个变量或类型export const someVar = 123;export type someType = {  foo: string;};// export 的写法除了上面这种，还有另外一种：const someVar = 123;type someType = {  type: string;};export { someVar, someType };// 可以用重命名变量的方式导出：const someVar = 123;export { someVar as aDifferentName };</code></pre><p>导入</p><pre><code class="js">//使用 import 关键字导入一个变量或者是一个类型：import { someVar, someType } from &#39;./foo&#39;;//通过重命名的方式导入变量或者类型：import { someVar as aDifferentName } from &#39;./foo&#39;//可以使用整体加载，即用星号（*）指定一个对象，所有输出值都加载在这个对象上面：// 你可以使用 `foo.someVar` 和 `foo.someType` 以及其他任何从 `foo` 导出的变量或者类型import * as foo from &#39;./foo&#39;;//只导入模块：import &#39;core-js&#39;; // 一个普通的 polyfill 库//从其他模块导入后整体导出：export * from &#39;./foo&#39;;//从其他模块导入后，部分导出：export { someVar } from &#39;./foo&#39;;//通过重命名，部分导出从另一个模块导入的项目：export { someVar as aDifferentName } from &#39;./foo&#39;;//默认导入／导出,使用 export default// some varexport default (someVar = 123);//导入使用 import someName from &#39;someModule&#39; 语法（你可以根据需要为导入命名）：import someLocalNameForThisFile from &#39;./foo&#39;;</code></pre><h5 id="模块路径"><a href="#模块路径" class="headerlink" title="模块路径"></a>模块路径</h5><p>这里存在两种截然不同的模块：</p><blockquote><p>相对模块路径（路径以 . 开头，例如：./someFile 或者 ../../someFolder/someFile 等）；<br>其他动态查找模块（如：core-js，typestyle，react 或者甚至是 react/core 等）。</p></blockquote><h5 id="什么是-place"><a href="#什么是-place" class="headerlink" title="什么是 place"></a>什么是 place</h5><p>这个点指的应该是一个模块查找的过程</p><h5 id="重写类型的动态查找"><a href="#重写类型的动态查找" class="headerlink" title="重写类型的动态查找"></a>重写类型的动态查找</h5><p>在项目里，可以通过<code>declare module &#39;somePath&#39;</code> 声明一个全局模块的方式，来解决查找模块路径的问题。</p><h5 id="import-require-仅仅是导入类型"><a href="#import-require-仅仅是导入类型" class="headerlink" title="import/require 仅仅是导入类型"></a>import/require 仅仅是导入类型</h5><p>它实际上只做了两件事：</p><ul><li>导入 foo 模块的所有类型信息；</li><li>确定 foo 模块运行时的依赖关系。</li></ul><h2 id="命名空间"><a href="#命名空间" class="headerlink" title="命名空间"></a>命名空间</h2><p>在 JavaScript 可以使用匿名函数创建一个命名空间</p><pre><code class="js">(function(something) {  something.foo = 123;})(something || (something = {}));</code></pre><p>TypeScript 提供了 namespace 关键字来描述这种分组</p><pre><code class="js">namespace Utility {  export function log(msg) {    console.log(msg);  }  export function error(msg) {    console.log(msg);  }}// usageUtility.log(&#39;Call me&#39;);Utility.error(&#39;maybe&#39;);</code></pre><h2 id="动态导入表达式"><a href="#动态导入表达式" class="headerlink" title="动态导入表达式"></a>动态导入表达式</h2><p>动态导入表达式是 ECMAScript 的一个新功能，它允许你在程序的任意位置异步加载一个模块  </p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;书本地址&quot;&gt;&lt;a href=&quot;#书本地址&quot; class=&quot;headerlink&quot; title=&quot;书本地址&quot;&gt;&lt;/a&gt;书本地址&lt;/h1&gt;&lt;p&gt;&lt;a href=&quot;https://jkchao.github.io/typescript-book-chinese/#why&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://jkchao.github.io/typescript-book-chinese/#why&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;什么是TypeScript-为什么要使用TypeScript&quot;&gt;&lt;a href=&quot;#什么是TypeScript-为什么要使用TypeScript&quot; class=&quot;headerlink&quot; title=&quot;什么是TypeScript,为什么要使用TypeScript?&quot;&gt;&lt;/a&gt;什么是TypeScript,为什么要使用TypeScript?&lt;/h2&gt;&lt;p&gt;根据TypeScript官网中的介绍，TypeScript - JavaScript the scales (属于Js的超集)，Ts发展至今已经是很多大型项目的标配，它提供的静态类型检查，大大的提高了代码的可维护性及可读性；同时提供最新和不断发展的Javascript特性，让我们能建立更加强壮的组件。&lt;/p&gt;
-&lt;h2 id=&quot;从tsconfig-json配置看ts整体&quot;&gt;&lt;a href=&quot;#从tsconfig-json配置看ts整体&quot; class=&quot;headerlink&quot; title=&quot;从tsconfig.json配置看ts整体&quot;&gt;&lt;/a&gt;从tsconfig.json配置看ts整体&lt;/h2&gt;&lt;h3 id=&quot;创建tsconfig-json文件，配置信息&quot;&gt;&lt;a href=&quot;#创建tsconfig-json文件，配置信息&quot; class=&quot;headerlink&quot; title=&quot;创建tsconfig.json文件，配置信息&quot;&gt;&lt;/a&gt;创建tsconfig.json文件，配置信息&lt;/h3&gt;&lt;p&gt;通过compilerOption来定制你的编译选项&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;json&quot;&gt;{
-  &amp;quot;compilerOptions&amp;quot;: {
-
-    /* 基本选项 */
-    &amp;quot;target&amp;quot;: &amp;quot;es5&amp;quot;,                       // 指定 ECMAScript 目标版本: &amp;#39;ES3&amp;#39; (default), &amp;#39;ES5&amp;#39;, &amp;#39;ES2015&amp;#39;, &amp;#39;ES2016&amp;#39;, &amp;#39;ES2017&amp;#39;, or &amp;#39;ESNEXT&amp;#39;
-    &amp;quot;module&amp;quot;: &amp;quot;commonjs&amp;quot;,                  // 指定使用模块: &amp;#39;commonjs&amp;#39;, &amp;#39;amd&amp;#39;, &amp;#39;system&amp;#39;, &amp;#39;umd&amp;#39; or &amp;#39;es2015&amp;#39;
-    &amp;quot;lib&amp;quot;: [],                             // 指定要包含在编译中的库文件
-    &amp;quot;allowJs&amp;quot;: true,                       // 允许编译 javascript 文件
-    &amp;quot;checkJs&amp;quot;: true,                       // 报告 javascript 文件中的错误
-    &amp;quot;jsx&amp;quot;: &amp;quot;preserve&amp;quot;,                     // 指定 jsx 代码的生成: &amp;#39;preserve&amp;#39;, &amp;#39;react-native&amp;#39;, or &amp;#39;react&amp;#39;
-    &amp;quot;declaration&amp;quot;: true,                   // 生成相应的 &amp;#39;.d.ts&amp;#39; 文件
-    &amp;quot;sourceMap&amp;quot;: true,                     // 生成相应的 &amp;#39;.map&amp;#39; 文件
-    &amp;quot;outFile&amp;quot;: &amp;quot;./&amp;quot;,                       // 将输出文件合并为一个文件
-    &amp;quot;outDir&amp;quot;: &amp;quot;./&amp;quot;,                        // 指定输出目录
-    &amp;quot;rootDir&amp;quot;: &amp;quot;./&amp;quot;,                       // 用来控制输出目录结构 --outDir.
-    &amp;quot;removeComments&amp;quot;: true,                // 删除编译后的所有的注释
-    &amp;quot;noEmit&amp;quot;: true,                        // 不生成输出文件
-    &amp;quot;importHelpers&amp;quot;: true,                 // 从 tslib 导入辅助工具函数
-    &amp;quot;isolatedModules&amp;quot;: true,               // 将每个文件做为单独的模块 （与 &amp;#39;ts.transpileModule&amp;#39; 类似）.
-
-    /* 严格的类型检查选项 */
-    &amp;quot;strict&amp;quot;: true,                        // 启用所有严格类型检查选项
-    &amp;quot;noImplicitAny&amp;quot;: true,                 // 在表达式和声明上有隐含的 any类型时报错
-    &amp;quot;strictNullChecks&amp;quot;: true,              // 启用严格的 null 检查
-    &amp;quot;noImplicitThis&amp;quot;: true,                // 当 this 表达式值为 any 类型的时候，生成一个错误
-    &amp;quot;alwaysStrict&amp;quot;: true,                  // 以严格模式检查每个模块，并在每个文件里加入 &amp;#39;use strict&amp;#39;
-
-    /* 额外的检查 */
-    &amp;quot;noUnusedLocals&amp;quot;: true,                // 有未使用的变量时，抛出错误
-    &amp;quot;noUnusedParameters&amp;quot;: true,            // 有未使用的参数时，抛出错误
-    &amp;quot;noImplicitReturns&amp;quot;: true,             // 并不是所有函数里的代码都有返回值时，抛出错误
-    &amp;quot;noFallthroughCasesInSwitch&amp;quot;: true,    // 报告 switch 语句的 fallthrough 错误。（即，不允许 switch 的 case 语句贯穿）
-
-    /* 模块解析选项 */
-    &amp;quot;moduleResolution&amp;quot;: &amp;quot;node&amp;quot;,            // 选择模块解析策略： &amp;#39;node&amp;#39; (Node.js) or &amp;#39;classic&amp;#39; (TypeScript pre-1.6)
-    &amp;quot;baseUrl&amp;quot;: &amp;quot;./&amp;quot;,                       // 用于解析非相对模块名称的基目录
-    &amp;quot;paths&amp;quot;: {},                           // 模块名到基于 baseUrl 的路径映射的列表
-    &amp;quot;rootDirs&amp;quot;: [],                        // 根文件夹列表，其组合内容表示项目运行时的结构内容
-    &amp;quot;typeRoots&amp;quot;: [],                       // 包含类型声明的文件列表
-    &amp;quot;types&amp;quot;: [],                           // 需要包含的类型声明文件名列表
-    &amp;quot;allowSyntheticDefaultImports&amp;quot;: true,  // 允许从没有设置默认导出的模块中默认导入。
-
-    /* Source Map Options */
-    &amp;quot;sourceRoot&amp;quot;: &amp;quot;./&amp;quot;,                    // 指定调试器应该找到 TypeScript 文件而不是源文件的位置
-    &amp;quot;mapRoot&amp;quot;: &amp;quot;./&amp;quot;,                       // 指定调试器应该找到映射文件而不是生成文件的位置
-    &amp;quot;inlineSourceMap&amp;quot;: true,               // 生成单个 soucemaps 文件，而不是将 sourcemaps 生成不同的文件
-    &amp;quot;inlineSources&amp;quot;: true,                 // 将代码与 sourcemaps 生成到一个文件中，要求同时设置了 --inlineSourceMap 或 --sourceMap 属性
-
-    /* 其他选项 */
-    &amp;quot;experimentalDecorators&amp;quot;: true,        // 启用装饰器
-    &amp;quot;emitDecoratorMetadata&amp;quot;: true          // 为装饰器提供元数据的支持
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;Ts编译生成Js文件&quot;&gt;&lt;a href=&quot;#Ts编译生成Js文件&quot; class=&quot;headerlink&quot; title=&quot;Ts编译生成Js文件&quot;&gt;&lt;/a&gt;Ts编译生成Js文件&lt;/h3&gt;&lt;p&gt;在目录下运行 &lt;code&gt;tsc&lt;/code&gt;命令，会在当前目录或者父级目录下找&lt;code&gt;tsconfig.json&lt;/code&gt;文件&lt;br&gt;运行 &lt;code&gt;tsc -p ./path-to-project-directory&lt;/code&gt; 。当然，这个路径可以是绝对路径，也可以是相对于当前目录的相对路径。&lt;br&gt;使用 &lt;code&gt;tsc -w&lt;/code&gt; 来启用 TypeScript 编译器的观测模式，在检测到文件改动之后，它将重新编译。&lt;/p&gt;
-&lt;h3 id=&quot;显示的指定编译文件&quot;&gt;&lt;a href=&quot;#显示的指定编译文件&quot; class=&quot;headerlink&quot; title=&quot;显示的指定编译文件&quot;&gt;&lt;/a&gt;显示的指定编译文件&lt;/h3&gt;&lt;pre&gt;&lt;code class=&quot;js&quot;&gt;{
-  &amp;quot;files&amp;quot;: [
-    &amp;quot;./some/file.ts&amp;quot;
-  ]
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;声明空间&quot;&gt;&lt;a href=&quot;#声明空间&quot; class=&quot;headerlink&quot; title=&quot;声明空间&quot;&gt;&lt;/a&gt;声明空间&lt;/h2&gt;&lt;h3 id=&quot;类型声明空间（class-interface-type）&quot;&gt;&lt;a href=&quot;#类型声明空间（class-interface-type）&quot; class=&quot;headerlink&quot; title=&quot;类型声明空间（class interface type）&quot;&gt;&lt;/a&gt;类型声明空间（class interface type）&lt;/h3&gt;&lt;pre&gt;&lt;code class=&quot;js&quot;&gt;class Foo{}
-interface Bar{}
-type Bas{}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;strong&gt;注意：&lt;/strong&gt;尽管你定义了 interface Bar，却并不能够把它作为一个变量来使用，因为它没有定义在变量声明空间中。&lt;/p&gt;
-&lt;h3 id=&quot;变量声明空间&quot;&gt;&lt;a href=&quot;#变量声明空间&quot; class=&quot;headerlink&quot; title=&quot;变量声明空间&quot;&gt;&lt;/a&gt;变量声明空间&lt;/h3&gt;&lt;pre&gt;&lt;code class=&quot;js&quot;&gt;class Foo {}
-const someOne = Foo
-const someOneVar = 123
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt; 一些用 var 声明的变量，也只能在变量声明空间使用，不能用作类型注解。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="Js" scheme="https://zhanghao-web.github.io/categories/Js/"/>
-    
-    
-      <category term="Ts" scheme="https://zhanghao-web.github.io/tags/Ts/"/>
     
   </entry>
   
