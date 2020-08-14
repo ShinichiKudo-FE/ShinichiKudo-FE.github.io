@@ -11,7 +11,8 @@
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="TriDiamond Obsidian,"> 
     <meta name="description" content="一枚前端搬砖队队员的记录册,前言上一篇看了react的核心概念后，大概心里对react的五脏六腑有个形状了，接着看文档中的高级指引部分
-react文档中高级指引部分的重点"> 
+react文档中高级指引部分的重点代码分割在通过动态 import() 语法。
+impor,"> 
     <meta name="author" content="张白告丶"> 
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -99,13 +100,13 @@ react文档中高级指引部分的重点">
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    253
+                    3k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    1 mins.
+                    3 mins.
                 </span>
                 
                 
@@ -138,7 +139,97 @@ react文档中高级指引部分的重点">
     <div class='main'>
         <div class="content markdown animated fadeIn">
             <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>上一篇看了react的核心概念后，大概心里对react的五脏六腑有个形状了，接着看文档中的高级指引部分</p>
-<h2 id="react文档中高级指引部分的重点"><a href="#react文档中高级指引部分的重点" class="headerlink" title="react文档中高级指引部分的重点"></a>react文档中高级指引部分的重点</h2>
+<h2 id="react文档中高级指引部分的重点"><a href="#react文档中高级指引部分的重点" class="headerlink" title="react文档中高级指引部分的重点"></a>react文档中高级指引部分的重点</h2><h3 id="代码分割"><a href="#代码分割" class="headerlink" title="代码分割"></a>代码分割</h3><p>在通过动态 import() 语法。</p>
+<pre><code class="js">import(&quot;./math&quot;).then(math =&gt; {
+  console.log(math.add(16, 26));
+});
+</code></pre>
+<p><strong>使用React.Lazy</strong></p>
+<p><code>React.lazy</code> 函数能让你像渲染常规组件一样处理动态引入（的组件）</p>
+<pre><code class="js">const OtherComponent = React.lazy(() =&gt; import(&#39;./OtherComponent&#39;));
+</code></pre>
+<h3 id="context（常用）"><a href="#context（常用）" class="headerlink" title="context（常用）"></a>context（常用）</h3><p>内部的一个组件状态通信的一个方法</p>
+<p>定义：<strong>Context 提供了一个无需为每层组件手动添加 props，就能在组件树间进行数据传递的方法</strong>。</p>
+<p><code>theme-context.js</code></p>
+<pre><code class="js">// 确保传递给 createContext 的默认值数据结构是调用的组件（consumers）所能匹配的！
+export const ThemeContext = React.createContext({
+  theme: themes.dark,
+  toggleTheme: () =&gt; {},
+});
+</code></pre>
+<p><code>theme-toggler-button.js</code></p>
+<pre><code class="js">// 有两种显示方式
+&lt;MyContext.Provider value={/* 某个值 */}&gt;
+
+&lt;MyContext.Consumer&gt;
+  {value =&gt; /* 基于 context 值进行渲染*/}
+&lt;/MyContext.Consumer&gt;
+</code></pre>
+<pre><code class="js">import {ThemeContext} from &#39;./theme-context&#39;;
+
+function ThemeTogglerButton() {
+  // Theme Toggler 按钮不仅仅只获取 theme 值，它也从 context 中获取到一个 toggleTheme 函数
+  return (
+    &lt;ThemeContext.Consumer&gt;
+      {({theme, toggleTheme}) =&gt; (
+        &lt;button          onClick={toggleTheme}
+          style={{backgroundColor: theme.background}}&gt;
+
+          Toggle Theme
+        &lt;/button&gt;
+      )}
+    &lt;/ThemeContext.Consumer&gt;
+  );
+}
+
+export default ThemeTogglerButton;
+</code></pre>
+<p><code>app.js</code></p>
+<pre><code class="js">import {ThemeContext, themes} from &#39;./theme-context&#39;;
+import ThemeTogglerButton from &#39;./theme-toggler-button&#39;;
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.toggleTheme = () =&gt; {
+      this.setState(state =&gt; ({
+        theme:
+          state.theme === themes.dark
+            ? themes.light
+            : themes.dark,
+      }));
+    };
+
+    // State 也包含了更新函数，因此它会被传递进 context provider。
+    this.state = {
+      theme: themes.light,
+      toggleTheme: this.toggleTheme,
+    };
+  }
+
+  render() {
+    // 整个 state 都被传递进 provider
+    return (
+      &lt;ThemeContext.Provider value={this.state}&gt;
+        &lt;Content /&gt;
+      &lt;/ThemeContext.Provider&gt;
+    );
+  }
+}
+
+function Content() {
+  return (
+    &lt;div&gt;
+      &lt;ThemeTogglerButton /&gt;
+    &lt;/div&gt;
+  );
+}
+
+ReactDOM.render(&lt;App /&gt;, document.root);
+</code></pre>
+<h2 id="refs"><a href="#refs" class="headerlink" title="refs"></a>refs</h2><p><strong>Ref 转发是一项将 ref 自动地通过组件传递到其一子组件的技巧</strong><br>类似vue中的 <code>refs</code>,获取真实dom的属性</p>
+
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
                 data-autoplay="false">
@@ -196,7 +287,7 @@ react文档中高级指引部分的重点">
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#react文档中高级指引部分的重点"><span class="toc-number">1.1.</span> <span class="toc-text">react文档中高级指引部分的重点</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#react文档中高级指引部分的重点"><span class="toc-number">1.1.</span> <span class="toc-text">react文档中高级指引部分的重点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#代码分割"><span class="toc-number">1.1.1.</span> <span class="toc-text">代码分割</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#context（常用）"><span class="toc-number">1.1.2.</span> <span class="toc-text">context（常用）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#refs"><span class="toc-number">1.2.</span> <span class="toc-text">refs</span></a></li></ol></li></ol>
                 </div>
             </div>
             
