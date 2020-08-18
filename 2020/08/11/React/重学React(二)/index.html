@@ -100,13 +100,13 @@ impor,">
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    3k
+                    4.8k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    3 mins.
+                    4 mins.
                 </span>
                 
                 
@@ -228,7 +228,51 @@ function Content() {
 
 ReactDOM.render(&lt;App /&gt;, document.root);
 </code></pre>
-<h2 id="refs"><a href="#refs" class="headerlink" title="refs"></a>refs</h2><p><strong>Ref 转发是一项将 ref 自动地通过组件传递到其一子组件的技巧</strong><br>类似vue中的 <code>refs</code>,获取真实dom的属性</p>
+<h2 id="refs"><a href="#refs" class="headerlink" title="refs"></a>refs</h2><p><strong>Ref 转发是一项将 ref 自动地通过组件传递到其一子组件的技巧,<code>render prop</code> 是一个用于告知组件需要渲染什么内容的函数 prop。</strong><br>类似vue中的 <code>refs</code>,获取真实dom的属性</p>
+<h3 id="何时使用refs"><a href="#何时使用refs" class="headerlink" title="何时使用refs"></a>何时使用refs</h3><ul>
+<li><ol>
+<li>管理焦点，文本选择或媒体播放。</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>触发强制动画。</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>集成第三方 DOM 库。</li>
+</ol>
+</li>
+</ul>
+<h2 id="如何使用refs"><a href="#如何使用refs" class="headerlink" title="如何使用refs"></a>如何使用refs</h2><ol>
+<li>创建Refs</li>
+</ol>
+<pre><code class="js">this.myRef = React.createRef()
+</code></pre>
+<ol start="2">
+<li>访问Refs</li>
+</ol>
+<pre><code class="js">const node = this.myRef.current;
+</code></pre>
+<p><strong>默认情况下，你不能在函数组件上使用 <code>ref</code> 属性，因为它们没有实例,在hook函数中useRef,指向一个DOM元素或class组件</strong></p>
+<h2 id="Render-Props"><a href="#Render-Props" class="headerlink" title="Render Props"></a>Render Props</h2><p>指一种在 React 组件之间使用一个值为<strong>函数的 prop</strong>共享代码的简单技术</p>
+<pre><code class="js">&lt;DataProvider render={data =&gt; (
+  &lt;h1&gt;Hello {data.target}&lt;/h1&gt;
+)}/&gt;
+</code></pre>
+<h2 id="静态类型检查"><a href="#静态类型检查" class="headerlink" title="静态类型检查"></a>静态类型检查</h2><p>有两种方式一种是<code>Flow</code>语法，这个我没有用过。所以重点学习另一种<code>TypeScript</code></p>
+<ol>
+<li>在 <code>Create React App</code> 中使用 TypeScript</li>
+</ol>
+<pre><code class="js">npx create-react-app my-app --template typescript
+</code></pre>
+<ol start="2">
+<li>添加相关依赖包</li>
+</ol>
+<pre><code class="js">npm install --save typescript @types/node @types/react @types/react-dom @types/jest
+//or
+yarn add typescript @types/node @types/react @types/react-dom @types/jest
+</code></pre>
+<h2 id="非受控组件"><a href="#非受控组件" class="headerlink" title="非受控组件"></a>非受控组件</h2><p>如果你还是不清楚在某个特殊场景中应该使用哪种组件，那么 这篇关于<a href="https://goshakkk.name/controlled-vs-uncontrolled-inputs-react/" target="_blank" rel="noopener">受控和非受控输入组件的文章</a> 会很有帮助。</p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -287,7 +331,7 @@ ReactDOM.render(&lt;App /&gt;, document.root);
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#react文档中高级指引部分的重点"><span class="toc-number">1.1.</span> <span class="toc-text">react文档中高级指引部分的重点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#代码分割"><span class="toc-number">1.1.1.</span> <span class="toc-text">代码分割</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#context（常用）"><span class="toc-number">1.1.2.</span> <span class="toc-text">context（常用）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#refs"><span class="toc-number">1.2.</span> <span class="toc-text">refs</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#react文档中高级指引部分的重点"><span class="toc-number">1.1.</span> <span class="toc-text">react文档中高级指引部分的重点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#代码分割"><span class="toc-number">1.1.1.</span> <span class="toc-text">代码分割</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#context（常用）"><span class="toc-number">1.1.2.</span> <span class="toc-text">context（常用）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#refs"><span class="toc-number">1.2.</span> <span class="toc-text">refs</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#何时使用refs"><span class="toc-number">1.2.1.</span> <span class="toc-text">何时使用refs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何使用refs"><span class="toc-number">1.3.</span> <span class="toc-text">如何使用refs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Render-Props"><span class="toc-number">1.4.</span> <span class="toc-text">Render Props</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#静态类型检查"><span class="toc-number">1.5.</span> <span class="toc-text">静态类型检查</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#非受控组件"><span class="toc-number">1.6.</span> <span class="toc-text">非受控组件</span></a></li></ol></li></ol>
                 </div>
             </div>
             
