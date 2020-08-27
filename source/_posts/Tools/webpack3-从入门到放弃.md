@@ -9,7 +9,7 @@ categories: "Tools"
 
 > 首先，这篇文章是根据 webpack 版本 (即 v3.4.1) 撰写，较长一段时间内无需担心过时的问题。其次，这应该会是一篇极长的文章，涵盖了基本的使用方法，有更高级功能的需求可以参考官方文档继续学习。再次，即使是基本的功能，也内容繁多，我尽可能地解释通俗易懂，将我学习过程中的疑惑和坑一一解释，如有纰漏，敬请雅正。再次，为了清晰有效地讲解，我会演示从零编写 demo，只要一步步跟着做，就会清晰许多。
 
-[本文demo地址](https://github.com/zhanghao-web/webpack-demo)
+[本文demo地址](https://github.com/ShinichiKudo-FE/webpack-demo)
 
 ## Webpack，何许人也？
 

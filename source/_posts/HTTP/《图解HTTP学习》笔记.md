@@ -7,7 +7,7 @@ categories: "HTTP"
 
 # 从一道题引发的思考
 
-[从输入网页到呈现网页页面这一过程经历了什么？](https://zhanghao-web.github.io/2018/07/10/HTTP/%E4%BB%8E%E8%BE%93%E5%85%A5url%E5%88%B0%E9%A1%B5%E9%9D%A2%E5%B1%95%E7%A4%BA%E5%88%B0%E5%BA%95%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88/#more)
+[从输入网页到呈现网页页面这一过程经历了什么？](https://ShinichiKudo-FE.github.io/2018/07/10/HTTP/%E4%BB%8E%E8%BE%93%E5%85%A5url%E5%88%B0%E9%A1%B5%E9%9D%A2%E5%B1%95%E7%A4%BA%E5%88%B0%E5%BA%95%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88/#more)
 
 ## HTTP的诞生
 

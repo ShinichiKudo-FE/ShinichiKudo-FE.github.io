@@ -4,7 +4,7 @@ date: 2018-04-19 00:21:34
 tags: "Record"
 categories: "Standard"
 ---
-[更多前端代码规范请移步](https://github.com/zhanghao-web/spec)
+[更多前端代码规范请移步](https://github.com/ShinichiKudo-FE/spec)
 
 -------
 
