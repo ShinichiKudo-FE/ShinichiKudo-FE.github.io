@@ -1,0 +1,768 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>使用vue高阶组件 - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,前文高阶组件(HOC)是一种架构模式，在 React 中非常常见，但也可以在 Vue 中使用。它可以被描述为一种在组件之间共享公共功能而不需要重复代码的方法。HOC 的目的是增强组件的功能。它允许在,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://ShinichiKudo-FE.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">使用vue高阶组件</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/Vue"><b>「
+                    </b>VUE<b> 」</b></a>
+                
+                November 25, 2019
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2019/11/25/Vue/%E4%BD%BF%E7%94%A8vue%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6/" title="使用vue高阶组件" class="">使用vue高阶组件</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    11k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    10 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Vue/" rel="tag">Vue</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h1 id="前文"><a href="#前文" class="headerlink" title="前文"></a>前文</h1><p><code>高阶组件(HOC)</code>是一种架构模式，在 React 中非常常见，但也可以在 Vue 中使用。它可以被描述为一种<strong>在组件之间共享公共功能而不需要重复代码</strong>的方法。HOC 的目的是增强组件的功能。它允许在项目中实现可重用性和可维护性。</p>
+<ul>
+<li>只要你向一个方法传入组件，然后返回一个新的组件，这就是一个 HOC。</li>
+</ul>
+<blockquote>
+<p>高阶组件在以下方面非常有用: 1.操作属性。 2.操作数据和数据抽象。 3.代码重用</p>
+</blockquote>
+<h2 id="预备知识"><a href="#预备知识" class="headerlink" title="预备知识"></a>预备知识</h2><p>在我们开始教程之前，需要了解以下几点：</p>
+<p>使用 Vue 框架的经验。<br>知道如何使用 vue-cli 设置应用程序。<br>JavaScript 和 Vue 的基本知识<br>Node (8)<br>npm (5.2.0)</p>
+<h2 id="Vue-中的高阶组件模式"><a href="#Vue-中的高阶组件模式" class="headerlink" title="Vue 中的高阶组件模式"></a>Vue 中的高阶组件模式</h2><p>虽然高阶组件通常与 React 相关联，但是为 Vue 组件创建高阶组件是很有可能的。在 Vue 中创建高阶组件的模式如下所示。</p>
+<pre><code class="js">// hoccomponent.js
+
+import Vue from &quot;vue&quot;
+import ComponentExample from &#39;@/components/ComponentExample.vue&#39;
+const HoComponent = (component) =&gt; {
+    return Vue.component(&#39;withSubscription&#39;, {
+        render(createElement) {
+            return createElement(component)
+        }
+    }
+}
+const HoComponentEnhanced = HoComponent(ComponentExample);
+
+</code></pre>
+<p>如上面的代码块所示，<code>HoComponent</code> 函数接受一个组件作为参数，并创建一个新组件来渲染传进来的组件。</p>
+<h2 id="一个简单的-HOC-示例"><a href="#一个简单的-HOC-示例" class="headerlink" title="一个简单的 HOC 示例"></a>一个简单的 HOC 示例</h2><p>在本教程中，我们将介绍一个使用高阶组件的示例。在介绍高阶组件之前，我们将了解在没有高阶组件的情况下，当前的代码库是如何工作的，然后了解如何进行抽象。</p>
+<p><a href="https://codesandbox.io/embed/llvq04nx4l" target="_blank" rel="noopener">https://codesandbox.io/embed/llvq04nx4l</a></p>
+<p>正如上面的 CodeSandbox 所示，该应用程序会显示一个纸业公司及其净资产的列表，以及《办公室》(美国)中的人物及其获奖情况。</p>
+<p>我们获得应用程序所需的所有数据来源只有一个，那就是<code>mockData.js</code>文件。</p>
+<a id="more"></a>
+<pre><code class="js">// src/components/mockData.js
+const staff = [
+  {
+    name: &quot;Michael Scott&quot;,
+    id: 0,
+    awards: 2
+  },
+  {
+    name: &quot;Toby Flenderson&quot;,
+    id: 1,
+    awards: 0
+  },
+  {
+    name: &quot;Dwight K. Schrute&quot;,
+    id: 2,
+    awards: 10
+  },
+  {
+    name: &quot;Jim Halpert&quot;,
+    id: 3,
+    awards: 1
+  },
+  {
+    name: &quot;Andy Bernard&quot;,
+    id: 4,
+    awards: 0
+  },
+  {
+    name: &quot;Phyllis Vance&quot;,
+    id: 5,
+    awards: 0
+  },
+  {
+    name: &quot;Stanley Hudson&quot;,
+    id: 6,
+    awards: 0
+  }
+];
+const paperCompanies = [
+  {
+    id: 0,
+    name: &quot;Staples&quot;,
+    net: 10000000
+  },
+  {
+    id: 1,
+    name: &quot;Dundler Mufflin&quot;,
+    net: 5000000
+  },
+  {
+    id: 2,
+    name: &quot;Michael Scott Paper Company&quot;,
+    net: 300000
+  },
+  {
+    id: 3,
+    name: &quot;Prince Family Paper&quot;,
+    net: 30000
+  }
+];
+
+export default {
+  getStaff() {
+    return staff;
+  },
+  getCompanies() {
+    return paperCompanies;
+  },
+  increaseAward(id) {
+    staff[id].awards++;
+  },
+  decreaseAward(id) {
+    staff[id].awards--;
+  },
+  setNetWorth(id) {
+    paperCompanies[id].net = Math.random() * (5000000 - 50000) + 50000;
+  }
+};
+</code></pre>
+<p>在上面的代码片段中，有几个 const 变量保存了公司和员工列表的信息。我们也导出了一些函数，</p>
+<blockquote>
+<p>实现以下功能：<br>返回员工列表<br>返回公司列表<br>增加和减少对特定员工的奖励，最后<br>最后，设定公司的净值</p>
+</blockquote>
+<p>接下来，我们看看 <code>Staff.vue</code> 和 <code>Companies.vue</code> 组件。</p>
+<pre><code class="html">// src/components/Staff.vue
+&lt;template&gt;
+  &lt;main&gt;
+    &lt;h3&gt;Staff List&lt;/h3&gt;
+    &lt;div v-for=&quot;(staff, i) in staffList&quot; :key=&quot;i&quot;&gt;
+      {{ staff.name }}: {{ staff.awards }} Salesman of the year Award 🎉
+      &lt;button @click=&quot;increaseAwards(staff.id);&quot;&gt;+&lt;/button&gt;
+      &lt;button @click=&quot;decreaseAwards(staff.id);&quot;&gt;-&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+&lt;/template&gt;
+&lt;script&gt;
+  import mockData from &quot;./mockData.js&quot;;
+  export default {
+    data() {
+      return {
+        staffList: mockData.getStaff()
+      };
+    },
+    methods: {
+      increaseAwards(id) {
+        mockData.increaseAward(id);
+        this.staffList = mockData.getStaff();
+      },
+      decreaseAwards(id) {
+        mockData.decreaseAward(id);
+        this.staffList = mockData.getStaff();
+      }
+    }
+  };
+&lt;/script&gt;
+</code></pre>
+<p>在上面的代码块中，数据实例变量staffList被赋值为函数mockData.getStaff()返回的内容。我们也有increaseAwards和decreaseAwards函数，分别调用mockData.increaseAward 和 mockData.decreaseAward。传递给这些函数的id 是从渲染的模板中获得的。</p>
+<pre><code class="html">    // src/components/Companies.vue
+    &lt;template&gt;
+      &lt;main&gt;
+        &lt;h3&gt;Paper Companies&lt;/h3&gt;
+        &lt;div v-for=&quot;(companies, i) in companies&quot; :key=&quot;i&quot;&gt;
+          {{ companies.name }} - ${{ companies.net
+          }}&lt;button @click=&quot;setWorth(companies.id);&quot;&gt;Set Company Value&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/main&gt;
+    &lt;/template&gt;
+
+    &lt;script&gt;
+      import mockData from &quot;./mockData.js&quot;;
+        export default {
+        data() {
+          return {
+            companies: mockData.getCompanies()
+          };
+        },
+        methods: {
+          setWorth(id) {
+            mockData.setNetWorth(id);
+            this.companies = mockData.getCompanies();
+          }
+        }
+      };
+    &lt;/script&gt;
+
+</code></pre>
+<p>在上面的代码块中，数据实例变量companies 被赋值为函数mockData.getCompanies()的返回内容。我们还有setWorth函数，它通过将公司的 id 传递给mockData.setNetWorth来设置一个随机值作为净值。传递给函数的id是从渲染的模板中获得的。</p>
+<p>现在我们已经看到了这两个组件是如何工作的，我们可以</p>
+<blockquote>
+<p>找出它们之间的共同点，并将其抽象如下：</p>
+</blockquote>
+<p>从数据源获取数据 (mockData.js)<br>onClick 函数</p>
+<p>我们来看看如何将上面的操作放到高阶组件中，以避免代码重复并确保可重用性。</p>
+<p>HoComponent 函数接受两个参数，一个组件和fetchData。fetchData方法用于确定要在表示组件中显示什么。这意味着无论在哪里使用高阶组件，作为fetchData 传递的函数都将被用来从mockData 中获取数据。</p>
+<p>然后将数据实例returnedData 设置为fetchData的内容，然后作为props 传递给在高阶组件中创建的新组件。</p>
+<p>让我们看看新创建的高阶组件如何在应用程序中使用。我们需要编辑Staff.vue 和Companies.vue。</p>
+<pre><code class="html">    // src/components/Staff.vue
+    &lt;template&gt;
+      &lt;main&gt;
+        &lt;h3&gt;Staff List&lt;/h3&gt;
+        &lt;div v-for=&quot;(staff, i) in returnedData&quot; :key=&quot;i&quot;&gt;
+          {{ staff.name }}: {{ staff.awards }} Salesman of the year Award 🎉
+          &lt;button @click=&quot;increaseAwards(staff.id);&quot;&gt;+&lt;/button&gt;
+          &lt;button @click=&quot;decreaseAwards(staff.id);&quot;&gt;-&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/main&gt;
+    &lt;/template&gt;
+    &lt;script&gt;
+      export default {
+        props: [&quot;returnedData&quot;]
+      };
+    &lt;/script&gt;
+
+</code></pre>
+<pre><code class="html">    // src/components/Companies.vue
+    &lt;template&gt;
+      &lt;main&gt;
+        &lt;h3&gt;Paper Companies&lt;/h3&gt;
+        &lt;div v-for=&quot;(companies, i) in returnedData&quot; :key=&quot;i&quot;&gt;
+          {{ companies.name }} - ${{ companies.net
+          }}&lt;button @click=&quot;setWorth(companies.id);&quot;&gt;Set Company Value&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/main&gt;
+    &lt;/template&gt;
+    &lt;script&gt;
+      export default {
+        props: [&quot;returnedData&quot;]
+      };
+    &lt;/script&gt;
+
+</code></pre>
+<p>正如你在上面的代码块中看到的，对于这两个组件，我们去掉了函数和数据实例变量，显示内容所需的所有数据现在都将从这些props中获得。对于删掉的函数，我们将很快会讲到。</p>
+<p>在 App.vue 组件中，用以下代码编辑script 标签中的现有内容：</p>
+<pre><code class="html">    // src/App.vue
+    &lt;script&gt;
+      // import the Companies component
+      import Companies from &quot;./components/Companies&quot;;
+      // import the Staff component
+      import Staff from &quot;./components/Staff&quot;;
+      // import the higher order component
+      import HoComponent from &quot;./components/HoComponent.js&quot;;
+
+      // Create a const variable which contains the Companies component wrapped in the higher order component
+      const CompaniesComponent = HoComponent(Companies, mockData =&gt; mockData.getCompanies()
+      );
+
+      // Create a const variable which contains the Staff component wrapped in the higher order component
+      const StaffComponent = HoComponent(Staff, mockData =&gt; mockData.getStaff());
+
+      export default {
+        name: &quot;App&quot;,
+        components: {
+          CompaniesComponent,
+          StaffComponent
+        }
+      };
+    &lt;/script&gt;
+
+</code></pre>
+<p>在上面的代码块中，HoComponent用于包装 Staff 和 Companies 组件。</p>
+<p>每个组件作为HoComponent 的第一个参数传入，第二个参数是一个函数，它返回另一个函数，指定应该从mockData获取什么数据。这是我们之前创建的高阶组件(HoComponent.js)中的fetchData 函数。</p>
+<p>如果你现在刷新应用程序，你应该仍然可以看到来自mockData 文件的数据像往常一样呈现。唯一的区别是，这些按钮无法工作，因为它们还没有绑定到任何函数。让我们解决这个问题。</p>
+<pre><code class="html">    // src/App.vue
+    &lt;template&gt;
+      &lt;div id=&quot;app&quot;&gt;
+        &lt;CompaniesComponent @click=&quot;onEventHappen&quot; /&gt;
+        &lt;StaffComponent @click=&quot;onEventHappen&quot; /&gt;
+      &lt;/div&gt;
+    &lt;/template&gt;
+
+    &lt;script&gt;
+      // import the Companies component
+      import Companies from &quot;./components/Companies&quot;;
+      // import the Staff component
+      import Staff from &quot;./components/Staff&quot;;
+      // import the higher order component
+      import HoComponent from &quot;./components/HoComponent.js&quot;;
+      // import the source data from mockData only to be used for event handlers
+      import sourceData from &quot;./components/mockData.js&quot;;
+      // Create a const variable which contains the Companies component wrapped in the higher order component
+      const CompaniesComponent = HoComponent(Companies, mockData =&gt;
+      mockData.getCompanies()
+      );
+      // Create a const variable which contains the Staff component wrapped in the higher order component
+      const StaffComponent = HoComponent(Staff, mockData =&gt; mockData.getStaff());
+
+      export default {
+        name: &quot;App&quot;,
+        components: {
+          CompaniesComponent,
+          StaffComponent
+          },
+        methods: {
+          onEventHappen(value) {
+            // set the variable setFunction to the name of the function that was passed iin the value emitted from child component i.e. if value.name is &#39;increaseAward&#39;, setFunction is set to increaseAward()
+            let setFunction = sourceData[value.name];
+            // call the corresponding function with the id passed as an argument.
+            setFunction(value.id);
+          }
+        }
+      };
+    &lt;/script&gt;
+
+    &lt;style&gt;
+    #app {
+      font-family: &quot;Avenir&quot;, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-align: center;
+      color: #2c3e50;
+      margin-top: 60px;
+    }
+    &lt;/style&gt;
+</code></pre>
+<p>在上面的代码块中，我们在App.vue组件中添加了一个事件监听器。</p>
+<p>vue的组件。每当Staff.vue 或Companies.vue 组件被点击时，onEventHappen 方法将会被调用。</p>
+<p>在onEventHappen方法中，我们将变量setFunction 设置为从子组件发出的值中传递的函数名，也就是说，如果value.name是’increaseAward’，那么setFunction设置为increaseAward()。setFunction 将以id作为参数执行。</p>
+<p>最后，为了将事件监听器传递给封装在高阶组件中的组件，我们需要在 HoComponent.js文件中添加下面这行代码。</p>
+<pre><code class="js">    props: {
+    returnedData: this.returnedData
+    },
+    on: { ...this.$listeners }
+
+</code></pre>
+<h2 id="vue-hoc"><a href="#vue-hoc" class="headerlink" title="vue-hoc"></a>vue-hoc</h2><p>或者，您可以使用<a href="https://github.com/jackmellis/vue-hoc" target="_blank" rel="noopener">vue-hoc</a>库来帮助创建高阶组件。vue-hoc帮助你轻松地创建高阶组件，你要做的就是传递基本组件、应用于HOC的一系列组件选项和在渲染阶段传递给组件的数据属性。<br>vue-hoc 可用如下命令安装：<br>    <code>npm install --save vue-hoc</code></p>
+<p>复制代码vue-hoc插件有一些例子可以让你开始创建更高阶的组件，你可以<a href="https://github.com/jackmellis/vue-hoc/blob/master/packages/vue-hoc/README.md" target="_blank" rel="noopener">查看这里</a>.</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/favicon.png" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <!-- <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd> -->
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">171 <p>Articles</p></a></li>
+                    <li><a href="/categories">26 <p>Categories</p></a></li>
+                    <li><a href="/tags">55 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前文"><span class="toc-number">1.</span> <span class="toc-text">前文</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#预备知识"><span class="toc-number">1.1.</span> <span class="toc-text">预备知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Vue-中的高阶组件模式"><span class="toc-number">1.2.</span> <span class="toc-text">Vue 中的高阶组件模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一个简单的-HOC-示例"><span class="toc-number">1.3.</span> <span class="toc-text">一个简单的 HOC 示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vue-hoc"><span class="toc-number">1.4.</span> <span class="toc-text">vue-hoc</span></a></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+
+
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>

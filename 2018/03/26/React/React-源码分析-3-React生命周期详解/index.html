@@ -1,0 +1,847 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>React 源码分析 3 React生命周期详解 - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,React生命周期流程调用流程可以参看上图。分为实例化，存在期和销毁三个不同阶段。介绍生命周期流程的文章很多，相信大部分同学也有所了解，我们就不详细分析了。很多同学肯定有疑问，这些方法在React内,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://ShinichiKudo-FE.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">React 源码分析 3 React生命周期详解</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/React"><b>「
+                    </b>REACT<b> 」</b></a>
+                
+                March 26, 2018
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2018/03/26/React/React-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-3-React%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E8%AF%A6%E8%A7%A3/" title="React 源码分析 3 React生命周期详解" class="">React 源码分析 3 React生命周期详解</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    18k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    16 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/React/" rel="tag">React</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h1 id="React生命周期流程"><a href="#React生命周期流程" class="headerlink" title="React生命周期流程"></a>React生命周期流程</h1><p><img src="http://img.colabug.com/2017/10/965595492cafc7b07b8340cdc9b4441d.png" alt="react"><br>调用流程可以参看上图。分为实例化，存在期和销毁三个不同阶段。介绍生命周期流程的文章很多，相信大部分同学也有所了解，我们就不详细分析了。很多同学肯定有疑问，这些方法在React内部是在哪些方法中被调用的呢，他们触发的时机又是什么时候呢。下面我们来详细分析。</p>
+<h1 id="实例化生命周期"><a href="#实例化生命周期" class="headerlink" title="实例化生命周期"></a>实例化生命周期</h1><h2 id="getDefaultProps"><a href="#getDefaultProps" class="headerlink" title="getDefaultProps"></a>getDefaultProps</h2><p>在React.creatClass()初始化组件类时，会调用getDefaultProps()，将返回的默认属性挂载到defaultProps变量下</p>
+<p>这里要提的一点是，初始化组件类只运行一次。可以把它简单类比为Java中的Class对象。初始化组件类就是ClassLoader加载Class对象的过程。类对象的初始化不要错误理解成了实例对象的初始化。一个React组件类可能会在JSX中被多次调用，产生多个组件对象，但它只有一个类对象，也就是类加载后getDefaultProps就不会再调用了。</p>
+<h2 id="getlnitialState"><a href="#getlnitialState" class="headerlink" title="getlnitialState"></a>getlnitialState</h2><p>这个方法在创建组件实例对象的时候被调用，具体代码位于React.creatClass()的Constructor函数中。</p>
+<p>每次创建React实例对象时，它都会被调用。</p>
+<h2 id="mountComponent"><a href="#mountComponent" class="headerlink" title="mountComponent"></a>mountComponent</h2><p>componentWillMount，render，componentDidMount都是在mountComponent中被调用.它是在渲染新的ReactComponent中被调用的。输入ReactComponent，返回组件对应的HTML。把这个HTML插入到DOM中，就可以生成组件对应的DOM对象了。所以mountComponent尤其关键。</p>
+<p>和Java中的多态一样，不同的React组件的mountComponent实现都有所区别。下面我们来重点分析React自定义组件类，也就是ReactCompositeComponent的mountComponent。</p>
+<pre><code class="javascript"> mountComponent: function (transaction, nativeParent, nativeContainerInfo, context) {
+    this._context = context;
+    this._mountOrder = nextMountID++;
+    this._nativeParent = nativeParent;
+    this._nativeContainerInfo = nativeContainerInfo;
+
+    // 做propTypes是否合法的判断，这个只在开发阶段有用
+    var publicProps = this._processProps(this._currentElement.props);
+    var publicContext = this._processContext(context);
+
+    var Component = this._currentElement.type;
+
+    // 初始化公共类
+    var inst = this._constructComponent(publicProps, publicContext);
+    var renderedElement;
+
+    // inst或者inst.render为空对应的是stateless组件，也就是无状态组件
+    // 无状态组件没有实例对象，它本质上只是一个返回JSX的函数而已。是一种轻量级的React组件
+    if (!shouldConstruct(Component) &amp;&amp; (inst == null || inst.render == null)) {
+      renderedElement = inst;
+      warnIfInvalidElement(Component, renderedElement);
+      inst = new StatelessComponent(Component);
+    }
+
+    // 设置变量
+    inst.props = publicProps;
+    inst.context = publicContext;
+    inst.refs = emptyObject;
+    inst.updater = ReactUpdateQueue;
+    this._instance = inst;
+
+    // 存储实例对象的引用到map中，方便以后查找
+    ReactInstanceMap.set(inst, this);
+
+    // 初始化state，队列等
+    var initialState = inst.state;
+    if (initialState === undefined) {
+      inst.state = initialState = null;
+    }
+    this._pendingStateQueue = null;
+    this._pendingReplaceState = false;
+    this._pendingForceUpdate = false;
+
+    var markup;
+    if (inst.unstable_handleError) {
+      // 挂载时出错，进行一些错误处理，然后performInitialMount，初始化挂载
+      markup = this.performInitialMountWithErrorHandling(renderedElement, nativeParent, nativeContainerInfo, transaction, context);
+    } else {
+      // 初始化挂载
+      markup = this.performInitialMount(renderedElement, nativeParent, nativeContainerInfo, transaction, context);
+    }
+
+    if (inst.componentDidMount) {
+      // 调用componentDidMount，以事务的形式
+      transaction.getReactMountReady().enqueue(inst.componentDidMount, inst);
+    }
+
+    return markup;
+  },
+</code></pre>
+<a id="more"></a>
+<p>mountComponent先做实例对象的props,state等初始化，然后调用performInitialMount初始化挂载，完成后调用componentDidMount。这个调用链还是很清晰的。下面我们重点来分析performInitialMountWithErrorHandling和performInitialMount</p>
+<pre><code class="javascript"> performInitialMountWithErrorHandling: function (renderedElement, nativeParent, nativeContainerInfo, transaction, context) {
+    var markup;
+    var checkpoint = transaction.checkpoint();
+    try {
+      // 放到try-catch中，如果没有出错则调用performInitialMount初始化挂载。可见这里没有什么特别的操作，也就是做一些错误处理而已
+      markup = this.performInitialMount(renderedElement, nativeParent, nativeContainerInfo, transaction, context);
+    } catch (e) {
+      // handleError，卸载组件，然后重新performInitialMount初始化挂载
+      transaction.rollback(checkpoint);
+      this._instance.unstable_handleError(e);
+      if (this._pendingStateQueue) {
+        this._instance.state = this._processPendingState(this._instance.props, this._instance.context);
+      }
+      checkpoint = transaction.checkpoint();
+
+      this._renderedComponent.unmountComponent(true);
+      transaction.rollback(checkpoint);
+
+      markup = this.performInitialMount(renderedElement, nativeParent, nativeContainerInfo, transaction, context);
+    }
+    return markup;
+  },
+</code></pre>
+<p>可见performInitialMountWithErrorHandling只是多了一层错误处理而已，关键还是在performInitialMount中。</p>
+<pre><code class="javascript">performInitialMount: function (renderedElement, nativeParent, nativeContainerInfo, transaction, context) {
+    var inst = this._instance;
+    if (inst.componentWillMount) {
+      // render前调用componentWillMount
+      inst.componentWillMount();
+      // 将state提前合并，故在componentWillMount中调用setState不会触发重新render，而是做一次state合并。这样做的目的是减少不必要的重新渲染
+      if (this._pendingStateQueue) {
+        inst.state = this._processPendingState(inst.props, inst.context);
+      }
+    }
+
+    // 如果不是stateless，即无状态组件，则调用render，返回ReactElement
+    if (renderedElement === undefined) {
+      renderedElement = this._renderValidatedComponent();
+    }
+
+    // 得到组件类型，如空组件ReactNodeTypes.EMPTY，自定义React组件ReactNodeTypes.COMPOSITE，DOM原生组件ReactNodeTypes.NATIVE
+    this._renderedNodeType = ReactNodeTypes.getType(renderedElement);
+    // 由ReactElement生成ReactComponent，这个方法在之前讲解过。根据不同type创建不同Component对象
+    // 参考 http://blog.csdn.net/u013510838/article/details/55669769
+    this._renderedComponent = this._instantiateReactComponent(renderedElement);
+
+    // 递归渲染，渲染子组件
+    var markup = ReactReconciler.mountComponent(this._renderedComponent, transaction, nativeParent, nativeContainerInfo, this._processChildContext(context));
+
+    return markup;
+  },
+</code></pre>
+<p>performInitialMount中先调用componentWillMount()，再将setState()产生的state改变进行state合并，然后调用_renderValidatedComponent()返回ReactElement，它会调用render()方法。然后由ReactElement创建ReactComponent。最后进行递归渲染。下面来看renderValidatedComponent()</p>
+<pre><code class="javascript">  _renderValidatedComponent: function () {
+    var renderedComponent;
+    ReactCurrentOwner.current = this;
+    try {
+      renderedComponent = this._renderValidatedComponentWithoutOwnerOrContext();
+    } finally {
+      ReactCurrentOwner.current = null;
+    }
+    !(
+    return renderedComponent;
+  },
+
+  _renderValidatedComponentWithoutOwnerOrContext: function () {
+    var inst = this._instance;
+    // 调用render方法，得到ReactElement。JSX经过babel转译后其实就是createElement()方法。这一点在前面也讲解过
+    var renderedComponent = inst.render();
+    return renderedComponent;
+  },
+</code></pre>
+<h1 id="存在期生命周期"><a href="#存在期生命周期" class="headerlink" title="存在期生命周期"></a>存在期生命周期</h1><p>组件实例对象已经生成时，我们可以通过setState()来更新组件。setState机制后面会有单独文章分析，现在只用知道它会调用updateComponent()来完成更新即可。下面来分析updateComponent</p>
+<pre><code class="javascript">updateComponent: function(transaction, prevParentElement, nextParentElement, prevUnmaskedContext, nextUnmaskedContext
+  ) {
+    var inst = this._instance;
+    var willReceive = false;
+    var nextContext;
+    var nextProps;
+
+    // context对象如果有改动,则检查propTypes等,这在开发阶段可以报错提醒
+    if (this._context === nextUnmaskedContext) {
+      nextContext = inst.context;
+    } else {
+      nextContext = this._processContext(nextUnmaskedContext);
+      willReceive = true;
+    }
+
+    // 如果父元素类型相同,则跳过propTypes类型检查
+    if (prevParentElement === nextParentElement) {
+      nextProps = nextParentElement.props;
+    } else {
+      nextProps = this._processProps(nextParentElement.props);
+      willReceive = true;
+    }
+
+    // 调用componentWillReceiveProps,如果通过setState进入的updateComponent，则没有这一步
+    if (willReceive &amp;&amp; inst.componentWillReceiveProps) {
+      inst.componentWillReceiveProps(nextProps, nextContext);
+    }
+
+    // 提前合并state,componentWillReceiveProps中调用setState不会重新渲染,在此处做合并即可,因为后面也是要调用render的
+    // 这样可以避免没必要的渲染
+    var nextState = this._processPendingState(nextProps, nextContext);
+
+    // 调用shouldComponentUpdate给shouldUpdate赋值
+    // 如果通过forceUpdate进入的updateComponent，即_pendingForceUpdate不为空，则不用判断shouldComponentUpdate.
+    var shouldUpdate = true;
+    if (!this._pendingForceUpdate &amp;&amp; inst.shouldComponentUpdate) {
+      shouldUpdate = inst.shouldComponentUpdate(nextProps, nextState, nextContext);
+    }
+
+    // 如果shouldUpdate为true,则会执行渲染,否则不会
+    this._updateBatchNumber = null;
+    if (shouldUpdate) {
+      this._pendingForceUpdate = false;
+      // 执行更新渲染,后面详细分析
+      this._performComponentUpdate(
+        nextParentElement,
+        nextProps,
+        nextState,
+        nextContext,
+        transaction,
+        nextUnmaskedContext
+      );
+    } else {
+      // shouldUpdate为false,则不会更新渲染
+      this._currentElement = nextParentElement;
+      this._context = nextUnmaskedContext;
+      inst.props = nextProps;
+      inst.state = nextState;
+      inst.context = nextContext;
+    }
+},
+</code></pre>
+<p>updateComponent中，先调用componentWillReceiveProps，然后合并setState导致的state变化。然后调用shouldComponentUpdate判断是否需要更新渲染。如果需要，则调用_performComponentUpdate执行渲染更新，下面接着分析performComponentUpdate。</p>
+<pre><code class="javascript">_performComponentUpdate: function(nextElement,nextProps,nextState,nextContext,transaction,
+                                     unmaskedContext
+  ) {
+    var inst = this._instance;
+
+    // 判断是否已经update了
+    var hasComponentDidUpdate = Boolean(inst.componentDidUpdate);
+    var prevProps;
+    var prevState;
+    var prevContext;
+    if (hasComponentDidUpdate) {
+      prevProps = inst.props;
+      prevState = inst.state;
+      prevContext = inst.context;
+    }
+
+    // render前调用componentWillUpdate
+    if (inst.componentWillUpdate) {
+      inst.componentWillUpdate(nextProps, nextState, nextContext);
+    }
+
+    // state props等属性设置到内部变量inst上
+    this._currentElement = nextElement;
+    this._context = unmaskedContext;
+    inst.props = nextProps;
+    inst.state = nextState;
+    inst.context = nextContext;
+
+    // 内部会调用render方法，重新解析ReactElement并得到HTML
+    this._updateRenderedComponent(transaction, unmaskedContext);
+
+    // render后调用componentDidUpdate
+    if (hasComponentDidUpdate) {
+      transaction.getReactMountReady().enqueue(
+        inst.componentDidUpdate.bind(inst, prevProps, prevState, prevContext),
+        inst
+      );
+    }
+},
+</code></pre>
+<p>_performComponentUpdate会调用componentWillUpdate，然后在调用updateRenderedComponent进行更新渲染，最后调用componentDidUpdate。下面来看看updateRenderedComponent中怎么调用render方法的。</p>
+<pre><code class="javascript">_updateRenderedComponent: function(transaction, context) {
+    var prevComponentInstance = this._renderedComponent;
+    var prevRenderedElement = prevComponentInstance._currentElement;
+
+    // _renderValidatedComponent内部会调用render,得到ReactElement
+    var nextRenderedElement = this._renderValidatedComponent();
+
+    // 判断是否做DOM diff。React为了简化递归diff,认为组件层级不变,且type和key不变(key用于listView等组件,很多时候我们没有设置type)才update,否则先unmount再重新mount
+    if (shouldUpdateReactComponent(prevRenderedElement, nextRenderedElement)) {
+      // 递归updateComponent,更新子组件的Virtual DOM
+      ReactReconciler.receiveComponent(prevComponentInstance, nextRenderedElement, transaction, this._processChildContext(context));
+    } else {
+      var oldNativeNode = ReactReconciler.getNativeNode(prevComponentInstance);
+
+      // 不做DOM diff,则先卸载掉,然后再加载。也就是先unMountComponent,再mountComponent
+      ReactReconciler.unmountComponent(prevComponentInstance, false);
+
+      this._renderedNodeType = ReactNodeTypes.getType(nextRenderedElement);
+
+      // 由ReactElement创建ReactComponent
+      this._renderedComponent = this._instantiateReactComponent(nextRenderedElement);
+
+      // mountComponent挂载组件,得到组件对应HTML
+      var nextMarkup = ReactReconciler.mountComponent(this._renderedComponent, transaction, this._nativeParent, this._nativeContainerInfo, this._processChildContext(context));
+
+      // 将HTML插入DOM中
+      this._replaceNodeWithMarkup(oldNativeNode, nextMarkup, prevComponentInstance);
+    }
+},
+
+_renderValidatedComponent: function() {
+    var renderedComponent;
+    ReactCurrentOwner.current = this;
+    try {
+      renderedComponent =
+        this._renderValidatedComponentWithoutOwnerOrContext();
+    } finally {
+      ReactCurrentOwner.current = null;
+    }
+
+    return renderedComponent;
+},
+
+_renderValidatedComponentWithoutOwnerOrContext: function() {
+    var inst = this._instance;
+    // 看到render方法了把，应该放心了把~
+    var renderedComponent = inst.render();
+
+    return renderedComponent;
+},
+
+</code></pre>
+<p>和mountComponent中一样，updateComponent也是用递归的方式将各子组件进行update的。这里要特别注意的是DOM diff。DOM diff是React中渲染加速的关键所在，它会帮我们算出virtual DOM中真正变化的部分，并对这部分进行原生DOM操作。为了避免循环递归对比节点的低效率，React中做了假设，即只对层级不变，type不变，key不变的组件进行Virtual DOM更新。这其中的关键是shouldUpdateReactComponent，下面分析</p>
+<pre><code class="javascript">function shouldUpdateReactComponent(prevElement, nextElement) {
+  var prevEmpty = prevElement === null || prevElement === false;
+  var nextEmpty = nextElement === null || nextElement === false;
+  if (prevEmpty || nextEmpty) {
+    return prevEmpty === nextEmpty;
+  }
+
+  var prevType = typeof prevElement;
+  var nextType = typeof nextElement;
+  // React DOM diff算法
+  // 如果前后两次为数字或者字符,则认为只需要update(处理文本元素)
+  // 如果前后两次为DOM元素或React元素,则必须在同一层级内,且type和key不变(key用于listView等组件,很多时候我们没有设置type)才update,否则先unmount再重新mount
+  if (prevType === &#39;string&#39; || prevType === &#39;number&#39;) {
+    return (nextType === &#39;string&#39; || nextType === &#39;number&#39;);
+  } else {
+    return (
+      nextType === &#39;object&#39; &amp;&amp;
+      prevElement.type === nextElement.type &amp;&amp;
+      prevElement.key === nextElement.key
+    );
+  }
+}
+</code></pre>
+<h1 id="销毁"><a href="#销毁" class="headerlink" title="销毁"></a>销毁</h1><p>前面提到过，更新组件时，如果不满足DOM diff条件，会先unmountComponent, 然后再mountComponent，下面我们来分析下unmountComponent时都发生了什么事。和mountComponent的多态一样，不同type的ReactComponent也会有不同的unmountComponent行为。我们来分析下React自定义组件，也就是ReactCompositeComponent中的unmountComponent。</p>
+<pre><code class="javascript"> unmountComponent: function(safely) {
+    if (!this._renderedComponent) {
+      return;
+    }
+    var inst = this._instance;
+
+    // 调用componentWillUnmount
+    if (inst.componentWillUnmount &amp;&amp; !inst._calledComponentWillUnmount) {
+      inst._calledComponentWillUnmount = true;
+      // 安全模式下，将componentWillUnmount包在try-catch中。否则直接componentWillUnmount
+      if (safely) {
+        var name = this.getName() + &#39;.componentWillUnmount()&#39;;
+        ReactErrorUtils.invokeGuardedCallback(name, inst.componentWillUnmount.bind(inst));
+      } else {
+        inst.componentWillUnmount();
+      }
+    }
+
+    // 递归调用unMountComponent来销毁子组件
+    if (this._renderedComponent) {
+      ReactReconciler.unmountComponent(this._renderedComponent, safely);
+      this._renderedNodeType = null;
+      this._renderedComponent = null;
+      this._instance = null;
+    }
+
+    // reset等待队列和其他等待状态
+    this._pendingStateQueue = null;
+    this._pendingReplaceState = false;
+    this._pendingForceUpdate = false;
+    this._pendingCallbacks = null;
+    this._pendingElement = null;
+
+    // reset内部变量,防止内存泄漏
+    this._context = null;
+    this._rootNodeID = null;
+    this._topLevelWrapper = null;
+
+    // 将组件从map中移除,还记得我们在mountComponent中将它加入了map中的吧
+    ReactInstanceMap.remove(inst);
+  },
+
+</code></pre>
+<blockquote>
+<p>可见，unmountComponent还是比较简单的，它就做三件事<br>1.调用componentWillUnmount()<br>2.递归调用unmountComponent(),销毁子组件<br>3.将内部变量置空，防止内存泄漏</p>
+</blockquote>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>React自定义组件创建期，存在期，销毁期三个阶段的生命周期调用上面都讲完了。三个入口函数mountComponent，updateComponent，unmountComponent尤其关键。大家如果有兴趣，还可以自行分析ReactDOMEmptyComponent，ReactDOMComponent和ReactDOMTextComponent的这三个方法。</p>
+<p>深入学习React生命周期源码可以帮我们理清各个方法的调用顺序，明白它们都是什么时候被调用的，哪些条件下才会被调用等等。阅读源码虽然有点枯燥，但能够大大加深对上层API接口的理解，并体会设计者设计这些API的良苦用心。</p>
+<h1 id="React组件生命周期过程说明"><a href="#React组件生命周期过程说明" class="headerlink" title="React组件生命周期过程说明"></a><a href="http://react-china.org/t/react/1740" target="_blank" rel="noopener">React组件生命周期过程说明</a></h1><p>实例化<br>首次实例化</p>
+<p>getDefaultProps<br>getInitialState<br>componentWillMount<br>render<br>componentDidMount<br>实例化完成后的更新</p>
+<p>getInitialState<br>componentWillMount<br>render<br>componentDidMount<br>存在期<br>组件已存在时的状态改变</p>
+<p>componentWillReceiveProps<br>shouldComponentUpdate<br>componentWillUpdate<br>render<br>componentDidUpdate<br>销毁&amp;清理期<br>componentWillUnmount<br>说明<br>生命周期共提供了10个不同的API。</p>
+<p>1.getDefaultProps<br>作用于组件类，只调用一次，返回对象用于设置默认的props，对于引用值，会在实例中共享。</p>
+<p>2.getInitialState<br>作用于组件的实例，在实例创建时调用一次，用于初始化每个实例的state，此时可以访问this.props。</p>
+<p>3.componentWillMount<br>在完成首次渲染之前调用，此时仍可以修改组件的state。</p>
+<p>4.render<br>必选的方法，创建虚拟DOM，该方法具有特殊的规则：</p>
+<p>只能通过this.props和this.state访问数据<br>可以返回null、false或任何React组件<br>只能出现一个顶级组件（不能返回数组）<br>不能改变组件的状态<br>不能修改DOM的输出<br>5.componentDidMount<br>真实的DOM被渲染出来后调用，在该方法中可通过this.getDOMNode()访问到真实的DOM元素。此时已可以使用其他类库来操作这个DOM。</p>
+<p>在服务端中，该方法不会被调用。</p>
+<p>6.componentWillReceiveProps<br>组件接收到新的props时调用，并将其作为参数nextProps使用，此时可以更改组件props及state。</p>
+<pre><code>componentWillReceiveProps: function(nextProps) {
+    if (nextProps.bool) {
+        this.setState({
+            bool: true
+        });
+    }
+}
+</code></pre><p>7.shouldComponentUpdate<br>组件是否应当渲染新的props或state，返回false表示跳过后续的生命周期方法，通常不需要使用以避免出现bug。在出现应用的瓶颈时，可通过该方法进行适当的优化。</p>
+<p>在首次渲染期间或者调用了forceUpdate方法后，该方法不会被调用</p>
+<p>8.componentWillUpdate<br>接收到新的props或者state后，进行渲染之前调用，此时不允许更新props或state。</p>
+<p>9.componentDidUpdate<br>完成渲染新的props或者state后调用，此时可以访问到新的DOM元素。</p>
+<p>10.componentWillUnmount<br>组件被移除之前被调用，可以用于做一些清理工作，在componentDidMount方法中添加的所有任务都需要在该方法中撤销，比如创建的定时器或添加的事件监听器。</p>
+<p><a href="https://yq.aliyun.com/articles/72330?spm=a2c4e.11153940.blogcont72329.20.38732a71NEGBnM" target="_blank" rel="noopener">原文地址</a></p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/favicon.png" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <!-- <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd> -->
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">171 <p>Articles</p></a></li>
+                    <li><a href="/categories">26 <p>Categories</p></a></li>
+                    <li><a href="/tags">55 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#React生命周期流程"><span class="toc-number">1.</span> <span class="toc-text">React生命周期流程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#实例化生命周期"><span class="toc-number">2.</span> <span class="toc-text">实例化生命周期</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#getDefaultProps"><span class="toc-number">2.1.</span> <span class="toc-text">getDefaultProps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#getlnitialState"><span class="toc-number">2.2.</span> <span class="toc-text">getlnitialState</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mountComponent"><span class="toc-number">2.3.</span> <span class="toc-text">mountComponent</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#存在期生命周期"><span class="toc-number">3.</span> <span class="toc-text">存在期生命周期</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#销毁"><span class="toc-number">4.</span> <span class="toc-text">销毁</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#React组件生命周期过程说明"><span class="toc-number">6.</span> <span class="toc-text">React组件生命周期过程说明</span></a></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+
+
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>

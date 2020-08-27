@@ -1,0 +1,722 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>《图解HTTP学习》笔记 - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,从一道题引发的思考从输入网页到呈现网页页面这一过程经历了什么？
+HTTP的诞生在深入了解HTTP之前，先介绍HTTP诞生的背景。cern的timbernersLee 提出一种能让远隔两地的研究者们共,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://ShinichiKudo-FE.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">《图解HTTP学习》笔记</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/HTTP"><b>「
+                    </b>HTTP<b> 」</b></a>
+                
+                July 13, 2018
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2018/07/13/HTTP/%E3%80%8A%E5%9B%BE%E8%A7%A3HTTP%E5%AD%A6%E4%B9%A0%E3%80%8B%E7%AC%94%E8%AE%B0/" title="《图解HTTP学习》笔记" class="">《图解HTTP学习》笔记</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    14k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    13 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h1 id="从一道题引发的思考"><a href="#从一道题引发的思考" class="headerlink" title="从一道题引发的思考"></a>从一道题引发的思考</h1><p><a href="https://ShinichiKudo-FE.github.io/2018/07/10/HTTP/%E4%BB%8E%E8%BE%93%E5%85%A5url%E5%88%B0%E9%A1%B5%E9%9D%A2%E5%B1%95%E7%A4%BA%E5%88%B0%E5%BA%95%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88/#more">从输入网页到呈现网页页面这一过程经历了什么？</a></p>
+<h2 id="HTTP的诞生"><a href="#HTTP的诞生" class="headerlink" title="HTTP的诞生"></a>HTTP的诞生</h2><p>在深入了解HTTP之前，先介绍HTTP诞生的背景。cern的timbernersLee 提出一种能让远隔两地的研究者们共享知识点的设想。</p>
+<h2 id="网络基础-TCP-IP"><a href="#网络基础-TCP-IP" class="headerlink" title="网络基础 TCP/IP"></a>网络基础 TCP/IP</h2><p>通常使用的网络（包括互联网）是在TCP/IP协议族的基础上运作的。而HTTP属于它内部的一个子集。</p>
+<p>TCP/IP协议族按层次分为以下4层</p>
+<ul>
+<li><p>应用层</p>
+<p>应用层决定了向用户提供应用服务时通信的活动。</p>
+<p>TCP/IP协议族预存了各类通用的应用服务，比如，FTP(file transfer protocol,文件传输协议)和<br>DNS(Domain Name system)域名系统服务就是其中两类。</p>
+<p>HTTP协议也处于该层。</p>
+</li>
+<li><p>传输层</p>
+</li>
+</ul>
+<p>传输层对上层应用层，提供处于网络连接中的两台计算机之间的数据传输。</p>
+<p>在传输层中有两个性质不同的协议：TCP（传输控制协议）和UDP（用户数据报协议）</p>
+<ul>
+<li>网络层（又名网络互联层）</li>
+</ul>
+<p>网络层用来处理在网络上流动的数据包。与对方计算机之间通过多台计算机或网络设备进行传输时，网络层所起的作用就是在众多的选项内选择一条传输路线。</p>
+<ul>
+<li>数据链路层（又名网络接口层）</li>
+</ul>
+<p>用来处理连接网络的硬件部分。包括控制操作系统，硬件的设备驱动，NIC(网络适配器，即网卡)，及光纤等物理可见部分，</p>
+<p>利用TCP/IP协议族进行网络通信时，会通过分层顺序与对方进行通信。<strong>发送端从应用层往下走，接收端则往应用层往下走。发送端每通过一层则增加首部，接收端每通过一层则删除首部</strong>。</p>
+<p>TCP位于传输层，提供可靠的字节流服务</p>
+<h3 id="负责域名解析的DNS服务"><a href="#负责域名解析的DNS服务" class="headerlink" title="负责域名解析的DNS服务"></a>负责域名解析的DNS服务</h3><p>DNS和HTTP协议以一样位于应用的协议。它提供域名到IP地址之间的解析服务</p>
+<h3 id="URI和URL"><a href="#URI和URL" class="headerlink" title="URI和URL"></a>URI和URL</h3><p>与URI（统一资源标识符）相比，我们更熟悉URL（统一资源定位符）。URI用字符串标识某一互联网资源，而URL表示资源的地点。可见URL是URI的子集。</p>
+<h2 id="简单的HTTP协议"><a href="#简单的HTTP协议" class="headerlink" title="简单的HTTP协议"></a>简单的HTTP协议</h2><p>请求访问文本或图像资源等的一端称为客户端，而提供资源响应的一端称为服务端</p>
+<p>请求报文<strong>由 请求方法，请求URI，协议版本，可选请求首部字段和内容实体构成的</strong>。</p>
+<p>响应报文<strong>由协议版本，状态码（表示请求成功或失败的数字代码），用以解释状态码的原因短语，可选的响应首部字段以及实体主体构成</strong>。</p>
+<h3 id="HTTP是不保存状态的协议（即无状态协议）"><a href="#HTTP是不保存状态的协议（即无状态协议）" class="headerlink" title="HTTP是不保存状态的协议（即无状态协议）"></a>HTTP是不保存状态的协议（即无状态协议）</h3><p>HTTP协议自身不对请求和响应之间的通信状态进行保存。也就是说在HTTP这个级别，协议对于发送过的请求或响应都不做持久化处理。</p>
+<p>这样是为了更快地处理大量事务，确保协议的可伸缩性，而特意把HTTP协议设计成如此简单的。</p>
+<p>为了解决这种无状态的问题，于是引入了cookie技术。有了cookie再用HTTP协议通信，就可以管理状态了。<br><a id="more"></a></p>
+<h3 id="告知服务器意图的HTTP方法"><a href="#告知服务器意图的HTTP方法" class="headerlink" title="告知服务器意图的HTTP方法"></a>告知服务器意图的HTTP方法</h3><ul>
+<li><p>GET 获取资源</p>
+</li>
+<li><p>POST 传输实体主体</p>
+</li>
+<li><p>PUT 传输文件</p>
+</li>
+<li><p>HEAD 获取报文头部</p>
+</li>
+<li><p>DELETE 删除文件</p>
+</li>
+<li><p>OPTIONS 询问支持的方法</p>
+</li>
+<li><p>TRACE 追踪路径</p>
+</li>
+<li><p>CONNECT 要求用隧道协议连接代理</p>
+</li>
+</ul>
+<p>因为PUT 和 DELETE方法一样不带验证机制，任何人都可以进行操作，所以存在安全性。不常用</p>
+<h3 id="持久连接节省通信量"><a href="#持久连接节省通信量" class="headerlink" title="持久连接节省通信量"></a>持久连接节省通信量</h3><p>HTTP协议的初始版本中，每进行一次HTTP通信就要断开一次TCP链接，如果要请求一个包含很多图片资源的网站，会进行很多次TCP的连接和中断，增加通信量的开销。</p>
+<p>为了解决上述问题，HTTP/1.1和一部分HTTP/1.0想出了持久连接（也成为HTTP keep-alive）</p>
+<h4 id="管道化"><a href="#管道化" class="headerlink" title="管道化"></a>管道化</h4><p>持久连接使得多数请求以管道化（pipelining）方式发送成为可能。从前发送请求后需要等待并收到响应。管道化技术的出现解决了不用等待响应亦可直接发送下一个请求。</p>
+<p>管道化技术要比持久连接还要快。</p>
+<h3 id="使用cookie的状态管理"><a href="#使用cookie的状态管理" class="headerlink" title="使用cookie的状态管理"></a>使用cookie的状态管理</h3><p>cookie技术通过在请求和响应报文中写入cookie信息来控制客户端的状态。</p>
+<p>cookie会根据从服务器端发送的响应报文内的一个叫做Set-Cookie的首部字段信息，通知客户端保存Cookie。当下次客户端在往该服务器发送请求时，客户端会自动在请求报文中加入cookie值后发送出去</p>
+<h2 id="HTTP报文内的HTTP信息"><a href="#HTTP报文内的HTTP信息" class="headerlink" title="HTTP报文内的HTTP信息"></a>HTTP报文内的HTTP信息</h2><p>HTTP报文大致可分为报文首部和报文主体两块。</p>
+<p><strong>报文主体和实体主体的差异</strong></p>
+<p>报文（message）是HTTP通信的基本单位。由8位组字节流组成，通过HTTP通信传输。</p>
+<p>实体（entity）作为请求或响应的有效载荷数据被传输，其内容由实体首部和实体主体组成。</p>
+<p>通常，报文主体等于实体主体，只有当传输过程中进行编码操作时，实体主体的内容发生变化，才导致它和报文主体产生差异。</p>
+<p><strong>压缩传输的内容编码</strong></p>
+<p>常见的内容编码有以下几种</p>
+<ul>
+<li>gzip（GNU zip）</li>
+<li>compress（UNIX系统的标准压缩）</li>
+<li>deflate（zlib）</li>
+<li>identity（不进行编码）</li>
+</ul>
+<p><strong>分割发送的分块传输编码</strong></p>
+<p>这种把实体主体分块的功能称为分块传输编码</p>
+<p>分块传输编码会将实体主体分为多个部分（块）。每一块都会用十六进制来标记块的大小，而实体主体的最后一块会使用“0（CR+LF）”来标记。</p>
+<p><strong>发送多种数据的多部分对象集合</strong></p>
+<p>多部分对象集合包含的对象如下</p>
+<ul>
+<li><p>multipart/form-data</p>
+<p>在web表单文件上传时使用</p>
+</li>
+<li><p>multipart/byteranges</p>
+<p>状态码206响应报文包含了多个范围的内容时使用</p>
+</li>
+</ul>
+<p><strong>获取部分内容的范围请求</strong></p>
+<p>要实现该功能需要指定下载的实体范围，像这样，指定范围发送的请求叫做范围请求。</p>
+<p><strong>内容协商返回最合适的内容</strong></p>
+<p>内容协商机制是指客户端和服务器端就响应的资源内容进行交涉，然后提供给客户端最为适合的资源。内容协商会以响应资源的语言，字符集，编码方式等作为判断的基准。</p>
+<p>包含在请求报文中的某些首部字段就是判断的基准。</p>
+<ul>
+<li>Accept</li>
+<li>Accept-Charset</li>
+<li>Accept-Encoding</li>
+<li>Accept-Language</li>
+<li>Content-Language</li>
+</ul>
+<p>内容协商技术有以下3中类型</p>
+<ul>
+<li>服务器驱动协商</li>
+<li>客户端驱动协商</li>
+<li>透明协商</li>
+</ul>
+<h2 id="返回结果的HTTP状态码"><a href="#返回结果的HTTP状态码" class="headerlink" title="返回结果的HTTP状态码"></a>返回结果的HTTP状态码</h2><h3 id="2XX-成功"><a href="#2XX-成功" class="headerlink" title="2XX 成功"></a>2XX 成功</h3><p><strong>200 ok</strong> 表示从客户端发来的请求在服务器端已被正常处理</p>
+<p><strong>204 No Content</strong> 请求处理成功，但没有资源可返回</p>
+<p><strong>206 partial content</strong> 该状态码表示客户端进行了范围请求 而服务器成功执行了这部分的get请求</p>
+<h3 id="3XX-重定向"><a href="#3XX-重定向" class="headerlink" title="3XX 重定向"></a>3XX 重定向</h3><p><strong>301 moved permanently</strong><br>永久性重定向。该状态码表示请求的资源已被分配了新的URI，以后应使用资源现在所指的URI。</p>
+<p><strong>302 Found</strong><br>临时重定向。该状态码表示请求的资源已被分配了新的URI，希望用户（本次）能使用新的URI访问。</p>
+<p><strong>303 see other</strong><br>临时重定向。该状态码表示请求的资源存在着另一个URI，应使用get方法定向获取请求的资源。</p>
+<p><strong>304 Not Modified</strong></p>
+<p>该状态码表示客户端发送附带条件的请求时，服务器允许请求访问资源。</p>
+<p><strong>307 Temporary Redirect</strong><br>临时重定向。该状态码与302 Found有着相同的含义。</p>
+<h3 id="4XX-客户端错误"><a href="#4XX-客户端错误" class="headerlink" title="4XX 客户端错误"></a>4XX 客户端错误</h3><p><strong>400 Bad Request</strong><br>该状态码表示请求报文中存在语法错误。</p>
+<p><strong>401 Unauthorized</strong><br>该状态码表示发送的请求需要有HTTP认证的认证信息。</p>
+<p><strong>403 Forbidden</strong><br>该状态码表明对请求的资源的访问被服务器拒绝了</p>
+<p><strong>404 Not Found</strong><br>该状态码表示请求的资源无法再服务器上找到</p>
+<h3 id="5XX-服务器错误"><a href="#5XX-服务器错误" class="headerlink" title="5XX 服务器错误"></a>5XX 服务器错误</h3><p><strong>500 Internal Server Error</strong></p>
+<p>该状态码表示服务器端在执行请求时发生了错误。也可能是web应用存在的bug或某些临时的故障。</p>
+<p><strong>503 Service Unavailable</strong></p>
+<p>该状态码表明服务器暂时处于超负载或正在停机维护，现在无法处理请求。</p>
+<h2 id="与HTTP协作的web服务器"><a href="#与HTTP协作的web服务器" class="headerlink" title="与HTTP协作的web服务器"></a>与HTTP协作的web服务器</h2><p>HTTP/1.1允许一台HTTP服务器搭建多个web站点。即使物理层面只有一台服务器，但只要使用虚拟主机的功能，则可以假象已具有多台服务器。</p>
+<p>在相同的IP地址下，由于虚拟主机可以寄存多个不同的主机名和域名的web网站，因此在发送HTTP请求时，必须在host首部内完整指定主机名或域名的URI</p>
+<h3 id="通信数据转发程序-代理、网关、隧道"><a href="#通信数据转发程序-代理、网关、隧道" class="headerlink" title="通信数据转发程序:代理、网关、隧道"></a>通信数据转发程序:代理、网关、隧道</h3><p>这些应用程序和服务器可以将请求转发给通信线路上的下一站服务器，并且能接收从那台服务器发送的响应再转发给客户端。</p>
+<h4 id="代理"><a href="#代理" class="headerlink" title="代理"></a>代理</h4><p>代理是一种有转发功能的应用程序，他扮演了位于服务器和客户端“中间人”的角色，接收有客户端发送的请求并转发给服务器，同时也接受服务器返回的响应并转发给客户端。</p>
+<p>每一次通过代理服务器转发给请求或响应时，也会写入<strong>Via</strong>首部信息，用来标记经过的主机信息。</p>
+<p>使用代理的理由有，<strong>利用缓存技术减少网络宽带的流量，组织内部针对特定网站的访问控制，以获取访问日志为主要目的</strong>，等等。</p>
+<p>代理有多种使用方法，按两种基准分类，一种是否使用缓存技术，另一种是否会修改报文。</p>
+<h4 id="网关"><a href="#网关" class="headerlink" title="网关"></a>网关</h4><p>网关是转发其他服务器通信数据的服务器，接收从客户端发送来的请求时，它就像自己拥有资源的源服务器一样对请求处理。</p>
+<p>网关的工作机制和代理十分相似，而网关能使通信线路上的服务器提供非HTTP协议服务。利用网关可以提高通信的安全性，因为可以在客户端与网关之间的通信线路上加密以确保连接的安全。</p>
+<h4 id="隧道"><a href="#隧道" class="headerlink" title="隧道"></a>隧道</h4><p>隧道是在相隔深远的客户端和服务器两者之间进行中转，并保持双方通信连接的应用程序。</p>
+<p>隧道的目的是确保客户端能与服务器进行安全的通信。</p>
+<h3 id="保存资源的缓存"><a href="#保存资源的缓存" class="headerlink" title="保存资源的缓存"></a>保存资源的缓存</h3><p>缓存是指代理服务器或客户端本地磁盘内保存的资源副本，利用缓存可减少对源服务器的访问，因此也就节省了通信流量和通信时间。</p>
+<p>即使存在缓存，也会因为<strong>客户端的要求，缓存的有效期</strong>等因素，向源服务器确认资源的有效性。若判断缓存失败，缓存服务器将会再次从源服务器上获取“新”资源。</p>
+<h2 id="HTTP首部"><a href="#HTTP首部" class="headerlink" title="HTTP首部"></a>HTTP首部</h2><p>HTTP协议的请求和响应报文中必定包含HTTP首部</p>
+<h3 id="HTTP报文首部"><a href="#HTTP报文首部" class="headerlink" title="HTTP报文首部"></a>HTTP报文首部</h3><p>HTTP请求报文由方法，URI，HTTP版本，HTTP首部字段等部分构成</p>
+<p>HTTP响应报文由HTTP版本，状态码（数字和原因短语）HTTP首部字段等3部分构成。</p>
+<h3 id="HTTP首部字段"><a href="#HTTP首部字段" class="headerlink" title="HTTP首部字段"></a>HTTP首部字段</h3><p>HTTP首部字段是由字段名和字段值构成的，中间用冒号“：”分割；</p>
+<p><code>首部字段名:字段值</code><br>如<code>Content-Type: text/html</code></p>
+<p>HTTP首部字段根据实际用途被分为以下4中类型。</p>
+<ul>
+<li>通用首部字段</li>
+<li>请求首部字段</li>
+<li>响应首部字段</li>
+<li>实体首部字段</li>
+</ul>
+<p>HTTP首部字段将定义成缓存代理和非缓存代理的行为，分为2种类型</p>
+<p>端到端首部（End-to-end Header）</p>
+<p>逐跳首部（Hop-by-hop header）</p>
+<p>下面列举了HTTP/1.1中的逐跳首部字段。除了这8个首部字段之外，其他所有字段都属于端到端首部字段。</p>
+<ul>
+<li>Connection</li>
+<li>Keep-Alive</li>
+<li>Proxy-Authenticate</li>
+<li>Proxy-Authorization</li>
+<li>Trailer</li>
+<li>TE</li>
+<li>Transfer-Encoding</li>
+<li>Upgrade</li>
+</ul>
+<h3 id="HTTP-1-1通用首部字段"><a href="#HTTP-1-1通用首部字段" class="headerlink" title="HTTP/1.1通用首部字段"></a>HTTP/1.1通用首部字段</h3><h4 id="cache-control"><a href="#cache-control" class="headerlink" title="cache-control"></a>cache-control</h4><p>通过指定首部字段cache-control的指令，就能操作缓存的工作机制</p>
+<h4 id="connection"><a href="#connection" class="headerlink" title="connection"></a>connection</h4><p>connection首部字段具有如下两个作用</p>
+<ul>
+<li>控制不再转发给代理的首部字段</li>
+<li>管理持久连接</li>
+</ul>
+<h4 id="Date"><a href="#Date" class="headerlink" title="Date"></a>Date</h4><p>首部字段Date表明创建HTTP报文的日期和时间</p>
+<h4 id="Pragma"><a href="#Pragma" class="headerlink" title="Pragma"></a>Pragma</h4><p>pragma是HTTP/1.1之前的版本历史遗留字段，仅作为与HTTP/1.0的向后兼容而定义</p>
+<h4 id="Tralier"><a href="#Tralier" class="headerlink" title="Tralier"></a>Tralier</h4><p>首部字段会事先说明在报文主体后记录了哪些首部字段。</p>
+<h4 id="Transfer-Encoding"><a href="#Transfer-Encoding" class="headerlink" title="Transfer-Encoding"></a>Transfer-Encoding</h4><p>规定了传输报文主体采用的编码方式</p>
+<h4 id="Upgrade"><a href="#Upgrade" class="headerlink" title="Upgrade"></a>Upgrade</h4><p>用于检测HTTP协议及其他协议是否可使用更高的版本进行通信，其参数值可以用来指定一个完全不同的通信协议</p>
+<h4 id="Via"><a href="#Via" class="headerlink" title="Via"></a>Via</h4><p>为了追踪客户端与服务器之间的请求和响应报文的传输路径</p>
+<h4 id="Waring"><a href="#Waring" class="headerlink" title="Waring"></a>Waring</h4><p>通常会告知用户一些与缓存相关的问题的警告</p>
+<h2 id="确保Web安全的HTTPS"><a href="#确保Web安全的HTTPS" class="headerlink" title="确保Web安全的HTTPS"></a>确保Web安全的HTTPS</h2><p>在HTTP协议中有可能存在信息窃听或身份伪装等安全问题，使用HTTPS通信机制可以有效地防止这些问题。</p>
+<h3 id="HTTP的缺点"><a href="#HTTP的缺点" class="headerlink" title="HTTP的缺点"></a>HTTP的缺点</h3><p>HTTP主要由以下不足：</p>
+<ul>
+<li>通信食用明文（不加密），内容可能被窃听</li>
+<li>不验证通信方的身份，因此有可能遭遇伪装</li>
+<li>无法证明报文的完整性，所以有可能已遭篡改</li>
+</ul>
+<p>这些问题不仅在HTTP上出现，其他未加密的协议中也会存在这类问题。</p>
+<p>通过和SSL（secure socket layer 安全套接层）或TSL（安全层传输协议）的组合使用加密HTTP的通信内容。</p>
+<h3 id="HTTP-加密-认证-完整性保护-HTTPS"><a href="#HTTP-加密-认证-完整性保护-HTTPS" class="headerlink" title="HTTP+加密+认证+完整性保护 = HTTPS"></a>HTTP+加密+认证+完整性保护 = HTTPS</h3><p>我们把添加了加密方式及认证机制的HTTP称为HTTPS（HTTP Secure）</p>
+<h4 id="HTTPS是身披SSL外壳的HTTP"><a href="#HTTPS是身披SSL外壳的HTTP" class="headerlink" title="HTTPS是身披SSL外壳的HTTP"></a>HTTPS是身披SSL外壳的HTTP</h4><p>SSL采用一种佳作公开密钥加密（public-key cryptography）的加密处理方式</p>
+<p>这种加密方法中加密算法是公开的，而密钥却是保密的。</p>
+<p><strong>HTTPS采用混合加密机制</strong><br>HTTPS采用共享密钥加密和公开密钥加密两者并用的混合加密机制。</p>
+<p><strong>证明公开密钥正确性的证书</strong></p>
+<p><strong>HTTPS的安全通信机制</strong></p>
+<p><strong>为什么不一直使用HTTPS</strong></p>
+<p>原因有，因为与纯文本通信相比，加密通信会消耗更多的CPU及内存资源。因此，如果是非敏感信息则使用HTTP通信。只有在包含个人信息等敏感数据时，才会利用HTTPS加密通信。</p>
+<p>除此之外，想要节约购买证书的开销也是原因之一。</p>
+<h2 id="确定访问用户身份的认证"><a href="#确定访问用户身份的认证" class="headerlink" title="确定访问用户身份的认证"></a>确定访问用户身份的认证</h2><p>为了认证使用者的信息，通常是指以下这些：</p>
+<ul>
+<li>密码（只有本人才会知道的字符串信息）</li>
+<li>动态令牌：仅限本人持有的设备内显示一次性密码</li>
+<li>数字证书：仅限本人（终端）持有的信息</li>
+<li>生物认证：指纹和虹膜等本人的生理信息</li>
+<li>IC卡等：仅限本人持有的信息</li>
+</ul>
+<p><strong>HTTP使用的认证方式</strong></p>
+<blockquote>
+<p>HTTP/1.1使用的认证方式如下</p>
+</blockquote>
+<ul>
+<li>BASIC认证（基本认证）</li>
+<li>DIGEST认证（摘要认证）</li>
+<li>SSL客户端认证</li>
+<li>FormBase认证（基于表单认证）</li>
+</ul>
+<p>为减轻跨站脚本攻击（XSS）造成的损失，建议事先在Cookie内加上httponly属性</p>
+<h2 id="基于HTTP的功能追加协议"><a href="#基于HTTP的功能追加协议" class="headerlink" title="基于HTTP的功能追加协议"></a>基于HTTP的功能追加协议</h2><h3 id="消除HTTP瓶颈的SPDY"><a href="#消除HTTP瓶颈的SPDY" class="headerlink" title="消除HTTP瓶颈的SPDY"></a>消除HTTP瓶颈的SPDY</h3><p>若想在现有的Web实现所需的功能，以下这些HTTP标准就会成为瓶颈</p>
+<ul>
+<li>一条连接上只能发送一条请求</li>
+<li>请求只能从客户端开始。客户端不可以接收除响应以外的指令。</li>
+<li>请求/响应首部未经压缩就发送。首部信息越多延迟越大</li>
+<li>发送冗长的首部。每次互相发送相同的首部造成的浪费较多</li>
+<li>可热议选择数据压缩格式。非强制压缩发送。</li>
+</ul>
+<p><strong>Ajax的解决方法</strong></p>
+<p>Ajax是一种javascript和DOM的操作，以达到局部web页面替换加载的异步通信手段。而利用Ajax实时地从服务器获取内容，有可能会导致大量请求产生。</p>
+<p><strong>Comet的解决方法</strong></p>
+<p>一旦服务器端有内容更新了，comet不会让请求等待，而是直接给客户端返回响应。这是一种通过延迟应答，模拟实现服务器端向客户端推送（Server Push）的功能。</p>
+<p>内容上虽然可以做到实时更新，但为了保留响应，一次连接的持续时间也变长了。期间，为了维持连接会消耗更多的资源。</p>
+<p><strong>SPDY的设计与功能</strong></p>
+<p>SPDY以会话层的形式加入，控制对数据的流动，但还是采用HTTP建立通信连接。</p>
+<p>使用SPDY后，HTTP协议额外获得以下功能：</p>
+<ul>
+<li>多路复用流 通过单一的TCP连接，可以无限制处理多个HTTP请求。</li>
+<li>赋予请求优先级 </li>
+<li>压缩HTTP首部</li>
+<li>推送功能</li>
+<li>服务器提示功能</li>
+</ul>
+<h3 id="使用浏览器进行全双工通信的WebSocket"><a href="#使用浏览器进行全双工通信的WebSocket" class="headerlink" title="使用浏览器进行全双工通信的WebSocket"></a>使用浏览器进行全双工通信的WebSocket</h3><p>一旦web服务器与客户端之间建立websocket协议的通信连接，之后所有的通信都依靠这个专用协议进行。通信过程中可互相发送JSON，XML，HTML或图片等任意格式的数据</p>
+<h4 id="WebSocket协议的特点"><a href="#WebSocket协议的特点" class="headerlink" title="WebSocket协议的特点"></a>WebSocket协议的特点</h4><ul>
+<li>推送功能 </li>
+<li>减少通信量 为了实现Websocket，在HTTP连接建立之后，需要完成一次“握手”的步骤</li>
+</ul>
+<h3 id="期盼已久的HTTP-2-0"><a href="#期盼已久的HTTP-2-0" class="headerlink" title="期盼已久的HTTP/2.0"></a>期盼已久的HTTP/2.0</h3><p>HTTP/2.0的特点</p>
+<ul>
+<li>SPDY</li>
+<li>HTTP Speed + Mobility</li>
+<li>Network-Friendly HTTP Upgrade</li>
+</ul>
+<p>HTTP/2.0 的7项技术及讨论</p>
+<ul>
+<li>压缩</li>
+<li>多路复用</li>
+<li>TSL义务化</li>
+<li>协商</li>
+<li>客户端拉拽/服务器推送</li>
+<li>流量控制</li>
+<li>websocket</li>
+</ul>
+<h3 id="Web服务器管理文件的WebDAV"><a href="#Web服务器管理文件的WebDAV" class="headerlink" title="Web服务器管理文件的WebDAV"></a>Web服务器管理文件的WebDAV</h3><p>WebDAV（基于万维网的分布式创作和版本控制） 是一个可对Web服务器上的内容直接进行文件复制，编辑等操作的分布式文件系统。</p>
+<p>除了创建、删除等基本功能外，他还具备文件创建者管理，文件编辑过程中禁止其他用户内容覆盖的加<br>锁功能，以及对文件内容修改的版本控制功能。</p>
+<h2 id="构建Web内容的技术"><a href="#构建Web内容的技术" class="headerlink" title="构建Web内容的技术"></a>构建Web内容的技术</h2><p><strong>HTML</strong><br><strong>CSS</strong><br><strong>JAVASCRIPT</strong></p>
+<p>与Web服务器及程序协作的CGI</p>
+<p>CGI（通用网关接口）是指Web服务器在接收到客户端发送过来的请求后转发给程序的一组机制。在CGI的作用下，程序会对请求内容做出相应的动作。</p>
+<h2 id="针对web的攻击技术"><a href="#针对web的攻击技术" class="headerlink" title="针对web的攻击技术"></a>针对web的攻击技术</h2><p>对Web应用的攻击模式有以下两种</p>
+<ul>
+<li>主动攻击  具有代表性的攻击是SQL注入攻击和OS命令注入攻击</li>
+</ul>
+<ul>
+<li>被动攻击 具有代表性的攻击是跨站脚本攻击(XSS)和跨站点请求伪造(CORS)</li>
+</ul>
+<p>实施web应用的安全对策可大致分为以下两部分。</p>
+<ul>
+<li>客户端的验证</li>
+<li>web应用端（服务器端）的验证<br>  <code>输入值验证</code><br>  <code>输出值转义</code></li>
+</ul>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/favicon.png" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <!-- <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd> -->
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">171 <p>Articles</p></a></li>
+                    <li><a href="/categories">26 <p>Categories</p></a></li>
+                    <li><a href="/tags">55 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#从一道题引发的思考"><span class="toc-number">1.</span> <span class="toc-text">从一道题引发的思考</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP的诞生"><span class="toc-number">1.1.</span> <span class="toc-text">HTTP的诞生</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#网络基础-TCP-IP"><span class="toc-number">1.2.</span> <span class="toc-text">网络基础 TCP&#x2F;IP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#负责域名解析的DNS服务"><span class="toc-number">1.2.1.</span> <span class="toc-text">负责域名解析的DNS服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#URI和URL"><span class="toc-number">1.2.2.</span> <span class="toc-text">URI和URL</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#简单的HTTP协议"><span class="toc-number">1.3.</span> <span class="toc-text">简单的HTTP协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP是不保存状态的协议（即无状态协议）"><span class="toc-number">1.3.1.</span> <span class="toc-text">HTTP是不保存状态的协议（即无状态协议）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#告知服务器意图的HTTP方法"><span class="toc-number">1.3.2.</span> <span class="toc-text">告知服务器意图的HTTP方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#持久连接节省通信量"><span class="toc-number">1.3.3.</span> <span class="toc-text">持久连接节省通信量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用cookie的状态管理"><span class="toc-number">1.3.4.</span> <span class="toc-text">使用cookie的状态管理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP报文内的HTTP信息"><span class="toc-number">1.4.</span> <span class="toc-text">HTTP报文内的HTTP信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#返回结果的HTTP状态码"><span class="toc-number">1.5.</span> <span class="toc-text">返回结果的HTTP状态码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2XX-成功"><span class="toc-number">1.5.1.</span> <span class="toc-text">2XX 成功</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3XX-重定向"><span class="toc-number">1.5.2.</span> <span class="toc-text">3XX 重定向</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4XX-客户端错误"><span class="toc-number">1.5.3.</span> <span class="toc-text">4XX 客户端错误</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5XX-服务器错误"><span class="toc-number">1.5.4.</span> <span class="toc-text">5XX 服务器错误</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#与HTTP协作的web服务器"><span class="toc-number">1.6.</span> <span class="toc-text">与HTTP协作的web服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#通信数据转发程序-代理、网关、隧道"><span class="toc-number">1.6.1.</span> <span class="toc-text">通信数据转发程序:代理、网关、隧道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#保存资源的缓存"><span class="toc-number">1.6.2.</span> <span class="toc-text">保存资源的缓存</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP首部"><span class="toc-number">1.7.</span> <span class="toc-text">HTTP首部</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP报文首部"><span class="toc-number">1.7.1.</span> <span class="toc-text">HTTP报文首部</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP首部字段"><span class="toc-number">1.7.2.</span> <span class="toc-text">HTTP首部字段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-1-1通用首部字段"><span class="toc-number">1.7.3.</span> <span class="toc-text">HTTP&#x2F;1.1通用首部字段</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#确保Web安全的HTTPS"><span class="toc-number">1.8.</span> <span class="toc-text">确保Web安全的HTTPS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP的缺点"><span class="toc-number">1.8.1.</span> <span class="toc-text">HTTP的缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-加密-认证-完整性保护-HTTPS"><span class="toc-number">1.8.2.</span> <span class="toc-text">HTTP+加密+认证+完整性保护 &#x3D; HTTPS</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#确定访问用户身份的认证"><span class="toc-number">1.9.</span> <span class="toc-text">确定访问用户身份的认证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基于HTTP的功能追加协议"><span class="toc-number">1.10.</span> <span class="toc-text">基于HTTP的功能追加协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#消除HTTP瓶颈的SPDY"><span class="toc-number">1.10.1.</span> <span class="toc-text">消除HTTP瓶颈的SPDY</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用浏览器进行全双工通信的WebSocket"><span class="toc-number">1.10.2.</span> <span class="toc-text">使用浏览器进行全双工通信的WebSocket</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#期盼已久的HTTP-2-0"><span class="toc-number">1.10.3.</span> <span class="toc-text">期盼已久的HTTP&#x2F;2.0</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Web服务器管理文件的WebDAV"><span class="toc-number">1.10.4.</span> <span class="toc-text">Web服务器管理文件的WebDAV</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#构建Web内容的技术"><span class="toc-number">1.11.</span> <span class="toc-text">构建Web内容的技术</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#针对web的攻击技术"><span class="toc-number">1.12.</span> <span class="toc-text">针对web的攻击技术</span></a></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+
+
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>

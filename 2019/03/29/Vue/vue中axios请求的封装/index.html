@@ -1,0 +1,694 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>vue中axios请求的封装 - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,前言Axios 是一个基于 promise 的 HTTP 库，可以用在浏览器和 node.js 中, 也是vue官方推荐使用的http库；封装axios，一方面为了以后维护方便，另一方面也可以对请求,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://ShinichiKudo-FE.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">vue中axios请求的封装</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/Vue"><b>「
+                    </b>VUE<b> 」</b></a>
+                
+                March 29, 2019
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2019/03/29/Vue/vue%E4%B8%ADaxios%E8%AF%B7%E6%B1%82%E7%9A%84%E5%B0%81%E8%A3%85/" title="vue中axios请求的封装" class="">vue中axios请求的封装</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    6.8k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    6 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Vue/" rel="tag">Vue</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Axios 是一个基于 promise 的 HTTP 库，可以用在浏览器和 node.js 中, 也是vue官方推荐使用的http库；封装axios，一方面为了以后维护方便，另一方面也可以对请求进行自定义处理，不多BB,开搞</p>
+<h2 id="设置接口请求前缀"><a href="#设置接口请求前缀" class="headerlink" title="设置接口请求前缀"></a>设置接口请求前缀</h2><p>一般我们开发都会有开发、测试、生产环境，前缀需要加以区分，我们利用node环境变量来作判断</p>
+<pre><code class="js">if(process.env.NODE_ENV === &quot;development&quot;){
+    axios.default.baseURL = &quot;XXXX&quot;
+}else if(process.env.NODE_ENV === &quot;production&quot;){
+    axios.default.baseURL = &quot;XXXX&quot;
+}
+</code></pre>
+<p>在localhost调试时，直接用开发地址一般都会有跨域的问题，所以我们还需要<code>vue.config.js</code>配置代理</p>
+<pre><code class="js">module.exports = {
+  devServer: {
+    proxy: {
+      &#39;/proxyApi&#39;: {
+        target: &#39;http://dev.xxx.com&#39;,
+        changeOrigin: true,
+        pathRewrite: {
+          &#39;/proxyApi&#39;: &#39;&#39;
+        }
+      }
+    }
+  }
+}
+</code></pre>
+<p>这样就成功把/proxyApi 指向了 <code>XXXX</code>，重启服务</p>
+<h2 id="拦截器"><a href="#拦截器" class="headerlink" title="拦截器"></a>拦截器</h2><p>接着设置超时时间和请求头信息</p>
+<pre><code class="js">axios.defaults.timeout = 10000
+// 请求头信息是为post请求设置
+axios.defaults.headers.post[&#39;Content-Type&#39;] = &#39;application/x-www-form-urlencoded;charset=UTF-8&#39;
+</code></pre>
+<p>axios很好用，其中之一就是它的拦截器十分强大，我们就可以为请求和响应设置拦截器，比如请求拦截器可以在每个请求里加上token，做了统一处理后维护起来也方便，响应拦截器可以在接收到响应后先做一层操作，如根据状态码判断登录状态、授权。<br><a id="more"></a></p>
+<pre><code class="js">// 请求拦截器
+axios.interceptors.request.use(
+  config =&gt; {
+    // 每次发送请求之前判断是否存在token
+    // 如果存在，则统一在http请求的header都加上token，这样后台根据token判断你的登录情况，此处token一般是用户完成登录后储存到localstorage里的
+    token &amp;&amp; (config.headers.Authorization = token)
+    return config
+  },
+  error =&gt; {
+    return Promise.error(error)
+  })
+// 响应拦截器
+axios.interceptors.response.use(response =&gt; {
+  // 如果返回的状态码为200，说明接口请求成功，可以正常拿到数据
+  // 否则的话抛出错误
+  if (response.status === 200) {
+    if (response.data.code === 511) {
+      // 未授权调取授权接口
+    } else if (response.data.code === 510) {
+      // 未登录跳转登录页
+    } else {
+      return Promise.resolve(response)
+    }
+  } else {
+    return Promise.reject(response)
+  }
+}, error =&gt; {
+  // 我们可以在这里对异常状态作统一处理
+  if (error.response.status) {
+    // 处理请求失败的情况
+    // 对不同返回码对相应处理
+    return Promise.reject(error.response)
+  }
+})
+</code></pre>
+<h2 id="get-post的封装"><a href="#get-post的封装" class="headerlink" title="get post的封装"></a>get post的封装</h2><p>httpGet: 一个参数是请求的url,一个就携带的请求参数，返回promise对象</p>
+<pre><code class="js">// get 请求
+export function httpGet({
+  url,
+  params = {}
+}) {
+  return new Promise((resolve, reject) =&gt; {
+    axios.get(url, {
+      params
+    }).then((res) =&gt; {
+      resolve(res.data)
+    }).catch(err =&gt; {
+      reject(err)
+    })
+  })
+}
+</code></pre>
+<p>httpPost: 原理和get差不多，需要注意，这里多了个data参数，post请求提交前需要对它进行序列号操作，这里是通过<code>transformRequest</code>做处理；另外两个参数url,params和get请求的一样；</p>
+<pre><code class="js">// post请求
+export function httpPost({
+  url,
+  data = {},
+  params = {}
+}) {
+  return new Promise((resolve, reject) =&gt; {
+    axios({
+      url,
+      method: &#39;post&#39;,
+      transformRequest: [function (data) {
+        let ret = &#39;&#39;
+        for (let it in data) {
+          ret += encodeURIComponent(it) + &#39;=&#39; + encodeURIComponent(data[it]) + &#39;&amp;&#39;
+        }
+        return ret
+      }],
+      // 发送的数据
+      data,
+      // url参数
+      params
+
+    }).then(res =&gt; {
+      resolve(res.data)
+    })
+  })
+}
+</code></pre>
+<h3 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h3><p>我把所有的接口调用都在api.js文件中</p>
+<p>先引入封装好的方法，再在要调用的接口重新封装成一个方法暴露出去</p>
+<pre><code class="js">import { httpGet, httpPost } from &#39;./http&#39;
+export const getorglist = (params = {}) =&gt; httpGet({ url: &#39;apps/api/org/list&#39;, params })
+</code></pre>
+<p>在页面中可以这样调用：</p>
+<pre><code class="js">// .vue
+import { getorglist } from &#39;@/assets/js/api&#39;
+
+getorglist({ id: 200 }).then(res =&gt; {
+  console.log(res)
+})
+</code></pre>
+<p>这样可以把api统一管理起来，以后维护修改只需要在api.js文件操作即可</p>
+<h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><h3 id="http-js"><a href="#http-js" class="headerlink" title="http.js"></a>http.js</h3><pre><code class="js">// http.js
+import axios from &#39;axios&#39;
+
+// 环境的切换
+if (process.env.NODE_ENV === &#39;development&#39;) {
+  axios.defaults.baseURL = &#39;/proxyApi&#39;
+} else if (process.env.NODE_ENV === &#39;production&#39;) {
+  axios.defaults.baseURL = &#39;http://prod.xxx.com&#39;
+}
+
+// 请求拦截器
+axios.interceptors.request.use(
+  config =&gt; {
+    token &amp;&amp; (config.headers.Authorization = token)
+    return config
+  },
+  error =&gt; {
+    return Promise.error(error)
+  })
+
+axios.defaults.timeout = 10000
+
+axios.defaults.headers.post[&#39;Content-Type&#39;] = &#39;application/x-www-form-urlencoded;charset=UTF-8&#39;
+
+// 响应拦截器
+axios.interceptors.response.use(response =&gt; {
+  if (response.status === 200) {
+    if (response.data.code === 511) {
+      // 未授权调取授权接口
+    } else if (response.data.code === 510) {
+      // 未登录跳转登录页
+    } else {
+      return Promise.resolve(response)
+    }
+  } else {
+    return Promise.reject(response)
+  }
+}, error =&gt; {
+  // 我们可以在这里对异常状态作统一处理
+  if (error.response.status) {
+    // 处理请求失败的情况
+    // 对不同返回码对相应处理
+    return Promise.reject(error.response)
+  }
+})
+
+// get 请求
+export function httpGet({
+  url,
+  params = {}
+}) {
+  return new Promise((resolve, reject) =&gt; {
+    axios.get(url, {
+      params
+    }).then((res) =&gt; {
+      resolve(res.data)
+    }).catch(err =&gt; {
+      reject(err)
+    })
+  })
+}
+
+// post请求
+export function httpPost({
+  url,
+  data = {},
+  params = {}
+}) {
+  return new Promise((resolve, reject) =&gt; {
+    axios({
+      url,
+      method: &#39;post&#39;,
+      transformRequest: [function (data) {
+        let ret = &#39;&#39;
+        for (let it in data) {
+          ret += encodeURIComponent(it) + &#39;=&#39; + encodeURIComponent(data[it]) + &#39;&amp;&#39;
+        }
+        return ret
+      }],
+      // 发送的数据
+      data,
+      // url参数
+      params
+
+    }).then(res =&gt; {
+      resolve(res.data)
+    })
+  })
+}
+</code></pre>
+<h3 id="api-js"><a href="#api-js" class="headerlink" title="api.js"></a>api.js</h3><pre><code class="js">// api.js
+import { httpGet, httpPost } from &#39;./http&#39;
+export const getorglist = (params = {}) =&gt; httpGet({ url: &#39;apps/api/org/list&#39;, params })
+
+export const save = (data) =&gt; {
+  return httpPost({
+    url: &#39;apps/wechat/api/save_member&#39;,
+    data
+  })
+}
+
+</code></pre>
+<h3 id="vue"><a href="#vue" class="headerlink" title="vue"></a>vue</h3><pre><code class="js">// .vue
+&lt;script&gt;
+import { getorglist } from &#39;@/assets/js/api&#39;
+export default {
+  name: &#39;upload-card&#39;,
+  data() {},
+  mounted() {
+    getorglist({ id: 200 }).then(res =&gt; {
+      // console.log(res)
+    })
+  },
+}
+&lt;/script&gt;
+
+</code></pre>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/favicon.png" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <!-- <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd> -->
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">171 <p>Articles</p></a></li>
+                    <li><a href="/categories">26 <p>Categories</p></a></li>
+                    <li><a href="/tags">55 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#设置接口请求前缀"><span class="toc-number">1.1.</span> <span class="toc-text">设置接口请求前缀</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#拦截器"><span class="toc-number">1.2.</span> <span class="toc-text">拦截器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#get-post的封装"><span class="toc-number">1.3.</span> <span class="toc-text">get post的封装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#如何使用"><span class="toc-number">1.3.1.</span> <span class="toc-text">如何使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#完整代码"><span class="toc-number">1.4.</span> <span class="toc-text">完整代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#http-js"><span class="toc-number">1.4.1.</span> <span class="toc-text">http.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#api-js"><span class="toc-number">1.4.2.</span> <span class="toc-text">api.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vue"><span class="toc-number">1.4.3.</span> <span class="toc-text">vue</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+
+
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>

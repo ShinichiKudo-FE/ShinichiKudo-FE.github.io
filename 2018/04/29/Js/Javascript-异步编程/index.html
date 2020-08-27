@@ -1,0 +1,794 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Javascript 异步编程 - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,为什么JavaScript的异步编程经常被人提起，我想到以下两点原因。首先，JavaScript是单线程的，用事件循环的机制来保证系统的正常运行。如果有同步的ajax请求或者很复杂的运算，JavaS,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://ShinichiKudo-FE.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">Javascript 异步编程</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/Js"><b>「
+                    </b>JS<b> 」</b></a>
+                
+                April 29, 2018
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2018/04/29/Js/Javascript-%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/" title="Javascript 异步编程" class="">Javascript 异步编程</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    9.5k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    9 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Js/" rel="tag">Js</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h1 id="为什么JavaScript的异步编程经常被人提起，我想到以下两点原因。"><a href="#为什么JavaScript的异步编程经常被人提起，我想到以下两点原因。" class="headerlink" title="为什么JavaScript的异步编程经常被人提起，我想到以下两点原因。"></a>为什么JavaScript的异步编程经常被人提起，我想到以下两点原因。</h1><p>首先，JavaScript是单线程的，用事件循环的机制来保证系统的正常运行。如果有同步的ajax请求或者很复杂的运算，JavaScript要等这些操作完成，才能响应其他事件，页面会进入假死状态。<br>然而对于日渐复杂的web应用来说，这个是致命的。这也是为什么Node.js适合高I/O操作的业务，而像PHP，直到现在，I/O操作也没有提供对应的异步版本，对于PHP来说每个请求都在php-fpm的一个新线程里，这个线程阻塞了不影响其他线程，异步也就没有那么迫切。</p>
+<p>其次，JavaScript作为动态语言，函数是一等一的公民，可以随意定义函数，将函数作为变量传值传参，极大的方便了JSer灵活的进行异步编程。在C语言里面，也有异步编程，不管是IOCP模型还是epool模型，他们都是创建多个线程来统一的处理回调，在每个线程函数里用一个死循环，在死循环里用一个阻塞的的操作去等待完成的I/O操作。<br>这样的话，I/O操作函数和回调函数不在同一个线程里，这个给流程控制带来很大的不便。Node.js底层肯定也是用的这个来处理I/O的，但这对于JSer来说是透明的，不用操心。</p>
+<p>好像有点跑偏了，我们来看一下JavaScript中有哪些灵活的异步编程吧。</p>
+<p>编程，就是由coder定好代码的执行顺序，让计算机去跑。那对于同步操作，这个过程很简单。比如执行我们有A和B操作，A操作完成再执行B，如下</p>
+<pre><code class="js">A();
+B();
+</code></pre>
+<p>这样就能很好的体现流程，但是当A操作是个异步操作的时候，A操作一开始只执行一个发起的操作（发起请求，发起等待），至于什么时候能完成只有A知道。这时候如果还按如上的方式组织代码，就不能保证“A操作完成再执行B”。</p>
+<p>当然，我们可以直接把B直接糅合进A。</p>
+<pre><code class="js">function A(){B()}
+</code></pre>
+<p>这样代码之间耦合度太高，增加代码复用的难度 ，于是有了callback形式。</p>
+<a id="more"></a>
+<h2 id="callback"><a href="#callback" class="headerlink" title="callback"></a>callback</h2><blockquote>
+<p><em>被广泛吐槽的callback，真正该被吐槽的应该是不合格的JSer吧</em>。</p>
+</blockquote>
+<p><code>setTimeout</code>就是一个典型的异步操作，延迟时间到了时候只有<code>setTimeout</code>自己能得到通知。那么我们就可以以函数的形式先告诉<code>setTimeout</code>延迟时间到了时候我们要执行什么操作。</p>
+<pre><code class="js">setTimeout(() =&gt; {
+
+    console.log(1);
+
+    console.log(2);
+
+}, 1000);
+</code></pre>
+<p>我们都用setTimeout来表示异步操作。</p>
+<pre><code class="js">function A(callback){
+    console.log(&#39;do a start&#39;);
+
+    setTimeout(() =&gt; {
+
+        console.log(&#39;do a end&#39;);
+
+        callback();
+
+    }, 1000);
+}
+function B() {
+
+    console.log(&#39;do b&#39;);
+
+}
+
+A(B);
+</code></pre>
+<p>这样保证了“A操作完成再执行B”，也解决了耦合度高的问题。</p>
+<p><strong>但是callback在流程复杂的情况下，难以达到理想编码体验；在流程长的情况下会形成回调地狱，流程难以阅读和维护</strong>。</p>
+<h2 id="Promise"><a href="#Promise" class="headerlink" title="Promise"></a>Promise</h2><blockquote>
+<p><em>callback的问题是下一步的操作不是靠返回值，而是要靠callback来决定的。这个是跟同步操作最大的区别，也是导致callback烦恼的根本原因。</em></p>
+</blockquote>
+<p><code>Promise</code>让异步操作的状态返回出来，而不是在内部处理，是链式调用的基础，也给之后同步方式的写法奠定基础。</p>
+<pre><code class="js">function A(){
+    console.log(&#39;do a start&#39;);
+    return new Promise((resolve,reject) =&gt; {
+        setTimeout(() =&gt; {
+            console.log(&#39;do a end&#39;);
+            resolve();
+        },1000)
+    })
+}
+function B(){
+    console.log(&#39;do B&#39;);
+}
+A().then(B)
+</code></pre>
+<p>配合<code>defer</code>，<code>Promise.all</code>和<code>Promise.race</code>，使用Promise可以写出很清晰的异步流程。从本质上来讲，<strong>Promise连接了异步操作和操作结果，只是将回调延后，再通过链式调用让流程更清晰</strong>。</p>
+<h2 id="generator"><a href="#generator" class="headerlink" title="generator"></a>generator</h2><blockquote>
+<p><em>调用<code>generator</code>函数不立即执行，调用一次<code>next</code>执行到下一个<code>yield</code>，拿到<code>yield</code>右边表达式的值，下次调用next传的值赋值给yield左边。</em></p>
+</blockquote>
+<p>很尴尬啊，写完上面一段话，自己再回头看，也不知道说的啥。还是来看代码吧。</p>
+<pre><code class="js">function* generator(){
+    console.log(&#39;start&#39;);
+
+    const res = yield 1 + 3;
+
+    console.log(res);
+
+    return res;
+}
+const gen = generator();
+
+const res1 = gen.next();
+
+console.log(res1);
+
+const res2 = gen.next(5);
+
+console.log(res2);
+</code></pre>
+<p>可以看到yield的左值不是等于yield右边的结果，而是等于你下一次调用next的时候传入的值。这个特性，使得<code>generator配合Promise</code>，能很好的控制异步。如果yield右边是一个Promise，在Promise的状态变成resolved的时候调用下一次next，传入PromiseValue。</p>
+<pre><code class="js">function sleep(msTime = 1000){
+    return new Promise((resolve,reject) =&gt; {
+        setTimeout(resolve,msTime);
+    });
+}
+function* generator() {
+
+    const startTime = Date.now();
+
+    yield sleep(1000);
+
+    console.log(Date.now() - startTime);
+
+}
+
+const gen = generator();
+
+gen.next().value.then((val) =&gt; {
+
+    gen.next(val);
+
+});
+</code></pre>
+<p>这样所有的流程控制的回调代码都脱离了逻辑函数本身，在<code>generator</code>里，同步和异步的代码混在一起了，但是整个写法看上去是一个同步的，异常的清晰。而后面的控制代码，可以写成一个通用的控制函数，让<code>generator</code>自执行，这个是<code>co</code>模块做的。</p>
+<pre><code class="js">
+import co from &#39;co&#39;;
+
+const doSomeThing = co.wrap(function* generator() {
+
+    const startTime = Date.now();
+
+    yield sleep(1000);
+
+    console.log(Date.now() - startTime);
+
+});
+
+doSomeThing();
+
+</code></pre>
+<p>使用co模块yield右值可以是<code>promise</code>和<code>trunk函数</code>（为什么是这两个？因为这两个都能从回掉里拿到上一个异步操作的状态），不能是基本类型，确实从异步的角度考虑yield右值放基本类型没有啥意义，但是因为这个报错是有点难以接受的。还值得一提的是co做了一些处理，yield右值也可以是<code>Array</code>和<code>Object</code>，但是里面的值还是必须是promise和trunk。</p>
+<h2 id="async-await"><a href="#async-await" class="headerlink" title="async/await"></a>async/await</h2><blockquote>
+<p><em>async/<code>await</code>是es2017出的规范，可以说co和generator的<code>语法糖</code>。不一样的是await的右值<strong>兼容了基本类型</strong>，但是不再处理Array和Object。</em></p>
+</blockquote>
+<pre><code class="js">async function doSomeThing() {
+
+    const startTime = Date.now();
+
+    await sleep(1000);
+
+    console.log(Date.now() - startTime);
+
+}
+
+doSomeThing();
+</code></pre>
+<p>从<code>async/await</code>来看JavaScript的异步编程，可以说是很清楚了，同步和异步无缝连接，写起来行云流水，看来清晰明了。想必大家都想用<code>async/await</code>来提高工作效率吧，那么使用async/await要<strong>注意</strong>什么呢？</p>
+<ul>
+<li><p>1.<code>async/await</code>离不开<code>Promise</code>，使用<code>Promise.all</code>和<code>Promise.race</code>等优化流程。await写起来太方便了，当两个操作可以并行的时候还请用Promise.all，连续两个await是串行的操作。</p>
+</li>
+<li><p>2.async函数始终返回的一个Promise，就算简单如下函数。</p>
+</li>
+</ul>
+<pre><code class="js">async function doSomeThing() {
+
+    return 123;
+
+}
+</code></pre>
+<ul>
+<li><p>3.await右边异步操作变成<code>rejected</code>的时候抛出错误能被<code>try/catch</code>捕捉到，请不要吝啬使用<code>try/catch</code>。</p>
+</li>
+<li><p>4.还有一点重要的忘记说了，不支持的环境下请转码。</p>
+</li>
+</ul>
+<p>现在的<code>async/await</code>比较完美了，纵观这个变化历程，其实也是蛮辛酸的。在Callback的路上坚持走了很久，期间也出了wind.js等库，或者使用trunk函数，或者使用流式编程的rx.js等。可以看到先辈们的努力，正是他们的努力如今我们可以才可以享受如此硕果。</p>
+<p><code>trunk函数</code>(阮一峰老师的介绍)是个很有意思的想法，通过把callback形式的函数柯里化，很简单的就跟promise一样做到了延迟了回掉。那我们是不是也可以简单的用trunk函数来实现链式调用，答案是no。</p>
+<p>不怕大家笑话，因为Promise的then强调的要返回一个Promise，所以，在写本文之前我还一直以为Promise链式调用是依赖回掉的返回值。回想起来，有点好笑，在下一个then调用之前，callback都还没有执行，怎么可能依赖他的返回值来链式调用呢。</p>
+<p>这让我们回到一个编程的最基本，就是定义好一系列的操作和操作之前的关系。简单的来将，我们可以把这一系列的操作看成一个数组或者说链表可能更贴切一点，是一环扣一环的，程序开始执行，数组第一个操作完成，然后执行第二个操作，依次类推，直到执行完毕。</p>
+<blockquote>
+<p>在异步编程里面如何应该关心的大概有三个问题：</p>
+<ol>
+<li>如何生成这个数组（序列）</li>
+<li>写执行器，如何有序的执行完这个数组，在一个操作完成之后通知下一个操作开始执行</li>
+<li>看似上面已经完成了所有问题，但还有一个隐藏问题需要解决。在已知的任何事情从宏观的角度来讲，都是一个序列，从前到后的推移，犹如时间的推移。但是从微观的角度，必定会有事件的分支和合流（不知道这样说会不会被打）。如何处理这一部分的逻辑也是重中之重。</li>
+</ol>
+</blockquote>
+<p>对第一个问题，我们直接用数组，可以列为函数的参数，可以像Promise一样链式调用最后组成，奥还有callback。</p>
+<p>到第二个问题，我们很容易联想到runSequence这种函数名，于是雏形就有了</p>
+<pre><code class="js">`function runSequence(...seqs) { }`
+</code></pre>
+<p>拿到<code>seqs</code>就是干，一个一个执行呗，重要的就是如何一个一个执行。从这一点来看的化，每个异步操作都会有callback，只是callback的时机和写法不一样，或优或劣，从callback里调用下一次操作。我们可以把callback想成next借用koa的思想把序列执行完。这个要求每个操作都会调用并且只调用一次next，以最普通callback函数为例。</p>
+<pre><code class="js">function runSequence(...seqs) {
+
+    let i = 0;
+
+    const next = (index, ...args) =&gt; {
+
+        if (i !== index) {
+
+            console.warn(&#39;next call twice&#39;);
+
+            return;
+
+        }
+
+        let arg, callback;
+
+        if (typeof args[args.length - 1] === &#39;function&#39;) {
+
+            arg = args.slice(0, args.length - 1);
+
+            callback = args[args.length - 1];
+
+        } else {
+
+            arg = args;
+
+            callback = null;
+
+        }
+
+        const seq = seqs[i++];
+
+        if (!seq) {
+
+            callback &amp;&amp; callback(null, ...arg);
+
+            return;
+
+        }
+
+        try {
+
+            seq.call(null, ...arg, ((i, err, ...res) =&gt; {
+
+                if (err) {
+
+                    callback &amp;&amp; callback(err);
+
+                } else {
+
+                    next.call(null, i, ...res, callback);
+
+                }
+
+            }).bind(null, i));
+
+        } catch (err) {
+
+            callback &amp;&amp; callback(err);
+
+        }
+
+    }
+
+    return (...args) =&gt; {
+
+        next.call(null, 0, ...args);
+
+    }
+
+}
+
+</code></pre>
+<p>大功告成，我们来写一些简单的例子测试一下</p>
+<pre><code class="js">const res = {
+
+    a: &#39;b&#39;,
+
+    b: &#39;c&#39;,
+
+}
+
+
+
+function fetch(key, next) {
+
+    console.log(`fetch ${key} start`, Date.now() | 0);
+
+    if (!key) {
+
+        next(&#39;err key&#39;);
+
+    }
+
+    setTimeout(() =&gt; {
+
+        console.log(`fetch ${key} end`, Date.now() | 0);
+
+        if (!res[key]) {
+
+            next(`${key} not found`);
+
+        } else {
+
+            next(null, res[key]);
+
+        }
+
+    }, 1000);
+
+}
+
+
+
+function runError(next) {
+
+    throw new Error(&#39;erred&#39;);
+
+    next();
+
+}
+
+runSequence(fetch, fetch, (data, next) =&gt; {
+
+    next(null, data + &#39;1&#39;);
+
+    next(null, data + &#39;2&#39;);
+
+}, (data, next) =&gt; {
+
+    console.log(data);
+
+    next(null, data + &#39;3&#39;);
+
+}, runError)(&#39;a&#39;, (err, ...data) =&gt; {
+
+    console.log(err, ...data, &#39;finish all&#39;);
+
+});
+
+
+</code></pre>
+<p>log如下</p>
+<pre><code class="js">// fetch a start 5682
+
+// fetch a end 6686
+
+// fetch b start 6687
+
+// fetch b start 6687
+
+// c1
+
+// Error: erred &quot;finish all&quot;
+
+// warn: next call twice
+</code></pre>
+<p>看上去没毛病了。我们可以来解决第三个问题，还是拿来主义，借鉴<code>Promise.all</code>和<code>Promise.race</code>。我们也可以给callback写一个对应的all和race。直接贴代码</p>
+<p>总的来说，任何方案，只要是有规范，按规范走就能很好的优化这个流程。比如最后一个函数是callback，callback最后，第一个参数是err等等。使用Promise也有一定遵循的，如果Promise.resolve(123, 345);，后面的参数就会被忽略了，如果使用了这一点runSequence也能优化很多。runSequence.all数组里只能用函数bind的形式来写，就很丑，就可以用thunkify来优化。</p>
+<p><a href="https://mp.weixin.qq.com/s/5swBKkITeG8yf9hZJbGfWg" target="_blank" rel="noopener">原文地址</a></p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/favicon.png" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <!-- <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd> -->
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">171 <p>Articles</p></a></li>
+                    <li><a href="/categories">26 <p>Categories</p></a></li>
+                    <li><a href="/tags">55 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#为什么JavaScript的异步编程经常被人提起，我想到以下两点原因。"><span class="toc-number">1.</span> <span class="toc-text">为什么JavaScript的异步编程经常被人提起，我想到以下两点原因。</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#callback"><span class="toc-number">1.1.</span> <span class="toc-text">callback</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise"><span class="toc-number">1.2.</span> <span class="toc-text">Promise</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#generator"><span class="toc-number">1.3.</span> <span class="toc-text">generator</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#async-await"><span class="toc-number">1.4.</span> <span class="toc-text">async&#x2F;await</span></a></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+
+
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>

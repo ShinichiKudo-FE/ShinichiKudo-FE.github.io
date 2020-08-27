@@ -1,0 +1,521 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>React的Diff算法 - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,React 是 Facebook 开发的构建用户界面的类库.它从设计之初就将性能作为重点.这篇文章我展示 diff 算法和渲染过程怎样工作, 你可以借鉴优化自己的应用.
+Diff 算法在深入实现的细,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://ShinichiKudo-FE.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">React的Diff算法</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/React"><b>「
+                    </b>REACT<b> 」</b></a>
+                
+                March 20, 2018
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2018/03/20/React/React%E7%9A%84Diff%E7%AE%97%E6%B3%95/" title="React的Diff算法" class="">React的Diff算法</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    6.7k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    6 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/React/" rel="tag">React</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <p><strong>React</strong> 是 Facebook 开发的构建用户界面的类库.<br>它从设计之初就将性能作为重点.<br>这篇文章我展示 diff 算法和渲染过程怎样工作, 你可以借鉴优化自己的应用.</p>
+<h1 id="Diff-算法"><a href="#Diff-算法" class="headerlink" title="Diff 算法"></a>Diff 算法</h1><p>在深入实现的细节之前, 需要了解一下 React 怎样工作的.</p>
+<pre><code class="javascript">class MyComponent extends React.Component{
+    render() {
+        if (this.props.first) {
+            return &lt;div className=&quot;first&quot;&gt;&lt;span&gt;A Span&lt;/span&gt;&lt;/div&gt;;
+            } else {
+            return &lt;div className=&quot;second&quot;&gt;&lt;p&gt;A Paragraph&lt;/p&gt;&lt;/div&gt;;
+            }
+        }
+}
+</code></pre>
+<p>任何时间, 你描述的是你的 UI 看起来是什么样子.<br>需要特别注意, render 执行的结果得到的不是真正的 DOM 节点.<br>结果仅仅是轻量级的 JavaScript 对象, 我们称之为 <font color = 'blue'>virtual DOM</font>.</p>
+<p>React 要从这个表现形式当中尝试找到前一个渲染结果到后一个的最小步数.<br>比如, 当我们挂载了 <font color = "red"> <MyComponent first={true} /> </font><br>, 然后用 <font color = "red"><MyComponent first={false} /></font> 替换, 然后又取消挂载,<br>这样一个过程的 DOM 的指令是这样的:</p>
+<blockquote>
+<p>从没有到第一步<br>创建节点: <div className="first"><span>A Span</span></div></p>
+</blockquote>
+<blockquote>
+<p>第一步到第二步<br>替换属性: className=”first” 到 className=”second”<br>替换节点: <span>A Span</span> 到 <p>A Paragraph</p></p>
+</blockquote>
+<blockquote>
+<p>第二步到没有<br>删除节点: <div className="second"><p>A Paragraph</p></div><br><a id="more"></a></p>
+</blockquote>
+<h2 id="按照层级"><a href="#按照层级" class="headerlink" title="按照层级"></a>按照层级</h2><p>找到两棵任意的树之间最小的修改是一个复杂度为 O(n^3) 的问题.<br>你可以想象, 我们的例子里这不是容易处理的.<br>React 用了一种简单但是强大的技巧, 达到了接近 O(n) 的复杂度.</p>
+<p>React 仅仅是尝试把树按照层级分解. 这彻底简化了复杂度,<br>而且也不会失去很多, 因为 Web 应用很少有 component 移动到树的另一个层级去.<br>它们大部分只是在相邻的子节点之间移动.</p>
+<p><img src="https://segmentfault.com/img/remote/1460000004844002" alt="diff1"></p>
+<h2 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h2><p>假设我们有个 component, 一个循环渲染了 5 个 component,<br>随后又在列表中间插入一个新的 component.<br>只知道这些信息, 要弄清两个 component 的列表怎么对应很难.</p>
+<p>默认情况下, React 会将前一个列表第一个 component 和后一个第一个关联起来, 后面也是.<br>你可以写一个 key 属性帮助 React 来处理它们之间的对应关系.<br>实际中, 在子元素中找到唯一的 <font color = "red">key</font> 通常很容易.</p>
+<p><img src="https://segmentfault.com/img/remote/1460000004844003" alt="diff2"></p>
+<h2 id="Components"><a href="#Components" class="headerlink" title="Components"></a>Components</h2><p>React app 通常由用户定义的 component 组合而成,<br>通常结果是一个主要是很多 div 组成的树.<br>这个信息也被 React 的 diff 算法考虑进去, React 只会匹配相同 class 的 component.</p>
+<p>比如, 如果有个 <Header> 被 <ExampleBlock> 替换掉了,<br>React 会删除掉 header 再创建一个 example block.<br>我们不需要化宝贵的时间去匹配两个不大可能有相似之处的 component.</p>
+<p><img src="https://segmentfault.com/img/remote/1460000004844005" alt="diff3"></p>
+<h1 id="事件代理"><a href="#事件代理" class="headerlink" title="事件代理"></a>事件代理</h1><p>往 DOM 节点上绑事件慢得人心碎啊, 而且很费内存.</p>
+<p>作为替代, React 部署了种流行技术, 叫做”<font color = "red">事件代理</font>“.<br>React 走得更远, 重新实现了一遍符合 W3C 规范的事件系统.<br>意味着 IE8 事件处理的 bug 成为过去了, 所有事件名称跨浏览器保持一致.</p>
+<p>这里解释一下怎么实现的. </p>
+<blockquote>
+<p>事件 listener 被绑定到整个文档的根节点上.<br>当事件被触发, 浏览器会给出一个触发的目标的 DOM 节点.<br>为了在 DOM 的层级传播事件, React 不会迭代 virtual DOM 的层级.<br>而是, 我们依靠每个 React component 各自独立的 id 来编码这个层级.<br>我们能通过简单的字符串操作来获取所有父级 component 的父级内容.<br>把事件 listener 存储在 hash map 当中, 我们发现性能比放到 virtual DOM 还要好.</p>
+</blockquote>
+<p>这个例子展示了, 当一个事件广播到整个 virtual DOM 时发生什么.</p>
+<pre><code class="javascript">// dispatchEvent(&#39;click&#39;, &#39;a.b.c&#39;, event)
+clickCaptureListeners[&#39;a&#39;](event);
+clickCaptureListeners[&#39;a.b&#39;](event);
+clickCaptureListeners[&#39;a.b.c&#39;](event);
+clickBubbleListeners[&#39;a.b.c&#39;](event);
+clickBubbleListeners[&#39;a.b&#39;](event);
+clickBubbleListeners[&#39;a&#39;](event);
+</code></pre>
+<p>浏览器为每个事件和每个 listener 创建一个新的事件对象.<br>这个事件对象的属性很不错, 你能获取到事件的引用, 甚至修改掉.<br>然而这也意味着高额的内存分配.<br>React 在启动时就为那些对象分配了一个内存池.<br>任何时候需要用到事件对象, 就可以从这个内存池进行复用.<br>这一点非常显著地减轻了垃圾回收的负担.</p>
+<h1 id="渲染"><a href="#渲染" class="headerlink" title="渲染"></a>渲染</h1><h2 id="合并操作"><a href="#合并操作" class="headerlink" title="合并操作"></a>合并操作</h2><p>你调用 component 的 <font color = "red">setState</font> 方法的时候, React 将其标记为 dirty.<br>到每一个事件循环结束, React 检查所有标记 dirty 的 component 重新绘制.</p>
+<p>这里的”合并操作”是说, 在一个事件循环当中, DOM 只会被更新一次.<br>这个特性是构建高性能应用的关键, 而且用通常的 JavaScript 代码难以实现.<br>而在 React 应用里, 你默认就能实现.</p>
+<p><img src="https://segmentfault.com/img/remote/1460000004851132" alt="diff4"></p>
+<h2 id="子树渲染操作"><a href="#子树渲染操作" class="headerlink" title="子树渲染操作"></a>子树渲染操作</h2><p>调用 <font color = "red">setState</font> 方法时, component 会重新构建包括子节点的 virtual DOM.<br>如果你在根节点调用 <font color = "red">setState</font>, 整个 React 的应用都会被重新渲染.</p>
+<p>所有的 component, 即便没有更新, 都会调用他们的 <strong>render</strong> 方法.<br>这个听起来可怕, 性能像是很低, 但实际上我们不会触碰真实的 DOM, 运行起来没那样的问题.</p>
+<p>首先, 我们讨论的是展示用户界面. 因为屏幕空间有限, 通常你需要一次渲染成百上千条指令.<br>JavaScript 对于能处理的整个界面, 在业务逻辑上已经足够快了.</p>
+<p>另一点, 在写 React 代码时, 每当有数据更新, 你不是都调用根节点的 setState.<br>你会在需要接收对应更新的 component 上调用, 或者在上面的几个 component.<br>你很少要一直到根节点上. 就是说界面更新只出现在用户产生交互的局部.</p>
+<p><img src="https://segmentfault.com/img/remote/1460000004851134" alt="diff5"></p>
+<h2 id="选择性子树渲染"><a href="#选择性子树渲染" class="headerlink" title="选择性子树渲染"></a>选择性子树渲染</h2><p>最后, 你还有可能去掉一些子树的重新渲染.<br>如果你在 component 上实现以下方法的话:</p>
+<pre><code class="javascript">boolean shouldComponentUpdate(object nextProps, object nextState)
+</code></pre>
+<p>根据 component 的前一个和下一个 <font color = "red">props/state</font>,<br>你可以告诉 React 这个 component 没有更新, 也不需要重新绘制.<br>实现得好的话, 可以带来巨大的性能提升.</p>
+<p>要用这个方法, 你要能够对 JavaScript Object 进行比对.<br>这件有很多细节的因素, 比如对比应该是深度的还是浅层的,<br>如果要深的, 我们是用不可变数据结构, 还是进行深度拷贝…</p>
+<p>而且你要注意, 这个函数每次都会被调用, 所以你要确保运行起来花的时间更少,<br>比 React 的做法时间少, 还有比计算 component 需要的时间少,<br>即便重新绘制并不是必要的.</p>
+<p><img src="https://segmentfault.com/img/remote/1460000004851138" alt="diff6"></p>
+<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>帮助 React 变快的技术并不新颖. 长久以来, 我们到知道触碰 DOM 是费时的,<br>你应该合并处理读和写的操作, 事件代理会更快…</p>
+<p>人们还是会经常讨论他们, 因为在实际当中用 JavaScript 进行实现很是挺难的.<br>React 突出的一个原因是这些优化默认就启动了.<br>这就让你避免掉不小心把 app 写得很慢.</p>
+<p>React 消耗性能的模型很简单, 很好理解: 每次调用 setState 会重新计算整个子树.<br>如果你想要提高性能, 尽量少调用 setState,<br>还有用 shouldComponentUpdate 减少大的子树的重新计算.</p>
+<p>react的一大特点就是虚拟DOM的diff算法，下图为diff实现流程图。<br><img src="https://segmentfault.com/img/bVuHXW" alt="diff7"><br>传统算法的理解画的流程图<br><img src="https://segmentfault.com/img/bVuGgm" alt="diff8"><br>React 通过制定大胆的策略，将 O(n^3) 复杂度的问题转换成 O(n) 复杂度的问题。<br><img src="https://segmentfault.com/img/bVuH57" alt="diff9"></p>
+<p>更多关于React源码链接<br><a href="http://purplebamboo.github.io/2015/09/15/reactjs_source_analyze_part_one/" target="_blank" rel="noopener">react源码分析</a><br><a href="https://zhuanlan.zhihu.com/p/20346379?refer=purerender" target="_blank" rel="noopener">react源码剖析（这篇文章对图中移位算法有详细解释）</a><br><a href="https://grfia.dlsi.ua.es/ml/algorithms/references/editsurvey_bille.pdf" target="_blank" rel="noopener">论文算法详解</a></p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/favicon.png" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <!-- <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd> -->
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">171 <p>Articles</p></a></li>
+                    <li><a href="/categories">26 <p>Categories</p></a></li>
+                    <li><a href="/tags">55 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Diff-算法"><span class="toc-number">1.</span> <span class="toc-text">Diff 算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#按照层级"><span class="toc-number">1.1.</span> <span class="toc-text">按照层级</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#列表"><span class="toc-number">1.2.</span> <span class="toc-text">列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Components"><span class="toc-number">1.3.</span> <span class="toc-text">Components</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#事件代理"><span class="toc-number">2.</span> <span class="toc-text">事件代理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#渲染"><span class="toc-number">3.</span> <span class="toc-text">渲染</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#合并操作"><span class="toc-number">3.1.</span> <span class="toc-text">合并操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#子树渲染操作"><span class="toc-number">3.2.</span> <span class="toc-text">子树渲染操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#选择性子树渲染"><span class="toc-number">3.3.</span> <span class="toc-text">选择性子树渲染</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#结论"><span class="toc-number">4.</span> <span class="toc-text">结论</span></a></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+
+
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>

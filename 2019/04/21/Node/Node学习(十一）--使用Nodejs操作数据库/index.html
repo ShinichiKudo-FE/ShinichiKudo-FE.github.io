@@ -1,0 +1,664 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Node学习(十一) --使用Nodejs操作数据库 - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,Nodejs操作数据库Nodejs操作数据库需要用到mysql模块，通过npm i mysql -D进行安装。
+之后可以通过mysql.createConnection方法新建一个数据库连接，需要传,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://ShinichiKudo-FE.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">Node学习(十一) --使用Nodejs操作数据库</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/Node"><b>「
+                    </b>NODE<b> 」</b></a>
+                
+                April 21, 2019
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2019/04/21/Node/Node%E5%AD%A6%E4%B9%A0(%E5%8D%81%E4%B8%80%EF%BC%89--%E4%BD%BF%E7%94%A8Nodejs%E6%93%8D%E4%BD%9C%E6%95%B0%E6%8D%AE%E5%BA%93/" title="Node学习(十一) --使用Nodejs操作数据库" class="">Node学习(十一) --使用Nodejs操作数据库</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    5.9k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    5 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Node/" rel="tag">Node</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h2 id="Nodejs操作数据库"><a href="#Nodejs操作数据库" class="headerlink" title="Nodejs操作数据库"></a>Nodejs操作数据库</h2><p>Nodejs操作数据库需要用到<code>mysql</code>模块，通过<code>npm i mysql -D</code>进行安装。</p>
+<p>之后可以通过<code>mysql.createConnection</code>方法新建一个数据库连接，需要传入的参数有地址、端口、登录名、密码，以及需要连接的数据库。</p>
+<p><code>mysql.createConnection</code>会返回一个<code>connection</code>对象，可使用<code>connection.query</code>方法，传入SQL语句，对数据库进行相应操作。</p>
+<pre><code class="js">const mysql = require(&#39;mysql&#39;)
+
+// 1. 连接服务器
+const connection = mysql.createConnection({
+  host: &#39;localhost&#39;,  // 地址
+  port: 3306,  // 端口，不传则默认3306
+  user: &#39;root&#39;,  // 登录名
+  password: &#39;&#39;,  // 密码
+  database: &#39;test&#39;  // 连接的数据库
+})
+
+const username = &#39;zzz&#39;
+const password = &#39;888888&#39;
+
+// 向数据库中插入数据
+connection.query(`INSERT INTO user_table (username, password) VALUES (&#39;${username}&#39;, &#39;${password}&#39;)`, (err, data) =&gt; {
+  if (err) {
+    console.error(err)
+  } else {
+    console.log(data)
+  }
+})
+
+// 查询user_table表的数据
+db.query(`SELECT * FROM User_table`, (err, data) =&gt; {
+  if (err) {
+    console.error(err)
+  } else {
+    console.log(data)
+  }
+})
+</code></pre>
+<p>INSERT语句的打印的是插入结果：</p>
+<pre><code class="js">OkPacket {
+  fieldCount: 0,
+  affectedRows: 1,
+  insertId: 8,    // 返回了当前插入语句的id，可以用来告知前端插入数据的id
+  serverStatus: 2,
+  warningCount: 0,
+  message: &#39;&#39;,
+  protocol41: true,
+  changedRows: 0 }
+</code></pre>
+<p>SELECT语句的打印结果为查询到的所有数据：</p>
+<pre><code class="js">[ RowDataPacket { ID: 1, username: &#39;lee&#39;, password: &#39;123456&#39; },
+  RowDataPacket { ID: 3, username: &#39;chen&#39;, password: &#39;654321&#39; },
+  RowDataPacket { ID: 8, username: &#39;zzz&#39;, password: &#39;888888&#39; } ]
+
+</code></pre>
+<p>但<code>mysql.createConnection</code>方法有一个缺陷，就是它一次只能创建一个连接，一旦有多个用户同时请求，就会造成请求排队等待。</p>
+<p>因此为了提高性能，可以改用<code>mysql.createPool</code>方法，创建一个连接池，它可以创建n个与服务器之间的连接，需要使用时，可以自动从中选取一个空闲的连接使用。</p>
+<pre><code class="js">const connection = mysql.createPool({
+  connectionLimit: 10,  // 建立的连接数量，默认为10个
+  host: &#39;localhost&#39;,  // 地址
+  port: 3306,  // 端口，不传则默认3306
+  user: &#39;root&#39;,  // 登录名
+  password: &#39;&#39;,  // 密码
+  database: &#39;test&#39;  // 连接的数据库
+})
+</code></pre>
+<a id="more"></a>
+<h2 id="与HTTP模块配合实现接口"><a href="#与HTTP模块配合实现接口" class="headerlink" title="与HTTP模块配合实现接口"></a>与HTTP模块配合实现接口</h2><p>完成了基本操作后，就可以实现一个完整的注册、登录流程</p>
+<pre><code class="js">const http = require(&#39;http&#39;)
+const url = require(&#39;url&#39;)
+const fs = require(&#39;fs&#39;)
+const mysql = require(&#39;mysql&#39;)
+
+// 1. 连接服务器
+const connection = mysql.createPool({
+  connectionLimit: 10,  // 建立的连接数量，默认为10个
+  host: &#39;localhost&#39;,  // 地址
+  port: 3306,  // 端口，不传则默认3306
+  user: &#39;root&#39;,  // 登录名
+  password: &#39;&#39;,  // 密码
+  database: &#39;test&#39;  // 连接的数据库
+})
+
+// 2. 与HTTP模块配合使用
+const server = http.createServer((req, res) =&gt; {
+  const {
+    pathname,
+    query
+  } = url.parse(req.url, true)
+
+  if (pathname === &#39;/reg&#39;) {
+    // 获取get请求数据
+    const {
+      username,
+      password
+    } = query
+
+    // 校验参数是否正确
+    if (!username || !password) {
+      res.write(JSON.stringify({
+        error: 1,
+        msg: &#39;用户名或密码不可为空&#39;
+      }))
+      res.end()
+    } else if (username.length &gt; 32) {
+      res.write(JSON.stringify({
+        error: 1,
+        msg: &#39;用户名的长度不可超过32位&#39;
+      }))
+      res.end()
+    } else if (password.length &gt; 32) {
+      res.write(JSON.stringify({
+        error: 1,
+        msg: &#39;密码的长度不可超过32位&#39;
+      }))
+    } else {  // 校验通过，开始注册流程
+      // 检查用户名是否已存在
+      connection.query(`SELECT ID FROM User_table WHERE username=&#39;${username}&#39;`, (err, data) =&gt; {
+        if (err) {
+          res.writeHead(500)
+          res.end()
+        } else {
+          if (data.length) {
+            res.write(JSON.stringify({
+              error: 1,
+              msg: &#39;此用户名已被占用&#39;
+            }))
+            res.end()
+          } else {
+            // 将用户名和密码插入数据库
+            connection.query(`INSERT INTO user_table (username, password) VALUES(&#39;${username}&#39;, &#39;${password}&#39;)`, (err, data) =&gt; {
+              if (err) {
+                res.writeHead(500)
+                res.end()
+              } else {
+                res.write(JSON.stringify({
+                  error: 0,
+                  msg: &#39;注册成功&#39;
+                }))
+                res.end()
+              }
+            })
+          }
+        }
+      })
+    }
+
+  } else if (pathname === &#39;/login&#39;) {
+    let arr = []
+
+    req.on(&#39;data&#39;, (buffer) =&gt; {
+      // 获取POST请求的Buffer数据
+      arr.push(buffer)
+    })
+
+    req.on(&#39;end&#39;, () =&gt; {
+      // 将Buffer数据合并
+      let buffer = Buffer.concat(arr)
+
+      // 处理接收到的POST数据
+      const post = JSON.parse(buffer.toString())
+
+      // 获取post请求数据
+      const {
+        username,
+        password
+      } = post
+
+      // 根据用户名查询
+      connection.query(`SELECT username, password FROM User_table WHERE username=&#39;${username}&#39;`, (err, data) =&gt; {
+        if (err) {
+          console.error(err)
+        } else {
+          if (!data.length) {
+            // 用户不存在
+            res.write(JSON.stringify({
+              error: 1,
+              msg: &#39;用户名或密码错误&#39;
+            }))
+            res.end()
+          } else if (data[0].password !== password) {
+            // 密码不正确
+            res.write(JSON.stringify({
+              error: 1,
+              msg: &#39;用户名或密码错误&#39;
+            }))
+            res.end()
+          } else {
+            res.write(JSON.stringify({
+              error: 0,
+              msg: &#39;登录成功&#39;
+            }))
+            res.end()
+          }
+        }
+      })
+    })
+  } else {
+    // 若请求不为接口，则默认为请求文件
+    fs.readFile(`.${pathname}`, (err, buffer) =&gt; {
+      if (err) {
+        res.writeHead(404)
+        res.write(buffer)
+      } else {
+        res.write(buffer)
+      }
+      res.end()
+    })
+  }
+})
+
+server.listen(8080)
+
+</code></pre>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/favicon.png" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <!-- <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd> -->
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">171 <p>Articles</p></a></li>
+                    <li><a href="/categories">26 <p>Categories</p></a></li>
+                    <li><a href="/tags">55 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nodejs操作数据库"><span class="toc-number">1.</span> <span class="toc-text">Nodejs操作数据库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#与HTTP模块配合实现接口"><span class="toc-number">2.</span> <span class="toc-text">与HTTP模块配合实现接口</span></a></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+
+
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>

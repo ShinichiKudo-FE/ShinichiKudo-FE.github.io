@@ -1,0 +1,727 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>JavaScript 复杂判断的更优雅写法 - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,原文地址
+前言我们编写js代码时经常遇到复杂逻辑判断的情况，通常大家可以用if/else或者switch来实现多个条件判断，但这样会有个问题，随着逻辑复杂度的增加，代码中的if/else/switc,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://ShinichiKudo-FE.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">JavaScript 复杂判断的更优雅写法</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/Js"><b>「
+                    </b>JS<b> 」</b></a>
+                
+                November 18, 2018
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2018/11/18/Js/JavaScript-%E5%A4%8D%E6%9D%82%E5%88%A4%E6%96%AD%E7%9A%84%E6%9B%B4%E4%BC%98%E9%9B%85%E5%86%99%E6%B3%95/" title="JavaScript 复杂判断的更优雅写法" class="">JavaScript 复杂判断的更优雅写法</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    9.2k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    8 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Js/" rel="tag">Js</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <p><a href="https://juejin.im/post/5bdfef86e51d453bf8051bf8?utm_source=gold_browser_extension" target="_blank" rel="noopener">原文地址</a></p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>我们编写js代码时经常遇到复杂逻辑判断的情况，通常大家可以用if/else或者switch来实现多个条件判断，但这样会有个问题，随着逻辑复杂度的增加，代码中的if/else/switch会变得越来越臃肿，越来越看不懂，那么如何更优雅的写判断逻辑，本文带你试一下。</p>
+<h2 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h2><pre><code class="js">/**
+ * 按钮点击事件
+ * @param {number} status 活动状态：1 开团进行中 2 开团失败 3 商品售罄 4 开团成功 5 系统取消
+ */
+const onButtonClick = (status)=&gt;{
+  if(status == 1){
+    sendLog(&#39;processing&#39;)
+    jumpTo(&#39;IndexPage&#39;)
+  }else if(status == 2){
+    sendLog(&#39;fail&#39;)
+    jumpTo(&#39;FailPage&#39;)
+  }else if(status == 3){
+    sendLog(&#39;fail&#39;)
+    jumpTo(&#39;FailPage&#39;)
+  }else if(status == 4){
+    sendLog(&#39;success&#39;)
+    jumpTo(&#39;SuccessPage&#39;)
+  }else if(status == 5){
+    sendLog(&#39;cancel&#39;)
+    jumpTo(&#39;CancelPage&#39;)
+  }else {
+    sendLog(&#39;other&#39;)
+    jumpTo(&#39;Index&#39;)
+  }
+}
+
+</code></pre>
+<p>通过代码可以看到这个按钮的点击逻辑：根据不同活动状态做两件事情，发送日志埋点和跳转到对应页面，大家可以很轻易的提出这段代码的改写方案，switch出场：</p>
+<pre><code class="js">/**
+ * 按钮点击事件
+ * @param {number} status 活动状态：1 开团进行中 2 开团失败 3 商品售罄 4 开团成功 5 系统取消
+ */
+const onButtonClick = (status)=&gt;{
+  switch (status){
+    case 1:
+      sendLog(&#39;processing&#39;)
+      jumpTo(&#39;IndexPage&#39;)
+      break
+    case 2:
+    case 3:
+      sendLog(&#39;fail&#39;)
+      jumpTo(&#39;FailPage&#39;)
+      break  
+    case 4:
+      sendLog(&#39;success&#39;)
+      jumpTo(&#39;SuccessPage&#39;)
+      break
+    case 5:
+      sendLog(&#39;cancel&#39;)
+      jumpTo(&#39;CancelPage&#39;)
+      break
+    default:
+      sendLog(&#39;other&#39;)
+      jumpTo(&#39;Index&#39;)
+      break
+  }
+}
+</code></pre>
+<a id="more"></a>
+<p>嗯，这样看起来比if/else清晰多了，细心的同学也发现了小技巧，case 2和case 3逻辑一样的时候，可以省去执行语句和break，则case 2的情况自动执行case 3的逻辑。</p>
+<p>这时有同学会说，还有更简单的写法：（表驱动编程）</p>
+<pre><code class="js">const actions = {
+  &#39;1&#39;: [&#39;processing&#39;,&#39;IndexPage&#39;],
+  &#39;2&#39;: [&#39;fail&#39;,&#39;FailPage&#39;],
+  &#39;3&#39;: [&#39;fail&#39;,&#39;FailPage&#39;],
+  &#39;4&#39;: [&#39;success&#39;,&#39;SuccessPage&#39;],
+  &#39;5&#39;: [&#39;cancel&#39;,&#39;CancelPage&#39;],
+  &#39;default&#39;: [&#39;other&#39;,&#39;Index&#39;],
+}
+/**
+ * 按钮点击事件
+ * @param {number} status 活动状态：1开团进行中 2开团失败 3 商品售罄 4 开团成功 5 系统取消
+ */
+const onButtonClick = (status)=&gt;{
+  let action = actions[status] || actions[&#39;default&#39;],
+      logName = action[0],
+      pageName = action[1]
+  sendLog(logName)
+  jumpTo(pageName)
+}
+
+</code></pre>
+<p>上面代码确实看起来更清爽了，这种方法的聪明之处在于：将判断条件作为对象的属性名，将处理逻辑作为对象的属性值，在按钮点击的时候，通过对象属性查找的方式来进行逻辑判断，这种写法特别适合<strong>一元条件判断</strong>的情况。</p>
+<p>是不是还有其他写法呢？</p>
+<pre><code class="js">const actions = new Map([
+  [1, [&#39;processing&#39;,&#39;IndexPage&#39;]],
+  [2, [&#39;fail&#39;,&#39;FailPage&#39;]],
+  [3, [&#39;fail&#39;,&#39;FailPage&#39;]],
+  [4, [&#39;success&#39;,&#39;SuccessPage&#39;]],
+  [5, [&#39;cancel&#39;,&#39;CancelPage&#39;]],
+  [&#39;default&#39;, [&#39;other&#39;,&#39;Index&#39;]]
+])
+/**
+ * 按钮点击事件
+ * @param {number} status 活动状态：1 开团进行中 2 开团失败 3 商品售罄 4 开团成功 5 系统取消
+ */
+const onButtonClick = (status)=&gt;{
+  let action = actions.get(status) || actions.get(&#39;default&#39;)
+  sendLog(action[0])
+  jumpTo(action[1])
+}
+</code></pre>
+<p>这样写用到了es6里的<strong>Map对象</strong>，是不是更爽了？Map对象和Object对象有什么区别呢？</p>
+<blockquote>
+<p>一个对象通常都有自己的原型，所以一个对象总有一个”prototype”键。<br>一个对象的键只能是字符串或者Symbols，但一个Map的键可以是任意值。<br>你可以通过size属性很容易地得到一个Map的键值对个数，而对象的键值对个数只能手动确认。</p>
+</blockquote>
+<p>我们需要把问题升级一下，以前按钮点击时候只需要判断status，现在还需要判断用户的身份：</p>
+<pre><code class="js">/**
+ * 按钮点击事件
+ * @param {number} status 活动状态：1开团进行中 2开团失败 3 开团成功 4 商品售罄 5 有库存未开团
+ * @param {string} identity 身份标识：guest客态 master主态
+ */
+const onButtonClick = (status,identity)=&gt;{
+  if(identity == &#39;guest&#39;){
+    if(status == 1){
+      //do sth
+    }else if(status == 2){
+      //do sth
+    }else if(status == 3){
+      //do sth
+    }else if(status == 4){
+      //do sth
+    }else if(status == 5){
+      //do sth
+    }else {
+      //do sth
+    }
+  }else if(identity == &#39;master&#39;) {
+    if(status == 1){
+      //do sth
+    }else if(status == 2){
+      //do sth
+    }else if(status == 3){
+      //do sth
+    }else if(status == 4){
+      //do sth
+    }else if(status == 5){
+      //do sth
+    }else {
+      //do sth
+    }
+  }
+}
+</code></pre>
+<p>原谅我不写每个判断里的具体逻辑了，因为代码太冗长了。<br>原谅我又用了if/else，因为我看到很多人依然在用if/else写这种大段的逻辑判断。<br>从上面的例子我们可以看到，当你的逻辑升级为二元判断时，你的判断量会加倍，你的代码量也会加倍，这时怎么写更清爽呢？</p>
+<pre><code class="js">const actions = new Map([
+  [&#39;guest_1&#39;, ()=&gt;{/*do sth*/}],
+  [&#39;guest_2&#39;, ()=&gt;{/*do sth*/}],
+  [&#39;guest_3&#39;, ()=&gt;{/*do sth*/}],
+  [&#39;guest_4&#39;, ()=&gt;{/*do sth*/}],
+  [&#39;guest_5&#39;, ()=&gt;{/*do sth*/}],
+  [&#39;master_1&#39;, ()=&gt;{/*do sth*/}],
+  [&#39;master_2&#39;, ()=&gt;{/*do sth*/}],
+  [&#39;master_3&#39;, ()=&gt;{/*do sth*/}],
+  [&#39;master_4&#39;, ()=&gt;{/*do sth*/}],
+  [&#39;master_5&#39;, ()=&gt;{/*do sth*/}],
+  [&#39;default&#39;, ()=&gt;{/*do sth*/}],
+])
+
+/**
+ * 按钮点击事件
+ * @param {string} identity 身份标识：guest客态 master主态
+ * @param {number} status 活动状态：1 开团进行中 2 开团失败 3 开团成功 4 商品售罄 5 有库存未开团
+ */
+const onButtonClick = (identity,status)=&gt;{
+  let action = actions.get(`${identity}_${status}`) || actions.get(&#39;default&#39;)
+  action.call(this)
+}
+</code></pre>
+<p>上述代码核心逻辑是：<strong>把两个条件拼接成字符串，并通过以条件拼接字符串作为键，以处理函数作为值的Map对象进行查找并执行</strong>，这种写法在多元条件判断时候尤其好用。</p>
+<p>当然上述代码如果用Object对象来实现也是类似的：</p>
+<pre><code class="js">const actions = {
+  &#39;guest_1&#39;:()=&gt;{/*do sth*/},
+  &#39;guest_2&#39;:()=&gt;{/*do sth*/},
+  //....
+}
+
+const onButtonClick = (identity,status)=&gt;{
+  let action = actions[`${identity}_${status}`] || actions[&#39;default&#39;]
+  action.call(this)
+}
+</code></pre>
+<p>如果有些同学觉得把查询条件拼成字符串有点别扭，那还有一种方案，就是<strong>用Map对象</strong>，以Object对象作为key：</p>
+<pre><code class="js">const actions = new Map([
+  [{identity:&#39;guest&#39;,status:1},()=&gt;{/*do sth*/}],
+  [{identity:&#39;guest&#39;,status:2},()=&gt;{/*do sth*/}],
+  //...
+])
+
+const onButtonClick = (identity,status)=&gt;{
+  let action = [...actions].filter(([key,value])=&gt;(key.identity == identity &amp;&amp; key.status == status))
+  action.forEach(([key,value])=&gt;value.call(this))
+}
+</code></pre>
+<p>是不是又高级了一点点？</p>
+<p>这里也看出来Map与Object的区别，<code>Map可以用任何类型的数据作为key</code>。</p>
+<p>我们现在再将难度升级一点点，假如guest情况下，status1-4的处理逻辑都一样怎么办，最差的情况是这样：</p>
+<pre><code class="js">const actions = new Map([
+  [{identity:&#39;guest&#39;,status:1},()=&gt;{/* functionA */}],
+  [{identity:&#39;guest&#39;,status:2},()=&gt;{/* functionA */}],
+  [{identity:&#39;guest&#39;,status:3},()=&gt;{/* functionA */}],
+  [{identity:&#39;guest&#39;,status:4},()=&gt;{/* functionA */}],
+  [{identity:&#39;guest&#39;,status:5},()=&gt;{/* functionB */}],
+  //...
+])
+</code></pre>
+<p>好一点的写法是将处理逻辑函数进行缓存：</p>
+<pre><code class="js">const actions = ()=&gt;{
+  const functionA = ()=&gt;{/*do sth*/}
+  const functionB = ()=&gt;{/*do sth*/}
+  return new Map([
+    [{identity:&#39;guest&#39;,status:1},functionA],
+    [{identity:&#39;guest&#39;,status:2},functionA],
+    [{identity:&#39;guest&#39;,status:3},functionA],
+    [{identity:&#39;guest&#39;,status:4},functionA],
+    [{identity:&#39;guest&#39;,status:5},functionB],
+    //...
+  ])
+}
+
+const onButtonClick = (identity,status)=&gt;{
+  let action = [...actions()].filter(([key,value])=&gt;(key.identity == identity &amp;&amp; key.status == status))
+  action.forEach(([key,value])=&gt;value.call(this))
+}
+</code></pre>
+<p>这样写已经能满足日常需求了，但认真一点讲，上面重写了4次functionA还是有点不爽，假如判断条件变得特别复杂，比如identity有3种状态，status有10种状态，那你需要定义30条处理逻辑，而往往这些逻辑里面很多都是相同的，这似乎也是笔者不想接受的，那可以这样实现:</p>
+<pre><code class="js">const actions = ()=&gt;{
+  const functionA = ()=&gt;{/*do sth*/}
+  const functionB = ()=&gt;{/*do sth*/}
+  return new Map([
+    [/^guest_[1-4]$/,functionA],
+    [/^guest_5$/,functionB],
+    //...
+  ])
+}
+
+const onButtonClick = (identity,status)=&gt;{
+  let action = [...actions()].filter(([key,value])=&gt;(key.test(`${identity}_${status}`)))
+  action.forEach(([key,value])=&gt;value.call(this))
+}
+</code></pre>
+<p>这里Map的优势更加凸显，可以用正则类型作为key了，这样就有了无限可能，假如需求变成，凡是guest情况都要发送一个日志埋点，不同status情况也需要单独的逻辑处理，那我们可以这样写:</p>
+<pre><code class="js">const actions = ()=&gt;{
+  const functionA = ()=&gt;{/*do sth*/}
+  const functionB = ()=&gt;{/*do sth*/}
+  const functionC = ()=&gt;{/*send log*/}
+  return new Map([
+    [/^guest_[1-4]$/,functionA],
+    [/^guest_5$/,functionB],
+    [/^guest_.*$/,functionC],
+    //...
+  ])
+}
+
+const onButtonClick = (identity,status)=&gt;{
+  let action = [...actions()].filter(([key,value])=&gt;(key.test(`${identity}_${status}`)))
+  action.forEach(([key,value])=&gt;value.call(this))
+}
+</code></pre>
+<p>也就是说<strong>利用数组循环的特性，符合正则条件的逻辑都会被执行，那就可以同时执行公共逻辑和单独逻辑</strong>，因为正则的存在，你可以打开想象力解锁更多的玩法，本文就不赘述了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文已经教你了8种逻辑判断写法，包括：</p>
+<ul>
+<li>if/else</li>
+<li>switch</li>
+<li>一元判断时：存到Object里</li>
+<li>一元判断时：存到Map里</li>
+<li>多元判断时：将condition拼接成字符串存到Object里</li>
+<li>多元判断时：将condition拼接成字符串存到Map里</li>
+<li>多元判断时：将condition存为Object存到Map里</li>
+<li>多元判断时：将condition写作正则存到Map里</li>
+</ul>
+<p>至此，本文也将告一段落，愿你未来的人生里，不只是有if/else/switch。</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/favicon.png" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <!-- <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd> -->
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">171 <p>Articles</p></a></li>
+                    <li><a href="/categories">26 <p>Categories</p></a></li>
+                    <li><a href="/tags">55 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#举个例子"><span class="toc-number">1.1.</span> <span class="toc-text">举个例子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.2.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+
+
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>

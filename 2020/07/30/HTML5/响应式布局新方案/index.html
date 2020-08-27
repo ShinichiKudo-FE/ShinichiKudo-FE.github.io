@@ -1,0 +1,645 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>响应式布局新方案 - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,原文地址
+前言概念：融合响应式设计
+本文中我们可以尝试得出一种新的解决方案，那就是利用 JavaScript 和 CSS 来进行媒体查询，是响应式设计与自适应设计结合的方案，我这里给起一个好记的名字,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://ShinichiKudo-FE.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">响应式布局新方案</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/HTML5"><b>「
+                    </b>HTML5<b> 」</b></a>
+                
+                July 30, 2020
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2020/07/30/HTML5/%E5%93%8D%E5%BA%94%E5%BC%8F%E5%B8%83%E5%B1%80%E6%96%B0%E6%96%B9%E6%A1%88/" title="响应式布局新方案" class="">响应式布局新方案</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    9.8k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    9 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" rel="tag">响应式</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <p><a href="https://mp.weixin.qq.com/s?__biz=Mzg5ODA5NTM1Mw==&amp;mid=2247488692&amp;idx=1&amp;sn=5296bb93e4fcec284fe8dfe858634e9b&amp;chksm=c0669522f7111c345f71416e84d2a6a32fe730be9e7734eee71a8c1bd93d61467df3c4075257&amp;mpshare=1&amp;scene=1&amp;srcid=0730IrQ52ONYNC8eirsY5vf6&amp;sharer_sharetime=1596079115612&amp;sharer_shareid=857ca04011f1cc878c5f0c9e8e947d57&amp;key=3c1b79f4d2f73bee114f16dcdfd3b504678f8d95031f428469c7a393e3314e043cbfa073c22cc8b27fd6e46074839d9dc6941a9801bc8145315e56cc9849f39ebd3a36532aadb9630bbd9d2ba5e887a6&amp;ascene=1&amp;uin=MTA4OTc2NTY3Mg%3D%3D&amp;devicetype=Windows+10+x64&amp;version=62090538&amp;lang=zh_CN&amp;exportkey=A597mrIlaQ%2B2fkuWhB0UYgw%3D&amp;pass_ticket=KFo0GUOexWMIpxp6jEIHplHkIy%2Fbm272lNRA4DRRf%2Bxq5hWFuvoJ7oFj7xf%2Boyh6" target="_blank" rel="noopener">原文地址</a></p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>概念：融合响应式设计</p>
+<p>本文中我们可以尝试得出一种新的解决方案，那就是利用 JavaScript 和 CSS 来进行媒体查询，是响应式设计与自适应设计结合的方案，我这里给起一个好记的名字叫做融合响应式设计（ <code>Fusion Web Design</code>，简称 FWD ）。</p>
+<p>技术原则：</p>
+<ul>
+<li>JavaScript 判断尽量少</li>
+<li>CSS 媒体查询的断点也尽量少</li>
+</ul>
+<p>UI效果</p>
+<ul>
+<li>在笔记本、平板电脑、智能手机上展示合适的 UI 效果</li>
+<li>PC UI：给笔记本等设备上看的大屏效果</li>
+<li>Mobile UI：给智能手机上看的小屏效果</li>
+</ul>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/zewrLkrYfsPdXEmic1Nw35LXFqNUiawH9F72dq8UWxDyh6qn8gbhYGKpZgmUTNUy5UibVnrzQ09SkYGwIOyiaaw79g/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="demo"></p>
+<p>但这里，还是有一个遗漏的为平板电脑上效果。</p>
+<p>先前，<code>iPad Air</code> 或 <code>iPad Mini</code> 会被归类到智能手机的 Mobile UI 范围，但是这两年新出的 <code>iPad Pro</code> 的宽高单纯展示 PC UI 或 Mobile UI，效果都不是很理想。</p>
+<ul>
+<li>iPad Pro （横屏 1366px）展示 Mobile站点内容，中间内容区域只有 768px</li>
+<li>iPad Mini （横屏 1024px）展示PC 站点内容，右侧容易被截取</li>
+</ul>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/zewrLkrYfsPdXEmic1Nw35LXFqNUiawH9FphodDhHCJQFcApagNClp7u7d7Hjcf9U8V56qXPnZSuathD4H7ibaICA/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="ipad Demo"></p>
+<h2 id="先说为何不能以-UserAgent-来作为依据"><a href="#先说为何不能以-UserAgent-来作为依据" class="headerlink" title="先说为何不能以 UserAgent 来作为依据"></a>先说为何不能以 UserAgent 来作为依据</h2><p>iPad 装着 iOS 系统，其 UserAgent 中包含着 iPad 字眼，一般可用来判断 iPad。</p>
+<pre><code class="js">Mozilla/5.0 (iPad; CPU OS 11_0 like Mac OS X) AppleWebKit/604.1.34 (KHTML, like Gecko) Version/11.0 Mobile/15A5341f Safari/604.1
+</code></pre>
+<p>那么，这里的一个的难点为不能使用 <code>UserAgent</code> 来判断 <code>iPad Pro（iPad OS）</code>，因为它的 <code>UserAgent</code> 太像 MacBook Pro。</p>
+<p>iPad Pro 上装着 iPad OS 系统，其 <code>UserAgent</code> 为</p>
+<pre><code class="js">Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.2 Safari/605.1.15
+</code></pre>
+<p>MacBook Pro 的 Safari 浏览器的 <code>UserAgent</code> 为</p>
+<pre><code class="js">Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Safari/605.1.15
+</code></pre>
+<p>当然，也不能一直通过 UserAgent 来区分各种设备，因为以后新出的设备会更多。</p>
+<ul>
+<li>12.9 英寸 iPad Pro (第四、三、二、一代)</li>
+<li>11 英寸 iPad Pro (第二、一代)</li>
+<li>10.5 英寸 iPad Pro</li>
+<li>9.7 英寸 iPad Pro</li>
+<li>iPad (第七、六、五代)</li>
+<li>iPad mini (第五、4代)</li>
+<li>iPad Air (第三、2代)</li>
+<li>…</li>
+</ul>
+<h2 id="依据设备横竖屏及宽高特点"><a href="#依据设备横竖屏及宽高特点" class="headerlink" title="依据设备横竖屏及宽高特点"></a>依据设备横竖屏及宽高特点</h2><p>这里，我先列举一下我的目标设备的网页宽高、设备特点。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/zewrLkrYfsPdXEmic1Nw35LXFqNUiawH9FyjD73wjHTUiaZgcoWMWCd5KiaHLXUs9kzoG4D4CbfnHQptpbMUsBxs8Q/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="目标设备"></p>
+<p>判断的主要依据：</p>
+<ul>
+<li>设备是否支持横竖屏切换</li>
+<li>刚进页面时设备的宽高</li>
+<li>设备在横竖屏切换后的宽高</li>
+</ul>
+<p>那么，常见的设备显示效果如下：</p>
+<ul>
+<li>常见笔记本电脑的最小宽高为 1280x800，显示的为 PC UI</li>
+<li>常见智能手机的最大屏为 iPhone11 pro max，网页宽高为 414x896，无论是横竖屏都现实的是 Mobile UI。</li>
+</ul>
+<p>难点还是在 iPad 设备上，根据上面的表格我们发现，平板电脑支持横竖屏切换，竖屏范围在 768、834、1024 上，横屏范围在1024、1194、1366上。</p>
+<p>最大的难点就在于，1024宽度应该显示 Mobile UI 还是PC UI呢？</p>
+<p>这里我选择将判断的断点改为<code>1040px</code> 上，就是将最大宽不超过<code>1024px</code>的设备都认为 Mobile UI 。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/zewrLkrYfsPdXEmic1Nw35LXFqNUiawH9FnvSymbRYKGqib8UHw5JR9a3RD7zEAqyPq7obdvB9xLvgSXM4Ek1Fdbg/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="决定设备大小"></p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/zewrLkrYfsPdXEmic1Nw35LXFqNUiawH9FkX2A642fDoRVOia1Zle0o9Egll4pzkgABqOcCXgNbQIPbU9yXxFxA9g/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="效果图pc"><br><img src="https://mmbiz.qpic.cn/mmbiz_png/zewrLkrYfsPdXEmic1Nw35LXFqNUiawH9F9UGve7q7H6goDn42eY45Jn7RDDZ9xYT6PHVrKlF1UKPwia3Jgic3oO6A/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="效果图mobile"></p>
+<blockquote>
+<p>区分 Mobile UI 和 PC UI 的完整的判断逻辑如下：</p>
+</blockquote>
+<p>1.笔记本电脑，不支持 onorientationchange 横竖屏切换的，就认定为 PC</p>
+<ul>
+<li>不使用 onRisize 来监听网页的宽高，因为性能消耗大</li>
+<li>并且当浏览器拖动小了，支持左右滚动</li>
+</ul>
+<p>2.进入页面时，竖屏时以 <code>window.innerWidth, window.innerHeight</code> 中数值小的那个来判断，横屏中以 <code>window.innerWidth, window.innerHeight</code> 数值大的来判断，当宽度大于 1040px 时认为是 PC ，宽度小于 1040px 时，认定为 Mobile 。</p>
+<p>3.横竖屏切换时，重复第 2 步的判断</p>
+<p>备注：</p>
+<ul>
+<li><code>window.innerWidth, window.innerHeight</code> 在安卓和 iOS 上的横竖屏切换上有不一致的地方，所以以最大值或最小值来做更准确。</li>
+</ul>
+<h2 id="源码示例"><a href="#源码示例" class="headerlink" title="源码示例"></a>源码示例</h2><pre><code class="js">
+import React from &#39;react&#39; 
+// JavaScript 的媒体查询 
+const mqlMedia = window.matchMedia(&#39;(orientation: portrait)&#39;)
+
+function onMatchMediaChange(mql = window.matchMedia(&#39;(orientation: portrait)&#39;)) { 
+  if (mql.matches) { 
+    //竖屏 
+    return &#39;portrait&#39; 
+  } else { 
+    //横屏 
+    return &#39;horizontal&#39; 
+  } 
+} 
+// 输出当前屏幕模式 
+const getUiMode = (uiMode = &#39;&#39;, mql) =&gt; { 
+  if (uiMode) return uiMode 
+  if (!(&#39;onorientationchange&#39; in window)) return &#39;pc&#39; 
+  let status = onMatchMediaChange(mql) 
+  let width = status === &#39;portrait&#39; ? Math.min(window.innerWidth, window.innerHeight) : Math.max(window.innerWidth, window.innerHeight) 
+  if (width &gt; 1040) return &#39;pc&#39; 
+  return &#39;mobile&#39; 
+} 
+const getIsPcMode = (uiMode) =&gt; uiMode === &#39;pc&#39; 
+/** 
+ * UI 模式，判断逻辑 
+ * @export 
+ * @param {*} Cmp 
+ * @returns 
+ */ 
+export function withUiMode(Cmp, options = {}) { 
+  return class WithUIRem extends React.Component { 
+    constructor(props) { 
+      super(props) 
+      let uiMode = getUiMode() 
+      let isPCMode = getIsPcMode(uiMode) 
+      this.state = { 
+        uiMode: uiMode, 
+        isPCMode: isPCMode, 
+      } 
+    } 
+    // 横竖屏切换监听 
+    componentDidMount() { 
+      mqlMedia.addListener(this.changeUiMode) 
+    } 
+    componentWillUnmount() { 
+      mqlMedia.removeListener(this.changeUiMode) 
+    } 
+    changeUiMode = (mql) =&gt; { 
+      let newUiMode = getUiMode(&#39;&#39;, mql) 
+      if (newUiMode !== this.state.uiMode) { 
+        this.setState({ 
+          isPCMode: getIsPcMode(newUiMode), 
+          uiMode: newUiMode 
+        }) 
+      } 
+    } 
+    render() { 
+      return &lt;Cmp {...this.state} {...this.props} /&gt; 
+    } 
+  } 
+} 
+export default (options) =&gt; { 
+  return (Cmp) =&gt;  withUiMode(Cmp, options) 
+}
+</code></pre>
+<h2 id="调用方法"><a href="#调用方法" class="headerlink" title="调用方法"></a>调用方法</h2><pre><code class="js">// 装饰器的方式来使用 
+@withUiMode() 
+export default class Video extends React.Component { 
+  render() { 
+    const { isPCMode, uiMode } = this.props 
+    return ( 
+      &lt;Page isPCMode={isPCMode}&gt;&lt;/Page&gt; 
+    ) 
+  } 
+}
+</code></pre>
+<h2 id="符合设计师需求的细节"><a href="#符合设计师需求的细节" class="headerlink" title="符合设计师需求的细节"></a>符合设计师需求的细节</h2><p>在区分好 PC UI 和 Mobile UI 的判断设定后，我们还要关心的是在一些常见的设备上的显示效果，比如 iPad 横竖屏、大屏显示器。</p>
+<h3 id="Mobile-UI-效果中的优化"><a href="#Mobile-UI-效果中的优化" class="headerlink" title="Mobile UI 效果中的优化"></a>Mobile UI 效果中的优化</h3><p>在 Mobile UI 模式下，iPad Mini 显示效果如下：</p>
+<ul>
+<li>竖屏的为 768px，此时显示的平铺拉伸版效果</li>
+<li>横屏的为 1024px，此时显示的平铺拉伸版效果</li>
+</ul>
+<p>所以 Mobile UI 就有了如下的 CSS 最大宽的设定：</p>
+<pre><code class="css">// Mobile 模式下页面最大宽 
+$max-body-width = 768px 
+// Mobile 模式下的内容宽度 
+$max-body-width-center = $max-body-width - 40px
+</code></pre>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/zewrLkrYfsPdXEmic1Nw35LXFqNUiawH9FjNWVjE6XFHS03VicrNNs5Me6s031m48QNvXf9xm8GJfqZesUd0LACAg/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="mobile ui"></p>
+<h3 id="PC-UI-效果中的优化"><a href="#PC-UI-效果中的优化" class="headerlink" title="PC UI 效果中的优化"></a>PC UI 效果中的优化</h3><p>在上面的 PC UI 的判定中，我们是以 1040px 作为判断区间的，那么在这个宽度下，推荐设计师以 960px 为设计宽度，这样两侧就各有 40px 的留白，以此来增加整个页面的呼吸感。</p>
+<p>那么，市面上绝大部分的设备其实是比 1280px 还要大的。此时，可以选择以 1220px 作为更大屏的媒体查询断点。也就是说，我这里运用了响应式设计中的 CSS 媒体查询。</p>
+<p>为何不选用 1400px 呢，因为在 CCtalk 上课的网师、学生所使用的主流设备分辨率宽度还是在 <code>1280px、1366px、1440px</code>这几个区间的。</p>
+<p>所以，有如下 PC UI 的 CSS 最大宽设定：</p>
+<pre><code class="css">// PC 模式下小屏的宽度断点 
+$page-min-width = 1040px 
+// 小屏模式下的内容宽度 
+$page-min-width-center = $page-min-width - 80px 
+// PC 模式下大屏的宽度断点 
+$page-max-width = 1220px // 触屏三合一上的最大宽 
+// 大屏模式下的内容宽度 
+$page-max-width-content = $page-max-width - 60px
+</code></pre>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/zewrLkrYfsPdXEmic1Nw35LXFqNUiawH9FPxUXzd4atVRN69Y2ya1ctHvbURjPhaHLiaz5uuBDuCOBTxWSjKN71fg/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="pc ui"></p>
+<h2 id="设计规范"><a href="#设计规范" class="headerlink" title="设计规范"></a>设计规范</h2><p>使用融合响应式设计时，需要尽量在设计师进行 UI 设计前就与其商量好设计规范。</p>
+<p>我认为需要注意如下两点：</p>
+<ul>
+<li>1.只修改模块的宽度、边距</li>
+<li>2.保证模块内的所有细节都不调整模块细节内容的 UI，如字体、宽高、间距</li>
+</ul>
+<p>如果 Mobile UI 与 PC UI 的细节差异很大，那无论是响应式设计、自适应设计，还是我认为的融合响应式设计，在网页制作过程中，都是非常难做的，后期维护成本也是非常高的。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>融合响应式设计（ Fusion Web Design，简称 FWD），利用 JavaScript 和 CSS 来进行媒体查询，是响应式设计与自适应设计结合的方案。</p>
+<ul>
+<li>自适应设计：根据设备特点，使用 JavaScript 来区分 PC UI 和 Mobile UI</li>
+<li>响应式设计：在需要调整出更好的 UI 时，可以加入一些 CSS 媒体查询的断点，比如常见的大屏显示效果</li>
+</ul>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/favicon.png" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <!-- <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd> -->
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">171 <p>Articles</p></a></li>
+                    <li><a href="/categories">26 <p>Categories</p></a></li>
+                    <li><a href="/tags">55 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#先说为何不能以-UserAgent-来作为依据"><span class="toc-number">1.1.</span> <span class="toc-text">先说为何不能以 UserAgent 来作为依据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#依据设备横竖屏及宽高特点"><span class="toc-number">1.2.</span> <span class="toc-text">依据设备横竖屏及宽高特点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#源码示例"><span class="toc-number">1.3.</span> <span class="toc-text">源码示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#调用方法"><span class="toc-number">1.4.</span> <span class="toc-text">调用方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#符合设计师需求的细节"><span class="toc-number">1.5.</span> <span class="toc-text">符合设计师需求的细节</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Mobile-UI-效果中的优化"><span class="toc-number">1.5.1.</span> <span class="toc-text">Mobile UI 效果中的优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PC-UI-效果中的优化"><span class="toc-number">1.5.2.</span> <span class="toc-text">PC UI 效果中的优化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设计规范"><span class="toc-number">1.6.</span> <span class="toc-text">设计规范</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小结"><span class="toc-number">1.7.</span> <span class="toc-text">小结</span></a></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+
+
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>

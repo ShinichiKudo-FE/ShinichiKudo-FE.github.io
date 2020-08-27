@@ -1,0 +1,740 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>&lt;深入理解TypeScript读书笔记&gt;（一） - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,TypeScript类型系统@types全局@types@types 支持全局和模块类型定义
+npm install @type/jquery --save-dev
+
+默认情况下，TypeScrip,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://ShinichiKudo-FE.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle"><深入理解TypeScript读书笔记>（一）</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/Js"><b>「
+                    </b>JS<b> 」</b></a>
+                
+                April 19, 2020
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2020/04/19/Ts/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3TypeScript%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89/" title="&lt;深入理解TypeScript读书笔记&gt;（一）" class="">&lt;深入理解TypeScript读书笔记&gt;（一）</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    10k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    10 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Ts/" rel="tag">Ts</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h1 id="TypeScript类型系统"><a href="#TypeScript类型系统" class="headerlink" title="TypeScript类型系统"></a>TypeScript类型系统</h1><h2 id="types"><a href="#types" class="headerlink" title="@types"></a>@types</h2><h3 id="全局-types"><a href="#全局-types" class="headerlink" title="全局@types"></a>全局@types</h3><p>@types 支持全局和模块类型定义</p>
+<pre><code class="js">npm install @type/jquery --save-dev
+</code></pre>
+<p>默认情况下，TypeScript 会自动包含支持全局使用的任何声明定义</p>
+<h3 id="局部-types"><a href="#局部-types" class="headerlink" title="局部@types"></a>局部@types</h3><p>安装完成后不需要做特别配置，只要想使用模块一样使用它一样</p>
+<pre><code class="js">import * as $ from &#39;jquery&#39;
+</code></pre>
+<p>可以在<code>typeconfig.json</code>中可以配置有意义的类型</p>
+<pre><code class="js">{
+    compilerOptions{
+        &quot;type&quot; :[
+            &quot;jquery&quot;
+        ]
+    }
+}
+</code></pre>
+<h2 id="声明文件"><a href="#声明文件" class="headerlink" title="声明文件"></a>声明文件</h2><p>可以使用<code>declear</code>关键字来告诉typescript，你试图表诉一个其他地方已经存在的代码</p>
+<pre><code class="ts">foo = 123
+declear var foo:any
+foo = 123
+</code></pre>
+<p>在实际项目可以新建一个<code>global.d.ts</code>文件来把这些声明放到里面</p>
+<h2 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h2><p>接口运行时的影响为0.有多种方式可以声明变量的结构</p>
+<pre><code class="js">//等效声明
+//内联注解
+declear const myPoint = {x:number,y:number}
+//接口实现  
+interface myPoint{
+    x: number,
+    y: number
+}
+</code></pre>
+<h3 id="类来实现接口"><a href="#类来实现接口" class="headerlink" title="类来实现接口"></a>类来实现接口</h3><pre><code class="js">interface myPoint{
+    x: string,
+    y: string
+}
+
+class point implements myPoint{
+    x: string,
+    y: string
+}
+</code></pre>
+<p><strong>注意：并非每个接口都容易实现</strong></p>
+<pre><code class="js">interface Crazy{
+    new() {
+        value: number
+    }
+}
+
+class CrazyClass implements Crazy{
+    constructor(){
+        return {
+            value: 123
+        }
+    }
+}
+
+const crazy = new CrazyClass()
+</code></pre>
+<h2 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h2><p>枚举是收集有关连变量的一种方式, 作用就是管理常量，让常量更规范统一</p>
+<h3 id="数字枚举"><a href="#数字枚举" class="headerlink" title="数字枚举"></a>数字枚举</h3><pre><code class="js">enum CradSuit{
+    Clubs,
+    Diamonds,
+    Hearts,
+    Spades
+}
+let clubs = CradSuot.Clubs
+</code></pre>
+<h3 id="字符串枚举"><a href="#字符串枚举" class="headerlink" title="字符串枚举"></a>字符串枚举</h3><pre><code class="js">enum CradSuit{
+    Clubs,
+    Diamonds,
+    Hearts,
+    Spades
+}
+console.log(CardSuit.Clubs[0]) // &#39;Clubs&#39;
+console.log(CardSuit.[&#39;Diamonds&#39;]) // 0
+</code></pre>
+<p>改变与枚举关联的数字</p>
+<pre><code class="js">enum CradSuit{
+    Clubs , // 0
+    Diamonds, // 1
+    Hearts, // 2
+    Spades // 3
+}
+enum CradSuit{
+    Clubs  = 3, // 3
+    Diamonds, // 4
+    Hearts, // 5
+    Spades // 6
+
+</code></pre>
+<h3 id="常量枚举"><a href="#常量枚举" class="headerlink" title="常量枚举"></a>常量枚举</h3><pre><code class="js">enum Fruit {
+    Apple,
+    banner,
+    orange
+}
+
+console.log(Fruit.orange) // 2
+</code></pre>
+<h4 id="静态方法的枚举"><a href="#静态方法的枚举" class="headerlink" title="静态方法的枚举"></a>静态方法的枚举</h4><pre><code class="js">enum Weekday{
+    Monday,
+    Tuesday,
+    Wednesday,
+    Thursday,
+    Friday,
+    Saturday
+    Sunday
+}
+namesapce Weekday{
+    export function isBusinessDay(weekday: Weekday){
+        switch(weekday){
+            case Weekday.Saturday:
+        case Weekday.Sunday:
+            return false;
+        default:
+            return true;
+        }
+    }
+}
+const mon = Weekday.Monday;
+const sun = Weekday.Sunday;
+
+console.log(Weekday.isBusinessDay(mon)); // true
+console.log(Weekday.isBusinessDay(sun));
+</code></pre>
+<h2 id="lib-d-ts"><a href="#lib-d-ts" class="headerlink" title="lib.d.ts"></a>lib.d.ts</h2><p>安装typescript的时候会有附带一个<code>lib.d.ts</code>的文件，里面的内容定义了(window,document,math，data,string)的变量声明</p>
+<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><p>可组合系统的核心构建块</p>
+<h3 id="返回函数类型注解"><a href="#返回函数类型注解" class="headerlink" title="返回函数类型注解"></a>返回函数类型注解</h3><pre><code class="js">interface Foo {
+    foo: string
+}
+
+function foo(sameple: foo) :foo{
+    console.log(foo)
+}
+</code></pre>
+<h3 id="可选参数及默认参数值属性"><a href="#可选参数及默认参数值属性" class="headerlink" title="可选参数及默认参数值属性"></a>可选参数及默认参数值属性</h3><pre><code class="js">function person(speak:string =&quot;hello world&quot;,age?:number){
+    console.log(speak,age)
+}
+person(&#39;你好&#39;)
+person(...12)
+</code></pre>
+<h3 id="函数重载"><a href="#函数重载" class="headerlink" title="函数重载"></a>函数重载</h3><pre><code class="js">function addOne(a:number,y?:number,z?:number,x?:number){
+    if(x === undefined &amp;&amp; y === undefined &amp;&amp; z === undefined){
+        x = y = z = a
+    }else if( y === undefined &amp;&amp; z === undefined ){
+        z = a 
+        x = y
+    }
+    return {
+        top: a,
+        left: x,
+        right: y,
+        bottom: z
+    }
+}
+addOne(1)
+addOne(1,1,1,1)
+</code></pre>
+<h3 id="函数声明"><a href="#函数声明" class="headerlink" title="函数声明"></a>函数声明</h3><pre><code class="js">type londHand = {
+    (a:number) : number
+}
+type ShortHand = (a:number) =&gt;{number}
+</code></pre>
+<h2 id="可调用的"><a href="#可调用的" class="headerlink" title="可调用的"></a>可调用的</h2><pre><code class="js">interface Complex {
+    (foo:string,age?:number,...other,boolean[]):number
+}
+</code></pre>
+<h2 id="类型断言"><a href="#类型断言" class="headerlink" title="类型断言"></a>类型断言</h2><p>TypeScript 允许你覆盖它的推断，并且能以你任何你想要的方式分析它，这种机制被称为「类型断言」</p>
+<p><code>as foo 与 &lt;foo&gt;</code></p>
+<p><code>&lt;foo&gt;</code>可能会与jsx中冲突，推荐使用<code>as foo</code></p>
+<h3 id="双重断言"><a href="#双重断言" class="headerlink" title="双重断言"></a>双重断言</h3><pre><code class="js">function handle(event:Event){
+    console.log(element = (event as any) as HTMLElement)
+}
+</code></pre>
+<h2 id="Freshness"><a href="#Freshness" class="headerlink" title="Freshness"></a>Freshness</h2><p>为了能让检查对象字面量类型更容易，提供Freshness更严格的类型检查</p>
+<h2 id="类型保护"><a href="#类型保护" class="headerlink" title="类型保护"></a>类型保护</h2><p>你可以使用更小范围的对象类型</p>
+<p><code>typeof</code> <code>instanceof</code></p>
+<h2 id="字面量类型"><a href="#字面量类型" class="headerlink" title="字面量类型"></a>字面量类型</h2><p>你可以使用一个准备的类型来定义一个对象</p>
+<h2 id="readOnly"><a href="#readOnly" class="headerlink" title="readOnly"></a>readOnly</h2><p>如字面意思一样，是只读的，不能随便更改的，是一种更安全的方式</p>
+<pre><code class="js">type Foo = {
+  readonly bar: number;
+  readonly bas: number;
+};
+
+// 初始化
+const foo: Foo = { bar: 123, bas: 456 };
+
+// 不能被改变
+foo.bar = 456; // Error: foo.bar 为仅读属性
+</code></pre>
+<h3 id="与const不同"><a href="#与const不同" class="headerlink" title="与const不同"></a>与const不同</h3><ul>
+<li>const 用于变量，变量不能重新赋给其他任何事物</li>
+<li>readOnly 用于属性，用于别名可以修改属性</li>
+</ul>
+<h2 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h2><p>他的用途就是在你不确定要穿的值的属性时，那么就可以使用泛型去确定<br>在成员之间提供有意义的约束，这些成员可以是：</p>
+<ul>
+<li>类的实例成员</li>
+<li>类的方法</li>
+<li>函数参数</li>
+<li>函数返回值</li>
+</ul>
+<pre><code class="js">class Queue&lt;T&gt;{
+    private data: T[] = []
+    push = (item:&lt;T&gt;) =&gt; {this.data.push(item)}
+    pop = ():T | undefiend =&gt; {this.data.shift()}
+}
+
+const queue = new Queue&lt;number&gt;()
+queue.push(1)
+queue.shift(&#39;1&#39;) //  error &#39;1&#39; is string
+</code></pre>
+<p>你可以随意调用泛型参数，当你使用简单的泛型时，泛型常用 T、U、V 表示</p>
+<h2 id="类型推断"><a href="#类型推断" class="headerlink" title="类型推断"></a>类型推断</h2><p>TypeScript 能根据一些简单的规则推断（检查）变量的类型，你可以通过实践，很快的了解它们。</p>
+<p>定义变量，函数返回类型，赋值，解构，结构化等都可以推断出类型</p>
+<h2 id="类型兼容性"><a href="#类型兼容性" class="headerlink" title="类型兼容性"></a>类型兼容性</h2><p>用于确定一个类型是否能赋值给其他类型</p>
+<p>协变<br>逆变，<br>双向协变，<br>不变</p>
+<h2 id="never"><a href="#never" class="headerlink" title="never"></a>never</h2><p><code>never</code> 类型是 TypeScript 中的底层类型。它自然被分配的一些例子：</p>
+<p>一个从来不会有返回值的函数（如：如果函数内含有 <code>while(true) {}</code>）；<br>一个总是会抛出错误的函数（如：<code>function foo() { throw new Error(&#39;Not Implemented&#39;)</code> }，foo 的返回类型是 never）；</p>
+<p>但是，never 类型仅能被赋值给另外一个 never</p>
+<h3 id="用例：详细的检查"><a href="#用例：详细的检查" class="headerlink" title="用例：详细的检查"></a>用例：详细的检查</h3><pre><code class="js">function foo(x:string | number):boolean {
+    if (typeof x === &#39;string&#39;) {
+        return true;
+    } else if (typeof x === &#39;number&#39;) {
+        return false;
+    }
+    // 如果不是一个 never 类型，这会报错：
+    // - 不是所有条件都有返回值 （严格模式下）
+    // - 或者检查到无法访问的代码
+    // 但是由于 TypeScript 理解 `fail` 函数返回为 `never` 类型
+    // 它可以让你调用它，因为你可能会在运行时用它来做安全或者详细的检查。
+    return fail(&#39;Unexhaustive&#39;);
+} 
+function fail(message: string): never {
+  throw new Error(message);
+}
+</code></pre>
+<h3 id="never与void的区别"><a href="#never与void的区别" class="headerlink" title="never与void的区别"></a>never与void的区别</h3><p>void 表示没有任何类型，never 表示永远不存在的值的类型。</p>
+<h2 id="辨析联合类型"><a href="#辨析联合类型" class="headerlink" title="辨析联合类型"></a>辨析联合类型</h2><p>当类中含有字面量成员时，我们可以用该类的属性来辨析联合类型。</p>
+<pre><code class="js">interface Square {
+  kind: &#39;square&#39;;
+  size: number;
+}
+
+interface Rectangle {
+  kind: &#39;rectangle&#39;;
+  width: number;
+  height: number;
+}
+
+type Shape = Square | Rectangle;
+</code></pre>
+<h2 id="流动的类型"><a href="#流动的类型" class="headerlink" title="流动的类型"></a>流动的类型</h2><p>TypeScript 类型系统非常强大，它支持其他任何单一语言无法实现的类型流动和类型片段。<br>关键的动机：当你改变了其中一个时，其他相关的会自动更新，并且当有事情变糟糕时，你会得到一个友好的提示，就好像一个被精心设计过的约束系统。</p>
+<h3 id="复制类型和值"><a href="#复制类型和值" class="headerlink" title="复制类型和值"></a>复制类型和值</h3><p>如果你想移动一个类，你可能会想要做以下事情：</p>
+<pre><code class="js">class Foo {}
+
+const Bar = Foo;
+
+let bar: Bar; // Error: 不能找到名称 &#39;Bar&#39;
+
+//这会得到一个错误，因为 const 仅仅是复制了 Foo 到一个变量声明空间，因此你无法把 Bar 当作一个类型声明使用。正确的方式是使用 import 关键字，请注意，如果你在使用 namespace 或者 modules，使用 import 是你唯一能用的方式：
+namespace importing {
+  export class Foo {}
+}
+
+import Bar = importing.Foo;
+let bar: Bar; // ok
+
+//这个 import 技巧，仅适合于类型和变量。
+</code></pre>
+<h3 id="捕获变量的类型"><a href="#捕获变量的类型" class="headerlink" title="捕获变量的类型"></a>捕获变量的类型</h3><p>你可以通过 typeof 操作符在类型注解中使用变量    </p>
+<h2 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h2><p>JavaScript 有一个 Error 类，用于处理异常。你可以通过 throw 关键字来抛出一个错误。然后通过 try/catch 块来捕获此错误：</p>
+<pre><code class="js">try{
+    throw new Error(&#39;Something bad happened&#39;);
+}catch(e){
+    console.log(e)
+}
+</code></pre>
+<p>除内置的 Error 类外，还有一些额外的内置错误，它们继承自 Error 类：<code>RangeError,ReferenceError,SyntaxError,TypeError,URIError</code></p>
+<h2 id="混合"><a href="#混合" class="headerlink" title="混合"></a>混合</h2><p>TypeScript (和 JavaScript) 类只能严格的单继承，因此你不能做：</p>
+<pre><code class="js">class User extends Tagged, Timestamped { // ERROR : 不能多重继承
+  // ..
+}
+</code></pre>
+<p>从可重用组件构建类的另一种方式是通过基类来构建它们，这种方式称为混合。</p>
+<h2 id="常见的typescript错误"><a href="#常见的typescript错误" class="headerlink" title="常见的typescript错误"></a>常见的typescript错误</h2><p><a href="https://jkchao.github.io/typescript-book-chinese/error/common.html#ts2304" target="_blank" rel="noopener">常见的typescript错误</a></p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/favicon.png" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <!-- <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd> -->
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">171 <p>Articles</p></a></li>
+                    <li><a href="/categories">26 <p>Categories</p></a></li>
+                    <li><a href="/tags">55 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#TypeScript类型系统"><span class="toc-number">1.</span> <span class="toc-text">TypeScript类型系统</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#types"><span class="toc-number">1.1.</span> <span class="toc-text">@types</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#全局-types"><span class="toc-number">1.1.1.</span> <span class="toc-text">全局@types</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#局部-types"><span class="toc-number">1.1.2.</span> <span class="toc-text">局部@types</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#声明文件"><span class="toc-number">1.2.</span> <span class="toc-text">声明文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#接口"><span class="toc-number">1.3.</span> <span class="toc-text">接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#类来实现接口"><span class="toc-number">1.3.1.</span> <span class="toc-text">类来实现接口</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#枚举"><span class="toc-number">1.4.</span> <span class="toc-text">枚举</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数字枚举"><span class="toc-number">1.4.1.</span> <span class="toc-text">数字枚举</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串枚举"><span class="toc-number">1.4.2.</span> <span class="toc-text">字符串枚举</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常量枚举"><span class="toc-number">1.4.3.</span> <span class="toc-text">常量枚举</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lib-d-ts"><span class="toc-number">1.5.</span> <span class="toc-text">lib.d.ts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数"><span class="toc-number">1.6.</span> <span class="toc-text">函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#返回函数类型注解"><span class="toc-number">1.6.1.</span> <span class="toc-text">返回函数类型注解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可选参数及默认参数值属性"><span class="toc-number">1.6.2.</span> <span class="toc-text">可选参数及默认参数值属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#函数重载"><span class="toc-number">1.6.3.</span> <span class="toc-text">函数重载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#函数声明"><span class="toc-number">1.6.4.</span> <span class="toc-text">函数声明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可调用的"><span class="toc-number">1.7.</span> <span class="toc-text">可调用的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类型断言"><span class="toc-number">1.8.</span> <span class="toc-text">类型断言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#双重断言"><span class="toc-number">1.8.1.</span> <span class="toc-text">双重断言</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Freshness"><span class="toc-number">1.9.</span> <span class="toc-text">Freshness</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类型保护"><span class="toc-number">1.10.</span> <span class="toc-text">类型保护</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#字面量类型"><span class="toc-number">1.11.</span> <span class="toc-text">字面量类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#readOnly"><span class="toc-number">1.12.</span> <span class="toc-text">readOnly</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#与const不同"><span class="toc-number">1.12.1.</span> <span class="toc-text">与const不同</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#泛型"><span class="toc-number">1.13.</span> <span class="toc-text">泛型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类型推断"><span class="toc-number">1.14.</span> <span class="toc-text">类型推断</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类型兼容性"><span class="toc-number">1.15.</span> <span class="toc-text">类型兼容性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#never"><span class="toc-number">1.16.</span> <span class="toc-text">never</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#用例：详细的检查"><span class="toc-number">1.16.1.</span> <span class="toc-text">用例：详细的检查</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#never与void的区别"><span class="toc-number">1.16.2.</span> <span class="toc-text">never与void的区别</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#辨析联合类型"><span class="toc-number">1.17.</span> <span class="toc-text">辨析联合类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#流动的类型"><span class="toc-number">1.18.</span> <span class="toc-text">流动的类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#复制类型和值"><span class="toc-number">1.18.1.</span> <span class="toc-text">复制类型和值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#捕获变量的类型"><span class="toc-number">1.18.2.</span> <span class="toc-text">捕获变量的类型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#异常处理"><span class="toc-number">1.19.</span> <span class="toc-text">异常处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#混合"><span class="toc-number">1.20.</span> <span class="toc-text">混合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常见的typescript错误"><span class="toc-number">1.21.</span> <span class="toc-text">常见的typescript错误</span></a></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+
+
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>

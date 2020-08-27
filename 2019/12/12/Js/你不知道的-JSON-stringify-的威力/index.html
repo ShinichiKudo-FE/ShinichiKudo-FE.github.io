@@ -1,0 +1,683 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>你不知道的 JSON.stringify() 的威力 - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,原文地址
+通过需求学习JSON.stringify()首先我们在开发的过程当中遇到这样一个处理数据的需求
+const todayILearn = {
+  _id: 1,
+  content: &amp;#3,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://ShinichiKudo-FE.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">你不知道的 JSON.stringify() 的威力</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/Js"><b>「
+                    </b>JS<b> 」</b></a>
+                
+                December 12, 2019
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2019/12/12/Js/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84-JSON-stringify-%E7%9A%84%E5%A8%81%E5%8A%9B/" title="你不知道的 JSON.stringify() 的威力" class="">你不知道的 JSON.stringify() 的威力</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    10k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    9 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Js/" rel="tag">Js</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <p><a href="https://juejin.im/post/5decf09de51d45584d238319#heading-4" target="_blank" rel="noopener">原文地址</a></p>
+<h2 id="通过需求学习JSON-stringify"><a href="#通过需求学习JSON-stringify" class="headerlink" title="通过需求学习JSON.stringify()"></a>通过需求学习JSON.stringify()</h2><p>首先我们在开发的过程当中遇到这样一个处理数据的需求</p>
+<pre><code class="js">const todayILearn = {
+  _id: 1,
+  content: &#39;今天学习 JSON.stringify()，我很开心！&#39;,
+  created_at: &#39;Mon Nov 25 2019 14:03:55 GMT+0800 (中国标准时间)&#39;,
+  updated_at: &#39;Mon Nov 25 2019 16:03:55 GMT+0800 (中国标准时间)&#39;
+}
+</code></pre>
+<p>我们需要将上面这个对象处理成下面这个对象</p>
+<pre><code class="js">const todayILearn = {
+  id: 1,
+  content: &#39;今天学习 JSON.stringify()，我很开心！&#39;,
+  createdAt: &#39;Mon Nov 25 2019 14:03:55 GMT+0800 (中国标准时间)&#39;,
+  updatedAt: &#39;Mon Nov 25 2019 16:03:55 GMT+0800 (中国标准时间)&#39;
+}
+</code></pre>
+<p>也就是在不改变属性的值的前提下，将对象属性修改一下。 把_id  改成 id，把 updated_at 改成 updatedAt，把 created_at 改成 createdAt。我们现在通过这个小小的需求来见识一下 JSON.stringify() 的强大吧。</p>
+<p>首先要解决这个问题我们有很多种解决方式，我们先提供两种不优雅的解决方案：</p>
+<p><strong>方案一：一次遍历+多声明一个变量</strong></p>
+<pre><code class="js">// 多一个变量存储
+const todayILearnTemp = {};
+for (const [key, value] of Object.entries(todayILearn)) {
+  if (key === &quot;_id&quot;) todayILearnTemp[&quot;id&quot;] = value;
+  else if (key === &quot;created_at&quot;) todayILearnTemp[&quot;createdAt&quot;] = value;
+  else if (key === &quot;updatedAt&quot;) todayILearnTemp[&quot;updatedAt&quot;] = value;
+  else todayILearnTemp[key] = value;
+}
+console.log(todayILearnTemp);
+// 结果：
+// { id: 1,
+//  content: &#39;今天学习 JSON.stringify()，我很开心！&#39;,
+//  createdAt: &#39;Mon Nov 25 2019 14:03:55 GMT+0800 (中国标准时间)&#39;,
+//  updated_at: &#39;Mon Nov 25 2019 16:03:55 GMT+0800 (中国标准时间)&#39; 
+// }
+</code></pre>
+<p>方案一完全没有问题，可以实现。但是多声明了一个变量又加上一层循环并且还有很多的 if else 语句，怎么都显得不太优雅。</p>
+<p><strong>方案二：暴力 delete 属性和增加属性</strong></p>
+<pre><code class="js">// 极致的暴力美学
+todayILearn.id = todayILearn._id;
+todayILearn.createdAt = todayILearn.created_at;
+todayILearn.updatedAt = todayILearn.updated_at;
+delete todayILearn._id;
+delete todayILearn.created_at;
+delete todayILearn.updated_at;
+console.log(todayILearn);
+//     太暴力😢
+//{ 
+//  content: &#39;今天学习 JSON.stringify()，我很开心！&#39;,
+//  id: 1,
+//  createdAt: &#39;Mon Nov 25 2019 14:03:55 GMT+0800 (中国标准时间)&#39;,
+//  updatedAt: &#39;Mon Nov 25 2019 16:03:55 GMT+0800 (中国标准时间)&#39; 
+//}
+
+</code></pre>
+<p>直接 delete 暴力解决太粗鲁了，而且有一个缺点，属性的顺序变了。</p>
+<p><strong>方案三：序列化+ replace 美学典范</strong></p>
+<pre><code class="js">const mapObj = {
+  _id: &quot;id&quot;,
+  created_at: &quot;createdAt&quot;,
+  updated_at: &quot;updatedAt&quot;
+};
+JSON.parse(
+  JSON.stringify(todayILearn).replace(
+    /_id|created_at|updated_at/gi,
+    matched =&gt; mapObj[matched])
+    )
+
+// { 
+// id: 1,
+//  content: &#39;今天学习 JSON.stringify()，我很开心！&#39;,
+//  createdAt: &#39;Mon Nov 25 2019 14:03:55 GMT+0800 (中国标准时间)&#39;,
+//  updatedAt: &#39;Mon Nov 25 2019 16:03:55 GMT+0800 (中国标准时间)&#39; 
+// }
+</code></pre>
+<p><img src="https://user-gold-cdn.xitu.io/2019/12/8/16ee5ace18ca5dbb?imageslim" alt="Json.Stringify"></p>
+<a id="more"></a>
+<h2 id="JSON-stringify-九大特性"><a href="#JSON-stringify-九大特性" class="headerlink" title="JSON.stringify() 九大特性"></a>JSON.stringify() 九大特性</h2><h3 id="JSON-stringify-第一大特性"><a href="#JSON-stringify-第一大特性" class="headerlink" title="JSON.stringify()第一大特性"></a>JSON.stringify()第一大特性</h3><p><strong>对于 undefined、任意的函数以及 symbol 三个特殊的值分别作为对象属性的值、数组元素、单独的值时 JSON.stringify()将返回不同的结果</strong>。</p>
+<p>首先，我们来复习一下知识点，看一道非常简单的面试题目：请问下面代码会输出什么？</p>
+<pre><code class="js">const data = {
+  a: &quot;aaa&quot;,
+  b: undefined,
+  c: Symbol(&quot;dd&quot;),
+  fn: function() {
+    return true;
+  }
+};
+JSON.stringify(data); // 输出：？
+
+// &quot;{&quot;a&quot;:&quot;aaa&quot;}&quot;
+
+</code></pre>
+<p>很简单这道题目面试官主要考察的知识点是：</p>
+<ul>
+<li>undefined、任意的函数以及 symbol 作为对象属性值时 JSON.stringify() 将跳过（忽略）对它们进行序列化</li>
+</ul>
+<p>面试官追问：假设 undefined、任意的函数以及 symbol 值作为数组元素会是怎样呢？</p>
+<pre><code class="js">JSON.stringify([&quot;aaa&quot;, undefined, function aa() {
+    return true
+  }, Symbol(&#39;dd&#39;)])  // 输出：？
+
+// &quot;[&quot;aaa&quot;,null,null,null]&quot;
+</code></pre>
+<p>知识点是：</p>
+<ul>
+<li>undefined、任意的函数以及 symbol 作为数组元素值时，JSON.stringify() 会将它们序列化为 null</li>
+</ul>
+<p>我们稍微再动下脑筋，如果单独序列化这些值会是什么样的结果呢？</p>
+<pre><code class="js">JSON.stringify(function a (){console.log(&#39;a&#39;)})
+// undefined
+JSON.stringify(undefined)
+// undefined
+JSON.stringify(Symbol(&#39;dd&#39;))
+// undefined
+</code></pre>
+<p>单独转换的结果就是：</p>
+<p>undefined、任意的函数以及 symbol 被 JSON.stringify() 作为单独的值进行序列化时都会返回 undefined</p>
+<blockquote>
+<p>JSON.stringify() 第一大特性总结<br>undefined、任意的函数以及 symbol 作为对象属性值时 JSON.stringify() 对跳过（忽略）它们进行序列化<br>undefined、任意的函数以及 symbol 作为数组元素值时，JSON.stringify() 将会将它们序列化为 null<br>undefined、任意的函数以及 symbol 被 JSON.stringify() 作为单独的值进行序列化时，都会返回 undefined</p>
+</blockquote>
+<h3 id="JSON-stringify-第二大特性"><a href="#JSON-stringify-第二大特性" class="headerlink" title="JSON.stringify() 第二大特性"></a>JSON.stringify() 第二大特性</h3><p><strong>非数组对象的属性不能保证以特定的顺序出现在序列化后的字符串中。</strong></p>
+<pre><code class="js">const data = {
+  a: &quot;aaa&quot;,
+  b: undefined,
+  c: Symbol(&quot;dd&quot;),
+  fn: function() {
+    return true;
+  },
+  d: &quot;ddd&quot;
+};
+JSON.stringify(data); // 输出：？
+// &quot;{&quot;a&quot;:&quot;aaa&quot;,&quot;d&quot;:&quot;ddd&quot;}&quot;
+
+JSON.stringify([&quot;aaa&quot;, undefined, function aa() {
+    return true
+  }, Symbol(&#39;dd&#39;),&quot;eee&quot;])  // 输出：？
+
+// &quot;[&quot;aaa&quot;,null,null,null,&quot;eee&quot;]&quot;
+</code></pre>
+<p>正如我们在第一特性所说，JSON.stringify() 序列化时<strong>会忽略一些特殊的值</strong>，所以不能保证序列化后的字符串还是以特定的顺序出现（数组除外）。</p>
+<h3 id="JSON-stringify-第三大特性"><a href="#JSON-stringify-第三大特性" class="headerlink" title="JSON.stringify() 第三大特性"></a>JSON.stringify() 第三大特性</h3><ul>
+<li>转换值如果<strong>有 toJSON() 函数，该函数返回什么值，序列化结果就是什么值，并且忽略其他属性的值</strong>。</li>
+</ul>
+<pre><code class="js">JSON.stringify({
+    say: &quot;hello JSON.stringify&quot;,
+    toJSON: function() {
+      return &quot;today i learn&quot;;
+    }
+  })
+// &quot;today i learn&quot;
+</code></pre>
+<h3 id="JSON-stringify-第四大特性"><a href="#JSON-stringify-第四大特性" class="headerlink" title="JSON.stringify()第四大特性"></a>JSON.stringify()第四大特性</h3><p>JSON.stringify() 将会<strong>正常序列化 Date</strong> 的值。</p>
+<pre><code class="js">JSON.stringify({ now: new Date() });
+// &quot;{&quot;now&quot;:&quot;2019-12-08T07:42:11.973Z&quot;}&quot;
+</code></pre>
+<p>实际上 Date 对象自己部署了 toJSON() 方法（同Date.toISOString()），因此 Date 对象会被当做字符串处理。</p>
+<h3 id="JSON-stringify-第五大特性"><a href="#JSON-stringify-第五大特性" class="headerlink" title="JSON.stringify() 第五大特性"></a>JSON.stringify() 第五大特性</h3><p><strong>NaN 和 Infinity 格式的数值及 null 都会被当做 null。</strong></p>
+<pre><code class="js">JSON.stringify(NaN)
+// &quot;null&quot;
+JSON.stringify(null)
+// &quot;null&quot;
+JSON.stringify(Infinity)
+// &quot;null&quot;
+</code></pre>
+<h3 id="JSON-stringify-第六大特性"><a href="#JSON-stringify-第六大特性" class="headerlink" title="JSON.stringify() 第六大特性"></a>JSON.stringify() 第六大特性</h3><p><strong>布尔值、数字、字符串的包装对象在序列化过程中会自动转换成对应的原始值。</strong></p>
+<pre><code class="js">JSON.stringify([new Number(1), new String(&quot;false&quot;), new Boolean(false)]);
+// &quot;[1,&quot;false&quot;,false]&quot;
+</code></pre>
+<h3 id="JSON-stringify-第七大特性"><a href="#JSON-stringify-第七大特性" class="headerlink" title="JSON.stringify() 第七大特性"></a>JSON.stringify() 第七大特性</h3><p>关于对象属性的是否可枚举：</p>
+<p><strong>其他类型的对象，包括 Map/Set/WeakMap/WeakSet，仅会序列化可枚举的属性。</strong></p>
+<pre><code class="js">// 不可枚举的属性默认会被忽略：
+JSON.stringify( 
+    Object.create(
+        null, 
+        { 
+            x: { value: &#39;json&#39;, enumerable: false }, 
+            y: { value: &#39;stringify&#39;, enumerable: true } 
+        }
+    )
+);
+// &quot;{&quot;y&quot;:&quot;stringify&quot;}&quot;
+</code></pre>
+<h3 id="JSON-stringify-第八大特性"><a href="#JSON-stringify-第八大特性" class="headerlink" title="JSON.stringify() 第八大特性"></a>JSON.stringify() 第八大特性</h3><p>我们都知道实现深拷贝最简单粗暴的方式就是序列化：<code>JSON.parse(JSON.stringify())</code>，这个方式实现深拷贝会因为序列化的诸多特性从而导致诸多的坑点：比如现在我们要说的循环引用问题。</p>
+<pre><code class="js">// 对包含循环引用的对象（对象之间相互引用，形成无限循环）执行此方法，会抛出错误。 
+const obj = {
+  name: &quot;loopObj&quot;
+};
+const loopObj = {
+  obj
+};
+// 对象之间形成循环引用，形成闭环
+obj.loopObj = loopObj;
+
+// 封装一个深拷贝的函数
+function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+// 执行深拷贝，抛出错误
+deepClone(obj)
+/**
+ VM44:9 Uncaught TypeError: Converting circular structure to JSON
+    --&gt; starting at object with constructor &#39;Object&#39;
+    |     property &#39;loopObj&#39; -&gt; object with constructor &#39;Object&#39;
+    --- property &#39;obj&#39; closes the circle
+    at JSON.stringify (&lt;anonymous&gt;)
+    at deepClone (&lt;anonymous&gt;:9:26)
+    at &lt;anonymous&gt;:11:13
+ */
+</code></pre>
+<ul>
+<li>对包含循环引用的对象（对象之间相互引用，形成无限循环）执行此方法，会抛出错误。</li>
+</ul>
+<p>这也就是为什么用序列化去实现深拷贝时，遇到循环引用的对象会抛出错误的原因</p>
+<h3 id="JSON-stringify-第九大特性"><a href="#JSON-stringify-第九大特性" class="headerlink" title="JSON.stringify() 第九大特性"></a>JSON.stringify() 第九大特性</h3><p><strong>所有以 symbol 为属性键的属性都会被完全忽略掉，即便 replacer 参数中强制指定包含了它们。</strong></p>
+<pre><code class="js">JSON.stringify({ [Symbol.for(&quot;json&quot;)]: &quot;stringify&quot; }, function(k, v) {
+    if (typeof k === &quot;symbol&quot;) {
+      return v;
+    }
+  })
+
+// undefined
+</code></pre>
+<p><code>replacer</code> 是 <code>JSON.stringify()</code> 的第二个参数，我们比较少用到，所以很多时候我们会忘记 <code>JSON.stringify()</code> 第二个、第三个参数，场景不多，但是用的好的话会非常方便，关于 <code>JSON.stringify()</code> 第九大特性的例子中对 replacer 参数不明白的同学先别急，其实很简单，我们马上就会在下面的学习中弄懂。</p>
+<h2 id="第二个参数和第三个参数"><a href="#第二个参数和第三个参数" class="headerlink" title="第二个参数和第三个参数"></a>第二个参数和第三个参数</h2><p>JSON.stringify() 第二个参数和第三个参数</p>
+<h3 id="强大的第二个参数："><a href="#强大的第二个参数：" class="headerlink" title="强大的第二个参数："></a>强大的第二个参数：</h3><p>作为函数时，它有两个参数，键（key）和值（value），函数类似就是数组方法 map、filter 等方法的回调函数，对每一个属性值都会执行一次该函数（期间我们还简单实现过一个 map 函数）。<br>如果 replacer 是一个数组，数组的值代表将被序列化成 JSON 字符串的属性名。</p>
+<h3 id="华丽的第三个参数："><a href="#华丽的第三个参数：" class="headerlink" title="华丽的第三个参数："></a>华丽的第三个参数：</h3><p>如果是一个数字, 则在字符串化时每一级别会比上一级别缩进多这个数字值的空格（最多10个空格）；</p>
+<p>如果是一个字符串，则每一级别会比上一级别多缩进该字符串（或该字符串的前10个字符）。</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/favicon.png" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <!-- <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd> -->
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">171 <p>Articles</p></a></li>
+                    <li><a href="/categories">26 <p>Categories</p></a></li>
+                    <li><a href="/tags">55 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#通过需求学习JSON-stringify"><span class="toc-number">1.</span> <span class="toc-text">通过需求学习JSON.stringify()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSON-stringify-九大特性"><span class="toc-number">2.</span> <span class="toc-text">JSON.stringify() 九大特性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-第一大特性"><span class="toc-number">2.1.</span> <span class="toc-text">JSON.stringify()第一大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-第二大特性"><span class="toc-number">2.2.</span> <span class="toc-text">JSON.stringify() 第二大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-第三大特性"><span class="toc-number">2.3.</span> <span class="toc-text">JSON.stringify() 第三大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-第四大特性"><span class="toc-number">2.4.</span> <span class="toc-text">JSON.stringify()第四大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-第五大特性"><span class="toc-number">2.5.</span> <span class="toc-text">JSON.stringify() 第五大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-第六大特性"><span class="toc-number">2.6.</span> <span class="toc-text">JSON.stringify() 第六大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-第七大特性"><span class="toc-number">2.7.</span> <span class="toc-text">JSON.stringify() 第七大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-第八大特性"><span class="toc-number">2.8.</span> <span class="toc-text">JSON.stringify() 第八大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-第九大特性"><span class="toc-number">2.9.</span> <span class="toc-text">JSON.stringify() 第九大特性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第二个参数和第三个参数"><span class="toc-number">3.</span> <span class="toc-text">第二个参数和第三个参数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#强大的第二个参数："><span class="toc-number">3.1.</span> <span class="toc-text">强大的第二个参数：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#华丽的第三个参数："><span class="toc-number">3.2.</span> <span class="toc-text">华丽的第三个参数：</span></a></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+
+
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>

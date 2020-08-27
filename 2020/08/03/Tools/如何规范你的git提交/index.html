@@ -1,0 +1,594 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>如何规范你的git提交? - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,原文地址
+一、为什么需要规范？无规矩不成方圆，编程也一样。
+如果你有一个项目，从始至终都是自己写，那么你想怎么写都可以，没有人可以干预你。可是如果在团队协作中，大家都张扬个性，那么代码将会是一团糟，,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://ShinichiKudo-FE.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">如何规范你的git提交?</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/Tools"><b>「
+                    </b>TOOLS<b> 」</b></a>
+                
+                August 03, 2020
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2020/08/03/Tools/%E5%A6%82%E4%BD%95%E8%A7%84%E8%8C%83%E4%BD%A0%E7%9A%84git%E6%8F%90%E4%BA%A4/" title="如何规范你的git提交?" class="">如何规范你的git提交?</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    5.5k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    5 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/git/" rel="tag">git</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <p><a href="https://www.jianshu.com/p/5522df15c9ec" target="_blank" rel="noopener">原文地址</a></p>
+<h1 id="一、为什么需要规范？"><a href="#一、为什么需要规范？" class="headerlink" title="一、为什么需要规范？"></a>一、为什么需要规范？</h1><p>无规矩不成方圆，编程也一样。</p>
+<p>如果你有一个项目，从始至终都是自己写，那么你想怎么写都可以，没有人可以干预你。可是如果在团队协作中，大家都张扬个性，那么代码将会是一团糟，好好的项目就被糟践了。不管是开发还是日后维护，都将是灾难。</p>
+<p>这时候，有人提出了何不统一标准，大家都按照这个标准来。于是 ESLint，JSHint 等代码工具如雨后春笋般涌现，成为了项目构建的必备良品。</p>
+<p><code>Git Commit</code> 规范可能并没有那么夸张，但如果你在版本回退的时候看到一大段糟心的 Commit，恐怕会懊恼不已吧。所以，严格遵守规范，利人利己。</p>
+<p>二、具体规则</p>
+<p>先来看看公式：</p>
+<p><strong><code>&lt;type&gt;(&lt;scope&gt;): &lt;subject&gt;</code></strong></p>
+<blockquote>
+<p>type 用于说明 commit 的类别，只允许使用下面7个标识。</p>
+<ul>
+<li>feat：新功能(feature)</li>
+<li>fix：修补</li>
+<li>bugdocs：文档(documentation)</li>
+<li>style：格式(不影响代码运行的变动);</li>
+<li>refactor：重构(即不是新增功能，也不是修改bug的代码变动)</li>
+<li>test：增加测试</li>
+<li>chore：构建过程或辅助工具的变动</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>scope 用于说明 commit 影响的范围，比如<code>数据层、控制层、视图层</code>等等，视项目不同而不同。</p>
+</blockquote>
+<blockquote>
+<p>subject 是 commit 目的的简短描述，不超过50个字符。</p>
+</blockquote>
+<ul>
+<li>以动词开头，使用第一人称现在时，比如change，而不是changed或changes</li>
+<li>第一个字母小写</li>
+<li>结尾不加句号(.)</li>
+</ul>
+<h1 id="三、异常处理"><a href="#三、异常处理" class="headerlink" title="三、异常处理"></a>三、异常处理</h1><p>我们先来看看这个异常提醒：</p>
+<pre><code class="js">INVALID COMMIT MSG: does not match &quot;&lt;type&gt;(&lt;scope&gt;): &lt;subject&gt;&quot; ! 
+jartto:fix bug 
+</code></pre>
+<p>这里之所以报出这个警告，是因为我的提交出现了两个问题：</p>
+<ul>
+<li>其一，使用了规范外的关键字;</li>
+<li>其二，很细节的问题，<code>jartto：</code>后少了空格;</li>
+</ul>
+<p>这时候我才回忆起来，当时提交一直失败，情急之下直接强制提交，所以以后的提交都会抱出这个异常。大致意思就是：</p>
+<blockquote>
+<p>你的之前的 Commit 不合格～你的之前的 Commit 不合格～你的之前的 Commit 不合格</p>
+</blockquote>
+<p>这时候就很烦了，我们只能去将之前的错误修正，那么如何操作呢?</p>
+<h1 id="四、如何修改之前的-commit-信息？"><a href="#四、如何修改之前的-commit-信息？" class="headerlink" title="四、如何修改之前的 commit 信息？"></a>四、如何修改之前的 commit 信息？</h1><p>其实并不复杂，我们只需要这样做:</p>
+<ul>
+<li>1、将当前分支无关的工作状态进行暂存 <code>git stash</code></li>
+<li>2、将 HEAD 移动到需要修改的 commit 上 <code>git rebase 9633cf0919^ --interactive</code></li>
+<li>3、找到需要修改的 commit ,将首行的 pick 改成 edit</li>
+<li>4、开始着手解决你的 bug</li>
+<li>5、<code>git add</code>将改动文件添加到暂存</li>
+<li>6、<code>git commit –amend</code> 追加改动到提交</li>
+<li>7、<code>git rebase –continue</code> 移动 HEAD 回最新的 commit</li>
+<li>8、恢复之前的工作状态 <code>git stash pop</code></li>
+</ul>
+<p>大功告成，是不是想把整个 Commit 都修改一遍</p>
+<h1 id="五、项目中使用"><a href="#五、项目中使用" class="headerlink" title="五、项目中使用"></a>五、项目中使用</h1><p>这时候问题又来了，为什么我提交的时候会有警告，这个又是如何做到的呢?</p>
+<p>这时候，我们需要一款 Node 插件 <code>validate-commit-msg</code> 来检查项目中 <code>Commit message</code> 是否规范。</p>
+<ul>
+<li>1.首先，安装插件：</li>
+</ul>
+<pre><code class="js">npm install --save-dev validate-commit-msg 
+</code></pre>
+<ul>
+<li><p>2.使用方式一，建立 .vcmrc 文件：</p>
+<pre><code class="js">{ 
+&quot;types&quot;: [&quot;feat&quot;, &quot;fix&quot;, &quot;docs&quot;, &quot;style&quot;, &quot;refactor&quot;, &quot;perf&quot;, &quot;test&quot;, &quot;build&quot;, &quot;ci&quot;, &quot;chore&quot;, &quot;revert&quot;], 
+&quot;scope&quot;: { 
+  &quot;required&quot;: false, 
+  &quot;allowed&quot;: [&quot;*&quot;], 
+  &quot;validate&quot;: false, 
+  &quot;multiple&quot;: false 
+}, 
+&quot;warnOnFail&quot;: false, 
+&quot;maxSubjectLength&quot;: 100, 
+&quot;subjectPattern&quot;: &quot;.+&quot;, 
+&quot;subjectPatternErrorMsg&quot;: &quot;subject does not match subject pattern!&quot;, 
+&quot;helpMessage&quot;: &quot;&quot;, 
+&quot;autoFix&quot;: false 
+}
+</code></pre>
+</li>
+<li><p>3.使用方式二：写入 package.json</p>
+</li>
+</ul>
+<pre><code class="json">{ 
+  &quot;config&quot;: { 
+    &quot;validate-commit-msg&quot;: { 
+      /* your config here */ 
+    } 
+  } 
+}
+</code></pre>
+<ul>
+<li>4.可是我们如果想自动使用 ghooks 钩子函数呢？</li>
+</ul>
+<pre><code class="js">{ 
+  … 
+  &quot;config&quot;: { 
+    &quot;ghooks&quot;: { 
+      &quot;pre-commit&quot;: &quot;gulp lint&quot;, 
+      &quot;commit-msg&quot;: &quot;validate-commit-msg&quot;, 
+      &quot;pre-push&quot;: &quot;make test&quot;, 
+      &quot;post-merge&quot;: &quot;npm install&quot;, 
+      &quot;post-rewrite&quot;: &quot;npm install&quot;, 
+      … 
+    } 
+  } 
+  … 
+} 
+</code></pre>
+<p>在 ghooks 中我们可以做很多事情，当然不只是 <code>validate-commit-msg</code>哦。</p>
+<h1 id="六、Commit-规范的作用"><a href="#六、Commit-规范的作用" class="headerlink" title="六、Commit 规范的作用"></a>六、Commit 规范的作用</h1><ul>
+<li>提供更多的信息，方便排查与回退;</li>
+<li>过滤关键字，迅速定位;</li>
+<li>方便生成文档;</li>
+</ul>
+<h1 id="七、生成-Change-log"><a href="#七、生成-Change-log" class="headerlink" title="七、生成 Change log"></a>七、生成 Change log</h1><p>正如上文提到的生成文档，如果我们的提交都按照规范的话，那就很简单了。生成的文档包括以下三个部分：</p>
+<p><strong>New features</strong></p>
+<p><strong>Bug fixes</strong></p>
+<p><strong>Breaking changes</strong></p>
+<p>每个部分都会罗列相关的 <code>commit</code> ，并且有指向这些 <code>commit</code> 的链接。当然，生成的文档允许手动修改，所以发布前，你还可以添加其他内容。</p>
+<p>这里需要使用工具 <code>Conventional Changelog</code> 生成 <code>Change log</code>：</p>
+<pre><code class="js">npm install -g conventional-changelog 
+cd jartto-domo 
+conventional-changelog -p angular -i CHANGELOG.md -w
+</code></pre>
+<p>为了方便使用，可以将其写入 <code>package.json</code> 的 scripts 字段。</p>
+<pre><code class="js">{ 
+  &quot;scripts&quot;: { 
+    &quot;changelog&quot;: &quot;conventional-changelog -p angular -i CHANGELOG.md -w -r 0&quot; 
+  } 
+}
+</code></pre>
+<p>这样，使用起来就很简单了：</p>
+<pre><code class="js"> npm run changelog
+</code></pre>
+<h1 id="八、总结"><a href="#八、总结" class="headerlink" title="八、总结"></a>八、总结</h1><p>看完文章，你还会如此放荡不羁吗?你还会随心所欲的编写 Commit 吗?你还会如此 git commit -m “hello world”提交吗?</p>
+<p>答案是否定的，因为使用了钩子函数，你没有机会了，否则将是无穷无尽的恢复 Commit。这倒可以养成良好的提交习惯。</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/favicon.png" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <!-- <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd> -->
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">171 <p>Articles</p></a></li>
+                    <li><a href="/categories">26 <p>Categories</p></a></li>
+                    <li><a href="/tags">55 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、为什么需要规范？"><span class="toc-number">1.</span> <span class="toc-text">一、为什么需要规范？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#三、异常处理"><span class="toc-number">2.</span> <span class="toc-text">三、异常处理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#四、如何修改之前的-commit-信息？"><span class="toc-number">3.</span> <span class="toc-text">四、如何修改之前的 commit 信息？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#五、项目中使用"><span class="toc-number">4.</span> <span class="toc-text">五、项目中使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#六、Commit-规范的作用"><span class="toc-number">5.</span> <span class="toc-text">六、Commit 规范的作用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#七、生成-Change-log"><span class="toc-number">6.</span> <span class="toc-text">七、生成 Change log</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#八、总结"><span class="toc-number">7.</span> <span class="toc-text">八、总结</span></a></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+
+
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>

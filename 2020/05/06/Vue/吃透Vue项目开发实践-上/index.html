@@ -1,0 +1,1502 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>吃透Vue项目开发实践(上) - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,原文地址
+概览
+问题
+我将从 16 个方面来论述 vue 开发过程中的一些技巧和原理。当然由于篇幅有限，先论述前 8 个问题，下节将完成全系列内容。
+
+本篇文章将围绕下列问题进行论述：
+
+如何规范你,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://ShinichiKudo-FE.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">吃透Vue项目开发实践(上)</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/Vue"><b>「
+                    </b>VUE<b> 」</b></a>
+                
+                May 06, 2020
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2020/05/06/Vue/%E5%90%83%E9%80%8FVue%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%AE%9E%E8%B7%B5-%E4%B8%8A/" title="吃透Vue项目开发实践(上)" class="">吃透Vue项目开发实践(上)</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    37k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    34 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Vue/" rel="tag">Vue</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <p><a href="https://juejin.im/post/5e0202fc6fb9a0165721e39a" target="_blank" rel="noopener">原文地址</a></p>
+<h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><p><img src="https://user-gold-cdn.xitu.io/2019/12/30/16f5676f7940d72a?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="概览"></p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><blockquote>
+<p>我将从 16 个方面来论述 vue 开发过程中的一些技巧和原理。当然由于篇幅有限，先论述前 8 个问题，下节将完成全系列内容。</p>
+</blockquote>
+<p>本篇文章将围绕下列问题进行论述：</p>
+<ul>
+<li><strong>如何规范你的 git 提交，并自动生成并提交日志？</strong></li>
+<li><strong>如何配置和使用 Sass 和 PUG 提升你的编码效率？</strong></li>
+<li><strong>如何处理你的代码风格问题，以及如何使用 perttier 与 eslint 解决效率风格两难问题？</strong></li>
+<li><strong>如何管理页面的路由，如何编写异步路由？</strong></li>
+<li><strong>如何编写组件，引入组件库？</strong></li>
+<li><strong>如何管理你的资源，如何引入图标，样式？</strong></li>
+<li><strong>如何封装你的 axios，管理你的api？</strong></li>
+<li><strong>如何使用 mock 模拟你的数据，实现真正意义的前后端分离？</strong></li>
+</ul>
+<h2 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h2><blockquote>
+<p>实践之前：我希望你有如下准备，或者知识储备。</p>
+<ul>
+<li>了解 <code>npm/yarn/git/sass/pug/vue/vuex/vue-router/axios/mock/ssr/jest</code><br>的使用和原理。</li>
+<li>当然上面知识不了解也没关系哈哈哈，文章中会提到大致用法和作用。</li>
+</ul>
+</blockquote>
+<h3 id="如何规范-git-提交"><a href="#如何规范-git-提交" class="headerlink" title="如何规范 git 提交"></a>如何规范 git 提交</h3><blockquote>
+<p>代码提交记录是一个很好的代码修改日志。规范的代码提交记录，不管在平时代码开发维护过程中，还是在定位 bug 或者回退版本来说都是极为重要。</p>
+</blockquote>
+<h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>两种做法：</p>
+<ul>
+<li>自己手动规范 git 的提交原则或者团队统一制定。这个靠自觉，好习惯养成之后就没问题来</li>
+<li>使用插件规范，比如下面这种</li>
+</ul>
+<p>为了规范提交，我使用了如下插件：</p>
+<ul>
+<li>commitizen</li>
+<li>conventional-changelog</li>
+<li>cz-conventional-changelog</li>
+<li>conventional-changelog-cli<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><h5 id="安装系列插件依赖"><a href="#安装系列插件依赖" class="headerlink" title="安装系列插件依赖"></a>安装系列插件依赖</h5><pre><code class="sh">yarn add -D commitizen conventional-changelog cz-conventional-changelog
+</code></pre>
+<blockquote>
+<p>安装依赖时，要注意是否是生产环境需要的。显然 <code>commitizen</code> 只在开发环境中使用。<code>-D</code> 只在 <code>dev</code> 环境使用</p>
+</blockquote>
+<h5 id="配置依赖路径"><a href="#配置依赖路径" class="headerlink" title="配置依赖路径"></a>配置依赖路径</h5>在 <code>package.json</code> 中添加配置<pre><code class="js">{
+  //...
+  &quot;config&quot;: {
+      &quot;commitizen&quot;: {
+        &quot;path&quot;: &quot;./node_modules/cz-conventional-changelog&quot;
+      }
+  }
+}
+</code></pre>
+在命令行中输入<pre><code class="sh">git add -A
+git-cz
+</code></pre>
+出现了交互输入方式，规范你的 <code>commit</code> 输入格式<br><img src="https://user-gold-cdn.xitu.io/2019/12/30/16f554235055e8f3?w=2194&amp;h=620&amp;f=jpeg&amp;s=226477" alt="commit"></li>
+</ul>
+<h5 id="生成-CHANGELOG"><a href="#生成-CHANGELOG" class="headerlink" title="生成 CHANGELOG"></a>生成 CHANGELOG</h5><pre><code class="sh">npm i -g conventional-changelog-cli
+</code></pre>
+<p>增加一个npm 命令，快速生成日志</p>
+<pre><code class="js">&quot;genlog&quot;: &quot;conventional-changelog -p angular -i .github/CHANGELOG.md -s&quot;
+</code></pre>
+<p>使用<code>yarn</code>命令生成日志</p>
+<pre><code class="sh">yarn genlog
+</code></pre>
+<p>自动生成的log</p>
+<h5 id="Features"><a href="#Features" class="headerlink" title="Features"></a>Features</h5><ul>
+<li><strong>git:</strong> 增加commitizen工具规范提交 (<a href="https://github.com/suoyuesmile/suo-design-pro/commit/58e39370aa838fd99312f73b37d092ffadc85990" target="_blank" rel="noopener">58e3937</a>)</li>
+</ul>
+<h3 id="如何管理代码风格"><a href="#如何管理代码风格" class="headerlink" title="如何管理代码风格"></a>如何管理代码风格</h3><blockquote>
+<p>较统一的代码风格利于阅读，也利于协作。</p>
+</blockquote>
+<h4 id="原理与解决方案"><a href="#原理与解决方案" class="headerlink" title="原理与解决方案"></a>原理与解决方案</h4><p>使用 eslint 约束基本风格和语法，使用 prettier 自动格式化你的代码。</p>
+<h4 id="实践-1"><a href="#实践-1" class="headerlink" title="实践"></a>实践</h4><h5 id="安装-eslint-依赖"><a href="#安装-eslint-依赖" class="headerlink" title="安装 eslint 依赖"></a>安装 eslint 依赖</h5><pre><code class="json">{
+    &quot;eslint&quot;: &quot;^5.16.0&quot;,
+    &quot;eslint-config-standard&quot;: &quot;^6.2.1&quot;,
+    &quot;eslint-friendly-formatter&quot;: &quot;^2.0.7&quot;,
+    &quot;eslint-loader&quot;: &quot;^2.1.2&quot;,
+    &quot;eslint-plugin-html&quot;: &quot;^2.0.1&quot;,
+    &quot;eslint-plugin-promise&quot;: &quot;^3.5.0&quot;,
+    &quot;eslint-plugin-standard&quot;: &quot;^2.3.1&quot;,
+    &quot;eslint-plugin-vue&quot;: &quot;^5.0.0&quot;
+}
+</code></pre>
+<p>使用两个插件，一个 <code>plugin:vue/essential</code>，一个是 <code>standard</code>。<br><code>vue/essential</code> 为了在 vue 里面也可以生效。另一个是 <code>standard</code>。<br><a href="https://github.com/standard/standard/blob/master/docs/RULES-zhcn.md#javascript-standard-style" target="_blank" rel="noopener">standard 标准文档</a></p>
+<blockquote>
+<p>使用 recommend 也可以，采用推荐 lint，更加轻量化</p>
+</blockquote>
+<pre><code class="js">module.exports = {
+  root: true,
+  env: {
+    node: true
+  },
+  extends: [&#39;plugin:vue/essential&#39;, &#39;standard&#39;],
+  rules: {
+    quotes: [&#39;error&#39;, &#39;single&#39;],
+    indent: [&#39;error&#39;, 2, { MemberExpression: &#39;off&#39; }],
+    &#39;arrow-parens&#39;: 0,
+    &#39;no-loop-func&#39;: 2,
+    &#39;space-before-function-paren&#39;: [&#39;error&#39;, &#39;never&#39;],
+    indent: [&#39;error&#39;, 2, { SwitchCase: 1 }]
+  },
+  parserOptions: {
+    parser: require.resolve(&#39;babel-eslint&#39;),
+    ecmaVersion: 2018,
+    sourceType: &#39;module&#39;
+  }
+}
+</code></pre>
+<h5 id="可以自定义-rules-的规则"><a href="#可以自定义-rules-的规则" class="headerlink" title="可以自定义 rules 的规则"></a>可以自定义 rules 的规则</h5><blockquote>
+<p>rules 的规则 { 规则名：[是否关闭/规则等级，配置的值，只对部分配置] }<br><code>indent: [&#39;error&#39;, 2, { SwitchCase: 1 }]</code> 兼容 prettier，prettier 会将代码格式化成 eslint 报错的情况。<br>规则等级：0 关闭 1 警告 2 报错</p>
+</blockquote>
+<h5 id="使用-prettier"><a href="#使用-prettier" class="headerlink" title="使用 prettier"></a>使用 prettier</h5><h6 id="配置-prettier-文件"><a href="#配置-prettier-文件" class="headerlink" title="配置 prettier 文件"></a>配置 prettier 文件</h6><pre><code class="js">{
+  &quot;printWidth&quot;: 150,
+  &quot;singleQuote&quot;: true,
+  &quot;trailingComma&quot;: &quot;none&quot;,
+  &quot;semi&quot;: false,
+  &quot;tabWidth&quot;: 2,
+  &quot;useTabs&quot;: false,
+  &quot;bracketSpacing&quot;: true,
+  &quot;jsxBracketSameLine&quot;: false,
+  &quot;arrowParens&quot;: &quot;always&quot;,
+  &quot;proseWrap&quot;: &quot;preserve&quot;,
+  &quot;overrides&quot;: [
+    {
+        &quot;files&quot;: [&quot;*.json&quot;, &quot;.eslintrc&quot;, &quot;.tslintrc&quot;, &quot;.prettierrc&quot;, &quot;.tern-project&quot;],
+        &quot;options&quot;: {
+            &quot;parser&quot;: &quot;json&quot;,
+            &quot;tabWidth&quot;: 2
+        }
+    },
+    {
+        &quot;files&quot;: &quot;*.{css,sass,scss,less}&quot;,
+        &quot;options&quot;: {
+            &quot;parser&quot;: &quot;css&quot;,
+            &quot;tabWidth&quot;: 2
+        }
+    },
+    {
+        &quot;files&quot;: &quot;*.ts&quot;,
+        &quot;options&quot;: {
+            &quot;parser&quot;: &quot;typescript&quot;
+        }
+    },
+    {
+        &quot;files&quot;: &quot;*.vue&quot;,
+        &quot;options&quot;: {
+            &quot;parser&quot;: &quot;vue&quot;
+        }
+    },
+    {
+        &quot;files&quot;: &quot;*.md&quot;,
+        &quot;options&quot;: {
+            &quot;parser&quot;: &quot;markdown&quot;
+        }
+    }
+  ]
+}
+</code></pre>
+<h5 id="开启-vscode-自动格式化"><a href="#开启-vscode-自动格式化" class="headerlink" title="开启 vscode 自动格式化"></a>开启 vscode 自动格式化</h5><pre><code class="json">{
+  // prettier
+  &quot;prettier.singleQuote&quot;: true,
+  &quot;prettier.semi&quot;: false,
+  &quot;prettier.tabWidth&quot;: 2,
+  &quot;[javascript]&quot;: {
+    &quot;editor.formatOnSave&quot;: true,
+    &quot;editor.defaultFormatter&quot;: &quot;esbenp.prettier-vscode&quot;
+  }
+}
+</code></pre>
+<h3 id="如何提升编码效率"><a href="#如何提升编码效率" class="headerlink" title="如何提升编码效率"></a>如何提升编码效率</h3><h4 id="原理与解决方案-1"><a href="#原理与解决方案-1" class="headerlink" title="原理与解决方案"></a>原理与解决方案</h4><p>我主要从 3 个方面来做一些编码效率上的改进</p>
+<ul>
+<li>升级你的 vue-cli 减少 webpack 配置的成本</li>
+<li>使用 sass，利用里面函数、mixins、变量提升 css 文件的复用</li>
+<li>使用 pug，减少 html 的代码编写量</li>
+</ul>
+<h4 id="实践-2"><a href="#实践-2" class="headerlink" title="实践"></a>实践</h4><blockquote>
+<p><code>vue-cli3+、vue-cli4+</code> 相比于 <code>vue-cli2+</code> 最大的改变就是将约定俗称的配置，全部公共化了，也就是做了一次二次封装。这样的好处在于，我们不必要在繁多的配置代码中寻找需要的配置。</p>
+</blockquote>
+<p>简单新建一个配置入口就能操作我们大多数想要的功能。在 <code>root</code> 目录下新建一个 <code>vue.config.js</code> 文件，作为我们 <code>webpack</code> 的配置文件。</p>
+<p><strong>初始化 vue 配置</strong></p>
+<pre><code class="js">const autoprefixer = require(&#39;autoprefixer&#39;)
+
+module.exports = {
+  publicPath: process.env === &#39;production&#39; ? &#39;&#39; : &#39;/&#39;,
+  outputDir: &#39;dist&#39;,
+  assetsDir: &#39;static&#39;,
+  filenameHashing: true,
+  lintOnSave: true,
+  runtimeCompiler: false,
+  transpileDependencies: [/\/node_modules\/vue-echarts\//, /\/node_modules\/resize-detector\//],
+  productionSourceMap: false
+}
+</code></pre>
+<p>简单的配置完成后，我们引入一个 <code>sass</code> 工具用于编写 <code>sass</code>文件</p>
+<blockquote>
+<p>用法见 sass <a href="https://www.sass.hk/docs/" target="_blank" rel="noopener">参考资料</a>！</p>
+</blockquote>
+<h5 id="使用-Sass"><a href="#使用-Sass" class="headerlink" title="使用 Sass"></a>使用 Sass</h5><h6 id="安装与使用"><a href="#安装与使用" class="headerlink" title="安装与使用"></a>安装与使用</h6><pre><code class="sh">yarn add -D sass sass-loader
+</code></pre>
+<h6 id="如何处理样式"><a href="#如何处理样式" class="headerlink" title="如何处理样式"></a>如何处理样式</h6><p>在 <code>assets</code> 目录中建立一个 styles 文件专门来存放样式文件，新增入口<code>index.scss</code>文件，便于 JavaScript 引入，增加 utils.scss、reset.scss、varibles 文件。</p>
+<blockquote>
+<p>这些样式工具都是为了提升我们 <code>scss</code> 开发效率，具有畅快的开发体验！</p>
+</blockquote>
+<h6 id="使用-varibles-变量文件"><a href="#使用-varibles-变量文件" class="headerlink" title="使用 varibles 变量文件"></a>使用 varibles 变量文件</h6><p>为了提升我们代码的可读性，复用性。使用 <code>sass</code> 变量必不可少。</p>
+<p>还有一点就是利于全局修改样式，如果需要更换皮肤这个功能，我们只需要更改全局的主题色，即可更换主题，那样更加方便。</p>
+<pre><code class="scss">// 主题色
+$color-red: #ff3333;
+$color-purple: #ff33a9;
+$color-orange: #ff8833;
+$color-blue: #3377ff;
+
+// 文字色
+$color-black: #000;
+$color-dark: #333;
+$color-deep: #555;
+$color-pl: #999999;
+$color-weak: #B3B3B3;
+$color-white: #fff;
+
+// 背景色
+$bg-bar: #F9F9F9;
+$bg-page: #F3F3F3;
+$bg-page-light: #F9F9F9;
+</code></pre>
+<p>使用变量之后，sass 文件不会直接生效，至少在 vue 文件 里面是访问不到的。<br>需要在 <code>vue.config.js</code> 里面增加如下配置。</p>
+<pre><code class="js">module.exports = {
+    // ...
+    css: {
+        sourceMap: true,
+        loaderOptions: {
+            sass: {
+                prependData: `
+        @import &quot;@/assets/styles/variable.scss&quot;;
+        `
+            }
+        }
+    }
+}
+</code></pre>
+<h6 id="覆盖默认样式"><a href="#覆盖默认样式" class="headerlink" title="覆盖默认样式"></a>覆盖默认样式</h6><p>常规操作, 引入 reset.scss 将默认样式覆盖掉</p>
+<pre><code class="scss">/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+body {
+    line-height: 1;
+}
+ol, ul {
+    list-style: none;
+}
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: &#39;&#39;;
+    content: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  margin: 0;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+</code></pre>
+<h6 id="使用样式工具集"><a href="#使用样式工具集" class="headerlink" title="使用样式工具集"></a>使用样式工具集</h6><p>有时候我们发现，光是引入变量还不够，变量工具只能允许我们在 css 类文件中使用。假如我想着模版中直接使用样式，有没有更快的方案呢？<br>当然有的，我们可以自定义一个常用的样式工具集。设置一些背景颜色、字体颜色、盒子模型中的常规操作。</p>
+<blockquote>
+<p>要是有设计规范更好哦，我也是常常向设计师提出要求，一定要制定出一套产品的设计规范。</p>
+</blockquote>
+<pre><code class="scss">/* // utils 工具
+// 颜色 */
+.bg-red {background-color: $color-red!important;}
+.bg-purple {background-color: $color-purple!important;}
+.bg-orange {background-color: $color-orange!important;}
+.bg-blue {background-color: $color-blue!important;}
+.color-red {color: $color-red!important;}
+.color-purple {color: $color-purple!important;}
+.color-orange {color: $color-orange!important;}
+.color-blue {color: $color-blue!important;}
+.text-black {color: #000;}
+.text-dark {color: #333;}
+.text-deep {color: #555;}
+.text-weak {color: #B3B3B3;}
+.text-white {color: #fff;}
+/* // 字体 */
+.f10 {font-size: 10px;}
+.f12 {font-size: 12px;}
+.f14 {font-size: 14px;}
+.f15 {font-size: 15px;}
+.f17 {font-size: 17px;}
+.f20 {font-size: 20px;}
+.f24 {font-size: 24px;}
+/* // 文字对齐 */
+.tl {text-align: left;}
+.tc {text-align: center;}
+.tr {text-align: right;}
+/* // 浮动与清除浮动 */
+.fl {float: left;}
+.fr {float: right;}
+.fix {*zoom: 1;}
+.fix:after{display:table; content:&#39;&#39;; clear:both;}
+/* // 显示 */
+.dn{display:none;}
+.di{display:inline;}
+.db{display:block;}
+.dib{display:inline-block;}
+.dt{display:table;}
+div.dib{*display:inline; *zoom:1;}
+.vm {vertical-align: middle;}
+.vib {display:inline-block; vertical-align: middle;}
+/* // 定位 */
+.pr {position: relative;}
+.pa {position: absolute;}
+.pf {position: fixed;}
+/* // 盒子模型 */
+.ml4 {margin-left: 4px;}
+.mr4 {margin-right: 4px;}
+.mt4 {margin-top: 4px;}
+.mb4 {margin-bottom: 4px;}
+.ml8 {margin-left: 8px;}
+.mr8 {margin-right: 8px;}
+.mt8 {margin-top: 8px;}
+.mb8 {margin-bottom: 8px;}
+.ml12 {margin-left: 12px;}
+.mr12 {margin-right: 12px;}
+.mt12 {margin-top: 12px;}
+.mb12 {margin-bottom: 12px;}
+.ml16 {margin-left: 16px;}
+.mr16 {margin-right: 16px;}
+.mt16 {margin-top: 16px;}
+.mb16 {margin-bottom: 16px;}
+.ml20 {margin-left: 20px;}
+.mr20 {margin-right: 20px;}
+.mt20 {margin-top: 20px;}
+.mb20 {margin-bottom: 20px;}
+.ml24 {margin-left: 24px;}
+.mr24 {margin-right: 24px;}
+.mt24 {margin-top: 24px;}
+.mb24 {margin-bottom: 24px;}
+.ml10 {margin-left: 10px;}
+.mr10 {margin-right: 10px;}
+.mt10 {margin-top: 10px;}
+.mb10 {margin-bottom: 10px;}
+.ml15 {margin-left: 15px;}
+.mr15 {margin-right: 15px;}
+.mt15 {margin-top: 15px;}
+.mb15 {margin-bottom: 15px;}
+/* // 按钮禁用 */
+.disabled{outline:0 none; cursor:default!important; opacity:.4; filter:alpha(opacity=40); -ms-pointer-events:none; pointer-events:none;}
+</code></pre>
+<h6 id="增加样式入口文件"><a href="#增加样式入口文件" class="headerlink" title="增加样式入口文件"></a>增加样式入口文件</h6><p>最后一步，新建一个入口文件，将样式工具类全部导入进来，供主程序引入。</p>
+<pre><code class="scss">// index.scss 文件
+import &#39;./reset.scss&#39;;
+import &#39;./varibles.scss&#39;;
+improt &#39;./utils/scss&#39;;
+</code></pre>
+<p>在 <code>main.js</code> 中直接引入 <code>index.scss</code></p>
+<pre><code class="js">import &#39;@/assets/styles/index.scss&#39;
+</code></pre>
+<h3 id="vue-中写样式要注意哪些方面，有哪些技巧呢？"><a href="#vue-中写样式要注意哪些方面，有哪些技巧呢？" class="headerlink" title="vue 中写样式要注意哪些方面，有哪些技巧呢？"></a>vue 中写样式要注意哪些方面，有哪些技巧呢？</h3><h4 id="避免全局污染"><a href="#避免全局污染" class="headerlink" title="避免全局污染"></a>避免全局污染</h4><p>在页面中写 <code>css/scss</code> 加上 <code>scoped</code>，<code>scoped</code> 的功能就是使页面的样式是局部的，不让影响其他页面的样式。</p>
+<h4 id="bem-规范"><a href="#bem-规范" class="headerlink" title="bem 规范"></a>bem 规范</h4><p>我们大多数人时候会遇到问题，<strong>样式嵌套太多了怎么命名</strong></p>
+<blockquote>
+<p>BEM是块（block）、元素（element）、修饰符（modifier）的简写，由 Yandex 团队提出的一种前端 CSS 命名方法论。</p>
+</blockquote>
+<p>名字太长易读性太差</p>
+<pre><code class="scss">.cardbox {
+    .cardbox-card {
+        .cardbox-card-wrapper
+            .cardbox-card-wrapper-header {
+                .cardbox-card-wrapper-header-title {
+                    // ...
+                }
+            }
+            .cardbox-card-wrapper-body{
+                .cardbox-card-item {
+                    .cardbox-card-item-title {
+                        // ...
+                    }  
+              }
+          }
+        }
+    }
+}
+</code></pre>
+<h4 id="bem-使用方式"><a href="#bem-使用方式" class="headerlink" title="bem 使用方式"></a>bem 使用方式</h4><p><code>block-name__element-name--color</code></p>
+<ul>
+<li>区分块，子元素，修饰元素</li>
+<li>块，页面中独立的单元</li>
+<li>子元素，块里面的儿子 <code>card__item</code> 使用 <code>__</code> 连接</li>
+<li>子元素长命名使用 - 连接</li>
+<li>修饰（易变的）<code>card__item--warning</code> 使用 <code>--</code></li>
+</ul>
+<p>我们使用 bem 改造样式</p>
+<pre><code class="scss">.cardbox {
+    &amp;__header {
+        &amp;__title {
+            //...
+        }
+    }
+    &amp;__body {
+        &amp;__item {
+            &amp;__title {
+                //...
+            }
+        }
+    }
+}
+</code></pre>
+<blockquote>
+<p>bem 一般推荐子元素嵌套尽量在2-3层以内</p>
+</blockquote>
+<p>但是我们发现样式子元素嵌套有点多，使用了两重子元素嵌套。</p>
+<p>大致原理是<strong>尝试分离父子元素的关系，把卡片本身当作一个块看待。</strong></p>
+<p>下面来试着去减少嵌套：</p>
+<pre><code class="scss">.cardbox {
+    &amp;__header {
+        &amp;__title {
+            //...
+        }
+    }
+    &amp;__body {
+        .card {
+            &amp;__title {
+                //...
+            }
+        }
+    }
+}
+</code></pre>
+<p>现在编写样式效率提高也更加规范了，那么编写 HTML 也是有很多累赘的代码。</p>
+<p>比如大多数标签都是前开后闭的。通过 pug 我们可以省略很多字符的敲打，下面我们谈谈如何使用 pug 编写模版。</p>
+<blockquote>
+<p>当然喜欢哪种 HTML 编写风格见人见智啦，我自己更加倾向 pug，那种缩进和简洁的表达，有种在写 scss 的感觉。</p>
+</blockquote>
+<h3 id="如何使用-pug"><a href="#如何使用-pug" class="headerlink" title="如何使用 pug"></a>如何使用 pug</h3><h4 id="实践：类似-sass，首先安装-pug-和-pug-的-loader"><a href="#实践：类似-sass，首先安装-pug-和-pug-的-loader" class="headerlink" title="实践：类似 sass，首先安装 pug 和 pug 的 loader"></a>实践：类似 sass，首先安装 pug 和 pug 的 loader</h4><pre><code>yarn add -D pug pug-html-loader pug-plain-loader
+</code></pre><h4 id="完成配置"><a href="#完成配置" class="headerlink" title="完成配置"></a>完成配置</h4><pre><code class="js">module.exports = {
+  // ...
+  chainWebpack: (config) =&gt; {
+    config.module
+      .rule(&#39;pug&#39;)
+      .test(/\.pug$/)
+      .use(&#39;pug-html-loader&#39;)
+      .loader(&#39;pug-html-loader&#39;)
+      .end()
+  }
+}
+</code></pre>
+<h4 id="编写-pug-代码"><a href="#编写-pug-代码" class="headerlink" title="编写 pug 代码"></a>编写 pug 代码</h4><p>使用 scss 工具与 pug 完美搭配，少写很多代码</p>
+<pre><code class="html">// 登陆
+&lt;template lang=&quot;pug&quot;&gt;
+  .login
+    h1.login__title.ml15 注册/登陆
+    .login__form.mt15.ml15
+      van-field.login__form__input(placeholder=&quot;输入手机号&quot; v-model=&quot;phone&quot;)
+      .login__form__protocol.mt15
+        .login__form__protocol__tips.dib.text-weak 注册或登录即表示同意
+        .login__form__protocol__name.dib.color-orange 《用户协议》
+      app-button.mt15(size=&quot;large&quot;
+        theme=&quot;orange&quot;
+        :disabled=&quot;phone.length !== 11&quot;
+        @click=&quot;handleSubmit&quot;
+      ) 下一步
+&lt;/template&gt;
+</code></pre>
+<p>我们已经引入了样式，接下来我将谈谈其他资源的引入</p>
+<h3 id="如何管理你的资源"><a href="#如何管理你的资源" class="headerlink" title="如何管理你的资源"></a>如何管理你的资源</h3><h4 id="原理与解决方案-2"><a href="#原理与解决方案-2" class="headerlink" title="原理与解决方案"></a>原理与解决方案</h4><p>我暂时把资源分为下面几种</p>
+<ul>
+<li>字体</li>
+<li>ICON</li>
+<li>图片</li>
+<li>样式<br><img src="https://user-gold-cdn.xitu.io/2019/12/30/16f55578916de772?imageslim" alt="资源"><br>把他们各自新建一个目录，都放在 assets 目录下面分门别类，供其他地方调用。<br>使用 alias 更好重命名，使之更便捷的访问到。</li>
+</ul>
+<p>增加 <code>vue.config.js</code> 配置 ,设置<code>assets</code>别名</p>
+<pre><code class="js">const path = require(&#39;path&#39;)
+function resolve(dir) {
+  return path.join(__dirname, dir)
+}
+module.exports = {
+  //...
+  chainWebpack: (config) =&gt; {
+    config.resolve.alias.set(&#39;@&#39;, resolve(&#39;src&#39;)).set(&#39;@assets&#39;, resolve(&#39;src/assets&#39;))
+  }
+}
+</code></pre>
+<h5 id="ICON"><a href="#ICON" class="headerlink" title="ICON"></a>ICON</h5><h6 id="引入-iconfont"><a href="#引入-iconfont" class="headerlink" title="引入 iconfont"></a>引入 iconfont</h6><ul>
+<li>(1) <a href="https://www.iconfont.cn/manage/index" target="_blank" rel="noopener">iconfont</a> 阿里图标项目中下载，将整个项目图标包一起下载下来</li>
+</ul>
+<p><img src="https://user-gold-cdn.xitu.io/2019/12/27/16f462a5119bdcdf?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="ICON"></p>
+<ul>
+<li>(2) 引入 iconfont 样式<br>需要下面四个文件</li>
+</ul>
+<ul>
+<li><code>iconfont.eot</code></li>
+<li><code>iconfont.ttf</code></li>
+<li><code>iconfont.woff</code></li>
+<li><code>iconfont.woff2</code></li>
+</ul>
+<ul>
+<li>(3)  项目中引入 iconfont</li>
+</ul>
+<p>让 <code>icon</code> 组件化</p>
+<pre><code class="html">&lt;template&gt;
+  &lt;i class=&quot;iconfont&quot; v-on=&quot;$listeners&quot; :class=&quot;name&quot;&gt;&lt;/i&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  props: {
+    name: String
+  }
+}
+&lt;/script&gt;
+
+&lt;style lang=&quot;scss&quot; scoped&gt;
+.iconfont {
+  font-size: 16px;
+  color: $color-icon;
+}
+&lt;/style&gt;
+</code></pre>
+<h6 id="引入图片作为-ICON"><a href="#引入图片作为-ICON" class="headerlink" title="引入图片作为 ICON"></a>引入图片作为 ICON</h6><p>让图片组件化，我们再来写一个 img 组件</p>
+<pre><code class="html">&lt;template lang=&quot;pug&quot;&gt;
+  img(
+    :src=&quot;require(`@/assets/images/${name}.png`)&quot;
+    v-bind=&quot;$attrs&quot;
+    v-on=&quot;$listeners&quot;
+    :style=&quot;{&#39;width&#39;: width ? width + &#39;px&#39; : size + &#39;px&#39;, &#39;height&#39;: height ? height + &#39;px&#39; : size + &#39;px&#39; }&quot;)
+&lt;/template&gt;
+&lt;script&gt;
+export default {
+  name: &#39;app-img&#39;,
+  props: {
+    name: {
+      type: String,
+      default: &#39;&#39;
+    },
+    size: {
+      type: Number,
+      default: 16
+    },
+    width: {
+      type: Number,
+      default: 0
+    },
+    height: {
+      type: Number,
+      default: 0
+    }
+  }
+}
+&lt;/script&gt;
+</code></pre>
+<h3 id="如何管理你的路由"><a href="#如何管理你的路由" class="headerlink" title="如何管理你的路由"></a>如何管理你的路由</h3><h4 id="原理与解决方案-3"><a href="#原理与解决方案-3" class="headerlink" title="原理与解决方案"></a>原理与解决方案</h4><p>使用 vue-router，使用<code>import()</code> 生成异步路由，只有在访问时候才会加载模块。</p>
+<p>为什么使用 <code>import()</code> 会异步加载模块？</p>
+<blockquote>
+<p>MDN：在您希望按照一定的条件或者按需加载模块的时候，动态import() 是非常有用的。而静态型的 import 是初始化加载依赖项的最优选择，使用静态 import 更容易从代码静态分析工具和 tree shaking 中受益。</p>
+</blockquote>
+<p>说白了就是起到一个<strong>按需加载</strong>的目的。现在大多数实现的按需加载，基本都是依赖 <code>import()</code> 这个方法。</p>
+<h5 id="安装-vue-router"><a href="#安装-vue-router" class="headerlink" title="安装 vue-router"></a>安装 vue-router</h5><pre><code class="sh">yarn add vue-router
+</code></pre>
+<p>安装完 <code>router</code>，在编写 <code>router</code> 先创建页面</p>
+<h5 id="新建一个空页面"><a href="#新建一个空页面" class="headerlink" title="新建一个空页面"></a>新建一个空页面</h5><p>src 目录下新增 views 目录存放页面文件。创建 index 目录和 home 页面</p>
+<pre><code class="html">&lt;template lang=&quot;pug&quot;&gt;
+  .home 首页
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+
+}
+&lt;/script&gt;
+&lt;style lang=&quot;scss&quot; scoped&gt;
+&lt;/style&gt;
+</code></pre>
+<h5 id="编写路由"><a href="#编写路由" class="headerlink" title="编写路由"></a>编写路由</h5><pre><code class="js">const routes = [
+    {
+        // 首页
+        path: &#39;/&#39;,
+        name: &#39;index&#39;,
+        redirect: &#39;/home&#39;,
+        component: App,
+        children: [
+            {
+                // 首页
+                path: &#39;home&#39;,
+                name: &#39;home&#39;,
+                // 路由懒加载
+                component: () =&gt;
+                    import(
+                        /* webpackChunkName: &quot;index&quot; */ &#39;../views/index/home.vue&#39;
+                    )
+            }
+        ]
+    }
+]
+Vue.use(VueRouter)
+
+const router = new VueRouter({
+    mode: &#39;history&#39;,
+    routes: routes,
+    base: process.env.BASE_URL,
+    props: true
+})
+
+export default router
+</code></pre>
+<h5 id="为了消除-显得路径更加好看简洁，我们采用-history-模式，但是-history-模式有个问题就是，异步路由没有缓存在页面中，第一次进入页面会找不到"><a href="#为了消除-显得路径更加好看简洁，我们采用-history-模式，但是-history-模式有个问题就是，异步路由没有缓存在页面中，第一次进入页面会找不到" class="headerlink" title="为了消除 # 显得路径更加好看简洁，我们采用 history 模式，但是 history 模式有个问题就是，异步路由没有缓存在页面中，第一次进入页面会找不到"></a>为了消除 # 显得路径更加好看简洁，我们采用 history 模式，但是 history 模式有个问题就是，异步路由没有缓存在页面中，第一次进入页面会找不到</h5><p>在 vue.config.js 中增加配置，开发环境可以访问到，恢复正常</p>
+<pre><code class="js">module.exports = {
+  // ...
+  devServer: {
+    historyApiFallback: true
+  }
+}
+</code></pre>
+<blockquote>
+<p>关于路由还有很多可以研究到地方，可以自行研究哦！</p>
+</blockquote>
+<h3 id="组件化开发"><a href="#组件化开发" class="headerlink" title="组件化开发"></a>组件化开发</h3><h4 id="原理与解决方案-4"><a href="#原理与解决方案-4" class="headerlink" title="原理与解决方案"></a>原理与解决方案</h4><p>一般来说，我们根据组件的复用度，分给基础（公共）组件和业务组件。</p>
+<p>为了节省时间，快速开发，这里基础组件大部分引用开源组件。当然不能直接就用哦。</p>
+<p>一般要进行二次封装，也就是高阶组件开发。</p>
+<ol>
+<li>通过修改和覆盖当前组件的样式来达到修改样式的作用。</li>
+<li>通过拦截事件来更改js的逻辑。</li>
+</ol>
+<p>下面我们先引入 <code>vant</code> 组件</p>
+<h4 id="实践-3"><a href="#实践-3" class="headerlink" title="实践"></a>实践</h4><h5 id="引入-vant"><a href="#引入-vant" class="headerlink" title="引入 vant"></a>引入 vant</h5><pre><code class="sh">yarn add vant
+</code></pre>
+<h4 id="对基础组件进行二次封装和改造"><a href="#对基础组件进行二次封装和改造" class="headerlink" title="对基础组件进行二次封装和改造"></a>对基础组件进行二次封装和改造</h4><p>下面 7 步来写好一个公共组件</p>
+<ul>
+<li>(1) 新建一个 <code>components</code> 目录来存放基础组件</li>
+<li>(2) 基础组件命名为 <code>app-xxx</code> 或 <code>appXxx</code>，新建一个 <code>app-button</code> 目录，新建 <code>index.vue</code></li>
+<li>(3) 根据设计稿设计和编写组件<blockquote>
+<p>编写组件之前首先要设计组件，根据组件的不变性和可变性原则编写。不变性是组件的核心，可变性根据参数对组件对相关部分进行调节，实现可选择的功能。</p>
+</blockquote>
+</li>
+<li>(4) 实现组件</li>
+</ul>
+<pre><code class="html">&lt;template lang=&quot;pug&quot;&gt;
+  div.dib
+    van-button.btn(
+      @click=&quot;$emit(&#39;click&#39;)&quot;
+      :class=&quot;getClass&quot; v-bind=&quot;$attrs&quot;
+      :style=&quot;{&#39;width&#39;: size === &#39;large&#39; ? &#39;345px&#39;: &#39;&#39;, &#39;backgroundColor&#39;: getBgColor, borderColor: getBgColor, color: getBgColor}&quot;)
+      slot
+&lt;/template&gt;
+
+&lt;script&gt;
+import { Button } from &#39;vant&#39;
+import Vue from &#39;vue&#39;
+import { getColor } from &#39;@/utils&#39;
+Vue.use(Button)
+
+export default {
+  name: &#39;app-button&#39;,
+  props: {
+    type: {
+      type: String,
+      default: &#39;primary&#39;
+    },
+    theme: {
+      type: String,
+      default: &#39;blue&#39;
+    },
+    size: {
+      type: String,
+      default: &#39;&#39;
+    }
+  },
+  computed: {
+    getClass() {
+      if (!this.type) {
+        return &#39;&#39;
+      }
+      return `app-btn--${this.type}`
+    },
+    getBgColor() {
+      if (!this.theme) {
+        return &#39;&#39;
+      }
+      return getColor(this.theme)
+    }
+  }
+}
+&lt;/script&gt;
+
+&lt;style lang=&quot;scss&quot; scoped&gt;
+.app-btn  {
+  ::v-deep &amp;--primary {
+    padding: 8px 30px;
+    height: 40px;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 19px;
+    color: white!important;
+  }
+  ::v-deep &amp;--minor {
+    padding: 5px 10px;
+    height: 26px;
+    border-radius: 14px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    background-color: #fff!important;
+  }
+  ::v-deep &amp;--rect {
+    padding: 5px px;
+    height: 49px;
+    font-size: 14px;
+    color: white!important;
+  }
+}
+&lt;/style&gt;
+</code></pre>
+<blockquote>
+<p>::v-deep  样式深覆盖，scoped 情况下覆盖组件样式，不改变其样式</p>
+</blockquote>
+<ul>
+<li>(5) 写好基础组件 README，为什么要写文档呢？如果多人开发同一个项目，基础组件会被其他人引用。方便其他人使用，所以要写文档。</li>
+</ul>
+<blockquote>
+<p>一句话言：只要可能被其他人用的公共方法和组件，注释或文档是很重要的，对自己的代码负责哈。</p>
+</blockquote>
+<p>其他用法参照 vant</p>
+<ul>
+<li>(6) 全局引用，基础组件许多页面都会用到，将其设置成全局组件，其他地方就不必再引用了哦。</li>
+</ul>
+<p>新建一个文件 <code>global</code> 存放全局组件注册，在 <code>main.js</code> 引入</p>
+<pre><code class="javascript">import Vue from &#39;vue&#39;
+import appButton from &#39;@/components/app-button&#39;
+Vue.component(&#39;app-button&#39;, appButton)
+</code></pre>
+<ul>
+<li>(7) 写好 <code>demo</code>，即使暂时不写单元测试，也要写好一个 <code>demo</code>，使之能正常的运行</li>
+</ul>
+<p>添加 demo 页面和路由</p>
+<pre><code class="html">&lt;template lang=&quot;pug&quot;&gt;
+  div(class=&quot;base&quot;)
+    // 按钮组件
+    app-button.mt4(theme=&quot;blue&quot;) 确认支付
+    app-button(theme=&quot;orange&quot;) 确认支付
+    app-button(theme=&quot;purple&quot;) 确认支付
+    app-button.mt4(theme=&quot;red&quot;) 确认支付
+    app-button(theme=&quot;grey&quot;) 确认支付
+    app-button.mt4(theme=&quot;blue&quot; size=&quot;large&quot;) 修改地址
+    app-button.mt4(theme=&quot;orange&quot; size=&quot;large&quot;) 修改地址
+    app-button.mt4(theme=&quot;purple&quot; size=&quot;large&quot;) 修改地址
+    app-button.mt4(theme=&quot;red&quot; size=&quot;large&quot;) 修改地址
+    app-button.mt4(theme=&quot;grey&quot; size=&quot;large&quot;) 修改地址
+    app-button.mt4(theme=&quot;blue&quot; type=&quot;minor&quot;) 确认收货
+    app-button(theme=&quot;orange&quot; type=&quot;minor&quot;) 确认收货
+    app-button(theme=&quot;purple&quot; type=&quot;minor&quot;) 确认收货
+    app-button(theme=&quot;red&quot; type=&quot;minor&quot;) 修改地址
+    app-button(theme=&quot;grey&quot; type=&quot;minor&quot;) 修改地址
+    app-button.mt4(theme=&quot;blue&quot; type=&quot;rect&quot;) 确认收货
+    app-button(theme=&quot;orange&quot; type=&quot;rect&quot;) 确认收货
+    app-button(theme=&quot;purple&quot; type=&quot;rect&quot;) 确认收货
+    app-button(theme=&quot;red&quot; type=&quot;rect&quot;) 修改地址
+    app-button(theme=&quot;grey&quot; type=&quot;rect&quot;) 修改地址
+&lt;/template&gt;
+&lt;script&gt;
+export default {
+}
+&lt;/script&gt;
+&lt;style lang=&quot;scss&quot;&gt;
+&lt;/style&gt;
+</code></pre>
+<h4 id="实现效果"><a href="#实现效果" class="headerlink" title="实现效果"></a>实现效果</h4><p><img src="https://user-gold-cdn.xitu.io/2019/12/30/16f55700de463c65?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="demo"></p>
+<h3 id="如何封装请求"><a href="#如何封装请求" class="headerlink" title="如何封装请求"></a>如何封装请求</h3><h4 id="原理与解决方案-5"><a href="#原理与解决方案-5" class="headerlink" title="原理与解决方案"></a>原理与解决方案</h4><p>基本上就是对 axios 的封装，封装主要有两个目的。</p>
+<ul>
+<li>修改一些基础的配置：请求地址，超时，其他的杂七杂八的</li>
+<li>统一操作：统一处理错误，统一处理请求参数和格式，响应参数和格式。统一处理 message，统一拦截挂载等等。</li>
+</ul>
+<p>网上已经有很多类似的文章了， 我这里给出我常用的封装方案。</p>
+<h4 id="实践-4"><a href="#实践-4" class="headerlink" title="实践"></a>实践</h4><h5 id="根据不同环境设置请求地址"><a href="#根据不同环境设置请求地址" class="headerlink" title="根据不同环境设置请求地址"></a>根据不同环境设置请求地址</h5><pre><code class="js">// .env-default.js 文件
+// 不同环境访问不同的路径
+const api = {
+  develop: &#39;http://xxxx:8080&#39;,
+  mock: &#39;http://xxxx&#39;,
+  feature: &#39;http://xxxx&#39;,
+  test: &#39;http://xxxx&#39;,
+  production: &#39;http://xxxx&#39;
+}
+
+export const baseURL = api[process.env.NODE_ENV || &#39;dev&#39;]
+</code></pre>
+<blockquote>
+<p>因为每个人开发环境，mock环境不一定相同，这个文件建议 gitignore忽略掉。模版可以写在 readme 文档中，启动项目时加入文件。</p>
+</blockquote>
+<h5 id="新建一个-utils-工具"><a href="#新建一个-utils-工具" class="headerlink" title="新建一个 utils 工具"></a>新建一个 <code>utils</code> 工具</h5><p>我们现在将 axios 封装成我们自己需要的配置，然后定义四个常用的请求方法供调用</p>
+<pre><code class="js">// utils/http.js 文件
+import axios from &#39;axios&#39;
+import { baseURL } from &#39;../../.env-defalut.js&#39;
+
+// axios 配置
+const defaultBaseUrl = &#39;http://localhost:8080/&#39;
+// 默认超时时间
+axios.defaults.timeout = 15000
+// 数据接口域名统一配置.env
+axios.defaults.baseURL = baseURL || defaultBaseUrl 
+
+// http request 拦截器
+axios.interceptors.request.use(
+  (config) =&gt; {
+    config.headers = {
+    }
+    return config
+  },
+  (err) =&gt; {
+    return Promise.reject(err)
+  }
+)
+
+// http response 拦截器
+axios.interceptors.response.use(
+  (response) =&gt; {
+    return response
+  },
+  (error) =&gt; {
+    const data = error.response.data
+    return Promise.reject(data || error)
+  }
+)
+
+export default axios
+
+/**
+ * fetch 请求方法
+ * @param {*} url
+ * @param {*} params
+ */
+export function fetch(url, params = {}) {
+  return new Promise((resolve, reject) =&gt; {
+    axios
+      .get(url, {
+        params: params
+      })
+      .then((response) =&gt; {
+        resolve(response.data)
+      })
+      .catch((err) =&gt; {
+        reject(err)
+      })
+  })
+}
+
+/**
+ * post 请求方法，发送数据格式 json
+ * @param {*} url
+ * @param {*} data
+ */
+export function post(
+  url,
+  data = {},
+  config = {
+    transformRequest: [
+      function(fData, headers) {
+        headers[&#39;Content-Type&#39;] = &#39;application/json&#39;
+        return JSON.stringify(fData)
+      }
+    ]
+  }
+) {
+  return new Promise((resolve, reject) =&gt; {
+    axios.post(url, data, config).then(
+      (response) =&gt; {
+        resolve(response.data)
+      },
+      (err) =&gt; {
+        reject(err)
+      }
+    )
+  })
+}
+
+/**
+ * patch 请求方法，发送数据格式 json
+ * @param {*} url
+ * @param {*} data
+ */
+export function patch(url, data = {}) {
+  return new Promise((resolve, reject) =&gt; {
+    axios
+      .patch(url, data, {
+        transformRequest: [
+          function(fData, headers) {
+            headers[&#39;Content-Type&#39;] = &#39;application/json&#39;
+            return JSON.stringify(fData)
+          }
+        ]
+      })
+      .then(
+        (response) =&gt; {
+          resolve(response.data)
+        },
+        (err) =&gt; {
+          reject(err)
+        }
+      )
+  })
+}
+
+export function del(url, data) {
+  return new Promise((resolve, reject) =&gt; {
+    axios.delete(url, { data }).then(
+      (response) =&gt; {
+        resolve(response.data)
+      },
+      (err) =&gt; {
+        reject(err)
+      }
+    )
+  })
+}
+</code></pre>
+<h3 id="如何管理-api"><a href="#如何管理-api" class="headerlink" title="如何管理 api"></a>如何管理 api</h3><h4 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h4><p>首先要制定一个 api 的原则<br>我的原则一般是这些：</p>
+<ul>
+<li>干净纯粹</li>
+<li>尽量不要处理数据</li>
+<li>独立单一不要互相依赖</li>
+</ul>
+<p>好处在于：不在 api 里面处理数据，api里面的接口和接口文档上一样。避免别人引用我的api，还要去看代码，只需要看文档就好了。</p>
+<blockquote>
+<p>例子：想象这样一种情况，别人引用了我的 api，突然发现响应数据不对。首先它排查到页面数据没更改。看了api文档，数据也没问题，最后发现我在写 api 的时候进行了处理，这个 api 呢又不能改动，改了影响我自己的模块。只能它在重新写一个api，这样显得很繁杂了，不够干净优雅。</p>
+</blockquote>
+<pre><code class="js">import { fetch, post } from &#39;@/utils/http&#39;
+// 用户登陆
+export const login = data =&gt; post(&#39;/user/login&#39;, data)
+// 获取用户信息
+export const getUserInfo = (data) =&gt; fetch(&#39;/api/user/info&#39;, data)
+</code></pre>
+<p>如果需要处理数据，要么使用一个中间工具处理，要么在页面里面处理。当然还是实际问题实际分析。</p>
+<h3 id="如何使用mock模拟数据"><a href="#如何使用mock模拟数据" class="headerlink" title="如何使用mock模拟数据"></a>如何使用<code>mock</code>模拟数据</h3><h4 id="原理与解决方案-6"><a href="#原理与解决方案-6" class="headerlink" title="原理与解决方案"></a>原理与解决方案</h4><p>一般就是两种方案，一是模拟后端，使用远程在线 JSON 服务器。另外一种搭建本地 JSON 或者 使用现成的 Node 服务器拦截请求。</p>
+<blockquote>
+<p>这两种方式各有千秋，没有优劣之分，适合就是最好的。</p>
+</blockquote>
+<h4 id="远程在线mock"><a href="#远程在线mock" class="headerlink" title="远程在线mock"></a>远程在线<code>mock</code></h4><p>我用过的远程在线<code>mock</code></p>
+<ul>
+<li>apizza：好用，功能齐全，喜欢他的文件展开目录<code>api</code>，免费版只支持 2 个人共同编辑</li>
+<li>swagger：开源免费，<code>api</code>管理太凌乱，</li>
+<li>rap/rap2：开源免费，可以搭建本地<code>api</code>，需要自己搭建</li>
+</ul>
+<p>使用远程<code>mock</code>的优点：</p>
+<ul>
+<li>不需要在项目内部增加<code>mock</code></li>
+<li>功能更加全面完善</li>
+<li>可以在接口文档基础上<code>mock</code>，与接口文档放在一起查看更加方便。</li>
+</ul>
+<p>缺点：需要自己另外搭建服务器，只支持静态的<code>mock</code>，不能与单元测试结合使用</p>
+<h4 id="本地JSON-mock"><a href="#本地JSON-mock" class="headerlink" title="本地JSON mock"></a>本地JSON mock</h4><ul>
+<li>使用 <code>webpack</code> 内部 mock 配置</li>
+</ul>
+<pre><code class="js">devServer: {
+    // 接口未实现情况下，使用mock
+    before: require(&#39;./mock&#39;)
+}
+</code></pre>
+<p>基本原理：主要是使用 node 读取文件，转换成 JSON 格式，使用<code>mock.js</code> 模拟数据，最后 webpack 拦截请求生成<code>json</code>响应数据</p>
+<pre><code class="js">const Mock = require(&#39;mockjs&#39;)
+
+module.exports = (app) =&gt; {
+    function getJsonFile (filePath) {
+        var json = fs.readFileSync(path.resolve(__dirname, filePath), &#39;utf-8&#39;)
+        return JSON.parse(json)
+    },
+    const returnMock = (datafile, res, req) =&gt; {
+        setTimeout(() =&gt; {
+            var json
+            if (/\.json$/.test(datafile)) {
+                // json文件暴露的是mock的模板
+                json = getJsonFile(datafile)
+            } else if (/\.js$/.test(datafile)) {
+                json = require(datafile)(req.query)
+            }
+            res.json(Mock.mock(json))
+        }, 500)
+    }
+}
+</code></pre>
+<ul>
+<li>使用 <code>json-server</code> 搭建<br>主要分为下面几步</li>
+</ul>
+<ol>
+<li><code>npm</code> 安装 <code>json-server</code></li>
+<li>编写 <code>npm</code> 脚本命令，引入 <code>mock</code> 配置文件</li>
+<li>编写 <code>mock</code> 路由匹配规则<blockquote>
+<p>比较简单这里不详细描述了！</p>
+</blockquote>
+</li>
+</ol>
+<p>本地的缺点在于需要</p>
+<ul>
+<li>前端需要根据<code>api</code>文档写<code>mock</code>数据格式</li>
+<li>功能没有远程<code>mock</code>那么完善，支持<code>restful</code>需要去研究下</li>
+<li>也是需要配置相关<code>mock</code>工具</li>
+</ul>
+<p>优点在于</p>
+<ul>
+<li>不用查看编辑<code>api</code>文档</li>
+<li>在代码中就可以更改和查看<code>mock</code>数据</li>
+<li>支持使用<code>JavaScipt</code>动态处<code>mock</code>，可以与单元测试结合使用</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://github.com/commitizen/cz-cli" target="_blank" rel="noopener">commitizen</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/import" target="_blank" rel="noopener">MDN import()</a></li>
+<li><a href="https://youzan.github.io/vant/#/zh-CN/intro" target="_blank" rel="noopener">vant 文档</a></li>
+<li><a href="https://eslint.org/" target="_blank" rel="noopener">eslint 文档</a></li>
+<li><a href="https://router.vuejs.org/zh/" target="_blank" rel="noopener">vue-router 文档</a></li>
+<li><a href="https://www.sasscss.com/getting-started/" target="_blank" rel="noopener">sass 文档</a></li>
+<li><a href="https://github.com/axios/axios" target="_blank" rel="noopener">axios 文档</a></li>
+</ul>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/favicon.png" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <!-- <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd> -->
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">171 <p>Articles</p></a></li>
+                    <li><a href="/categories">26 <p>Categories</p></a></li>
+                    <li><a href="/tags">55 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概览"><span class="toc-number">1.</span> <span class="toc-text">概览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#问题"><span class="toc-number">2.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实践"><span class="toc-number">3.</span> <span class="toc-text">实践</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#如何规范-git-提交"><span class="toc-number">3.1.</span> <span class="toc-text">如何规范 git 提交</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何管理代码风格"><span class="toc-number">3.2.</span> <span class="toc-text">如何管理代码风格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何提升编码效率"><span class="toc-number">3.3.</span> <span class="toc-text">如何提升编码效率</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vue-中写样式要注意哪些方面，有哪些技巧呢？"><span class="toc-number">3.4.</span> <span class="toc-text">vue 中写样式要注意哪些方面，有哪些技巧呢？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何使用-pug"><span class="toc-number">3.5.</span> <span class="toc-text">如何使用 pug</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何管理你的资源"><span class="toc-number">3.6.</span> <span class="toc-text">如何管理你的资源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何管理你的路由"><span class="toc-number">3.7.</span> <span class="toc-text">如何管理你的路由</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#组件化开发"><span class="toc-number">3.8.</span> <span class="toc-text">组件化开发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何封装请求"><span class="toc-number">3.9.</span> <span class="toc-text">如何封装请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何管理-api"><span class="toc-number">3.10.</span> <span class="toc-text">如何管理 api</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何使用mock模拟数据"><span class="toc-number">3.11.</span> <span class="toc-text">如何使用mock模拟数据</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">4.</span> <span class="toc-text">参考资料</span></a></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+
+
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>

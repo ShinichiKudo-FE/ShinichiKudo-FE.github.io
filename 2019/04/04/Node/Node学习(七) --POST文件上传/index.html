@@ -1,0 +1,661 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Node学习(七) --POST文件上传 - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,简单的文件上传例子处理文件上传数据，也是前后端交互中重要的功能，它的处理方式与数据不同。
+接下来，通过一个例子查看服务端接收到的文件上传数据。
+首先，在post_file.html中，新建一个用与上,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://ShinichiKudo-FE.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">Node学习(七) --POST文件上传</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/Node"><b>「
+                    </b>NODE<b> 」</b></a>
+                
+                April 04, 2019
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2019/04/04/Node/Node%E5%AD%A6%E4%B9%A0(%E4%B8%83)%20--POST%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" title="Node学习(七) --POST文件上传" class="">Node学习(七) --POST文件上传</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    8.2k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    7 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Node/" rel="tag">Node</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h2 id="简单的文件上传例子"><a href="#简单的文件上传例子" class="headerlink" title="简单的文件上传例子"></a>简单的文件上传例子</h2><p>处理文件上传数据，也是前后端交互中重要的功能，它的处理方式与数据不同。</p>
+<p>接下来，通过一个例子查看服务端接收到的文件上传数据。</p>
+<p>首先，在<code>post_file.html</code>中，新建一个用与上传文件的表单：</p>
+<p><code>form</code>的属性<code>enctype=&quot;multipart/form-data&quot;</code>代表表单上传的是文件。</p>
+<p><code>enctype</code>的默认值为<code>enctype=&quot;application/x-www-form-urlencoded&quot;</code>表示上传的是数据类型，此时服务端接收到的数据为“username=lee&amp;password=123456&amp;file=upload.txt”。</p>
+<pre><code class="js">&lt;form action=&quot;http://localhost:8080/upload&quot; method=&quot;POST&quot; enctype=&quot;multipart/form-data&quot;&gt;
+  用户：&lt;input type=&quot;text&quot; name=&quot;username&quot; value=&quot;lee&quot;&gt;&lt;br/&gt;
+  密码：&lt;input type=&quot;password&quot; name=&quot;password&quot; value=&quot;123456&quot;&gt;&lt;br/&gt;
+  &lt;input type=&quot;file&quot; name=&quot;file&quot; id=&quot;&quot;&gt;&lt;br/&gt;
+  &lt;input type=&quot;submit&quot; value=&quot;提交&quot;&gt;
+&lt;/form&gt;
+</code></pre>
+<p>其次，在server.js中，查看接收到的表单提交数据：</p>
+<pre><code class="js">const http = require(&#39;http&#39;)
+
+const server = http.createServer((req, res) =&gt; {
+  let arr = []
+
+  req.on(&#39;data&#39;, (buffer) =&gt; {
+    arr.push(buffer)
+  })
+
+  req.on(&#39;end&#39;, () =&gt; {
+    let buffer = Buffer.concat(arr)
+
+    console.log(buffer.toString())
+  })
+})
+
+server.listen(8080)
+</code></pre>
+<p>最后，在表单中上传/lesson16/upload.txt文件，并查看打印出的结果：</p>
+<pre><code class="js">------WebKitFormBoundaryL5AGcit70yhKB92Y
+Content-Disposition: form-data; name=&quot;username&quot;
+
+lee
+------WebKitFormBoundaryL5AGcit70yhKB92Y
+Content-Disposition: form-data; name=&quot;password&quot;
+
+123456
+Content-Disposition: form-data; name=&quot;file&quot;; filename=&quot;upload.txt&quot;
+Content-Type: text/plain
+
+upload
+------WebKitFormBoundaryL5AGcit70yhKB92Y--
+</code></pre>
+<h2 id="文件上传数据分析"><a href="#文件上传数据分析" class="headerlink" title="文件上传数据分析"></a>文件上传数据分析</h2><p>通过分析上面这个例子中，服务端接收到的数据，可以得到以下信息：</p>
+<p><code>.表单上传的数据，被分隔符“------WebKitFormBoundaryL5AGcit70yhKB92Y”隔开，分隔符在每次上传时都不同。分隔符数据可以从</code>req.headers[‘content-type’]<code>中获取，如：</code>const boundary = ‘–’ + req.headers[‘content-type’].split(‘; ‘)[1].split(‘=’)[1]`。</p>
+<p>2.前两段数据中，分别可以获取到表单上传的字段名name=”username”，以及数据“lee”。</p>
+<p>3.第三段数据中，多了一个字段filename=”upload.txt”，它表示的是文件的原始名称。以及可以获取到文件类型“Content-Type: text/plain”，表示这是一个文本文件。最后是文件的内容“upload”。</p>
+<p>由此可以看出，文件上传数据虽然有些乱，但还是有规律的，那么处理思路就是按照规律，将数据切割之后，取出其中有用的部分。</p>
+<h2 id="文件上传数据简化"><a href="#文件上传数据简化" class="headerlink" title="文件上传数据简化"></a>文件上传数据简化</h2><p>先回顾一下上面的数据，并将回车符标记出来：</p>
+<pre><code class="js">------WebKitFormBoundaryL5AGcit70yhKB92Y\r\n
+Content-Disposition: form-data; name=&quot;username&quot;\r\n
+\r\n
+lee\r\n
+------WebKitFormBoundaryL5AGcit70yhKB92Y\r\n
+Content-Disposition: form-data; name=&quot;password&quot;\r\n
+\r\n
+123456\r\n
+Content-Disposition: form-data; name=&quot;file&quot;; filename=&quot;upload.txt&quot;\r\n
+Content-Type: text/plain\r\n
+\r\n
+upload\r\n
+------WebKitFormBoundaryL5AGcit70yhKB92Y--
+</code></pre>
+<a id="more"></a>
+<p>可以看出，每段数据的结构其实是这样的：</p>
+<pre><code class="js">------WebKitFormBoundaryL5AGcit70yhKB92Y\r\nContent-Disposition: form-data; name=&quot;username&quot;\r\n\r\nlee\r\
+</code></pre>
+<p>将每段上传数据简化如下：</p>
+<pre><code class="js">&lt;分隔符&gt;\r\n字段头\r\n\r\n内容\r\n
+</code></pre>
+<p>也就是说，整个表单的数据，就是按照这样的数据格式组装而成。</p>
+<p>需要注意的是，在表单数据的结尾不再是\r\n，而是“–”。</p>
+<h2 id="文件上传数据处理步骤"><a href="#文件上传数据处理步骤" class="headerlink" title="文件上传数据处理步骤"></a>文件上传数据处理步骤</h2><p>1.用&lt;分隔符&gt;切分数据：</p>
+<p>2.删除数组头尾数据：</p>
+<p>3.将每一项数据头尾的的\r\n删除：</p>
+<p>4.将每一项数据中间的\r\n\r\n删除，得到最终结果：</p>
+<h2 id="Buffer的数据处理"><a href="#Buffer的数据处理" class="headerlink" title="Buffer的数据处理"></a>Buffer的数据处理</h2><p>由于文件都是二进制数据，不能直接将其转换为字符串后再进行处理，否则数据会出错，因此要通过Buffer模块进行数据处理操作。</p>
+<p>Buffer模块提供了indexOf方法获取Buffer数据中，其参数所在位置的index值。</p>
+<p>Buffer模块提供了slice方法，可通过index值切分Buffer数据。</p>
+<pre><code class="js">let buffer = Buffer.from(&#39;lee\r\nchen\r\ntest&#39;)
+
+const index = buffer.indexOf(&#39;\r\n&#39;)
+
+console.log(index)
+console.log(buffer.slice(0, index).toString())
+
+</code></pre>
+<p>可以看到打印结果分别为3和”lee”，也就是说，我们先找到了”\r\n”所在的index为3，之后从Buffer数据的index为0的位置，切割到index为3的位置，得到了正确的结果。</p>
+<p>由此，可以封装一个专门用于切割Buffer数据的方法：</p>
+<pre><code class="js">module.exports = function bufferSplit(buffer, separator) {
+  let result = [];
+  let index = 0;
+
+  while ((index = buffer.indexOf(separator)) != -1) {
+    result.push(buffer.slice(0, index));
+    buffer = buffer.slice(index + separator.length);
+  }
+  result.push(buffer);
+
+  return result;
+}
+</code></pre>
+<p>有了bufferSplit方法，就可以正式开始处理数据了。</p>
+<h2 id="文件上传数据处理"><a href="#文件上传数据处理" class="headerlink" title="文件上传数据处理"></a>文件上传数据处理</h2><p>根据上面的思路，就可以实现一个完整的文件上传流程。</p>
+<pre><code class="js">const http = require(&#39;http&#39;)
+const fs = require(&#39;fs&#39;)
+const bufferSplit = require(&#39;./bufferSplit&#39;)
+
+const server = http.createServer((req, res) =&gt; {
+  const boundary = `--${req.headers[&#39;content-type&#39;].split(&#39;; &#39;)[1].split(&#39;=&#39;)[1]}`  // 获取分隔符
+  let arr = []
+
+  req.on(&#39;data&#39;, (buffer) =&gt; {
+    arr.push(buffer)
+  })
+
+  req.on(&#39;end&#39;, () =&gt; {
+    const buffer = Buffer.concat(arr)
+    console.log(buffer.toString())
+
+    // 1. 用&lt;分隔符&gt;切分数据
+    let result = bufferSplit(buffer, boundary)
+    console.log(result.map(item =&gt; item.toString()))
+
+    // 2. 删除数组头尾数据
+    result.pop()
+    result.shift()
+    console.log(result.map(item =&gt; item.toString()))
+
+    // 3. 将每一项数据头尾的的\r\n删除
+    result = result.map(item =&gt; item.slice(2, item.length - 2))
+    console.log(result.map(item =&gt; item.toString()))
+
+    // 4. 将每一项数据中间的\r\n\r\n删除，得到最终结果
+    result.forEach(item =&gt; {
+      console.log(bufferSplit(item, &#39;\r\n\r\n&#39;).map(item =&gt; item.toString()))
+
+      let [info, data] = bufferSplit(item, &#39;\r\n\r\n&#39;)  // 数据中含有文件信息，保持为Buffer类型
+
+      info = info.toString()  // info为字段信息，这是字符串类型数据，直接转换成字符串，若为文件信息，则数据中含有一个回车符\r\n，可以据此判断数据为文件还是为普通数据。
+
+      if (info.indexOf(&#39;\r\n&#39;) &gt;= 0) {  // 若为文件信息，则将Buffer转为文件保存
+        // 获取字段名
+        let infoResult = info.split(&#39;\r\n&#39;)[0].split(&#39;; &#39;)
+        let name = infoResult[1].split(&#39;=&#39;)[1]
+        name = name.substring(1, name.length - 1)
+
+        // 获取文件名
+        let filename = infoResult[2].split(&#39;=&#39;)[1]
+        filename = filename.substring(1, filename.length - 1)
+        console.log(name)
+        console.log(filename)
+
+        // 将文件存储到服务器
+        fs.writeFile(`./upload/${filename}`, data, err =&gt; {
+          if (err) {
+            console.log(err)
+          } else {
+            console.log(&#39;文件上传成功&#39;)
+          }
+        })
+      } else {  // 若为数据，则直接获取字段名称和值
+        let name = info.split(&#39;; &#39;)[1].split(&#39;=&#39;)[1]
+        name = name.substring(1, name.length - 1)
+        const value = data.toString()
+        console.log(name, value)
+      }
+    })
+  })
+})
+
+server.listen(8080)
+</code></pre>
+<h2 id="multiparty"><a href="#multiparty" class="headerlink" title="multiparty"></a>multiparty</h2><p>我们可以尝试使用第三方库来完成POST请求的处理，如<a href="https://github.com/pillarjs/multiparty" target="_blank" rel="noopener">multiparty</a>。</p>
+<h3 id="multiparty-demo"><a href="#multiparty-demo" class="headerlink" title="multiparty demo"></a>multiparty demo</h3><p>通过如下例子，可以测试一下multiparty的功能。</p>
+<p>它会在field事件中，将数据信息的字段名和值返回。在file事件中，将文件的字段名和信息返回。</p>
+<p>上传成功后，会在指定的文件夹创建一个上传的文件，并会将文件重命名（如：IqUHkFe0u2h2TsiBztjKxoBR.jpg），以防止重名。</p>
+<p>若上传出现失败，已保存的文件会自动删除。</p>
+<p>close事件表示表单数据全部解析完成，用户可以在其中处理已经接收到的信息。</p>
+<pre><code class="js">const http = require(&#39;http&#39;)
+const multiparty = require(&#39;multiparty&#39;)
+
+const server = http.createServer((req, res) =&gt; {
+  const form = new multiparty.Form({
+    uploadDir: &#39;./upload&#39; // 指定文件存储目录
+  })
+
+  form.parse(req) // 将请求参数传入，multiparty会进行相应处理
+
+  form.on(&#39;field&#39;, (name, value) =&gt; { // 接收到数据参数时，触发field事件
+    console.log(name, value)
+  })
+
+  form.on(&#39;file&#39;, (name, file, ...rest) =&gt; { // 接收到文件参数时，触发file事件
+    console.log(name, file)
+  })
+
+  form.on(&#39;close&#39;, () =&gt; {  // 表单数据解析完成，触发close事件
+    console.log(&#39;表单数据解析完成&#39;)
+  })
+})
+
+server.listen(8080)
+</code></pre>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/favicon.png" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <!-- <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd> -->
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">171 <p>Articles</p></a></li>
+                    <li><a href="/categories">26 <p>Categories</p></a></li>
+                    <li><a href="/tags">55 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#简单的文件上传例子"><span class="toc-number">1.</span> <span class="toc-text">简单的文件上传例子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件上传数据分析"><span class="toc-number">2.</span> <span class="toc-text">文件上传数据分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件上传数据简化"><span class="toc-number">3.</span> <span class="toc-text">文件上传数据简化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件上传数据处理步骤"><span class="toc-number">4.</span> <span class="toc-text">文件上传数据处理步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Buffer的数据处理"><span class="toc-number">5.</span> <span class="toc-text">Buffer的数据处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件上传数据处理"><span class="toc-number">6.</span> <span class="toc-text">文件上传数据处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#multiparty"><span class="toc-number">7.</span> <span class="toc-text">multiparty</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#multiparty-demo"><span class="toc-number">7.1.</span> <span class="toc-text">multiparty demo</span></a></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+
+
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>

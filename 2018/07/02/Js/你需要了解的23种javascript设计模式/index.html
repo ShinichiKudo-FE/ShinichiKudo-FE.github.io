@@ -1,0 +1,707 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>你需要了解的23种javascript设计模式 - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,为什么要学习设计模式？在许多访谈中，你可能会遇到很多面向对象编程中的接口，抽象类，代理和以及其他与设计模式相关的问题。 一旦了解了设计模式，它会让你轻松应对任何访谈，并可以在你的项目中应用这些特性。,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://ShinichiKudo-FE.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">你需要了解的23种javascript设计模式</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/Js"><b>「
+                    </b>JS<b> 」</b></a>
+                
+                July 02, 2018
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2018/07/02/Js/%E4%BD%A0%E9%9C%80%E8%A6%81%E4%BA%86%E8%A7%A3%E7%9A%8423%E7%A7%8Djavascript%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" title="你需要了解的23种javascript设计模式" class="">你需要了解的23种javascript设计模式</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    11k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    10 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h1 id="为什么要学习设计模式？"><a href="#为什么要学习设计模式？" class="headerlink" title="为什么要学习设计模式？"></a>为什么要学习设计模式？</h1><p>在许多访谈中，你可能会遇到很多面向对象编程中的接口，抽象类，代理和以及其他与设计模式相关的问题。 一旦了解了设计模式，它会让你轻松应对任何访谈，并可以在你的项目中应用这些特性。在应用程序中实现设计模式已经得到验证和测试。</p>
+<p>为了使应用程序具有可扩展性，可靠性和易维护性，应该编写符合设计模式的代码。</p>
+<h2 id="什么是设计模式"><a href="#什么是设计模式" class="headerlink" title="什么是设计模式"></a>什么是设计模式</h2><ul>
+<li>设计模式是我们每天编程遇到的可重用解决方案。</li>
+<li>设计模式主要是为了解决对象的生成和整合问题。</li>
+<li>换句话说，设计模式可以作为可应用于现实世界编程问题的模板。</li>
+</ul>
+<h2 id="设计模式的发展历史"><a href="#设计模式的发展历史" class="headerlink" title="设计模式的发展历史"></a>设计模式的发展历史</h2><p>设计模式的概念是由四人帮（《设计模式（可复用面向对象软件的基础）》的四位作者）提出。</p>
+<blockquote>
+<p>四人帮把这本书分成两部分：</p>
+</blockquote>
+<ul>
+<li>第一部分解释面向对象编程的优缺点。</li>
+<li>第二部分是关于 23 个经典设计模式的演变。</li>
+</ul>
+<p>自提出设计模式概念后，四人帮设计模式在软件开发生命周期中发挥了重要作用。</p>
+<h2 id="设计模式分类"><a href="#设计模式分类" class="headerlink" title="设计模式分类"></a>设计模式分类</h2><p>根据实际应用中遇到的不同问题，四人帮将设计模式分为三种类型。</p>
+<ul>
+<li>创建型模式</li>
+<li>结构型模式</li>
+<li>行为型模式</li>
+</ul>
+<p>接下来将概述属于这三种类型的 23 种设计模式的主要概念。</p>
+<h2 id="创建型模式"><a href="#创建型模式" class="headerlink" title="创建型模式"></a>创建型模式</h2><p>这类模式用于<strong>对象的生成和生命周期的管理</strong>。</p>
+<blockquote>
+<p>创建模式可以决定生成哪些对象，提高了程序的灵活性，模式如下：</p>
+</blockquote>
+<ul>
+<li>抽象工厂模式</li>
+<li>生成器模式</li>
+<li>工厂方法模式</li>
+<li>单例模式</li>
+<li>原型模式</li>
+</ul>
+<h3 id="JavaScript-抽象工厂模式"><a href="#JavaScript-抽象工厂模式" class="headerlink" title="JavaScript 抽象工厂模式"></a>JavaScript 抽象工厂模式</h3><blockquote>
+<p>抽象工厂模式究竟是什么？</p>
+</blockquote>
+<a id="more"></a>
+<p>它就像一个工厂，但一切被封锁起来：</p>
+<ul>
+<li>提供对象的方法</li>
+<li>构建对象的工厂</li>
+<li>最终的对象</li>
+<li>最终对象包含使用策略模式的对象</li>
+</ul>
+<p>策略模式只是使用组合的方式，换句话说，它的类字段实际上是对象本身。</p>
+<blockquote>
+<p>抽象工厂模式的用处？</p>
+</blockquote>
+<p>抽象工厂模式可以创建类簇类的对象，而不需要指定具体的类，这使得抽象工厂很灵活。</p>
+<p>通过抽象工厂模式可以对任何类簇对象进行建模并通过统一的接口供外部对象使用。</p>
+<p>抽象工厂唯一不好的地方是<strong>它可能变得非常复杂</strong></p>
+<h3 id="JavaScript-的生成器模式（Builder-模式）"><a href="#JavaScript-的生成器模式（Builder-模式）" class="headerlink" title="JavaScript 的生成器模式（Builder 模式）"></a>JavaScript 的生成器模式（Builder 模式）</h3><blockquote>
+<p>Builder 模式是什么？</p>
+</blockquote>
+<p>Builder 模式是一种用于创建由其他对象组合构成的对象的模式。创建部件的方法应该独立于主对象。另外，为了从业务方隐藏部件的创建细节，两者是相互独立的。</p>
+<p>在使用生成器模式时，生成器知道所有的细节，且创建细节完全对其他相关类屏蔽。</p>
+<h3 id="JavaScript-工厂方法模式"><a href="#JavaScript-工厂方法模式" class="headerlink" title="JavaScript 工厂方法模式"></a>JavaScript 工厂方法模式</h3><blockquote>
+<p>什么是工厂方法模式？</p>
+</blockquote>
+<p>根据定义，只要想一个方法返回公共超类的几个可能的类中的一个，就可以使用工厂模式。</p>
+<p>假设我想随机向屏幕上射击敌人。那么如果所有东西都硬编码好了，并且不知道敌人的具体类型会让处理变得很困难。</p>
+<p>但是，假设我创建了一个随机数生成器，每个可能的敌人类都由一个数字代替，并可以由该随机数生成器返回。</p>
+<p>然后可以将这个数字发送给工厂对象，这样可以返回一个动态创建的敌人。</p>
+<p>所以，MOL 的主要概念非常重要，我们希望能够在运行时选择类，这就是工厂模式能够提供的。</p>
+<blockquote>
+<p>何时使用工厂模式</p>
+</blockquote>
+<p>当不知道需要何种类型的对象时可以使用工厂方法模式。</p>
+<p>但是，有一点需要注意，确保所有潜在的类都具有相同的子类层次结构，这意味着在继承路径上有相同的父类。</p>
+<p>可以使用工厂模式来集中类别选择的代码。或是不希望用户知道每一个可能的子类时。</p>
+<h3 id="JavaScript-单例模式"><a href="#JavaScript-单例模式" class="headerlink" title="JavaScript 单例模式"></a>JavaScript 单例模式</h3><blockquote>
+<p>什么是单例模式？</p>
+</blockquote>
+<p>当想要避免实例化多个对象时使用单例模式。单例使得只能从类实例化一个对象。</p>
+<p>现在你可能会问自己，我什么时候会想要这样做？ 其实，有很多场景。</p>
+<p>我们已经演示过拼字游戏里使用一个类容纳所有可能的字母，并且拼字游戏是一款非常常见的棋盘游戏，这里使用单例模式是很明智的选择。</p>
+<p>这个单例类包含所有可能的拼字游戏字母，以便玩家可以使用这个单例类取得所有字母，不同玩家可以同时请求获取。</p>
+<p>单例使得每个玩家都共享相同的字母列表，每个玩家可以根据这个字母列表来拼接自己的单词。</p>
+<h3 id="Javascript-原型模式"><a href="#Javascript-原型模式" class="headerlink" title="Javascript 原型模式"></a>Javascript 原型模式</h3><blockquote>
+<p>什么是原型模式？</p>
+</blockquote>
+<p>当想要通过克隆或拷贝对象来生成对象时，这就是原型模式。</p>
+<p>通过原型模式可以在运行时添加已知父类的子类实例。</p>
+<p>当有许多类只在运行时需要使用时可以使用原型模式。原型模式的好处之一是减少了创建多个子类。</p>
+<h2 id="结构型模式"><a href="#结构型模式" class="headerlink" title="结构型模式"></a>结构型模式</h2><blockquote>
+<p>这类模式描述了向现有对象添加功能的不同方式简单地说，这个模式着重于解耦对象的接口实现模式如下：</p>
+</blockquote>
+<ul>
+<li>适配器模式</li>
+<li>桥接模式</li>
+<li>组合模式</li>
+<li>装饰者模式</li>
+<li>外观模式</li>
+<li>享元模式</li>
+<li>代理模式</li>
+</ul>
+<h3 id="JavaScript-适配器设计模式"><a href="#JavaScript-适配器设计模式" class="headerlink" title="JavaScript 适配器设计模式"></a>JavaScript 适配器设计模式</h3><blockquote>
+<p>适配器模式的作用</p>
+</blockquote>
+<p>适配器设计模式允许使用两个完全不兼容的接口一起工作，正如其名字一样，适配不同接口。</p>
+<p>假设你墙上的插座只有两座插头，但是你想连接一个三座的插头，这时就需要适配器了。</p>
+<p>当客户期望使用目标接口是两座插头，但是你只有三座插头，这就是适配器将要执行的操作 把三座转换成两座。</p>
+<p>适配器模式允许使用任何现有接口适配为目标接口。</p>
+<p>从另一个角度看任何类都可以协同工作只要适配器解决了所有类都必须实现相同接口的问题。</p>
+<h3 id="Javascript-桥接模式"><a href="#Javascript-桥接模式" class="headerlink" title="Javascript 桥接模式"></a>Javascript 桥接模式</h3><blockquote>
+<p>什么是桥接模式</p>
+</blockquote>
+<p>官方定义是将抽象与其实现分离开来，因此两者可以独立变化。</p>
+<p>该模式用于将抽象与其实现分开，以便两者都可以独立修改。该模式包含一个用于桥接抽象类和实现类的接口。通过桥接模式，两种类型都可以修改而不会相互影响。</p>
+<blockquote>
+<p>桥接模式实现指南</p>
+</blockquote>
+<p>当想要避免抽象与其实现之间的永久绑定时可以使用桥接模式。</p>
+<p>抽象和它们的实现都应该可以通过子类进行扩展。当抽象的实现有变化时不应该影响到调用方，及调用方不需要重新编译。</p>
+<p>当需要在多个对象之间共享一个实现时，可以选择这种模式。</p>
+<p>最后我们希望完全对调用方隐藏抽象的实现。</p>
+<h3 id="JavaScript-组合模式"><a href="#JavaScript-组合模式" class="headerlink" title="JavaScript 组合模式"></a>JavaScript 组合模式</h3><p>组合模式从定义上看起来很复杂，一旦用起来就会感觉很合理。</p>
+<p>它允许统一处理单个对象和对象组合，这是组合设计模式的典型定义。</p>
+<p>组合模式可以表示为<strong>部分 - 整体的层次结构</strong>。该结构的组件又可以划分为更小的组件。</p>
+<p>一个更合乎逻辑的定义是组合设计模式是<code>用来结构化数据或单独表示整个对象的每个部分的互相操作</code>。</p>
+<h3 id="JavaScript-装饰模式"><a href="#JavaScript-装饰模式" class="headerlink" title="JavaScript 装饰模式"></a>JavaScript 装饰模式</h3><blockquote>
+<p>什么是装饰模式？</p>
+</blockquote>
+<p>动态的为一个对象附加额外的功能，装饰模式可以不通过继承来实现功能扩展。</p>
+<p>这种模式属于结构设计模式类别，也被称为包装模式，装饰设计模式解决了在不改变对象现有结构的情况下添加附加功能的问题。</p>
+<p>另外，该模式创建了一个装饰器类，它包装原始类并在运行时向对象添加新的行为或操作。</p>
+<blockquote>
+<p>装饰模式的实现指南</p>
+</blockquote>
+<p>当选择这种模式时，<strong>需要动态地向单个对象添加新的功能，并且而不会影响其他对象</strong>。</p>
+<p>例如，在有些情况下，为原有代码添加新的功能可能会很困难，用修饰器修改代码会更容易些。</p>
+<p>通过继承来实现功能扩展会产生大量的子类，并且有可能这些子类还不足以覆盖所有需要扩展的功能。</p>
+<p>当无法查看类定义或无法继承时，需要选择装饰模式。</p>
+<p>例如，尽管类被封装起来无法修改，通过装饰模式仍然可以进行扩展，并且，我相信你肯定也遇到过无法通过继承来实现功能扩展的情况，在这些情况下，选择装饰模式。</p>
+<h3 id="Javascript-外观模式"><a href="#Javascript-外观模式" class="headerlink" title="Javascript 外观模式"></a>Javascript 外观模式</h3><blockquote>
+<p>什么是外观模式？</p>
+</blockquote>
+<p><strong>为子系统中的一组接口提供统一接口</strong>。外观模式定义了一个更高层次的接口，使子系统更易于使用。术语外观来自法语 façade，意思是正面或脸。</p>
+<p>简单来说是外观模式隐藏了子系统的实现复杂性，为我们提供了一个简洁的接口。该接口负责调用现有子系统的功能</p>
+<blockquote>
+<p>外观模式实现指南</p>
+</blockquote>
+<p>当我们想为子系统提供一个简单的接口时需要使用外观模式。随着子系统的发展，子系统往往会变得更加复杂。</p>
+<p>当我们在应用一些模式时，大多数模式会导致更多的类创建出来，这使得子系统可用性更好，更容易自定义需要的功能，但对于不太需要自定义的业务方而言，它也变得更加困难。</p>
+<p>外观模式将子系统包装成一个简单默认的接口，足以应付大多数情况的使用。</p>
+<p>另外，当业务方和子系统的实现存在过多依赖时也可以选择外观模式。</p>
+<p>在这种情况下，外观模式将子系统从业务方和其他子系统中分离出来，从而提高子系统的独立性和可移植性。</p>
+<p>到目前为止，如果子系统过于耦合，那么可以通过外观模式提供的接口来简化子系统之间的依赖。</p>
+<h3 id="JavaScript-享元模式"><a href="#JavaScript-享元模式" class="headerlink" title="JavaScript 享元模式"></a>JavaScript 享元模式</h3><p>当需要创建大量相似对象时需要使用享元模式，这里的大量是上万的量级而不是平时接触的上百。</p>
+<p>享元模式通过 <strong>共享对象的相似部分</strong>，避免重复创建，来达到减小内存的使用。</p>
+<h3 id="JavaScript-代理模式"><a href="#JavaScript-代理模式" class="headerlink" title="JavaScript 代理模式"></a>JavaScript 代理模式</h3><blockquote>
+<p>什么是代理设计模式？</p>
+</blockquote>
+<p>代理是一个 <strong>将被用来限制访问另一个类的类</strong>。</p>
+<p>这可能是出于安全的考虑，通过代理来决定需要代理的对象哪些方法是可用的。</p>
+<h2 id="行为型模式"><a href="#行为型模式" class="headerlink" title="行为型模式"></a>行为型模式</h2><p>这类模式描述了<code>对象如何相互作用</code>，模式如下：</p>
+<ul>
+<li>责任链模式</li>
+<li>命令模式</li>
+<li>解释器模式</li>
+<li>迭代器模式</li>
+<li>中介者模式</li>
+<li>备忘录模式</li>
+<li>观察者模式</li>
+<li>状态模式</li>
+<li>策略模式</li>
+<li>模板方法模式</li>
+<li>访问者模式</li>
+</ul>
+<h3 id="JavaScript-责任链模式"><a href="#JavaScript-责任链模式" class="headerlink" title="JavaScript 责任链模式"></a>JavaScript 责任链模式</h3><p>责任链模式有一组对象，期望它们之间能够解决问题，如果第一个对象无法解决它，则将数据传递给责任链中的下一个数据。</p>
+<p>通过多个接收者对象来处理请求，避免将请求的发送者耦合到其接收者。将接收对象串联起来，传递请求直到被其中一个处理掉。</p>
+<p>责任链模式为 <strong>请求创建一系列接收者对象</strong>。 在这种模式下，通常每个接收器都包含对另一个接收器的引用。</p>
+<p>如果一个接收者不能处理该请求，则它将请求传递给下一个接受者。</p>
+<h3 id="JavaScript-命令模式"><a href="#JavaScript-命令模式" class="headerlink" title="JavaScript 命令模式"></a>JavaScript 命令模式</h3><blockquote>
+<p>什么是命令模式？</p>
+</blockquote>
+<p>命令设计模式是一种行为设计模式，其对象用于表示和封装稍后调用某个方法所需的所有信息。该信息包括方法名称，拥有方法的对象和方法参数的值。</p>
+<p>基本上，它允许你做的是存储代码清单，在稍后或多次执行，并且通常使用命令模式可以撤销命令。</p>
+<p>当这些封装的对象调用 execute() 方法，业务方或程序会执行指定命令或一段代码。</p>
+<p>然后，调用者对象在调用时会传递命令给命令接收者，命令接收者拥有实际想要执行的代码，一旦从调用者接收到命令就立马执行。</p>
+<p>例如有个”TurnTVOn”的命令对象，然后一个“DeviceButton”的对象，一旦”DeviceButton”对象被调用就会发送”TurnTVOn”命令。所有这些之间的接口可以使用多态，所以无论何时调用 TurnTVOn，该方法将由命令接收者执行。</p>
+<h3 id="JavaScript-解释器模式"><a href="#JavaScript-解释器模式" class="headerlink" title="JavaScript 解释器模式"></a>JavaScript 解释器模式</h3><blockquote>
+<p>什么是解释器模式</p>
+</blockquote>
+<p>解释器模式很容易被忽略，并且网上很少有使用这种模式。</p>
+<p>但是，如果与 JavaScript 反射技术结合使用，会变得非常有用。它用于将数据的一种表示转换为另一种表示。</p>
+<h3 id="JavaScript-迭代器模式"><a href="#JavaScript-迭代器模式" class="headerlink" title="JavaScript 迭代器模式"></a>JavaScript 迭代器模式</h3><blockquote>
+<p>什么是迭代器模式？</p>
+</blockquote>
+<p>迭代器模式提供一种统一的方式来访问不同类型的对象集合。</p>
+<p>例如，Array，ArrayList 和 HashTable，这三个集合包含相同类型的对象，通过迭代器可以取到集合里的每一个元素，并做相同的处理。</p>
+<p>迭代器模式做的是提供统一的方式来循环遍历这些不同类型的集合。</p>
+<h3 id="JavaScript-中介者计模式"><a href="#JavaScript-中介者计模式" class="headerlink" title="JavaScript 中介者计模式"></a>JavaScript 中介者计模式</h3><blockquote>
+<p>什么是中介者模式？</p>
+</blockquote>
+<p>用于处理相关对象之间的通信。所有通信由中介者完成，通信双方不需要了解对方的任何信息。</p>
+<p>更严格的定义是，中介者模式允许通过封装不同对象之间相互作用和相互通信的方式来实现松耦合，并且中介者模式允许每个对象的行为彼此独立地变化。</p>
+<h3 id="Javascript-备忘录模式"><a href="#Javascript-备忘录模式" class="headerlink" title="Javascript 备忘录模式"></a>Javascript 备忘录模式</h3><blockquote>
+<p>什么是备忘录模式？</p>
+</blockquote>
+<p>用于存储对象以前状态的模式，首先，备忘录模式需要一个备忘录对象用于存储对象的不同状态，不同的状态及一些字段拥有不同的值。</p>
+<p>然后，用于从当前目标备忘录对象读写值的初始对象，创建新的备忘录对象并赋值给当前备忘录对象。</p>
+<p>最后，内部是一个 ArrayList 对象用于持有之前所有的备忘录对象，该 ArrayList 对象同时用于存储和检索备忘录对象</p>
+<h3 id="Javascript-观察者模式"><a href="#Javascript-观察者模式" class="headerlink" title="Javascript 观察者模式"></a>Javascript 观察者模式</h3><blockquote>
+<p>什么时候使用观察者模式？</p>
+</blockquote>
+<p>当另一个对象更改时需要其他对象接收更新。例如，假设我们有一个对象或发布者代表股票市场中的数千个股票，当需要将更新发送给多个订阅者时，可以使用观察者模式来完成。</p>
+<blockquote>
+<p>观察者模式的好处</p>
+</blockquote>
+<p>松耦合。 对象或发布者完全不用知道观察者或订阅者的存在，我把这分为两种不同的概念，因为我觉得发布 - 订阅更有意义，但 OLP 的基本术语使用的是对象 - 观察者。</p>
+<blockquote>
+<p>坏处</p>
+</blockquote>
+<p>观察者模式唯一的缺点是对象或发布者可能发送对观察者，订阅者无关紧要的更新。</p>
+<h3 id="JavaScript-状态模式"><a href="#JavaScript-状态模式" class="headerlink" title="JavaScript 状态模式"></a>JavaScript 状态模式</h3><blockquote>
+<p>什么是状态模式？</p>
+</blockquote>
+<p>它允许对象在其内部状态改变时改变其行为，这样让对象看起来改变了它所属的类。</p>
+<p>状态模式主要分为三个部分：</p>
+<ul>
+<li>首先，将拥有所谓的“上下文”或“账户”，它将要做的是维护一个将定义当前状态的 ConcreteState 子类的实例。</li>
+<li>然后，拥有“状态”，该状态定义了一个用于封装与上下文特定状态关联的行为接口。</li>
+<li>最后是具体的状态，每个子类将实现与上下文状态相关的行为</li>
+</ul>
+<h3 id="Javascript-策略模式"><a href="#Javascript-策略模式" class="headerlink" title="Javascript 策略模式"></a>Javascript 策略模式</h3><blockquote>
+<p>何时使用策略模式？</p>
+</blockquote>
+<p>如果要定义一个类，该类将具有与列表中的所有其他行为相似的行为，可以使用策略模式。</p>
+<p>例如，有的动物可以飞，有的动物不能飞，这里的相似行为就是飞行，不论该动物是否能飞行。</p>
+<p>可以从以下类中选择类对象：</p>
+<p>1.不会飞行<br>2.用翅膀飞翔<br>3.飞得快</p>
+<p>通过策略模式可以动态的创建全新的不同类型的飞行类动物。</p>
+<p>当需要动态决定需要使用的行为时可以使用策略模式。</p>
+<blockquote>
+<p>使用策略模式的其他好处</p>
+</blockquote>
+<p>它通常会减少很长的条件列表，所以如果你看到使用许多不同类型的条件时，策略模式会很有帮助。当然，还避免了重复的代码。</p>
+<p>策略模式可以防止其他类的变化影响到当前类。也可以向业务方隐藏复杂和敏感代码。</p>
+<p>坏处：<strong>策略模式会增加对象和类的数量</strong>。</p>
+<h3 id="JavaScript-模板方法模式"><a href="#JavaScript-模板方法模式" class="headerlink" title="JavaScript 模板方法模式"></a>JavaScript 模板方法模式</h3><blockquote>
+<p>什么是模板方法模式？</p>
+</blockquote>
+<p>用于创建一组执行类似方法的子类。</p>
+<p>要实现它，需要创建一个抽象类，它将包含一个名为模板方法的方法。</p>
+<p>创建包含称为模板方法的抽象类，并且模板方法包含每个子类对象将调用的一系列方法调用。在某些情况下子类也会重载一些不合适的方法调用。</p>
+<h3 id="Javascript-访问者模式"><a href="#Javascript-访问者模式" class="headerlink" title="Javascript 访问者模式"></a>Javascript 访问者模式</h3><blockquote>
+<p>什么是访问者模式</p>
+</blockquote>
+<p>访问者模式允许将方法添加到不同类型的类中 - 但它们不必是不同的类型 - 只会让复杂度有所增加，并不会对类有太多修改。</p>
+<p>这可以根据所使用的类制作完全不同的方法。</p>
+<p>也可以说访问者模式可以为现有类创建外部类来进行扩展以避免对原有类做修改。</p>
+<p>注意：掌握抽象，继承，多态，封装，接口，类和抽象类等面向对象概念的基本知识对于更好地理解设计模式非常重要。</p>
+<p><a href="https://mp.weixin.qq.com/s/Ov62U8kktVv7Jz0Ukhekkg" target="_blank" rel="noopener">原文地址</a></p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/favicon.png" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <!-- <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd> -->
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">171 <p>Articles</p></a></li>
+                    <li><a href="/categories">26 <p>Categories</p></a></li>
+                    <li><a href="/tags">55 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#为什么要学习设计模式？"><span class="toc-number">1.</span> <span class="toc-text">为什么要学习设计模式？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是设计模式"><span class="toc-number">1.1.</span> <span class="toc-text">什么是设计模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设计模式的发展历史"><span class="toc-number">1.2.</span> <span class="toc-text">设计模式的发展历史</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设计模式分类"><span class="toc-number">1.3.</span> <span class="toc-text">设计模式分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建型模式"><span class="toc-number">1.4.</span> <span class="toc-text">创建型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript-抽象工厂模式"><span class="toc-number">1.4.1.</span> <span class="toc-text">JavaScript 抽象工厂模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript-的生成器模式（Builder-模式）"><span class="toc-number">1.4.2.</span> <span class="toc-text">JavaScript 的生成器模式（Builder 模式）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript-工厂方法模式"><span class="toc-number">1.4.3.</span> <span class="toc-text">JavaScript 工厂方法模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript-单例模式"><span class="toc-number">1.4.4.</span> <span class="toc-text">JavaScript 单例模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Javascript-原型模式"><span class="toc-number">1.4.5.</span> <span class="toc-text">Javascript 原型模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结构型模式"><span class="toc-number">1.5.</span> <span class="toc-text">结构型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript-适配器设计模式"><span class="toc-number">1.5.1.</span> <span class="toc-text">JavaScript 适配器设计模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Javascript-桥接模式"><span class="toc-number">1.5.2.</span> <span class="toc-text">Javascript 桥接模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript-组合模式"><span class="toc-number">1.5.3.</span> <span class="toc-text">JavaScript 组合模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript-装饰模式"><span class="toc-number">1.5.4.</span> <span class="toc-text">JavaScript 装饰模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Javascript-外观模式"><span class="toc-number">1.5.5.</span> <span class="toc-text">Javascript 外观模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript-享元模式"><span class="toc-number">1.5.6.</span> <span class="toc-text">JavaScript 享元模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript-代理模式"><span class="toc-number">1.5.7.</span> <span class="toc-text">JavaScript 代理模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#行为型模式"><span class="toc-number">1.6.</span> <span class="toc-text">行为型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript-责任链模式"><span class="toc-number">1.6.1.</span> <span class="toc-text">JavaScript 责任链模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript-命令模式"><span class="toc-number">1.6.2.</span> <span class="toc-text">JavaScript 命令模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript-解释器模式"><span class="toc-number">1.6.3.</span> <span class="toc-text">JavaScript 解释器模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript-迭代器模式"><span class="toc-number">1.6.4.</span> <span class="toc-text">JavaScript 迭代器模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript-中介者计模式"><span class="toc-number">1.6.5.</span> <span class="toc-text">JavaScript 中介者计模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Javascript-备忘录模式"><span class="toc-number">1.6.6.</span> <span class="toc-text">Javascript 备忘录模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Javascript-观察者模式"><span class="toc-number">1.6.7.</span> <span class="toc-text">Javascript 观察者模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript-状态模式"><span class="toc-number">1.6.8.</span> <span class="toc-text">JavaScript 状态模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Javascript-策略模式"><span class="toc-number">1.6.9.</span> <span class="toc-text">Javascript 策略模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript-模板方法模式"><span class="toc-number">1.6.10.</span> <span class="toc-text">JavaScript 模板方法模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Javascript-访问者模式"><span class="toc-number">1.6.11.</span> <span class="toc-text">Javascript 访问者模式</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+
+
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>

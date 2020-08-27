@@ -1,0 +1,1058 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Node学习(十四) --Node项目-商品列表 - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,Node.js项目介绍利用学到的知识，实现一个简单但实用的小项目如下：
+这是一个商品列表，具有展示商品信息，添加商品，删除商品的功能。
+项目的文件夹结构├── package.json├── ser,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://ShinichiKudo-FE.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">Node学习(十四) --Node项目-商品列表</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/Node"><b>「
+                    </b>NODE<b> 」</b></a>
+                
+                May 25, 2019
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2019/05/25/Node/Node%E5%AD%A6%E4%B9%A0(%E5%8D%81%E5%9B%9B)%20--Node%E9%A1%B9%E7%9B%AE-%E5%95%86%E5%93%81%E5%88%97%E8%A1%A8/" title="Node学习(十四) --Node项目-商品列表" class="">Node学习(十四) --Node项目-商品列表</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    18k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    17 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Node/" rel="tag">Node</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h1 id="Node-js项目介绍"><a href="#Node-js项目介绍" class="headerlink" title="Node.js项目介绍"></a>Node.js项目介绍</h1><p>利用学到的知识，实现一个简单但实用的小项目如下：</p>
+<p>这是一个商品列表，具有展示商品信息，添加商品，删除商品的功能。</p>
+<h2 id="项目的文件夹结构"><a href="#项目的文件夹结构" class="headerlink" title="项目的文件夹结构"></a>项目的文件夹结构</h2><p>├── package.json<br>├── server.js # 服务器代码<br>├── config # 项目配置文件夹<br>│     ├── config.dev.js # 开发环境配置<br>│     ├── config.prod.js # 生产环境配置<br>│     ├── index.js # 导出当前所处环境及配置<br>├── libs # 项目工具文件夹<br>│     ├── database.js # 连接数据库<br>│     ├── http.js # 服务器配置<br>│     ├── router.js # 处理路由<br>├── router # 项目路由配置文件夹<br>│     ├── index.js # 连接数据库<br>│     ├── list.js # 获取商品列表接口配置<br>│     ├── add.js # 增加商品接口配置<br>│     ├── del.js # 删除商品接口配置<br>├── static # 静态资源文件夹<br>│     ├── index.html # 前端HTML页面<br>│     ├── js # 前端JavaScript文件夹<br>│     ├── css # 前端CSS文件夹<br>│     ├── fonts # 前端字体文件夹<br>│     ├── upload # 前端上传文件夹</p>
+<h2 id="判断当前所处环境"><a href="#判断当前所处环境" class="headerlink" title="判断当前所处环境"></a>判断当前所处环境</h2><p>通常项目在开发环境和生产环境要采用不同的，服务器、账号、域名、端口等配置，如果用人工进行切换操作麻烦且容易出错，因此通常使用环境变量进行判断。</p>
+<p>首先引入process模块<code>const process=require(&#39;process&#39;)</code>，该模块提供了当前Node.js进程的信息。</p>
+<p>1.可以通过process.env环境变量获取开发环境和生产环境系统等参数差异，如开发环境运行在Windows系统上，而生产环境运行在Linux系统，那么就可以使用<code>process.env.OS === &#39;Windows_NT&#39;</code>判断当前所处的是否开发环境。</p>
+<pre><code class="js">const mode = process.env.OS === &#39;Windows_NT&#39; ? &#39;env&#39; : &#39;prod&#39;
+</code></pre>
+<p>2.也可以通过package.json中配置的启动命令判断处于开发还是生产环境，如开发环境命令<code>npm start --dev</code>和生产环境命令<code>npm run build --build</code>。</p>
+<pre><code class="js">const mode = process.argv[2] === &#39;--dev&#39; ? &#39;env&#39; : &#39;prod&#39;
+</code></pre>
+<h2 id="初始化开发和生产环境配置"><a href="#初始化开发和生产环境配置" class="headerlink" title="初始化开发和生产环境配置"></a>初始化开发和生产环境配置</h2><p>在/config/index.js中，判断所处的环境，并将相应环境的标识和参数作为模块导出。开发过程中，可以直接引用相应的配置使用。</p>
+<pre><code class="js">const process = require(&#39;process&#39;)
+
+// 可以通过开发环境和生产环境系统等参数差异，判断处于哪个环境。
+// const mode = process.env.OS === &#39;Windows_NT&#39; ? &#39;env&#39; : &#39;prod&#39;
+
+// 也可以通过package.json中配置的启动命令判断处于开发还是生产环境。
+const mode = process.argv[2] === &#39;--dev&#39; ? &#39;env&#39; : &#39;prod&#39;
+
+module.exports = {
+  mode, // 当前所处环境
+  ...(mode === &#39;env&#39; ? require(&#39;./config.dev&#39;) : require(&#39;./config.prod&#39;))  // 当前环境的配置
+}
+</code></pre>
+<p>1.以开发环境为例，需要使用的配置为服务器域名、端口号、账号、密码、数据库名，以及HTTP端口、静态文件绝对路径、上传文件保存绝对路径，如下：</p>
+<pre><code class="js">module.exports = {
+  // 数据库配置
+  DB_HOST: &#39;localhost&#39;,
+  DB_PORT: 3306,
+  DB_USER: &#39;root&#39;,
+  DB_PASS: &#39;&#39;,
+  DB_NAME: &#39;test&#39;,
+
+  // HTTP端口
+  HTTP_PORT: 8080,
+  // 静态文件绝对路径
+  HTTP_ROOT: path.resolve(__dirname, &#39;../static/&#39;),
+  // 上传文件保存绝对路径
+  HTTP_UPLOAD: path.resolve(__dirname, &#39;../static/upload&#39;)
+}
+</code></pre>
+<h2 id="连接数据库"><a href="#连接数据库" class="headerlink" title="连接数据库"></a>连接数据库</h2><p>在lib文件夹下，创建database.js，用于连接数据库。</p>
+<a id="more"></a>
+<pre><code class="js">// 引入mysql和co-mysql，用于连接数据库
+const mysql = require(&#39;mysql&#39;)
+const coMysql = require(&#39;co-mysql&#39;)
+
+// 引入数据库配置
+const {
+  DB_HOST,
+  DB_PORT,
+  DB_USER,
+  DB_PASS,
+  DB_NAME
+} = require(&#39;../config&#39;)
+
+// 1. 创建服务器连接池
+const pool = mysql.createPool({
+  host: DB_HOST,
+  port: DB_PORT,
+  user: DB_USER,
+  password: DB_PASS,
+  database: DB_NAME
+})
+
+// 2. 使用co-mysql包装连接池，将连接转换为Async/Await异步方式
+const connection = coMysql(pool)
+
+// 3. 作为模块导出使用
+module.exports = connection
+</code></pre>
+<p>创建数据库连接后，可以在server.js中，创建一个数据库连接，并查看item_table表的数据</p>
+<pre><code class="js">const connection = require(&#39;./lib/database&#39;)
+
+;(async () =&gt; {
+  // 查询item_table表中的数据
+  const response = await connection.query(`SELECT * FROM item_table`)
+  console.log(response)
+})()
+</code></pre>
+<p>若正常连接，即可打印数据如下：</p>
+<pre><code class="js">[ RowDataPacket { ID: 1, title: &#39;运动服&#39;, price: 299, count: 998 } ]ice: 199, count: 999 },
+  RowDataPacket { ID: 2, title: &#39;运动裤&#39;, price: 299, count: 998 } ]
+</code></pre>
+<h2 id="创建路由"><a href="#创建路由" class="headerlink" title="创建路由"></a>创建路由</h2><p>在之前的例子中，我们总是要通过if else语句来判断请求的接口路径，并进行相应操作。</p>
+<p>这样会极大地降低开发效率，也不利于后期代码维护。</p>
+<p>因此，通常的开发中，都会使用路由对不同的接口进行操作。</p>
+<p>现在我们就来自己实现一个简单的路由：</p>
+<p><strong>1.先创建一个router对象，用于存储路由表。其中有2个属性，分别为get、post，分别用于存储相应get、post请求地址的回调方法</strong></p>
+<pre><code class="js">// 创建路由表
+let router = {
+  // 存储get请求的路由
+  get: {
+
+  },
+  // 存储post请求的路由
+  post: {
+
+  }
+}
+</code></pre>
+<p><strong>2. 创建一个addRouter方法，用于添加路由配置，参数method为请求方法，url为请求地址，callback为处理该请求的回调函数。</strong></p>
+<pre><code class="js">// 添加路由的方法，method为请求方法，url为请求地址，callback为处理该请求的回调函数
+function addRouter(method, url, callback) {
+  // 为便于处理，将method和url统一转换成小写
+  method = method.toLowerCase()
+  url = url.toLowerCase()
+
+  // 将处理请求的回调函数，按方法名和地址储存到路由表中
+  router[method][url] = callback
+}
+</code></pre>
+<p><strong>3. 创建一个findRouter方法，用于查找相应路由的回调函数。参数method为请求方法，url为请求地址，返回处理路由的回调函数。</strong></p>
+<pre><code class="js">// 查找处理请求的回调函数的方法，method为请求方法，url为请求地址，返回处理路由的回调函数
+function findRouter(method, url) {
+  // 为便于处理，将method和url统一转换成小写
+  method = method.toLowerCase()
+  url = url.toLowerCase()
+
+  // 找到路由对应的回调函数，不存在则默认返回null
+  const callback = router[method][url] || null
+
+  // 将回调函数返回
+  return callback
+}
+</code></pre>
+<p><strong>4. 将路由配置作为模块导出</strong></p>
+<pre><code class="js">// 将添加路由和查找路由方法导出
+module.exports = {
+  addRouter,
+  findRouter
+}
+</code></pre>
+<h2 id="创建服务器"><a href="#创建服务器" class="headerlink" title="创建服务器"></a>创建服务器</h2><p>在实现了路由之后，就可以以此为基础实现服务器了。</p>
+<p>实现服务器分为以下几个步骤：</p>
+<p>1.引入所需Node.js模块、服务器配置、路由模块<br>2.封装统一处理请求数据的方法<br>3.接收到的请求分为POST请求、GET请求，区分并进行处理<br>4.POST请求分为数据请求、文件上传请求，区分并进行处理<br>5.GET请求分为数据请求、读取文件请求，区分并进行处理</p>
+<p>接下来，按步骤实现每部分代码。</p>
+<p><strong>1. 引入所需Node.js模块、服务器配置、路由模块</strong></p>
+<pre><code class="js">// 引入创建服务器所需的模块
+const http = require(&#39;http&#39;)
+const url = require(&#39;url&#39;)
+const querystring = require(&#39;querystring&#39;)
+const zlib = require(&#39;zlib&#39;)
+const fs = require(&#39;fs&#39;)
+const { Form } = require(&#39;multiparty&#39;)
+
+// 引入服务器配置
+const {
+  HTTP_PORT,
+  HTTP_ROOT,
+  HTTP_UPLOAD
+} = require(&#39;../config&#39;)
+
+// 引入路由模块的查找路由方法
+const { findRouter } = require(&#39;./router&#39;)
+
+const server = http.createServer((req, res) =&gt; {
+  // 服务器代码
+})
+
+// 监听配置的端口
+server.listen(HTTP_PORT)
+// 打印创建服务器成功信息
+console.log(`Server started at ${HTTP_PORT}`)
+</code></pre>
+<p><strong>2. 封装统一处理请求数据的方法</strong></p>
+<p>要处理所有请求接口，需要的参数为method（请求方法）、pathname（请求接口路径）、query（query数据）、post（post数据）、files（文件数据）。</p>
+<p>首先，根据method（请求方法）、pathname（请求接口路径），获取在路由配置时，已经配置好的相应接口的回调函数。<br>其次，若回调函数存在，则直接将参数传入回调函数处理。<br>最后，若回调函数不存在，则默认为请求一个静态文件，即可将文件读取之后发送给前端。</p>
+<pre><code class="js">// 引入创建服务器所需的模块
+...
+
+// 引入服务器配置
+...
+
+// 引入路由模块的查找路由方法
+...
+
+const server = http.createServer((req, res) =&gt; {
+  // 通过路由处理请求数据的公共方法
+  async function processData(method, pathname, query, post, files) {
+    const callback = findRouter(method, pathname)  // 获取处理请求的回调函数
+
+    // 若回调函数存在，则表示路由有配置相应的数据处理，即该请求不是获取静态文件。
+    if (callback) {
+      try {
+        // 根据路由处理接口数据
+        await callback(res, query, post, files)
+      } catch (error) {
+        // 出现错误的处理
+        res.writeHead(500)
+        res.write(&#39;Internal Server Error&#39;)
+        res.end()
+      }
+    } else {
+      // 若回调函数不存在，则表示该请求为请求一个静态文件，如html、css、js等
+      ...
+    }
+  }
+})
+
+// 监听配置的端口
+server.listen(HTTP_PORT)
+// 打印创建服务器成功信息
+console.log(`Server started at ${HTTP_PORT}`)
+</code></pre>
+<p><strong>3. 接收到的请求分为POST请求、GET请求，区分并进行处理</strong></p>
+<p>根据请求的method，将请求分为POST请求、GET请求。</p>
+<p>若为POST请求，则需要进一步判断是普通数据请求，还是文件请求，并分别进行处理。</p>
+<p>而GET请求，只需要将数据传入processData方法进行处理，在processData方法中，区分GET请求获取数据，还是获取静态文件。</p>
+<pre><code class="js">// 引入创建服务器所需的模块
+...
+
+// 引入服务器配置
+...
+
+// 引入路由模块的查找路由方法
+...
+
+const server = http.createServer((req, res) =&gt; {
+  // 解析请求数据
+  // 获取请求路径及query数据
+  const method = req.method
+  const {
+    pathname,
+    query
+  } = url.parse(req.url, true)
+
+  // 处理POST请求
+  if (method === &#39;POST&#39;) {
+    // POST请求分为数据请求、文件上传请求，区分并进行处理
+    ...
+  } else {  // 处理GET请求
+    // 通过路由处理数据，因为此时是GET请求，只有query数据
+    processData(method, url, query, {}, {})
+  }
+
+  // 通过路由处理请求数据的公共方法
+  async function processData(method, pathname, query, post, files) {
+    ...
+  }
+})
+
+// 监听配置的端口
+server.listen(HTTP_PORT)
+// 打印创建服务器成功信息
+console.log(`Server started at ${HTTP_PORT}`)
+</code></pre>
+<p><strong>4. POST请求分为数据请求、文件上传请求，区分并进行处理</strong></p>
+<p>判断请求头的content-type为<code>application/x-www-form-urlencoded</code>时，表示该请求只是单纯传输数据，可以直接当做字符串处理。<br>若请求头的content-type不对，则表示该请求是上传文件，可以用multiparty进行处理。</p>
+<pre><code class="js">// 引入创建服务器所需的模块
+...
+
+// 引入服务器配置
+...
+
+// 引入路由模块的查找路由方法
+...
+
+const server = http.createServer((req, res) =&gt; {
+  // 解析请求数据
+  // 获取请求路径及query数据
+  const method = req.method
+  const {
+    pathname,
+    query
+  } = url.parse(req.url, true)
+
+  // 处理POST请求
+  if (method === &#39;POST&#39;) {
+    // 根据请求头的content-type属性值，区分是普通POST请求，还是文件请求。
+    // content-type为application/x-www-form-urlencoded时，表示是普通POST请求
+    // 普通POST请求直接进行处理，文件请求使用multiparty处理
+    if (req.headers[&#39;content-type&#39;].startsWith(&#39;application/x-www-form-urlencoded&#39;)) {
+      // 普通POST请求
+      let arr = []  // 存储Buffer数据
+
+      // 接收数据
+      req.on(&#39;data&#39;, (buffer) =&gt; {
+        arr.push(buffer)
+      })
+
+      // 数据接收完成
+      req.on(&#39;end&#39;, () =&gt; {
+        const data = Buffer.concat(arr)  // 合并接收到的数据
+        const post = querystring.parse(data.toString()) // 将接收到的数据转换为JSON
+
+        // 通过路由处理数据，因为此时是普通POST请求，不存在文件数据
+        processData(method, pathname, query, post, {})
+      })
+    } else {
+      // 文件POST请求
+      const form = new Form({
+        uploadDir: HTTP_UPLOAD  // 指定文件存储目录
+      })
+
+      // 处理请求数据
+      form.parse(req)
+
+      let post = {} // 存储数据参数
+      let files = {}  // 存储文件数据
+
+      // 通过field事件处理普通数据
+      form.on(&#39;field&#39;, (name, value) =&gt; {
+        post[name] = value
+      })
+
+      // 通过file时间处理文件数据
+      form.on(&#39;file&#39;, (name, file) =&gt; {
+        files[name] = file
+      })
+
+      // 处理错误
+      form.on(&#39;error&#39;, (error) =&gt; {
+        console.error(error)
+      })
+
+      // 数据传输完成时，触发close事件
+      form.on(&#39;close&#39;, () =&gt; {
+        // 通过路由处理数据，因为此时是POST文件请求，query、post、files数据都存在
+        processData(method, pathname, query, post, files)
+      })
+    }
+  } else {  // 处理GET请求
+    // 通过路由处理数据，因为此时是GET请求，只有query数据
+    processData(method, url, query, {}, {})
+  }
+
+  // 通过路由处理请求数据的公共方法
+  async function processData(method, pathname, query, post, files) {
+    ...
+  }
+})
+
+// 监听配置的端口
+server.listen(HTTP_PORT)
+// 打印创建服务器成功信息
+console.log(`Server started at ${HTTP_PORT}`)
+</code></pre>
+<p><strong>5. GET请求分为数据请求、读取文件请求，区分并进行处理</strong></p>
+<p>GET请求可以直接用<code>processData</code>方法统一处理，若路由中未配置处理数据的方法，则表示该请求为获取静态文件，需要进行单独处理，否则只需要调用路由配置的回调函数处理即可。</p>
+<pre><code class="js">// 引入创建服务器所需的模块
+...
+
+// 引入服务器配置
+...
+
+// 引入路由模块的查找路由方法
+...
+
+const server = http.createServer((req, res) =&gt; {
+  // 解析请求数据
+  // 获取请求路径及query数据
+  const method = req.method
+  const {
+    pathname,
+    query
+  } = url.parse(req.url, true)
+
+  // 处理POST请求
+  if (method === &#39;POST&#39;) {
+    ...
+  } else {  // 处理GET请求
+    // 通过路由处理数据，因为此时是GET请求，只有query数据
+    processData(method, url, query, {}, {})
+  }
+
+  // 通过路由处理请求数据的公共方法
+  async function processData(method, pathname, query, post, files) {
+    const callback = findRouter(method, pathname)  // 获取处理请求的回调函数
+
+    // 若回调函数存在，则表示路由有配置相应的数据处理，即该请求不是获取静态文件。
+    if (callback) {
+      try {
+        // 根据路由处理接口数据
+        await callback(res, query, post, files)
+      } catch (error) {
+        // 出现错误的处理
+        res.writeHead(500)
+        res.write(&#39;Internal Server Error&#39;)
+        res.end()
+      }
+    } else {
+      // 若回调函数不存在，则表示该请求为请求一个静态文件，如html、css、js等
+      const filePath = HTTP_ROOT + pathname
+
+      // 检查文件是否存在
+      fs.stat(filePath, (error, stat) =&gt; {
+        if (error) {
+          // 出现错误表示文件不存在
+          res.writeHead(404)
+          res.write(&#39;Not Found&#39;)
+          res.end()
+        } else {
+          // 文件存在则进行读取
+          // 创建一个可读流。
+          const readStream = fs.createReadStream(filePath)
+
+          // 创建一个Gzip对象，用于将文件压缩成
+          const gz = zlib.createGzip()
+
+          // 向浏览器发送经过gzip压缩的文件，设置响应头，否则浏览器无法识别，会自动进行下载。
+          res.setHeader(&#39;content-encoding&#39;, &#39;gzip&#39;)
+
+          // 将读取的内容，通过gzip压缩之后，在通过管道推送到res中，由于res继承自Stream流，因此也可以接收管道的推送。
+          readStream.pipe(gz).pipe(res)
+
+          readStream.on(&#39;error&#39;, (error) =&gt; {
+            console.error(error)
+          })
+        }
+      })
+    }
+  }
+})
+
+// 监听配置的端口
+server.listen(HTTP_PORT)
+// 打印创建服务器成功信息
+console.log(`Server started at ${HTTP_PORT}`)
+</code></pre>
+<h2 id="测试服务器"><a href="#测试服务器" class="headerlink" title="测试服务器"></a>测试服务器</h2><p>在server.js中引入封装的http模块：</p>
+<pre><code class="js">const http = require(&#39;./lib/http&#39;)
+</code></pre>
+<p>再使用node server.js启动服务器，就可以在浏览器中访问<code>http://localhost:8080/index.html</code>，看到html页面</p>
+<h2 id="添加各接口路由配置"><a href="#添加各接口路由配置" class="headerlink" title="添加各接口路由配置"></a>添加各接口路由配置</h2><p>获取商品列表路由回调函数</p>
+<p>查询<code>item_table</code>表中的商品数据后，返回给前台，并将回调函数作为模块导出。</p>
+<pre><code class="js">const connection = require(&#39;../lib/database&#39;)
+
+module.exports = async (res, query, post, files) =&gt; {
+  try {
+    // 查询商品列表
+    const data = await connection.query(`SELECT * FROM item_table`)
+
+    res.writeJson({
+      error: 0, // error为0则表示接口正常
+      data  // 查询到的商品列表数据
+    })
+  } catch (error) {
+    console.error(error)
+    res.writeJson({
+      error: 1, // error为1则表示接口出错
+      msg: &#39;数据库出错&#39; // 接口的错误信息
+    })
+  }
+  res.end()
+}
+</code></pre>
+<h3 id="添加商品路由回调函数"><a href="#添加商品路由回调函数" class="headerlink" title="添加商品路由回调函数"></a>添加商品路由回调函数</h3><p>应禁止query语句使用如下写法，容易造成注入攻击。<br><code>connection.query(INSERT INTO item_table (title, price, count) VALUES(&#39;${title}, ${price} ${count}&#39;))</code><br>此时若用户传入参数如下：</p>
+<p><code>http://localhost:8080/add?title=a&#39;)%3B%20DELETE%20FROM%20item_table%3B%20SELECT%20(1&amp;price=19.8&amp;count=200</code></p>
+<p>就会让服务器执行一个这样的语句：</p>
+<pre><code class="js">INSERT INTO item_table (title, price, count) VALUES(&#39;a&#39;); DELETE FROM item_table; SELECT (&#39;1&#39;, 19.8, 200)
+</code></pre>
+<p>其意义为：</p>
+<p>1.插入一个虚假数据<br>2.删除item_table表中所有数据<br>3.返回一个虚假数据</p>
+<p>这样就会导致item_table表中的所有数据被删除。</p>
+<p>为防止注入攻击，可以使用占位符?代替需要插入数据库的参数，第二个数组参数中的3个值会按顺序填充占位符，该方法可以避免大部分注入攻击，如下：</p>
+<pre><code class="js">await connection.query(`INSERT INTO item_table (title, price, count) VALUES(?,?,?)`, [title, price, count])
+</code></pre>
+<pre><code class="js">const connection = require(&#39;../lib/database&#39;)
+
+module.exports = async (res, query, post, files) =&gt; {
+  let {
+    title,
+    price,
+    count
+  } = post
+
+  // 判断是否有传参
+  if (!title || !price || !count) {
+    res.writeJson({
+      error: 1,
+      msg: &#39;参数不合法&#39;
+    })
+  } else {
+    // 将价格和数量转为数字
+    price = Number(price)
+    count = Number(count)
+
+    // 判断价格和数量是否非数字
+    if (isNaN(price) || isNaN(count)) {
+      res.writeJson({
+        error: 1,
+        msg: &#39;参数不合法&#39;
+      })
+    } else {
+      try {
+        // 使用占位符?代替需要插入数据库的参数，第二个数组参数中的3个值会按顺序填充占位符，该方法可以避免大部分注入攻击。
+        await connection.query(`INSERT INTO item_table (title, price, count) VALUES(?,?,?)`, [title, price, count])
+
+        res.writeJson({
+          error: 0,
+          msg: &#39;添加商品成功&#39;
+        })
+      } catch (error) {
+        console.error(error)
+        res.writeJson({
+          error: 1,
+          msg: &#39;数据库内部错误&#39;
+        })
+      }
+    }
+  }
+  res.end()
+}
+</code></pre>
+<h3 id="删除商品路由回调函数"><a href="#删除商品路由回调函数" class="headerlink" title="删除商品路由回调函数"></a>删除商品路由回调函数</h3><pre><code class="js">const connection = require(&#39;../lib/database&#39;)
+
+module.exports = async (res, query, post, files) =&gt; {
+  const ID = query.id
+
+  if (!ID) {
+    res.writeJson({
+      error: 1,
+      msg: &#39;参数不合法&#39;
+    })
+  } else {
+    await connection.query(`DELETE FROM item_table WHERE ID=${ID}`)
+
+    res.writeJson({
+      error: 0,
+      msg: &#39;删除成功&#39;
+    })
+  }
+  res.end()
+}
+</code></pre>
+<h3 id="添加各接口路由配置-1"><a href="#添加各接口路由配置-1" class="headerlink" title="添加各接口路由配置"></a>添加各接口路由配置</h3><p>在<code>/router/index.js</code>中，引用各个接口的配置，并用addRouter方法添加到路由表中，即可在接收到请求时，查找路由并进行处理。</p>
+<pre><code class="js">const {
+  addRouter
+} = require(&#39;../lib/router&#39;)
+
+// 添加获取商品列表接口
+addRouter(&#39;get&#39;, &#39;/list&#39;, require(&#39;./list&#39;))
+
+// 添加商品接口
+addRouter(&#39;post&#39;, &#39;/add&#39;, require(&#39;./add&#39;))
+
+// 删除商品接口
+addRouter(&#39;get&#39;, &#39;/del&#39;, require(&#39;./del&#39;))
+</code></pre>
+<h3 id="在主模块中引用路由"><a href="#在主模块中引用路由" class="headerlink" title="在主模块中引用路由"></a>在主模块中引用路由</h3><p>在/server.js中，引用router模块，就可以完成整个服务端的配置。</p>
+<pre><code class="js">const connection = require(&#39;./lib/database&#39;)
+const http = require(&#39;./lib/http&#39;)
+const router = require(&#39;./router&#39;)
+</code></pre>
+<h3 id="完成前端功能"><a href="#完成前端功能" class="headerlink" title="完成前端功能"></a>完成前端功能</h3><p>在/static/index.html中，使用jquery为前端页面实现如下功能：</p>
+<p>1.显示商品列表<br>2.添加随机名称、价格、库存的商品<br>3.删除对应商品</p>
+<pre><code class="js">// 查询商品列表的方法
+function getList() {
+  $.ajax({
+    url: &#39;/list&#39;,
+    dataType: &#39;json&#39;
+  }).then(res =&gt; {
+    let html = ``
+
+    res.data.forEach((item, index) =&gt; {
+      html += (
+        `
+            &lt;tr&gt;
+              &lt;td&gt;${item.title}&lt;/td&gt;
+              &lt;td&gt;￥${item.price}&lt;/td&gt;
+              &lt;td&gt;${item.count}&lt;/td&gt;
+              &lt;td&gt;
+                &lt;a data-id=&quot;${item.ID}&quot; href=&quot;#&quot; class=&quot;glyphicon glyphicon-trash&quot;&gt;删除&lt;/a&gt;
+              &lt;/td&gt;
+            &lt;/tr&gt;
+          `
+      )
+    })
+
+    $(&#39;tbody&#39;).html(html)
+  });
+} getList()
+
+// 点击添加按钮，随机添加一个商品
+$(&#39;#addBtn&#39;).on(&#39;click&#39;, function () {
+  $.ajax({
+    url: &#39;/add&#39;,
+    method: &#39;post&#39;,
+    data: {
+      title: `test${Math.floor(Math.random() * 100)}`,
+      price: Math.floor(Math.random() * 100),
+      count: Math.floor(Math.random() * 100)
+    }
+  })
+    .then((response) =&gt; {
+      getList()
+    })
+})
+
+// 点击删除按钮
+$(&#39;tbody&#39;).on(&#39;click&#39;, &#39;a&#39;, function () {
+  $.ajax({
+    url: &#39;/del&#39;,
+    data: {
+      id: $(this).attr(&#39;data-id&#39;)
+    }
+  })
+    .then((response) =&gt; {
+      getList()
+    })
+})
+</code></pre>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/favicon.png" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <!-- <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd> -->
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">171 <p>Articles</p></a></li>
+                    <li><a href="/categories">26 <p>Categories</p></a></li>
+                    <li><a href="/tags">55 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Node-js项目介绍"><span class="toc-number">1.</span> <span class="toc-text">Node.js项目介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#项目的文件夹结构"><span class="toc-number">1.1.</span> <span class="toc-text">项目的文件夹结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#判断当前所处环境"><span class="toc-number">1.2.</span> <span class="toc-text">判断当前所处环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#初始化开发和生产环境配置"><span class="toc-number">1.3.</span> <span class="toc-text">初始化开发和生产环境配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#连接数据库"><span class="toc-number">1.4.</span> <span class="toc-text">连接数据库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建路由"><span class="toc-number">1.5.</span> <span class="toc-text">创建路由</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建服务器"><span class="toc-number">1.6.</span> <span class="toc-text">创建服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试服务器"><span class="toc-number">1.7.</span> <span class="toc-text">测试服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加各接口路由配置"><span class="toc-number">1.8.</span> <span class="toc-text">添加各接口路由配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#添加商品路由回调函数"><span class="toc-number">1.8.1.</span> <span class="toc-text">添加商品路由回调函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除商品路由回调函数"><span class="toc-number">1.8.2.</span> <span class="toc-text">删除商品路由回调函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#添加各接口路由配置-1"><span class="toc-number">1.8.3.</span> <span class="toc-text">添加各接口路由配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#在主模块中引用路由"><span class="toc-number">1.8.4.</span> <span class="toc-text">在主模块中引用路由</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#完成前端功能"><span class="toc-number">1.8.5.</span> <span class="toc-text">完成前端功能</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+
+
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>

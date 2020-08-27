@@ -1,0 +1,881 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vue开发实践(下) - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,原文地址   
+前言前面两篇文章总结了 Vue 开发的大部分技巧和内容，最后一篇文章来对它进行一个收尾这篇文章我们来谈谈一些 Vue 理解和实践要求高一点的问题
+首先是生命周期这一块内容，随着实践越,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://ShinichiKudo-FE.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">Vue开发实践(下)</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/Vue"><b>「
+                    </b>VUE<b> 」</b></a>
+                
+                May 10, 2020
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2020/05/10/Vue/%E5%90%83%E9%80%8FVue%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%AE%9E%E8%B7%B5-%E4%B8%8B/" title="Vue开发实践(下)" class="">Vue开发实践(下)</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    21k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    19 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Vue/" rel="tag">Vue</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <p><a href="https://juejin.im/post/5e1eb1dff265da3e354ea2d0" target="_blank" rel="noopener">原文地址</a>   </p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>前面两篇文章总结了 Vue 开发的大部分技巧和内容，最后一篇文章来对它进行一个收尾<br>这篇文章我们来谈谈一些 Vue 理解和实践要求高一点的问题</p>
+<p>首先是生命周期这一块内容，随着实践越多它的意义越大，理解也越深刻</p>
+<p>mixin 功能强大，对代码复用组织都有很高的要求，算是 Vue 后期发力的高级技巧</p>
+<p>服务端渲染可能是学习 Vue 最后一块阵地了，对于 SPA 框架的一个里程碑</p>
+<p>最后，总结一下我在使用 Vue 中使用的技巧和经验</p>
+<h1 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h1><p><img src="https://user-gold-cdn.xitu.io/2020/3/11/170c9c19f1dd22b7?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="概览"></p>
+<h1 id="Vue-生命周期"><a href="#Vue-生命周期" class="headerlink" title="Vue 生命周期"></a>Vue 生命周期</h1><h2 id="什么是-Vue-生命周期？"><a href="#什么是-Vue-生命周期？" class="headerlink" title="什么是 Vue 生命周期？"></a>什么是 Vue 生命周期？</h2><p>Vue 生命周期大概就是：一个从 Vue 实例的创建到组件销毁的一个的过程。</p>
+<p>具体情况下，我们分为几个核心的阶段，并且每个阶段都有一套钩子函数来执行我们需要的代码。</p>
+<h3 id="生命周期阶段与钩子"><a href="#生命周期阶段与钩子" class="headerlink" title="生命周期阶段与钩子"></a>生命周期阶段与钩子</h3><p>我们整理分类一下这些生命周期钩子，为了记忆方便分为 4 大核心阶段：</p>
+<p>方便读者记忆，这里尽量使用图示：<br><img src="https://user-gold-cdn.xitu.io/2020/3/11/170c9c27264b6562?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="图示"></p>
+<p>可以看到每一个阶段中的钩子命名都很好记忆，阶段开始前使用 <code>beforeXxx</code>，阶段后结束后使用<code>xxxed</code></p>
+<p>除这 8 个核心钩子，另外还有 3 个新增功能型钩子，目前总共是 11 个钩子 顺带提一下这 3 个钩子的功能</p>
+<ol>
+<li>组件缓存，<code>activated</code> 与 <code>deactivated</code>，这两个钩子也是一对的，分别表示被 keep-alive 缓存的组件激活和停用时调用。</li>
+<li>组件错误捕获，<code>errorCaptured</code>，对组件中出现对异常错误进行处理，使用较少。</li>
+</ol>
+<h3 id="Vue-源码基本流程"><a href="#Vue-源码基本流程" class="headerlink" title="Vue 源码基本流程"></a>Vue 源码基本流程</h3><p>对于上面那张图的理解，我们需要对 Vue 源码进行梳理，才能真正的理解。大概根据现有的源码，我梳理了一下大致的流程：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2020/3/11/170c9c2cc22b99c2?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="源码"></p>
+<p>我们可以清楚的看到，从 Vue 实例创建、组件挂载、渲染的一些过程中，有着明显的周期节点。</p>
+<h3 id="简化文字图解"><a href="#简化文字图解" class="headerlink" title="简化文字图解"></a>简化文字图解</h3><p>对于上面那张图的理解，我们需要对 Vue 源码进行梳理，才能真正的理解。大概根据现有的源码，我梳理了一下大致的流程：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2020/3/11/170c9c2cc22b99c2?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="图解"></p>
+<h2 id="实践验证一下生命周期"><a href="#实践验证一下生命周期" class="headerlink" title="实践验证一下生命周期"></a>实践验证一下生命周期</h2><h3 id="提出问题"><a href="#提出问题" class="headerlink" title="提出问题"></a>提出问题</h3><p>下面我们提出一些问题：</p>
+<ol>
+<li>什么时期创建 el ？</li>
+<li>什么时期挂载 data ？</li>
+<li>什么时期可以访问 dom ？</li>
+<li>什么情况下组件会更新？更新是同步更新还是异步更新？</li>
+<li>什么情况下组件会被销毁？</li>
+<li>销毁组件后，还可以访问哪些内容？</li>
+</ol>
+<h3 id="编写代码"><a href="#编写代码" class="headerlink" title="编写代码"></a>编写代码</h3><ol>
+<li>首先写一个小 demo，打印关键组件信息</li>
+</ol>
+<pre><code class="html">&lt;template&gt;  
+&lt;div&gt;    
+&lt;div class=&quot;message&quot;&gt;      
+{{message}}    
+&lt;/div&gt;  
+&lt;/div&gt;
+&lt;/template&gt;
+&lt;script&gt;
+export default {  
+    data() {    
+        return {      
+            message: &#39;1&#39;    
+        }
+    },  
+    methods: {    
+        printComponentInfo(lifeName) {      
+            console.log(lifeName)      
+            console.log(&#39;el&#39;, this.$el)      
+            console.log(&#39;data&#39;, this.$data)      
+            console.log(&#39;watch&#39;, this.$watch)    
+        }  
+    }
+}
+&lt;/script&gt;
+</code></pre>
+<ol start="2">
+<li>增加核心的 8 个生命周期钩子，分别调用打印方法</li>
+</ol>
+<pre><code class="js">  // ...  
+  beforeCreate() {    this.printComponentInfo(&#39;beforeCreate&#39;)  },  
+  created() {    this.printComponentInfo(&#39;created&#39;)  },  
+  beforeMount() {    this.printComponentInfo(&#39;beforeMount&#39;)  },  
+  mounted() {    this.printComponentInfo(&#39;mounted&#39;)  },  
+  beforeUpdate() {    this.printComponentInfo(&#39;beforeUpdate&#39;)  },  
+  updated() {    this.printComponentInfo(&#39;updated&#39;)  },  
+  beforeDestroy() {    this.printComponentInfo(&#39;beforeDestroy&#39;)  },  
+  destroyed() {    this.printComponentInfo(&#39;destroyed&#39;)  },  
+  // ...
+</code></pre>
+<h3 id="创建阶段"><a href="#创建阶段" class="headerlink" title="创建阶段"></a>创建阶段</h3><p><img src="https://user-gold-cdn.xitu.io/2020/3/10/170c25e769e9f94e?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="创建"></p>
+<p>beforeCreate 中methods中方法直接报错无法访问，直接访问 el 和 data 后</p>
+<p><img src="https://user-gold-cdn.xitu.io/2020/3/10/170c26347c3622f5?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="创建"></p>
+<p>发现只能访问到 watch， el 和 data 均不能访问到</p>
+<p>created 时期 el 无法访问到，但是可以访问到 data 了</p>
+<h3 id="挂载阶段"><a href="#挂载阶段" class="headerlink" title="挂载阶段"></a>挂载阶段</h3><p><img src="https://user-gold-cdn.xitu.io/2020/3/10/170c2679f7e956d2?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="挂载"></p>
+<p><code>beforeMount</code> 中可以访问 data 但是仍然访问不到 el</p>
+<p><code>mounted</code> 中可以访问到 el 了</p>
+<blockquote>
+<p>首次加载页面，更新阶段和销毁阶段到钩子都未触发</p>
+</blockquote>
+<h3 id="更新阶段"><a href="#更新阶段" class="headerlink" title="更新阶段"></a>更新阶段</h3><pre><code class="js">this.message = this.message + 1
+</code></pre>
+<p>如果增加在 created 阶段，发现 update钩子仍然未触发，但是 el 和 data 的值都变成了 2</p>
+<p>如果增加在 mounted 阶段，发现 update钩子此时触发了</p>
+<p><img src="https://user-gold-cdn.xitu.io/2020/3/10/170c2727250a6c8c?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="更新"></p>
+<h3 id="销毁阶段"><a href="#销毁阶段" class="headerlink" title="销毁阶段"></a>销毁阶段</h3><p>怎样触发销毁的钩子呢？ 大概有这几种方法</p>
+<ul>
+<li>手动调用 $destory</li>
+<li>v-if 与 v-for 指令，（v-show 不行）</li>
+<li>路由切换和关闭或刷新浏览器</li>
+</ul>
+<p><img src="https://user-gold-cdn.xitu.io/2020/3/10/170c2ef6a6785ddc?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="路由切换"></p>
+<h2 id="生命周期钩子常见使用的场景"><a href="#生命周期钩子常见使用的场景" class="headerlink" title="生命周期钩子常见使用的场景"></a>生命周期钩子常见使用的场景</h2><h3 id="beforeCreate-谨慎操作-this"><a href="#beforeCreate-谨慎操作-this" class="headerlink" title="beforeCreate 谨慎操作 this"></a>beforeCreate 谨慎操作 this</h3><p><code>beforeCreate</code> 无法访问到 this 中的 <code>data、method</code></p>
+<h3 id="请求应放在-created-钩子中"><a href="#请求应放在-created-钩子中" class="headerlink" title="请求应放在 created 钩子中"></a>请求应放在 created 钩子中</h3><p>created 可以访问 this，但无法访问 dom，dom 未挂载</p>
+<h3 id="操作-DOM-代码应放在-mounted-钩子中"><a href="#操作-DOM-代码应放在-mounted-钩子中" class="headerlink" title="操作 DOM 代码应放在 mounted 钩子中"></a>操作 DOM 代码应放在 mounted 钩子中</h3><p>mounted 已经挂载 dom，可以访问 this</p>
+<blockquote>
+<p>生命周期相关demo 代码见<a href="生命周期相关demo 代码见github-lifecycle-demo">github-lifecycle-demo</a></p>
+</blockquote>
+<h1 id="理解并合理使用-mixin"><a href="#理解并合理使用-mixin" class="headerlink" title="理解并合理使用 mixin"></a>理解并合理使用 mixin</h1><h2 id="什么是-mixin（混入）"><a href="#什么是-mixin（混入）" class="headerlink" title="什么是 mixin（混入）"></a>什么是 mixin（混入）</h2><blockquote>
+<p>当组件使用混入对象时，所有混入对象的选项将被“混合”进入该组件本身的选项 大致原理就是将外来的组件、方法以某种方式进行合并。合并的规则有点像继承和扩展。</p>
+</blockquote>
+<p>当组件和混入对象含有<strong>同名选项</strong>时，这些选项将以恰当的方式进行“合并”</p>
+<p>我们看一下一个组件里面有哪些东西是可以合并的</p>
+<p><code>data、methods、computed、directives、components</code> 生命周期钩子</p>
+<p>没错这些都可以混入</p>
+<pre><code class="js">import demoMixin form &#39;@/mixins/demo&#39;
+export default {    
+    mixins: [demoMixin]
+}
+</code></pre>
+<p>这样看来，很多页面重复的代码我们都可以直接抽取出来<br>或者是封装成一个公共的 <code>mixin</code><br>比如我们做 H5 页面，里面很多短信验证的逻辑固有逻辑，但是需要访问到 this。使用工具函数肯定不行。<br>这时候就可以考虑使用 <code>mixin</code>，封装成一个具有响应式的模块。供需要的地方进行引入。</p>
+<h2 id="mixin-规则"><a href="#mixin-规则" class="headerlink" title="mixin 规则"></a>mixin 规则</h2><p>首先是<strong>优先级</strong>的问题，当重名选项时选择哪一个为最后的结果</p>
+<p>默认规则我这里分为 3 类</p>
+<ul>
+<li><ol>
+<li>data 混入: 以当前组件值为最后的值</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>生命周期钩子: 保留所有钩子，先执行 mixins 的，后执行当前组件的</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>methods、computed、directives、components 这种健值对形式，同名key，统统以当前组件为准</li>
+</ol>
+</li>
+</ul>
+<p>当然如果想改变规则，也可以通过配置来改变规则</p>
+<pre><code class="js">Vue.config.optionMergeStrategies.myOption = function (toVal, fromVal) {
+    // 返回合并后的值
+}
+</code></pre>
+<h2 id="mixin-的好处"><a href="#mixin-的好处" class="headerlink" title="mixin 的好处"></a>mixin 的好处</h2><p>我们知道 <code>Vue</code> 最能复用代码的就是组件。一般情况，我们通过 <code>props</code> 来控制组件的，将原有组件封装成 <code>HOC</code> 高阶组件。而控制 <code>props</code> 的生成不一样的功能的代码还是写在基础组件里。</p>
+<pre><code class="html">&lt;template lang=&quot;pug&quot;&gt;  
+div.dib    
+van-button.btn(      
+    @click=&quot;$emit(&#39;click&#39;)&quot;      
+    :class=&quot;getClass&quot; v-bind=&quot;$attrs&quot;      
+    :style=&quot;{&#39;width&#39;: size === &#39;large&#39; ? &#39;345px&#39;: &#39;&#39;, 
+    &#39;backgroundColor&#39;: getBgColor, 
+    borderColor: getBgColor, color: getBgColor}&quot;
+)      
+slot
+&lt;/template&gt;
+&lt;script&gt;
+import { Button } from &#39;vant&#39;
+import Vue from &#39;vue&#39;
+import { getColor } from &#39;@/utils&#39;
+Vue.use(Button)
+export default {  
+    name: &#39;app-button&#39;,  
+    props: {    
+        type: {      
+            type: String,      
+            default: &#39;primary&#39;    
+        },    
+        theme: {      
+            type: String,      
+            default: &#39;blue&#39;    
+        },    
+        size: {      
+            type: String,      
+            default: &#39;&#39;   
+        }  
+    }
+}
+</code></pre>
+<p>以这个组件为例，我们还是<strong>通过公共组件内部的逻辑，来改变组件的行为</strong>。</p>
+<p>但是，使用 mixin 提供了另一个思路。我们写好公共的 mixin，每一个需要使用 mixin 的地方。我们进行扩展合并，不同与公共 mixin 的选项我们在当前组件中进行自定义，也就是扩展。<strong>我们新的逻辑是写在当前组件里面的，而非公共 mixins 里</strong>。</p>
+<p>画个图理解一下：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2020/3/10/170c3937144fd11f?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="画个图"></p>
+<h2 id="最后总结一下-mixin-的优点及缺点"><a href="#最后总结一下-mixin-的优点及缺点" class="headerlink" title="最后总结一下 mixin 的优点及缺点"></a>最后总结一下 mixin 的优点及缺点</h2><p><strong>优点</strong></p>
+<ul>
+<li>复用代码，公共逻辑抽离</li>
+<li>可以访问 this, 可以操作响应式代码</li>
+<li>mixins 相对与组件来说，更像扩展</li>
+</ul>
+<p><strong>缺点</strong></p>
+<ul>
+<li>千万不能滥用全局 mixins 因为会影响所有多子组件</li>
+<li>由于 mixins 的合并策略固有影响，可能在一些极端情况达不到你想要的效果。</li>
+</ul>
+<p>比如：我已经存在一个 <code>mixins</code>，我的页面里面也有一些方法，我要引入<code>mixins</code> 就要做很多改动，来保证我的代码按我的需要运行。</p>
+<p>页面 data 有一个 <code>message</code> 值，<code>mixins</code> 里面同样有一个。</p>
+<p>按照默认规则，<code>mixins</code> 里面的 <code>message</code> 会被页面里面 <code>message</code> 覆盖。但是这两个 <code>message</code> 可能代表的意义不一样，都需要存在。那么我就需要改掉其中的一个，如果业务太深的话，可能这个 <code>message</code> 没那么好改。</p>
+<p>有时候需要考虑这些问题，导致使用 <code>mixins</code> 都会增加一些开发负担。当然也是这些问题可以使用规范来规避。</p>
+<h1 id="理解并使用-SSR"><a href="#理解并使用-SSR" class="headerlink" title="理解并使用 SSR"></a>理解并使用 SSR</h1><blockquote>
+<p>SSR 是 Serve Side Render 的缩写，翻译过来就是我们常说的服务端渲染</p>
+</blockquote>
+<h2 id="简单归纳-SSR-存在的原因"><a href="#简单归纳-SSR-存在的原因" class="headerlink" title="简单归纳 SSR 存在的原因"></a>简单归纳 SSR 存在的原因</h2><ol>
+<li>SPA 框架 SEO 的解决方案</li>
+<li>提升首屏加载速度</li>
+</ol>
+<p>但是它还存在以下问题</p>
+<ul>
+<li>有些生命周期钩子无法使用（之前提到的 activated 和 deactivated 等等）</li>
+<li>额外很多的配置</li>
+<li>服务器资源的需求</li>
+</ul>
+<p>总得来说，SSR 是必要的但不是充分的，SPA 的 SEO 现在没有更好的方案，有这方面强烈需求的网站来说，SSR 确实很有必要</p>
+<h2 id="SSR-原理"><a href="#SSR-原理" class="headerlink" title="SSR 原理"></a>SSR 原理</h2><p><img src="https://user-gold-cdn.xitu.io/2020/3/10/170c3ed6607a605c?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="SSR 原理"></p>
+<p>通过上面图我们可以得大致几点内容</p>
+<ul>
+<li>通用业务代码只写一套。</li>
+<li>通过暴露客户端和服务端两个入口，对 Vue 实例进行访问。</li>
+<li>通过构建工具打成两个包，服务端包通过 node 服务器渲染给浏览器访问。客户端和原来一样通过访问资源获取。</li>
+</ul>
+<h2 id="实现SSR-有-3-种方式"><a href="#实现SSR-有-3-种方式" class="headerlink" title="实现SSR 有 3 种方式"></a>实现SSR 有 3 种方式</h2><ol>
+<li>根据官网教程搭建，一步一步搭建SSR， 这里有具体教程，略微有点麻烦，但是能够体验搭建的过程，更加深入细节。使用于练习，和现有项目的改造</li>
+<li>使用demo改造，开源 demo，方便省时，适用代码参考学习 <a href="https://github.com/vuejs/vue-hackernews-2.0" target="_blank" rel="noopener">vue-ssr-demo</a></li>
+<li>使用nuxt，预设了 SSR 和预渲染，适用于需要 SSR 的新项目。</li>
+</ol>
+<p><strong>分别尝试用这 3 种方式搭建 SSR</strong></p>
+<h2 id="五步简单理解SSR（根据官网教程，具体完操作查看整教程和demo）"><a href="#五步简单理解SSR（根据官网教程，具体完操作查看整教程和demo）" class="headerlink" title="五步简单理解SSR（根据官网教程，具体完操作查看整教程和demo）"></a>五步简单理解SSR（根据官网教程，具体完操作查看整教程和demo）</h2><p><em>这里主要加深理解，vue-cli3+ 实现基本 SSR</em></p>
+<h3 id="第一步：安装依赖"><a href="#第一步：安装依赖" class="headerlink" title="第一步：安装依赖"></a>第一步：安装依赖</h3><ul>
+<li>vue-server-renderer （核心依赖，版本必须与 vue 版本一致）</li>
+<li>webpack-merge（用于webpack配置合并）</li>
+<li>webpack-node-externals （用于webpack配置更改）</li>
+<li>express (用于服务端渲染)</li>
+</ul>
+<h3 id="第二步：建立入口，并改造改造"><a href="#第二步：建立入口，并改造改造" class="headerlink" title="第二步：建立入口，并改造改造"></a>第二步：建立入口，并改造改造</h3><p>分为 2 个入口，将 <code>main.js</code> 定为通用入口， 并额外增加<code>entry-client.js</code> 和 <code>entry-serve.js</code> 两个</p>
+<p>1.改造主要入口，创建工厂函数</p>
+<pre><code class="js">// main.js
+import Vue from &#39;vue&#39;
+import App from &#39;./App.vue&#39;
+import { createRouter } from &quot;./router&quot;
+// app、router
+export function createApp () {  
+    const router = createRouter()  
+    const app = new Vue({    
+        router,    
+        render: h =&gt; h(App)  
+    })  
+    return { 
+        app, router 
+    }
+}
+</code></pre>
+<p>2.客户端入口</p>
+<pre><code class="js">// client.js
+import { createApp } from &#39;./main&#39;
+// 客户端特定引导逻辑
+const { app } = createApp()
+app.$mount(&#39;#app&#39;)
+</code></pre>
+<p>3.服务端入口</p>
+<pre><code class="js">// serve.js
+import { createApp } from &quot;./main&quot;;
+export default context =&gt; {  
+    // 因为有可能会是异步路由钩子函数或组件，所以我们将返回一个 Promise  
+    return new Promise((resolve, reject) =&gt; {    
+        const { app, router } = createApp();    
+        // 设置服务器端 router 的位置    
+        router.push(context.url);    
+        // 等到 router 将可能的异步组件和钩子函数解析完    
+        router.onReady(() =&gt; {      
+            const matchedComponents = router.getMatchedComponents();      
+            // 匹配不到的路由，执行 reject 函数      
+            if (!matchedComponents.length) {        
+                return reject({          
+                    code: 404        
+                });      
+            }      
+            // Promise 应该 resolve 应用程序实例，以便它可以渲染      
+            resolve(app);   
+
+        }, reject);  
+    });
+};
+</code></pre>
+<h3 id="第三步：改造-vue-config-配置"><a href="#第三步：改造-vue-config-配置" class="headerlink" title="第三步：改造 vue.config 配置"></a>第三步：改造 vue.config 配置</h3><pre><code class="js">const VueSSRServerPlugin = require(&quot;vue-server-renderer/server-plugin&quot;);
+const VueSSRClientPlugin = require(&quot;vue-server-renderer/client-plugin&quot;);
+const nodeExternals = require(&quot;webpack-node-externals&quot;);
+const merge = require(&quot;webpack-merge&quot;);
+const TARGET_NODE = process.env.WEBPACK_TARGET === &quot;node&quot;;
+const target = TARGET_NODE ? &quot;server&quot; : &quot;client&quot;;
+module.exports = {  
+    configureWebpack: () =&gt; ({    
+        entry: `./src/entry-${target}.js`,    
+        devtool: &#39;source-map&#39;,    
+        target: TARGET_NODE ? &quot;node&quot; : &quot;web&quot;,    
+        node: TARGET_NODE ? undefined : false,    
+        output: {      
+            libraryTarget: TARGET_NODE ? &quot;commonjs2&quot; : undefined    
+        },    
+        externals: TARGET_NODE      
+        ? nodeExternals({          
+            whitelist: [/\.css$/]        
+        }): undefined,    
+        optimization: {          
+            splitChunks: undefined    
+        },    
+        plugins: [
+            TARGET_NODE ? new VueSSRServerPlugin() : new VueSSRClientPlugin()]  
+        }), 
+
+        //...
+};
+</code></pre>
+<h3 id="第四步：对路由-router-改造"><a href="#第四步：对路由-router-改造" class="headerlink" title="第四步：对路由 router 改造"></a>第四步：对路由 router 改造</h3><pre><code class="js">export function createRouter(){  
+    return new Router({    
+        mode: &#39;history&#39;,    
+        routes: [    
+            //...    
+        ]  
+    })
+}
+</code></pre>
+<h3 id="第五步：使用-express-运行服务端代码"><a href="#第五步：使用-express-运行服务端代码" class="headerlink" title="第五步：使用 express 运行服务端代码"></a>第五步：使用 express 运行服务端代码</h3><p>这一步主要是让 node 服务端响应 HTML 给浏览器访问</p>
+<pre><code class="js">const Vue = require(&#39;vue&#39;)
+const server = require(&#39;express&#39;)()
+const renderer = require(&#39;vue-server-renderer&#39;).createRenderer()
+server.get(&#39;*&#39;, (req, res) =&gt; {  
+    const app = new Vue({    
+        data: {      
+            url: req.url    
+        },    
+        template: `&lt;div&gt;访问的 URL 是： {{ url }}&lt;/div&gt;`  
+    })  
+    renderer.renderToString(app, (err, html) =&gt; {    
+        if (err) {      
+            res.status(500).end(&#39;Internal Server Error&#39;)      
+            return    
+        }    
+        res.end(`      
+            &lt;!DOCTYPE html&gt;      
+            &lt;html lang=&quot;en&quot;&gt;       
+            &lt;head&gt;&lt;title&gt;Hello&lt;/title&gt;&lt;/head&gt;        
+            &lt;body&gt;${html}&lt;/body&gt;      
+            &lt;/html&gt;`)  
+    })
+})
+server.listen(8080)
+</code></pre>
+<h2 id="nuxt-体验"><a href="#nuxt-体验" class="headerlink" title="nuxt 体验"></a>nuxt 体验</h2><p>简单几步体验下 nuxt</p>
+<p>安装后</p>
+<p><img src="https://user-gold-cdn.xitu.io/2020/3/11/170c7cbe963be44c?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="nuxt"></p>
+<p>简单看了一下源码，nuxt 把我们之前提到的重要的改造，全部封装到 .nuxt 文件夹里面了\</p>
+<p><img src="https://user-gold-cdn.xitu.io/2020/3/11/170c7cc50e09b590?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="启动"></p>
+<p>跑一下 dev 发现有两个端，一个 clinet 端，一个 server 端</p>
+<p><img src="https://user-gold-cdn.xitu.io/2020/3/11/170c7cc93fe6230b?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="demo"></p>
+<p>最后查看一下效果，整个过程挺丝滑的。目录结构也比较符合我的风格，新项目需要 SSR 会考虑使用 nuxt</p>
+<h2 id="使用-webpack-插件预渲染"><a href="#使用-webpack-插件预渲染" class="headerlink" title="使用 webpack 插件预渲染"></a>使用 webpack 插件预渲染</h2><p>解决 SEO 问题是不是只有 SSR 呢？其实预渲染也能做到，首先</p>
+<h3 id="区别使用-SSR-和预渲染"><a href="#区别使用-SSR-和预渲染" class="headerlink" title="区别使用 SSR 和预渲染"></a>区别使用 SSR 和预渲染</h3><ul>
+<li>服务端渲染解决的问题，不仅只是把 HTML 页面给浏览器，更重要的是处理动态逻辑和 JS 代码后，将渲染后完整的 HTML 给浏览器，渲染的过程在服务端。</li>
+<li>预渲染，是利用构建工具在 webpack 中生成静态的 HTML，直接给浏览器，渲染的过程在本地。</li>
+<li>预渲染插件里面提到两种不能使用：大量路由、动态内容</li>
+</ul>
+<h3 id="使用-prerender-spa-plugin-插件进行简单预渲染"><a href="#使用-prerender-spa-plugin-插件进行简单预渲染" class="headerlink" title="使用 prerender-spa-plugin 插件进行简单预渲染"></a>使用 prerender-spa-plugin 插件进行简单预渲染</h3><ol>
+<li>安装 prerender-spa-plugin</li>
+</ol>
+<pre><code class="js">yarn prerender-spa-plugin
+</code></pre>
+<ol start="2">
+<li>修改 webpack 配置，比较简单就能完成配置</li>
+</ol>
+<pre><code class="js">const path = require(&#39;path&#39;)
+const PrerenderSPAPlugin = require(&#39;prerender-spa-plugin&#39;)
+const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
+module.exports = {  
+    plugins: [    
+        //...    
+        new PrerenderSPAPlugin({      
+            staticDir: path.join(__dirname, &#39;dist&#39;),      
+            outputDir: path.join(__dirname, &#39;prerendered&#39;),      
+            indexPath: path.join(__dirname, &#39;dist&#39;, &#39;index.html&#39;),      
+            routes: [ &#39;/&#39;, &#39;/about&#39;, &#39;/some/deep/nested/route&#39; ],      
+            postProcess (renderedRoute) {        
+                renderedRoute.route = renderedRoute.originalPath        
+                renderedRoute.html = renderedRoute.html.split(/&gt;[\s]+&lt;/gmi).join(&#39;&gt;&lt;&#39;)        
+                if (renderedRoute.route.endsWith(&#39;.html&#39;)) {          
+                    renderedRoute.outputPath = path.join(__dirname, &#39;dist&#39;, renderedRoute.route)        
+                }        
+                return renderedRoute      
+            },      
+            minify: {        
+                collapseBooleanAttributes: true,        
+                collapseWhitespace: true,        
+                decodeEntities: true,        
+                keepClosingSlash: true,        
+                sortAttributes: true      
+            },      
+            renderer: new Renderer({        
+                inject: {          
+                    foo: &#39;bar&#39;        
+                },        
+            maxConcurrentRoutes: 4  
+        ]
+}
+</code></pre>
+<h1 id="Vue-开发技巧总结"><a href="#Vue-开发技巧总结" class="headerlink" title="Vue 开发技巧总结"></a>Vue 开发技巧总结</h1><blockquote>
+<p>从 5 个大的角度来提升开发效率和体验，代码美观和代码质量，用户体验</p>
+</blockquote>
+<p><img src="https://user-gold-cdn.xitu.io/2020/3/11/170c9c3a14c4cf39?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="技巧"></p>
+<h2 id="5-大角度提升"><a href="#5-大角度提升" class="headerlink" title="5 大角度提升"></a>5 大角度提升</h2><h3 id="代码复用"><a href="#代码复用" class="headerlink" title="代码复用"></a>代码复用</h3><ul>
+<li>组件化开发，代码效率 * n</li>
+<li>使用 mixins 抽离公共逻辑，代码效率 * n</li>
+<li>工具化函数、使用 filter 编码效率+</li>
+<li>sass 复用 css，编码体验、效率+</li>
+</ul>
+<h3 id="代码质量"><a href="#代码质量" class="headerlink" title="代码质量"></a>代码质量</h3><ul>
+<li>代码静态检查 eslint + prettier，代码风格+、基础语法错误-</li>
+<li>数据类型控制 typescript，代码质量+</li>
+<li>前端测试 test，代码质量+</li>
+</ul>
+<h3 id="代码优化"><a href="#代码优化" class="headerlink" title="代码优化"></a>代码优化</h3><ul>
+<li>合理使用 vue，渲染性能+</li>
+<li>合理使用 vuex 减少请求，使用图片懒加载，加载性能+</li>
+<li>合理使用函数组件，组件性能+</li>
+<li>合理骨架屏、路由过渡，用户体验+</li>
+</ul>
+<h3 id="开发效率"><a href="#开发效率" class="headerlink" title="开发效率"></a>开发效率</h3><ul>
+<li>使用更新的脚手架 vue-cli4，webpack 配置效率+</li>
+<li>使用配置好的脚手架模版 vue-h5-template，vue 配置效率+</li>
+<li>使用更简洁的模版 pug，HTML 编写效率+</li>
+<li>使用更强大的 css 编写 sass，CSS 编写效率+</li>
+<li>使用模拟数据 mock，脱离后端开发效率+</li>
+<li>开源组件封装 HOC，组件开发，页面编写效率+</li>
+</ul>
+<h3 id="瓶颈解决"><a href="#瓶颈解决" class="headerlink" title="瓶颈解决"></a>瓶颈解决</h3><ul>
+<li>路由history使用，服务端配置相关，URL美观+</li>
+<li>解决SEO与首屏加载、服务端渲染 SSR 基本解决</li>
+</ul>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/favicon.png" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <!-- <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd> -->
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">171 <p>Articles</p></a></li>
+                    <li><a href="/categories">26 <p>Categories</p></a></li>
+                    <li><a href="/tags">55 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#概览"><span class="toc-number">2.</span> <span class="toc-text">概览</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Vue-生命周期"><span class="toc-number">3.</span> <span class="toc-text">Vue 生命周期</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是-Vue-生命周期？"><span class="toc-number">3.1.</span> <span class="toc-text">什么是 Vue 生命周期？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#生命周期阶段与钩子"><span class="toc-number">3.1.1.</span> <span class="toc-text">生命周期阶段与钩子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vue-源码基本流程"><span class="toc-number">3.1.2.</span> <span class="toc-text">Vue 源码基本流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#简化文字图解"><span class="toc-number">3.1.3.</span> <span class="toc-text">简化文字图解</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实践验证一下生命周期"><span class="toc-number">3.2.</span> <span class="toc-text">实践验证一下生命周期</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#提出问题"><span class="toc-number">3.2.1.</span> <span class="toc-text">提出问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#编写代码"><span class="toc-number">3.2.2.</span> <span class="toc-text">编写代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建阶段"><span class="toc-number">3.2.3.</span> <span class="toc-text">创建阶段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#挂载阶段"><span class="toc-number">3.2.4.</span> <span class="toc-text">挂载阶段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#更新阶段"><span class="toc-number">3.2.5.</span> <span class="toc-text">更新阶段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#销毁阶段"><span class="toc-number">3.2.6.</span> <span class="toc-text">销毁阶段</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生命周期钩子常见使用的场景"><span class="toc-number">3.3.</span> <span class="toc-text">生命周期钩子常见使用的场景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#beforeCreate-谨慎操作-this"><span class="toc-number">3.3.1.</span> <span class="toc-text">beforeCreate 谨慎操作 this</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#请求应放在-created-钩子中"><span class="toc-number">3.3.2.</span> <span class="toc-text">请求应放在 created 钩子中</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#操作-DOM-代码应放在-mounted-钩子中"><span class="toc-number">3.3.3.</span> <span class="toc-text">操作 DOM 代码应放在 mounted 钩子中</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#理解并合理使用-mixin"><span class="toc-number">4.</span> <span class="toc-text">理解并合理使用 mixin</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是-mixin（混入）"><span class="toc-number">4.1.</span> <span class="toc-text">什么是 mixin（混入）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mixin-规则"><span class="toc-number">4.2.</span> <span class="toc-text">mixin 规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mixin-的好处"><span class="toc-number">4.3.</span> <span class="toc-text">mixin 的好处</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最后总结一下-mixin-的优点及缺点"><span class="toc-number">4.4.</span> <span class="toc-text">最后总结一下 mixin 的优点及缺点</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#理解并使用-SSR"><span class="toc-number">5.</span> <span class="toc-text">理解并使用 SSR</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#简单归纳-SSR-存在的原因"><span class="toc-number">5.1.</span> <span class="toc-text">简单归纳 SSR 存在的原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSR-原理"><span class="toc-number">5.2.</span> <span class="toc-text">SSR 原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现SSR-有-3-种方式"><span class="toc-number">5.3.</span> <span class="toc-text">实现SSR 有 3 种方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#五步简单理解SSR（根据官网教程，具体完操作查看整教程和demo）"><span class="toc-number">5.4.</span> <span class="toc-text">五步简单理解SSR（根据官网教程，具体完操作查看整教程和demo）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#第一步：安装依赖"><span class="toc-number">5.4.1.</span> <span class="toc-text">第一步：安装依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第二步：建立入口，并改造改造"><span class="toc-number">5.4.2.</span> <span class="toc-text">第二步：建立入口，并改造改造</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第三步：改造-vue-config-配置"><span class="toc-number">5.4.3.</span> <span class="toc-text">第三步：改造 vue.config 配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第四步：对路由-router-改造"><span class="toc-number">5.4.4.</span> <span class="toc-text">第四步：对路由 router 改造</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第五步：使用-express-运行服务端代码"><span class="toc-number">5.4.5.</span> <span class="toc-text">第五步：使用 express 运行服务端代码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nuxt-体验"><span class="toc-number">5.5.</span> <span class="toc-text">nuxt 体验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用-webpack-插件预渲染"><span class="toc-number">5.6.</span> <span class="toc-text">使用 webpack 插件预渲染</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#区别使用-SSR-和预渲染"><span class="toc-number">5.6.1.</span> <span class="toc-text">区别使用 SSR 和预渲染</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用-prerender-spa-plugin-插件进行简单预渲染"><span class="toc-number">5.6.2.</span> <span class="toc-text">使用 prerender-spa-plugin 插件进行简单预渲染</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Vue-开发技巧总结"><span class="toc-number">6.</span> <span class="toc-text">Vue 开发技巧总结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-大角度提升"><span class="toc-number">6.1.</span> <span class="toc-text">5 大角度提升</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#代码复用"><span class="toc-number">6.1.1.</span> <span class="toc-text">代码复用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#代码质量"><span class="toc-number">6.1.2.</span> <span class="toc-text">代码质量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#代码优化"><span class="toc-number">6.1.3.</span> <span class="toc-text">代码优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开发效率"><span class="toc-number">6.1.4.</span> <span class="toc-text">开发效率</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#瓶颈解决"><span class="toc-number">6.1.5.</span> <span class="toc-text">瓶颈解决</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+
+
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>

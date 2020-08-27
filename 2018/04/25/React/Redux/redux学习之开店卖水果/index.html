@@ -1,0 +1,780 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>redux学习之开店卖水果 - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,Redux 是什么每当我们谈及到 redux，大家都会说是 react 的状态管理工具。这么说确实没错，毕竟 redux 项目也是 React Community 组织下的一个子项目。而且 redu,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://ShinichiKudo-FE.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">redux学习之开店卖水果</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/Redux"><b>「
+                    </b>REDUX<b> 」</b></a>
+                
+                April 25, 2018
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2018/04/25/React/Redux/redux%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%BC%80%E5%BA%97%E5%8D%96%E6%B0%B4%E6%9E%9C/" title="redux学习之开店卖水果" class="">redux学习之开店卖水果</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    12k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    11 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Redux/" rel="tag">Redux</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h1 id="Redux-是什么"><a href="#Redux-是什么" class="headerlink" title="Redux 是什么"></a>Redux 是什么</h1><p>每当我们谈及到 <a href="https://github.com/reactjs/redux" target="_blank" rel="noopener">redux</a>，大家都会说是 <a href="https://github.com/facebook/react" target="_blank" rel="noopener">react</a> 的状态管理工具。这么说确实没错，毕竟 redux 项目也是 <code>React Community</code> 组织下的一个子项目。而且 redux 的诞生也是和 react 这个 ui 库急需一个状态管理解决方案有很大的联系。但是 redux 和 react 并没有任何的耦合。虽然它们经常一起用，但是 <code>redux 的用途并不局限于 react</code>，或者说，和 <code>react 的结合只是 redux 的使用方式之一</code>。</p>
+<p>那么撇开 react 不谈， redux 到底是什么呢？我们看一下这个例子。</p>
+<p>在实际的开发当中，我们可能会碰到这样的需求：监听一个事件，当事件触发的时候，我们可以做一些想做的事情。</p>
+<h2 id="redux基础用法—卖水果"><a href="#redux基础用法—卖水果" class="headerlink" title="redux基础用法—卖水果"></a>redux基础用法—卖水果</h2><p>一天，程序员阿大（化名）想要去买水果吃，发现小区周围居然没有水果店，于是就打算自己开一个水果店赚点小钱。<br>阿大分析了一下水果店的营业模式。其实就是<strong>处理每一位顾客的需求</strong>，然后记账看看每天的盈亏。那么抽象成程序就是<code>监听顾客的行为，并把每个行为的结果都记在账上</code>，这正好是 <strong>redux</strong> 所擅长的。阿大胸有成竹，说着就开始写了起来：</p>
+<h3 id="首先模拟顾客的购买行为："><a href="#首先模拟顾客的购买行为：" class="headerlink" title="首先模拟顾客的购买行为："></a>首先模拟顾客的购买行为：</h3><pre><code class="js">const action = {
+  type: &#39;BUY_APPLE&#39;, // 买苹果
+  payload: {
+    count: 2 // 买 2 斤
+  }
+}
+</code></pre>
+<p>那不同的顾客要的斤数可能不同，于是他写了下面这个方法：</p>
+<pre><code class="js">/**
+ * 只要知道斤数就可以快速生成顾客的各种需求
+ * @param {number} num 顾客要买的斤数
+ */
+function buyApple(num) {
+  return {
+    type: &#39;BUY_APPLE&#39;,
+    payload: {
+      count: num
+    }
+  }
+}
+</code></pre>
+<p>然后是账本的结构，记录每天卖了多少斤：<br><a id="more"></a></p>
+<pre><code class="js">// 被托管的数据 state
+// 账本，今天已卖的苹果：0 斤；为了简便，就只举一个例子，事实上还有很多其他水果，大家自行脑补
+const state = { apple: 0 };
+</code></pre>
+<p>好了，现在顾客需求，账本都有了，那谁来记账呢？所以阿大请了一个<code>收银员</code>负责记账，并告诉他这么记账：</p>
+<pre><code class="js">/**
+ * 监听函数 listener
+ * 收银员只要知道顾客的需求就能正确的操作账本
+ * @param {object} state 账本
+ * @param {object} action 顾客的需求
+ */
+function reducer(state, action) {
+
+  // 注册 ‘买苹果’ 事件
+  // 如果有人买了苹果，加上顾客买的斤数，更新账本
+  if (action.type === &#39;BUY_APPLE&#39;) {
+    return Object.assign({}, state, {
+      apple: state.apple + action.payload.count
+    });
+  }
+
+  // 没注册的事件不作处理
+  // 买咱们店里没有的东西，不更新账本，原样返回
+  return state;
+}
+</code></pre>
+<p>好，万事俱备，可以正式的监听顾客的购买需求并更新账本了：</p>
+<pre><code class="js">const {createStore} = require(&#39;redux&#39;);
+
+// 创建水果店需要收银员（监听函数 listener）和账本（被托管的数据）
+const store = createStore(reducer, state);
+</code></pre>
+<p>不仅如此，redux 还提供了一个功能，每服务一个顾客，都可以额外做一些事情，于是阿大就想看看每笔交易之后的账本：</p>
+<pre><code class="js">// store.getState() 可以获取最新的 state
+store.subscribe(() =&gt; console.log(JSON.stringify(store.getState())));
+</code></pre>
+<p>好了，顾客开始来买水果了：</p>
+<pre><code class="js">// 触发用户购买水果的事件
+// 销售员开始销售
+store.dispatch(buyApple(3)); // {&quot;apple&quot;:3}
+store.dispatch(buyApple(4)); // {&quot;apple&quot;:7}
+</code></pre>
+<p>店铺稳定的运营了下去，阿大心里美滋滋~</p>
+<h3 id="讲解"><a href="#讲解" class="headerlink" title="讲解"></a>讲解</h3><p>不过在此之前要先说 redux 特别讲究也是特别重要的 3 点：</p>
+<ul>
+<li>只能有唯一的 store 对象保存整个应用的 state</li>
+<li>state 是只读的，只能通过 dispatch(action) 的方式来改变 state</li>
+<li>reducer 必须是纯函数</li>
+</ul>
+<h4 id="action"><a href="#action" class="headerlink" title="action"></a>action</h4><p>action 是行为信息的抽象，对象类型，它描述发生了什么。这个对象必须有一个 type 属性，对于对象里面的其他内容，redux 不做限制。但是推荐符合 Flux Standard Action 规范：</p>
+<pre><code class="js">{
+  type: &#39;ACTION_TYPE&#39;,
+  payload, // action 携带的数据
+}
+</code></pre>
+<h4 id="action-creator"><a href="#action-creator" class="headerlink" title="action creator"></a>action creator</h4><p>action creator 顾名思义就是用来创建 action 的，action creator 只简单的返回 action。</p>
+<pre><code class="js">function createAction(num) {
+  return {
+    type: &#39;ACTION_TYPE&#39;,
+    payload,
+  }
+}
+</code></pre>
+<h4 id="state"><a href="#state" class="headerlink" title="state"></a>state</h4><p>state 是被托管的数据，也就是每次触发监听事件，我们要操作的数据。</p>
+<h4 id="reducer"><a href="#reducer" class="headerlink" title="reducer"></a>reducer</h4><p>reducer 是用来控制 state 改变的函数。action 描述了发生了什么，但是并不会知道相应的 state 该怎么改变。对于不同的 action，相应的 state 变化是用 reducer 来描述的。</p>
+<p>reducer 接受两个函数，第一个是 <code>state</code>，第二个是 <code>action</code>，并返回计算之后新的 state。reducer 必须是一个<strong>纯函数</strong>，对于相同的输入 state 和 action，一定会返回相同的新的 state。</p>
+<pre><code class="js">nextState = reducer(prevState, action);
+</code></pre>
+<p>因为 reducer 是纯函数，所以原来的 <strong>prevState</strong> 并不会改变，新的 <strong>nextState</strong> 是一个最新的快照。</p>
+<h4 id="store"><a href="#store" class="headerlink" title="store"></a>store</h4><p>store 是把上面三个元素合起来的一个大对象:</p>
+<pre><code class="js">{
+  createStore,
+  combineReducers,
+  bindActionCreators,
+  applyMiddleware,
+  compose,
+  __DO_NOT_USE__ActionTypes
+}
+</code></pre>
+<blockquote>
+<p>它负责：</p>
+<ul>
+<li>托管应用的 state</li>
+<li>允许通过 store.getState() 方法访问到托管的 state</li>
+<li>允许通过 store.dispatch() 方法来触发 action 更新 state</li>
+<li>允许通过 store.subscribe() 注册监听函数监听每一次的 action 触发</li>
+<li>允许注销通过 store.subscribe() 方法注册的监听函数</li>
+</ul>
+</blockquote>
+<pre><code class="js">// 注册
+const unsubscribe = store.subscribe(() =&gt; { /** do something */});
+
+// 注销
+unsubscribe();
+</code></pre>
+<p><img src="https://user-gold-cdn.xitu.io/2018/4/18/162d7d65eb48257f?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="图解"></p>
+<h2 id="reducer拆分"><a href="#reducer拆分" class="headerlink" title="reducer拆分"></a>reducer拆分</h2><p>谁知道水果店生意越来越好，于是阿大开始拓展业务，不仅卖水果，还卖起了生鲜，于是有了水果部和生鲜部。</p>
+<p>于是阿大想了想未来购买生鲜的顾客的行为：</p>
+<pre><code class="js">// 买生鲜 - 鸡蛋
+function buyEgg(num) {
+  return {
+    type: &#39;BUY_EGG&#39;,
+    payload: {
+      count: num
+    }
+  }
+}
+</code></pre>
+<p>分了不同的部门之后，不同的业务有不同的记账方式，得分账记了，开来要增加一个生鲜的记账本：</p>
+<pre><code class="js">const freshState = {
+  egg: 0
+};
+</code></pre>
+<p>原来的水果账本也要改个名字：</p>
+<pre><code class="js">//- const state = {
++ const fruitsState = {
+    apple: 0
+  };
+</code></pre>
+<p>然后增加生鲜部的收银员, 管理生鲜账本 <code>freshState</code>：</p>
+<pre><code class="js">// 生鲜部收银员
+function freshReducer(state = freshState, action) {
+  if (action.type === &#39;BUY_EGG&#39;) {
+    return Object.assign({}, state, {
+      egg: state.egg + action.payload.count
+    });
+  }
+  return state;
+}
+</code></pre>
+<p>然后原来水果部的收银员管理水果账本 fruitsState 需要修改下：</p>
+<pre><code class="js">// 水果部收银员
+//- function reducer(state, action) {
++ function fruitReducer(state = fruitState, action) {
+   if (action.type === &#39;BUY_APPLE&#39;) {
+     return Object.assign({}, state, {
+       apple: state.apple + action.payload.count
+     });
+   }
+   return state;
+ }
+</code></pre>
+<p>但是阿大并不想看各个部门的分账本，他只想看一个总账本就好了。刚好 redux 提供了 <strong>combineReducers</strong> 功能，可以把各个收银员管理的账本合起来：</p>
+<pre><code class="js">//- const { createStore } = require(&#39;redux&#39;);
++ const { createStore, combineReducers } = require(&#39;redux&#39;);
+
+// 总账本
++ const state = {
++   fruits: fruitsReducer,
++   fresh: freshReducer
++ };
+
+// 总收银员
++ const reducer = combineReducers(state);
+
+// 创建新的水果生鲜店
+//- const store = createStore(reducer, state);
++ const store = createStore(reducer);
+
+</code></pre>
+<p>这样，水果生鲜店就可以营业了，销售员又开始处理顾客的购物需求了：</p>
+<pre><code class="js">store.dispatch(buyApple(3)); // {&quot;fruit&quot;:{&quot;apple&quot;:3},&quot;fresh&quot;:{&quot;egg&quot;:0}}
+store.dispatch(buyEgg(1)); // {&quot;fruit&quot;:{&quot;apple&quot;:3},&quot;fresh&quot;:{&quot;egg&quot;:1}}
+store.dispatch(buyApple(4)); // {&quot;fruit&quot;:{&quot;apple&quot;:7},&quot;fresh&quot;:{&quot;egg&quot;:1}}
+store.dispatch(buyEgg(8)); // {&quot;fruit&quot;:{&quot;apple&quot;:7},&quot;fresh&quot;:{&quot;egg&quot;:9}}
+// ...
+</code></pre>
+<h3 id="图解："><a href="#图解：" class="headerlink" title="图解："></a>图解：</h3><p><img src="https://user-gold-cdn.xitu.io/2018/4/18/162d7f51769b18c2?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="reducer"></p>
+<h4 id="combineReducers"><a href="#combineReducers" class="headerlink" title="combineReducers"></a>combineReducers</h4><p>当业务场景越来越复杂的时候，state 的结构也会变得越来越复杂而且庞大。如果只用一个 reducer 来计算 state 的变化势必会特别麻烦。这个时候我们就可以把 state 里独立的数据分离出来，单独用一个 reducer 来计算，然后再通过 <strong>combineReducers</strong> 方法合入到 state 中。<br>combineReducers 接收一个对象，这个对象就是最终的 state</p>
+<pre><code class="js">const reducer = combineReducers({
+  fruits: fruitsReducer,
+  fresh: freshReducer
+});
+</code></pre>
+<h2 id="处理-async-action"><a href="#处理-async-action" class="headerlink" title="处理 async action"></a>处理 async action</h2><p>阿大通过 redux 的 bindReducers 方法将水果店的业务分治成功，店铺也越做越大。以至于有顾客开始想要买一些进口的水果生鲜。</p>
+<p>阿大考虑了一下，决定继续拓展这个店铺，从事进口商品的销售。首先是顾客的需求行为需要购买进口水果生鲜：</p>
+<pre><code class="js">
+// 买水果 - 进口苹果
++ function buyImportedApple(num) {
++   return {
++     type: &#39;BUY_IMPORTED_APPLE&#39;,
++     payload: {
++       num
++     }
++   }
++ }
+
+// 买生鲜 - 进口鸡蛋
++ function buyImportedEgg(num) {
++   return  {
++     type: &#39;BUY_IMPORTED_EGG&#39;,
++     payload: {
++       num
++     }
++   }
++ }
+
+</code></pre>
+<p>然后水果部和生鲜部的账本也要更新啦：</p>
+<pre><code class="js">// 水果账本
+ const fruitState = {
+   orange: 0,
+   apple: 0,
+   banana: 0,
++  importedApple: 0
+ };
+
+ // 生鲜账本
+ const freshState = {
+   egg: 0,
+   fish: 0,
+   vegetable: 0,
++  importedEgg: 0
+ };
+
+</code></pre>
+<p>同样的，相应部门的收银员们也要学会怎么处理进口水果生鲜的记账，他们的记账方式要改成下面这样：</p>
+<pre><code class="js">// 水果部收银员
+function fruitReducer(state = fruitState, action) {
+
+  // 如果有人买了相应的水果，更新账本
+  switch (action.type) {
+    case &#39;BUY_APPLE&#39;:
+      return Object.assign({}, state, {
+        apple: state.apple + action.payload.count
+      });
+    case &#39;BUY_IMPORTED_APPLE&#39;:
+      return Object.assign({}, state, {
+        importedApple: state.importedApple + action.payload.count
+      });
+
+    // 买其他的东西，不更新账本，原样返回
+    default: return state;
+  } ;
+}
+
+// 生鲜部收银员
+function freshReducer(state = freshState, action) {
+  switch (action.type) {
+    case &#39;BUY_EGG&#39;:
+      return Object.assign({}, state, {
+        egg: state.egg + action.payload.count
+      });
+    case &#39;BUY_IMPORTED_EGG&#39;:
+      return Object.assign({}, state, {
+        importedEgg: state.importedEgg + action.payload.count
+      });
+    default: return state;
+  } ;
+}
+</code></pre>
+<p>可是这时候阿大发现，进口水果生鲜不能大量存在自己仓库卖，因为它们又贵又容易坏，只有当顾客需要买的时候，才能去采购这些水果生鲜，于是阿大又雇了一个<strong>采购员</strong>专门负责处理要买进口水果和生鲜的顾客，等到货了再通知销售员取货给顾客：</p>
+<pre><code class="js">// 采购商品生成器，不同的商品需要不同的时间采购
+function fetchGoodsGenerator(time, action) {
+
+  // 用延时模拟采购时间
+  const timer = setTimeout(() =&gt; {
+    clearTimeout(timer);
+
+    // 采购完成，通知销售员
+    store.dispatch(action);
+  }, time);
+}
+
+// 采购进口苹果需要 2 天（2s）
+function fetchImportedApple(action) {
+  fetchGoodsGenerator(2000, action);
+}
+
+// 采购进口鸡蛋需要 3 天（3s）
+function fetchImportedEgg(action) {
+  fetchGoodsGenerator(3000, action);
+}
+
+// 采购员
+const API = {
+  fetchImportedApple, // 采购进口苹果
+  fetchImportedEgg // 采购进口鸡蛋
+}
+</code></pre>
+<p>好了，布置完了之后，顾客开始来买水果生鲜了：</p>
+<pre><code class="js">// 销售员开始销售，采购员开始采购
+store.dispatch(buyApple(3));
+API.fetchImportedApple(buyImportedApple(10));
+store.dispatch(buyEgg(1));
+API.fetchImportedEgg(buyImportedEgg(10));
+store.dispatch(buyApple(4));
+API.fetchImportedApple(buyImportedApple(10));
+store.dispatch(buyEgg(8));
+API.fetchImportedEgg(buyImportedEgg(10));
+// {&quot;fruit&quot;:{&quot;apple&quot;:3,&quot;importedApple&quot;:0},&quot;fresh&quot;:{&quot;egg&quot;:0,&quot;importedEgg&quot;:0}}
+// {&quot;fruit&quot;:{&quot;apple&quot;:3,&quot;importedApple&quot;:0},&quot;fresh&quot;:{&quot;egg&quot;:1,&quot;importedEgg&quot;:0}}
+// {&quot;fruit&quot;:{&quot;apple&quot;:7,&quot;importedApple&quot;:0},&quot;fresh&quot;:{&quot;egg&quot;:1,&quot;importedEgg&quot;:0}}
+// {&quot;fruit&quot;:{&quot;apple&quot;:7,&quot;importedApple&quot;:0},&quot;fresh&quot;:{&quot;egg&quot;:9,&quot;importedEgg&quot;:0}}
+// {&quot;fruit&quot;:{&quot;apple&quot;:7,&quot;importedApple&quot;:10},&quot;fresh&quot;:{&quot;egg&quot;:9,&quot;importedEgg&quot;:0}}
+// {&quot;fruit&quot;:{&quot;apple&quot;:7,&quot;importedApple&quot;:20},&quot;fresh&quot;:{&quot;egg&quot;:9,&quot;importedEgg&quot;:0}}
+// {&quot;fruit&quot;:{&quot;apple&quot;:7,&quot;importedApple&quot;:20},&quot;fresh&quot;:{&quot;egg&quot;:9,&quot;importedEgg&quot;:10}}
+// {&quot;fruit&quot;:{&quot;apple&quot;:7,&quot;importedApple&quot;:20},&quot;fresh&quot;:{&quot;egg&quot;:9,&quot;importedEgg&quot;:20}}
+</code></pre>
+<h3 id="图解"><a href="#图解" class="headerlink" title="图解"></a>图解</h3><p><img src="https://user-gold-cdn.xitu.io/2018/4/18/162d925e3fdc050d?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="async action"></p>
+<p>在实际的开发当中我们经常会调用一些 API 接口获取数据更新 state。刚开始使用 redux 的一个误区就是在 reducer 里接收到异步的 action 之后，就在 reducer 里做异步操作，调用 API。但是这样是错误的。reducer 只能是纯函数，不能有任何副作用。这样才能保证对于相同的输入，一定会有相同的输出。</p>
+<p><a href="https://juejin.im/user/57d8a928d203090069c13a21/likes" target="_blank" rel="noopener">原文地址</a></p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/favicon.png" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <!-- <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd> -->
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">171 <p>Articles</p></a></li>
+                    <li><a href="/categories">26 <p>Categories</p></a></li>
+                    <li><a href="/tags">55 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Redux-是什么"><span class="toc-number">1.</span> <span class="toc-text">Redux 是什么</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#redux基础用法—卖水果"><span class="toc-number">1.1.</span> <span class="toc-text">redux基础用法—卖水果</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#首先模拟顾客的购买行为："><span class="toc-number">1.1.1.</span> <span class="toc-text">首先模拟顾客的购买行为：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#讲解"><span class="toc-number">1.1.2.</span> <span class="toc-text">讲解</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reducer拆分"><span class="toc-number">1.2.</span> <span class="toc-text">reducer拆分</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#图解："><span class="toc-number">1.2.1.</span> <span class="toc-text">图解：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#处理-async-action"><span class="toc-number">1.3.</span> <span class="toc-text">处理 async action</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#图解"><span class="toc-number">1.3.1.</span> <span class="toc-text">图解</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+
+
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>

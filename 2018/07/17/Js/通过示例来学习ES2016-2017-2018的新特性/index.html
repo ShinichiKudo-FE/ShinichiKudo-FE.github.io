@@ -1,0 +1,530 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>通过示例来学习ES2016, 2017, 2018的新特性 - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,
+前言本文会辅以有用的例子来讲述TC39中的18个特性，它们分别在ES2016, ES2017和ES2018中加入。鉴于本文内容很长，我们将分为两个部分来介绍，此为第一部分。
+ES6Array.pr,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://ShinichiKudo-FE.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">通过示例来学习ES2016, 2017, 2018的新特性</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/Js"><b>「
+                    </b>JS<b> 」</b></a>
+                
+                July 17, 2018
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2018/07/17/Js/%E9%80%9A%E8%BF%87%E7%A4%BA%E4%BE%8B%E6%9D%A5%E5%AD%A6%E4%B9%A0ES2016-2017-2018%E7%9A%84%E6%96%B0%E7%89%B9%E6%80%A7/" title="通过示例来学习ES2016, 2017, 2018的新特性" class="">通过示例来学习ES2016, 2017, 2018的新特性</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    6.7k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    6 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/ES6/" rel="tag">ES6</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/es_16_17_18.png" alt="es678"></p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本文会辅以有用的例子来讲述TC39中的18个特性，它们分别在ES2016, ES2017和ES2018中加入。<br>鉴于本文内容很长，我们将分为两个部分来介绍，此为第一部分。</p>
+<h2 id="ES6"><a href="#ES6" class="headerlink" title="ES6"></a>ES6</h2><h3 id="Array-prototype-includes"><a href="#Array-prototype-includes" class="headerlink" title="Array.prototype.includes"></a>Array.prototype.includes</h3><p>includes是一个Array上很有用的函数，用于快速查找数组中是否包含某个元素。(包括NaN，所以和indexOf不一样)。</p>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/includes.png" alt="includes"></p>
+<h3 id="指数函数的中缀形式"><a href="#指数函数的中缀形式" class="headerlink" title="指数函数的中缀形式"></a>指数函数的中缀形式</h3><p>加/减法我们通常都是用其中缀形式，直观易懂。在ECMAScript2016中，我们可以使用<code>**</code>来替代<code>Math.pow</code>。</p>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/pow.png" alt="pow"><br><a id="more"></a></p>
+<h2 id="ES7"><a href="#ES7" class="headerlink" title="ES7"></a>ES7</h2><h3 id="Object-values"><a href="#Object-values" class="headerlink" title="Object.values()"></a>Object.values()</h3><p><code>Object.values()</code>函数和<code>Object.keys()</code>很相似，它返回一个对象中自己属性的所有值(通过原型链继承的不算)。</p>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/objvalues.png" alt="objvalues"></p>
+<h3 id="Object-entries"><a href="#Object-entries" class="headerlink" title="Object.entries()"></a>Object.entries()</h3><p><code>Object.entries()</code>和<code>Object.keys</code>相关，不过entries()函数会将key和value以数组的形式都返回。这样，使用循环或则将对象转为Map就很方便了。</p>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/objentry1.png" alt="objentry1"></p>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/objentry2.png" alt="objentry2"></p>
+<h3 id="字符串追加"><a href="#字符串追加" class="headerlink" title="字符串追加"></a>字符串追加</h3><p>提供了两个字符串追加的方法<code>String.prototype.padStart</code>和<code>String.prototype.padEnd</code>，方便我们将一个新的字符串追加到某个字符串的头尾。</p>
+<pre><code class="js">&#39;someString&#39;.padStart(numberOfCharcters [,stringForPadding]);
+&#39;5&#39;.padStart(10) // &#39;          5&#39;
+&#39;5&#39;.padStart(10, &#39;=*&#39;) //&#39;=*=*=*=*=5&#39;
+&#39;5&#39;.padEnd(10) // &#39;5         &#39;
+&#39;5&#39;.padEnd(10, &#39;=*&#39;) //&#39;5=*=*=*=*=&#39;
+</code></pre>
+<p>这个对于格式化输出很有用！</p>
+<h4 id="padStart例子"><a href="#padStart例子" class="headerlink" title="padStart例子"></a>padStart例子</h4><p>我们有一个不同长度元素的数组，我们可以往前面追加0来使得他们打印的长度都为10。</p>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/padStart.png" alt="padStart"></p>
+<h4 id="padEnd例子"><a href="#padEnd例子" class="headerlink" title="padEnd例子"></a>padEnd例子</h4><p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/padEnd.png" alt="padEnd例子"></p>
+<pre><code class="js">const cars = {
+  &#39;🚙BMW&#39;: &#39;10&#39;,
+  &#39;🚘Tesla&#39;: &#39;5&#39;,
+  &#39;🚖Lamborghini&#39;: &#39;0&#39;
+}
+Object.entries(cars).map(([name, count]) =&gt; {
+  //padEnd appends &#39; -&#39; until the name becomes 20 characters
+  //padStart prepends &#39;0&#39; until the count becomes 3 characters.
+  console.log(`${name.padEnd(20, &#39; -&#39;)} Count: ${count.padStart(3, &#39;0&#39;)}`)
+});
+//Prints..
+// 🚙BMW - - - - - - -  Count: 010
+// 🚘Tesla - - - - - -  Count: 005
+// 🚖Lamborghini - - -  Count: 000
+
+</code></pre>
+<h4 id="使用padStart和padEnd来格式化Emojis和其他宽字符"><a href="#使用padStart和padEnd来格式化Emojis和其他宽字符" class="headerlink" title="使用padStart和padEnd来格式化Emojis和其他宽字符"></a>使用padStart和padEnd来格式化Emojis和其他宽字符</h4><p>Emojis和宽字符使用多个字节来表示，因此可能使用padStart和padEnd的结果并非如你所愿。</p>
+<p>比如：我们追加❤️到heart前面：</p>
+<pre><code class="js">//你会发现不仅没有5个桃心，有一个桃心还很奇怪。
+&#39;heart&#39;.padStart(10, &quot;❤️&quot;); // prints.. &#39;❤️❤️❤heart&#39;
+</code></pre>
+<p>这是因为❤️占有2个字节(‘\u2764\uFE0F’)，而heart本身有5个字节，因此只有5个字节的余地。所以只是追加了2个半的桃心。最后追加的’\u2764’会显示为小黑桃心。</p>
+<h3 id="Object-getOwnPropertyDescriptors"><a href="#Object-getOwnPropertyDescriptors" class="headerlink" title="Object.getOwnPropertyDescriptors"></a>Object.getOwnPropertyDescriptors</h3><p>该函数返回一个对象所有的属性，甚至包括get/set函数。ES2017加入这个函数的主要动机在于方便将一个对象深度拷贝给另一个对象，同时可以将getter/setter拷贝。和Object.assign不同。</p>
+<p>Object.assign将一个对象除了getter/setter以外的都深度拷贝了。</p>
+<p>将原对象Car拷贝到ElectricCar，你就会发现Object.getOwnPropertyDescriptors拷贝了 getter和setter，而Object.assign没有。</p>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/objcopy.png" alt="objcopy"></p>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/objcopy2.png" alt="objcopy2"></p>
+<h3 id="允许在函数参数最后添加逗号"><a href="#允许在函数参数最后添加逗号" class="headerlink" title="允许在函数参数最后添加逗号"></a>允许在函数参数最后添加逗号</h3><p>这是一个很小的改动，方便git算法更加方便区分代码职责。我们用一个详细的例子来理解：</p>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/gitcomma.png" alt="gitcomma"></p>
+<p>值得一提的是，在函数调用的时候，也可以在最后添加逗号。</p>
+<h3 id="Async-Await"><a href="#Async-Await" class="headerlink" title="Async/Await"></a>Async/Await</h3><p>迄今为止，我介绍的特性中最有用的就属这个功能了。Async函数可以帮助我们摆脱“回调地狱”，并且整个代码会更加简洁。</p>
+<p>async关键字告诉JavaScript编译器对于标定的函数要区别对待。当编译器遇到await函数的时候会暂停。它会等到await标定的函数返回的promise。该promise要么得到结果、要么reject。</p>
+<p>在下面的例子中，getAmount函数调用getUser和getBankBalance两个异步函数。我们可以用promise来实现它，不过用async await更加简洁。</p>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/async_await.png" alt="async_await"></p>
+<h4 id="async函数返回Promise"><a href="#async函数返回Promise" class="headerlink" title="async函数返回Promise"></a>async函数返回Promise</h4><p>如果你想获取一个async函数的结果，你需要使用Promise的then语法。</p>
+<p>在下面的例子中，我们想用console.log来打印doubleAndAdd的结果，可以使用then语法，将console.log函数作为参数传入。</p>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/async_promise.png" alt="async_promise"></p>
+<h4 id="并行处理"><a href="#并行处理" class="headerlink" title="并行处理"></a>并行处理</h4><p>在上面的例子中，我们显示地调用了await两次，因为每次都等待了1秒钟，因此总计两秒钟。现在，我们可以使用Promise.all函数来让他们并行处理。</p>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/await_parallel.png" alt="await_parallel"></p>
+<h4 id="async-await的错误处理"><a href="#async-await的错误处理" class="headerlink" title="async/await的错误处理"></a>async/await的错误处理</h4><p>有很多方法来处理错误。</p>
+<ul>
+<li>方法1：在函数中使用try-catch</li>
+</ul>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/trycatch.png" alt="trycatch"></p>
+<ul>
+<li>方法2：catch每一个await表达式</li>
+</ul>
+<p>因为每一个await表达式都会返回Promise，你可以对一个进行catch操作。</p>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/await_catch.png" alt="await_catch"></p>
+<ul>
+<li>方法3：catch整个async-await函数</li>
+</ul>
+<p><img src="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/catch_all.png" alt="catch_all"></p>
+<p><a href="https://blog.fundebug.com/2018/07/17/new_in_es16_17_18/" target="_blank" rel="noopener">原文地址</a></p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/favicon.png" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <!-- <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd> -->
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">171 <p>Articles</p></a></li>
+                    <li><a href="/categories">26 <p>Categories</p></a></li>
+                    <li><a href="/tags">55 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ES6"><span class="toc-number">1.1.</span> <span class="toc-text">ES6</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Array-prototype-includes"><span class="toc-number">1.1.1.</span> <span class="toc-text">Array.prototype.includes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#指数函数的中缀形式"><span class="toc-number">1.1.2.</span> <span class="toc-text">指数函数的中缀形式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ES7"><span class="toc-number">1.2.</span> <span class="toc-text">ES7</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Object-values"><span class="toc-number">1.2.1.</span> <span class="toc-text">Object.values()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Object-entries"><span class="toc-number">1.2.2.</span> <span class="toc-text">Object.entries()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串追加"><span class="toc-number">1.2.3.</span> <span class="toc-text">字符串追加</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Object-getOwnPropertyDescriptors"><span class="toc-number">1.2.4.</span> <span class="toc-text">Object.getOwnPropertyDescriptors</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#允许在函数参数最后添加逗号"><span class="toc-number">1.2.5.</span> <span class="toc-text">允许在函数参数最后添加逗号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Async-Await"><span class="toc-number">1.2.6.</span> <span class="toc-text">Async&#x2F;Await</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+
+
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>
