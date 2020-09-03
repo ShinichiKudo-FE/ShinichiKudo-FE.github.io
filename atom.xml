@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ShinichiKudo-FE.github.io/"/>
-  <updated>2020-08-18T03:06:42.378Z</updated>
+  <updated>2020-09-03T08:49:55.505Z</updated>
   <id>https://ShinichiKudo-FE.github.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>深入 TypeScript 中的子类型、逆变、协变</title>
+    <link href="https://ShinichiKudo-FE.github.io/2020/09/03/Ts/%E6%B7%B1%E5%85%A5-TypeScript-%E4%B8%AD%E7%9A%84%E5%AD%90%E7%B1%BB%E5%9E%8B%E3%80%81%E9%80%86%E5%8F%98%E3%80%81%E5%8D%8F%E5%8F%98/"/>
+    <id>https://ShinichiKudo-FE.github.io/2020/09/03/Ts/深入-TypeScript-中的子类型、逆变、协变/</id>
+    <published>2020-09-03T07:58:12.000Z</published>
+    <updated>2020-09-03T08:49:55.505Z</updated>
+    
+    <content type="html"><![CDATA[<p><a href="https://juejin.im/post/6855517117778198542" target="_blank" rel="noopener">原文地址</a></p><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>TypeScript 中有很多地方涉及到子类型 <code>subtype</code>、父类型 <code>supertype</code>、逆变和协变<code>covariance and contravariance</code>的概念，如果搞不清这些概念，那么很可能被报错搞的无从下手，或者在写一些复杂类型的时候看到别人可以这么写，但是不知道为什么他可以生效。</p><h2 id="子类型"><a href="#子类型" class="headerlink" title="子类型"></a>子类型</h2><p>比如考虑如下的接口：</p><pre><code class="js">interface Animal {  age: number}interface Dog extends Animal {  bark(): void}</code></pre><p>在这个例子中，<code>Animal</code> 是 <code>Dog</code> 的父类，<code>Dog</code>是<code>Animal</code>的子类型，子类型的属性比父类型更多，更具体。</p><p>在类型系统中，属性更多的类型是子类型。<br>在集合论中，属性更少的集合是子集。</p><p>也就是说，子类型是父类型的超集，而父类型是子类型的子集，这是直觉上容易搞混的一点。<br>记住一个特征，<em>子类型比父类型更加具体</em>，这点很关键。</p><h2 id="可赋值性的assignable"><a href="#可赋值性的assignable" class="headerlink" title="可赋值性的assignable"></a>可赋值性的<font color="red">assignable</font></h2><p><code>assignable</code> 是类型系统中很重要的一个概念，当你把一个变量赋值给另一个变量时，就要检查这两个变量的类型之间是否可以相互赋值。</p><pre><code class="js">let animal: Animallet dog: Doganimal = dog // ✅okdog = animal // ❌error! animal 实例上缺少属性 &#39;bark&#39;</code></pre><p>从这个例子里可以看出，animal 是一个「更宽泛」的类型，它的属性比较少，所以更「具体」的子类型是可以赋值给它的，因为你是知道 animal 上只有 age 这个属性的，你只会去使用这个属性，dog 上拥有 animal 所拥有的一切类型，赋值给 animal 是不会出现类型安全问题的。</p><p>反之，如果 dog = animal，那么后续使用者会期望 dog 上拥有 bark 属性，当他调用了 dog.bark() 就会引发运行时的崩溃。</p><p>从可赋值性角度来说，子类型是可以赋值给父类型的，也就是<code>父类型变量 = 子类型变量</code> 是安全的，因为子类型上涵盖了父类型所拥有的的一切属性。</p><p>当我初学的时候，我会觉得<code>T extends {}</code> 这样的语句很奇怪，为什么可以 <code>extends</code>一个空类型并且在传递任意类型时都成立呢？当搞明白上面的知识点，这个问题也自然迎刃而解了。</p><h2 id="在函数中的运用"><a href="#在函数中的运用" class="headerlink" title="在函数中的运用"></a>在函数中的运用</h2><p>假设我们有这样的一个函数：</p><pre><code class="js">function c(val:{a:number,b:number})</code></pre><p>有这样两个变量：</p><pre><code class="js">let val1 = { a: 1 }let val2 = { a: 1, b: 2, c: 3 }</code></pre><p>调用 <code>f(val1)</code> 是会报错的，比较显而易见的来看是因为缺少属性 b，而函数 f 中很可能去访问 b 属性并且做一些操作，比如 <code>b.substr()</code>，这就会导致崩溃。</p><p>换成上面的知识点来看，val1 对应的类型是{ a: number }，它是 { a: number, b: number } 的父类型，调用 <code>f(val1)</code> 其实就相当于把函数定义中的形参 val 赋值成了 val1，把父类型的变量赋值给子类型的变量，这是危险的。</p><p>反之，调用 f(val2) 没有任何问题，因为 val2 的类型是 val类型的子类型，它拥有更多的属性，函数有可能使用的一切属性它都有。</p><p>假设我现在要开发一个 <code>redux</code>，在声明 <code>dispatch</code> 类型的时候，我就可以这样去做：</p><pre><code class="ts">interface Action {  type: string}declare function dispatch&lt;T extends Action&gt;(action: T)</code></pre><p>这样，就约束了传入的参数一定是 Action 的子类型。也就是说，必须有 type，其他的属性有没有，您随意。</p><h2 id="在联合类型中的运用"><a href="#在联合类型中的运用" class="headerlink" title="在联合类型中的运用"></a>在联合类型中的运用</h2><p>学习了以上知识点，再看联合类型的可赋值性，乍一看会比较反直觉， <code>&#39;a&#39; | &#39;b&#39; | &#39;c&#39;</code> 是 <code>&#39;a&#39; | &#39;b&#39;</code> 的子类型吗？它看起来属性更多诶？其实正相反，<code>&#39;a&#39; | &#39;b&#39; | &#39;c&#39;</code> 是 <code>&#39;a&#39; | &#39;b&#39;</code> 的父类型。因为<strong>前者比后者更「宽泛」，后者比前者更「具体」</strong>。</p><pre><code class="ts">type Parent = &#39;a&#39; | &#39;b&#39; | &#39;c&#39;type Son = &#39;a&#39; | &#39;b&#39;let parent: Parentlet son: Sonparent = son // ✅okson = parent // ❌error! parent 有可能是 &#39;c&#39;</code></pre><p>这里 son 是可以安全的赋值给 parent 的，因为 son 的所有可能性都被 parent 涵盖了。<br>而反之则不行，parent 太宽泛了，它有可能是 ‘c’，这是 Son 类型 hold 不住的。<br>这个例子看完以后，你应该可以理解为什么 <code>&#39;a&#39; | &#39;b&#39;</code> extends <code>&#39;a&#39; | &#39;b&#39; | &#39;c&#39;</code> 为 true 了，在书写 <code>conditional types</code>的时候更加灵活的运用吧。</p><h2 id="逆变和协变"><a href="#逆变和协变" class="headerlink" title="逆变和协变"></a>逆变和协变</h2><p>先来段<a href="https://zh.wikipedia.org/wiki/%E5%8D%8F%E5%8F%98%E4%B8%8E%E9%80%86%E5%8F%98" target="_blank" rel="noopener">维基百科的定义</a>：</p><blockquote><p>协变与逆变(covariance and contravariance)是在计算机科学中，描述具有父/子型别关系的多个型别通过型别构造器、构造出的多个复杂型别之间是否有父/子型别关系的用语。</p></blockquote><p>描述的比较晦涩难懂，但是用我们上面的动物类型的例子来解释一波，现在我们还是有 <code>Animal</code> 和 <code>Dog</code> 两个父子类型。</p><h3 id="协变（Covariance）"><a href="#协变（Covariance）" class="headerlink" title="协变（Covariance）"></a>协变（Covariance）</h3><p>那么想象一下，现在我们分别有这两个子类型的数组，他们之间的父子关系应该是怎么样的呢？没错，Animal[] 依然是 Dog[] 的父类型，对于这样的一段代码，把子类型赋值给父类型依然是安全的：</p><pre><code class="js">let animals: Animal[]let dogs: Dog[]animals = dogsanimals[0].age // ✅ok</code></pre><p>转变成数组之后，对于父类型的变量，我们依然只会去 <code>Dog</code> 类型中一定有的那些属性。</p><p>那么，对于 <code>type MakeArray&lt;T&gt; = T[]</code> 这个类型构造器来说，它就是 协变（Covariance） 的。</p><h3 id="逆变（Contravariance）"><a href="#逆变（Contravariance）" class="headerlink" title="逆变（Contravariance）"></a>逆变（Contravariance）</h3><p>有这样两个函数：</p><pre><code class="js">let visitAnimal = (animal: Animal) =&gt; void;let visitDog = (dog: Dog) =&gt; void;</code></pre><p><code>animal = dog</code> 是类型安全的，那么 <code>visitAnimal = visitDog</code> 好像也是可行的？其实不然，想象一下这两个函数的实现：</p><pre><code class="ts">let visitAnimal = (animal: Animal) =&gt; {  animal.age}let visitDog = (dog: Dog) =&gt; {  dog.age  dog.bark()}</code></pre><p>由于 visitDog 的参数期望的是一个更具体的带有 bark 属性的子类型，所以如果 visitAnimal = visitDog 后，我们可能会用一个不带 bark 属性的普通的 animal 类型来传给 visitDog。</p><pre><code class="ts">visitAnimal = visitDoglet animal = { age: 5 }visitAnimal(animal) // ❌</code></pre><p>这会造成运行时错误，<code>animal.bark</code> 根本不存在，去调用这个方法会引发崩溃。<br>但是反过来，<code>visitDog = visitAnimal</code> 却是完全可行的。因为后续调用方会传入一个比 animal 属性更具体的 dog，函数体内部的一切访问都是安全的。</p><p>在对 Animal 和 Dog 类型分别调用如下的类型构造器之后：</p><pre><code class="ts">  type MakeFunction&lt;T&gt; = (arg: T) =&gt; void</code></pre><p>父子类型关系逆转了，这就是 逆变（Contravariance）。</p><h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>当然，在 <code>TypeScript</code> 中，由于灵活性等权衡，对于函数参数默认的处理是<code>双向协变</code> 的。也就是既可以 visitAnimal = visitDog，也可以 visitDog = visitAnimal。在开启了 tsconfig 中的 <strong><code>strictFunctionType</code></strong> 后才会严格按照 <code>逆变</code> 来约束赋值关系。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;a href=&quot;https://juejin.im/post/6855517117778198542&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;原文地址&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerl
+      
+    
+    </summary>
+    
+      <category term="Ts" scheme="https://ShinichiKudo-FE.github.io/categories/Ts/"/>
+    
+    
+      <category term="Ts" scheme="https://ShinichiKudo-FE.github.io/tags/Ts/"/>
+    
+  </entry>
   
   <entry>
     <title>重学React(三)</title>
@@ -649,31 +675,6 @@ export function render(_ctx, _cache) {
     
     
       <category term="Vue3.x" scheme="https://ShinichiKudo-FE.github.io/tags/Vue3-x/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>关于SaaS产品的一些思考和总结</title>
-    <link href="https://ShinichiKudo-FE.github.io/2020/04/20/%E6%9D%82%E6%96%87/%E5%85%B3%E4%BA%8ESaaS%E4%BA%A7%E5%93%81%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83%E5%92%8C%E6%80%BB%E7%BB%93/"/>
-    <id>https://ShinichiKudo-FE.github.io/2020/04/20/杂文/关于SaaS产品的一些思考和总结/</id>
-    <published>2020-04-20T09:38:27.000Z</published>
-    <updated>2020-04-20T12:30:12.000Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="SaaS的收费模式"><a href="#SaaS的收费模式" class="headerlink" title="SaaS的收费模式"></a>SaaS的收费模式</h1><p>首年收取的是开户费(软件系统费和账号费等)，从第二年开始收取年费，Sass要提供持续的运营服务才能够持续收费</p><h1 id="SaaS的运营框架"><a href="#SaaS的运营框架" class="headerlink" title="SaaS的运营框架"></a>SaaS的运营框架</h1><h2 id="基础工作"><a href="#基础工作" class="headerlink" title="基础工作"></a>基础工作</h2><h3 id="弄懂产品"><a href="#弄懂产品" class="headerlink" title="弄懂产品"></a>弄懂产品</h3><p>了解产品，可不是注册一个账号，随便玩玩，然后提几个优化建议就完事了，这是敷衍。真正弄懂产品，可以从这4方面入手。</p><p>第一、了解产品相关的行业背景，如行业历史、现状、最新动态。了解产品涉及的基础知识，如技术原理，在行业的优势。</p><p>第二、阅读产品相关的材料，包括内部的文档、介绍、白皮书，外部的报道、技术分析等。</p><p>第三、经常和技术、产品、客服同学交流，了解内部人对产品的切身感受和想法。</p><p>第四、自己深度体验产品，多问几个为什么。为什么这个功能是这样设计的，在什么场景下为谁解决了什么问题？</p><h3 id="弄懂业务"><a href="#弄懂业务" class="headerlink" title="弄懂业务"></a>弄懂业务</h3><p>首先，要弄懂自己内部的业务。要把同事变成自己的助手，而不是阻力。一定要熟悉各部门的办事流程、各部门能支持的资源、老板能支持的资源，洞悉和掌握这些信息，有利于你开展工作，快速推进。</p><p>其次，要了解客户的业务。他们的业务是怎么运作的，每个人是如何分工配合的，遇到的问题是什么。弄懂客户的业务，才能更好的匹配客户需求，不然永远是门外汉。</p><h3 id="弄懂用户路径"><a href="#弄懂用户路径" class="headerlink" title="弄懂用户路径"></a>弄懂用户路径</h3><p>用户是怎么认识你，为什么选择了你，最后又是怎么流失的？如果你能弄懂用户路径，那么就知道每个环节应该做什么，张弛有度，整体的运营工作开展就会很顺利。这一点非常重要，很多人就是没搞懂用户路径，不知道工作从哪着手，想到一点就做一点，完全没有章法，工作自然难出成绩。</p><h1 id="SaaS的核心组件"><a href="#SaaS的核心组件" class="headerlink" title="SaaS的核心组件"></a>SaaS的核心组件</h1><h2 id="安全组件（保护用户数据）"><a href="#安全组件（保护用户数据）" class="headerlink" title="安全组件（保护用户数据）"></a>安全组件（保护用户数据）</h2><h2 id="数据隔离组件"><a href="#数据隔离组件" class="headerlink" title="数据隔离组件"></a>数据隔离组件</h2><h2 id="可配置组件"><a href="#可配置组件" class="headerlink" title="可配置组件"></a>可配置组件</h2><h2 id="可扩展组件"><a href="#可扩展组件" class="headerlink" title="可扩展组件"></a>可扩展组件</h2><h2 id="0停机时间升级维护产品"><a href="#0停机时间升级维护产品" class="headerlink" title="0停机时间升级维护产品"></a>0停机时间升级维护产品</h2><h2 id="多租户组件"><a href="#多租户组件" class="headerlink" title="多租户组件"></a>多租户组件</h2><h1 id="SaaS多租户下的数据模型分析"><a href="#SaaS多租户下的数据模型分析" class="headerlink" title="SaaS多租户下的数据模型分析"></a>SaaS多租户下的数据模型分析</h1><h2 id="数据存储架构"><a href="#数据存储架构" class="headerlink" title="数据存储架构"></a>数据存储架构</h2><p>现有的多租户用户数据存储主要分为三种方式：</p><ul><li>独立数据库</li><li>共享数据库但隔离数据</li><li>共享数据库且共享数据</li></ul><h2 id="总体业务架构"><a href="#总体业务架构" class="headerlink" title="总体业务架构"></a>总体业务架构</h2><p>SaaS平台的用户管理系统主要是统一管理用户信息，用户通过SaaS平台统一注册、登录后，能够试用、采购各企业应用，实现各个第三方企业应用的集成</p><p>从功能结构上大致可以分成4个业务域：租户域、租户管理域、用户域、用户权限域等；</p><ul><li>租户域：主要描述租户的基本信息，以及租户的组织结构、租户的用户成员（成员职位）等信息；</li><li>租户管理域：主要描述租户多级管理员详情，以及管理员对应管理的企业应用权限、数据范围权限；</li><li>用户域：主要描述用户基本信息，用户登录账号、实名认证、登录的第三方账号绑定等信息；</li><li>用户权限域：主要描述用户能够使用的企业应用以及数据范围的权限信息；</li></ul><p><img src="https://img-blog.csdn.net/20180622144116115?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2hvdF9zdW1tZXJ5/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="多租户模型图"><br><img src="https://img-blog.csdnimg.cn/20200404205531179.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0hvdGljZTg4OA==,size_16,color_FFFFFF,t_70" alt="分析介绍"></p><h1 id="成熟SaaS产品的4个标志"><a href="#成熟SaaS产品的4个标志" class="headerlink" title="成熟SaaS产品的4个标志"></a>成熟SaaS产品的4个标志</h1><p>成熟可用是企业选择SaaS产品的最重要标准，这也是为什么我们行业为什么要坚持潜行相当长时间的原因。企业境况说是靠时间熬出来的，更准确地说是靠产品的成熟化熬出来的。成熟的SaaS果实一如褚橙般甜蜜。</p><p>那么如何判断一个产品是已经成熟的？</p><h2 id="稳定的商业模式，组分市场和顾客分层"><a href="#稳定的商业模式，组分市场和顾客分层" class="headerlink" title="稳定的商业模式，组分市场和顾客分层"></a>稳定的商业模式，组分市场和顾客分层</h2><p>当一个商业模式和对应的价格水平能够稳定一到两年，感觉已经没有大幅修订的必要时，SaaS产品在商业模式上才算稳定下来，它是对产品成熟度的第一大贡献。</p><h2 id="产品投射了专业和行业的最佳实践"><a href="#产品投射了专业和行业的最佳实践" class="headerlink" title="产品投射了专业和行业的最佳实践"></a>产品投射了专业和行业的最佳实践</h2><p>一个成熟的CRM应用必然需要将销售管理方法、流程和工具内置在产品中，它不仅需要提供一个程序，还需要提供一个使用程序的程序。</p><h2 id="健全的用户入场协助"><a href="#健全的用户入场协助" class="headerlink" title="健全的用户入场协助"></a>健全的用户入场协助</h2><p>为了做到这一点，SaaS产品需要首先拥有完善的团队账户架构，能够支持每个个体用户使用实名账户，被初始管理员授予合适的权限，如果有多个团队，还可能需要团队管理员这个角色来减轻大管家的压力。为了加入新成员，调整成员和分组的过程必须足够清晰和简单，让客户有动力来维持这个用户系统。相反，如果我们在这个问题上忽视，胡乱地分配一些001，002工号出去，甚至允许用户合用账号，那客户总是会走到混乱失序的那一天，距离客户流失也就不远了。</p><p>仅仅有了科学完善的账户结构体系还不够，我们还要帮助企业穿针引线，让多成员进入这个系统非常简单和轻松。比如一个BI应用，在配置外部数据源的时候，需要用户添加Google Analytics的Profile，问题是掌握这个信息的人可能不是管理员本人，他可能需要同事的帮忙才能完成这个配置，这时候软件可能需要直接将邀请成员完成一个配置作为一个用例来对待，设计出专门的交互界面。</p><p>有一次在机场顿悟，昂贵的机场设施和几乎所有的机场地勤人员其实只为一个事情，让乘客登上飞机。而我们去机场，其实是为了坐飞机旅行，我们不一定意识到onboarding的过程这么重要和昂贵。</p><p>当一个SaaS产品意识到这一点，把帮助用户上船，上飞机作为一个大型项目来看待，它距离成熟就不远了。</p><h2 id="支持外部数据整合的开放性"><a href="#支持外部数据整合的开放性" class="headerlink" title="支持外部数据整合的开放性"></a>支持外部数据整合的开放性</h2><p>最后一点，成熟的SaaS产品必然考虑开放性，如果没有API，几乎就不可能成为一个长期存在的SaaS产品</p><p>一个标准化的SaaS软件可能增强到特性丰富，组织有序的良好状态，但是它绝无可能提供用户所要的所有功能，企业用户结合使用多个产品工具解决业务问题是一个常态。有了丰富的编程接口，至少让用户有机会能够通过变通的办法来实现他之所想。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;SaaS的收费模式&quot;&gt;&lt;a href=&quot;#SaaS的收费模式&quot; class=&quot;headerlink&quot; title=&quot;SaaS的收费模式&quot;&gt;&lt;/a&gt;SaaS的收费模式&lt;/h1&gt;&lt;p&gt;首年收取的是开户费(软件系统费和账号费等)，从第二年开始收取年费，Sass要提供持续
-      
-    
-    </summary>
-    
-      <category term="杂文" scheme="https://ShinichiKudo-FE.github.io/categories/%E6%9D%82%E6%96%87/"/>
-    
-    
-      <category term="杂文" scheme="https://ShinichiKudo-FE.github.io/tags/%E6%9D%82%E6%96%87/"/>
     
   </entry>
   

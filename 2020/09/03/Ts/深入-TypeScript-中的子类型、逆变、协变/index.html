@@ -1,0 +1,549 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>深入 TypeScript 中的子类型、逆变、协变 - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,原文地址
+前言TypeScript 中有很多地方涉及到子类型 subtype、父类型 supertype、逆变和协变covariance and contravariance的概念，如果搞不清这些概,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://ShinichiKudo-FE.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">深入 TypeScript 中的子类型、逆变、协变</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/Ts"><b>「
+                    </b>TS<b> 」</b></a>
+                
+                September 03, 2020
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2020/09/03/Ts/%E6%B7%B1%E5%85%A5-TypeScript-%E4%B8%AD%E7%9A%84%E5%AD%90%E7%B1%BB%E5%9E%8B%E3%80%81%E9%80%86%E5%8F%98%E3%80%81%E5%8D%8F%E5%8F%98/" title="深入 TypeScript 中的子类型、逆变、协变" class="">深入 TypeScript 中的子类型、逆变、协变</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    5.8k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    5 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Ts/" rel="tag">Ts</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <p><a href="https://juejin.im/post/6855517117778198542" target="_blank" rel="noopener">原文地址</a></p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>TypeScript 中有很多地方涉及到子类型 <code>subtype</code>、父类型 <code>supertype</code>、逆变和协变<code>covariance and contravariance</code>的概念，如果搞不清这些概念，那么很可能被报错搞的无从下手，或者在写一些复杂类型的时候看到别人可以这么写，但是不知道为什么他可以生效。</p>
+<h2 id="子类型"><a href="#子类型" class="headerlink" title="子类型"></a>子类型</h2><p>比如考虑如下的接口：</p>
+<pre><code class="js">interface Animal {
+  age: number
+}
+
+interface Dog extends Animal {
+  bark(): void
+}
+</code></pre>
+<p>在这个例子中，<code>Animal</code> 是 <code>Dog</code> 的父类，<code>Dog</code>是<code>Animal</code>的子类型，子类型的属性比父类型更多，更具体。</p>
+<p>在类型系统中，属性更多的类型是子类型。<br>在集合论中，属性更少的集合是子集。</p>
+<p>也就是说，子类型是父类型的超集，而父类型是子类型的子集，这是直觉上容易搞混的一点。<br>记住一个特征，<em>子类型比父类型更加具体</em>，这点很关键。</p>
+<h2 id="可赋值性的assignable"><a href="#可赋值性的assignable" class="headerlink" title="可赋值性的assignable"></a>可赋值性的<font color="red">assignable</font></h2><p><code>assignable</code> 是类型系统中很重要的一个概念，当你把一个变量赋值给另一个变量时，就要检查这两个变量的类型之间是否可以相互赋值。</p>
+<pre><code class="js">let animal: Animal
+let dog: Dog
+
+animal = dog // ✅ok
+dog = animal // ❌error! animal 实例上缺少属性 &#39;bark&#39;
+</code></pre>
+<p>从这个例子里可以看出，animal 是一个「更宽泛」的类型，它的属性比较少，所以更「具体」的子类型是可以赋值给它的，因为你是知道 animal 上只有 age 这个属性的，你只会去使用这个属性，dog 上拥有 animal 所拥有的一切类型，赋值给 animal 是不会出现类型安全问题的。</p>
+<p>反之，如果 dog = animal，那么后续使用者会期望 dog 上拥有 bark 属性，当他调用了 dog.bark() 就会引发运行时的崩溃。</p>
+<p>从可赋值性角度来说，子类型是可以赋值给父类型的，也就是<code>父类型变量 = 子类型变量</code> 是安全的，因为子类型上涵盖了父类型所拥有的的一切属性。</p>
+<p>当我初学的时候，我会觉得<code>T extends {}</code> 这样的语句很奇怪，为什么可以 <code>extends</code>一个空类型并且在传递任意类型时都成立呢？当搞明白上面的知识点，这个问题也自然迎刃而解了。</p>
+<h2 id="在函数中的运用"><a href="#在函数中的运用" class="headerlink" title="在函数中的运用"></a>在函数中的运用</h2><p>假设我们有这样的一个函数：</p>
+<pre><code class="js">function c(val:{a:number,b:number})
+</code></pre>
+<p>有这样两个变量：</p>
+<pre><code class="js">let val1 = { a: 1 }
+let val2 = { a: 1, b: 2, c: 3 }
+</code></pre>
+<p>调用 <code>f(val1)</code> 是会报错的，比较显而易见的来看是因为缺少属性 b，而函数 f 中很可能去访问 b 属性并且做一些操作，比如 <code>b.substr()</code>，这就会导致崩溃。</p>
+<p>换成上面的知识点来看，val1 对应的类型是{ a: number }，它是 { a: number, b: number } 的父类型，调用 <code>f(val1)</code> 其实就相当于把函数定义中的形参 val 赋值成了 val1，把父类型的变量赋值给子类型的变量，这是危险的。</p>
+<p>反之，调用 f(val2) 没有任何问题，因为 val2 的类型是 val类型的子类型，它拥有更多的属性，函数有可能使用的一切属性它都有。</p>
+<p>假设我现在要开发一个 <code>redux</code>，在声明 <code>dispatch</code> 类型的时候，我就可以这样去做：</p>
+<pre><code class="ts">interface Action {
+  type: string
+}
+
+declare function dispatch&lt;T extends Action&gt;(action: T)
+</code></pre>
+<p>这样，就约束了传入的参数一定是 Action 的子类型。也就是说，必须有 type，其他的属性有没有，您随意。</p>
+<h2 id="在联合类型中的运用"><a href="#在联合类型中的运用" class="headerlink" title="在联合类型中的运用"></a>在联合类型中的运用</h2><p>学习了以上知识点，再看联合类型的可赋值性，乍一看会比较反直觉， <code>&#39;a&#39; | &#39;b&#39; | &#39;c&#39;</code> 是 <code>&#39;a&#39; | &#39;b&#39;</code> 的子类型吗？它看起来属性更多诶？其实正相反，<code>&#39;a&#39; | &#39;b&#39; | &#39;c&#39;</code> 是 <code>&#39;a&#39; | &#39;b&#39;</code> 的父类型。因为<strong>前者比后者更「宽泛」，后者比前者更「具体」</strong>。</p>
+<pre><code class="ts">type Parent = &#39;a&#39; | &#39;b&#39; | &#39;c&#39;
+type Son = &#39;a&#39; | &#39;b&#39;
+
+let parent: Parent
+let son: Son
+
+parent = son // ✅ok
+son = parent // ❌error! parent 有可能是 &#39;c&#39;
+</code></pre>
+<p>这里 son 是可以安全的赋值给 parent 的，因为 son 的所有可能性都被 parent 涵盖了。<br>而反之则不行，parent 太宽泛了，它有可能是 ‘c’，这是 Son 类型 hold 不住的。<br>这个例子看完以后，你应该可以理解为什么 <code>&#39;a&#39; | &#39;b&#39;</code> extends <code>&#39;a&#39; | &#39;b&#39; | &#39;c&#39;</code> 为 true 了，在书写 <code>conditional types</code>的时候更加灵活的运用吧。</p>
+<h2 id="逆变和协变"><a href="#逆变和协变" class="headerlink" title="逆变和协变"></a>逆变和协变</h2><p>先来段<a href="https://zh.wikipedia.org/wiki/%E5%8D%8F%E5%8F%98%E4%B8%8E%E9%80%86%E5%8F%98" target="_blank" rel="noopener">维基百科的定义</a>：</p>
+<blockquote>
+<p>协变与逆变(covariance and contravariance)是在计算机科学中，描述具有父/子型别关系的多个型别通过型别构造器、构造出的多个复杂型别之间是否有父/子型别关系的用语。</p>
+</blockquote>
+<p>描述的比较晦涩难懂，但是用我们上面的动物类型的例子来解释一波，现在我们还是有 <code>Animal</code> 和 <code>Dog</code> 两个父子类型。</p>
+<h3 id="协变（Covariance）"><a href="#协变（Covariance）" class="headerlink" title="协变（Covariance）"></a>协变（Covariance）</h3><p>那么想象一下，现在我们分别有这两个子类型的数组，他们之间的父子关系应该是怎么样的呢？没错，Animal[] 依然是 Dog[] 的父类型，对于这样的一段代码，把子类型赋值给父类型依然是安全的：</p>
+<pre><code class="js">let animals: Animal[]
+let dogs: Dog[]
+
+animals = dogs
+
+animals[0].age // ✅ok
+</code></pre>
+<p>转变成数组之后，对于父类型的变量，我们依然只会去 <code>Dog</code> 类型中一定有的那些属性。</p>
+<p>那么，对于 <code>type MakeArray&lt;T&gt; = T[]</code> 这个类型构造器来说，它就是 协变（Covariance） 的。</p>
+<h3 id="逆变（Contravariance）"><a href="#逆变（Contravariance）" class="headerlink" title="逆变（Contravariance）"></a>逆变（Contravariance）</h3><p>有这样两个函数：</p>
+<pre><code class="js">let visitAnimal = (animal: Animal) =&gt; void;
+let visitDog = (dog: Dog) =&gt; void;
+</code></pre>
+<p><code>animal = dog</code> 是类型安全的，那么 <code>visitAnimal = visitDog</code> 好像也是可行的？其实不然，想象一下这两个函数的实现：</p>
+<pre><code class="ts">let visitAnimal = (animal: Animal) =&gt; {
+  animal.age
+}
+
+let visitDog = (dog: Dog) =&gt; {
+  dog.age
+  dog.bark()
+}
+</code></pre>
+<p>由于 visitDog 的参数期望的是一个更具体的带有 bark 属性的子类型，所以如果 visitAnimal = visitDog 后，我们可能会用一个不带 bark 属性的普通的 animal 类型来传给 visitDog。</p>
+<pre><code class="ts">visitAnimal = visitDog
+
+let animal = { age: 5 }
+
+visitAnimal(animal) // ❌
+</code></pre>
+<p>这会造成运行时错误，<code>animal.bark</code> 根本不存在，去调用这个方法会引发崩溃。<br>但是反过来，<code>visitDog = visitAnimal</code> 却是完全可行的。因为后续调用方会传入一个比 animal 属性更具体的 dog，函数体内部的一切访问都是安全的。</p>
+<p>在对 Animal 和 Dog 类型分别调用如下的类型构造器之后：</p>
+<pre><code class="ts">  type MakeFunction&lt;T&gt; = (arg: T) =&gt; void
+</code></pre>
+<p>父子类型关系逆转了，这就是 逆变（Contravariance）。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>当然，在 <code>TypeScript</code> 中，由于灵活性等权衡，对于函数参数默认的处理是<code>双向协变</code> 的。也就是既可以 visitAnimal = visitDog，也可以 visitDog = visitAnimal。在开启了 tsconfig 中的 <strong><code>strictFunctionType</code></strong> 后才会严格按照 <code>逆变</code> 来约束赋值关系。</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/favicon.png" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <!-- <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd> -->
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">172 <p>Articles</p></a></li>
+                    <li><a href="/categories">27 <p>Categories</p></a></li>
+                    <li><a href="/tags">54 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#子类型"><span class="toc-number">1.1.</span> <span class="toc-text">子类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可赋值性的assignable"><span class="toc-number">1.2.</span> <span class="toc-text">可赋值性的assignable</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在函数中的运用"><span class="toc-number">1.3.</span> <span class="toc-text">在函数中的运用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在联合类型中的运用"><span class="toc-number">1.4.</span> <span class="toc-text">在联合类型中的运用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#逆变和协变"><span class="toc-number">1.5.</span> <span class="toc-text">逆变和协变</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#协变（Covariance）"><span class="toc-number">1.5.1.</span> <span class="toc-text">协变（Covariance）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#逆变（Contravariance）"><span class="toc-number">1.5.2.</span> <span class="toc-text">逆变（Contravariance）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-number">1.6.</span> <span class="toc-text">结语</span></a></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+
+
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>
