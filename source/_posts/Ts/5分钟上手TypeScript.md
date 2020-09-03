@@ -1,7 +1,7 @@
 ---
 title: 5分钟上手TypeScript
 date: 2018-03-02 15:45:30
-tags: "TS"
+tags: "Ts"
 categories: "Js"
 ---
 # 让我们使用TypeScript来创建一个简单的Web应用。
