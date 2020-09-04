@@ -37,7 +37,7 @@ ES modules（ESM） 是 JavaScript 官方的标准化模块系统。然而，它
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -140,25 +140,27 @@ ES modules（ESM） 是 JavaScript 官方的标准化模块系统。然而，它
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>原文：ES modules: <a href="https://hacks.mozilla.org/2018/03/es-modules-a-cartoon-deep-dive/" target="_blank" rel="noopener">A cartoon deep-dive, Lin Clark</a></p>
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>原文：ES modules: <a target="_blank" rel="noopener" href="https://hacks.mozilla.org/2018/03/es-modules-a-cartoon-deep-dive/">A cartoon deep-dive, Lin Clark</a></p>
 <p>ES modules（ESM） 是 JavaScript 官方的标准化模块系统。<br>然而，它在标准化的道路上已经花费了近 10 年的时间。</p>
-<p>可喜的是，标准化之路马上就要完成了。等到 2018 年 5 月 Firefox 60 发布之后，所有的主流浏览器就都支持 ESM 了。同时，Node 模块工作小组也正在为 Node.js 添加 ESM 支持。<a href="https://www.youtube.com/watch?v=qR_b5gajwug" target="_blank" rel="noopener">为 WebAssembly 提供 ESM 集成的工作</a>也正在如火如荼的进行。</p>
+<p>可喜的是，标准化之路马上就要完成了。等到 2018 年 5 月 Firefox 60 发布之后，所有的主流浏览器就都支持 ESM 了。同时，Node 模块工作小组也正在为 Node.js 添加 ESM 支持。<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=qR_b5gajwug">为 WebAssembly 提供 ESM 集成的工作</a>也正在如火如荼的进行。</p>
 <p>许多 JS 开发者都知道，对 ESM 的讨论从开始至今一直都没停过。但是很少有人真正理解 ESM 的工作原理。</p>
 <p>今天，让我们来梳理梳理 ESM 到底解决了什么问题，以及它跟其他模块系统之间有什么区别。</p>
 <h2 id="为什么要模块化"><a href="#为什么要模块化" class="headerlink" title="为什么要模块化"></a>为什么要模块化</h2><p>说到 JS 编程，其实说的就是<strong>如何管理变量</strong>。<br>编程的过程都是关于如何给变量赋值，要么直接赋值给变量，要么是把两个变量结合起来然后再把结果赋值给另一个变量。</p>
-<p><img src="https://segmentfault.com/img/bV72g6?w=3399&amp;h=1207" alt="esmpic1"></p>
+<p><img src="https://segmentfault.com/img/bV72g6?w=3399&h=1207" alt="esmpic1"></p>
 <p>因为大部分代码都是关于改变变量的，所以如何组织这些变量就直接影响了编码质量，以及维护它们的成本。</p>
-<p>如果代码中仅有少量的变量，那么组织起来其实是很简单的。<br>JS 本身就提供了一种方式帮你组织变量，称为<strong>函数作用域</strong>。因为函数作用域的缘故，一个函数无法访问另一个函数中定义的变量。<br><a id="more"></a><br><img src="https://segmentfault.com/img/bV72kE?w=2478&amp;h=1446" alt="esmpic2"></p>
+<p>如果代码中仅有少量的变量，那么组织起来其实是很简单的。<br>JS 本身就提供了一种方式帮你组织变量，称为<strong>函数作用域</strong>。因为函数作用域的缘故，一个函数无法访问另一个函数中定义的变量。</p>
+<a id="more"></a>
+<p><img src="https://segmentfault.com/img/bV72kE?w=2478&h=1446" alt="esmpic2"></p>
 <p>这种方式是很有效的。它使得我们在写一个函数的时候，只需要考虑当前函数，而不必担心其它函数可能会改变当前函数的变量。<br>不过，它也有不好的地方。它会让我们很难在不同函数之间<strong>共享变量</strong>。</p>
 <p>如果我们想跟当前函数以外的函数共享变量要怎么办呢？一种通用的<code>做法是把要共享的变量提升到上一层作用域，比如全局作用域</code>。</p>
 <p>在 jQuery 时代这种提升做法相当普遍。在我们加载任何 jQuery 插件之前，我们必须确保 jQuery 已经存在于全局作用域。</p>
-<p><img src="https://segmentfault.com/img/bV72np?w=2478&amp;h=2229" alt="esmpic3"></p>
+<p><img src="https://segmentfault.com/img/bV72np?w=2478&h=2229" alt="esmpic3"></p>
 <p>这种做法也确实行之有效，但是也带来了令人烦恼的影响。</p>
 <blockquote>
 <p>首先，所有的 <code>script</code>必须以正确的顺序排列，开发者必须非常谨慎地确保没有任何一个脚本排列错误。</p>
 </blockquote>
 <p>如果排列错了，那么在运行过程中，应用将会抛出错误。当函数在全局作用域寻找 jQuery 变量时，如果没有找到，那么它将会抛出异常错误，并且停止继续运行。</p>
-<p><img src="https://segmentfault.com/img/bV72oH?w=2478&amp;h=2229" alt="esmpic4"></p>
+<p><img src="https://segmentfault.com/img/bV72oH?w=2478&h=2229" alt="esmpic4"></p>
 <p>这同时也使得代码的后期维护变得困难。<br>它会使得移除旧代码或者脚本标签变得充满不确定性。你根本不知道移除它会带来什么影响。<strong>代码之间的依赖是不透明的</strong>。任何函数都可能依赖全局作用域中的任何变量，以至于你也不知道哪个函数依赖哪个脚本。</p>
 <h2 id="模块化的作用"><a href="#模块化的作用" class="headerlink" title="模块化的作用"></a>模块化的作用</h2><blockquote>
 <p><strong>模块化为你提供了一种更好的方式来组织变量和函数</strong>。你可以把相关的变量和函数放在一起组成一个模块。</p>
@@ -166,41 +168,41 @@ ES modules（ESM） 是 JavaScript 官方的标准化模块系统。然而，它
 <p>这种组织方式会把函数和变量放在<code>模块作用域</code>中。模块中的函数可以通过<code>模块作用域来共享变量</code>。</p>
 <p>不过，与函数作用域不同的是，模块作用域还提供了一种暴露变量给其他模块使用的方式。模块可以明确地指定哪些变量、类或函数对外暴露。</p>
 <p>对外暴露的过程称为<strong>导出</strong>。一旦导出，其他模块就可以明确地声称它们依赖这些导出的变量、类或者函数。</p>
-<p><img src="https://segmentfault.com/img/bV72tP?w=2478&amp;h=2229" alt="esmpic5"></p>
+<p><img src="https://segmentfault.com/img/bV72tP?w=2478&h=2229" alt="esmpic5"></p>
 <p>因为这是一种明确的关系，所以你可以很简单地辨别哪些代码能移除，哪些不能移除。</p>
 <p>拥有了在模块之间导出和导入变量的能力之后，你就可以把代码分割成更小的、可以独立运行地代码块了。然后，你就可以像搭乐高积木一样，基于这些代码块，创建所有不同类型的应用。</p>
 <p>由于模块化是非常有用的，所以历史上曾经多次尝试为 JS 添加模块化的功能。不过截止到目前，真正得到广泛使用的只有两个模块系统。<br>一个是 Node.js 使用的 <code>CommonJS （CJS）</code>；另一个是 JS 规范的新模块系统 <code>EcmaScript modules（ESM）</code>，Node.js 也正在添加对 ESM 的支持。</p>
 <p>下面就让我们来深入理解下这个新的模块系统是如何工作的。</p>
 <h2 id="ESM-原理"><a href="#ESM-原理" class="headerlink" title="ESM 原理"></a>ESM 原理</h2><p>当你在使用模块进行开发时，其实是在构建一张<strong>依赖关系图</strong>。不同模块之间的连线就代表了代码中的导入语句。</p>
 <p>正是这些导入语句告诉浏览器或者 Node 该去加载哪些代码。<br>我们要做的是为依赖关系图指定一个<strong>入口文件</strong>。从这个入口文件开始，浏览器或者 Node 就会顺着导入语句找出所依赖的其他代码文件。</p>
-<p><img src="https://segmentfault.com/img/bV75dW?w=1861&amp;h=1082" alt="esmpic6"></p>
+<p><img src="https://segmentfault.com/img/bV75dW?w=1861&h=1082" alt="esmpic6"></p>
 <p>但是呢，浏览器并不能直接使用这些代码文件。它需要解析所有的文件，并把它们变成一种称为<code>模块记录（Module Record）</code>的数据结构。只有这样，它才知道代码文件中到底发生了什么。</p>
-<p><img src="https://segmentfault.com/img/bV75fA?w=2545&amp;h=1462" alt="esmpic7"></p>
+<p><img src="https://segmentfault.com/img/bV75fA?w=2545&h=1462" alt="esmpic7"></p>
 <p>解析之后，还需要把模块记录变成一个模块实例。模块实例会把代码和状态结合起来。</p>
 <ul>
 <li>所谓代码，基本上是一组指令集合。它就像是制作某样东西的配方，指导你该如何制作。但是它本身并不能让你完成制作。你还需要一些原料，这样才可以按照这些指令完成制作。</li>
 <li>所谓状态，它就是原料。具体点，状态是变量在任何时候的真实值。当然，变量实际上就是内存地址的别名，内存才是正在存储值的地方。</li>
 </ul>
 <p>所以，可以看出，模块实例中代码和状态的结合，就是<strong>指令集和变量值的结合</strong>。</p>
-<p><img src="https://segmentfault.com/img/bV75iE?w=3067&amp;h=2284" alt="esmpic8"></p>
+<p><img src="https://segmentfault.com/img/bV75iE?w=3067&h=2284" alt="esmpic8"></p>
 <p>对于模块而言，我们真正需要的是<strong>模块实例</strong>。<br>模块加载会从入口文件开始，最终生成完整的模块实例关系图。</p>
 <blockquote>
 <p>对于 ESM ，这个过程包含三个阶段：</p>
+</blockquote>
 <ul>
 <li>构建：查找，下载，然后把所有文件解析成模块记录。</li>
 <li>实例化：为所有模块分配内存空间（此刻还没有填充值），然后依照导出、导入语句把模块指向对应的内存地址。这个过程称为链接（Linking）。</li>
 <li>运行：运行代码，从而把内存空间填充为真实值。</li>
 </ul>
-</blockquote>
-<p><img src="https://segmentfault.com/img/bV75nE?w=9150&amp;h=3359" alt="esmpic9"></p>
+<p><img src="https://segmentfault.com/img/bV75nE?w=9150&h=3359" alt="esmpic9"></p>
 <p>大家都说 ESM 是异步的。<br>因为它把整个过程分为了三个不同的阶段：<strong>加载、实例化和运行，并且这三个阶段是可以独立进行的</strong>。</p>
 <p>这意味着，ESM 规范确实引入了一种异步方式，且这种异步方式在 CJS 中是没有的。<br>后面我们会详细说到为什么，然而在 CJS 中，一个模块及其依赖的加载、实例化和运行是一起顺序执行的，中间没有任何间断。</p>
 <p>不过，这三个阶段本身是没必要异步化。它们可以同步执行，这取决于它是<strong>由谁来加载的</strong>。因为 ESM 标准并没有明确规范所有相关内容。实际上，这些工作分为两部分，并且分别是由不同的标准所规范的。</p>
-<p>其中，<a href="https://tc39.github.io/ecma262/#sec-modules" target="_blank" rel="noopener">ESM 标准</a> 规范了如何把文件解析为模块记录，如何实例化和如何运行模块。但是它没有规范如何获取文件。</p>
+<p>其中，<a target="_blank" rel="noopener" href="https://tc39.github.io/ecma262/#sec-modules">ESM 标准</a> 规范了如何把文件解析为模块记录，如何实例化和如何运行模块。但是它没有规范如何获取文件。</p>
 <p>文件是由<code>加载器</code>来提取的，而加载器由另一个不同的标准所规范。对于浏览器来说，这个标准就是<code>HTML</code>。但是你还可以根据所使用的平台使用不同的加载器。</p>
-<p><img src="https://segmentfault.com/img/bV78qI?w=3576&amp;h=2044" alt="esmpic10"></p>
+<p><img src="https://segmentfault.com/img/bV78qI?w=3576&h=2044" alt="esmpic10"></p>
 <p>加载器也同时控制着如何加载模块。它会调用 ESM 的方法，包括 <code>ParseModule、Module.Instantiate 和 Module.Evaluate</code> 。它就像是控制着 JS 引擎的木偶。</p>
-<p><img src="https://segmentfault.com/img/bV78ta?w=2779&amp;h=1835" alt="esmpic11"></p>
+<p><img src="https://segmentfault.com/img/bV78ta?w=2779&h=1835" alt="esmpic11"></p>
 <p>下面我们将更加详细地说明每一步。</p>
 <h3 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h3><blockquote>
 <p>对于每个模块，在构建阶段会做三个处理：</p>
@@ -211,83 +213,83 @@ ES modules（ESM） 是 JavaScript 官方的标准化模块系统。然而，它
 <li>解析文件为模块记录</li>
 </ul>
 <h4 id="下载模块"><a href="#下载模块" class="headerlink" title="下载模块"></a>下载模块</h4><p>加载器负责定位文件并且提取。首先，它需要找到入口文件。在 HTML 中，你可以通过 <code>&lt;script&gt;</code> 标签来告诉加载器。</p>
-<p><img src="https://segmentfault.com/img/bV78vT?w=2080&amp;h=780" alt="esmpic12"></p>
+<p><img src="https://segmentfault.com/img/bV78vT?w=2080&h=780" alt="esmpic12"></p>
 <p>但是，加载器要如何定位 <code>main.js</code> 直接依赖的模块呢？<br>这个时候导入语句就派上用场了。导入语句中有一部分称为<code>模块定位符（Module Specifier）</code>，它会告诉加载器去哪定位模块。</p>
-<p><img src="https://segmentfault.com/img/bV78wX?w=2821&amp;h=590" alt="esmpic13"></p>
+<p><img src="https://segmentfault.com/img/bV78wX?w=2821&h=590" alt="esmpic13"></p>
 <p>对于模块定位符，有一点要注意的是：它们在浏览器和 Node 中会有不同的处理。每个平台都有自己的一套方式来解析模块定位符。这些方式称为<code>模块定位算法</code>，不同的平台会使用不同的模块定位算法。<br>当前，一些在 Node 中能工作模块定位符并不能在浏览器中工作，但是已经有一项工作正在解决这个问题。</p>
 <p>在这个问题被解决之前，浏览器只接受 URL 作为模块定位符。<br>它们会从 URL 加载模块文件。但是，这并不是在整个关系图上同时发生的。因为在解析完这个模块之前，你根本不知道它依赖哪些模块。而且在它下载完成之前，你也无法解析它。</p>
 <p>这就意味着，我们必须一层层遍历依赖树，先解析文件，然后找出依赖，最后又定位并加载这些依赖，如此往复。</p>
-<p><img src="https://segmentfault.com/img/bV78z4?w=4084&amp;h=2467" alt="esmpic14"></p>
+<p><img src="https://segmentfault.com/img/bV78z4?w=4084&h=2467" alt="esmpic14"></p>
 <p>如果主线程正在等待这些模块文件下载完成，许多其他任务将会堆积在任务队列中，造成阻塞。这是因为在浏览器中，下载会耗费大量的时间。</p>
-<p><img src="https://segmentfault.com/img/bV78AB?w=500&amp;h=270" alt="esmpic15"></p>
+<p><img src="https://segmentfault.com/img/bV78AB?w=500&h=270" alt="esmpic15"></p>
 <p>而阻塞主线程会使得应用变得卡顿，影响用户体验。这是 ESM 标准把算法分成多个阶段的原因之一。将构建划分为一个独立阶段后，浏览器可以在进入同步的实例化过程之前下载文件然后理解模块关系图。</p>
 <blockquote>
 <p>ESM 和 CJS 之间最主要的区别之一就是，ESM 把算法化为为多个阶段。</p>
 </blockquote>
 <p>CJS 使用不同的算法是因为它从文件系统加载文件，这耗费的时间远远小于从网络上下载。因此 Node 在加载文件的时候可以阻塞主线程，而不造成太大影响。而且既然文件已经加载完成了，那么它就可以直接进行实例化和运行。所以在 CJS 中实例化和运行并不是两个相互独立的阶段。</p>
 <p>这也意味着，<strong>你可以在返回模块实例之前，顺着整颗依赖树去逐一加载、实例化和运行每一个依赖</strong>。</p>
-<p><img src="https://segmentfault.com/img/bV78PU?w=3045&amp;h=1813" alt="esmpic16"></p>
+<p><img src="https://segmentfault.com/img/bV78PU?w=3045&h=1813" alt="esmpic16"></p>
 <p>CJS 的方式对 ESM 也有一些启发，这个后面会解释。<br>其中一个就是，在 Node 的 CJS 中，你可以在模块定位符中使用变量。因为已经执行了 require 之前的代码，所以模块定位符中的变量此刻是有值的，这样就可以进行模块定位的处理了。</p>
 <p>但是对于 ESM，在运行任何代码之前，你首先需要建立整个模块依赖的关系图。也就是说，<strong>建立关系图时变量是还没有值</strong>的，因为代码都还没运行。</p>
-<p><img src="https://segmentfault.com/img/bV78Ss?w=2827&amp;h=827" alt="esmpic17"></p>
+<p><img src="https://segmentfault.com/img/bV78Ss?w=2827&h=827" alt="esmpic17"></p>
 <p>不过呢，有时候我们确实需要在模块定位符中使用变量。比如，你可能需要根据当前的状况加载不同的依赖。</p>
 <p>为了在 ESM 中实现这种方式，人们已经提出了一个<em>动态导入</em>提案。该提案允许你可以使用类似 <code>import(\</code>${path}/foo.js<code>)</code>的导入语句。</p>
 <p>这种方式实际上是把使用 <code>import()</code> 加载的文件当成了一个入口文件。动态导入的模块会开启一个全新的独立依赖关系树。</p>
-<p><img src="https://segmentfault.com/img/bV78TU?w=2952&amp;h=2294" alt="esmpic18"></p>
+<p><img src="https://segmentfault.com/img/bV78TU?w=2952&h=2294" alt="esmpic18"></p>
 <p>不过有一点要注意的是，这<code>两棵依赖关系树共有的模块会共享同一个模块实例</code>。这是因为加载器会缓存模块实例。在特定的全局作用域中，每个模块只会有一个与之对应的模块实例。</p>
 <p>这种方式有助于提高 JS 引擎的性能。例如，一个模块文件只会被下载一次，即使有多个模块依赖它。这也是缓存模块的原因之一，后面说到运行的时候会介绍另一个原因。</p>
 <p>加载器使用<code>模块映射（Module Map）</code>来管理缓存。每个全局作用域都在一个单独的模块映射中跟踪其模块。</p>
 <p>当加载器要从一个 URL 加载文件时，它会把 URL 记录到模块映射中，并把它标记为正在下载的文件。然后它会发出这个文件请求并继续开始获取下一个文件。</p>
-<p><img src="https://segmentfault.com/img/bV785X?w=3221&amp;h=1096" alt="esmpic18"></p>
+<p><img src="https://segmentfault.com/img/bV785X?w=3221&h=1096" alt="esmpic18"></p>
 <p>当其他模块也依赖这个文件的时候会发生什么呢？加载器会查找模块映射中的每一个 URL 。如果发现 URL 的状态为正在下载，则会跳过该 URL ，然后开始下一个依赖的处理。</p>
 <p>不过，模块映射的作用并不仅仅是记录哪些文件已经下载。下面我们将会看到，模块映射也可以作为模块的缓存。</p>
 <h4 id="解析模块"><a href="#解析模块" class="headerlink" title="解析模块"></a>解析模块</h4><p>至此，我们已经拿到了模块文件，我们需要把它解析为模块记录。<br>这有助于浏览器理解模块的不同部分。</p>
-<p><img src="https://segmentfault.com/img/bV789W?w=3670&amp;h=1462" alt="esmpic19"></p>
+<p><img src="https://segmentfault.com/img/bV789W?w=3670&h=1462" alt="esmpic19"></p>
 <p>一旦模块记录创建完成，它就会被记录在<code>模块映射</code>中。所以，后续任何时候再次请求这个模块时，加载器就可以直接从<code>模块映射</code>中获取该模块。</p>
-<p><img src="https://segmentfault.com/img/bV79aU?w=3196&amp;h=1527" alt="esmpic20"></p>
+<p><img src="https://segmentfault.com/img/bV79aU?w=3196&h=1527" alt="esmpic20"></p>
 <p>解析过程中有一个看似微不足道的细节，但是实际造成的影响却很大。那就是所有的模块都按照<strong>严格模式</strong>来解析的。<br>也还有其他的小细节，比如，关键字 <code>await</code> 在模块的最顶层是保留字， <code>this</code> 的值为 <code>undefinded</code>。</p>
 <p>这种不同的解析方式称为解析目标（Parse Goal）。如果按照不同的解析目标来解析相同的文件，会得到不同的结果。因此，在解析文件之前，必须清楚地知道所解析的文件类型是什么，不管它是不是一个模块文件。</p>
 <p>在浏览器中，知道文件类型是很简单的。只需要在 <code>&lt;script&gt;</code> 脚本中添加 type=”module” 属性即可。这告诉浏览器这个文件需要被解析为一个模块。而且，因为只有模块才能被导入，所以浏览器以此推测所有的导入也都是模块文件。</p>
-<p><img src="https://segmentfault.com/img/bV79fk?w=2700&amp;h=1677" alt="esmpic21"></p>
+<p><img src="https://segmentfault.com/img/bV79fk?w=2700&h=1677" alt="esmpic21"></p>
 <p>不过在 Node 中，我们并不使用 <code>HTML</code> 标签，所以也没办法通过 <code>type</code> 属性来辨别。社区提出一种解决办法是使用 <code>.mjs</code> 拓展名。使用该拓展名会告诉 Node 说“这是个模块文件”。你会看到大家正在讨论把这个作为解析目标。不过讨论仍在继续，所以目前仍不明确 Node 社区最终会采用哪种方式。</p>
 <p>无论最终使用哪种方式，加载器都会决定是否把一个文件作为模块来解析。如果是模块，而且包含导入语句，那它会重新开始处理直至所有的文件都已提取和解析。</p>
 <p>到这里，构建阶段差不多就完成了。在加载过程处理完成后，你已经从最开始只有一个入口文件，到现在得到了一堆模块记录。</p>
-<p><img src="https://segmentfault.com/img/bV79h6?w=2561&amp;h=2080" alt="esmpic22"></p>
+<p><img src="https://segmentfault.com/img/bV79h6?w=2561&h=2080" alt="esmpic22"></p>
 <p>下一步会实例化这些模块并且把所有的实例链接起来。</p>
 <h4 id="实例化"><a href="#实例化" class="headerlink" title="实例化"></a>实例化</h4><p>正如前文所述，一个模块实例结合了代码和状态。状态存储在内存中，所以实例化的过程就是把所有值写入内存的过程。</p>
 <p>首先，JS 引擎会创建一个·模块环境记录（Module Environment Record）·。它管理着模块记录的所有变量。然后，引擎会找出多有导出在内存中的地址。<strong>模块环境记录会跟踪每个导出对应于哪个内存地址</strong>。</p>
 <p>这些内存地址此时还没有值，只有等到运行后它们才会被填充上实际值。有一点要注意，所有导出的函数声明都在这个阶段初始化，这会使得后面的运行阶段变得更加简单。</p>
 <p>为了实例化模块关系图，引擎会采用<code>深度优先</code>的后序遍历方式。<br>即，它会顺着关系图到达最底端没有任何依赖的模块，然后设置它们的导出。</p>
-<p><img src="https://segmentfault.com/img/bV8cbJ?w=6086&amp;h=2505" alt="esmpic23"></p>
+<p><img src="https://segmentfault.com/img/bV8cbJ?w=6086&h=2505" alt="esmpic23"></p>
 <p>最终，引擎会把模块下的所有依赖导出链接到当前模块。然后回到上一层把模块的导入链接起来。</p>
-<p><img src="https://segmentfault.com/img/bV8ccp?w=6086&amp;h=2505" alt="esmpic24"></p>
+<p><img src="https://segmentfault.com/img/bV8ccp?w=6086&h=2505" alt="esmpic24"></p>
 <p>这个过程跟 CJS 是不同的。在 CJS 中，整个导出对象在导出时都是<code>值拷贝</code>。<br>即，所有的导出值都是<code>拷贝值</code>，而<code>不是引用</code>。<br>所以，如果导出模块内导出的值改变了，导入模块中导入的值也不会改变。</p>
-<p><img src="https://segmentfault.com/img/bV8cde?w=3426&amp;h=776" alt="esmpic25"></p>
+<p><img src="https://segmentfault.com/img/bV8cde?w=3426&h=776" alt="esmpic25"></p>
 <p>相反，ESM 则使用称为<code>实时绑定（Live Binding）</code>的方式。导出和导入的模块都指向相同的内存地址（即<code>值引用</code>）。所以，当导出模块内导出的值改变后，导入模块中的值也实时改变了。</p>
 <p>模块导出的值在任何时候都可以能发生改变，但是导入模块却不能改变它所导入的值，因为它是只读的。<br>举例来说，如果一个模块导入了一个对象，那么它只能改变该对象的属性，而不能改变对象本身。</p>
-<p><img src="https://segmentfault.com/img/bV8cd7?w=6086&amp;h=2505" alt="esmpic25"></p>
+<p><img src="https://segmentfault.com/img/bV8cd7?w=6086&h=2505" alt="esmpic25"></p>
 <p>ESM 采用这种实时绑定的原因是，引擎可以在不运行任何模块代码的情况下完成链接。后面会解释到，这对解决运行阶段的循环依赖问题也是有帮助的。</p>
 <p>实例化阶段完成后，我们得到了所有模块实例，以及已完成链接的导入、导出值。</p>
 <p>现在我们可以开始运行代码并且往内存空间内填充值了。</p>
 <h4 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h4><p>最后一步是往已申请好的内存空间中填入真实值。JS 引擎通过运行顶层代码（函数外的代码）来完成填充。</p>
 <p>除了填充值以外，运行代码也会引发一些副作用（Side Effect）。例如，一个模块可能会向服务器发起请求。</p>
-<p><img src="https://segmentfault.com/img/bV8ce1?w=2412&amp;h=705" alt="esmpic26"></p>
+<p><img src="https://segmentfault.com/img/bV8ce1?w=2412&h=705" alt="esmpic26"></p>
 <p>因为这些潜在副作用的存在，所以<em>模块代码只能运行一次</em>。<br>前面我们看到，实例化阶段中发生的链接可以多次进行，并且每次的结果都一样。但是，如果运行阶段进行多次的话，则可能会每次都得到不一样的结果。</p>
 <p>这正是为什么会使用<code>模块映射</code>的原因之一。模块映射会以 <code>URL</code> 为索引来缓存模块，以确保每个模块只有一个模块记录。这保证了每个模块只会运行一次。跟实例化一样，运行阶段也采用<code>深度优先的后序遍历</code>方式。</p>
 <p>那对于前面谈到的循环依赖会怎么处理呢？</p>
 <p><strong>循环依赖</strong>会使得依赖关系图中出现一个依赖环，即你依赖我，我也依赖你。通常来说，这个环会非常大。不过，为了解释好这个问题，这里我们举例一个简单的循环依赖。</p>
-<p><img src="https://segmentfault.com/img/bV8chF?w=3164&amp;h=1416" alt="esmpic27"></p>
+<p><img src="https://segmentfault.com/img/bV8chF?w=3164&h=1416" alt="esmpic27"></p>
 <p>首先来看下这种情况在 <code>CJS</code> 中会发生什么。<br>最开始时，<code>main</code> 模块会运行 <code>require</code>语句。紧接着，会去加载 <code>counter</code> 模块。</p>
-<p><img src="https://segmentfault.com/img/bV8cih?w=3289&amp;h=1850" alt="esmpic28"></p>
+<p><img src="https://segmentfault.com/img/bV8cih?w=3289&h=1850" alt="esmpic28"></p>
 <p><code>counter</code> 模块会试图去访问导出对象的 <code>message</code> 。不过，由于 <code>main</code> 模块中还没运行到 <code>message</code> 处，所以此时得到的 message 为 undefined。JS 引擎会为本地变量分配空间并把值设为 undefined 。</p>
-<p><img src="https://segmentfault.com/img/bV8ci8?w=3426&amp;h=776" alt="esmpic29"></p>
+<p><img src="https://segmentfault.com/img/bV8ci8?w=3426&h=776" alt="esmpic29"></p>
 <p>运行阶段继续往下执行，直到 <code>counter</code> 模块顶层代码的末尾处。我们想知道，当 <code>counter</code> 模块运行结束后，<code>message</code> 是否会得到真实值，所以我们设置了一个超时定时器。之后运行阶段便返回到 <code>main.js</code> 中。</p>
-<p><img src="https://segmentfault.com/img/bV8ckc?w=3164&amp;h=1416" alt="esmpic30"></p>
+<p><img src="https://segmentfault.com/img/bV8ckc?w=3164&h=1416" alt="esmpic30"></p>
 <p>这时，<code>message</code> 将会被初始化并添加到内存中。但是这个 <code>message</code> 与 <code>counter</code> 模块中的 <code>message</code> 之间并没有任何关联关系，所以 <code>counter</code> 模块中的 <code>message</code> 仍然为 undefined。</p>
-<p><img src="https://segmentfault.com/img/bV8ck5?w=3426&amp;h=1477" alt="esmpic31"></p>
+<p><img src="https://segmentfault.com/img/bV8ck5?w=3426&h=1477" alt="esmpic31"></p>
 <p>如果导出值采用的是实时绑定方式，那么 <code>counter</code> 模块最终会得到真实的 <code>message</code> 值。当超时定时器开始计时时，<code>main.js</code> 的运行就已经完成并设置了 <code>message</code> 值。</p>
 <p>支持<code>循环依赖</code>是 ESM 设计之初就考虑到的一大原因。也正是这种分段设计使其成为可能。</p>
-<p><a href="https://segmentfault.com/a/1190000014318751#articleHeader7" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000014318751#articleHeader7">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -312,7 +314,7 @@ ES modules（ESM） 是 JavaScript 官方的标准化模块系统。然而，它
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -346,7 +348,7 @@ ES modules（ESM） 是 JavaScript 官方的标准化模块系统。然而，它
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么要模块化"><span class="toc-number">1.1.</span> <span class="toc-text">为什么要模块化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模块化的作用"><span class="toc-number">1.2.</span> <span class="toc-text">模块化的作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ESM-原理"><span class="toc-number">1.3.</span> <span class="toc-text">ESM 原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#构建"><span class="toc-number">1.3.1.</span> <span class="toc-text">构建</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%A8%A1%E5%9D%97%E5%8C%96"><span class="toc-number">1.1.</span> <span class="toc-text">为什么要模块化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%9D%97%E5%8C%96%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text">模块化的作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ESM-%E5%8E%9F%E7%90%86"><span class="toc-number">1.3.</span> <span class="toc-text">ESM 原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E5%BB%BA"><span class="toc-number">1.3.1.</span> <span class="toc-text">构建</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
             

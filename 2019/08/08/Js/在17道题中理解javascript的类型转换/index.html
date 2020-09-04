@@ -37,7 +37,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -100,7 +100,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    9.5k
+                    9.6k
                 </span>
                 
                 
@@ -140,7 +140,7 @@
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <p><a href="https://juejin.im/post/5d4999fff265da038f47f5c7" target="_blank" rel="noopener">原文地址</a></p>
+            <p><a target="_blank" rel="noopener" href="https://juejin.im/post/5d4999fff265da038f47f5c7">原文地址</a></p>
 <p>类型转换是将值从一种类型转换为另一种类型的过程（比如字符串转数字，对象转布尔值等）。任何类型不论是原始类型还是对象类型都可以进行类型转换，JavaScript 的原始类型有：<code>number, string, boolean, null, undefined, Symbol</code>。</p>
 <pre><code class="js">true + false
 12 / &quot;6&quot;
@@ -155,11 +155,10 @@ null == &quot;&quot;
 [&quot;x&quot;] == &quot;x&quot;
 [] + null + 1
 [1,2,3] == [1,2,3]
-{} + [] + {} + [1]
+&#123;&#125; + [] + &#123;&#125; + [1]
 ! + [] + [] + ![]
 new Date(0) - 0
-new Date(0) + 0
-</code></pre>
+new Date(0) + 0</code></pre>
 <p>类似于上面的这些问题大概率也会在 JS 面试中被问到, 所以继续往下读。</p>
 <h2 id="隐式转换VS显示转换"><a href="#隐式转换VS显示转换" class="headerlink" title="隐式转换VS显示转换"></a>隐式转换VS显示转换</h2><p>类型转换可以分为<strong>隐式类型转换</strong>和<strong>显式类型转换</strong>。</p>
 <p>当开发人员通过编写适当的代码(如Number(value))用于在类型之间进行转换时，就称为<code>显式类型强制转换(或强制类型转换)</code>。</p>
@@ -178,33 +177,29 @@ new Date(0) + 0
 <pre><code class="js">String(123) // 显式类型转换
 
 123 + &#39;&#39; // 隐式类型转换
-
 </code></pre>
 <p>所有原始类型转 String 类型</p>
 <pre><code class="js">String(123)  // &#39;123&#39;
 String(-12.3)  // &#39;-12.3&#39;
 String(null)  // &#39;null&#39;
 String(undefined)  // &#39;undefined&#39;
-String(true)  // &#39;true&#39;
-</code></pre>
+String(true)  // &#39;true&#39;</code></pre>
 <p>Symbol 类型转 String 类型是比较严格的，它只能被显式的转换</p>
 <pre><code class="js">String(Symbol(&#39;symbol&#39;))  // &#39;Symbol(symbol)&#39;
 
-&#39;&#39; + Symbol(&#39;symbol&#39;)  // TypeError is thrown
-</code></pre>
+&#39;&#39; + Symbol(&#39;symbol&#39;)  // TypeError is thrown</code></pre>
 <h2 id="Boolean-类型转换"><a href="#Boolean-类型转换" class="headerlink" title="Boolean 类型转换"></a>Boolean 类型转换</h2><p><code>Boolean()</code> 方法可以用来显式将值转换成 boolean 型。</p>
 <p>隐式类型转换通常在逻辑判断或者有逻辑运算符时被触发<code>（|| &amp;&amp; !）</code>。</p>
 <pre><code class="js">Boolean(2)    // 显示类型转换
-if(2) {}      // 逻辑判断触发隐式类型转换
+if(2) &#123;&#125;      // 逻辑判断触发隐式类型转换
 !!2           // 逻辑运算符触发隐式类型转换
-2 || &#39;hello&#39;  // 逻辑运算符触发隐式类型转换
-</code></pre>
+2 || &#39;hello&#39;  // 逻辑运算符触发隐式类型转换</code></pre>
 <a id="more"></a>
+
 <p>注意: 逻辑运算符（比如 || 和 &amp;&amp;）是在内部做了 boolean 类型转换，但实际上返回的是<code>原始操作数的值</code>，即使他们都不是 boolean 类型。</p>
 <pre><code class="js">// 返回 number 类型 123，而不是 boolean 型 true
 // &#39;hello&#39; 和 &#39;123&#39; 仍然在内部会转换成 boolean 型来计算表达式
-let x = &#39;hello&#39; &amp;&amp; 123  // x === 123
-</code></pre>
+let x = &#39;hello&#39; &amp;&amp; 123  // x === 123</code></pre>
 <p>boolean 类型转换只会有 true 或者 false 两种结果。</p>
 <pre><code class="js">Boolean(&#39;&#39;)           // false
 Boolean(0)            // false  
@@ -212,15 +207,13 @@ Boolean(-0)           // false
 Boolean(NaN)          // false
 Boolean(null)         // false
 Boolean(undefined)     // false
-Boolean(false)        // false
-</code></pre>
+Boolean(false)        // false</code></pre>
 <p><strong>任何不在上面列表中的值都会转换为 true</strong>, 包括 <code>object, function, Array, Date</code> 等，<code>Symbol</code> 类型是真值，空对象和空数组也是真值。</p>
-<pre><code class="js">Boolean({})             // true
+<pre><code class="js">Boolean(&#123;&#125;)             // true
 Boolean([])             // true
 Boolean(Symbol())       // true
 !!Symbol()              // true
-Boolean(function() {})  // true
-</code></pre>
+Boolean(function() &#123;&#125;)  // true</code></pre>
 <h2 id="Number-类型转换"><a href="#Number-类型转换" class="headerlink" title="Number 类型转换"></a>Number 类型转换</h2><p>和 <code>Boolean()</code>、<code>String()</code> 方法一样， <code>Number()</code> 方法可以用来显式将值转换成 number 类型。<br>number 的隐式类型转换是比较复杂的，因为它可以在下面多种情况下被触发。</p>
 <ul>
 <li>比较操作（&gt;, &lt;, &lt;=, &gt;=）</li>
@@ -234,8 +227,7 @@ Boolean(function() {})  // true
 123 != &quot;456&quot;    //  隐式类型转换
 4 &gt; &quot;5&quot;        //  隐式类型转换
 5 / null      //  隐式类型转换
-true | 0      //  隐式类型转换
-</code></pre>
+true | 0      //  隐式类型转换</code></pre>
 <p>接下来看一下原始类型显示转换 number 类型会发生什么</p>
 <pre><code class="js">Number(null)                   // 0
 Number(undefined)              // NaN
@@ -245,29 +237,25 @@ Number(&quot; 12 &quot;)                 // 12
 Number(&quot;-12.34&quot;)               // -12.34
 Number(&quot;\n&quot;)                   // 0
 Number(&quot; 12s &quot;)                // NaN
-Number(123)                    // 123
-</code></pre>
+Number(123)                    // 123</code></pre>
 <p>当将一个字符串转换为一个数字时，引擎首先删除前尾空格、<code>\n、\t</code> 字符，如果被修剪的字符串不成为一个有效的数字，则返回 NaN。如果字符串为空，则返回 0。</p>
 <p>Number() 方法对于 null 和 undefined 的处理是不同的， null 会转换为 0, undefined 会转换为 NaN</p>
 <p><strong>不管是显式还是隐式转换都不能将 Symbol 类型转为 number 类型，当试图这样操作时，会抛出错误</strong>。</p>
 <pre><code class="js">Number(Symbol(&#39;my symbol&#39;))    // TypeError is thrown
-+Symbol(&#39;123&#39;)                 // TypeError is thrown
-</code></pre>
++Symbol(&#39;123&#39;)                 // TypeError is thrown</code></pre>
 <p>这里<strong>有 2 个特殊的规则</strong>需要记住：</p>
 <ol>
 <li>当将 == 应用于 null 或 undefined 时，不会发生数值转换。null 只等于 null 或 undefined，不等于其他任何值。<pre><code class="js">null == 0               // false, null is not converted to 0
 null == null            // true
 undefined == undefined  // true
 null == undefined       // true
-undefined == 0          // false
-</code></pre>
+undefined == 0          // false</code></pre>
 </li>
 <li>NaN 不等于任何值，包括它自己</li>
 </ol>
 <pre><code class="js">NaN === NaN  // false
 
-if(value !== value) { console.log(&#39;the value is NaN&#39;) }
-</code></pre>
+if(value !== value) &#123; console.log(&#39;the value is NaN&#39;) &#125;</code></pre>
 <h2 id="object-类型转换"><a href="#object-类型转换" class="headerlink" title="object 类型转换"></a>object 类型转换</h2><p>到这里我们已经深入了解了原始类型的转换，接下来我们来看一下 object 类型的转换。</p>
 <p>当涉及到对象的操作比如：<code>[1] + [2,3]</code>，引擎首先会尝试将 object 类型转为原始类型，然后在将原始类型转为最终需要的类型，而且仍然只有 3 种类型的转换：<code>number, string, boolean</code></p>
 <p>最简单的情况是 boolean 类型的转换，任何非原始类型总是会转换成 true,无论对象或数组是否为空。</p>
@@ -329,12 +317,12 @@ null == &quot;&quot; // false
 [1,2,3] == [1,2,3] // false
 // 当运算符两边类型相同时，不会执行类型转换，两个数组的内存地址不一样，所以返回 false
 
-0 || &quot;0&quot; &amp;&amp; {}  // {}
+0 || &quot;0&quot; &amp;&amp; &#123;&#125;  // &#123;&#125;
 // 逻辑运算符 || 和 &amp;&amp; 将值转为 boolean 型，但是会返回原始值（不是 boolean）。
 
-{} + [] + {} + [1] // &#39;0[object Object]1&#39;
+&#123;&#125; + [] + &#123;&#125; + [1] // &#39;0[object Object]1&#39;
 
-// 所有的操作数都不是原始类型，所以会按照从左到右的顺序执行 number 类型的隐式转换， object 和 array 类型的 valueOf() 方法返回它们本身，所以直接忽略，执行 toString() 方法。 这里的技巧是，第一个 {} 不被视为 object，而是块声明语句，因此它被忽略。计算从 +[] 表达式开始，该表达式通过toString()方法转换为空字符串，然后转换为0。
+// 所有的操作数都不是原始类型，所以会按照从左到右的顺序执行 number 类型的隐式转换， object 和 array 类型的 valueOf() 方法返回它们本身，所以直接忽略，执行 toString() 方法。 这里的技巧是，第一个 &#123;&#125; 不被视为 object，而是块声明语句，因此它被忽略。计算从 +[] 表达式开始，该表达式通过toString()方法转换为空字符串，然后转换为0。
 
 ! + [] + [] + ![] // &#39;truefalse&#39;
 // 一元运算符优先执行，+[] 转为 number 类型 0，![] 转为 boolean 型 false。
@@ -344,7 +332,6 @@ new Date(0) - 0 // 0
 
 new Date(0) + 0 //&quot;Thu Jan 01 1970 08:00:00 GMT+0800 (中国标准时间)0&quot;
 // +&#39; 运算符触发默认转换，因此使用 toString() 方法，而不是 valueOf()。
-
 </code></pre>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
@@ -370,7 +357,7 @@ new Date(0) + 0 //&quot;Thu Jan 01 1970 08:00:00 GMT+0800 (中国标准时间)0&
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -404,7 +391,7 @@ new Date(0) + 0 //&quot;Thu Jan 01 1970 08:00:00 GMT+0800 (中国标准时间)0&
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#隐式转换VS显示转换"><span class="toc-number">1.</span> <span class="toc-text">隐式转换VS显示转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三种类型转换"><span class="toc-number">2.</span> <span class="toc-text">三种类型转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#String-类型转换"><span class="toc-number">3.</span> <span class="toc-text">String 类型转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Boolean-类型转换"><span class="toc-number">4.</span> <span class="toc-text">Boolean 类型转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Number-类型转换"><span class="toc-number">5.</span> <span class="toc-text">Number 类型转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#object-类型转换"><span class="toc-number">6.</span> <span class="toc-text">object 类型转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#答案解析"><span class="toc-number">7.</span> <span class="toc-text">答案解析</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9A%90%E5%BC%8F%E8%BD%AC%E6%8D%A2VS%E6%98%BE%E7%A4%BA%E8%BD%AC%E6%8D%A2"><span class="toc-number">1.</span> <span class="toc-text">隐式转换VS显示转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E7%A7%8D%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="toc-number">2.</span> <span class="toc-text">三种类型转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#String-%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="toc-number">3.</span> <span class="toc-text">String 类型转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Boolean-%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="toc-number">4.</span> <span class="toc-text">Boolean 类型转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Number-%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="toc-number">5.</span> <span class="toc-text">Number 类型转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#object-%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="toc-number">6.</span> <span class="toc-text">object 类型转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AD%94%E6%A1%88%E8%A7%A3%E6%9E%90"><span class="toc-number">7.</span> <span class="toc-text">答案解析</span></a></li></ol>
                 </div>
             </div>
             

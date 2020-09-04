@@ -37,7 +37,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -100,7 +100,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    2.8k
+                    2.9k
                 </span>
                 
                 
@@ -140,69 +140,67 @@
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <p><a href="https://github.com/answershuto/learnVue/blob/master/docs/%E4%BB%8E%E6%BA%90%E7%A0%81%E8%A7%92%E5%BA%A6%E5%86%8D%E7%9C%8B%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A.MarkDown" target="_blank" rel="noopener">原文地址</a></p>
-<h1 id="关于Vue-js"><a href="#关于Vue-js" class="headerlink" title="关于Vue.js"></a>关于Vue.js</h1><p>Vue.js是一款MVVM框架，上手快速简单易用，通过响应式在修改数据的时候更新视图。Vue.js的响应式原理依赖于<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty" target="_blank" rel="noopener">Object.defineProperty</a>，尤大大在Vue.js文档中就已经提到过，这也是Vue.js不支持IE8 以及更低版本浏览器的原因。Vue通过设定对象属性的 <code>setter/getter</code> 方法来监听数据的变化，通过<code>getter</code>进行依赖收集，而每个<code>setter</code>方法就是一个观察者，在数据变更的时候通知订阅者更新视图。</p>
+            <p><a target="_blank" rel="noopener" href="https://github.com/answershuto/learnVue/blob/master/docs/%E4%BB%8E%E6%BA%90%E7%A0%81%E8%A7%92%E5%BA%A6%E5%86%8D%E7%9C%8B%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A.MarkDown">原文地址</a></p>
+<h1 id="关于Vue-js"><a href="#关于Vue-js" class="headerlink" title="关于Vue.js"></a>关于Vue.js</h1><p>Vue.js是一款MVVM框架，上手快速简单易用，通过响应式在修改数据的时候更新视图。Vue.js的响应式原理依赖于<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty">Object.defineProperty</a>，尤大大在Vue.js文档中就已经提到过，这也是Vue.js不支持IE8 以及更低版本浏览器的原因。Vue通过设定对象属性的 <code>setter/getter</code> 方法来监听数据的变化，通过<code>getter</code>进行依赖收集，而每个<code>setter</code>方法就是一个观察者，在数据变更的时候通知订阅者更新视图。</p>
 <h2 id="将数据data变成可观察（observable）的"><a href="#将数据data变成可观察（observable）的" class="headerlink" title="将数据data变成可观察（observable）的"></a>将数据data变成可观察（observable）的</h2><p>那么Vue是如何将所有data下面的所有属性变成可观察的（observable）呢？</p>
-<pre><code class="js">function observable(value,cb){
+<pre><code class="js">function observable(value,cb)&#123;
     Object.keys(value).forEach((key)=&gt; defineReactive(value, key, value[key] , cb));
-}
+&#125;
 
-function defineReactive (obj, key, val, cb) {
-    Object.defineProperty(obj, key, {
+function defineReactive (obj, key, val, cb) &#123;
+    Object.defineProperty(obj, key, &#123;
         enumerable: true,
         configurable: true,
-        get: ()=&gt;{
+        get: ()=&gt;&#123;
             /*....依赖收集等....*/
             /*Github:https://github.com/answershuto*/
             return val
-        },
-        set:newVal=&gt; {
+        &#125;,
+        set:newVal=&gt; &#123;
             val = newVal;
             cb();/*订阅者收到消息的回调*/
-        }
-    })
-}
+        &#125;
+    &#125;)
+&#125;
 
-class Vue(){
-    constructor(options){
+class Vue()&#123;
+    constructor(options)&#123;
         this._data = options.data;
         observe(this._data, options.render)
-    }
-}
+    &#125;
+&#125;
 
-let app = new Vue({
+let app = new Vue(&#123;
     el: &#39;#app&#39;,
-    data: {
+    data: &#123;
         text: &#39;text&#39;,
         text2: &#39;text2&#39;
-    },
-    render(){
+    &#125;,
+    render()&#123;
         console.log(&quot;render&quot;);
-    }
-})
-</code></pre>
+    &#125;
+&#125;)</code></pre>
 <p>为了便于理解，首先考虑一种最简单的情况，不考虑数组等情况，代码如上所示。在initData中会调用observe这个函数将Vue的数据设置成observable的。当_data数据发生改变的时候就会触发set，对订阅者进行回调（在这里是render）。</p>
 <p>那么问题来了，需要对app._data.text操作才会触发set。为了偷懒，我们需要一种方便的方法通过app.text直接设置就能触发set对视图进行重绘。那么就需要用到代理。</p>
-<h2 id="代理"><a href="#代理" class="headerlink" title="代理"></a>代理</h2><p>我们可以在Vue的构造函数constructor中为data执行一个代理<a href="https://github.com/vuejs/vue/blob/dev/src/core/instance/state.js#L33" target="_blank" rel="noopener">proxy</a>。这样我们就把data上面的属性代理到了vm实例上。</p>
+<h2 id="代理"><a href="#代理" class="headerlink" title="代理"></a>代理</h2><p>我们可以在Vue的构造函数constructor中为data执行一个代理<a target="_blank" rel="noopener" href="https://github.com/vuejs/vue/blob/dev/src/core/instance/state.js#L33">proxy</a>。这样我们就把data上面的属性代理到了vm实例上。</p>
 <pre><code class="js">_proxy.call(this, options.data);/*构造函数中*/
 
 /*代理*/
-function _proxy (data) {
+function _proxy (data) &#123;
     const that = this;
-    Object.keys(data).forEach(key =&gt; {
-        Object.defineProperty(that, key, {
+    Object.keys(data).forEach(key =&gt; &#123;
+        Object.defineProperty(that, key, &#123;
             configurable: true,
             enumerable: true,
-            get: function proxyGetter () {
+            get: function proxyGetter () &#123;
                 return that._data[key];
-            },
-            set: function proxySetter (val) {
+            &#125;,
+            set: function proxySetter (val) &#123;
                 that._data[key] = val;
-            }
-        })
-    });
-}
-</code></pre>
+            &#125;
+        &#125;)
+    &#125;);
+&#125;</code></pre>
 <p>我们可以使用app.text代替app._data.text了。</p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
@@ -228,7 +226,7 @@ function _proxy (data) {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -262,7 +260,7 @@ function _proxy (data) {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#关于Vue-js"><span class="toc-number">1.</span> <span class="toc-text">关于Vue.js</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#将数据data变成可观察（observable）的"><span class="toc-number">1.1.</span> <span class="toc-text">将数据data变成可观察（observable）的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代理"><span class="toc-number">1.2.</span> <span class="toc-text">代理</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%B3%E4%BA%8EVue-js"><span class="toc-number">1.</span> <span class="toc-text">关于Vue.js</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%86%E6%95%B0%E6%8D%AEdata%E5%8F%98%E6%88%90%E5%8F%AF%E8%A7%82%E5%AF%9F%EF%BC%88observable%EF%BC%89%E7%9A%84"><span class="toc-number">1.1.</span> <span class="toc-text">将数据data变成可观察（observable）的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text">代理</span></a></li></ol></li></ol>
                 </div>
             </div>
             

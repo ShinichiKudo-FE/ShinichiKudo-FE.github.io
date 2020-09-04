@@ -41,7 +41,7 @@ componentWillReceiveProps,">
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -186,19 +186,18 @@ componentWillReceiveProps,">
 <li>初始化state对象</li>
 <li>给自定义方法绑定this</li>
 </ul>
-<pre><code class="js">class App extends React.Component{
-    constructor(props){
+<pre><code class="js">class App extends React.Component&#123;
+    constructor(props)&#123;
         super(props);
-        this.state = {
+        this.state = &#123;
             select,
             height: &#39;atuo&#39;,
             externalClass,
             externalClassText
-        }
+        &#125;
         this.handleClick = this.handleClick.bind(this);
-    }
-}
-</code></pre>
+    &#125;
+&#125;</code></pre>
 <p><strong>禁止在构造函数中调用setState，可以直接给state设置初始值</strong></p>
 <h2 id="getDerivedStateFromProps"><a href="#getDerivedStateFromProps" class="headerlink" title="getDerivedStateFromProps"></a>getDerivedStateFromProps</h2><p><code>static getDerivedStateFromProps(nextProps,prevState)</code></p>
 <p>一个静态方法，所以不能在这个函数里面使用this，这个函数有两个参数props和state，分别指接收到的新参数和当前的state对象，这个函数会返回一个对象用来更新当前的state对象，如果不需要更新可以返回null</p>
@@ -206,23 +205,22 @@ componentWillReceiveProps,">
 <p>在React v16.3时只有在挂载时和接收到新的props被调用，据说这是官方的失误，后来修复了</p>
 <p>这个方法就是为了取代之前的<del>componentWillMount、componentWillReceiveProps和componentWillUpdate</del></p>
 <p>当我们接收到新的属性想去修改我们state，可以使用<code>getDerivedStateFromProps</code></p>
-<pre><code class="js">class ExampleComponent extends React.Component {
-  state = {
+<pre><code class="js">class ExampleComponent extends React.Component &#123;
+  state = &#123;
     isScrollingDown: false,
     lastRow: null
-  }
-  static getDerivedStateFromProps(nextProps,prevState){
-      if(nextProps.currentRow !== prevState.lastRow){
-          return {
+  &#125;
+  static getDerivedStateFromProps(nextProps,prevState)&#123;
+      if(nextProps.currentRow !== prevState.lastRow)&#123;
+          return &#123;
             isScrollingDown:
             nextProps.currentRow &gt; prevState.lastRow,
             lastRow: nextProps.currentRow
-        }
-      }
+        &#125;
+      &#125;
       return null;
-  }
-}
-</code></pre>
+  &#125;
+&#125;</code></pre>
 <h2 id="componentWillMount-UNSAFE-componentWillMount"><a href="#componentWillMount-UNSAFE-componentWillMount" class="headerlink" title="componentWillMount/UNSAFE_componentWillMount"></a><del>componentWillMount/UNSAFE_componentWillMount</del></h2><p>在16版本这两个方法并存，但是在17版本中<del>componentWillMount</del>被删除，只保留<del>UNSAFE_componentWillMount</del>，目的是为了做向下兼容，对于新的应用，用<del>getDerivedStateFromProps</del>代替它们<br>由于<del>componentWillMount/ UNSAFE_componentWillMount</del>是在render之前调用，所以就算在这个方法中调用setState也不会触发重新渲染（re-render）</p>
 <h2 id="render"><a href="#render" class="headerlink" title="render"></a>render</h2><p>render方法是react中最核心的方法，一个组件中必须要这个方法：</p>
 <blockquote>
@@ -241,8 +239,8 @@ componentWillReceiveProps,">
 </blockquote>
 <p>render函数是纯函数，里面只做一件事，就是返回需要渲染的东西，不应该包含其它的业务逻辑，如数据请求，对于这些业务逻辑请移到<code>componentDidMount</code>和<code>componentDidUpdate</code>中</p>
 <h2 id="componentDidMount"><a href="#componentDidMount" class="headerlink" title="componentDidMount"></a>componentDidMount</h2><p>组件卸载之后调用，此时我们可以获取到DOM节点并操作，比如对canvas，svg的操作，服务器请求，订阅都可以写在这个里面，但是记得在<code>componentWillUnmount</code>中取消订阅</p>
-<pre><code class="js">componentDidMount() {
-    const { progressCanvas, progressSVG } = this
+<pre><code class="js">componentDidMount() &#123;
+    const &#123; progressCanvas, progressSVG &#125; = this
 
     const canvas = progressCanvas.current
     const ctx = canvas.getContext(&#39;2d&#39;)
@@ -272,8 +270,7 @@ componentWillReceiveProps,">
     this.canvas = canvas
     this.svg = svg
     this.ctx = ctx
- }
-
+ &#125;
 </code></pre>
 <p>在<code>componentDidMount</code>中调用setState会触发一次额外的渲染，多调用了一次render函数，但是用户对此没有感知，因为它是在浏览器刷新屏幕前执行的，但是我们应该在开发中避免它，因为它会带来一定的性能问题，我们应该在constructor中初始化我们的state对象，而不应该在componentDidMount调用state方法</p>
 <h1 id="更新阶段"><a href="#更新阶段" class="headerlink" title="更新阶段"></a>更新阶段</h1><p>更新阶段，当组件的props改变了，或组件内部调用了setState或者forceUpdate发生，会发生多次</p>
@@ -312,39 +309,38 @@ componentWillReceiveProps,">
 <p>还有这个方法一定要和componentDidUpdate一起使用，否则控制台也会有警告</p>
 <p><img src="https://user-gold-cdn.xitu.io/2018/8/12/1652d5bf732e3ff3?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="componentDidUpdate1"></p>
 <p>前面说过这个方法时用来代替<del>componentWillUpdate/UNSAVE_componentWillUpdate</del>，下面举个例子说明下：</p>
-<pre><code class="js">class ScrollingList extends React.Component {
-  constructor(props) {
+<pre><code class="js">class ScrollingList extends React.Component &#123;
+  constructor(props) &#123;
     super(props);
     this.listRef = React.createRef();
-  }
+  &#125;
 
-  getSnapshotBeforeUpdate(prevProps, prevState) {
+  getSnapshotBeforeUpdate(prevProps, prevState) &#123;
     // Are we adding new items to the list?
     // Capture the scroll position so we can adjust scroll later.
-    if (prevProps.list.length &lt; this.props.list.length) {
+    if (prevProps.list.length &lt; this.props.list.length) &#123;
       const list = this.listRef.current;
       return list.scrollHeight - list.scrollTop;
-    }
+    &#125;
     return null;
-  }
+  &#125;
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
+  componentDidUpdate(prevProps, prevState, snapshot) &#123;
     // If we have a snapshot value, we&#39;ve just added new items.
     // Adjust scroll so these new items don&#39;t push the old ones out of view.
     // (snapshot here is the value returned from getSnapshotBeforeUpdate)
-    if (snapshot !== null) {
+    if (snapshot !== null) &#123;
       const list = this.listRef.current;
       list.scrollTop = list.scrollHeight - snapshot;
-    }
-  }
+    &#125;
+  &#125;
 
-  render() {
+  render() &#123;
     return (
-      &lt;div ref={this.listRef}&gt;{/* ...contents... */}&lt;/div&gt;
+      &lt;div ref=&#123;this.listRef&#125;&gt;&#123;/* ...contents... */&#125;&lt;/div&gt;
     );
-  }
-}
-</code></pre>
+  &#125;
+&#125;</code></pre>
 <h2 id="componentDidUpdate"><a href="#componentDidUpdate" class="headerlink" title="componentDidUpdate"></a>componentDidUpdate</h2><p><code>componentDidUpdate(prevProps, prevState, snapshot)</code></p>
 <p>该方法在getSnapshotBeforeUpdate方法之后被调用，有三个参数<code>prevProps，prevState，snapshot</code>，<strong>表示之前的props，之前的state，和snapshot</strong>。第三个参数是<code>getSnapshotBeforeUpdate</code>返回的</p>
 <h1 id="卸载阶段"><a href="#卸载阶段" class="headerlink" title="卸载阶段"></a>卸载阶段</h1><p>卸载阶段，当我们的组件被卸载或者销毁了</p>
@@ -354,7 +350,7 @@ componentWillReceiveProps,">
 </ul>
 <h2 id="componentWillUnmount"><a href="#componentWillUnmount" class="headerlink" title="componentWillUnmount"></a>componentWillUnmount</h2><p>当我们的组件被卸载或者销毁了就会调用，我们可以在这个函数里去清除一些定时器，取消网络请求，清理无效的DOM元素等垃圾清理工作</p>
 <p>注意不要在这个函数里去调用setState，因为组件不会重新渲染了</p>
-<p><a href="https://juejin.im/post/5b6f1800f265da282d45a79a?utm_source=gold_browser_extension#comment" target="_blank" rel="noopener">原文链接</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.im/post/5b6f1800f265da282d45a79a?utm_source=gold_browser_extension#comment">原文链接</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -379,7 +375,7 @@ componentWillReceiveProps,">
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -413,7 +409,7 @@ componentWillReceiveProps,">
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#挂载阶段"><span class="toc-number">1.</span> <span class="toc-text">挂载阶段</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#constructor-NaN"><span class="toc-number">1.1.</span> <span class="toc-text">constructor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#getDerivedStateFromProps"><span class="toc-number">1.2.</span> <span class="toc-text">getDerivedStateFromProps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillMount-UNSAFE-componentWillMount"><span class="toc-number">1.3.</span> <span class="toc-text">componentWillMount&#x2F;UNSAFE_componentWillMount</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#render"><span class="toc-number">1.4.</span> <span class="toc-text">render</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#componentDidMount"><span class="toc-number">1.5.</span> <span class="toc-text">componentDidMount</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#更新阶段"><span class="toc-number">2.</span> <span class="toc-text">更新阶段</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillReceiveProps-UNSAFE-componentWillReceiveProps"><span class="toc-number">2.1.</span> <span class="toc-text">componentWillReceiveProps&#x2F;UNSAFE_componentWillReceiveProps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#getDerivedStateFromProps-1"><span class="toc-number">2.2.</span> <span class="toc-text">&#96;getDerivedStateFromProps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#shouldComponentUpdate"><span class="toc-number">2.3.</span> <span class="toc-text">shouldComponentUpdate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillUpdate-UNSAFE-componentWillUpdate"><span class="toc-number">2.4.</span> <span class="toc-text">componentWillUpdate&#x2F;UNSAFE_componentWillUpdate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#render-1"><span class="toc-number">2.5.</span> <span class="toc-text">&#96;render</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#getSnapshotBeforeUpdate"><span class="toc-number">2.6.</span> <span class="toc-text">getSnapshotBeforeUpdate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#componentDidUpdate"><span class="toc-number">2.7.</span> <span class="toc-text">componentDidUpdate</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#卸载阶段"><span class="toc-number">3.</span> <span class="toc-text">卸载阶段</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillUnmount"><span class="toc-number">3.1.</span> <span class="toc-text">componentWillUnmount</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8C%82%E8%BD%BD%E9%98%B6%E6%AE%B5"><span class="toc-number">1.</span> <span class="toc-text">挂载阶段</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#constructor-NaN"><span class="toc-number">1.1.</span> <span class="toc-text">constructor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#getDerivedStateFromProps"><span class="toc-number">1.2.</span> <span class="toc-text">getDerivedStateFromProps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillMount-UNSAFE-componentWillMount"><span class="toc-number">1.3.</span> <span class="toc-text">componentWillMount&#x2F;UNSAFE_componentWillMount</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#render"><span class="toc-number">1.4.</span> <span class="toc-text">render</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#componentDidMount"><span class="toc-number">1.5.</span> <span class="toc-text">componentDidMount</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E9%98%B6%E6%AE%B5"><span class="toc-number">2.</span> <span class="toc-text">更新阶段</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillReceiveProps-UNSAFE-componentWillReceiveProps"><span class="toc-number">2.1.</span> <span class="toc-text">componentWillReceiveProps&#x2F;UNSAFE_componentWillReceiveProps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#getDerivedStateFromProps-1"><span class="toc-number">2.2.</span> <span class="toc-text">&#96;getDerivedStateFromProps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#shouldComponentUpdate"><span class="toc-number">2.3.</span> <span class="toc-text">shouldComponentUpdate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillUpdate-UNSAFE-componentWillUpdate"><span class="toc-number">2.4.</span> <span class="toc-text">componentWillUpdate&#x2F;UNSAFE_componentWillUpdate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#render-1"><span class="toc-number">2.5.</span> <span class="toc-text">&#96;render</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#getSnapshotBeforeUpdate"><span class="toc-number">2.6.</span> <span class="toc-text">getSnapshotBeforeUpdate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#componentDidUpdate"><span class="toc-number">2.7.</span> <span class="toc-text">componentDidUpdate</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8D%B8%E8%BD%BD%E9%98%B6%E6%AE%B5"><span class="toc-number">3.</span> <span class="toc-text">卸载阶段</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillUnmount"><span class="toc-number">3.1.</span> <span class="toc-text">componentWillUnmount</span></a></li></ol></li></ol>
                 </div>
             </div>
             

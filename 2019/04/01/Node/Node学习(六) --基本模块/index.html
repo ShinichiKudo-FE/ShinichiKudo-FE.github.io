@@ -39,7 +39,7 @@ as,">
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -147,8 +147,7 @@ as,">
 
 assert(2 &gt; 1, &#39;2 &gt; 1&#39;)
 
-assert(1 &gt; 2, &#39;1 &gt; 2&#39;)
-</code></pre>
+assert(1 &gt; 2, &#39;1 &gt; 2&#39;)</code></pre>
 <p>代码在运行到assert(2 &gt; 1, ‘2 &gt; 1’)时，由于2 &gt; 1为true，此时不会抛出错误。</p>
 <p>而运行到assert(1 &gt; 2, ‘1 &gt; 2’)时，由于1 &gt; 2为false，此时会抛出错误如下：</p>
 <pre><code class="js">AssertionError [ERR_ASSERTION]: 1 &gt; 2
@@ -160,8 +159,7 @@ assert(1 &gt; 2, &#39;1 &gt; 2&#39;)
     at Function.Module._load (internal/modules/cjs/loader.js:558:3)
     at Function.Module.runMain (internal/modules/cjs/loader.js:797:12)
     at executeUserCode (internal/bootstrap/node.js:526:15)
-    at startMainThreadExecution (internal/bootstrap/node.js:439:3)
-</code></pre>
+    at startMainThreadExecution (internal/bootstrap/node.js:439:3)</code></pre>
 <h3 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h3><p>通常可以在一个模块或函数的每个阶段使用assert，或者在对函数传参进行assert校验，以保证代码运行的正确性。</p>
 <h3 id="assert-deepStrictEqual"><a href="#assert-deepStrictEqual" class="headerlink" title="assert.deepStrictEqual"></a>assert.deepStrictEqual</h3><p><code>assert.deepStrictEqual(actual, expected[, message])</code>用于对actual 参数和 expected的深度比较，即不仅校验它们是否相等，同时也要校验它们的成员之间是否相等。</p>
 <p><code>assert.deepStrictEqual</code>在校验对象或数组时比较有用。</p>
@@ -169,67 +167,66 @@ assert(1 &gt; 2, &#39;1 &gt; 2&#39;)
 <h3 id="assert-deepStrictEqual的用法"><a href="#assert-deepStrictEqual的用法" class="headerlink" title="assert.deepStrictEqual的用法"></a>assert.deepStrictEqual的用法</h3><p>1.使用<code>assert.deepStrictEqual</code>比较对象：</p>
 <pre><code class="js">const assert = require(&#39;assert&#39;)
 
-const obj1 = {
+const obj1 = &#123;
   a: 1,
   b: 2,
-  children: {
+  children: &#123;
     c: 3
-  }
-}
+  &#125;
+&#125;
 
-const obj2 = {
+const obj2 = &#123;
   a: 1,
   b: 2,
-  children: {
+  children: &#123;
     c: 3
-  }
-}
+  &#125;
+&#125;
 
-const obj3 = {
+const obj3 = &#123;
   a: 1,
   b: 2,
-  children: {
+  children: &#123;
     c: &#39;3&#39;
-  }
-}
+  &#125;
+&#125;
 
 assert.deepStrictEqual(obj1, obj2, &#39;obj1 !== obj2&#39;)
 
-assert.deepStrictEqual(obj1, obj3, &#39;obj1 !== obj3&#39;)
-</code></pre>
+assert.deepStrictEqual(obj1, obj3, &#39;obj1 !== obj3&#39;)</code></pre>
 <a id="more"></a>
+
 <p>代码会抛出错误：obj1 !== obj3。</p>
 <p>2.使用<code>assert.deepStrictEqual</code>比较数组</p>
 <pre><code class="js">const assert = require(&#39;assert&#39;)
 
-const arr1 = [{
+const arr1 = [&#123;
   a: 1,
   b: 2,
-  children: [{
+  children: [&#123;
     c: 3
-  }]
-}]
+  &#125;]
+&#125;]
 
-const arr2 = [{
+const arr2 = [&#123;
   a: 1,
   b: 2,
-  children: [{
+  children: [&#123;
     c: 3
-  }]
-}]
+  &#125;]
+&#125;]
 
-const arr3 = [{
+const arr3 = [&#123;
   a: 1,
   b: 2,
-  children: [{
+  children: [&#123;
     c: &#39;3&#39;
-  }]
-}]
+  &#125;]
+&#125;]
 
 assert.deepStrictEqual(arr1, arr2, &#39;arr1 !== arr2&#39;)
 
-assert.deepStrictEqual(arr1, arr3, &#39;arr1 !== arr3&#39;)
-</code></pre>
+assert.deepStrictEqual(arr1, arr3, &#39;arr1 !== arr3&#39;)</code></pre>
 <h2 id="path-路径"><a href="#path-路径" class="headerlink" title="path(路径)"></a>path(路径)</h2><p>path模块主要用来对文件路径进行处理，比如提取路径、后缀，拼接路径等。</p>
 <h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><pre><code class="js">const path = require(&#39;path&#39;)
 
@@ -240,8 +237,7 @@ console.log(path.basename(str)) // 获取文件名：1.txt
 console.log(path.extname(str)) // 获取文件后缀：.txt
 console.log(path.resolve(str, &#39;../c&#39;, &#39;build&#39;, &#39;strict&#39;)) // 将路径解析为绝对路径：C:\root\a\b\c\build\strict
 console.log(path.resolve(str, &#39;../c&#39;, &#39;build&#39;, &#39;strict&#39;, &#39;../..&#39;, &#39;assets&#39;)) // 将路径解析为绝对路径：C:\root\a\b\c\assets
-console.log(path.resolve(__dirname, &#39;build&#39;)) // 将路径解析为绝对路径：C:\projects\nodejs-tutorial\lesson12\build
-</code></pre>
+console.log(path.resolve(__dirname, &#39;build&#39;)) // 将路径解析为绝对路径：C:\projects\nodejs-tutorial\lesson12\build</code></pre>
 <p>值得一提的是<code>path.resolve</code>方法，它可以接收任意个参数，然后根据每个路径参数之间的关系，将路径最终解析为一个<em>绝对路径</em>。</p>
 <p><code>__dirname</code>指的是当前模块所在的绝对路径名称，它的值会自动根据当前的绝对路径变化，等同于<code>path.dirname(__filename)</code>的结果。</p>
 <h2 id="URL模块"><a href="#URL模块" class="headerlink" title="URL模块"></a>URL模块</h2><h3 id="url-parse"><a href="#url-parse" class="headerlink" title="url.parse"></a>url.parse</h3><p>URL模块用于对URL的解析，常用的是url.parse方法。</p>
@@ -250,10 +246,9 @@ console.log(path.resolve(__dirname, &#39;build&#39;)) // 将路径解析为绝�
 
 const str = &#39;https://www.google.com:8080/a/b?x=1&amp;y=2&amp;y=3&amp;y=4&#39;
 
-console.log(url.parse(str))
-</code></pre>
+console.log(url.parse(str))</code></pre>
 <p>打印结果如下：</p>
-<pre><code class="js">Url {
+<pre><code class="js">Url &#123;
   protocol: &#39;https:&#39;,
   slashes: true,
   auth: null,
@@ -265,11 +260,10 @@ console.log(url.parse(str))
   query: &#39;x=1&amp;y=2&amp;y=3&amp;y=4&#39;,
   pathname: &#39;/a/b&#39;,
   path: &#39;/a/b?x=1&amp;y=2&amp;y=3&amp;y=4&#39;,
-  href: &#39;https://www.google.com:8080/a/b?x=1&amp;y=2&amp;y=3&amp;y=4&#39; }
-</code></pre>
+  href: &#39;https://www.google.com:8080/a/b?x=1&amp;y=2&amp;y=3&amp;y=4&#39; &#125;</code></pre>
 <p>可以看到url的信息如端口号、域名、query参数等都被解析出来了。</p>
 <p>如果需要将query参数转为对象，则可以为url.parse函数的第二个参数传true，如<code>console.log(url.parse(str, true))</code>，打印结果如下：</p>
-<pre><code class="js">Url {
+<pre><code class="js">Url &#123;
   protocol: &#39;https:&#39;,
   slashes: true,
   auth: null,
@@ -278,21 +272,19 @@ console.log(url.parse(str))
   hostname: &#39;www.google.com&#39;,
   hash: null,
   search: &#39;?x=1&amp;y=2&amp;y=3&amp;y=4&#39;,
-  query: [Object: null prototype] { x: &#39;1&#39;, y: [ &#39;2&#39;, &#39;3&#39;, &#39;4&#39; ] },
+  query: [Object: null prototype] &#123; x: &#39;1&#39;, y: [ &#39;2&#39;, &#39;3&#39;, &#39;4&#39; ] &#125;,
   pathname: &#39;/a/b&#39;,
   path: &#39;/a/b?x=1&amp;y=2&amp;y=3&amp;y=4&#39;,
-  href: &#39;https://www.google.com:8080/a/b?x=1&amp;y=2&amp;y=3&amp;y=4&#39; }
-</code></pre>
+  href: &#39;https://www.google.com:8080/a/b?x=1&amp;y=2&amp;y=3&amp;y=4&#39; &#125;</code></pre>
 <p>同时可以看到y=2&amp;y=3&amp;y=4参数被解析为了y: [ ‘2’, ‘3’, ‘4’ ]。</p>
 <h3 id="new-URL"><a href="#new-URL" class="headerlink" title="new URL()"></a>new URL()</h3><p>除了用<code>url.parse</code>方法解析url，还可以通过构造函数URL，创建一个实例，其中带有解析后的数据。</p>
 <p>实例有一个toString方法，可以将实例解析为字符串url。</p>
-<pre><code class="js">const { URL } = require(&#39;url&#39;)
+<pre><code class="js">const &#123; URL &#125; = require(&#39;url&#39;)
 const urlObj = new URL(str)
 
 console.log(urlObj)
-console.log(urlObj.toString())
-</code></pre>
-<pre><code class="js">URL {
+console.log(urlObj.toString())</code></pre>
+<pre><code class="js">URL &#123;
   href: &#39;https://www.google.com:8080/a/b?x=1&amp;y=2&amp;y=3&amp;y=4&#39;,
   origin: &#39;https://www.google.com:8080&#39;,
   protocol: &#39;https:&#39;,
@@ -304,23 +296,20 @@ console.log(urlObj.toString())
   pathname: &#39;/a/b&#39;,
   search: &#39;?x=1&amp;y=2&amp;y=3&amp;y=4&#39;,
   searchParams:
-   URLSearchParams { &#39;x&#39; =&gt; &#39;1&#39;, &#39;y&#39; =&gt; &#39;2&#39;, &#39;y&#39; =&gt; &#39;3&#39;, &#39;y&#39; =&gt; &#39;4&#39; },
-  hash: &#39;&#39; }
+   URLSearchParams &#123; &#39;x&#39; =&gt; &#39;1&#39;, &#39;y&#39; =&gt; &#39;2&#39;, &#39;y&#39; =&gt; &#39;3&#39;, &#39;y&#39; =&gt; &#39;4&#39; &#125;,
+  hash: &#39;&#39; &#125;
 
-https://www.google.com:8080/a/b?x=1&amp;y=2&amp;y=3&amp;y=4    // toString方法解析出的url
-</code></pre>
+https://www.google.com:8080/a/b?x=1&amp;y=2&amp;y=3&amp;y=4    // toString方法解析出的url</code></pre>
 <h2 id="querystring模块"><a href="#querystring模块" class="headerlink" title="querystring模块"></a>querystring模块</h2><p>querystring用来对url中的query字符串进行解析，常用的方法有<code>querystring.parse</code>和<code>querystring.stringify</code>。</p>
 <h3 id="querystring-parse"><a href="#querystring-parse" class="headerlink" title="querystring.parse"></a>querystring.parse</h3><p>querystring.parse方法用于解析URL 查询字符串。</p>
 <pre><code class="js">const querystring = require(&#39;querystring&#39;)
 
 console.log(querystring.parse(&#39;foo=bar&amp;abc=xyz&amp;abc=123&#39;))
-//{ foo: &#39;bar&#39;, abc: [ &#39;xyz&#39;, &#39;123&#39; ] }
-</code></pre>
+//&#123; foo: &#39;bar&#39;, abc: [ &#39;xyz&#39;, &#39;123&#39; ] &#125;</code></pre>
 <h3 id="querystring-stringify"><a href="#querystring-stringify" class="headerlink" title="querystring.stringify"></a>querystring.stringify</h3><p>querystring.stringify用于将对象转换为URL查询字符串。</p>
-<pre><code class="js">console.log(querystring.stringify({ foo: &#39;bar&#39;, baz: [&#39;qux&#39;, &#39;quux&#39;], corge: &#39;&#39; }))
+<pre><code class="js">console.log(querystring.stringify(&#123; foo: &#39;bar&#39;, baz: [&#39;qux&#39;, &#39;quux&#39;], corge: &#39;&#39; &#125;))
 
-// foo=bar&amp;baz=qux&amp;baz=quux&amp;corge=
-</code></pre>
+// foo=bar&amp;baz=qux&amp;baz=quux&amp;corge=</code></pre>
 <h2 id="net模块"><a href="#net模块" class="headerlink" title="net模块"></a>net模块</h2><p>net 模块用于创建基于流的 TCP 或 IPC 的服务器（net.createServer()）与客户端（net.createConnection()）。</p>
 <p>net模块是专门用于网络通信的模块，若当前的数据交互不通过HTTP协议，就可以使用net模块，如<code>WebSocket</code>。</p>
 <p>HTTP协议本质上是以文本形式传输数据，它的传输数据量较大，而且它的传输需要二进制和文本之间进行转换和解析。</p>
@@ -373,7 +362,7 @@ console.log(querystring.parse(&#39;foo=bar&amp;abc=xyz&amp;abc=123&#39;))
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -407,7 +396,7 @@ console.log(querystring.parse(&#39;foo=bar&amp;abc=xyz&amp;abc=123&#39;))
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#assert-断言"><span class="toc-number">1.</span> <span class="toc-text">assert (断言)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#用法"><span class="toc-number">1.1.</span> <span class="toc-text">用法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用方式"><span class="toc-number">1.2.</span> <span class="toc-text">使用方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#assert-deepStrictEqual"><span class="toc-number">1.3.</span> <span class="toc-text">assert.deepStrictEqual</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#assert-deepStrictEqual的用法"><span class="toc-number">1.4.</span> <span class="toc-text">assert.deepStrictEqual的用法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#path-路径"><span class="toc-number">2.</span> <span class="toc-text">path(路径)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用"><span class="toc-number">3.</span> <span class="toc-text">使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#URL模块"><span class="toc-number">4.</span> <span class="toc-text">URL模块</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#url-parse"><span class="toc-number">4.1.</span> <span class="toc-text">url.parse</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#new-URL"><span class="toc-number">4.2.</span> <span class="toc-text">new URL()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#querystring模块"><span class="toc-number">5.</span> <span class="toc-text">querystring模块</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#querystring-parse"><span class="toc-number">5.1.</span> <span class="toc-text">querystring.parse</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#querystring-stringify"><span class="toc-number">5.2.</span> <span class="toc-text">querystring.stringify</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#net模块"><span class="toc-number">6.</span> <span class="toc-text">net模块</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#OSI参考模型"><span class="toc-number">6.1.</span> <span class="toc-text">OSI参考模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OSI参考模型分层"><span class="toc-number">6.2.</span> <span class="toc-text">OSI参考模型分层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OSI参考模型各层功能"><span class="toc-number">6.3.</span> <span class="toc-text">OSI参考模型各层功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP"><span class="toc-number">6.4.</span> <span class="toc-text">TCP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UDP"><span class="toc-number">6.5.</span> <span class="toc-text">UDP</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#assert-%E6%96%AD%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">assert (断言)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">用法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">1.2.</span> <span class="toc-text">使用方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#assert-deepStrictEqual"><span class="toc-number">1.3.</span> <span class="toc-text">assert.deepStrictEqual</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#assert-deepStrictEqual%E7%9A%84%E7%94%A8%E6%B3%95"><span class="toc-number">1.4.</span> <span class="toc-text">assert.deepStrictEqual的用法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#path-%E8%B7%AF%E5%BE%84"><span class="toc-number">2.</span> <span class="toc-text">path(路径)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text">使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#URL%E6%A8%A1%E5%9D%97"><span class="toc-number">4.</span> <span class="toc-text">URL模块</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#url-parse"><span class="toc-number">4.1.</span> <span class="toc-text">url.parse</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#new-URL"><span class="toc-number">4.2.</span> <span class="toc-text">new URL()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#querystring%E6%A8%A1%E5%9D%97"><span class="toc-number">5.</span> <span class="toc-text">querystring模块</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#querystring-parse"><span class="toc-number">5.1.</span> <span class="toc-text">querystring.parse</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#querystring-stringify"><span class="toc-number">5.2.</span> <span class="toc-text">querystring.stringify</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#net%E6%A8%A1%E5%9D%97"><span class="toc-number">6.</span> <span class="toc-text">net模块</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#OSI%E5%8F%82%E8%80%83%E6%A8%A1%E5%9E%8B"><span class="toc-number">6.1.</span> <span class="toc-text">OSI参考模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OSI%E5%8F%82%E8%80%83%E6%A8%A1%E5%9E%8B%E5%88%86%E5%B1%82"><span class="toc-number">6.2.</span> <span class="toc-text">OSI参考模型分层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OSI%E5%8F%82%E8%80%83%E6%A8%A1%E5%9E%8B%E5%90%84%E5%B1%82%E5%8A%9F%E8%83%BD"><span class="toc-number">6.3.</span> <span class="toc-text">OSI参考模型各层功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP"><span class="toc-number">6.4.</span> <span class="toc-text">TCP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UDP"><span class="toc-number">6.5.</span> <span class="toc-text">UDP</span></a></li></ol></li></ol>
                 </div>
             </div>
             

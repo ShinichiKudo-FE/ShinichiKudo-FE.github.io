@@ -36,7 +36,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -99,13 +99,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    20k
+                    21k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    18 mins.
+                    19 mins.
                 </span>
                 
                 
@@ -169,29 +169,28 @@
 <li>我们介绍了两个新的生命周期，分别是getDerivedStateFromProps和getSnapshotBeforeUpdate。</li>
 </ul>
 <h3 id="新的生命周期-getDerivedStateFromProps"><a href="#新的生命周期-getDerivedStateFromProps" class="headerlink" title="新的生命周期: getDerivedStateFromProps"></a>新的生命周期: getDerivedStateFromProps</h3><a id="more"></a>
-<pre><code class="js">
-class Example extends React.Component {
 
-  static getDerivedStateFromProps(nextProps, prevState) {
+<pre><code class="js">
+class Example extends React.Component &#123;
+
+  static getDerivedStateFromProps(nextProps, prevState) &#123;
 
     // ...
 
-  }
+  &#125;
 
-}
-</code></pre>
+&#125;</code></pre>
 <p>新的静态<code>getDerivedStateFromProps</code>生命周期在组件实例化以及接收新<code>props</code>后调用。它可以返回一个对象来更新<code>state</code>，或者返回null来表示新的<code>props</code>不需要任何<code>state</code>更新。</p>
 <p>与<code>componentDidUpdate</code>一起，这个新的生命周期应该覆盖传统<code>componentWillReceiveProps</code>的所有用例。</p>
-<h3 id="新的生命周期-getSnapshotBeforeUpdate"><a href="#新的生命周期-getSnapshotBeforeUpdate" class="headerlink" title="新的生命周期: getSnapshotBeforeUpdate"></a>新的生命周期: getSnapshotBeforeUpdate</h3><pre><code class="js">class Example extends React.Component {
+<h3 id="新的生命周期-getSnapshotBeforeUpdate"><a href="#新的生命周期-getSnapshotBeforeUpdate" class="headerlink" title="新的生命周期: getSnapshotBeforeUpdate"></a>新的生命周期: getSnapshotBeforeUpdate</h3><pre><code class="js">class Example extends React.Component &#123;
 
-  getSnapshotBeforeUpdate(prevProps, prevState) {
+  getSnapshotBeforeUpdate(prevProps, prevState) &#123;
 
     // ...
 
-  }
+  &#125;
 
-}
-</code></pre>
+&#125;</code></pre>
 <p>新的<code>getSnapshotBeforeUpdate</code>生命周期在更新之前被调用（例如，在DOM被更新之前）。此生命周期的返回值将作为第三个参数传递给<code>componentDidUpdate</code>。 （这个生命周期不是经常需要的，但可以用于在恢复期间手动保存滚动位置的情况。）</p>
 <p>You can find their type signatures in this gist.</p>
 <p>我们看看如何在使用这两种生命周期的，例子如下:</p>
@@ -219,149 +218,145 @@ class Example extends React.Component {
 <h3 id="初始化状态："><a href="#初始化状态：" class="headerlink" title="初始化状态："></a>初始化状态：</h3><p>这个例子展示了一个调用<code>componentWillMount</code>中带有<code>setState</code>的组件：</p>
 <pre><code class="js">// Before
 
-class ExampleComponent extends React.Component {
+class ExampleComponent extends React.Component &#123;
 
-  state = {};
+  state = &#123;&#125;;
 
-  componentWillMount() {
+  componentWillMount() &#123;
 
-    this.setState({
+    this.setState(&#123;
 
       currentColor: this.props.defaultColor,
 
       palette: &#39;rgb&#39;,
 
-    });
+    &#125;);
 
-  }
+  &#125;
 
-}
-</code></pre>
+&#125;</code></pre>
 <p>这种类型的组件最简单的重构是将状态初始化移动到构造函数或属性初始值设定项，如下所示：</p>
 <pre><code class="js">// After
 
-class ExampleComponent extends React.Component {
+class ExampleComponent extends React.Component &#123;
 
-  state = {
+  state = &#123;
 
     currentColor: this.props.defaultColor,
 
     palette: &#39;rgb&#39;,
 
-  };
+  &#125;;
 
-}
-</code></pre>
+&#125;</code></pre>
 <h3 id="获取外部数据"><a href="#获取外部数据" class="headerlink" title="获取外部数据"></a>获取外部数据</h3><p>以下是使用componentWillMount获取外部数据的组件示例：</p>
 <pre><code class="js">// Before
 
-class ExampleComponent extends React.Component {
+class ExampleComponent extends React.Component &#123;
 
-  state = {
+  state = &#123;
 
     externalData: null,
 
-  };
+  &#125;;
 
 
 
-  componentWillMount() {
+  componentWillMount() &#123;
 
     this._asyncRequest = asyncLoadData().then(
 
-      externalData =&gt; {
+      externalData =&gt; &#123;
 
         this._asyncRequest = null;
 
-        this.setState({externalData});
+        this.setState(&#123;externalData&#125;);
 
-      }
+      &#125;
 
     );
 
-  }
+  &#125;
 
 
 
-  componentWillUnmount() {
+  componentWillUnmount() &#123;
 
-    if (this._asyncRequest) {
+    if (this._asyncRequest) &#123;
 
       this._asyncRequest.cancel();
 
-    }
+    &#125;
 
-  }
+  &#125;
 
-  render() {
+  render() &#123;
 
-    if (this.state.externalData === null) {
+    if (this.state.externalData === null) &#123;
 
       // Render loading state ...
 
-    } else {
+    &#125; else &#123;
 
       // Render real UI ...
 
-    }
+    &#125;
 
-  }
+  &#125;
 
-}
-
+&#125;
 </code></pre>
 <p>对于大多数用例，建议的升级路径是将数据提取移入<code>componentDidMount</code>：</p>
 <pre><code class="js">// After
 
-class ExampleComponent extends React.Component {
+class ExampleComponent extends React.Component &#123;
 
-  state = {
+  state = &#123;
 
     externalData: null,
 
-  };
-  componentDidMount() {
+  &#125;;
+  componentDidMount() &#123;
 
     this._asyncRequest = asyncLoadData().then(
 
-      externalData =&gt; {
+      externalData =&gt; &#123;
 
         this._asyncRequest = null;
 
-        this.setState({externalData});
+        this.setState(&#123;externalData&#125;);
 
-      }
+      &#125;
 
     );
 
-  }
+  &#125;
 
-  componentWillUnmount() {
+  componentWillUnmount() &#123;
 
-    if (this._asyncRequest) {
+    if (this._asyncRequest) &#123;
 
       this._asyncRequest.cancel();
 
-    }
+    &#125;
 
-  }
+  &#125;
 
-  render() {
+  render() &#123;
 
-    if (this.state.externalData === null) {
+    if (this.state.externalData === null) &#123;
 
       // Render loading state ...
 
-    } else {
+    &#125; else &#123;
 
       // Render real UI ...
 
-    }
+    &#125;
 
-  }
+  &#125;
 
-}
-</code></pre>
+&#125;</code></pre>
 <p>有一个常见的错误观念认为，在<code>componentWillMount</code>中提取可以避免第一个空的渲染。在实践中，这从来都不是真的，因为React总是在<code>componentWillMount</code>之后立即执行渲染。如果数据在<code>componentWillMount</code>触发的时间内不可用，则无论你在哪里提取数据，第一个渲染仍将显示加载状态。这就是为什么在绝大多数情况下将提取移到<code>componentDidMount</code>没有明显效果。</p>
 <blockquote>
 <p>注意：<br>一些高级用例（例如，像Relay这样的库）可能想要尝试使用热切的预取异步数据。在这里可以找到一个这样做的例子。</p>
@@ -370,15 +365,15 @@ class ExampleComponent extends React.Component {
 <h3 id="添加时间监听"><a href="#添加时间监听" class="headerlink" title="添加时间监听"></a>添加时间监听</h3><p>下面是一个在安装时监听外部事件调度程序的组件示例：</p>
 <pre><code class="js">// Before
 
-class ExampleComponent extends React.Component {
+class ExampleComponent extends React.Component &#123;
 
-  componentWillMount() {
+  componentWillMount() &#123;
 
-    this.setState({
+    this.setState(&#123;
 
       subscribedValue: this.props.dataSource.value,
 
-    });
+    &#125;);
 
 
 
@@ -390,10 +385,10 @@ class ExampleComponent extends React.Component {
 
     );
 
-  }
+  &#125;
 
 
-  componentWillUnmount() {
+  componentWillUnmount() &#123;
 
     this.props.dataSource.unsubscribe(
 
@@ -401,36 +396,35 @@ class ExampleComponent extends React.Component {
 
     );
 
-  }
+  &#125;
 
-  handleSubscriptionChange = dataSource =&gt; {
+  handleSubscriptionChange = dataSource =&gt; &#123;
 
-    this.setState({
+    this.setState(&#123;
 
       subscribedValue: dataSource.value,
 
-    });
+    &#125;);
 
-  };
+  &#125;;
 
-}
-</code></pre>
+&#125;</code></pre>
 <p>不幸的是，这会导致服务器渲染（<code>componentWillUnmount</code>永远不会被调用）和异步渲染（在渲染完成之前渲染可能被中断，导致<code>componentWillUnmount</code>不被调用）的内存泄漏。</p>
 <p>人们经常认为<code>componentWillMount</code>和<code>componentWillUnmount</code>总是配对，但这并不能保证。只有调用<code>componentDidMount</code>后，React才能保证稍后调用<code>componentWillUnmount</code>进行清理。</p>
 <p>出于这个原因，添加事件监听的推荐方式是使用<code>componentDidMount</code>生命周期：</p>
 <pre><code class="js">// After
 
-class ExampleComponent extends React.Component {
+class ExampleComponent extends React.Component &#123;
 
-  state = {
+  state = &#123;
 
     subscribedValue: this.props.dataSource.value,
 
-  };
+  &#125;;
 
 
 
-  componentDidMount() {
+  componentDidMount() &#123;
 
     // Event listeners are only safe to add after mount,
 
@@ -454,21 +448,21 @@ class ExampleComponent extends React.Component {
 
       this.props.dataSource.value
 
-    ) {
+    ) &#123;
 
-      this.setState({
+      this.setState(&#123;
 
         subscribedValue: this.props.dataSource.value,
 
-      });
+      &#125;);
 
-    }
+    &#125;
 
-  }
+  &#125;
 
 
 
-  componentWillUnmount() {
+  componentWillUnmount() &#123;
 
     this.props.dataSource.unsubscribe(
 
@@ -476,47 +470,46 @@ class ExampleComponent extends React.Component {
 
     );
 
-  }
+  &#125;
 
 
 
-  handleSubscriptionChange = dataSource =&gt; {
+  handleSubscriptionChange = dataSource =&gt; &#123;
 
-    this.setState({
+    this.setState(&#123;
 
       subscribedValue: dataSource.value,
 
-    });
+    &#125;);
 
-  };
+  &#125;;
 
-}
-</code></pre>
+&#125;</code></pre>
 <p>有时候更新监听以响应属性变化很重要。如果您使用的是像Redux或MobX这样的库，库的容器组件会为您处理。对于应用程序作者，我们创建了一个小型库<code>create-subscription</code>来帮助解决这个问题。我们会将它与React 16.3一起发布。</p>
 <p>我们可以使用<code>create-subscription</code>来传递监听的值，而不是像上例那样传递监听 的<code>dataSource prop</code>。</p>
-<pre><code class="js">import {createSubscription} from &#39;create-subscription&#39;;
+<pre><code class="js">import &#123;createSubscription&#125; from &#39;create-subscription&#39;;
 
 
 
-const Subscription = createSubscription({
+const Subscription = createSubscription(&#123;
 
-  getCurrentValue(sourceProp) {
+  getCurrentValue(sourceProp) &#123;
 
     // Return the current value of the subscription (sourceProp).
 
     return sourceProp.value;
 
-  },
+  &#125;,
 
 
 
-  subscribe(sourceProp, callback) {
+  subscribe(sourceProp, callback) &#123;
 
-    function handleSubscriptionChange() {
+    function handleSubscriptionChange() &#123;
 
       callback(sourceProp.value);
 
-    }
+    &#125;
 
 
 
@@ -530,15 +523,15 @@ const Subscription = createSubscription({
 
     // Return an unsubscribe method.
 
-    return function unsubscribe() {
+    return function unsubscribe() &#123;
 
       sourceProp.unsubscribe(handleSubscriptionChange);
 
-    };
+    &#125;;
 
-  },
+  &#125;,
 
-});
+&#125;);
 
 
 
@@ -546,71 +539,69 @@ const Subscription = createSubscription({
 
 // We could just pass the subscribed value directly:
 
-`&lt;Subscription source={dataSource}&gt;`
+`&lt;Subscription source=&#123;dataSource&#125;&gt;`
 
-  {value =&gt; `&lt;ExampleComponent subscribedValue={value} /&gt;`}
+  &#123;value =&gt; `&lt;ExampleComponent subscribedValue=&#123;value&#125; /&gt;`&#125;
 
-`&lt;/Subscription&gt;`;
-</code></pre>
+`&lt;/Subscription&gt;`;</code></pre>
 <blockquote>
 <p>注意<br>像Relay / Apollo这样的库应该使用与创建订阅相同的技术手动管理订阅（如此处所引用的），并采用最适合其库使用的优化方式。</p>
 </blockquote>
 <h3 id="基于props更新state"><a href="#基于props更新state" class="headerlink" title="基于props更新state"></a>基于props更新state</h3><p>以下是使用旧版<code>componentWillReceiveProps</code>生命周期基于新的道具值更新状态的组件示例：</p>
 <pre><code class="js">// Before
 
-class ExampleComponent extends React.Component {
+class ExampleComponent extends React.Component &#123;
 
-  state = {
+  state = &#123;
 
     isScrollingDown: false,
 
-  };
+  &#125;;
 
 
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) &#123;
 
-    if (this.props.currentRow !== nextProps.currentRow) {
+    if (this.props.currentRow !== nextProps.currentRow) &#123;
 
-      this.setState({
+      this.setState(&#123;
 
         isScrollingDown:
 
           nextProps.currentRow &gt; this.props.currentRow,
 
-      });
+      &#125;);
 
-    }
+    &#125;
 
-  }
+  &#125;
 
-}
-</code></pre>
+&#125;</code></pre>
 <p>尽管上面的代码本身并没有问题，但<code>componentWillReceiveProps</code>生命周期通常会被错误地用于解决问题。因此，该方法将被弃用。</p>
 <p>从版本16.3开始，<code>更新state以响应props</code>更改的推荐方法是使用新的静态<code>getDerivedStateFromProps</code>生命周期。 （生命周期在组件创建时以及每次收到新道具时调用）：</p>
 <pre><code class="js">// After
 
-class ExampleComponent extends React.Component {
+class ExampleComponent extends React.Component &#123;
 
   // Initialize state in constructor,
 
   // Or with a property initializer.
 
-  state = {
+  state = &#123;
 
     isScrollingDown: false,
 
     lastRow: null,
 
-  };
+  &#125;;
 
 
 
-  static getDerivedStateFromProps(nextProps, prevState) {
+  static getDerivedStateFromProps(nextProps, prevState) &#123;
 
-    if (nextProps.currentRow !== prevState.lastRow) {
+    if (nextProps.currentRow !== prevState.lastRow) &#123;
 
-      return {
+      return &#123;
 
         isScrollingDown:
 
@@ -618,9 +609,9 @@ class ExampleComponent extends React.Component {
 
         lastRow: nextProps.currentRow,
 
-      };
+      &#125;;
 
-    }
+    &#125;
 
 
 
@@ -628,10 +619,9 @@ class ExampleComponent extends React.Component {
 
     return null;
 
-  }
+  &#125;
 
-}
-</code></pre>
+&#125;</code></pre>
 <p>你可能会注意到在上面的例子中，<code>props.currentRow</code>是一个镜像状态（如state.lastRow）。这使得<code>getDerivedStateFromProps</code>可以像在<code>componentWillReceiveProps</code>中一样访问以前的props值。</p>
 <p>您可能想知道为什么我们不只是将先前的<code>props</code>作为参数传递给<code>getDerivedStateFromProps</code>。我们在设计API时考虑了这个选项，但最终决定反对它，原因有两个</p>
 <ul>
@@ -646,9 +636,9 @@ class ExampleComponent extends React.Component {
 <h3 id="调用外部回调函数"><a href="#调用外部回调函数" class="headerlink" title="调用外部回调函数"></a>调用外部回调函数</h3><p>下面是一个在内部状态发生变化时调用外部函数的组件示例：</p>
 <pre><code class="js">// Before
 
-class ExampleComponent extends React.Component {
+class ExampleComponent extends React.Component &#123;
 
-  componentWillUpdate(nextProps, nextState) {
+  componentWillUpdate(nextProps, nextState) &#123;
 
     if (
 
@@ -656,22 +646,21 @@ class ExampleComponent extends React.Component {
 
       nextState.someStatefulValue
 
-    ) {
+    ) &#123;
 
       nextProps.onChange(nextState.someStatefulValue);
 
-    }
+    &#125;
 
-  }
+  &#125;
 
-}
-</code></pre>
+&#125;</code></pre>
 <p>在异步模式下使用<code>componentWillUpdate</code>都是不安全的，因为外部回调可能会多次调用只更新一次。相反，应该使用<code>componentDidUpdate</code>生命周期，因为它保证每次更新只调用一次：</p>
 <pre><code class="js">// After
 
-class ExampleComponent extends React.Component {
+class ExampleComponent extends React.Component &#123;
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) &#123;
 
     if (
 
@@ -679,162 +668,158 @@ class ExampleComponent extends React.Component {
 
       prevState.someStatefulValue
 
-    ) {
+    ) &#123;
 
       this.props.onChange(this.state.someStatefulValue);
 
-    }
+    &#125;
 
-  }
+  &#125;
 
-}
-</code></pre>
+&#125;</code></pre>
 <h3 id="props改变的副作用"><a href="#props改变的副作用" class="headerlink" title="props改变的副作用"></a>props改变的副作用</h3><p>与上述 事例类似，有时组件在道具更改时会产生副作用。</p>
 <pre><code class="js">// Before
 
-class ExampleComponent extends React.Component {
+class ExampleComponent extends React.Component &#123;
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) &#123;
 
-    if (this.props.isVisible !== nextProps.isVisible) {
+    if (this.props.isVisible !== nextProps.isVisible) &#123;
 
       logVisibleChange(nextProps.isVisible);
 
-    }
+    &#125;
 
-  }
+  &#125;
 
-}
-</code></pre>
+&#125;</code></pre>
 <p>与<code>componentWillUpdate</code>一样，<code>componentWillReceiveProps</code>可能会多次调用但是只更新一次。出于这个原因，避免在此方法中导致的副作用非常重要。相反，应该使用<code>componentDidUpdate</code>，因为它保证每次更新只调用一次：</p>
 <pre><code class="js">// After
 
-class ExampleComponent extends React.Component {
+class ExampleComponent extends React.Component &#123;
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) &#123;
 
-    if (this.props.isVisible !== prevProps.isVisible) {
+    if (this.props.isVisible !== prevProps.isVisible) &#123;
 
       logVisibleChange(this.props.isVisible);
 
-    }
+    &#125;
 
-  }
+  &#125;
 
-}
-</code></pre>
+&#125;</code></pre>
 <h3 id="props改变时获取外部数据"><a href="#props改变时获取外部数据" class="headerlink" title="props改变时获取外部数据"></a>props改变时获取外部数据</h3><p>以下是根据<code>propsvalues</code>提取外部数据的组件示例：</p>
 <pre><code class="js">// Before
 
-class ExampleComponent extends React.Component {
+class ExampleComponent extends React.Component &#123;
 
-  state = {
+  state = &#123;
 
     externalData: null,
 
-  };
+  &#125;;
 
 
 
-  componentDidMount() {
+  componentDidMount() &#123;
 
     this._loadAsyncData(this.props.id);
 
-  }
+  &#125;
 
 
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) &#123;
 
-    if (nextProps.id !== this.props.id) {
+    if (nextProps.id !== this.props.id) &#123;
 
-      this.setState({externalData: null});
+      this.setState(&#123;externalData: null&#125;);
 
       this._loadAsyncData(nextProps.id);
 
-    }
+    &#125;
 
-  }
+  &#125;
 
 
 
-  componentWillUnmount() {
+  componentWillUnmount() &#123;
 
-    if (this._asyncRequest) {
+    if (this._asyncRequest) &#123;
 
       this._asyncRequest.cancel();
 
-    }
+    &#125;
 
-  }
+  &#125;
 
 
 
-  render() {
+  render() &#123;
 
-    if (this.state.externalData === null) {
+    if (this.state.externalData === null) &#123;
 
       // Render loading state ...
 
-    } else {
+    &#125; else &#123;
 
       // Render real UI ...
 
-    }
+    &#125;
 
-  }
+  &#125;
 
 
 
-  _loadAsyncData(id) {
+  _loadAsyncData(id) &#123;
 
     this._asyncRequest = asyncLoadData(id).then(
 
-      externalData =&gt; {
+      externalData =&gt; &#123;
 
         this._asyncRequest = null;
 
-        this.setState({externalData});
+        this.setState(&#123;externalData&#125;);
 
-      }
+      &#125;
 
     );
 
-  }
+  &#125;
 
-}
-
+&#125;
 </code></pre>
 <p>此组件的推荐升级路径是将数据更新移动到<code>componentDidUpdate</code>中。在渲染新道具之前，您还可以使用新的<code>getDerivedStateFromProps</code>生命周期清除陈旧的数据：</p>
 <pre><code class="js">// After
 
-class ExampleComponent extends React.Component {
+class ExampleComponent extends React.Component &#123;
 
-  state = {
+  state = &#123;
 
     externalData: null,
 
-  };
+  &#125;;
 
 
 
-  static getDerivedStateFromProps(nextProps, prevState) {
+  static getDerivedStateFromProps(nextProps, prevState) &#123;
 
     // Store prevId in state so we can compare when props change.
 
     // Clear out previously-loaded data (so we don&#39;t render stale stuff).
 
-    if (nextProps.id !== prevState.prevId) {
+    if (nextProps.id !== prevState.prevId) &#123;
 
-      return {
+      return &#123;
 
         externalData: null,
 
         prevId: nextProps.id,
 
-      };
+      &#125;;
 
-    }
+    &#125;
 
 
 
@@ -842,106 +827,105 @@ class ExampleComponent extends React.Component {
 
     return null;
 
-  }
+  &#125;
 
 
 
-  componentDidMount() {
+  componentDidMount() &#123;
 
     this._loadAsyncData(this.props.id);
 
-  }
+  &#125;
 
 
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) &#123;
 
-    if (this.state.externalData === null) {
+    if (this.state.externalData === null) &#123;
 
       this._loadAsyncData(this.props.id);
 
-    }
+    &#125;
 
-  }
+  &#125;
 
 
 
-  componentWillUnmount() {
+  componentWillUnmount() &#123;
 
-    if (this._asyncRequest) {
+    if (this._asyncRequest) &#123;
 
       this._asyncRequest.cancel();
 
-    }
+    &#125;
 
-  }
+  &#125;
 
 
 
-  render() {
+  render() &#123;
 
-    if (this.state.externalData === null) {
+    if (this.state.externalData === null) &#123;
 
       // Render loading state ...
 
-    } else {
+    &#125; else &#123;
 
       // Render real UI ...
 
-    }
+    &#125;
 
-  }
+  &#125;
 
 
 
-  _loadAsyncData(id) {
+  _loadAsyncData(id) &#123;
 
     this._asyncRequest = asyncLoadData(id).then(
 
-      externalData =&gt; {
+      externalData =&gt; &#123;
 
         this._asyncRequest = null;
 
-        this.setState({externalData});
+        this.setState(&#123;externalData&#125;);
 
-      }
+      &#125;
 
     );
 
-  }
+  &#125;
 
-}
-
+&#125;
 </code></pre>
 <blockquote>
 <p>注意<br>如果您使用支持取消的HTTP库（如axios），那么卸载时取消正在进行的请求很简单。对于原生Promise，您可以使用如下所示的方法。</p>
 </blockquote>
 <h3 id="在更新之前读取DOM属性"><a href="#在更新之前读取DOM属性" class="headerlink" title="在更新之前读取DOM属性"></a>在更新之前读取DOM属性</h3><p>下面是一个组件的例子，它在更新之前从DOM中读取属性，以便在列表中保持滚动位置：</p>
-<pre><code class="js">componentWillUpdate(nextProps, nextState) {
+<pre><code class="js">componentWillUpdate(nextProps, nextState) &#123;
 
     // Are we adding new items to the list?
 
     // Capture the scroll position so we can adjust scroll later.
 
-    if (this.props.list.length &lt; nextProps.list.length) {
+    if (this.props.list.length &lt; nextProps.list.length) &#123;
 
       this.previousScrollOffset =
 
         this.listRef.scrollHeight - this.listRef.scrollTop;
 
-    }
+    &#125;
 
-  }
+  &#125;
 
 
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) &#123;
 
     // If previousScrollOffset is set, we&#39;ve just added new items.
 
     // Adjust scroll so these new items don&#39;t push the old ones out of view.
 
-    if (this.previousScrollOffset !== null) {
+    if (this.previousScrollOffset !== null) &#123;
 
       this.listRef.scrollTop =
 
@@ -951,50 +935,49 @@ class ExampleComponent extends React.Component {
 
       this.previousScrollOffset = null;
 
-    }
+    &#125;
 
-  }
+  &#125;
 
-  render() {
+  render() &#123;
 
     return (
 
       `&lt;div&gt;`
 
-        {/* ...contents... */}
+        &#123;/* ...contents... */&#125;
 
       `&lt;/div&gt;`
 
     );
 
-  }
+  &#125;
 
 
 
-  setListRef = ref =&gt; {
+  setListRef = ref =&gt; &#123;
 
     this.listRef = ref;
 
-  };
+  &#125;;
 
-}
-</code></pre>
+&#125;</code></pre>
 <p>在上面的例子中，<code>componentWillUpdate</code>被用来读取DOM属性。但是，对于异步渲染，“render”阶段生命周期（如c<code>omponentWillUpdate</code>和<code>render</code>）与“commit”阶段生命周期（如<code>componentDidUpdate</code>）之间可能存在延迟。如果用户在这段时间内做了类似调整窗口大小的操作，则从<code>componentWillUpdate</code>中读取的<code>scrollHeight</code>值将失效。</p>
 <p>解决此问题的方法是使用新的“commit”阶段生命周期<code>getSnapshotBeforeUpdate</code>。在数据发生变化之前立即调用该方法（例如，在更新DOM之前）。它可以将React的值作为参数传递给<code>componentDidUpdate</code>，在数据发生变化后立即调用它。</p>
 <p>这两个生命周期可以像这样一起使用：</p>
-<pre><code class="js">class ScrollingList extends React.Component {
+<pre><code class="js">class ScrollingList extends React.Component &#123;
 
   listRef = null;
 
 
 
-  getSnapshotBeforeUpdate(prevProps, prevState) {
+  getSnapshotBeforeUpdate(prevProps, prevState) &#123;
 
     // Are we adding new items to the list?
 
     // Capture the scroll position so we can adjust scroll later.
 
-    if (prevProps.list.length &lt; this.props.list.length) {
+    if (prevProps.list.length &lt; this.props.list.length) &#123;
 
       return (
 
@@ -1002,15 +985,15 @@ class ExampleComponent extends React.Component {
 
       );
 
-    }
+    &#125;
 
     return null;
 
-  }
+  &#125;
 
 
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
+  componentDidUpdate(prevProps, prevState, snapshot) &#123;
 
     // If we have a snapshot value, we&#39;ve just added new items.
 
@@ -1018,42 +1001,41 @@ class ExampleComponent extends React.Component {
 
     // (snapshot here is the value returned from getSnapshotBeforeUpdate)
 
-    if (snapshot !== null) {
+    if (snapshot !== null) &#123;
 
       this.listRef.scrollTop =
 
         this.listRef.scrollHeight - snapshot;
 
-    }
+    &#125;
 
-  }
+  &#125;
 
 
 
-  render() {
+  render() &#123;
 
     return (
 
       `&lt;div&gt;`
 
-        {/* ...contents... */}
+        &#123;/* ...contents... */&#125;
 
       `&lt;/div&gt;`
 
     );
 
-  }
+  &#125;
 
 
 
-  setListRef = ref =&gt; {
+  setListRef = ref =&gt; &#123;
 
     this.listRef = ref;
 
-  };
+  &#125;;
 
-}
-</code></pre>
+&#125;</code></pre>
 <blockquote>
 <p>注意<br>如果您正在编写共享组件，那么<code>react-lifecycles-compat polyfill</code>可以使新的<code>getSnapshotBeforeUpdate</code>生命周期与旧版本的React一起使用。详细了解如何使用它。</p>
 </blockquote>
@@ -1066,33 +1048,31 @@ yarn add react-lifecycles-compat
 
 # NPM
 
-npm install react-lifecycles-compat --save
-</code></pre>
+npm install react-lifecycles-compat --save</code></pre>
 <p>接下来，更新您的组件以使用新的生命周期（如上所述）。</p>
 <p>最后，使用polyfill将组件向后兼容旧版本的React：</p>
 <pre><code class="js">import React from &#39;react&#39;;
 
-import {polyfill} from &#39;react-lifecycles-compat&#39;;
+import &#123;polyfill&#125; from &#39;react-lifecycles-compat&#39;;
 
 
 
-class ExampleComponent extends React.Component {
+class ExampleComponent extends React.Component &#123;
 
-  static getDerivedStateFromProps(nextProps, prevState) {
+  static getDerivedStateFromProps(nextProps, prevState) &#123;
 
     // Your state update logic here ...
 
-  }
+  &#125;
 
-}
+&#125;
 
 // Polyfill your component to work with older versions of React:
 
 polyfill(ExampleComponent);
 
-export default ExampleComponent;
-</code></pre>
-<p><a href="https://mp.weixin.qq.com/s/dYVdOGtcka3_ODfap1pvJQ" target="_blank" rel="noopener">原文地址</a></p>
+export default ExampleComponent;</code></pre>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/dYVdOGtcka3_ODfap1pvJQ">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -1117,7 +1097,7 @@ export default ExampleComponent;
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -1151,7 +1131,7 @@ export default ExampleComponent;
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#即将更改的生命周期"><span class="toc-number">1.</span> <span class="toc-text">即将更改的生命周期</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#逐步迁移路径"><span class="toc-number">1.1.</span> <span class="toc-text">逐步迁移路径</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#从传统生命周期迁移"><span class="toc-number">1.2.</span> <span class="toc-text">从传统生命周期迁移</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#新的生命周期-getDerivedStateFromProps"><span class="toc-number">1.2.1.</span> <span class="toc-text">新的生命周期: getDerivedStateFromProps</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#新的生命周期-getSnapshotBeforeUpdate"><span class="toc-number">1.2.2.</span> <span class="toc-text">新的生命周期: getSnapshotBeforeUpdate</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#初始化状态："><span class="toc-number">1.2.3.</span> <span class="toc-text">初始化状态：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#获取外部数据"><span class="toc-number">1.2.4.</span> <span class="toc-text">获取外部数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#添加时间监听"><span class="toc-number">1.2.5.</span> <span class="toc-text">添加时间监听</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基于props更新state"><span class="toc-number">1.2.6.</span> <span class="toc-text">基于props更新state</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#调用外部回调函数"><span class="toc-number">1.2.7.</span> <span class="toc-text">调用外部回调函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#props改变的副作用"><span class="toc-number">1.2.8.</span> <span class="toc-text">props改变的副作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#props改变时获取外部数据"><span class="toc-number">1.2.9.</span> <span class="toc-text">props改变时获取外部数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#在更新之前读取DOM属性"><span class="toc-number">1.2.10.</span> <span class="toc-text">在更新之前读取DOM属性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其它情况"><span class="toc-number">1.3.</span> <span class="toc-text">其它情况</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8D%B3%E5%B0%86%E6%9B%B4%E6%94%B9%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-number">1.</span> <span class="toc-text">即将更改的生命周期</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%90%E6%AD%A5%E8%BF%81%E7%A7%BB%E8%B7%AF%E5%BE%84"><span class="toc-number">1.1.</span> <span class="toc-text">逐步迁移路径</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E%E4%BC%A0%E7%BB%9F%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E8%BF%81%E7%A7%BB"><span class="toc-number">1.2.</span> <span class="toc-text">从传统生命周期迁移</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B0%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F-getDerivedStateFromProps"><span class="toc-number">1.2.1.</span> <span class="toc-text">新的生命周期: getDerivedStateFromProps</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B0%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F-getSnapshotBeforeUpdate"><span class="toc-number">1.2.2.</span> <span class="toc-text">新的生命周期: getSnapshotBeforeUpdate</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E7%8A%B6%E6%80%81%EF%BC%9A"><span class="toc-number">1.2.3.</span> <span class="toc-text">初始化状态：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E5%A4%96%E9%83%A8%E6%95%B0%E6%8D%AE"><span class="toc-number">1.2.4.</span> <span class="toc-text">获取外部数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E6%97%B6%E9%97%B4%E7%9B%91%E5%90%AC"><span class="toc-number">1.2.5.</span> <span class="toc-text">添加时间监听</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8Eprops%E6%9B%B4%E6%96%B0state"><span class="toc-number">1.2.6.</span> <span class="toc-text">基于props更新state</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E7%94%A8%E5%A4%96%E9%83%A8%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0"><span class="toc-number">1.2.7.</span> <span class="toc-text">调用外部回调函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#props%E6%94%B9%E5%8F%98%E7%9A%84%E5%89%AF%E4%BD%9C%E7%94%A8"><span class="toc-number">1.2.8.</span> <span class="toc-text">props改变的副作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#props%E6%94%B9%E5%8F%98%E6%97%B6%E8%8E%B7%E5%8F%96%E5%A4%96%E9%83%A8%E6%95%B0%E6%8D%AE"><span class="toc-number">1.2.9.</span> <span class="toc-text">props改变时获取外部数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E6%9B%B4%E6%96%B0%E4%B9%8B%E5%89%8D%E8%AF%BB%E5%8F%96DOM%E5%B1%9E%E6%80%A7"><span class="toc-number">1.2.10.</span> <span class="toc-text">在更新之前读取DOM属性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E5%AE%83%E6%83%85%E5%86%B5"><span class="toc-number">1.3.</span> <span class="toc-text">其它情况</span></a></li></ol></li></ol>
                 </div>
             </div>
             

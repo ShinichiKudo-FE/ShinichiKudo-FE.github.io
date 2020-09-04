@@ -37,7 +37,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -100,7 +100,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    7.2k
+                    7.5k
                 </span>
                 
                 
@@ -142,195 +142,186 @@
         <div class="content markdown animated fadeIn">
             <h1 id="高阶组件"><a href="#高阶组件" class="headerlink" title="高阶组件"></a>高阶组件</h1><p>高阶组件（HOC）是react中对组件逻辑进行重用的高级技术。但高阶组件本身并不是React API。它只是一种模式，这种模式是由react自身的组合性质必然产生的。</p>
 <p>具体而言，<strong>高阶组件就是一个函数，且该函数接受一个组件作为参数，并返回一个新的组件</strong></p>
-<p>高阶组件在React第三方库中很常见，比如Redux的<a href="https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options" target="_blank" rel="noopener">connect</a>方法和Relay的<a href="">createContainer</a>.</p>
+<p>高阶组件在React第三方库中很常见，比如Redux的<a target="_blank" rel="noopener" href="https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options">connect</a>方法和Relay的<a href="">createContainer</a>.</p>
 <h2 id="使用高阶组件（HOC）解决交叉问题"><a href="#使用高阶组件（HOC）解决交叉问题" class="headerlink" title="使用高阶组件（HOC）解决交叉问题"></a>使用高阶组件（HOC）解决交叉问题</h2><h2 id="不要改变原始组件，使用组合"><a href="#不要改变原始组件，使用组合" class="headerlink" title="不要改变原始组件，使用组合"></a>不要改变原始组件，使用组合</h2><h2 id="约定：将不相关的props属性传递给包裹组件"><a href="#约定：将不相关的props属性传递给包裹组件" class="headerlink" title="约定：将不相关的props属性传递给包裹组件"></a>约定：将不相关的props属性传递给包裹组件</h2><h2 id="约定：最大化使用组合"><a href="#约定：最大化使用组合" class="headerlink" title="约定：最大化使用组合"></a>约定：最大化使用组合</h2><h2 id="约定：包装显示名字以便于调试"><a href="#约定：包装显示名字以便于调试" class="headerlink" title="约定：包装显示名字以便于调试"></a>约定：包装显示名字以便于调试</h2><a id="more"></a>
 <h1 id="函数模拟高阶组件"><a href="#函数模拟高阶组件" class="headerlink" title="函数模拟高阶组件"></a>函数模拟高阶组件</h1><p>我们通过普通函数来理解什么是高阶组件哦~</p>
 <p>1.最普通的方法，一个welcome，一个goodbye。两个函数先从localStorage读取了username，然后对username做了一些处理。</p>
-<pre><code class="javascript">    function welcome(){
+<pre><code class="javascript">    function welcome()&#123;
         let username = localStorage.getItem(&#39;username&#39;);
         console.log(&#39;welcome &#39; + username);
-    }
-    function goodbey() {
+    &#125;
+    function goodbey() &#123;
     let username = localStorage.getItem(&#39;username&#39;);
     console.log(&#39;goodbey &#39; + username);
-    }
+    &#125;
 
     welcome();
-    goodbey();
-</code></pre>
+    goodbey();</code></pre>
 <p>2.我们发现两个函数有一句代码是一样的，这叫冗余唉。不好不好~（你可以把那一句代码理解成平时的一大堆代码）</p>
 <p>我们要写一个中间函数，读取username,他来负责把username传递给两个函数。</p>
-<pre><code class="javascript">function welcome(username) {
+<pre><code class="javascript">function welcome(username) &#123;
     console.log(&#39;welcome &#39; + username);
-}
+&#125;
 
-function goodbey(username) {
+function goodbey(username) &#123;
     console.log(&#39;goodbey &#39; + username);
-}
+&#125;
 
-function wrapWithUsername(wrappedFunc) {
-    let newFunc = () =&gt; {
+function wrapWithUsername(wrappedFunc) &#123;
+    let newFunc = () =&gt; &#123;
         let username = localStorage.getItem(&#39;username&#39;);
         wrappedFunc(username);
-    };
+    &#125;;
     return newFunc;
-}
+&#125;
 
 welcome = wrapWithUsername(welcome);
 goodbey = wrapWithUsername(goodbey);
 
 welcome();
-goodbey();
-</code></pre>
+goodbey();</code></pre>
 <p>好了，我们里面的wrapWithUsername函数就是一个“高阶函数”。<br>他做了什么？他帮我们处理了username，传递给目标函数。我们调用最终的函数welcome的时候，根本不用关心username是怎么来的。<br>我们增加个用户study函数。</p>
-<pre><code class="javascript"> function study(username){
+<pre><code class="javascript"> function study(username)&#123;
      console.log(&#39;study&#39; + username);
- }
+ &#125;
  study = wrapWithUsername(study);
 
-study();
-</code></pre>
+study();</code></pre>
 <p>这里你是不是理解了为什么说wrapWithUsername是高阶函数？我们只需要知道，用wrapWithUsername包装我们的study函数后，study函数第一个参数是username。</p>
 <p>我们写平时写代码的时候，不用关心wrapWithUsername内部是如何实现的。</p>
 <h1 id="高阶组件就是一个没有副作用的纯函数。"><a href="#高阶组件就是一个没有副作用的纯函数。" class="headerlink" title="高阶组件就是一个没有副作用的纯函数。"></a>高阶组件就是一个没有副作用的纯函数。</h1><p>我们把上一节的函数统统改成react组件。</p>
 <p>最普通的组件哦。<br>welcome函数转为react组件。</p>
-<pre><code class="javascript">import React, {Component} from &#39;react&#39;
+<pre><code class="javascript">import React, &#123;Component&#125; from &#39;react&#39;
 
-class Welcome extends Component {
-    constructor(props) {
+class Welcome extends Component &#123;
+    constructor(props) &#123;
         super(props);
-        this.state = {
+        this.state = &#123;
             username: &#39;&#39;
-        }
-    }
+        &#125;
+    &#125;
 
-    componentWillMount() {
+    componentWillMount() &#123;
         let username = localStorage.getItem(&#39;username&#39;);
-        this.setState({
+        this.setState(&#123;
             username: username
-        })
-    }
+        &#125;)
+    &#125;
 
-    render() {
+    render() &#123;
         return (
-            &lt;div&gt;welcome {this.state.username}&lt;/div&gt;
+            &lt;div&gt;welcome &#123;this.state.username&#125;&lt;/div&gt;
         )
-    }
-}
+    &#125;
+&#125;
 
-export default Welcome;
-</code></pre>
+export default Welcome;</code></pre>
 <p>2.goodbey函数转为react组件。</p>
-<pre><code class="javascript">import React, {Component} from &#39;react&#39;
+<pre><code class="javascript">import React, &#123;Component&#125; from &#39;react&#39;
 
-class Goodbye extends Component {
-    constructor(props) {
+class Goodbye extends Component &#123;
+    constructor(props) &#123;
         super(props);
-        this.state = {
+        this.state = &#123;
             username: &#39;&#39;
-        }
-    }
+        &#125;
+    &#125;
 
-    componentWillMount() {
+    componentWillMount() &#123;
         let username = localStorage.getItem(&#39;username&#39;);
-        this.setState({
+        this.setState(&#123;
             username: username
-        })
-    }
+        &#125;)
+    &#125;
 
-    render() {
+    render() &#123;
         return (
-            &lt;div&gt;goodbye {this.state.username}&lt;/div&gt;
+            &lt;div&gt;goodbye &#123;this.state.username&#125;&lt;/div&gt;
         )
-    }
-}
+    &#125;
+&#125;
 
-export default Goodbye;
-</code></pre>
+export default Goodbye;</code></pre>
 <p>3.现在你是不是更能看到问题所在了？两个组件大部分代码都是重复的唉。<br>按照上一节wrapWithUsername函数的思路，我们来写一个高阶组件(高阶组件就是一个函数，且该函数接受一个组件作为参数，并返回一个新的组件)。</p>
-<pre><code class="javascript">import React, {Component} from &#39;react&#39;
+<pre><code class="javascript">import React, &#123;Component&#125; from &#39;react&#39;
 
-export default (WrappedComponent) =&gt; {
-    class NewComponent extends Component {
-        constructor() {
+export default (WrappedComponent) =&gt; &#123;
+    class NewComponent extends Component &#123;
+        constructor() &#123;
             super();
-            this.state = {
+            this.state = &#123;
                 username: &#39;&#39;
-            }
-        }
+            &#125;
+        &#125;
 
-        componentWillMount() {
+        componentWillMount() &#123;
             let username = localStorage.getItem(&#39;username&#39;);
-            this.setState({
+            this.setState(&#123;
                 username: username
-            })
-        }
+            &#125;)
+        &#125;
 
-        render() {
-            return &lt;WrappedComponent username={this.state.username}/&gt;
-        }
-    }
+        render() &#123;
+            return &lt;WrappedComponent username=&#123;this.state.username&#125;/&gt;
+        &#125;
+    &#125;
 
     return NewComponent
-}
-
+&#125;
 </code></pre>
 <p>这样我们就能简化Welcome组件和Goodbye组件。</p>
 <pre><code class="javascript">//welcome
-import React, {Component} from &#39;react&#39;;
+import React, &#123;Component&#125; from &#39;react&#39;;
 import wrapWithUsername from &#39;wrapWithUsername&#39;;
 
-class Welcome extends Component {
+class Welcome extends Component &#123;
 
-    render() {
+    render() &#123;
         return (
-            &lt;div&gt;welcome {this.props.username}&lt;/div&gt;
+            &lt;div&gt;welcome &#123;this.props.username&#125;&lt;/div&gt;
         )
-    }
-}
+    &#125;
+&#125;
 
 Welcome = wrapWithUsername(Welcome);
 
 export default Welcome;
 
 //goodbye
-import React, {Component} from &#39;react&#39;;
+import React, &#123;Component&#125; from &#39;react&#39;;
 import wrapWithUsername from &#39;wrapWithUsername&#39;;
 
-class Goodbye extends Component {
+class Goodbye extends Component &#123;
 
-    render() {
+    render() &#123;
         return (
-            &lt;div&gt;goodbye {this.props.username}&lt;/div&gt;
+            &lt;div&gt;goodbye &#123;this.props.username&#125;&lt;/div&gt;
         )
-    }
-}
+    &#125;
+&#125;
 
 Goodbye = wrapWithUsername(Goodbye);
 
 export default Goodbye;
-
 </code></pre>
 <p>看到没有，高阶组件就是把username通过props传递给目标组件了。目标组件只管从props里面拿来用就好了。</p>
 <p>到这里位置，高阶组件就讲完了。你再返回去理解下定义，是不是豁然开朗</p>
 <blockquote>
 <p>你现在理解react-redux的<em>connect函数</em>~<br>把redux的state和action创建函数，通过props注入给了Component。<br>你在目标组件Component里面可以直接用this.props去调用redux state和action创建函数了。</p>
 </blockquote>
-<pre><code class="javascript">ConnectedComment = connect(mapStateToProps, mapDispatchToProps)(Component);
-</code></pre>
+<pre><code class="javascript">ConnectedComment = connect(mapStateToProps, mapDispatchToProps)(Component);</code></pre>
 <p>相当于这样</p>
 <pre><code class="javascript">// connect是一个返回函数的函数（就是个高阶函数）
 const enhance = connect(mapStateToProps, mapDispatchToProps);
 // 返回的函数就是一个高阶组件，该高阶组件返回一个与Redux store
 // 关联起来的新组件
-const ConnectedComment = enhance(Component);
-</code></pre>
+const ConnectedComment = enhance(Component);</code></pre>
 <p>antd的Form也是一样的</p>
 <p>const WrappedNormalLoginForm = Form.create()(NormalLoginForm);</p>
 <h1 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h1><h2 id="不要再render函数中使用高阶组件"><a href="#不要再render函数中使用高阶组件" class="headerlink" title="不要再render函数中使用高阶组件"></a>不要再render函数中使用高阶组件</h2><p>React使用的差异算法（称为协调）使用组件标识确定是否更新现有的子对象树或丢掉现有的子树并重新挂载。如果render函数返回的组件和之前render函数返回的组件是相同的，React就递归的比较新子对象树和旧子对象树的差异，并更新旧子对象树。如果他们不相等，就会完全卸载掉旧的之对象树。</p>
 <h2 id="必须将静态方法做拷贝"><a href="#必须将静态方法做拷贝" class="headerlink" title="必须将静态方法做拷贝"></a>必须将静态方法做拷贝</h2><p>有时，给组件定义静态方法是十分有用的。例如，Relay的容器就开放了一个静态方法 getFragment便于组合GraphQL的代码片段。</p>
 <h2 id="Refs属性不能传递"><a href="#Refs属性不能传递" class="headerlink" title="Refs属性不能传递"></a>Refs属性不能传递</h2><p>一般来说，高阶组件可以传递所有的props属性给包裹的组件，但是不能传递refs引用。因为并不是像key一样，refs是一个伪属性，React对它进行了特殊处理。如果你向一个由高阶组件创建的组件的元素添加ref应用，那么ref指向的是最外层容器组件实例的，而不是包裹组件。</p>
-<p><a href="https://github.com/brickspert/blog/issues/2" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/brickspert/blog/issues/2">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -355,7 +346,7 @@ const ConnectedComment = enhance(Component);
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -389,7 +380,7 @@ const ConnectedComment = enhance(Component);
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#高阶组件"><span class="toc-number">1.</span> <span class="toc-text">高阶组件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#使用高阶组件（HOC）解决交叉问题"><span class="toc-number">1.1.</span> <span class="toc-text">使用高阶组件（HOC）解决交叉问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#不要改变原始组件，使用组合"><span class="toc-number">1.2.</span> <span class="toc-text">不要改变原始组件，使用组合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#约定：将不相关的props属性传递给包裹组件"><span class="toc-number">1.3.</span> <span class="toc-text">约定：将不相关的props属性传递给包裹组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#约定：最大化使用组合"><span class="toc-number">1.4.</span> <span class="toc-text">约定：最大化使用组合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#约定：包装显示名字以便于调试"><span class="toc-number">1.5.</span> <span class="toc-text">约定：包装显示名字以便于调试</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#函数模拟高阶组件"><span class="toc-number">2.</span> <span class="toc-text">函数模拟高阶组件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#高阶组件就是一个没有副作用的纯函数。"><span class="toc-number">3.</span> <span class="toc-text">高阶组件就是一个没有副作用的纯函数。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#注意事项"><span class="toc-number">4.</span> <span class="toc-text">注意事项</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#不要再render函数中使用高阶组件"><span class="toc-number">4.1.</span> <span class="toc-text">不要再render函数中使用高阶组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#必须将静态方法做拷贝"><span class="toc-number">4.2.</span> <span class="toc-text">必须将静态方法做拷贝</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Refs属性不能传递"><span class="toc-number">4.3.</span> <span class="toc-text">Refs属性不能传递</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6"><span class="toc-number">1.</span> <span class="toc-text">高阶组件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6%EF%BC%88HOC%EF%BC%89%E8%A7%A3%E5%86%B3%E4%BA%A4%E5%8F%89%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.</span> <span class="toc-text">使用高阶组件（HOC）解决交叉问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E8%A6%81%E6%94%B9%E5%8F%98%E5%8E%9F%E5%A7%8B%E7%BB%84%E4%BB%B6%EF%BC%8C%E4%BD%BF%E7%94%A8%E7%BB%84%E5%90%88"><span class="toc-number">1.2.</span> <span class="toc-text">不要改变原始组件，使用组合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%A6%E5%AE%9A%EF%BC%9A%E5%B0%86%E4%B8%8D%E7%9B%B8%E5%85%B3%E7%9A%84props%E5%B1%9E%E6%80%A7%E4%BC%A0%E9%80%92%E7%BB%99%E5%8C%85%E8%A3%B9%E7%BB%84%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">约定：将不相关的props属性传递给包裹组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%A6%E5%AE%9A%EF%BC%9A%E6%9C%80%E5%A4%A7%E5%8C%96%E4%BD%BF%E7%94%A8%E7%BB%84%E5%90%88"><span class="toc-number">1.4.</span> <span class="toc-text">约定：最大化使用组合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%A6%E5%AE%9A%EF%BC%9A%E5%8C%85%E8%A3%85%E6%98%BE%E7%A4%BA%E5%90%8D%E5%AD%97%E4%BB%A5%E4%BE%BF%E4%BA%8E%E8%B0%83%E8%AF%95"><span class="toc-number">1.5.</span> <span class="toc-text">约定：包装显示名字以便于调试</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E6%A8%A1%E6%8B%9F%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6"><span class="toc-number">2.</span> <span class="toc-text">函数模拟高阶组件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6%E5%B0%B1%E6%98%AF%E4%B8%80%E4%B8%AA%E6%B2%A1%E6%9C%89%E5%89%AF%E4%BD%9C%E7%94%A8%E7%9A%84%E7%BA%AF%E5%87%BD%E6%95%B0%E3%80%82"><span class="toc-number">3.</span> <span class="toc-text">高阶组件就是一个没有副作用的纯函数。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">4.</span> <span class="toc-text">注意事项</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E8%A6%81%E5%86%8Drender%E5%87%BD%E6%95%B0%E4%B8%AD%E4%BD%BF%E7%94%A8%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6"><span class="toc-number">4.1.</span> <span class="toc-text">不要再render函数中使用高阶组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BF%85%E9%A1%BB%E5%B0%86%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95%E5%81%9A%E6%8B%B7%E8%B4%9D"><span class="toc-number">4.2.</span> <span class="toc-text">必须将静态方法做拷贝</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Refs%E5%B1%9E%E6%80%A7%E4%B8%8D%E8%83%BD%E4%BC%A0%E9%80%92"><span class="toc-number">4.3.</span> <span class="toc-text">Refs属性不能传递</span></a></li></ol></li></ol>
                 </div>
             </div>
             

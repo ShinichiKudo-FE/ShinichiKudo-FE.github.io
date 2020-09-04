@@ -36,7 +36,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -141,12 +141,12 @@
         <div class="content markdown animated fadeIn">
             <p>React受大家欢迎的一个重要原因就是可以自定义组件。这样的一方面可以复用开发好的组件，实现一处开发，处处调用，另外也能使用别人开发好的组件，提高封装性。另一方面使得代码结构很清晰，组件间耦合减少，方便维护。ES5创建组件时，调用React.createClass()即可. ES6中使用class myComponent extends React.Component, 其实内部还是调用createClass创建组件。</p>
 <p>组件创建我们可以简单类比为Java中ClassLoader加载class。下面来分析下createClass的源码，我们省去了开发阶段错误提示的相关代码，如propType的检查。（if (“development” !== ‘production’) {}代码段都不进行分析了，这些只在开发调试阶段调用）</p>
-<h1 id="组件创建"><a href="#组件创建" class="headerlink" title="组件创建"></a>组件创建</h1><pre><code class="javascript">createClass: function (spec) {
-    var Constructor = function (props, context, updater) {
+<h1 id="组件创建"><a href="#组件创建" class="headerlink" title="组件创建"></a>组件创建</h1><pre><code class="javascript">createClass: function (spec) &#123;
+    var Constructor = function (props, context, updater) &#123;
       // 触发自动绑定
-      if (this.__reactAutoBindPairs.length) {
+      if (this.__reactAutoBindPairs.length) &#123;
         bindAutoBindMethods(this);
-      }
+      &#125;
 
       // 初始化参数
       this.props = props;
@@ -158,7 +158,7 @@
       this.state = null;
       var initialState = this.getInitialState ? this.getInitialState() : null;
       this.state = initialState;
-    };
+    &#125;;
 
     // 继承父类
     Constructor.prototype = new ReactClassComponent();
@@ -170,21 +170,20 @@
     mixSpecIntoComponent(Constructor, spec);
 
     // 调用getDefaultProps，并挂载到组件类上。defaultProps是类变量，使用ES6写法时更清晰
-    if (Constructor.getDefaultProps) {
+    if (Constructor.getDefaultProps) &#123;
       Constructor.defaultProps = Constructor.getDefaultProps();
-    }
+    &#125;
 
     // React中暴露给应用调用的方法，如render componentWillMount。
     // 如果应用未设置，则将他们设为null
-    for (var methodName in ReactClassInterface) {
-      if (!Constructor.prototype[methodName]) {
+    for (var methodName in ReactClassInterface) &#123;
+      if (!Constructor.prototype[methodName]) &#123;
         Constructor.prototype[methodName] = null;
-      }
-    }
+      &#125;
+    &#125;
 
     return Constructor;
-  },
-
+  &#125;,
 </code></pre>
 <a id="more"></a>
 <blockquote>
@@ -193,35 +192,33 @@
 <h1 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h1><p>JSX中创建React元素最终会被babel转译为createElement(type, config, children), babel根据JSX中标签的首字母来判断是原生DOM组件，还是自定义React组件。如果首字母大写，则为React组件。这也是为什么ES6中React组件类名必须大写的原因。如下面代码</p>
 <pre><code class="javascript">&lt;div className=&quot;title&quot; ref=&quot;example&quot;&gt;
     &lt;span&gt;123&lt;/span&gt;    // 原生DOM组件，首字母小写
-    &lt;ErrorPage title=&#39;123456&#39; desc={[]}/&gt;    // 自定义组件，首字母大写
-&lt;/div&gt;
-</code></pre>
+    &lt;ErrorPage title=&#39;123456&#39; desc=&#123;[]&#125;/&gt;    // 自定义组件，首字母大写
+&lt;/div&gt;</code></pre>
 <p>转译完成后</p>
 <pre><code class="javascript">React.createElement(
         &#39;div&#39;,    // type,标签名,原生DOM对象为String
-        {
+        &#123;
             className: &#39;title&#39;,
             ref: &#39;example&#39;
-        },   // config，属性
+        &#125;,   // config，属性
         React.createElement(&#39;span&#39;, null, &#39;123&#39;),   // children，子元素
         React.createElement(
             // type,标签名,React自定义组件的type不为String.
             // _errorPage2.default为从其他文件中引入的React组件
             _errorPage2.default,    
-            {
+            &#123;
                 title: &#39;123456&#39;,
                 desc: []
-            }
+            &#125;
         )   // children，子元素
 )
-
 </code></pre>
 <p>下面来分析下createElement的源码</p>
-<pre><code class="javascript">ReactElement.createElement = function (type, config, children) {
+<pre><code class="javascript">ReactElement.createElement = function (type, config, children) &#123;
   var propName;
 
   // 初始化参数
-  var props = {};
+  var props = &#123;&#125;;
 
   var key = null;
   var ref = null;
@@ -229,52 +226,51 @@
   var source = null;
 
   // 从config中提取出内容，如ref key props
-  if (config != null) {
+  if (config != null) &#123;
     ref = config.ref === undefined ? null : config.ref;
     key = config.key === undefined ? null : &#39;&#39; + config.key;
     self = config.__self === undefined ? null : config.__self;
     source = config.__source === undefined ? null : config.__source;
 
     // 提取出config中的prop，放入props变量中
-    for (propName in config) {
-      if (config.hasOwnProperty(propName) &amp;&amp; !RESERVED_PROPS.hasOwnProperty(propName)) {
+    for (propName in config) &#123;
+      if (config.hasOwnProperty(propName) &amp;&amp; !RESERVED_PROPS.hasOwnProperty(propName)) &#123;
         props[propName] = config[propName];
-      }
-    }
-  }
+      &#125;
+    &#125;
+  &#125;
 
   // 处理children，挂到props的children属性下
   // 入参的前两个为type和config，后面的就都是children参数了。故需要减2
   var childrenLength = arguments.length - 2;
-  if (childrenLength === 1) {
+  if (childrenLength === 1) &#123;
     // 只有一个参数时，直接挂到children属性下，不是array的方式
     props.children = children;
-  } else if (childrenLength &gt; 1) {
+  &#125; else if (childrenLength &gt; 1) &#123;
     // 不止一个时，放到array中，然后将array挂到children属性下
     var childArray = Array(childrenLength);
-    for (var i = 0; i &lt; childrenLength; i++) {
+    for (var i = 0; i &lt; childrenLength; i++) &#123;
       childArray[i] = arguments[i + 2];
-    }
+    &#125;
     props.children = childArray;
-  }
+  &#125;
 
   // 取出组件类中的静态变量defaultProps，并给未在JSX中设置值的属性设置默认值
-  if (type &amp;&amp; type.defaultProps) {
+  if (type &amp;&amp; type.defaultProps) &#123;
     var defaultProps = type.defaultProps;
-    for (propName in defaultProps) {
-      if (props[propName] === undefined) {
+    for (propName in defaultProps) &#123;
+      if (props[propName] === undefined) &#123;
         props[propName] = defaultProps[propName];
-      }
-    }
-  }
+      &#125;
+    &#125;
+  &#125;
 
   // 返回一个ReactElement对象
   return ReactElement(type, key, ref, self, source, ReactCurrentOwner.current, props);
-};
-</code></pre>
+&#125;;</code></pre>
 <p>下面来看ReactElement源码</p>
-<pre><code class="javascript">var ReactElement = function (type, key, ref, self, source, owner, props) {
-  var element = {
+<pre><code class="javascript">var ReactElement = function (type, key, ref, self, source, owner, props) &#123;
+  var element = &#123;
     // This tag allow us to uniquely identify this as a React Element
     $$typeof: REACT_ELEMENT_TYPE,
 
@@ -286,51 +282,49 @@
 
     // Record the component responsible for creating this element.
     _owner: owner
-  };
+  &#125;;
     return element;
-}
-</code></pre>
+&#125;</code></pre>
 <p>可以看到仅仅是给ReactElement对象内的成员变量赋值而已，不在赘述。</p>
 <p>流程如如下</p>
 <h1 id="组件对象初始化"><a href="#组件对象初始化" class="headerlink" title="组件对象初始化"></a>组件对象初始化</h1><p>在mountComponent()挂载组件中，会进行组件渲染，调用到instantiateReactComponent()方法。这个过程我们在React生命周期方法中再详细讲述，这里有个大体了解即可。instantiateReactComponent()根据ReactElement中不同的type字段，创建不同类型的组件对象。源码如下</p>
 <pre><code class="javascript">// 初始化组件对象，node是一个ReactElement对象，是节点元素在React中的表示
-function instantiateReactComponent(node) {
+function instantiateReactComponent(node) &#123;
   var instance;
 
   var isEmpty = node === null || node === false;
-  if (isEmpty) {
+  if (isEmpty) &#123;
     // 空对象
     instance = ReactEmptyComponent.create(instantiateReactComponent);
-  } else if (typeof node === &#39;object&#39;) {
+  &#125; else if (typeof node === &#39;object&#39;) &#123;
     // 组件对象，包括DOM原生的和React自定义组件
     var element = node;
 
     // 根据ReactElement中的type字段区分
-    if (typeof element.type === &#39;string&#39;) {
+    if (typeof element.type === &#39;string&#39;) &#123;
       // type为string则表示DOM原生对象，比如div span等。可以参看上面babel转译的那段代码
       instance = ReactNativeComponent.createInternalComponent(element);
-    } else if (isInternalComponentType(element.type)) {
+    &#125; else if (isInternalComponentType(element.type)) &#123;
       // 保留给以后版本使用，此处暂时不会涉及到
       instance = new element.type(element);
-    } else {
+    &#125; else &#123;
       // React自定义组件
       instance = new ReactCompositeComponentWrapper(element);
-    }
-  } else if (typeof node === &#39;string&#39; || typeof node === &#39;number&#39;) {
+    &#125;
+  &#125; else if (typeof node === &#39;string&#39; || typeof node === &#39;number&#39;) &#123;
     // 元素是一个string时，对应的比如&lt;span&gt;123&lt;/span&gt; 中的123
     // 本质上它不是一个ReactElement，但为了统一，也按照同样流程处理，称为ReactDOMTextComponent
     instance = ReactNativeComponent.createInstanceForText(node);
-  } else {
+  &#125; else &#123;
     // 无处理
-  }
+  &#125;
 
   // 初始化参数，这两个参数是DOM diff时用到的
   instance._mountIndex = 0;
   instance._mountImage = null;
 
   return instance;
-}
-</code></pre>
+&#125;</code></pre>
 <blockquote>
 <p>故我们可以看到有四种创建组件元素的方式，同时对应四种ReactElement<br>1.ReactEmptyComponent.create(), 创建空对象ReactDOMEmptyComponent<br>2.ReactNativeComponent.createInternalComponent(), 创建DOM原生对象 ReactDOMComponent<br>3.new ReactCompositeComponentWrapper(), 创建React自定义对象ReactCompositeComponent<br>4.ReactNativeComponent.createInstanceForText(), 创建文本对象 ReactDOMTextComponent</p>
 </blockquote>
@@ -338,55 +332,53 @@ function instantiateReactComponent(node) {
 <p><strong>ReactDOMEmptyComponent</strong><br>由ReactEmptyComponent.create()创建，最终生成ReactDOMEmptyComponent对象，源码如下</p>
 <pre><code class="javascript">var emptyComponentFactory;
 
-var ReactEmptyComponentInjection = {
-  injectEmptyComponentFactory: function (factory) {
+var ReactEmptyComponentInjection = &#123;
+  injectEmptyComponentFactory: function (factory) &#123;
     emptyComponentFactory = factory;
-  }
-};
+  &#125;
+&#125;;
 
-var ReactEmptyComponent = {
-  create: function (instantiate) {
+var ReactEmptyComponent = &#123;
+  create: function (instantiate) &#123;
     return emptyComponentFactory(instantiate);
-  }
-};
+  &#125;
+&#125;;
 
 ReactEmptyComponent.injection = ReactEmptyComponentInjection;
 
-ReactInjection.EmptyComponent.injectEmptyComponentFactory(function (instantiate) {
+ReactInjection.EmptyComponent.injectEmptyComponentFactory(function (instantiate) &#123;
   // 前面比较绕，关键就是这句话，创建ReactDOMEmptyComponent对象
    return new ReactDOMEmptyComponent(instantiate);
-});
+&#125;);
 
 // 各种null，就不分析了
-var ReactDOMEmptyComponent = function (instantiate) {
+var ReactDOMEmptyComponent = function (instantiate) &#123;
   this._currentElement = null;
   this._nativeNode = null;
   this._nativeParent = null;
   this._nativeContainerInfo = null;
   this._domID = null;
-};
-</code></pre>
+&#125;;</code></pre>
 <p><strong>ReactDOMComponent</strong><br>由ReactNativeComponent.createInternalComponent()创建。这里注意原生组件不代表是DOM组件，而是React封装过的Virtual DOM对象。React并不直接操作原生DOM。</p>
 <p>大家可以自己看ReactDOMComponent的源码。重点看下ReactDOMComponent.Mixin</p>
-<pre><code class="javascript">ReactDOMComponent.Mixin = {
-  mountComponent: function (transaction, nativeParent, nativeContainerInfo, context) {},
-  _createOpenTagMarkupAndPutListeners: function (transaction, props){},
-  _createContentMarkup: function (transaction, props, context) {},
-  _createInitialChildren: function (transaction, props, context, lazyTree) {}
-  receiveComponent: function (nextElement, transaction, context) {},
-  updateComponent: function (transaction, prevElement, nextElement, context) {},
-  _updateDOMProperties: function (lastProps, nextProps, transaction) {},
-  _updateDOMChildren: function (lastProps, nextProps, transaction, context) {},
-  getNativeNode: function () {},
-  unmountComponent: function (safely) {},
-  getPublicInstance: function () {}
-}
-</code></pre>
+<pre><code class="javascript">ReactDOMComponent.Mixin = &#123;
+  mountComponent: function (transaction, nativeParent, nativeContainerInfo, context) &#123;&#125;,
+  _createOpenTagMarkupAndPutListeners: function (transaction, props)&#123;&#125;,
+  _createContentMarkup: function (transaction, props, context) &#123;&#125;,
+  _createInitialChildren: function (transaction, props, context, lazyTree) &#123;&#125;
+  receiveComponent: function (nextElement, transaction, context) &#123;&#125;,
+  updateComponent: function (transaction, prevElement, nextElement, context) &#123;&#125;,
+  _updateDOMProperties: function (lastProps, nextProps, transaction) &#123;&#125;,
+  _updateDOMChildren: function (lastProps, nextProps, transaction, context) &#123;&#125;,
+  getNativeNode: function () &#123;&#125;,
+  unmountComponent: function (safely) &#123;&#125;,
+  getPublicInstance: function () &#123;&#125;
+&#125;</code></pre>
 <p>其中暴露给外部的比较关键的是mountComponent，receiveComponen， updateComponent，unmountComponent。他们会引发React生命周期方法的调用，下一节再讲。</p>
 <p><strong>ReactCompositeComponent</strong><br>由new ReactCompositeComponentWrapper()创建，重点看下ReactCompositeComponentMixin</p>
-<pre><code class="javascript">var ReactCompositeComponentMixin = {
+<pre><code class="javascript">var ReactCompositeComponentMixin = &#123;
   // new对应的方法，创建ReactCompositeComponent对象
-  construct: function(element) {},
+  construct: function(element) &#123;&#125;,
   mountComponent,   // 初始挂载组件时被调用，仅一次
   performInitialMountWithErrorHandling, // 和performInitialMount相近，只是多了错误处理
   performInitialMount,  // 执行mountComponent的渲染阶段，会调用到instantiateReactComponent，从而进入初始化React组件的入口
@@ -398,25 +390,23 @@ var ReactDOMEmptyComponent = function (instantiate) {
   attachRef,    // 将ref指向组件对象，这样我们就可以利用它调用对象内的方法了
   detachRef,    // 将组件的引用从全局对象refs中删掉，这样我们就不能利用ref找到组件对象了
   instantiateReactComponent，  // 初始化React组件的入口，在mountComponent时的渲染阶段会被调用
-}
-
+&#125;
 </code></pre>
 <p><strong>ReactDOMTextComponent</strong></p>
 <p>由ReactNativeComponent.createInstanceForText()创建，我们也不细细分析了，主要入口代码如下，大家可以自行分析。</p>
-<pre><code class="javascript">var ReactDOMTextComponent = function (text) {
+<pre><code class="javascript">var ReactDOMTextComponent = function (text) &#123;
   this._currentElement = text;
   this._stringText = &#39;&#39; + text;
-};
+&#125;;
 
-_assign(ReactDOMTextComponent.prototype, {
+_assign(ReactDOMTextComponent.prototype, &#123;
   mountComponent,
   receiveComponent,
   getNativeNode,
   unmountComponent
-}
-
+&#125;
 </code></pre>
-<p><a href="https://zhuanlan.zhihu.com/p/25881952" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/25881952">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -441,7 +431,7 @@ _assign(ReactDOMTextComponent.prototype, {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -475,7 +465,7 @@ _assign(ReactDOMTextComponent.prototype, {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#组件创建"><span class="toc-number">1.</span> <span class="toc-text">组件创建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#对象的创建"><span class="toc-number">2.</span> <span class="toc-text">对象的创建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#组件对象初始化"><span class="toc-number">3.</span> <span class="toc-text">组件对象初始化</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E5%88%9B%E5%BB%BA"><span class="toc-number">1.</span> <span class="toc-text">组件创建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="toc-number">2.</span> <span class="toc-text">对象的创建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E5%AF%B9%E8%B1%A1%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">3.</span> <span class="toc-text">组件对象初始化</span></a></li></ol>
                 </div>
             </div>
             

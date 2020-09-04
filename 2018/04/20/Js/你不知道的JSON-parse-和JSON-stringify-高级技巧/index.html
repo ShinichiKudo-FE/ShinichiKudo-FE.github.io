@@ -37,7 +37,7 @@ JSON.parse()JSON.parse() 可以接受第,">
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -100,7 +100,7 @@ JSON.parse()JSON.parse() 可以接受第,">
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    3.9k
+                    4.1k
                 </span>
                 
                 
@@ -142,100 +142,96 @@ JSON.parse()JSON.parse() 可以接受第,">
         <div class="content markdown animated fadeIn">
             <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>JSON对象的两个方法：JSON.parse() 和 JSON.stringify() 通常用做JSON对象和字符串之间的相互转换;</p>
 <h2 id="JSON-parse"><a href="#JSON-parse" class="headerlink" title="JSON.parse()"></a>JSON.parse()</h2><p>JSON.parse() 可以接受第二个参数，它可以在返回之前转换对象值。比如这例子中，将返回对象的属性值大写：</p>
-<pre><code class="javascript">const user = {
+<pre><code class="javascript">const user = &#123;
   name: &#39;John&#39;,
   email: &#39;john@awesome.com&#39;,
   plan: &#39;Pro&#39;
-};
+&#125;;
 
 const userStr = JSON.stringify(user);
 
-const newUserStr = JSON.parse(userStr, (key, value) =&gt; {
-  if (typeof value === &#39;string&#39;) {
+const newUserStr = JSON.parse(userStr, (key, value) =&gt; &#123;
+  if (typeof value === &#39;string&#39;) &#123;
     return value.toUpperCase();
-  }
+  &#125;
   return value;
-});
+&#125;);
 
-console.log(newUserStr); //{name: &quot;JOHN&quot;, email: &quot;JOHN@AWESOME.COM&quot;, plan: &quot;PRO&quot;}
-</code></pre>
-<p>注：尾随逗号在JSON 中无效，所以如果传递给它的字符串有尾随逗号，JSON.parse()将会抛出错误。<br><a id="more"></a></p>
+console.log(newUserStr); //&#123;name: &quot;JOHN&quot;, email: &quot;JOHN@AWESOME.COM&quot;, plan: &quot;PRO&quot;&#125;</code></pre>
+<p>注：尾随逗号在JSON 中无效，所以如果传递给它的字符串有尾随逗号，JSON.parse()将会抛出错误。</p>
+<a id="more"></a>
+
 <h2 id="JSON-stringify"><a href="#JSON-stringify" class="headerlink" title="JSON.stringify()"></a>JSON.stringify()</h2><p>JSON.stringify() 可以带两个额外的参数，第一个是替换函数，第二个间隔字符串，用作隔开返回字符串。</p>
 <blockquote>
 <p>参数：</p>
+</blockquote>
 <ul>
 <li>value ： 将要转为JSON字符串的javascript对象。</li>
 <li>replacer ：该参数可以是多种类型,如果是一个函数,则它可以改变一个javascript对象在字符串化过程中的行为, 如果是一个包含 String 和 Number 对象的数组,则它将作为一个白名单.只有那些键存在域该白名单中的键值对才会被包含进最终生成的JSON字符串中.如果该参数值为null或者被省略,则所有的键值对都会被包含进最终生成的JSON字符串中。</li>
 <li>space ：该参数可以是一个 String 或 Number 对象,作用是为了在输出的JSON字符串中插入空白符来增强可读性. 如果是Number对象, 则表示用多少个空格来作为空白符; 最大可为10,大于10的数值也取10.最小可为1,小于1的数值无效,则不会显示空白符. 如果是个 String对象, 则该字符串本身会作为空白符,字符串最长可为10个字符.超过的话会截取前十个字符. 如果该参数被省略 (或者为null), 则不会显示空白符</li>
 </ul>
-</blockquote>
 <p>替换函数可以用来过滤值，因为任何返回 <code>undefined</code> 的值将不在返回的字符串中：</p>
-<pre><code class="javascript">const user = {
+<pre><code class="javascript">const user = &#123;
   id: 229,
   name: &#39;John&#39;,
   email: &#39;john@awesome.com&#39;
-};
+&#125;;
 
-function replacer(key, value) {
+function replacer(key, value) &#123;
   console.log(typeof value);
-  if (key === &#39;email&#39;) {
+  if (key === &#39;email&#39;) &#123;
     return undefined;
-  }
+  &#125;
   return value;
-}
+&#125;
 
 const userStr = JSON.stringify(user, replacer);
-// &quot;{&quot;id&quot;:229,&quot;name&quot;:&quot;John&quot;}&quot;
-</code></pre>
+// &quot;&#123;&quot;id&quot;:229,&quot;name&quot;:&quot;John&quot;&#125;&quot;</code></pre>
 <p>传入一个间隔参数的示例：</p>
-<pre><code class="javascript">const user = {
+<pre><code class="javascript">const user = &#123;
   name: &#39;John&#39;,
   email: &#39;john@awesome.com&#39;,
   plan: &#39;Pro&#39;
-};
+&#125;;
 
 const userStr = JSON.stringify(user, null, &#39;...&#39;);
-// &quot;{
+// &quot;&#123;
 // ...&quot;name&quot;: &quot;John&quot;,
 // ...&quot;email&quot;: &quot;john@awesome.com&quot;,
 // ...&quot;plan&quot;: &quot;Pro&quot;
-// }&quot;
-</code></pre>
+// &#125;&quot;</code></pre>
 <h2 id="toJSON方法"><a href="#toJSON方法" class="headerlink" title="toJSON方法"></a>toJSON方法</h2><p>如果一个被序列化的对象拥有 toJSON 方法，那么该 toJSON 方法就会覆盖该对象默认的序列化行为：不是那个对象被序列化，而是调用 toJSON 方法后的返回值会被序列化</p>
-<pre><code class="javascript">var obj = {
+<pre><code class="javascript">var obj = &#123;
     foo: &#39;foo&#39;,
-    toJSON:function(){
+    toJSON:function()&#123;
         return &#39;bar&#39;;
-    }
-}
+    &#125;
+&#125;
 JSON.stringify(obj);//&#39;&quot;bar&quot;&#39;
-JSON.stringify({x:obj});//&#39;{&quot;x&quot;:&quot;bar&quot;}&#39;
-</code></pre>
+JSON.stringify(&#123;x:obj&#125;);//&#39;&#123;&quot;x&quot;:&quot;bar&quot;&#125;&#39;</code></pre>
 <p>利用toJSON方法,我们可以修改对象转换成JSON的默认行为。</p>
 <h2 id="用-JSON-stringify-来格式化对象"><a href="#用-JSON-stringify-来格式化对象" class="headerlink" title="用 JSON.stringify 来格式化对象"></a>用 JSON.stringify 来格式化对象</h2><p>在实际使用中,我们可能会格式化一些复杂的对象，这些对象往往对象内嵌套对象。直接看起来并不那么直观,结合上面的的 replacer 和 space 参数,我们可以这样格式化复杂对象：</p>
-<pre><code class="javascript">var censor = function(key,value){
-    if(typeof(value) == &#39;function&#39;){
+<pre><code class="javascript">var censor = function(key,value)&#123;
+    if(typeof(value) == &#39;function&#39;)&#123;
          return Function.prototype.toString.call(value)
-    }
+    &#125;
     return value;
-}
-var foo = {bar:&quot;1&quot;,baz:3,o:{name:&#39;xiaoli&#39;,age:21,info:{sex:&#39;男&#39;,getSex:function(){return &#39;sex&#39;;}}}};
-console.log(JSON.stringify(foo,censor,4))
-</code></pre>
+&#125;
+var foo = &#123;bar:&quot;1&quot;,baz:3,o:&#123;name:&#39;xiaoli&#39;,age:21,info:&#123;sex:&#39;男&#39;,getSex:function()&#123;return &#39;sex&#39;;&#125;&#125;&#125;&#125;;
+console.log(JSON.stringify(foo,censor,4))</code></pre>
 <p>实际返回的字符串，记住是字符串，如下:</p>
-<pre><code class="javascript">{
+<pre><code class="javascript">&#123;
     &quot;bar&quot;: &quot;1&quot;,
     &quot;baz&quot;: 3,
-    &quot;o&quot;: {
+    &quot;o&quot;: &#123;
         &quot;name&quot;: &quot;xiaoli&quot;,
         &quot;age&quot;: 21,
-        &quot;info&quot;: {
+        &quot;info&quot;: &#123;
             &quot;sex&quot;: &quot;男&quot;,
-            &quot;getSex&quot;: &quot;function (){return &#39;sex&#39;;}&quot;
-        }
-    }
-}
-</code></pre>
+            &quot;getSex&quot;: &quot;function ()&#123;return &#39;sex&#39;;&#125;&quot;
+        &#125;
+    &#125;
+&#125;</code></pre>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -260,7 +256,7 @@ console.log(JSON.stringify(foo,censor,4))
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -294,7 +290,7 @@ console.log(JSON.stringify(foo,censor,4))
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#JSON-parse"><span class="toc-number">1.1.</span> <span class="toc-text">JSON.parse()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSON-stringify"><span class="toc-number">1.2.</span> <span class="toc-text">JSON.stringify()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#toJSON方法"><span class="toc-number">1.3.</span> <span class="toc-text">toJSON方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#用-JSON-stringify-来格式化对象"><span class="toc-number">1.4.</span> <span class="toc-text">用 JSON.stringify 来格式化对象</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#JSON-parse"><span class="toc-number">1.1.</span> <span class="toc-text">JSON.parse()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSON-stringify"><span class="toc-number">1.2.</span> <span class="toc-text">JSON.stringify()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#toJSON%E6%96%B9%E6%B3%95"><span class="toc-number">1.3.</span> <span class="toc-text">toJSON方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8-JSON-stringify-%E6%9D%A5%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.4.</span> <span class="toc-text">用 JSON.stringify 来格式化对象</span></a></li></ol></li></ol>
                 </div>
             </div>
             

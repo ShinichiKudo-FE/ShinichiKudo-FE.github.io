@@ -11,10 +11,10 @@
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="TriDiamond Obsidian,"> 
     <meta name="description" content="一枚前端搬砖队队员的记录册,函数的3种定义函数声明//ES5
-function getSum(){}
-function (){}//匿名函数
+function getSum()&amp;#123;&amp;#125;
+function ()&amp;#123;&amp;#125;//匿名函数
 //ES6
-()=&amp;gt;{}//如果{}内容只有一行{}和return关键字可省,,"> 
+()=&amp;gt;&amp;#123;&amp;#1,"> 
     <meta name="author" content="张白告丶"> 
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -40,7 +40,7 @@ function (){}//匿名函数
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -109,7 +109,7 @@ function (){}//匿名函数
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    12 mins.
+                    13 mins.
                 </span>
                 
                 
@@ -144,145 +144,131 @@ function (){}//匿名函数
     <div class='main'>
         <div class="content markdown animated fadeIn">
             <h1 id="函数的3种定义"><a href="#函数的3种定义" class="headerlink" title="函数的3种定义"></a>函数的3种定义</h1><h2 id="函数声明"><a href="#函数声明" class="headerlink" title="函数声明"></a>函数声明</h2><pre><code class="javascript">//ES5
-function getSum(){}
-function (){}//匿名函数
+function getSum()&#123;&#125;
+function ()&#123;&#125;//匿名函数
 //ES6
-()=&gt;{}//如果{}内容只有一行{}和return关键字可省,
-</code></pre>
+()=&gt;&#123;&#125;//如果&#123;&#125;内容只有一行&#123;&#125;和return关键字可省,</code></pre>
 <h2 id="函数表达式（字面量形式）"><a href="#函数表达式（字面量形式）" class="headerlink" title="函数表达式（字面量形式）"></a>函数表达式（字面量形式）</h2><pre><code class="javascript">//ES5
-var sum=function getSum(){}
+var sum=function getSum()&#123;&#125;
 //ES6
-let sum=()=&gt;{}//如果{}内容只有一行{}和return关键字可省,
-</code></pre>
-<h2 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h2><pre><code class="javascript">var sum=new GetSum(num1,num2)
-</code></pre>
+let sum=()=&gt;&#123;&#125;//如果&#123;&#125;内容只有一行&#123;&#125;和return关键字可省,</code></pre>
+<h2 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h2><pre><code class="javascript">var sum=new GetSum(num1,num2)</code></pre>
 <h2 id="三种方法的对比"><a href="#三种方法的对比" class="headerlink" title="三种方法的对比"></a>三种方法的对比</h2><p>1.函数声明有预解析,而且函数声明的优先级高于变量;<br>2.使用Function构造函数定义函数的方式是一个函数表达式,这种方式会导致解析两次代码，影响性能。第一次解析常规的JavaScript代码，第二次解析传入构造函数的字符串</p>
 <h2 id="Es5函数中的4种调用"><a href="#Es5函数中的4种调用" class="headerlink" title="Es5函数中的4种调用"></a>Es5函数中的4种调用</h2><p>在ES5中函数内容的this指向和调用方法有关</p>
 <h3 id="函数调用模式"><a href="#函数调用模式" class="headerlink" title="函数调用模式"></a>函数调用模式</h3><p>包括函数名()和匿名函数调用,<code>this指向window</code></p>
-<pre><code class="javascript"> function getSum() {
+<pre><code class="javascript"> function getSum() &#123;
     console.log(this) //window
- }
+ &#125;
  getSum()
 
- (function() {
+ (function() &#123;
     console.log(this) //window
- })()
+ &#125;)()
 
- var getSum=function() {
+ var getSum=function() &#123;
     console.log(this) //window
- }
-</code></pre>
+ &#125;</code></pre>
 <a id="more"></a>
-<h3 id="方法调用"><a href="#方法调用" class="headerlink" title="方法调用"></a>方法调用</h3><p>对象.方法名(),<code>this指向对象</code></p>
-<pre><code class="javascript">var objList = {
-   name: &#39;methods&#39;,
-   getSum: function() {
-     console.log(this) //objList对象
-   }
-}
-objList.getSum()
-</code></pre>
-<h3 id="构造器调用"><a href="#构造器调用" class="headerlink" title="构造器调用"></a>构造器调用</h3><p>new 构造函数名(),<code>this指向构造函数</code></p>
-<pre><code class="javascript">function Person() {
-  console.log(this); //指向构造函数Person
-}
-var personOne = new Person();
-</code></pre>
-<h3 id="间接调用"><a href="#间接调用" class="headerlink" title="间接调用"></a>间接调用</h3><p>利用call和apply来实现,this就是call和apply对应的第一个参数,如果不传值或者第一个值为null,<code>undefined时this指向window</code></p>
-<pre><code class="javascript">function foo() {
-   console.log(this);
-}
-foo.apply(&#39;我是apply改变的this值&#39;);//我是apply改变的this值
-foo.call(&#39;我是call改变的this值&#39;);//我是call改变的this值
-</code></pre>
-<h3 id="Es6函数的调用"><a href="#Es6函数的调用" class="headerlink" title="Es6函数的调用"></a>Es6函数的调用</h3><p>箭头函数不可以当作构造函数使用，也就是不能用new命令实例化一个对象，否则会抛出一个错误<br>箭头函数的this是和定义时有关和调用无关<br>调用就是函数调用模式</p>
-<pre><code class="javascript">(() =&gt; {
-   console.log(this)//window
-})()
 
-let arrowFun = () =&gt; {
+<h3 id="方法调用"><a href="#方法调用" class="headerlink" title="方法调用"></a>方法调用</h3><p>对象.方法名(),<code>this指向对象</code></p>
+<pre><code class="javascript">var objList = &#123;
+   name: &#39;methods&#39;,
+   getSum: function() &#123;
+     console.log(this) //objList对象
+   &#125;
+&#125;
+objList.getSum()</code></pre>
+<h3 id="构造器调用"><a href="#构造器调用" class="headerlink" title="构造器调用"></a>构造器调用</h3><p>new 构造函数名(),<code>this指向构造函数</code></p>
+<pre><code class="javascript">function Person() &#123;
+  console.log(this); //指向构造函数Person
+&#125;
+var personOne = new Person();</code></pre>
+<h3 id="间接调用"><a href="#间接调用" class="headerlink" title="间接调用"></a>间接调用</h3><p>利用call和apply来实现,this就是call和apply对应的第一个参数,如果不传值或者第一个值为null,<code>undefined时this指向window</code></p>
+<pre><code class="javascript">function foo() &#123;
+   console.log(this);
+&#125;
+foo.apply(&#39;我是apply改变的this值&#39;);//我是apply改变的this值
+foo.call(&#39;我是call改变的this值&#39;);//我是call改变的this值</code></pre>
+<h3 id="Es6函数的调用"><a href="#Es6函数的调用" class="headerlink" title="Es6函数的调用"></a>Es6函数的调用</h3><p>箭头函数不可以当作构造函数使用，也就是不能用new命令实例化一个对象，否则会抛出一个错误<br>箭头函数的this是和定义时有关和调用无关<br>调用就是函数调用模式</p>
+<pre><code class="javascript">(() =&gt; &#123;
+   console.log(this)//window
+&#125;)()
+
+let arrowFun = () =&gt; &#123;
   console.log(this)//window
-}
+&#125;
 arrowFun()
 
-let arrowObj = {
-  arrFun: function() {
-   (() =&gt; {
+let arrowObj = &#123;
+  arrFun: function() &#123;
+   (() =&gt; &#123;
      console.log(this)//arrowObj
-   })()
-   }
- }
- arrowObj.arrFun();
-</code></pre>
+   &#125;)()
+   &#125;
+ &#125;
+ arrowObj.arrFun();</code></pre>
 <h2 id="call-apply和bind"><a href="#call-apply和bind" class="headerlink" title="call,apply和bind"></a>call,apply和bind</h2><p>1.IE5之前不支持call和apply,bind是ES5出来的;<br>2.call和apply可以调用函数,改变this,实现继承和借用别的对象的方法;</p>
 <h3 id="call和apply定义"><a href="#call和apply定义" class="headerlink" title="call和apply定义"></a>call和apply定义</h3><p>调用方法,用一个对象替换掉另一个对象(this)<br>对象.call(新this对象,实参1,实参2,实参3…..) 参数列表<br>对象.apply(新this对象,[实参1,实参2,实参3…..]) 参数数组</p>
 <h3 id="call和apply用法"><a href="#call和apply用法" class="headerlink" title="call和apply用法"></a>call和apply用法</h3><p>1.间接调用函数,改变作用域的this值<br>2.劫持其他对象的方法</p>
-<pre><code class="javascript">var foo = {
+<pre><code class="javascript">var foo = &#123;
   name:&quot;张三&quot;,
-  logName:function(){
+  logName:function()&#123;
     console.log(this.name);
-  }
-}
-var bar={
+  &#125;
+&#125;
+var bar=&#123;
   name:&quot;李四&quot;
-};
+&#125;;
 foo.logName.call(bar);//李四
-实质是call改变了foo的this指向为bar,并调用该函数
-</code></pre>
+实质是call改变了foo的this指向为bar,并调用该函数</code></pre>
 <p>3.两个函数实现继承</p>
-<pre><code class="javascript">function Animal(name){
+<pre><code class="javascript">function Animal(name)&#123;
   this.name = name;
-  this.showName = function(){
+  this.showName = function()&#123;
   console.log(this.name);
-  }
-}
-function Cat(name){  
+  &#125;
+&#125;
+function Cat(name)&#123;  
   Animal.call(this, name);  
-} 
+&#125; 
 var cat = new Cat(&quot;Black Cat&quot;);
-cat.showName(); //Black Cat
-</code></pre>
+cat.showName(); //Black Cat</code></pre>
 <p>4.为类数组(arguments和nodeList)添加数组方法push,pop</p>
-<pre><code class="javascript">(function(){
+<pre><code class="javascript">(function()&#123;
   Array.prototype.push.call(arguments,&#39;王五&#39;);
   console.log(arguments);//[&#39;张三&#39;,&#39;李四&#39;,&#39;王五&#39;]
-})(&#39;张三&#39;,&#39;李四&#39;)
-</code></pre>
+&#125;)(&#39;张三&#39;,&#39;李四&#39;)</code></pre>
 <p>5.合并数组</p>
 <pre><code class="javascript">let arr1=[1,2,3]; 
 let arr2=[4,5,6]; 
-Array.prototype.push.apply(arr1,arr2); //将arr2合并到了arr1中
-</code></pre>
+Array.prototype.push.apply(arr1,arr2); //将arr2合并到了arr1中</code></pre>
 <p>6.求数组最大值</p>
-<pre><code class="javascript">Math.max.apply(null,arr)
-</code></pre>
+<pre><code class="javascript">Math.max.apply(null,arr)</code></pre>
 <p>7.判断字符类型</p>
-<pre><code class="javascript">Object.prototype.toString.call({})
-</code></pre>
+<pre><code class="javascript">Object.prototype.toString.call(&#123;&#125;)</code></pre>
 <h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>bind是function的一个函数扩展方法，bind以后代码重新绑定了func内部的this指向,不会调用方法,不兼容IE8</p>
 <pre><code class="javascript">var name = &#39;李四&#39;
- var foo = {
+ var foo = &#123;
    name: &quot;张三&quot;,
-   logName: function(age) {
+   logName: function(age) &#123;
    console.log(this.name, age);
-   }
- }
+   &#125;
+ &#125;
  var fooNew = foo.logName;
  var fooNewBind = foo.logName.bind(foo);
  fooNew(10)//李四,10
- fooNewBind(11)//张三,11  因为bind改变了fooNewBind里面的this指向
-</code></pre>
+ fooNewBind(11)//张三,11  因为bind改变了fooNewBind里面的this指向</code></pre>
 <h2 id="常见的四种设计模式"><a href="#常见的四种设计模式" class="headerlink" title="常见的四种设计模式"></a>常见的四种设计模式</h2><h3 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h3><p>简单的工厂模式可以理解为解决多个相似的问题;</p>
-<pre><code class="javascript">function CreatePerson(name,age,sex) {
+<pre><code class="javascript">function CreatePerson(name,age,sex) &#123;
     var obj = new Object();
     obj.name = name;
     obj.age = age;
     obj.sex = sex;
-    obj.sayName = function(){
+    obj.sayName = function()&#123;
         return this.name;
-    }
+    &#125;
     return obj;
-}
+&#125;
 var p1 = new CreatePerson(&quot;longen&quot;,&#39;28&#39;,&#39;男&#39;);
 var p2 = new CreatePerson(&quot;tugenhua&quot;,&#39;27&#39;,&#39;女&#39;);
 console.log(p1.name); // longen
@@ -293,134 +279,123 @@ console.log(p1.sayName()); // longen
 console.log(p2.name);  // tugenhua
 console.log(p2.age);   // 27
 console.log(p2.sex);   // 女
-console.log(p2.sayName()); // tugenhua  
-</code></pre>
+console.log(p2.sayName()); // tugenhua  </code></pre>
 <h3 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h3><p>只能被实例化(构造函数给实例添加属性与方法)一次</p>
 <pre><code class="javascript">// 单体模式
-var Singleton = function(name){
+var Singleton = function(name)&#123;
     this.name = name;
-};
-Singleton.prototype.getName = function(){
+&#125;;
+Singleton.prototype.getName = function()&#123;
     return this.name;
-}
+&#125;
 // 获取实例对象
-var getInstance = (function() {
+var getInstance = (function() &#123;
     var instance = null;
-    return function(name) {
-        if(!instance) {//相当于一个一次性阀门,只能实例化一次
+    return function(name) &#123;
+        if(!instance) &#123;//相当于一个一次性阀门,只能实例化一次
             instance = new Singleton(name);
-        }
+        &#125;
         return instance;
-    }
-})();
+    &#125;
+&#125;)();
 // 测试单体模式的实例,所以a===b
 var a = getInstance(&quot;aa&quot;);
-var b = getInstance(&quot;bb&quot;);  
-</code></pre>
+var b = getInstance(&quot;bb&quot;);  </code></pre>
 <h3 id="沙箱模式"><a href="#沙箱模式" class="headerlink" title="沙箱模式"></a>沙箱模式</h3><p>将一些函数放到自执行函数里面,但要用闭包暴露接口,用变量接收暴露的接口,再调用里面的值,否则无法使用里面的值</p>
-<pre><code class="javascript">let sandboxModel=(function(){
-    function sayName(){};
-    function sayAge(){};
-    return{
+<pre><code class="javascript">let sandboxModel=(function()&#123;
+    function sayName()&#123;&#125;;
+    function sayAge()&#123;&#125;;
+    return&#123;
         sayName:sayName,
         sayAge:sayAge
-    }
-})()
-</code></pre>
+    &#125;
+&#125;)()</code></pre>
 <h3 id="发布者订阅模式"><a href="#发布者订阅模式" class="headerlink" title="发布者订阅模式"></a>发布者订阅模式</h3><p>就例如如我们关注了某一个公众号,然后他对应的有新的消息就会给你推送,</p>
 <pre><code class="javascript">//发布者与订阅模式
-    var shoeObj = {}; // 定义发布者
+    var shoeObj = &#123;&#125;; // 定义发布者
     shoeObj.list = []; // 缓存列表 存放订阅者回调函数
 
     // 增加订阅者
-    shoeObj.listen = function(fn) {
+    shoeObj.listen = function(fn) &#123;
         shoeObj.list.push(fn); // 订阅消息添加到缓存列表
-    }
+    &#125;
 
     // 发布消息
-    shoeObj.trigger = function() {
-            for (var i = 0, fn; fn = this.list[i++];) {
+    shoeObj.trigger = function() &#123;
+            for (var i = 0, fn; fn = this.list[i++];) &#123;
                 fn.apply(this, arguments);//第一个参数只是改变fn的this,
-            }
-        }
+            &#125;
+        &#125;
      // 小红订阅如下消息
-    shoeObj.listen(function(color, size) {
+    shoeObj.listen(function(color, size) &#123;
         console.log(&quot;颜色是：&quot; + color);
         console.log(&quot;尺码是：&quot; + size);
-    });
+    &#125;);
 
     // 小花订阅如下消息
-    shoeObj.listen(function(color, size) {
+    shoeObj.listen(function(color, size) &#123;
         console.log(&quot;再次打印颜色是：&quot; + color);
         console.log(&quot;再次打印尺码是：&quot; + size);
-    });
+    &#125;);
     shoeObj.trigger(&quot;红色&quot;, 40);
-    shoeObj.trigger(&quot;黑色&quot;, 42);  
-</code></pre>
+    shoeObj.trigger(&quot;黑色&quot;, 42);  </code></pre>
 <p>代码实现逻辑是用数组存贮订阅者, 发布者回调函数里面通知的方式是遍历订阅者数组,并将发布者内容传入订阅者数组</p>
-<p>更多设计模式请戳:<a href="https://www.cnblogs.com/tugenhua0707/p/5198407.html" target="_blank" rel="noopener">Javascript常用的设计模式详解</a></p>
+<p>更多设计模式请戳:<a target="_blank" rel="noopener" href="https://www.cnblogs.com/tugenhua0707/p/5198407.html">Javascript常用的设计模式详解</a></p>
 <h2 id="原型链"><a href="#原型链" class="headerlink" title="原型链"></a>原型链</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>对象继承属性的一个链条</p>
-<h3 id="构造函数-实例与原型对象的关系"><a href="#构造函数-实例与原型对象的关系" class="headerlink" title="构造函数,实例与原型对象的关系"></a>构造函数,实例与原型对象的关系</h3><p><a href="https://user-gold-cdn.xitu.io/2018/6/8/163deceaab1052c8?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" target="_blank" rel="noopener">构造函数,实例与原型对象的关系</a></p>
-<pre><code class="javascript">var Person = function (name) { this.name = name; }//person是构造函数
-var o3personTwo = new Person(&#39;personTwo&#39;)//personTwo是实例
-</code></pre>
-<p><a href="https://user-gold-cdn.xitu.io/2018/6/8/163decf026f2d9d7?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" target="_blank" rel="noopener">构造函数,实例与原型对象的关系例子</a></p>
+<h3 id="构造函数-实例与原型对象的关系"><a href="#构造函数-实例与原型对象的关系" class="headerlink" title="构造函数,实例与原型对象的关系"></a>构造函数,实例与原型对象的关系</h3><p><a target="_blank" rel="noopener" href="https://user-gold-cdn.xitu.io/2018/6/8/163deceaab1052c8?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">构造函数,实例与原型对象的关系</a></p>
+<pre><code class="javascript">var Person = function (name) &#123; this.name = name; &#125;//person是构造函数
+var o3personTwo = new Person(&#39;personTwo&#39;)//personTwo是实例</code></pre>
+<p><a target="_blank" rel="noopener" href="https://user-gold-cdn.xitu.io/2018/6/8/163decf026f2d9d7?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">构造函数,实例与原型对象的关系例子</a></p>
 <p>原型对象都有一个默认的constructor属性指向构造函数</p>
 <h2 id="创建实例的方法"><a href="#创建实例的方法" class="headerlink" title="创建实例的方法"></a>创建实例的方法</h2><p>1.字面量</p>
-<pre><code class="javascript">let obj={&#39;name&#39;:&#39;张三&#39;}
-</code></pre>
+<pre><code class="javascript">let obj=&#123;&#39;name&#39;:&#39;张三&#39;&#125;</code></pre>
 <p>2.Object构造函数创建</p>
 <pre><code class="javascript">let Obj=new Object()
-Obj.name=&#39;张三&#39;
-</code></pre>
+Obj.name=&#39;张三&#39;</code></pre>
 <p>3.使用工厂模式创建对象</p>
-<pre><code class="javascript">function createPerson(name){
+<pre><code class="javascript">function createPerson(name)&#123;
  var o = new Object();
  o.name = name;
- };
+ &#125;;
  return o;
-}
-var person1 = createPerson(&#39;张三&#39;);
-</code></pre>
+&#125;
+var person1 = createPerson(&#39;张三&#39;);</code></pre>
 <p>4.使用构造函数创建对象</p>
-<pre><code class="javascript">function Person(name){
+<pre><code class="javascript">function Person(name)&#123;
  this.name = name;
-}
-var person1 = new Person(&#39;张三&#39;);
-</code></pre>
+&#125;
+var person1 = new Person(&#39;张三&#39;);</code></pre>
 <h2 id="new运算符"><a href="#new运算符" class="headerlink" title="new运算符"></a>new运算符</h2><p>1.创了一个新对象;<br>2.this指向构造函数;<br>3.构造函数有返回,会替换new出来的对象,如果没有就是new出来的对象<br>4.手动封装一个new运算符</p>
-<pre><code class="javascript">var new2 = function (func) {
+<pre><code class="javascript">var new2 = function (func) &#123;
     var o = Object.create(func.prototype); 　　 //创建对象
     var k = func.call(o);　　　　　　　　　　　　　//改变this指向，把结果付给k
-    if (typeof k === &#39;object&#39;) {　　　　　　　　　//判断k的类型是不是对象
+    if (typeof k === &#39;object&#39;) &#123;　　　　　　　　　//判断k的类型是不是对象
         return k;　　　　　　　　　　　　　　　　　 //是，返回k
-    } else {
+    &#125; else &#123;
         return o;　　　　　　　　　　　　　　　　　 //不是返回返回构造函数的执行结果
-    }
-}  
-</code></pre>
-<p>更多详情:<a href="https://www.cnblogs.com/chengzp/p/prototype.html" target="_blank" rel="noopener">详谈JavaScript原型链</a></p>
-<h2 id="对象的原型链"><a href="#对象的原型链" class="headerlink" title="对象的原型链"></a>对象的原型链</h2><p><a href="https://user-gold-cdn.xitu.io/2018/6/8/163ded0dad3145ec?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" target="_blank" rel="noopener">对象的原型链</a></p>
+    &#125;
+&#125;  </code></pre>
+<p>更多详情:<a target="_blank" rel="noopener" href="https://www.cnblogs.com/chengzp/p/prototype.html">详谈JavaScript原型链</a></p>
+<h2 id="对象的原型链"><a href="#对象的原型链" class="headerlink" title="对象的原型链"></a>对象的原型链</h2><p><a target="_blank" rel="noopener" href="https://user-gold-cdn.xitu.io/2018/6/8/163ded0dad3145ec?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">对象的原型链</a></p>
 <h2 id="继承的方式"><a href="#继承的方式" class="headerlink" title="继承的方式"></a>继承的方式</h2><p>JS是一门弱类型动态语言,封装和继承是他的两大特性</p>
 <h3 id="原型链继承"><a href="#原型链继承" class="headerlink" title="原型链继承"></a>原型链继承</h3><p>将父类的实例作为子类的原型<br><strong>代码实现</strong></p>
 <p>定义父类:</p>
 <pre><code class="javascript">// 定义一个动物类
-function Animal (name) {
+function Animal (name) &#123;
   // 属性
   this.name = name || &#39;Animal&#39;;
   // 实例方法
-  this.sleep = function(){
+  this.sleep = function()&#123;
     console.log(this.name + &#39;正在睡觉！&#39;);
-  }
-}
+  &#125;
+&#125;
 // 原型方法
-Animal.prototype.eat = function(food) {
+Animal.prototype.eat = function(food) &#123;
   console.log(this.name + &#39;正在吃：&#39; + food);
-};
-</code></pre>
+&#125;;</code></pre>
 <p>子类:</p>
-<pre><code class="javascript">function Cat(){
-}
+<pre><code class="javascript">function Cat()&#123;
+&#125;
 Cat.prototype = new Animal();
 Cat.prototype.name = &#39;cat&#39;;
 
@@ -430,68 +405,61 @@ console.log(cat.name);//cat
 console.log(cat.eat(&#39;fish&#39;));//cat正在吃：fish  undefined
 console.log(cat.sleep());//cat正在睡觉！ undefined
 console.log(cat instanceof Animal); //true
-console.log(cat instanceof Cat); //true
-</code></pre>
+console.log(cat instanceof Cat); //true</code></pre>
 <p><strong>优缺点</strong><br>简单易于实现,但是要想为子类新增属性和方法，必须要在new Animal()这样的语句之后执行,无法实现多继承</p>
 <h3 id="构造继承"><a href="#构造继承" class="headerlink" title="构造继承"></a>构造继承</h3><p>实质是利用call来改变Cat中的this指向<br><strong>代码实现</strong><br>子类:</p>
-<pre><code class="javascript">function Cat(name){
+<pre><code class="javascript">function Cat(name)&#123;
   Animal.call(this);
   this.name = name || &#39;Tom&#39;;
-}
-</code></pre>
+&#125;</code></pre>
 <p><strong>优缺点</strong><br>可以实现多继承,不能继承原型属性/方法</p>
 <h3 id="实例继承"><a href="#实例继承" class="headerlink" title="实例继承"></a>实例继承</h3><p>为父类实例添加新特性，作为子类实例返回<br><strong>代码实现</strong><br>子类</p>
-<pre><code class="javascript">function Cat(name){
+<pre><code class="javascript">function Cat(name)&#123;
   var instance = new Animal();
   instance.name = name || &#39;Tom&#39;;
   return instance;
-}
-</code></pre>
+&#125;</code></pre>
 <p><strong>优缺点</strong><br>不限制调用方式,但不能实现多继承</p>
 <h3 id="拷贝继承"><a href="#拷贝继承" class="headerlink" title="拷贝继承"></a>拷贝继承</h3><p>将父类的属性和方法拷贝一份到子类中<br>子类:</p>
-<pre><code class="javascript">function Cat(name){
+<pre><code class="javascript">function Cat(name)&#123;
   var animal = new Animal();
-  for(var p in animal){
+  for(var p in animal)&#123;
     Cat.prototype[p] = animal[p];
-  }
+  &#125;
   Cat.prototype.name = name || &#39;Tom&#39;;
-}
-</code></pre>
+&#125;</code></pre>
 <p><strong>优缺点</strong><br>支持多继承,但是效率低占用内存</p>
 <h3 id="组合继承"><a href="#组合继承" class="headerlink" title="组合继承"></a>组合继承</h3><p>通过调用父类构造，继承父类的属性并保留传参的优点，然后通过将父类实例作为子类原型，实现函数复用<br>子类:</p>
-<pre><code class="javascript">function Cat(name){
+<pre><code class="javascript">function Cat(name)&#123;
   Animal.call(this);
   this.name = name || &#39;Tom&#39;;
-}
+&#125;
 Cat.prototype = new Animal();
-Cat.prototype.constructor = Cat;
-</code></pre>
-<h3 id="寄生组合继承"><a href="#寄生组合继承" class="headerlink" title="寄生组合继承"></a>寄生组合继承</h3><pre><code class="javascript">function Cat(name){
+Cat.prototype.constructor = Cat;</code></pre>
+<h3 id="寄生组合继承"><a href="#寄生组合继承" class="headerlink" title="寄生组合继承"></a>寄生组合继承</h3><pre><code class="javascript">function Cat(name)&#123;
   Animal.call(this);
   this.name = name || &#39;Tom&#39;;
-}
-(function(){
+&#125;
+(function()&#123;
   // 创建一个没有实例方法的类
-  var Super = function(){};
+  var Super = function()&#123;&#125;;
   Super.prototype = Animal.prototype;
   //将实例作为子类的原型
   Cat.prototype = new Super();
-})();
-</code></pre>
+&#125;)();</code></pre>
 <h3 id="ES6的extends继承"><a href="#ES6的extends继承" class="headerlink" title="ES6的extends继承"></a>ES6的extends继承</h3><p>ES6 的继承机制是先创造父类的实例对象this（所以必须先调用super方法），然后再用子类的构造函数修改this,链接描述</p>
-<pre><code class="javascript">class ColorPoint extends Point {
-  constructor(x, y, color) {
+<pre><code class="javascript">class ColorPoint extends Point &#123;
+  constructor(x, y, color) &#123;
     super(x, y); // 调用父类的constructor(x, y)
     this.color = color;
-  }
+  &#125;
 
-  toString() {
+  toString() &#123;
     return this.color + &#39; &#39; + super.toString(); // 调用父类的toString()
-  }
-}   
-</code></pre>
-<p>更多详情请戳:<a href="https://www.cnblogs.com/humin/p/4556820.html#undefined" target="_blank" rel="noopener">JS继承的实现方式</a></p>
-<p><a href="https://segmentfault.com/a/1190000014405410?utm_source=channel-hottest#articleHeader16" target="_blank" rel="noopener">原文地址</a></p>
+  &#125;
+&#125;   </code></pre>
+<p>更多详情请戳:<a target="_blank" rel="noopener" href="https://www.cnblogs.com/humin/p/4556820.html#undefined">JS继承的实现方式</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000014405410?utm_source=channel-hottest#articleHeader16">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -516,7 +484,7 @@ Cat.prototype.constructor = Cat;
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -550,7 +518,7 @@ Cat.prototype.constructor = Cat;
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#函数的3种定义"><span class="toc-number">1.</span> <span class="toc-text">函数的3种定义</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#函数声明"><span class="toc-number">1.1.</span> <span class="toc-text">函数声明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数表达式（字面量形式）"><span class="toc-number">1.2.</span> <span class="toc-text">函数表达式（字面量形式）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#构造函数"><span class="toc-number">1.3.</span> <span class="toc-text">构造函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三种方法的对比"><span class="toc-number">1.4.</span> <span class="toc-text">三种方法的对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Es5函数中的4种调用"><span class="toc-number">1.5.</span> <span class="toc-text">Es5函数中的4种调用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#函数调用模式"><span class="toc-number">1.5.1.</span> <span class="toc-text">函数调用模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法调用"><span class="toc-number">1.5.2.</span> <span class="toc-text">方法调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#构造器调用"><span class="toc-number">1.5.3.</span> <span class="toc-text">构造器调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#间接调用"><span class="toc-number">1.5.4.</span> <span class="toc-text">间接调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Es6函数的调用"><span class="toc-number">1.5.5.</span> <span class="toc-text">Es6函数的调用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#call-apply和bind"><span class="toc-number">1.6.</span> <span class="toc-text">call,apply和bind</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#call和apply定义"><span class="toc-number">1.6.1.</span> <span class="toc-text">call和apply定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#call和apply用法"><span class="toc-number">1.6.2.</span> <span class="toc-text">call和apply用法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bind"><span class="toc-number">1.6.3.</span> <span class="toc-text">bind</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常见的四种设计模式"><span class="toc-number">1.7.</span> <span class="toc-text">常见的四种设计模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#工厂模式"><span class="toc-number">1.7.1.</span> <span class="toc-text">工厂模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#单例模式"><span class="toc-number">1.7.2.</span> <span class="toc-text">单例模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#沙箱模式"><span class="toc-number">1.7.3.</span> <span class="toc-text">沙箱模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#发布者订阅模式"><span class="toc-number">1.7.4.</span> <span class="toc-text">发布者订阅模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原型链"><span class="toc-number">1.8.</span> <span class="toc-text">原型链</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#定义"><span class="toc-number">1.8.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#构造函数-实例与原型对象的关系"><span class="toc-number">1.8.2.</span> <span class="toc-text">构造函数,实例与原型对象的关系</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建实例的方法"><span class="toc-number">1.9.</span> <span class="toc-text">创建实例的方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#new运算符"><span class="toc-number">1.10.</span> <span class="toc-text">new运算符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对象的原型链"><span class="toc-number">1.11.</span> <span class="toc-text">对象的原型链</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#继承的方式"><span class="toc-number">1.12.</span> <span class="toc-text">继承的方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#原型链继承"><span class="toc-number">1.12.1.</span> <span class="toc-text">原型链继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#构造继承"><span class="toc-number">1.12.2.</span> <span class="toc-text">构造继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实例继承"><span class="toc-number">1.12.3.</span> <span class="toc-text">实例继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#拷贝继承"><span class="toc-number">1.12.4.</span> <span class="toc-text">拷贝继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#组合继承"><span class="toc-number">1.12.5.</span> <span class="toc-text">组合继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#寄生组合继承"><span class="toc-number">1.12.6.</span> <span class="toc-text">寄生组合继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ES6的extends继承"><span class="toc-number">1.12.7.</span> <span class="toc-text">ES6的extends继承</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E7%9A%843%E7%A7%8D%E5%AE%9A%E4%B9%89"><span class="toc-number">1.</span> <span class="toc-text">函数的3种定义</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E5%A3%B0%E6%98%8E"><span class="toc-number">1.1.</span> <span class="toc-text">函数声明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%88%E5%AD%97%E9%9D%A2%E9%87%8F%E5%BD%A2%E5%BC%8F%EF%BC%89"><span class="toc-number">1.2.</span> <span class="toc-text">函数表达式（字面量形式）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-number">1.3.</span> <span class="toc-text">构造函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="toc-number">1.4.</span> <span class="toc-text">三种方法的对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Es5%E5%87%BD%E6%95%B0%E4%B8%AD%E7%9A%844%E7%A7%8D%E8%B0%83%E7%94%A8"><span class="toc-number">1.5.</span> <span class="toc-text">Es5函数中的4种调用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.5.1.</span> <span class="toc-text">函数调用模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8"><span class="toc-number">1.5.2.</span> <span class="toc-text">方法调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E5%99%A8%E8%B0%83%E7%94%A8"><span class="toc-number">1.5.3.</span> <span class="toc-text">构造器调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%B4%E6%8E%A5%E8%B0%83%E7%94%A8"><span class="toc-number">1.5.4.</span> <span class="toc-text">间接调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Es6%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8"><span class="toc-number">1.5.5.</span> <span class="toc-text">Es6函数的调用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#call-apply%E5%92%8Cbind"><span class="toc-number">1.6.</span> <span class="toc-text">call,apply和bind</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#call%E5%92%8Capply%E5%AE%9A%E4%B9%89"><span class="toc-number">1.6.1.</span> <span class="toc-text">call和apply定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#call%E5%92%8Capply%E7%94%A8%E6%B3%95"><span class="toc-number">1.6.2.</span> <span class="toc-text">call和apply用法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bind"><span class="toc-number">1.6.3.</span> <span class="toc-text">bind</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E5%9B%9B%E7%A7%8D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.7.</span> <span class="toc-text">常见的四种设计模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.7.1.</span> <span class="toc-text">工厂模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.7.2.</span> <span class="toc-text">单例模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B2%99%E7%AE%B1%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.7.3.</span> <span class="toc-text">沙箱模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%91%E5%B8%83%E8%80%85%E8%AE%A2%E9%98%85%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.7.4.</span> <span class="toc-text">发布者订阅模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E5%9E%8B%E9%93%BE"><span class="toc-number">1.8.</span> <span class="toc-text">原型链</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89"><span class="toc-number">1.8.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0-%E5%AE%9E%E4%BE%8B%E4%B8%8E%E5%8E%9F%E5%9E%8B%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">1.8.2.</span> <span class="toc-text">构造函数,实例与原型对象的关系</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%AE%9E%E4%BE%8B%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">1.9.</span> <span class="toc-text">创建实例的方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#new%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-number">1.10.</span> <span class="toc-text">new运算符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%8E%9F%E5%9E%8B%E9%93%BE"><span class="toc-number">1.11.</span> <span class="toc-text">对象的原型链</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%A7%E6%89%BF%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="toc-number">1.12.</span> <span class="toc-text">继承的方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E5%9E%8B%E9%93%BE%E7%BB%A7%E6%89%BF"><span class="toc-number">1.12.1.</span> <span class="toc-text">原型链继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E7%BB%A7%E6%89%BF"><span class="toc-number">1.12.2.</span> <span class="toc-text">构造继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B%E7%BB%A7%E6%89%BF"><span class="toc-number">1.12.3.</span> <span class="toc-text">实例继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%B7%E8%B4%9D%E7%BB%A7%E6%89%BF"><span class="toc-number">1.12.4.</span> <span class="toc-text">拷贝继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%84%E5%90%88%E7%BB%A7%E6%89%BF"><span class="toc-number">1.12.5.</span> <span class="toc-text">组合继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%84%E7%94%9F%E7%BB%84%E5%90%88%E7%BB%A7%E6%89%BF"><span class="toc-number">1.12.6.</span> <span class="toc-text">寄生组合继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ES6%E7%9A%84extends%E7%BB%A7%E6%89%BF"><span class="toc-number">1.12.7.</span> <span class="toc-text">ES6的extends继承</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
             

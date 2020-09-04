@@ -36,7 +36,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -99,7 +99,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    9.5k
+                    9.9k
                 </span>
                 
                 
@@ -144,72 +144,68 @@
 <p>好像有点跑偏了，我们来看一下JavaScript中有哪些灵活的异步编程吧。</p>
 <p>编程，就是由coder定好代码的执行顺序，让计算机去跑。那对于同步操作，这个过程很简单。比如执行我们有A和B操作，A操作完成再执行B，如下</p>
 <pre><code class="js">A();
-B();
-</code></pre>
+B();</code></pre>
 <p>这样就能很好的体现流程，但是当A操作是个异步操作的时候，A操作一开始只执行一个发起的操作（发起请求，发起等待），至于什么时候能完成只有A知道。这时候如果还按如上的方式组织代码，就不能保证“A操作完成再执行B”。</p>
 <p>当然，我们可以直接把B直接糅合进A。</p>
-<pre><code class="js">function A(){B()}
-</code></pre>
+<pre><code class="js">function A()&#123;B()&#125;</code></pre>
 <p>这样代码之间耦合度太高，增加代码复用的难度 ，于是有了callback形式。</p>
 <a id="more"></a>
+
 <h2 id="callback"><a href="#callback" class="headerlink" title="callback"></a>callback</h2><blockquote>
 <p><em>被广泛吐槽的callback，真正该被吐槽的应该是不合格的JSer吧</em>。</p>
 </blockquote>
 <p><code>setTimeout</code>就是一个典型的异步操作，延迟时间到了时候只有<code>setTimeout</code>自己能得到通知。那么我们就可以以函数的形式先告诉<code>setTimeout</code>延迟时间到了时候我们要执行什么操作。</p>
-<pre><code class="js">setTimeout(() =&gt; {
+<pre><code class="js">setTimeout(() =&gt; &#123;
 
     console.log(1);
 
     console.log(2);
 
-}, 1000);
-</code></pre>
+&#125;, 1000);</code></pre>
 <p>我们都用setTimeout来表示异步操作。</p>
-<pre><code class="js">function A(callback){
+<pre><code class="js">function A(callback)&#123;
     console.log(&#39;do a start&#39;);
 
-    setTimeout(() =&gt; {
+    setTimeout(() =&gt; &#123;
 
         console.log(&#39;do a end&#39;);
 
         callback();
 
-    }, 1000);
-}
-function B() {
+    &#125;, 1000);
+&#125;
+function B() &#123;
 
     console.log(&#39;do b&#39;);
 
-}
+&#125;
 
-A(B);
-</code></pre>
+A(B);</code></pre>
 <p>这样保证了“A操作完成再执行B”，也解决了耦合度高的问题。</p>
 <p><strong>但是callback在流程复杂的情况下，难以达到理想编码体验；在流程长的情况下会形成回调地狱，流程难以阅读和维护</strong>。</p>
 <h2 id="Promise"><a href="#Promise" class="headerlink" title="Promise"></a>Promise</h2><blockquote>
 <p><em>callback的问题是下一步的操作不是靠返回值，而是要靠callback来决定的。这个是跟同步操作最大的区别，也是导致callback烦恼的根本原因。</em></p>
 </blockquote>
 <p><code>Promise</code>让异步操作的状态返回出来，而不是在内部处理，是链式调用的基础，也给之后同步方式的写法奠定基础。</p>
-<pre><code class="js">function A(){
+<pre><code class="js">function A()&#123;
     console.log(&#39;do a start&#39;);
-    return new Promise((resolve,reject) =&gt; {
-        setTimeout(() =&gt; {
+    return new Promise((resolve,reject) =&gt; &#123;
+        setTimeout(() =&gt; &#123;
             console.log(&#39;do a end&#39;);
             resolve();
-        },1000)
-    })
-}
-function B(){
+        &#125;,1000)
+    &#125;)
+&#125;
+function B()&#123;
     console.log(&#39;do B&#39;);
-}
-A().then(B)
-</code></pre>
+&#125;
+A().then(B)</code></pre>
 <p>配合<code>defer</code>，<code>Promise.all</code>和<code>Promise.race</code>，使用Promise可以写出很清晰的异步流程。从本质上来讲，<strong>Promise连接了异步操作和操作结果，只是将回调延后，再通过链式调用让流程更清晰</strong>。</p>
 <h2 id="generator"><a href="#generator" class="headerlink" title="generator"></a>generator</h2><blockquote>
 <p><em>调用<code>generator</code>函数不立即执行，调用一次<code>next</code>执行到下一个<code>yield</code>，拿到<code>yield</code>右边表达式的值，下次调用next传的值赋值给yield左边。</em></p>
 </blockquote>
 <p>很尴尬啊，写完上面一段话，自己再回头看，也不知道说的啥。还是来看代码吧。</p>
-<pre><code class="js">function* generator(){
+<pre><code class="js">function* generator()&#123;
     console.log(&#39;start&#39;);
 
     const res = yield 1 + 3;
@@ -217,7 +213,7 @@ A().then(B)
     console.log(res);
 
     return res;
-}
+&#125;
 const gen = generator();
 
 const res1 = gen.next();
@@ -226,15 +222,14 @@ console.log(res1);
 
 const res2 = gen.next(5);
 
-console.log(res2);
-</code></pre>
+console.log(res2);</code></pre>
 <p>可以看到yield的左值不是等于yield右边的结果，而是等于你下一次调用next的时候传入的值。这个特性，使得<code>generator配合Promise</code>，能很好的控制异步。如果yield右边是一个Promise，在Promise的状态变成resolved的时候调用下一次next，传入PromiseValue。</p>
-<pre><code class="js">function sleep(msTime = 1000){
-    return new Promise((resolve,reject) =&gt; {
+<pre><code class="js">function sleep(msTime = 1000)&#123;
+    return new Promise((resolve,reject) =&gt; &#123;
         setTimeout(resolve,msTime);
-    });
-}
-function* generator() {
+    &#125;);
+&#125;
+function* generator() &#123;
 
     const startTime = Date.now();
 
@@ -242,21 +237,20 @@ function* generator() {
 
     console.log(Date.now() - startTime);
 
-}
+&#125;
 
 const gen = generator();
 
-gen.next().value.then((val) =&gt; {
+gen.next().value.then((val) =&gt; &#123;
 
     gen.next(val);
 
-});
-</code></pre>
+&#125;);</code></pre>
 <p>这样所有的流程控制的回调代码都脱离了逻辑函数本身，在<code>generator</code>里，同步和异步的代码混在一起了，但是整个写法看上去是一个同步的，异常的清晰。而后面的控制代码，可以写成一个通用的控制函数，让<code>generator</code>自执行，这个是<code>co</code>模块做的。</p>
 <pre><code class="js">
 import co from &#39;co&#39;;
 
-const doSomeThing = co.wrap(function* generator() {
+const doSomeThing = co.wrap(function* generator() &#123;
 
     const startTime = Date.now();
 
@@ -264,16 +258,15 @@ const doSomeThing = co.wrap(function* generator() {
 
     console.log(Date.now() - startTime);
 
-});
+&#125;);
 
 doSomeThing();
-
 </code></pre>
 <p>使用co模块yield右值可以是<code>promise</code>和<code>trunk函数</code>（为什么是这两个？因为这两个都能从回掉里拿到上一个异步操作的状态），不能是基本类型，确实从异步的角度考虑yield右值放基本类型没有啥意义，但是因为这个报错是有点难以接受的。还值得一提的是co做了一些处理，yield右值也可以是<code>Array</code>和<code>Object</code>，但是里面的值还是必须是promise和trunk。</p>
 <h2 id="async-await"><a href="#async-await" class="headerlink" title="async/await"></a>async/await</h2><blockquote>
 <p><em>async/<code>await</code>是es2017出的规范，可以说co和generator的<code>语法糖</code>。不一样的是await的右值<strong>兼容了基本类型</strong>，但是不再处理Array和Object。</em></p>
 </blockquote>
-<pre><code class="js">async function doSomeThing() {
+<pre><code class="js">async function doSomeThing() &#123;
 
     const startTime = Date.now();
 
@@ -281,10 +274,9 @@ doSomeThing();
 
     console.log(Date.now() - startTime);
 
-}
+&#125;
 
-doSomeThing();
-</code></pre>
+doSomeThing();</code></pre>
 <p>从<code>async/await</code>来看JavaScript的异步编程，可以说是很清楚了，同步和异步无缝连接，写起来行云流水，看来清晰明了。想必大家都想用<code>async/await</code>来提高工作效率吧，那么使用async/await要<strong>注意</strong>什么呢？</p>
 <ul>
 <li><p>1.<code>async/await</code>离不开<code>Promise</code>，使用<code>Promise.all</code>和<code>Promise.race</code>等优化流程。await写起来太方便了，当两个操作可以并行的时候还请用Promise.all，连续两个await是串行的操作。</p>
@@ -292,12 +284,11 @@ doSomeThing();
 <li><p>2.async函数始终返回的一个Promise，就算简单如下函数。</p>
 </li>
 </ul>
-<pre><code class="js">async function doSomeThing() {
+<pre><code class="js">async function doSomeThing() &#123;
 
     return 123;
 
-}
-</code></pre>
+&#125;</code></pre>
 <ul>
 <li><p>3.await右边异步操作变成<code>rejected</code>的时候抛出错误能被<code>try/catch</code>捕捉到，请不要吝啬使用<code>try/catch</code>。</p>
 </li>
@@ -310,157 +301,154 @@ doSomeThing();
 <p>这让我们回到一个编程的最基本，就是定义好一系列的操作和操作之前的关系。简单的来将，我们可以把这一系列的操作看成一个数组或者说链表可能更贴切一点，是一环扣一环的，程序开始执行，数组第一个操作完成，然后执行第二个操作，依次类推，直到执行完毕。</p>
 <blockquote>
 <p>在异步编程里面如何应该关心的大概有三个问题：</p>
+</blockquote>
 <ol>
 <li>如何生成这个数组（序列）</li>
 <li>写执行器，如何有序的执行完这个数组，在一个操作完成之后通知下一个操作开始执行</li>
 <li>看似上面已经完成了所有问题，但还有一个隐藏问题需要解决。在已知的任何事情从宏观的角度来讲，都是一个序列，从前到后的推移，犹如时间的推移。但是从微观的角度，必定会有事件的分支和合流（不知道这样说会不会被打）。如何处理这一部分的逻辑也是重中之重。</li>
 </ol>
-</blockquote>
 <p>对第一个问题，我们直接用数组，可以列为函数的参数，可以像Promise一样链式调用最后组成，奥还有callback。</p>
 <p>到第二个问题，我们很容易联想到runSequence这种函数名，于是雏形就有了</p>
-<pre><code class="js">`function runSequence(...seqs) { }`
-</code></pre>
+<pre><code class="js">`function runSequence(...seqs) &#123; &#125;`</code></pre>
 <p>拿到<code>seqs</code>就是干，一个一个执行呗，重要的就是如何一个一个执行。从这一点来看的化，每个异步操作都会有callback，只是callback的时机和写法不一样，或优或劣，从callback里调用下一次操作。我们可以把callback想成next借用koa的思想把序列执行完。这个要求每个操作都会调用并且只调用一次next，以最普通callback函数为例。</p>
-<pre><code class="js">function runSequence(...seqs) {
+<pre><code class="js">function runSequence(...seqs) &#123;
 
     let i = 0;
 
-    const next = (index, ...args) =&gt; {
+    const next = (index, ...args) =&gt; &#123;
 
-        if (i !== index) {
+        if (i !== index) &#123;
 
             console.warn(&#39;next call twice&#39;);
 
             return;
 
-        }
+        &#125;
 
         let arg, callback;
 
-        if (typeof args[args.length - 1] === &#39;function&#39;) {
+        if (typeof args[args.length - 1] === &#39;function&#39;) &#123;
 
             arg = args.slice(0, args.length - 1);
 
             callback = args[args.length - 1];
 
-        } else {
+        &#125; else &#123;
 
             arg = args;
 
             callback = null;
 
-        }
+        &#125;
 
         const seq = seqs[i++];
 
-        if (!seq) {
+        if (!seq) &#123;
 
             callback &amp;&amp; callback(null, ...arg);
 
             return;
 
-        }
+        &#125;
 
-        try {
+        try &#123;
 
-            seq.call(null, ...arg, ((i, err, ...res) =&gt; {
+            seq.call(null, ...arg, ((i, err, ...res) =&gt; &#123;
 
-                if (err) {
+                if (err) &#123;
 
                     callback &amp;&amp; callback(err);
 
-                } else {
+                &#125; else &#123;
 
                     next.call(null, i, ...res, callback);
 
-                }
+                &#125;
 
-            }).bind(null, i));
+            &#125;).bind(null, i));
 
-        } catch (err) {
+        &#125; catch (err) &#123;
 
             callback &amp;&amp; callback(err);
 
-        }
+        &#125;
 
-    }
+    &#125;
 
-    return (...args) =&gt; {
+    return (...args) =&gt; &#123;
 
         next.call(null, 0, ...args);
 
-    }
+    &#125;
 
-}
-
+&#125;
 </code></pre>
 <p>大功告成，我们来写一些简单的例子测试一下</p>
-<pre><code class="js">const res = {
+<pre><code class="js">const res = &#123;
 
     a: &#39;b&#39;,
 
     b: &#39;c&#39;,
 
-}
+&#125;
 
 
 
-function fetch(key, next) {
+function fetch(key, next) &#123;
 
-    console.log(`fetch ${key} start`, Date.now() | 0);
+    console.log(`fetch $&#123;key&#125; start`, Date.now() | 0);
 
-    if (!key) {
+    if (!key) &#123;
 
         next(&#39;err key&#39;);
 
-    }
+    &#125;
 
-    setTimeout(() =&gt; {
+    setTimeout(() =&gt; &#123;
 
-        console.log(`fetch ${key} end`, Date.now() | 0);
+        console.log(`fetch $&#123;key&#125; end`, Date.now() | 0);
 
-        if (!res[key]) {
+        if (!res[key]) &#123;
 
-            next(`${key} not found`);
+            next(`$&#123;key&#125; not found`);
 
-        } else {
+        &#125; else &#123;
 
             next(null, res[key]);
 
-        }
+        &#125;
 
-    }, 1000);
+    &#125;, 1000);
 
-}
+&#125;
 
 
 
-function runError(next) {
+function runError(next) &#123;
 
     throw new Error(&#39;erred&#39;);
 
     next();
 
-}
+&#125;
 
-runSequence(fetch, fetch, (data, next) =&gt; {
+runSequence(fetch, fetch, (data, next) =&gt; &#123;
 
     next(null, data + &#39;1&#39;);
 
     next(null, data + &#39;2&#39;);
 
-}, (data, next) =&gt; {
+&#125;, (data, next) =&gt; &#123;
 
     console.log(data);
 
     next(null, data + &#39;3&#39;);
 
-}, runError)(&#39;a&#39;, (err, ...data) =&gt; {
+&#125;, runError)(&#39;a&#39;, (err, ...data) =&gt; &#123;
 
     console.log(err, ...data, &#39;finish all&#39;);
 
-});
-
+&#125;);
 
 </code></pre>
 <p>log如下</p>
@@ -476,11 +464,10 @@ runSequence(fetch, fetch, (data, next) =&gt; {
 
 // Error: erred &quot;finish all&quot;
 
-// warn: next call twice
-</code></pre>
+// warn: next call twice</code></pre>
 <p>看上去没毛病了。我们可以来解决第三个问题，还是拿来主义，借鉴<code>Promise.all</code>和<code>Promise.race</code>。我们也可以给callback写一个对应的all和race。直接贴代码</p>
 <p>总的来说，任何方案，只要是有规范，按规范走就能很好的优化这个流程。比如最后一个函数是callback，callback最后，第一个参数是err等等。使用Promise也有一定遵循的，如果Promise.resolve(123, 345);，后面的参数就会被忽略了，如果使用了这一点runSequence也能优化很多。runSequence.all数组里只能用函数bind的形式来写，就很丑，就可以用thunkify来优化。</p>
-<p><a href="https://mp.weixin.qq.com/s/5swBKkITeG8yf9hZJbGfWg" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/5swBKkITeG8yf9hZJbGfWg">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -505,7 +492,7 @@ runSequence(fetch, fetch, (data, next) =&gt; {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -539,7 +526,7 @@ runSequence(fetch, fetch, (data, next) =&gt; {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#为什么JavaScript的异步编程经常被人提起，我想到以下两点原因。"><span class="toc-number">1.</span> <span class="toc-text">为什么JavaScript的异步编程经常被人提起，我想到以下两点原因。</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#callback"><span class="toc-number">1.1.</span> <span class="toc-text">callback</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise"><span class="toc-number">1.2.</span> <span class="toc-text">Promise</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#generator"><span class="toc-number">1.3.</span> <span class="toc-text">generator</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#async-await"><span class="toc-number">1.4.</span> <span class="toc-text">async&#x2F;await</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88JavaScript%E7%9A%84%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E7%BB%8F%E5%B8%B8%E8%A2%AB%E4%BA%BA%E6%8F%90%E8%B5%B7%EF%BC%8C%E6%88%91%E6%83%B3%E5%88%B0%E4%BB%A5%E4%B8%8B%E4%B8%A4%E7%82%B9%E5%8E%9F%E5%9B%A0%E3%80%82"><span class="toc-number">1.</span> <span class="toc-text">为什么JavaScript的异步编程经常被人提起，我想到以下两点原因。</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#callback"><span class="toc-number">1.1.</span> <span class="toc-text">callback</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise"><span class="toc-number">1.2.</span> <span class="toc-text">Promise</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#generator"><span class="toc-number">1.3.</span> <span class="toc-text">generator</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#async-await"><span class="toc-number">1.4.</span> <span class="toc-text">async&#x2F;await</span></a></li></ol></li></ol>
                 </div>
             </div>
             

@@ -37,7 +37,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -100,13 +100,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    11k
+                    12k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    10 mins.
+                    11 mins.
                 </span>
                 
                 
@@ -143,178 +143,173 @@
             <p><img src="https://user-gold-cdn.xitu.io/2018/7/11/16488940d3621cc9?imageView2/1/w/1304/h/734/q/85/format/webp/interlace/1" alt="setState"></p>
 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>看之前，为了方便理解和简化流程，我们默认react内部代码执行到 <strong>performWork、performWorkOnRoot、performSyncWork、performAsyncWork</strong> 这四个方法的时候，就是react去update更新并且作用到UI上。</p>
 <h2 id="合成事件中的setState"><a href="#合成事件中的setState" class="headerlink" title="合成事件中的setState"></a>合成事件中的setState</h2><p>首先得了解一下什么是<code>合成事件</code>，react为了解决跨平台，兼容性问题，自己封装了一套事件机制，代理了原生的事件，像在jsx中常见的<code>onClick</code>、<code>onChange</code>这些都是合成事件。</p>
-<pre><code class="js">class App extends Component {
+<pre><code class="js">class App extends Component &#123;
 
-  state = { val: 0 }
+  state = &#123; val: 0 &#125;
 
-  increment = () =&gt; {
-    this.setState({ val: this.state.val + 1 })
+  increment = () =&gt; &#123;
+    this.setState(&#123; val: this.state.val + 1 &#125;)
     console.log(this.state.val) // 输出的是更新前的val --&gt; 0
-  }
-  render() {
+  &#125;
+  render() &#123;
     return (
-      &lt;div onClick={this.increment}&gt;
-        {`Counter is: ${this.state.val}`}
+      &lt;div onClick=&#123;this.increment&#125;&gt;
+        &#123;`Counter is: $&#123;this.state.val&#125;`&#125;
       &lt;/div&gt;
     )
-  }
-}
-</code></pre>
-<p>合成事件中的<code>setState</code>写法比较常见，点击事件里去改变 <code>this.state.val</code> 的状态值，在 <code>increment</code> 事件中打个断点可以看到调用栈，这里我贴一张自己画的流程图：<br><a id="more"></a><br><img src="https://user-gold-cdn.xitu.io/2018/7/11/164888c0fb049aef?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="合成事件"></p>
+  &#125;
+&#125;</code></pre>
+<p>合成事件中的<code>setState</code>写法比较常见，点击事件里去改变 <code>this.state.val</code> 的状态值，在 <code>increment</code> 事件中打个断点可以看到调用栈，这里我贴一张自己画的流程图：</p>
+<a id="more"></a>
+<p><img src="https://user-gold-cdn.xitu.io/2018/7/11/164888c0fb049aef?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="合成事件"></p>
 <p>从 <code>dispatchInteractiveEvent</code> 到 <code>callCallBack</code> 为止，都是对合成事件的处理和执行，从 <code>setState</code> 到 requestWork 是调用 <code>this.setState</code> 的逻辑，这边主要看下 <code>requestWork</code> 这个函数（从 <code>dispatchEvent</code> 到 <code>requestWork</code> 的调用栈是属于 <code>interactiveUpdates$1</code> 的 stry 代码块，下文会提到）。</p>
-<pre><code class="js">function requestWork(root, expirationTime) {
+<pre><code class="js">function requestWork(root, expirationTime) &#123;
   addRootToSchedule(root, expirationTime);
 
-  if (isRendering) {
+  if (isRendering) &#123;
     // Prevent reentrancy. Remaining work will be scheduled at the end of
     // the currently rendering batch.
     return;
-  }
+  &#125;
 
-  if (isBatchingUpdates) {
+  if (isBatchingUpdates) &#123;
     // Flush work at the end of the batch.
-    if (isUnbatchingUpdates) {
+    if (isUnbatchingUpdates) &#123;
       // ...unless we&#39;re inside unbatchedUpdates, in which case we should
       // flush it now.
       nextFlushedRoot = root;
       nextFlushedExpirationTime = Sync;
       performWorkOnRoot(root, Sync, false);
-    }
+    &#125;
     return;
-  }
+  &#125;
 
   // TODO: Get rid of Sync and use current time?
-  if (expirationTime === Sync) {
+  if (expirationTime === Sync) &#123;
     performSyncWork();
-  } else {
+  &#125; else &#123;
     scheduleCallbackWithExpiration(expirationTime);
-  }
-}
-</code></pre>
+  &#125;
+&#125;</code></pre>
 <p>在 <code>requestWork</code> 中有三个if分支，三个分支中有两个方法 <code>performWorkOnRoot</code> 和 <code>performSyncWork</code> ，就是我们默认的update函数，但是在合成事件中，走的是第二个if分支，第二个分支中有两个标识 <code>isBatchingUpdates</code> 和 <code>isUnbatchingUpdates</code> 两个初始值都为  <strong>false</strong> ，但是在 <code>interactiveUpdates$1</code> 中会把 <code>isBatchingUpdates</code> 设为 <strong>true</strong> ，下面就是 <code>interactiveUpdates$1</code> 的代码：</p>
-<pre><code class="js">function interactiveUpdates$1(fn, a, b) {
-  if (isBatchingInteractiveUpdates) {
+<pre><code class="js">function interactiveUpdates$1(fn, a, b) &#123;
+  if (isBatchingInteractiveUpdates) &#123;
     return fn(a, b);
-  }
+  &#125;
   // If there are any pending interactive updates, synchronously flush them.
   // This needs to happen before we read any handlers, because the effect of
   // the previous event may influence which handlers are called during
   // this event.
-  if (!isBatchingUpdates &amp;&amp; !isRendering &amp;&amp; lowestPendingInteractiveExpirationTime !== NoWork) {
+  if (!isBatchingUpdates &amp;&amp; !isRendering &amp;&amp; lowestPendingInteractiveExpirationTime !== NoWork) &#123;
     // Synchronously flush pending interactive updates.
     performWork(lowestPendingInteractiveExpirationTime, false, null);
     lowestPendingInteractiveExpirationTime = NoWork;
-  }
+  &#125;
   var previousIsBatchingInteractiveUpdates = isBatchingInteractiveUpdates;
   var previousIsBatchingUpdates = isBatchingUpdates;
   isBatchingInteractiveUpdates = true;
   isBatchingUpdates = true;  // 把requestWork中的isBatchingUpdates标识改为true
-  try {
+  try &#123;
     return fn(a, b);
-  } finally {
+  &#125; finally &#123;
     isBatchingInteractiveUpdates = previousIsBatchingInteractiveUpdates;
     isBatchingUpdates = previousIsBatchingUpdates;
-    if (!isBatchingUpdates &amp;&amp; !isRendering) {
+    if (!isBatchingUpdates &amp;&amp; !isRendering) &#123;
       performSyncWork();
-    }
-  }
-}
-</code></pre>
+    &#125;
+  &#125;
+&#125;</code></pre>
 <p>在这个方法中把 <code>isBatchingUpdates</code> 设为了 true ,导致在 <code>requestWork</code> 方法中， <code>isBatchingUpdates</code> 为 true ，但是 <code>isUnbatchingUpdates</code> 是 false ，而被直接return了。</p>
 <p>那return完的逻辑回到哪里呢，最终正是回到了 <code>interactiveUpdates</code> 这个方法，仔细看一眼，这个方法里面有个 <strong>try finally</strong>语法，前端同学这个其实是用的比较少的，简单的说就是会先执行 try 代码块中的语句，然后再执行 finally 中的代码，而 fn(a, b) 是在try代码块中，刚才说到在 <code>requestWork</code> 中被return掉的也就是这个fn（上文提到的 从<code>dispatchEvent</code> 到 <code>requestWork</code> 的一整个调用栈）。</p>
 <p>所以当你在 <code>increment</code> 中调用 <code>setState</code> 之后去console.log的时候，是属于 try 代码块中的执行，但是由于是合成事件，try代码块执行完state并没有更新，所以你输入的结果是更新前的 state 值，这就导致了所谓的”异步”，但是当你的try代码块执行完的时候（也就是你的increment合成事件），这个时候会去执行 finally 里的代码，在 finally 中执行了 <code>performSyncWork</code> 方法，这个时候才会去更新你的 state 并且渲染到UI上。</p>
-<h2 id="生命周期函数中的setState"><a href="#生命周期函数中的setState" class="headerlink" title="生命周期函数中的setState"></a>生命周期函数中的setState</h2><pre><code class="js">class App extends Component {
+<h2 id="生命周期函数中的setState"><a href="#生命周期函数中的setState" class="headerlink" title="生命周期函数中的setState"></a>生命周期函数中的setState</h2><pre><code class="js">class App extends Component &#123;
 
-  state = { val: 0 }
+  state = &#123; val: 0 &#125;
 
- componentDidMount() {
-    this.setState({ val: this.state.val + 1 })
+ componentDidMount() &#123;
+    this.setState(&#123; val: this.state.val + 1 &#125;)
    console.log(this.state.val) // 输出的还是更新前的值 --&gt; 0
- }
-  render() {
+ &#125;
+  render() &#123;
     return (
       &lt;div&gt;
-        {`Counter is: ${this.state.val}`}
+        &#123;`Counter is: $&#123;this.state.val&#125;`&#125;
       &lt;/div&gt;
     )
-  }
-}
-</code></pre>
+  &#125;
+&#125;</code></pre>
 <blockquote>
 <p>钩子函数中<code>setState</code>的调用栈：</p>
 </blockquote>
 <p><img src="https://user-gold-cdn.xitu.io/2018/7/11/164888cef54b5edd?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="钩子函数"></p>
 <p>其实还是和合成事件一样，当 <code>componentDidmount</code> 执行的时候，react内部并没有更新，执行完<code>componentDidmount</code>  后才去 <code>commitUpdateQueue</code> 更新。这就导致你在 <code>componentDidmount</code> 中 <code>setState</code> 完去<code>console.log</code>拿的结果还是更新前的值。</p>
-<h2 id="原生事件中的setState"><a href="#原生事件中的setState" class="headerlink" title="原生事件中的setState"></a>原生事件中的setState</h2><pre><code class="js">class App extends Component {
+<h2 id="原生事件中的setState"><a href="#原生事件中的setState" class="headerlink" title="原生事件中的setState"></a>原生事件中的setState</h2><pre><code class="js">class App extends Component &#123;
 
-  state = { val: 0 }
+  state = &#123; val: 0 &#125;
 
-  changeValue = () =&gt; {
-    this.setState({ val: this.state.val + 1 })
+  changeValue = () =&gt; &#123;
+    this.setState(&#123; val: this.state.val + 1 &#125;)
     console.log(this.state.val) // 输出的是更新后的值 --&gt; 1
-  }
+  &#125;
 
- componentDidMount() {
+ componentDidMount() &#123;
     document.body.addEventListener(&#39;click&#39;, this.changeValue, false)
- }
+ &#125;
 
-  render() {
+  render() &#123;
     return (
       &lt;div&gt;
-        {`Counter is: ${this.state.val}`}
+        &#123;`Counter is: $&#123;this.state.val&#125;`&#125;
       &lt;/div&gt;
     )
-  }
-}
-</code></pre>
+  &#125;
+&#125;</code></pre>
 <p>原生事件是指非<code>react</code>合成事件，原生自带的事件监听 <code>addEventListener</code> ，或者也可以用原生js、jq直接 <code>document.querySelector().onclick</code> 这种绑定事件的形式都属于原生事件。</p>
 <p><img src="https://user-gold-cdn.xitu.io/2018/7/11/164888d958a2df16?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="原生事件"></p>
 <p>原生事件的调用栈就比较简单了，因为没有走合成事件的那一大堆，直接触发click事件，到 <code>requestWork</code> ,在<code>requestWork</code>里由于 <code>expirationTime === Sync</code> 的原因，直接走了 <code>performSyncWork</code> 去更新，并不像合成事件或钩子函数中被return，所以当你在原生事件中<code>setState</code>后，能同步拿到更新后的state值。</p>
-<h2 id="setTimeout中的setState"><a href="#setTimeout中的setState" class="headerlink" title="setTimeout中的setState"></a>setTimeout中的setState</h2><pre><code class="js">class App extends Component {
+<h2 id="setTimeout中的setState"><a href="#setTimeout中的setState" class="headerlink" title="setTimeout中的setState"></a>setTimeout中的setState</h2><pre><code class="js">class App extends Component &#123;
 
-  state = { val: 0 }
+  state = &#123; val: 0 &#125;
 
- componentDidMount() {
-    setTimeout(_ =&gt; {
-      this.setState({ val: this.state.val + 1 })
+ componentDidMount() &#123;
+    setTimeout(_ =&gt; &#123;
+      this.setState(&#123; val: this.state.val + 1 &#125;)
       console.log(this.state.val) // 输出更新后的值 --&gt; 1
-    }, 0)
- }
+    &#125;, 0)
+ &#125;
 
-  render() {
+  render() &#123;
     return (
       &lt;div&gt;
-        {`Counter is: ${this.state.val}`}
+        &#123;`Counter is: $&#123;this.state.val&#125;`&#125;
       &lt;/div&gt;
     )
-  }
-}
-</code></pre>
+  &#125;
+&#125;</code></pre>
 <p>在 <code>setTimeout</code> 中去 <code>setState</code> 并不算是一个单独的场景，它是随着你外层去决定的，因为你可以在合成事件中 <code>setTimeout</code> ，可以在钩子函数中 <code>setTimeout</code> ，也可以在原生事件<code>setTimeout</code>，但是不管是哪个场景下，基于 <strong>event loop</strong>的模型下， <code>setTimeout</code> 中里去 <code>setState</code> 总能拿到最新的<code>state</code>值。</p>
-<p>举个栗子，比如之前的合成事件，由于你是 <code>setTimeout(_ =&gt; { this.setState()}, 0)</code> 是在 try 代码块中,当你 try 代码块执行到 <code>setTimeout</code> 的时候，把它丢到列队里，并没有去执行，而是先执行的 <code>finally</code> 代码块，等 finally 执行完了， <code>isBatchingUpdates</code> 又变为了 false ，导致最后去执行队列里的 setState 时候， <code>requestWork</code> 走的是和原生事件一样的 <code>expirationTime === Sync if</code>分支，所以表现就会和原生事件一样，可以同步拿到最新的state值。</p>
-<h2 id="setState中的批量更新"><a href="#setState中的批量更新" class="headerlink" title="setState中的批量更新"></a>setState中的批量更新</h2><pre><code class="js">class App extends Component {
+<p>举个栗子，比如之前的合成事件，由于你是 <code>setTimeout(_ =&gt; &#123; this.setState()&#125;, 0)</code> 是在 try 代码块中,当你 try 代码块执行到 <code>setTimeout</code> 的时候，把它丢到列队里，并没有去执行，而是先执行的 <code>finally</code> 代码块，等 finally 执行完了， <code>isBatchingUpdates</code> 又变为了 false ，导致最后去执行队列里的 setState 时候， <code>requestWork</code> 走的是和原生事件一样的 <code>expirationTime === Sync if</code>分支，所以表现就会和原生事件一样，可以同步拿到最新的state值。</p>
+<h2 id="setState中的批量更新"><a href="#setState中的批量更新" class="headerlink" title="setState中的批量更新"></a>setState中的批量更新</h2><pre><code class="js">class App extends Component &#123;
 
-  state = { val: 0 }
+  state = &#123; val: 0 &#125;
 
-  batchUpdates = () =&gt; {
-    this.setState({ val: this.state.val + 1 })
-    this.setState({ val: this.state.val + 1 })
-    this.setState({ val: this.state.val + 1 })
- }
+  batchUpdates = () =&gt; &#123;
+    this.setState(&#123; val: this.state.val + 1 &#125;)
+    this.setState(&#123; val: this.state.val + 1 &#125;)
+    this.setState(&#123; val: this.state.val + 1 &#125;)
+ &#125;
 
-  render() {
+  render() &#123;
     return (
-      &lt;div onClick={this.batchUpdates}&gt;
-        {`Counter is ${this.state.val}`} // 1
+      &lt;div onClick=&#123;this.batchUpdates&#125;&gt;
+        &#123;`Counter is $&#123;this.state.val&#125;`&#125; // 1
       &lt;/div&gt;
     )
-  }
-}
-
+  &#125;
+&#125;
 </code></pre>
 <p>上面的结果最终是1，在 <code>setState</code> 的时候react内部会创建一个 <code>updateQueue</code> ，通过 <code>firstUpdate</code> 、 <code>lastUpdate</code> 、 <code>lastUpdate.next</code> 去维护一个更新的队列，在最终的 <code>performWork</code> 中，相同的key会被覆盖，只会对最后一次的 <code>setState</code> 进行更新，下面是部分实现代码：</p>
-<pre><code class="js">function createUpdateQueue(baseState) {
-  var queue = {
+<pre><code class="js">function createUpdateQueue(baseState) &#123;
+  var queue = &#123;
     expirationTime: NoWork,
     baseState: baseState,
     firstUpdate: null,
@@ -325,51 +320,49 @@
     lastEffect: null,
     firstCapturedEffect: null,
     lastCapturedEffect: null
-  };
+  &#125;;
   return queue;
-}
+&#125;
 
-function appendUpdateToQueue(queue, update, expirationTime) {
+function appendUpdateToQueue(queue, update, expirationTime) &#123;
   // Append the update to the end of the list.
-  if (queue.lastUpdate === null) {
+  if (queue.lastUpdate === null) &#123;
     // Queue is empty
     queue.firstUpdate = queue.lastUpdate = update;
-  } else {
+  &#125; else &#123;
     queue.lastUpdate.next = update;
     queue.lastUpdate = update;
-  }
-  if (queue.expirationTime === NoWork || queue.expirationTime &gt; expirationTime) {
+  &#125;
+  if (queue.expirationTime === NoWork || queue.expirationTime &gt; expirationTime) &#123;
     // The incoming update has the earliest expiration of any update in the
     // queue. Update the queue&#39;s expiration time.
     queue.expirationTime = expirationTime;
-  }
-}
-</code></pre>
+  &#125;
+&#125;</code></pre>
 <p>看个🌰</p>
-<pre><code class="js">class App extends React.Component {
-  state = { val: 0 }
+<pre><code class="js">class App extends React.Component &#123;
+  state = &#123; val: 0 &#125;
 
-  componentDidMount() {
-    this.setState({ val: this.state.val + 1 })
+  componentDidMount() &#123;
+    this.setState(&#123; val: this.state.val + 1 &#125;)
     console.log(this.state.val)
 
-    this.setState({ val: this.state.val + 1 })
+    this.setState(&#123; val: this.state.val + 1 &#125;)
     console.log(this.state.val)
 
-    setTimeout(_ =&gt; {
-      this.setState({ val: this.state.val + 1 })
+    setTimeout(_ =&gt; &#123;
+      this.setState(&#123; val: this.state.val + 1 &#125;)
       console.log(this.state.val);
 
-      this.setState({ val: this.state.val + 1 })
+      this.setState(&#123; val: this.state.val + 1 &#125;)
       console.log(this.state.val)
-    }, 0)
-  }
+    &#125;, 0)
+  &#125;
 
-  render() {
-    return &lt;div&gt;{this.state.val}&lt;/div&gt;
-  }
-}
-</code></pre>
+  render() &#123;
+    return &lt;div&gt;&#123;this.state.val&#125;&lt;/div&gt;
+  &#125;
+&#125;</code></pre>
 <p>结合上面分析的，钩子函数中的 <code>setState</code> 无法立马拿到更新后的值，所以前两次都是输出0，当执行到 <code>setTimeout</code> 里的时候，前面两个state的值已经被更新，由于 setState 批量更新的策略， <code>this.state.val</code> 只对最后一次的生效，为1，而在 setTimmout 中 setState 是可以同步拿到更新结果，所以 setTimeout 中的两次输出2，3，最终结果就为 0, 0, 2, 3 。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
 <li><p>setState 只在合成事件和钩子函数中是“异步”的，在原生事件和 <code>setTimeout</code> 中都是同步的。</p>
@@ -379,7 +372,7 @@ function appendUpdateToQueue(queue, update, expirationTime) {
 <li><p>setState 的批量更新优化也是建立在“异步”（合成事件、钩子函数）之上的，在原生事件和setTimeout 中不会批量更新，在“异步”中如果对同一个值进行多次 setState ， setState 的批量更新策略会对其进行覆盖，取最后一次的执行，如果是同时 setState 多个不同的值，在更新时会对其进行合并批量更新。</p>
 </li>
 </ul>
-<p><a href="https://juejin.im/post/5b45c57c51882519790c7441#comment" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.im/post/5b45c57c51882519790c7441#comment">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -404,7 +397,7 @@ function appendUpdateToQueue(queue, update, expirationTime) {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -438,7 +431,7 @@ function appendUpdateToQueue(queue, update, expirationTime) {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#合成事件中的setState"><span class="toc-number">1.1.</span> <span class="toc-text">合成事件中的setState</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生命周期函数中的setState"><span class="toc-number">1.2.</span> <span class="toc-text">生命周期函数中的setState</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原生事件中的setState"><span class="toc-number">1.3.</span> <span class="toc-text">原生事件中的setState</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#setTimeout中的setState"><span class="toc-number">1.4.</span> <span class="toc-text">setTimeout中的setState</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#setState中的批量更新"><span class="toc-number">1.5.</span> <span class="toc-text">setState中的批量更新</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.6.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%88%E6%88%90%E4%BA%8B%E4%BB%B6%E4%B8%AD%E7%9A%84setState"><span class="toc-number">1.1.</span> <span class="toc-text">合成事件中的setState</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E5%87%BD%E6%95%B0%E4%B8%AD%E7%9A%84setState"><span class="toc-number">1.2.</span> <span class="toc-text">生命周期函数中的setState</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%94%9F%E4%BA%8B%E4%BB%B6%E4%B8%AD%E7%9A%84setState"><span class="toc-number">1.3.</span> <span class="toc-text">原生事件中的setState</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#setTimeout%E4%B8%AD%E7%9A%84setState"><span class="toc-number">1.4.</span> <span class="toc-text">setTimeout中的setState</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#setState%E4%B8%AD%E7%9A%84%E6%89%B9%E9%87%8F%E6%9B%B4%E6%96%B0"><span class="toc-number">1.5.</span> <span class="toc-text">setState中的批量更新</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.6.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
                 </div>
             </div>
             

@@ -36,7 +36,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -99,13 +99,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    8.4k
+                    8.2k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    8 mins.
+                    7 mins.
                 </span>
                 
                 
@@ -139,9 +139,9 @@
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>今天在掘金上突然看到京东凹凸实验室发布的一篇<a href="https://juejin.im/post/5ef1a698f265da02ce2181d0?utm_source=gold_browser_extension" target="_blank" rel="noopener">《向强大的svg迈进》</a>，想到前几个月项目老大非得让我从svg图标换成iconfont字体图标，最后在我耐心给老大讲了svg的未来，对比了iconfont与普通png的区别后，老大妥协了，让我说服其他成员，代码保持一致就行，:( ，没办法，又得给其他同事讲下。所以今天为了科普svg，写来这篇</p>
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>今天在掘金上突然看到京东凹凸实验室发布的一篇<a target="_blank" rel="noopener" href="https://juejin.im/post/5ef1a698f265da02ce2181d0?utm_source=gold_browser_extension">《向强大的svg迈进》</a>，想到前几个月项目老大非得让我从svg图标换成iconfont字体图标，最后在我耐心给老大讲了svg的未来，对比了iconfont与普通png的区别后，老大妥协了，让我说服其他成员，代码保持一致就行，:( ，没办法，又得给其他同事讲下。所以今天为了科普svg，写来这篇</p>
 <blockquote>
-<p>SVG 即 <code>Scalable Vector Graphics</code> 可缩放矢量图形，使用XML格式定义图形。<br><a href="https://juejin.im/post/5ef1a698f265da02ce2181d0?utm_source=gold_browser_extension" target="_blank" rel="noopener">原文地址</a></p>
+<p>SVG 即 <code>Scalable Vector Graphics</code> 可缩放矢量图形，使用XML格式定义图形。<br><a target="_blank" rel="noopener" href="https://juejin.im/post/5ef1a698f265da02ce2181d0?utm_source=gold_browser_extension">原文地址</a></p>
 </blockquote>
 <h2 id="SVG印象"><a href="#SVG印象" class="headerlink" title="SVG印象"></a>SVG印象</h2><p>SVG 的应用十分广泛，得益于 SVG 强大的各种特性。</p>
 <h3 id="矢量"><a href="#矢量" class="headerlink" title="矢量"></a>矢量</h3><p>可利用 SVG 矢量的特点，描出深圳地铁的轮廓：</p>
@@ -153,12 +153,11 @@
     &lt;foreignObject width=&quot;120&quot; height=&quot;60&quot;&gt;
         &lt;p style=&quot;font-size:20px;margin:0;&quot;&gt;凹凸实验室 欢迎您&lt;/p&gt;
     &lt;/foreignObject&gt;
-&lt;/svg&gt;
-</code></pre>
+&lt;/svg&gt;</code></pre>
 <p>截图实现流程：</p>
 <p>1.首先声明一个基础的 svg 模版，这个模版需要一些基础的描述信息，最重要的，它要有 <code>&lt;foreignObject&gt;&lt;/foreignObject&gt;</code> 这对标签；<br>2.将要渲染的 DOM 模版模版嵌入 <code>foreignObject</code> 即可；<br>3.利用 Blob 构建 svg 对象；<br>4.利用 <code>URL.createObjectURL(svg)</code> 取出 URL。</p>
 <h3 id="SVG-SMIL"><a href="#SVG-SMIL" class="headerlink" title="SVG SMIL"></a>SVG SMIL</h3><p>由于微信编辑器不允许嵌入 <code>&lt;style&gt;&lt;script&gt;&lt;a&gt;</code> 标签，利用SVG SMIL 可进行微信公众号极具创意的图文排版设计，包括动画与交互。<br>但是也要注意，标签里不允许有id，否则会被过滤或替换掉。</p>
-<p>点击 “凹凸实验室” 后，围绕 “凹凸实验室” 中心旋转 360度，点击0.5秒后 出现 <a href="https://aotu.io/" target="_blank" rel="noopener">aotu.io/</a> ，动画只运行一次。</p>
+<p>点击 “凹凸实验室” 后，围绕 “凹凸实验室” 中心旋转 360度，点击0.5秒后 出现 <a target="_blank" rel="noopener" href="https://aotu.io/">aotu.io/</a> ，动画只运行一次。</p>
 <p>下图为 GIF循环演示：</p>
 <p><img src="https://user-gold-cdn.xitu.io/2020/6/23/172dff2914fb651d?imageslim" alt="demo"></p>
 <p>代码如下：</p>
@@ -180,27 +179,23 @@
             &lt;animate attributeName=&quot;opacity&quot; begin=&quot;click+0.5s&quot; from=&quot;0&quot; to=&quot;1&quot; dur=&quot;0.5s&quot; fill=&quot;freeze&quot; restart=&quot;never&quot; /&gt;
         &lt;/g&gt;
     &lt;/g&gt;
-&lt;/svg&gt;
-</code></pre>
+&lt;/svg&gt;</code></pre>
 <h2 id="SVG-实现非比例缩放"><a href="#SVG-实现非比例缩放" class="headerlink" title="SVG 实现非比例缩放"></a>SVG 实现非比例缩放</h2><p>我们熟知的 <code>iconfont</code>，可通过改变字体大小缩放，但是这是 <strong>比例缩放</strong>，那如何实现 SVG 的<strong>非比例缩放</strong>呢？ 如下图所示，<code>如何将 一只兔子 非比例缩放？</code></p>
 <p><img src="https://user-gold-cdn.xitu.io/2020/6/23/172dff2972d16d14?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="demo"></p>
 <p>划重点：<strong>实现非比例缩放主要涉及三个知识点：<code>viewport、viewBox和preserveAspectRatio</code>，<code>viewport 与viewBox</code> 结合可实现缩放的功能，<code>viewBox 与 preserveAspectRatio</code> 结合可实现非比例的功能</strong>。</p>
 <h3 id="viewport"><a href="#viewport" class="headerlink" title="viewport"></a>viewport</h3><p><code>viewport</code> 表示SVG可见区域的大小。 <code>viewport</code> 就像是我们的显示器屏幕大小，超出区域则隐藏，原点位于左上角，x 轴水平向右，y 轴垂直向下。</p>
 <p><img src="https://user-gold-cdn.xitu.io/2020/6/23/172dff29abb23727?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="demo"></p>
 <p>通过类似CSS的属性 <code>width、height</code> 指定视图大小：</p>
-<pre><code class="js">&lt;svg width=&quot;400&quot; height=&quot;200&quot;&gt;&lt;/svg&gt;
-</code></pre>
+<pre><code class="js">&lt;svg width=&quot;400&quot; height=&quot;200&quot;&gt;&lt;/svg&gt;</code></pre>
 <h3 id="viewBox"><a href="#viewBox" class="headerlink" title="viewBox"></a>viewBox</h3><p>viewBox值有4个数字：<code>x, y, width, height</code> 。 其中 x：左上角横坐标，y：左上角纵坐标，width：宽度，height：高度。<br>原点默认位于左上角，x 轴水平向右，y 轴垂直向下。</p>
-<pre><code class="js">&lt;svg width=&quot;400&quot; height=&quot;200&quot; viewBox=&quot;0 0 200 100&quot;&gt;&lt;/svg&gt;
-</code></pre>
+<pre><code class="js">&lt;svg width=&quot;400&quot; height=&quot;200&quot; viewBox=&quot;0 0 200 100&quot;&gt;&lt;/svg&gt;</code></pre>
 <p>显示器屏幕的画面，可以特写，可以全景，这就是 <code>viewBox</code>。 <code>viewBox</code> 可以想象成截屏工具选中的那个框框，和 <code>viewport</code> 作用的结果就是 把框框中的截屏内容再次在 显示器 中全屏显示。</p>
 <p><img src="https://user-gold-cdn.xitu.io/2020/6/23/172dff29e1dee892?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="demo"></p>
 <h3 id="preserveAspectRatio"><a href="#preserveAspectRatio" class="headerlink" title="preserveAspectRatio"></a>preserveAspectRatio</h3><p>上图的红色框框和蓝色框框，恰好和显示器的比例相同，如果是下图的绿色框框，怎样在显示器屏幕中显示呢?</p>
 <p><img src="https://user-gold-cdn.xitu.io/2020/6/23/172dff2a1f0c94f7?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="demo"></p>
 <h4 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h4><p><code>preserveAspectRatio</code> 作用的对象是 <code>viewBox</code>，使用方法如下：</p>
 <pre><code class="js">preserveAspectRatio=&quot;[defer] &lt;align&gt; [&lt;meetOrSlice&gt;]&quot;
-// 例如 preserveAspectRatio=&quot;xMidYMid meet&quot;
-</code></pre>
+// 例如 preserveAspectRatio=&quot;xMidYMid meet&quot;</code></pre>
 <p>其中 <code>defer</code> 此时不是重点，暂且忽略，主要了解 <code>align</code> 和 <code>meetOrSlice</code> 的 用法：</p>
 <p><code>align</code>：由两个名词组成，分别代表 <code>viewbox 与 viewport 的 x 方向、y方向</code>的对齐方式。</p>
 <blockquote>
@@ -214,7 +209,7 @@
 <p><img src="https://user-gold-cdn.xitu.io/2020/6/23/172dff2adcb56f90?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="demo"></p>
 <p>例子4：preserveAspectRatio=”none” 不管三七二十一，随意缩放绿色框框，填满 显示屏即可；这就是非比例缩放的答案了。</p>
 <p><img src="https://user-gold-cdn.xitu.io/2020/6/23/172dff2b10f609f4?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="demo"></p>
-<h2 id="SVG-vs-Image-SVG-vs-Iconfont"><a href="#SVG-vs-Image-SVG-vs-Iconfont" class="headerlink" title="SVG vs Image, SVG vs Iconfont"></a>SVG vs Image, SVG vs Iconfont</h2><p>SVG vs Image, SVG vs Iconfont 对比文章地址 <a href="https://blog.csdn.net/cpongo3/article/details/90258990?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-7.nonecase&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-7.nonecase" target="_blank" rel="noopener">原文地址</a></p>
+<h2 id="SVG-vs-Image-SVG-vs-Iconfont"><a href="#SVG-vs-Image-SVG-vs-Iconfont" class="headerlink" title="SVG vs Image, SVG vs Iconfont"></a>SVG vs Image, SVG vs Iconfont</h2><p>SVG vs Image, SVG vs Iconfont 对比文章地址 <a target="_blank" rel="noopener" href="https://blog.csdn.net/cpongo3/article/details/90258990?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-7.nonecase&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-7.nonecase">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -239,7 +234,7 @@
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -273,7 +268,7 @@
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SVG印象"><span class="toc-number">1.1.</span> <span class="toc-text">SVG印象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#矢量"><span class="toc-number">1.1.1.</span> <span class="toc-text">矢量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#iconfont"><span class="toc-number">1.1.2.</span> <span class="toc-text">iconfont</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#foreignObject"><span class="toc-number">1.1.3.</span> <span class="toc-text">foreignObject</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SVG-SMIL"><span class="toc-number">1.1.4.</span> <span class="toc-text">SVG SMIL</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SVG-实现非比例缩放"><span class="toc-number">1.2.</span> <span class="toc-text">SVG 实现非比例缩放</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#viewport"><span class="toc-number">1.2.1.</span> <span class="toc-text">viewport</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#viewBox"><span class="toc-number">1.2.2.</span> <span class="toc-text">viewBox</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#preserveAspectRatio"><span class="toc-number">1.2.3.</span> <span class="toc-text">preserveAspectRatio</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SVG-vs-Image-SVG-vs-Iconfont"><span class="toc-number">1.3.</span> <span class="toc-text">SVG vs Image, SVG vs Iconfont</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SVG%E5%8D%B0%E8%B1%A1"><span class="toc-number">1.1.</span> <span class="toc-text">SVG印象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9F%A2%E9%87%8F"><span class="toc-number">1.1.1.</span> <span class="toc-text">矢量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#iconfont"><span class="toc-number">1.1.2.</span> <span class="toc-text">iconfont</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#foreignObject"><span class="toc-number">1.1.3.</span> <span class="toc-text">foreignObject</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SVG-SMIL"><span class="toc-number">1.1.4.</span> <span class="toc-text">SVG SMIL</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SVG-%E5%AE%9E%E7%8E%B0%E9%9D%9E%E6%AF%94%E4%BE%8B%E7%BC%A9%E6%94%BE"><span class="toc-number">1.2.</span> <span class="toc-text">SVG 实现非比例缩放</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#viewport"><span class="toc-number">1.2.1.</span> <span class="toc-text">viewport</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#viewBox"><span class="toc-number">1.2.2.</span> <span class="toc-text">viewBox</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#preserveAspectRatio"><span class="toc-number">1.2.3.</span> <span class="toc-text">preserveAspectRatio</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SVG-vs-Image-SVG-vs-Iconfont"><span class="toc-number">1.3.</span> <span class="toc-text">SVG vs Image, SVG vs Iconfont</span></a></li></ol></li></ol>
                 </div>
             </div>
             

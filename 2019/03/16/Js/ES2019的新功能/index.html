@@ -37,7 +37,7 @@ ES10/ES2019 在本次更新中有很大,">
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -145,22 +145,19 @@ ES10/ES2019 在本次更新中有很大,">
 <h2 id="flat"><a href="#flat" class="headerlink" title="flat()"></a>flat()</h2><p><code>flat()</code> 是一种用于扁平数组的方法。在某些时候，数组的元素还是数组，这些类型的数组称为嵌套数组。</p>
 <p>要取消数组的嵌套（扁平它们），我们不得不使用<code>递归</code>。现在引入<code>flat()</code>，可以用一行代码完成。 一个被展平的数组是一个深度为 0 的数组，<em>flat() 接受一个参数，一个代表深度的数字。深度指的是数组内嵌套的数量</em>。下面这个例子可以帮你理解嵌套和深度。</p>
 <pre><code class="js">var arr = [1,2,3,[4,5,6,[7,8,9,[1,2,3]]]];
-console.log(arr.flat(3)); // [1,2,3,4,5,6,7,8,9,1,2,3]
-</code></pre>
+console.log(arr.flat(3)); // [1,2,3,4,5,6,7,8,9,1,2,3]</code></pre>
 <p>通常在 JavaScript 中，数组的深度可以为无穷大，或者直到内存不足为止。假设一个数组的嵌套深度为3，并且我们仅将其展平到深度 2，那么主数组中仍然会存在一个嵌套数组。</p>
-<h2 id="flatMap"><a href="#flatMap" class="headerlink" title="flatMap()"></a>flatMap()</h2><p><code>flatMap()</code> 用于展平嵌套数组并根据给出的像 <code>map()</code> 这样的函数更改值。此函数作用于数组并用一个回调函数作为参数。回调函数用于指示数组应该怎样被展平。它就像 map 一样工作，此外也使它变得扁平。如果你想了解有关 map 的更多信息，请查看关于<a href="https://link.juejin.im/?target=https%3A%2F%2Fhackernoon.com%2Fmap-filter-reduce-ebbed4be4201">this</a>的文章。</p>
-<p>flatMap()<code></code> 可用于展平深度为1的数组，它在内部调用 map 函数，后跟着参数深度为1的 flat 函数.</p>
-<pre><code class="js">var array = arr.flatMap((callback(currentValue)));
-</code></pre>
+<h2 id="flatMap"><a href="#flatMap" class="headerlink" title="flatMap()"></a>flatMap()</h2><p><code>flatMap()</code> 用于展平嵌套数组并根据给出的像 <code>map()</code> 这样的函数更改值。此函数作用于数组并用一个回调函数作为参数。回调函数用于指示数组应该怎样被展平。它就像 map 一样工作，此外也使它变得扁平。如果你想了解有关 map 的更多信息，请查看关于<a href="https://link.juejin.im/?target=https://hackernoon.com/map-filter-reduce-ebbed4be4201">this</a>的文章。</p>
+<p>flatMap()`` 可用于展平深度为1的数组，它在内部调用 map 函数，后跟着参数深度为1的 flat 函数.</p>
+<pre><code class="js">var array = arr.flatMap((callback(currentValue)));</code></pre>
 <p>返回值</p>
 <p>带有操纵值的扁平数组，由提供给它的回调函数提供。就像一个map一样。</p>
 <p><strong>map() + flat() =&gt; flatmap()</strong></p>
 <pre><code class="js">var arr = [1,2,3,4];
 console.log(arr.map(x=&gt;[x*2])); // [2],[4],[6],[8]
-console.log(arr.flatMap(x=&gt;[x*2])); //[2,4,6,8]
-</code></pre>
+console.log(arr.flatMap(x=&gt;[x*2])); //[2,4,6,8]</code></pre>
 <p>在此例中，我们逐个显示 map 和 flatMap 以显示两个函数之间的差异。 map() 返回嵌套数组，<br>而flatMap() 的输出除了数组的展平外，还与 map 的结构相同。</p>
-<h2 id="Object-fromEntries"><a href="#Object-fromEntries" class="headerlink" title="Object.fromEntries()"></a>Object.fromEntries()</h2><p>另一个非常有用的函数 <code>Object.fromEntries</code> 用于根据提供的键值对生成对象。它接受一个键值对列表，并返回一个对象，对象的属性由参数 <code>entries</code>66n 给出。它的作用与 <strong>Object.entries()</strong>相反</p>
+<h2 id="Object-fromEntries"><a href="#Object-fromEntries" class="headerlink" title="Object.fromEntries()"></a>Object.fromEntries()</h2><p>另一个非常有用的函数 <code>Object.fromEntries</code> 用于根据提供的键值对生成对象。它接受一个键值对列表，并返回一个对象，对象的属性由参数 <code>entries</code>66n 给出。它的作用与 **Object.entries()**相反</p>
 <p>参数<br>接受任何可迭代的对象，即数组。</p>
 <a id="more"></a>
 <p>返回值<br>返回有给定键值对的对象。</p>
@@ -170,38 +167,33 @@ console.log(arr.flatMap(x=&gt;[x*2])); //[2,4,6,8]
 ]);
 
 const obj = Object.formEntries(entries);
-console.log(obj);// {apple:&quot;orange&quot;,grapes:&quot;peach&quot;}
-</code></pre>
+console.log(obj);// &#123;apple:&quot;orange&quot;,grapes:&quot;peach&quot;&#125;</code></pre>
 <p>我们可以看到，当向 <code>fromEntries()</code> 函数提供了一个map（将值成对存储）时，会得到一个对象，其对应的键值对和 map 中一样。</p>
 <h2 id="trimStart"><a href="#trimStart" class="headerlink" title="trimStart()"></a>trimStart()</h2><p><code>trimStart()</code> 方法删除字符串开头的空格。 <code>trimLeft()</code> 是此方法的别名。</p>
 <pre><code class="js">var message = &#39;  Hello World&#39;;
 console.log(message);// &#39;  Hello World&#39;
-console.log(message.trimStart());//&#39;Hello World&#39;
-</code></pre>
+console.log(message.trimStart());//&#39;Hello World&#39;</code></pre>
 <h2 id="trimEnd"><a href="#trimEnd" class="headerlink" title="trimEnd()"></a>trimEnd()</h2><p>trimEnd() 方法删除字符串末尾的空格。 trimRight() 是此方法的别名。</p>
 <pre><code class="js">var message = &#39;Hello World  &#39;;
 console.log(message);// &#39;  Hello World&#39;
-console.log(message.trimEnd());//&#39;Hello World&#39;
-</code></pre>
+console.log(message.trimEnd());//&#39;Hello World&#39;</code></pre>
 <h2 id="修改-catch-绑定"><a href="#修改-catch-绑定" class="headerlink" title="修改 catch 绑定"></a>修改 catch 绑定</h2><p>在 ES10 之前，我们必须<strong>通过语法为 catch 子句绑定异常变量，无论是否有必要</strong>。很多时候 catch 块是多余的。 ES10 提案使我们能够简单的把变量省略掉。</p>
 <p>示例</p>
-<pre><code class="js">function isValid(ison){
-    try{
+<pre><code class="js">function isValid(ison)&#123;
+    try&#123;
         JSON.parse(json);
         return true;
-    }catch {
+    &#125;catch &#123;
         return false;
-    }
-}
-</code></pre>
+    &#125;
+&#125;</code></pre>
 <p>在上面的例子中，可以看到没有为 catch 提供变量。</p>
 <h2 id="符号描述"><a href="#符号描述" class="headerlink" title="符号描述"></a>符号描述</h2><p>当我们在 JS 中创建一个 <code>Symbol</code> 时，可以指定一个在以后用于调试的描述。得到这个描述的过程有点无聊，必须再次重新构造 Symbol，并在 <code>toString()</code> 方法的帮助下才能访问描述。</p>
 <p>ES10添加了一个新的名为 <code>description</code> 的只读属性，它返回 Symbol 的描述。</p>
 <p>示例</p>
 <pre><code class="js">const symbol = Symbol(&quot;this is a symbol&quot;);
 console.log(symbol.toString()); // Symbol(My Symbol);
-console.log(symbol.destription); // My Symbol
-</code></pre>
+console.log(symbol.destription); // My Symbol</code></pre>
 <p>可以看到使用 Symbol 的.description 属性能够直接获取描述。</p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
@@ -227,7 +219,7 @@ console.log(symbol.destription); // My Symbol
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -261,7 +253,7 @@ console.log(symbol.destription); // My Symbol
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#flat"><span class="toc-number">1.1.</span> <span class="toc-text">flat()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#flatMap"><span class="toc-number">1.2.</span> <span class="toc-text">flatMap()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Object-fromEntries"><span class="toc-number">1.3.</span> <span class="toc-text">Object.fromEntries()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#trimStart"><span class="toc-number">1.4.</span> <span class="toc-text">trimStart()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#trimEnd"><span class="toc-number">1.5.</span> <span class="toc-text">trimEnd()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修改-catch-绑定"><span class="toc-number">1.6.</span> <span class="toc-text">修改 catch 绑定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#符号描述"><span class="toc-number">1.7.</span> <span class="toc-text">符号描述</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#flat"><span class="toc-number">1.1.</span> <span class="toc-text">flat()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#flatMap"><span class="toc-number">1.2.</span> <span class="toc-text">flatMap()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Object-fromEntries"><span class="toc-number">1.3.</span> <span class="toc-text">Object.fromEntries()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#trimStart"><span class="toc-number">1.4.</span> <span class="toc-text">trimStart()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#trimEnd"><span class="toc-number">1.5.</span> <span class="toc-text">trimEnd()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9-catch-%E7%BB%91%E5%AE%9A"><span class="toc-number">1.6.</span> <span class="toc-text">修改 catch 绑定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%A6%E5%8F%B7%E6%8F%8F%E8%BF%B0"><span class="toc-number">1.7.</span> <span class="toc-text">符号描述</span></a></li></ol></li></ol>
                 </div>
             </div>
             

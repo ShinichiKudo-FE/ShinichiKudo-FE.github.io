@@ -43,7 +43,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -106,13 +106,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    37k
+                    39k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    34 mins.
+                    35 mins.
                 </span>
                 
                 
@@ -146,7 +146,7 @@
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <p><a href="https://juejin.im/post/5e0202fc6fb9a0165721e39a" target="_blank" rel="noopener">原文地址</a></p>
+            <p><a target="_blank" rel="noopener" href="https://juejin.im/post/5e0202fc6fb9a0165721e39a">原文地址</a></p>
 <h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><p><img src="https://user-gold-cdn.xitu.io/2019/12/30/16f5676f7940d72a?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="概览"></p>
 <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><blockquote>
 <p>我将从 16 个方面来论述 vue 开发过程中的一些技巧和原理。当然由于篇幅有限，先论述前 8 个问题，下节将完成全系列内容。</p>
@@ -182,42 +182,36 @@
 <li>commitizen</li>
 <li>conventional-changelog</li>
 <li>cz-conventional-changelog</li>
-<li>conventional-changelog-cli<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><h5 id="安装系列插件依赖"><a href="#安装系列插件依赖" class="headerlink" title="安装系列插件依赖"></a>安装系列插件依赖</h5><pre><code class="sh">yarn add -D commitizen conventional-changelog cz-conventional-changelog
-</code></pre>
+<li>conventional-changelog-cli<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><h5 id="安装系列插件依赖"><a href="#安装系列插件依赖" class="headerlink" title="安装系列插件依赖"></a>安装系列插件依赖</h5><pre><code class="sh">yarn add -D commitizen conventional-changelog cz-conventional-changelog</code></pre>
 <blockquote>
 <p>安装依赖时，要注意是否是生产环境需要的。显然 <code>commitizen</code> 只在开发环境中使用。<code>-D</code> 只在 <code>dev</code> 环境使用</p>
 </blockquote>
-<h5 id="配置依赖路径"><a href="#配置依赖路径" class="headerlink" title="配置依赖路径"></a>配置依赖路径</h5>在 <code>package.json</code> 中添加配置<pre><code class="js">{
+<h5 id="配置依赖路径"><a href="#配置依赖路径" class="headerlink" title="配置依赖路径"></a>配置依赖路径</h5>在 <code>package.json</code> 中添加配置<pre><code class="js">&#123;
   //...
-  &quot;config&quot;: {
-      &quot;commitizen&quot;: {
+  &quot;config&quot;: &#123;
+      &quot;commitizen&quot;: &#123;
         &quot;path&quot;: &quot;./node_modules/cz-conventional-changelog&quot;
-      }
-  }
-}
-</code></pre>
+      &#125;
+  &#125;
+&#125;</code></pre>
 在命令行中输入<pre><code class="sh">git add -A
-git-cz
-</code></pre>
-出现了交互输入方式，规范你的 <code>commit</code> 输入格式<br><img src="https://user-gold-cdn.xitu.io/2019/12/30/16f554235055e8f3?w=2194&amp;h=620&amp;f=jpeg&amp;s=226477" alt="commit"></li>
+git-cz</code></pre>
+出现了交互输入方式，规范你的 <code>commit</code> 输入格式<br><img src="https://user-gold-cdn.xitu.io/2019/12/30/16f554235055e8f3?w=2194&h=620&f=jpeg&s=226477" alt="commit"></li>
 </ul>
-<h5 id="生成-CHANGELOG"><a href="#生成-CHANGELOG" class="headerlink" title="生成 CHANGELOG"></a>生成 CHANGELOG</h5><pre><code class="sh">npm i -g conventional-changelog-cli
-</code></pre>
+<h5 id="生成-CHANGELOG"><a href="#生成-CHANGELOG" class="headerlink" title="生成 CHANGELOG"></a>生成 CHANGELOG</h5><pre><code class="sh">npm i -g conventional-changelog-cli</code></pre>
 <p>增加一个npm 命令，快速生成日志</p>
-<pre><code class="js">&quot;genlog&quot;: &quot;conventional-changelog -p angular -i .github/CHANGELOG.md -s&quot;
-</code></pre>
+<pre><code class="js">&quot;genlog&quot;: &quot;conventional-changelog -p angular -i .github/CHANGELOG.md -s&quot;</code></pre>
 <p>使用<code>yarn</code>命令生成日志</p>
-<pre><code class="sh">yarn genlog
-</code></pre>
+<pre><code class="sh">yarn genlog</code></pre>
 <p>自动生成的log</p>
 <h5 id="Features"><a href="#Features" class="headerlink" title="Features"></a>Features</h5><ul>
-<li><strong>git:</strong> 增加commitizen工具规范提交 (<a href="https://github.com/suoyuesmile/suo-design-pro/commit/58e39370aa838fd99312f73b37d092ffadc85990" target="_blank" rel="noopener">58e3937</a>)</li>
+<li><strong>git:</strong> 增加commitizen工具规范提交 (<a target="_blank" rel="noopener" href="https://github.com/suoyuesmile/suo-design-pro/commit/58e39370aa838fd99312f73b37d092ffadc85990">58e3937</a>)</li>
 </ul>
 <h3 id="如何管理代码风格"><a href="#如何管理代码风格" class="headerlink" title="如何管理代码风格"></a>如何管理代码风格</h3><blockquote>
 <p>较统一的代码风格利于阅读，也利于协作。</p>
 </blockquote>
 <h4 id="原理与解决方案"><a href="#原理与解决方案" class="headerlink" title="原理与解决方案"></a>原理与解决方案</h4><p>使用 eslint 约束基本风格和语法，使用 prettier 自动格式化你的代码。</p>
-<h4 id="实践-1"><a href="#实践-1" class="headerlink" title="实践"></a>实践</h4><h5 id="安装-eslint-依赖"><a href="#安装-eslint-依赖" class="headerlink" title="安装 eslint 依赖"></a>安装 eslint 依赖</h5><pre><code class="json">{
+<h4 id="实践-1"><a href="#实践-1" class="headerlink" title="实践"></a>实践</h4><h5 id="安装-eslint-依赖"><a href="#安装-eslint-依赖" class="headerlink" title="安装 eslint 依赖"></a>安装 eslint 依赖</h5><pre><code class="json">&#123;
     &quot;eslint&quot;: &quot;^5.16.0&quot;,
     &quot;eslint-config-standard&quot;: &quot;^6.2.1&quot;,
     &quot;eslint-friendly-formatter&quot;: &quot;^2.0.7&quot;,
@@ -226,37 +220,35 @@ git-cz
     &quot;eslint-plugin-promise&quot;: &quot;^3.5.0&quot;,
     &quot;eslint-plugin-standard&quot;: &quot;^2.3.1&quot;,
     &quot;eslint-plugin-vue&quot;: &quot;^5.0.0&quot;
-}
-</code></pre>
-<p>使用两个插件，一个 <code>plugin:vue/essential</code>，一个是 <code>standard</code>。<br><code>vue/essential</code> 为了在 vue 里面也可以生效。另一个是 <code>standard</code>。<br><a href="https://github.com/standard/standard/blob/master/docs/RULES-zhcn.md#javascript-standard-style" target="_blank" rel="noopener">standard 标准文档</a></p>
+&#125;</code></pre>
+<p>使用两个插件，一个 <code>plugin:vue/essential</code>，一个是 <code>standard</code>。<br><code>vue/essential</code> 为了在 vue 里面也可以生效。另一个是 <code>standard</code>。<br><a target="_blank" rel="noopener" href="https://github.com/standard/standard/blob/master/docs/RULES-zhcn.md#javascript-standard-style">standard 标准文档</a></p>
 <blockquote>
 <p>使用 recommend 也可以，采用推荐 lint，更加轻量化</p>
 </blockquote>
-<pre><code class="js">module.exports = {
+<pre><code class="js">module.exports = &#123;
   root: true,
-  env: {
+  env: &#123;
     node: true
-  },
+  &#125;,
   extends: [&#39;plugin:vue/essential&#39;, &#39;standard&#39;],
-  rules: {
+  rules: &#123;
     quotes: [&#39;error&#39;, &#39;single&#39;],
-    indent: [&#39;error&#39;, 2, { MemberExpression: &#39;off&#39; }],
+    indent: [&#39;error&#39;, 2, &#123; MemberExpression: &#39;off&#39; &#125;],
     &#39;arrow-parens&#39;: 0,
     &#39;no-loop-func&#39;: 2,
     &#39;space-before-function-paren&#39;: [&#39;error&#39;, &#39;never&#39;],
-    indent: [&#39;error&#39;, 2, { SwitchCase: 1 }]
-  },
-  parserOptions: {
+    indent: [&#39;error&#39;, 2, &#123; SwitchCase: 1 &#125;]
+  &#125;,
+  parserOptions: &#123;
     parser: require.resolve(&#39;babel-eslint&#39;),
     ecmaVersion: 2018,
     sourceType: &#39;module&#39;
-  }
-}
-</code></pre>
+  &#125;
+&#125;</code></pre>
 <h5 id="可以自定义-rules-的规则"><a href="#可以自定义-rules-的规则" class="headerlink" title="可以自定义 rules 的规则"></a>可以自定义 rules 的规则</h5><blockquote>
-<p>rules 的规则 { 规则名：[是否关闭/规则等级，配置的值，只对部分配置] }<br><code>indent: [&#39;error&#39;, 2, { SwitchCase: 1 }]</code> 兼容 prettier，prettier 会将代码格式化成 eslint 报错的情况。<br>规则等级：0 关闭 1 警告 2 报错</p>
+<p>rules 的规则 { 规则名：[是否关闭/规则等级，配置的值，只对部分配置] }<br><code>indent: [&#39;error&#39;, 2, &#123; SwitchCase: 1 &#125;]</code> 兼容 prettier，prettier 会将代码格式化成 eslint 报错的情况。<br>规则等级：0 关闭 1 警告 2 报错</p>
 </blockquote>
-<h5 id="使用-prettier"><a href="#使用-prettier" class="headerlink" title="使用 prettier"></a>使用 prettier</h5><h6 id="配置-prettier-文件"><a href="#配置-prettier-文件" class="headerlink" title="配置 prettier 文件"></a>配置 prettier 文件</h6><pre><code class="js">{
+<h5 id="使用-prettier"><a href="#使用-prettier" class="headerlink" title="使用 prettier"></a>使用 prettier</h5><h6 id="配置-prettier-文件"><a href="#配置-prettier-文件" class="headerlink" title="配置 prettier 文件"></a>配置 prettier 文件</h6><pre><code class="js">&#123;
   &quot;printWidth&quot;: 150,
   &quot;singleQuote&quot;: true,
   &quot;trailingComma&quot;: &quot;none&quot;,
@@ -268,52 +260,50 @@ git-cz
   &quot;arrowParens&quot;: &quot;always&quot;,
   &quot;proseWrap&quot;: &quot;preserve&quot;,
   &quot;overrides&quot;: [
-    {
+    &#123;
         &quot;files&quot;: [&quot;*.json&quot;, &quot;.eslintrc&quot;, &quot;.tslintrc&quot;, &quot;.prettierrc&quot;, &quot;.tern-project&quot;],
-        &quot;options&quot;: {
+        &quot;options&quot;: &#123;
             &quot;parser&quot;: &quot;json&quot;,
             &quot;tabWidth&quot;: 2
-        }
-    },
-    {
-        &quot;files&quot;: &quot;*.{css,sass,scss,less}&quot;,
-        &quot;options&quot;: {
+        &#125;
+    &#125;,
+    &#123;
+        &quot;files&quot;: &quot;*.&#123;css,sass,scss,less&#125;&quot;,
+        &quot;options&quot;: &#123;
             &quot;parser&quot;: &quot;css&quot;,
             &quot;tabWidth&quot;: 2
-        }
-    },
-    {
+        &#125;
+    &#125;,
+    &#123;
         &quot;files&quot;: &quot;*.ts&quot;,
-        &quot;options&quot;: {
+        &quot;options&quot;: &#123;
             &quot;parser&quot;: &quot;typescript&quot;
-        }
-    },
-    {
+        &#125;
+    &#125;,
+    &#123;
         &quot;files&quot;: &quot;*.vue&quot;,
-        &quot;options&quot;: {
+        &quot;options&quot;: &#123;
             &quot;parser&quot;: &quot;vue&quot;
-        }
-    },
-    {
+        &#125;
+    &#125;,
+    &#123;
         &quot;files&quot;: &quot;*.md&quot;,
-        &quot;options&quot;: {
+        &quot;options&quot;: &#123;
             &quot;parser&quot;: &quot;markdown&quot;
-        }
-    }
+        &#125;
+    &#125;
   ]
-}
-</code></pre>
-<h5 id="开启-vscode-自动格式化"><a href="#开启-vscode-自动格式化" class="headerlink" title="开启 vscode 自动格式化"></a>开启 vscode 自动格式化</h5><pre><code class="json">{
+&#125;</code></pre>
+<h5 id="开启-vscode-自动格式化"><a href="#开启-vscode-自动格式化" class="headerlink" title="开启 vscode 自动格式化"></a>开启 vscode 自动格式化</h5><pre><code class="json">&#123;
   // prettier
   &quot;prettier.singleQuote&quot;: true,
   &quot;prettier.semi&quot;: false,
   &quot;prettier.tabWidth&quot;: 2,
-  &quot;[javascript]&quot;: {
+  &quot;[javascript]&quot;: &#123;
     &quot;editor.formatOnSave&quot;: true,
     &quot;editor.defaultFormatter&quot;: &quot;esbenp.prettier-vscode&quot;
-  }
-}
-</code></pre>
+  &#125;
+&#125;</code></pre>
 <h3 id="如何提升编码效率"><a href="#如何提升编码效率" class="headerlink" title="如何提升编码效率"></a>如何提升编码效率</h3><h4 id="原理与解决方案-1"><a href="#原理与解决方案-1" class="headerlink" title="原理与解决方案"></a>原理与解决方案</h4><p>我主要从 3 个方面来做一些编码效率上的改进</p>
 <ul>
 <li>升级你的 vue-cli 减少 webpack 配置的成本</li>
@@ -327,7 +317,7 @@ git-cz
 <p><strong>初始化 vue 配置</strong></p>
 <pre><code class="js">const autoprefixer = require(&#39;autoprefixer&#39;)
 
-module.exports = {
+module.exports = &#123;
   publicPath: process.env === &#39;production&#39; ? &#39;&#39; : &#39;/&#39;,
   outputDir: &#39;dist&#39;,
   assetsDir: &#39;static&#39;,
@@ -336,14 +326,12 @@ module.exports = {
   runtimeCompiler: false,
   transpileDependencies: [/\/node_modules\/vue-echarts\//, /\/node_modules\/resize-detector\//],
   productionSourceMap: false
-}
-</code></pre>
+&#125;</code></pre>
 <p>简单的配置完成后，我们引入一个 <code>sass</code> 工具用于编写 <code>sass</code>文件</p>
 <blockquote>
-<p>用法见 sass <a href="https://www.sass.hk/docs/" target="_blank" rel="noopener">参考资料</a>！</p>
+<p>用法见 sass <a target="_blank" rel="noopener" href="https://www.sass.hk/docs/">参考资料</a>！</p>
 </blockquote>
-<h5 id="使用-Sass"><a href="#使用-Sass" class="headerlink" title="使用 Sass"></a>使用 Sass</h5><h6 id="安装与使用"><a href="#安装与使用" class="headerlink" title="安装与使用"></a>安装与使用</h6><pre><code class="sh">yarn add -D sass sass-loader
-</code></pre>
+<h5 id="使用-Sass"><a href="#使用-Sass" class="headerlink" title="使用 Sass"></a>使用 Sass</h5><h6 id="安装与使用"><a href="#安装与使用" class="headerlink" title="安装与使用"></a>安装与使用</h6><pre><code class="sh">yarn add -D sass sass-loader</code></pre>
 <h6 id="如何处理样式"><a href="#如何处理样式" class="headerlink" title="如何处理样式"></a>如何处理样式</h6><p>在 <code>assets</code> 目录中建立一个 styles 文件专门来存放样式文件，新增入口<code>index.scss</code>文件，便于 JavaScript 引入，增加 utils.scss、reset.scss、varibles 文件。</p>
 <blockquote>
 <p>这些样式工具都是为了提升我们 <code>scss</code> 开发效率，具有畅快的开发体验！</p>
@@ -367,23 +355,21 @@ $color-white: #fff;
 // 背景色
 $bg-bar: #F9F9F9;
 $bg-page: #F3F3F3;
-$bg-page-light: #F9F9F9;
-</code></pre>
+$bg-page-light: #F9F9F9;</code></pre>
 <p>使用变量之后，sass 文件不会直接生效，至少在 vue 文件 里面是访问不到的。<br>需要在 <code>vue.config.js</code> 里面增加如下配置。</p>
-<pre><code class="js">module.exports = {
+<pre><code class="js">module.exports = &#123;
     // ...
-    css: {
+    css: &#123;
         sourceMap: true,
-        loaderOptions: {
-            sass: {
+        loaderOptions: &#123;
+            sass: &#123;
                 prependData: `
         @import &quot;@/assets/styles/variable.scss&quot;;
         `
-            }
-        }
-    }
-}
-</code></pre>
+            &#125;
+        &#125;
+    &#125;
+&#125;</code></pre>
 <h6 id="覆盖默认样式"><a href="#覆盖默认样式" class="headerlink" title="覆盖默认样式"></a>覆盖默认样式</h6><p>常规操作, 引入 reset.scss 将默认样式覆盖掉</p>
 <pre><code class="scss">/* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
@@ -402,166 +388,161 @@ table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, embed,
 figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
+time, mark, audio, video &#123;
     margin: 0;
     padding: 0;
     border: 0;
     font-size: 100%;
     font: inherit;
     vertical-align: baseline;
-}
+&#125;
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
+footer, header, hgroup, menu, nav, section &#123;
     display: block;
-}
-body {
+&#125;
+body &#123;
     line-height: 1;
-}
-ol, ul {
+&#125;
+ol, ul &#123;
     list-style: none;
-}
-blockquote, q {
+&#125;
+blockquote, q &#123;
     quotes: none;
-}
+&#125;
 blockquote:before, blockquote:after,
-q:before, q:after {
+q:before, q:after &#123;
     content: &#39;&#39;;
     content: none;
-}
-table {
+&#125;
+table &#123;
     border-collapse: collapse;
     border-spacing: 0;
-}
+&#125;
 
-html, body {
+html, body &#123;
   width: 100%;
   height: 100%;
   overflow: auto;
   margin: 0;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-}
-</code></pre>
+&#125;</code></pre>
 <h6 id="使用样式工具集"><a href="#使用样式工具集" class="headerlink" title="使用样式工具集"></a>使用样式工具集</h6><p>有时候我们发现，光是引入变量还不够，变量工具只能允许我们在 css 类文件中使用。假如我想着模版中直接使用样式，有没有更快的方案呢？<br>当然有的，我们可以自定义一个常用的样式工具集。设置一些背景颜色、字体颜色、盒子模型中的常规操作。</p>
 <blockquote>
 <p>要是有设计规范更好哦，我也是常常向设计师提出要求，一定要制定出一套产品的设计规范。</p>
 </blockquote>
 <pre><code class="scss">/* // utils 工具
 // 颜色 */
-.bg-red {background-color: $color-red!important;}
-.bg-purple {background-color: $color-purple!important;}
-.bg-orange {background-color: $color-orange!important;}
-.bg-blue {background-color: $color-blue!important;}
-.color-red {color: $color-red!important;}
-.color-purple {color: $color-purple!important;}
-.color-orange {color: $color-orange!important;}
-.color-blue {color: $color-blue!important;}
-.text-black {color: #000;}
-.text-dark {color: #333;}
-.text-deep {color: #555;}
-.text-weak {color: #B3B3B3;}
-.text-white {color: #fff;}
+.bg-red &#123;background-color: $color-red!important;&#125;
+.bg-purple &#123;background-color: $color-purple!important;&#125;
+.bg-orange &#123;background-color: $color-orange!important;&#125;
+.bg-blue &#123;background-color: $color-blue!important;&#125;
+.color-red &#123;color: $color-red!important;&#125;
+.color-purple &#123;color: $color-purple!important;&#125;
+.color-orange &#123;color: $color-orange!important;&#125;
+.color-blue &#123;color: $color-blue!important;&#125;
+.text-black &#123;color: #000;&#125;
+.text-dark &#123;color: #333;&#125;
+.text-deep &#123;color: #555;&#125;
+.text-weak &#123;color: #B3B3B3;&#125;
+.text-white &#123;color: #fff;&#125;
 /* // 字体 */
-.f10 {font-size: 10px;}
-.f12 {font-size: 12px;}
-.f14 {font-size: 14px;}
-.f15 {font-size: 15px;}
-.f17 {font-size: 17px;}
-.f20 {font-size: 20px;}
-.f24 {font-size: 24px;}
+.f10 &#123;font-size: 10px;&#125;
+.f12 &#123;font-size: 12px;&#125;
+.f14 &#123;font-size: 14px;&#125;
+.f15 &#123;font-size: 15px;&#125;
+.f17 &#123;font-size: 17px;&#125;
+.f20 &#123;font-size: 20px;&#125;
+.f24 &#123;font-size: 24px;&#125;
 /* // 文字对齐 */
-.tl {text-align: left;}
-.tc {text-align: center;}
-.tr {text-align: right;}
+.tl &#123;text-align: left;&#125;
+.tc &#123;text-align: center;&#125;
+.tr &#123;text-align: right;&#125;
 /* // 浮动与清除浮动 */
-.fl {float: left;}
-.fr {float: right;}
-.fix {*zoom: 1;}
-.fix:after{display:table; content:&#39;&#39;; clear:both;}
+.fl &#123;float: left;&#125;
+.fr &#123;float: right;&#125;
+.fix &#123;*zoom: 1;&#125;
+.fix:after&#123;display:table; content:&#39;&#39;; clear:both;&#125;
 /* // 显示 */
-.dn{display:none;}
-.di{display:inline;}
-.db{display:block;}
-.dib{display:inline-block;}
-.dt{display:table;}
-div.dib{*display:inline; *zoom:1;}
-.vm {vertical-align: middle;}
-.vib {display:inline-block; vertical-align: middle;}
+.dn&#123;display:none;&#125;
+.di&#123;display:inline;&#125;
+.db&#123;display:block;&#125;
+.dib&#123;display:inline-block;&#125;
+.dt&#123;display:table;&#125;
+div.dib&#123;*display:inline; *zoom:1;&#125;
+.vm &#123;vertical-align: middle;&#125;
+.vib &#123;display:inline-block; vertical-align: middle;&#125;
 /* // 定位 */
-.pr {position: relative;}
-.pa {position: absolute;}
-.pf {position: fixed;}
+.pr &#123;position: relative;&#125;
+.pa &#123;position: absolute;&#125;
+.pf &#123;position: fixed;&#125;
 /* // 盒子模型 */
-.ml4 {margin-left: 4px;}
-.mr4 {margin-right: 4px;}
-.mt4 {margin-top: 4px;}
-.mb4 {margin-bottom: 4px;}
-.ml8 {margin-left: 8px;}
-.mr8 {margin-right: 8px;}
-.mt8 {margin-top: 8px;}
-.mb8 {margin-bottom: 8px;}
-.ml12 {margin-left: 12px;}
-.mr12 {margin-right: 12px;}
-.mt12 {margin-top: 12px;}
-.mb12 {margin-bottom: 12px;}
-.ml16 {margin-left: 16px;}
-.mr16 {margin-right: 16px;}
-.mt16 {margin-top: 16px;}
-.mb16 {margin-bottom: 16px;}
-.ml20 {margin-left: 20px;}
-.mr20 {margin-right: 20px;}
-.mt20 {margin-top: 20px;}
-.mb20 {margin-bottom: 20px;}
-.ml24 {margin-left: 24px;}
-.mr24 {margin-right: 24px;}
-.mt24 {margin-top: 24px;}
-.mb24 {margin-bottom: 24px;}
-.ml10 {margin-left: 10px;}
-.mr10 {margin-right: 10px;}
-.mt10 {margin-top: 10px;}
-.mb10 {margin-bottom: 10px;}
-.ml15 {margin-left: 15px;}
-.mr15 {margin-right: 15px;}
-.mt15 {margin-top: 15px;}
-.mb15 {margin-bottom: 15px;}
+.ml4 &#123;margin-left: 4px;&#125;
+.mr4 &#123;margin-right: 4px;&#125;
+.mt4 &#123;margin-top: 4px;&#125;
+.mb4 &#123;margin-bottom: 4px;&#125;
+.ml8 &#123;margin-left: 8px;&#125;
+.mr8 &#123;margin-right: 8px;&#125;
+.mt8 &#123;margin-top: 8px;&#125;
+.mb8 &#123;margin-bottom: 8px;&#125;
+.ml12 &#123;margin-left: 12px;&#125;
+.mr12 &#123;margin-right: 12px;&#125;
+.mt12 &#123;margin-top: 12px;&#125;
+.mb12 &#123;margin-bottom: 12px;&#125;
+.ml16 &#123;margin-left: 16px;&#125;
+.mr16 &#123;margin-right: 16px;&#125;
+.mt16 &#123;margin-top: 16px;&#125;
+.mb16 &#123;margin-bottom: 16px;&#125;
+.ml20 &#123;margin-left: 20px;&#125;
+.mr20 &#123;margin-right: 20px;&#125;
+.mt20 &#123;margin-top: 20px;&#125;
+.mb20 &#123;margin-bottom: 20px;&#125;
+.ml24 &#123;margin-left: 24px;&#125;
+.mr24 &#123;margin-right: 24px;&#125;
+.mt24 &#123;margin-top: 24px;&#125;
+.mb24 &#123;margin-bottom: 24px;&#125;
+.ml10 &#123;margin-left: 10px;&#125;
+.mr10 &#123;margin-right: 10px;&#125;
+.mt10 &#123;margin-top: 10px;&#125;
+.mb10 &#123;margin-bottom: 10px;&#125;
+.ml15 &#123;margin-left: 15px;&#125;
+.mr15 &#123;margin-right: 15px;&#125;
+.mt15 &#123;margin-top: 15px;&#125;
+.mb15 &#123;margin-bottom: 15px;&#125;
 /* // 按钮禁用 */
-.disabled{outline:0 none; cursor:default!important; opacity:.4; filter:alpha(opacity=40); -ms-pointer-events:none; pointer-events:none;}
-</code></pre>
+.disabled&#123;outline:0 none; cursor:default!important; opacity:.4; filter:alpha(opacity=40); -ms-pointer-events:none; pointer-events:none;&#125;</code></pre>
 <h6 id="增加样式入口文件"><a href="#增加样式入口文件" class="headerlink" title="增加样式入口文件"></a>增加样式入口文件</h6><p>最后一步，新建一个入口文件，将样式工具类全部导入进来，供主程序引入。</p>
 <pre><code class="scss">// index.scss 文件
 import &#39;./reset.scss&#39;;
 import &#39;./varibles.scss&#39;;
-improt &#39;./utils/scss&#39;;
-</code></pre>
+improt &#39;./utils/scss&#39;;</code></pre>
 <p>在 <code>main.js</code> 中直接引入 <code>index.scss</code></p>
-<pre><code class="js">import &#39;@/assets/styles/index.scss&#39;
-</code></pre>
+<pre><code class="js">import &#39;@/assets/styles/index.scss&#39;</code></pre>
 <h3 id="vue-中写样式要注意哪些方面，有哪些技巧呢？"><a href="#vue-中写样式要注意哪些方面，有哪些技巧呢？" class="headerlink" title="vue 中写样式要注意哪些方面，有哪些技巧呢？"></a>vue 中写样式要注意哪些方面，有哪些技巧呢？</h3><h4 id="避免全局污染"><a href="#避免全局污染" class="headerlink" title="避免全局污染"></a>避免全局污染</h4><p>在页面中写 <code>css/scss</code> 加上 <code>scoped</code>，<code>scoped</code> 的功能就是使页面的样式是局部的，不让影响其他页面的样式。</p>
 <h4 id="bem-规范"><a href="#bem-规范" class="headerlink" title="bem 规范"></a>bem 规范</h4><p>我们大多数人时候会遇到问题，<strong>样式嵌套太多了怎么命名</strong></p>
 <blockquote>
 <p>BEM是块（block）、元素（element）、修饰符（modifier）的简写，由 Yandex 团队提出的一种前端 CSS 命名方法论。</p>
 </blockquote>
 <p>名字太长易读性太差</p>
-<pre><code class="scss">.cardbox {
-    .cardbox-card {
+<pre><code class="scss">.cardbox &#123;
+    .cardbox-card &#123;
         .cardbox-card-wrapper
-            .cardbox-card-wrapper-header {
-                .cardbox-card-wrapper-header-title {
+            .cardbox-card-wrapper-header &#123;
+                .cardbox-card-wrapper-header-title &#123;
                     // ...
-                }
-            }
-            .cardbox-card-wrapper-body{
-                .cardbox-card-item {
-                    .cardbox-card-item-title {
+                &#125;
+            &#125;
+            .cardbox-card-wrapper-body&#123;
+                .cardbox-card-item &#123;
+                    .cardbox-card-item-title &#123;
                         // ...
-                    }  
-              }
-          }
-        }
-    }
-}
-</code></pre>
+                    &#125;  
+              &#125;
+          &#125;
+        &#125;
+    &#125;
+&#125;</code></pre>
 <h4 id="bem-使用方式"><a href="#bem-使用方式" class="headerlink" title="bem 使用方式"></a>bem 使用方式</h4><p><code>block-name__element-name--color</code></p>
 <ul>
 <li>区分块，子元素，修饰元素</li>
@@ -571,60 +552,57 @@ improt &#39;./utils/scss&#39;;
 <li>修饰（易变的）<code>card__item--warning</code> 使用 <code>--</code></li>
 </ul>
 <p>我们使用 bem 改造样式</p>
-<pre><code class="scss">.cardbox {
-    &amp;__header {
-        &amp;__title {
+<pre><code class="scss">.cardbox &#123;
+    &amp;__header &#123;
+        &amp;__title &#123;
             //...
-        }
-    }
-    &amp;__body {
-        &amp;__item {
-            &amp;__title {
+        &#125;
+    &#125;
+    &amp;__body &#123;
+        &amp;__item &#123;
+            &amp;__title &#123;
                 //...
-            }
-        }
-    }
-}
-</code></pre>
+            &#125;
+        &#125;
+    &#125;
+&#125;</code></pre>
 <blockquote>
 <p>bem 一般推荐子元素嵌套尽量在2-3层以内</p>
 </blockquote>
 <p>但是我们发现样式子元素嵌套有点多，使用了两重子元素嵌套。</p>
 <p>大致原理是<strong>尝试分离父子元素的关系，把卡片本身当作一个块看待。</strong></p>
 <p>下面来试着去减少嵌套：</p>
-<pre><code class="scss">.cardbox {
-    &amp;__header {
-        &amp;__title {
+<pre><code class="scss">.cardbox &#123;
+    &amp;__header &#123;
+        &amp;__title &#123;
             //...
-        }
-    }
-    &amp;__body {
-        .card {
-            &amp;__title {
+        &#125;
+    &#125;
+    &amp;__body &#123;
+        .card &#123;
+            &amp;__title &#123;
                 //...
-            }
-        }
-    }
-}
-</code></pre>
+            &#125;
+        &#125;
+    &#125;
+&#125;</code></pre>
 <p>现在编写样式效率提高也更加规范了，那么编写 HTML 也是有很多累赘的代码。</p>
 <p>比如大多数标签都是前开后闭的。通过 pug 我们可以省略很多字符的敲打，下面我们谈谈如何使用 pug 编写模版。</p>
 <blockquote>
 <p>当然喜欢哪种 HTML 编写风格见人见智啦，我自己更加倾向 pug，那种缩进和简洁的表达，有种在写 scss 的感觉。</p>
 </blockquote>
-<h3 id="如何使用-pug"><a href="#如何使用-pug" class="headerlink" title="如何使用 pug"></a>如何使用 pug</h3><h4 id="实践：类似-sass，首先安装-pug-和-pug-的-loader"><a href="#实践：类似-sass，首先安装-pug-和-pug-的-loader" class="headerlink" title="实践：类似 sass，首先安装 pug 和 pug 的 loader"></a>实践：类似 sass，首先安装 pug 和 pug 的 loader</h4><pre><code>yarn add -D pug pug-html-loader pug-plain-loader
-</code></pre><h4 id="完成配置"><a href="#完成配置" class="headerlink" title="完成配置"></a>完成配置</h4><pre><code class="js">module.exports = {
+<h3 id="如何使用-pug"><a href="#如何使用-pug" class="headerlink" title="如何使用 pug"></a>如何使用 pug</h3><h4 id="实践：类似-sass，首先安装-pug-和-pug-的-loader"><a href="#实践：类似-sass，首先安装-pug-和-pug-的-loader" class="headerlink" title="实践：类似 sass，首先安装 pug 和 pug 的 loader"></a>实践：类似 sass，首先安装 pug 和 pug 的 loader</h4><pre><code>yarn add -D pug pug-html-loader pug-plain-loader</code></pre>
+<h4 id="完成配置"><a href="#完成配置" class="headerlink" title="完成配置"></a>完成配置</h4><pre><code class="js">module.exports = &#123;
   // ...
-  chainWebpack: (config) =&gt; {
+  chainWebpack: (config) =&gt; &#123;
     config.module
       .rule(&#39;pug&#39;)
       .test(/\.pug$/)
       .use(&#39;pug-html-loader&#39;)
       .loader(&#39;pug-html-loader&#39;)
       .end()
-  }
-}
-</code></pre>
+  &#125;
+&#125;</code></pre>
 <h4 id="编写-pug-代码"><a href="#编写-pug-代码" class="headerlink" title="编写 pug 代码"></a>编写 pug 代码</h4><p>使用 scss 工具与 pug 完美搭配，少写很多代码</p>
 <pre><code class="html">// 登陆
 &lt;template lang=&quot;pug&quot;&gt;
@@ -640,8 +618,7 @@ improt &#39;./utils/scss&#39;;
         :disabled=&quot;phone.length !== 11&quot;
         @click=&quot;handleSubmit&quot;
       ) 下一步
-&lt;/template&gt;
-</code></pre>
+&lt;/template&gt;</code></pre>
 <p>我们已经引入了样式，接下来我将谈谈其他资源的引入</p>
 <h3 id="如何管理你的资源"><a href="#如何管理你的资源" class="headerlink" title="如何管理你的资源"></a>如何管理你的资源</h3><h4 id="原理与解决方案-2"><a href="#原理与解决方案-2" class="headerlink" title="原理与解决方案"></a>原理与解决方案</h4><p>我暂时把资源分为下面几种</p>
 <ul>
@@ -652,18 +629,17 @@ improt &#39;./utils/scss&#39;;
 </ul>
 <p>增加 <code>vue.config.js</code> 配置 ,设置<code>assets</code>别名</p>
 <pre><code class="js">const path = require(&#39;path&#39;)
-function resolve(dir) {
+function resolve(dir) &#123;
   return path.join(__dirname, dir)
-}
-module.exports = {
+&#125;
+module.exports = &#123;
   //...
-  chainWebpack: (config) =&gt; {
+  chainWebpack: (config) =&gt; &#123;
     config.resolve.alias.set(&#39;@&#39;, resolve(&#39;src&#39;)).set(&#39;@assets&#39;, resolve(&#39;src/assets&#39;))
-  }
-}
-</code></pre>
+  &#125;
+&#125;</code></pre>
 <h5 id="ICON"><a href="#ICON" class="headerlink" title="ICON"></a>ICON</h5><h6 id="引入-iconfont"><a href="#引入-iconfont" class="headerlink" title="引入 iconfont"></a>引入 iconfont</h6><ul>
-<li>(1) <a href="https://www.iconfont.cn/manage/index" target="_blank" rel="noopener">iconfont</a> 阿里图标项目中下载，将整个项目图标包一起下载下来</li>
+<li>(1) <a target="_blank" rel="noopener" href="https://www.iconfont.cn/manage/index">iconfont</a> 阿里图标项目中下载，将整个项目图标包一起下载下来</li>
 </ul>
 <p><img src="https://user-gold-cdn.xitu.io/2019/12/27/16f462a5119bdcdf?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="ICON"></p>
 <ul>
@@ -684,60 +660,57 @@ module.exports = {
 &lt;/template&gt;
 
 &lt;script&gt;
-export default {
-  props: {
+export default &#123;
+  props: &#123;
     name: String
-  }
-}
+  &#125;
+&#125;
 &lt;/script&gt;
 
 &lt;style lang=&quot;scss&quot; scoped&gt;
-.iconfont {
+.iconfont &#123;
   font-size: 16px;
   color: $color-icon;
-}
-&lt;/style&gt;
-</code></pre>
+&#125;
+&lt;/style&gt;</code></pre>
 <h6 id="引入图片作为-ICON"><a href="#引入图片作为-ICON" class="headerlink" title="引入图片作为 ICON"></a>引入图片作为 ICON</h6><p>让图片组件化，我们再来写一个 img 组件</p>
 <pre><code class="html">&lt;template lang=&quot;pug&quot;&gt;
   img(
-    :src=&quot;require(`@/assets/images/${name}.png`)&quot;
+    :src=&quot;require(`@/assets/images/$&#123;name&#125;.png`)&quot;
     v-bind=&quot;$attrs&quot;
     v-on=&quot;$listeners&quot;
-    :style=&quot;{&#39;width&#39;: width ? width + &#39;px&#39; : size + &#39;px&#39;, &#39;height&#39;: height ? height + &#39;px&#39; : size + &#39;px&#39; }&quot;)
+    :style=&quot;&#123;&#39;width&#39;: width ? width + &#39;px&#39; : size + &#39;px&#39;, &#39;height&#39;: height ? height + &#39;px&#39; : size + &#39;px&#39; &#125;&quot;)
 &lt;/template&gt;
 &lt;script&gt;
-export default {
+export default &#123;
   name: &#39;app-img&#39;,
-  props: {
-    name: {
+  props: &#123;
+    name: &#123;
       type: String,
       default: &#39;&#39;
-    },
-    size: {
+    &#125;,
+    size: &#123;
       type: Number,
       default: 16
-    },
-    width: {
+    &#125;,
+    width: &#123;
       type: Number,
       default: 0
-    },
-    height: {
+    &#125;,
+    height: &#123;
       type: Number,
       default: 0
-    }
-  }
-}
-&lt;/script&gt;
-</code></pre>
+    &#125;
+  &#125;
+&#125;
+&lt;/script&gt;</code></pre>
 <h3 id="如何管理你的路由"><a href="#如何管理你的路由" class="headerlink" title="如何管理你的路由"></a>如何管理你的路由</h3><h4 id="原理与解决方案-3"><a href="#原理与解决方案-3" class="headerlink" title="原理与解决方案"></a>原理与解决方案</h4><p>使用 vue-router，使用<code>import()</code> 生成异步路由，只有在访问时候才会加载模块。</p>
 <p>为什么使用 <code>import()</code> 会异步加载模块？</p>
 <blockquote>
 <p>MDN：在您希望按照一定的条件或者按需加载模块的时候，动态import() 是非常有用的。而静态型的 import 是初始化加载依赖项的最优选择，使用静态 import 更容易从代码静态分析工具和 tree shaking 中受益。</p>
 </blockquote>
 <p>说白了就是起到一个<strong>按需加载</strong>的目的。现在大多数实现的按需加载，基本都是依赖 <code>import()</code> 这个方法。</p>
-<h5 id="安装-vue-router"><a href="#安装-vue-router" class="headerlink" title="安装 vue-router"></a>安装 vue-router</h5><pre><code class="sh">yarn add vue-router
-</code></pre>
+<h5 id="安装-vue-router"><a href="#安装-vue-router" class="headerlink" title="安装 vue-router"></a>安装 vue-router</h5><pre><code class="sh">yarn add vue-router</code></pre>
 <p>安装完 <code>router</code>，在编写 <code>router</code> 先创建页面</p>
 <h5 id="新建一个空页面"><a href="#新建一个空页面" class="headerlink" title="新建一个空页面"></a>新建一个空页面</h5><p>src 目录下新增 views 目录存放页面文件。创建 index 目录和 home 页面</p>
 <pre><code class="html">&lt;template lang=&quot;pug&quot;&gt;
@@ -745,22 +718,21 @@ export default {
 &lt;/template&gt;
 
 &lt;script&gt;
-export default {
+export default &#123;
 
-}
+&#125;
 &lt;/script&gt;
 &lt;style lang=&quot;scss&quot; scoped&gt;
-&lt;/style&gt;
-</code></pre>
+&lt;/style&gt;</code></pre>
 <h5 id="编写路由"><a href="#编写路由" class="headerlink" title="编写路由"></a>编写路由</h5><pre><code class="js">const routes = [
-    {
+    &#123;
         // 首页
         path: &#39;/&#39;,
         name: &#39;index&#39;,
         redirect: &#39;/home&#39;,
         component: App,
         children: [
-            {
+            &#123;
                 // 首页
                 path: &#39;home&#39;,
                 name: &#39;home&#39;,
@@ -769,29 +741,27 @@ export default {
                     import(
                         /* webpackChunkName: &quot;index&quot; */ &#39;../views/index/home.vue&#39;
                     )
-            }
+            &#125;
         ]
-    }
+    &#125;
 ]
 Vue.use(VueRouter)
 
-const router = new VueRouter({
+const router = new VueRouter(&#123;
     mode: &#39;history&#39;,
     routes: routes,
     base: process.env.BASE_URL,
     props: true
-})
+&#125;)
 
-export default router
-</code></pre>
+export default router</code></pre>
 <h5 id="为了消除-显得路径更加好看简洁，我们采用-history-模式，但是-history-模式有个问题就是，异步路由没有缓存在页面中，第一次进入页面会找不到"><a href="#为了消除-显得路径更加好看简洁，我们采用-history-模式，但是-history-模式有个问题就是，异步路由没有缓存在页面中，第一次进入页面会找不到" class="headerlink" title="为了消除 # 显得路径更加好看简洁，我们采用 history 模式，但是 history 模式有个问题就是，异步路由没有缓存在页面中，第一次进入页面会找不到"></a>为了消除 # 显得路径更加好看简洁，我们采用 history 模式，但是 history 模式有个问题就是，异步路由没有缓存在页面中，第一次进入页面会找不到</h5><p>在 vue.config.js 中增加配置，开发环境可以访问到，恢复正常</p>
-<pre><code class="js">module.exports = {
+<pre><code class="js">module.exports = &#123;
   // ...
-  devServer: {
+  devServer: &#123;
     historyApiFallback: true
-  }
-}
-</code></pre>
+  &#125;
+&#125;</code></pre>
 <blockquote>
 <p>关于路由还有很多可以研究到地方，可以自行研究哦！</p>
 </blockquote>
@@ -803,8 +773,7 @@ export default router
 <li>通过拦截事件来更改js的逻辑。</li>
 </ol>
 <p>下面我们先引入 <code>vant</code> 组件</p>
-<h4 id="实践-3"><a href="#实践-3" class="headerlink" title="实践"></a>实践</h4><h5 id="引入-vant"><a href="#引入-vant" class="headerlink" title="引入 vant"></a>引入 vant</h5><pre><code class="sh">yarn add vant
-</code></pre>
+<h4 id="实践-3"><a href="#实践-3" class="headerlink" title="实践"></a>实践</h4><h5 id="引入-vant"><a href="#引入-vant" class="headerlink" title="引入 vant"></a>引入 vant</h5><pre><code class="sh">yarn add vant</code></pre>
 <h4 id="对基础组件进行二次封装和改造"><a href="#对基础组件进行二次封装和改造" class="headerlink" title="对基础组件进行二次封装和改造"></a>对基础组件进行二次封装和改造</h4><p>下面 7 步来写好一个公共组件</p>
 <ul>
 <li>(1) 新建一个 <code>components</code> 目录来存放基础组件</li>
@@ -820,52 +789,52 @@ export default router
     van-button.btn(
       @click=&quot;$emit(&#39;click&#39;)&quot;
       :class=&quot;getClass&quot; v-bind=&quot;$attrs&quot;
-      :style=&quot;{&#39;width&#39;: size === &#39;large&#39; ? &#39;345px&#39;: &#39;&#39;, &#39;backgroundColor&#39;: getBgColor, borderColor: getBgColor, color: getBgColor}&quot;)
+      :style=&quot;&#123;&#39;width&#39;: size === &#39;large&#39; ? &#39;345px&#39;: &#39;&#39;, &#39;backgroundColor&#39;: getBgColor, borderColor: getBgColor, color: getBgColor&#125;&quot;)
       slot
 &lt;/template&gt;
 
 &lt;script&gt;
-import { Button } from &#39;vant&#39;
+import &#123; Button &#125; from &#39;vant&#39;
 import Vue from &#39;vue&#39;
-import { getColor } from &#39;@/utils&#39;
+import &#123; getColor &#125; from &#39;@/utils&#39;
 Vue.use(Button)
 
-export default {
+export default &#123;
   name: &#39;app-button&#39;,
-  props: {
-    type: {
+  props: &#123;
+    type: &#123;
       type: String,
       default: &#39;primary&#39;
-    },
-    theme: {
+    &#125;,
+    theme: &#123;
       type: String,
       default: &#39;blue&#39;
-    },
-    size: {
+    &#125;,
+    size: &#123;
       type: String,
       default: &#39;&#39;
-    }
-  },
-  computed: {
-    getClass() {
-      if (!this.type) {
+    &#125;
+  &#125;,
+  computed: &#123;
+    getClass() &#123;
+      if (!this.type) &#123;
         return &#39;&#39;
-      }
-      return `app-btn--${this.type}`
-    },
-    getBgColor() {
-      if (!this.theme) {
+      &#125;
+      return `app-btn--$&#123;this.type&#125;`
+    &#125;,
+    getBgColor() &#123;
+      if (!this.theme) &#123;
         return &#39;&#39;
-      }
+      &#125;
       return getColor(this.theme)
-    }
-  }
-}
+    &#125;
+  &#125;
+&#125;
 &lt;/script&gt;
 
 &lt;style lang=&quot;scss&quot; scoped&gt;
-.app-btn  {
-  ::v-deep &amp;--primary {
+.app-btn  &#123;
+  ::v-deep &amp;--primary &#123;
     padding: 8px 30px;
     height: 40px;
     border-radius: 4px;
@@ -873,8 +842,8 @@ export default {
     font-weight: 400;
     line-height: 19px;
     color: white!important;
-  }
-  ::v-deep &amp;--minor {
+  &#125;
+  ::v-deep &amp;--minor &#123;
     padding: 5px 10px;
     height: 26px;
     border-radius: 14px;
@@ -882,16 +851,15 @@ export default {
     font-weight: 400;
     line-height: 16px;
     background-color: #fff!important;
-  }
-  ::v-deep &amp;--rect {
+  &#125;
+  ::v-deep &amp;--rect &#123;
     padding: 5px px;
     height: 49px;
     font-size: 14px;
     color: white!important;
-  }
-}
-&lt;/style&gt;
-</code></pre>
+  &#125;
+&#125;
+&lt;/style&gt;</code></pre>
 <blockquote>
 <p>::v-deep  样式深覆盖，scoped 情况下覆盖组件样式，不改变其样式</p>
 </blockquote>
@@ -908,8 +876,7 @@ export default {
 <p>新建一个文件 <code>global</code> 存放全局组件注册，在 <code>main.js</code> 引入</p>
 <pre><code class="javascript">import Vue from &#39;vue&#39;
 import appButton from &#39;@/components/app-button&#39;
-Vue.component(&#39;app-button&#39;, appButton)
-</code></pre>
+Vue.component(&#39;app-button&#39;, appButton)</code></pre>
 <ul>
 <li>(7) 写好 <code>demo</code>，即使暂时不写单元测试，也要写好一个 <code>demo</code>，使之能正常的运行</li>
 </ul>
@@ -939,12 +906,11 @@ Vue.component(&#39;app-button&#39;, appButton)
     app-button(theme=&quot;grey&quot; type=&quot;rect&quot;) 修改地址
 &lt;/template&gt;
 &lt;script&gt;
-export default {
-}
+export default &#123;
+&#125;
 &lt;/script&gt;
 &lt;style lang=&quot;scss&quot;&gt;
-&lt;/style&gt;
-</code></pre>
+&lt;/style&gt;</code></pre>
 <h4 id="实现效果"><a href="#实现效果" class="headerlink" title="实现效果"></a>实现效果</h4><p><img src="https://user-gold-cdn.xitu.io/2019/12/30/16f55700de463c65?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="demo"></p>
 <h3 id="如何封装请求"><a href="#如何封装请求" class="headerlink" title="如何封装请求"></a>如何封装请求</h3><h4 id="原理与解决方案-5"><a href="#原理与解决方案-5" class="headerlink" title="原理与解决方案"></a>原理与解决方案</h4><p>基本上就是对 axios 的封装，封装主要有两个目的。</p>
 <ul>
@@ -954,23 +920,22 @@ export default {
 <p>网上已经有很多类似的文章了， 我这里给出我常用的封装方案。</p>
 <h4 id="实践-4"><a href="#实践-4" class="headerlink" title="实践"></a>实践</h4><h5 id="根据不同环境设置请求地址"><a href="#根据不同环境设置请求地址" class="headerlink" title="根据不同环境设置请求地址"></a>根据不同环境设置请求地址</h5><pre><code class="js">// .env-default.js 文件
 // 不同环境访问不同的路径
-const api = {
+const api = &#123;
   develop: &#39;http://xxxx:8080&#39;,
   mock: &#39;http://xxxx&#39;,
   feature: &#39;http://xxxx&#39;,
   test: &#39;http://xxxx&#39;,
   production: &#39;http://xxxx&#39;
-}
+&#125;
 
-export const baseURL = api[process.env.NODE_ENV || &#39;dev&#39;]
-</code></pre>
+export const baseURL = api[process.env.NODE_ENV || &#39;dev&#39;]</code></pre>
 <blockquote>
 <p>因为每个人开发环境，mock环境不一定相同，这个文件建议 gitignore忽略掉。模版可以写在 readme 文档中，启动项目时加入文件。</p>
 </blockquote>
 <h5 id="新建一个-utils-工具"><a href="#新建一个-utils-工具" class="headerlink" title="新建一个 utils 工具"></a>新建一个 <code>utils</code> 工具</h5><p>我们现在将 axios 封装成我们自己需要的配置，然后定义四个常用的请求方法供调用</p>
 <pre><code class="js">// utils/http.js 文件
 import axios from &#39;axios&#39;
-import { baseURL } from &#39;../../.env-defalut.js&#39;
+import &#123; baseURL &#125; from &#39;../../.env-defalut.js&#39;
 
 // axios 配置
 const defaultBaseUrl = &#39;http://localhost:8080/&#39;
@@ -981,118 +946,117 @@ axios.defaults.baseURL = baseURL || defaultBaseUrl
 
 // http request 拦截器
 axios.interceptors.request.use(
-  (config) =&gt; {
-    config.headers = {
-    }
+  (config) =&gt; &#123;
+    config.headers = &#123;
+    &#125;
     return config
-  },
-  (err) =&gt; {
+  &#125;,
+  (err) =&gt; &#123;
     return Promise.reject(err)
-  }
+  &#125;
 )
 
 // http response 拦截器
 axios.interceptors.response.use(
-  (response) =&gt; {
+  (response) =&gt; &#123;
     return response
-  },
-  (error) =&gt; {
+  &#125;,
+  (error) =&gt; &#123;
     const data = error.response.data
     return Promise.reject(data || error)
-  }
+  &#125;
 )
 
 export default axios
 
 /**
  * fetch 请求方法
- * @param {*} url
- * @param {*} params
+ * @param &#123;*&#125; url
+ * @param &#123;*&#125; params
  */
-export function fetch(url, params = {}) {
-  return new Promise((resolve, reject) =&gt; {
+export function fetch(url, params = &#123;&#125;) &#123;
+  return new Promise((resolve, reject) =&gt; &#123;
     axios
-      .get(url, {
+      .get(url, &#123;
         params: params
-      })
-      .then((response) =&gt; {
+      &#125;)
+      .then((response) =&gt; &#123;
         resolve(response.data)
-      })
-      .catch((err) =&gt; {
+      &#125;)
+      .catch((err) =&gt; &#123;
         reject(err)
-      })
-  })
-}
+      &#125;)
+  &#125;)
+&#125;
 
 /**
  * post 请求方法，发送数据格式 json
- * @param {*} url
- * @param {*} data
+ * @param &#123;*&#125; url
+ * @param &#123;*&#125; data
  */
 export function post(
   url,
-  data = {},
-  config = {
+  data = &#123;&#125;,
+  config = &#123;
     transformRequest: [
-      function(fData, headers) {
+      function(fData, headers) &#123;
         headers[&#39;Content-Type&#39;] = &#39;application/json&#39;
         return JSON.stringify(fData)
-      }
+      &#125;
     ]
-  }
-) {
-  return new Promise((resolve, reject) =&gt; {
+  &#125;
+) &#123;
+  return new Promise((resolve, reject) =&gt; &#123;
     axios.post(url, data, config).then(
-      (response) =&gt; {
+      (response) =&gt; &#123;
         resolve(response.data)
-      },
-      (err) =&gt; {
+      &#125;,
+      (err) =&gt; &#123;
         reject(err)
-      }
+      &#125;
     )
-  })
-}
+  &#125;)
+&#125;
 
 /**
  * patch 请求方法，发送数据格式 json
- * @param {*} url
- * @param {*} data
+ * @param &#123;*&#125; url
+ * @param &#123;*&#125; data
  */
-export function patch(url, data = {}) {
-  return new Promise((resolve, reject) =&gt; {
+export function patch(url, data = &#123;&#125;) &#123;
+  return new Promise((resolve, reject) =&gt; &#123;
     axios
-      .patch(url, data, {
+      .patch(url, data, &#123;
         transformRequest: [
-          function(fData, headers) {
+          function(fData, headers) &#123;
             headers[&#39;Content-Type&#39;] = &#39;application/json&#39;
             return JSON.stringify(fData)
-          }
+          &#125;
         ]
-      })
+      &#125;)
       .then(
-        (response) =&gt; {
+        (response) =&gt; &#123;
           resolve(response.data)
-        },
-        (err) =&gt; {
+        &#125;,
+        (err) =&gt; &#123;
           reject(err)
-        }
+        &#125;
       )
-  })
-}
+  &#125;)
+&#125;
 
-export function del(url, data) {
-  return new Promise((resolve, reject) =&gt; {
-    axios.delete(url, { data }).then(
-      (response) =&gt; {
+export function del(url, data) &#123;
+  return new Promise((resolve, reject) =&gt; &#123;
+    axios.delete(url, &#123; data &#125;).then(
+      (response) =&gt; &#123;
         resolve(response.data)
-      },
-      (err) =&gt; {
+      &#125;,
+      (err) =&gt; &#123;
         reject(err)
-      }
+      &#125;
     )
-  })
-}
-</code></pre>
+  &#125;)
+&#125;</code></pre>
 <h3 id="如何管理-api"><a href="#如何管理-api" class="headerlink" title="如何管理 api"></a>如何管理 api</h3><h4 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h4><p>首先要制定一个 api 的原则<br>我的原则一般是这些：</p>
 <ul>
 <li>干净纯粹</li>
@@ -1103,12 +1067,11 @@ export function del(url, data) {
 <blockquote>
 <p>例子：想象这样一种情况，别人引用了我的 api，突然发现响应数据不对。首先它排查到页面数据没更改。看了api文档，数据也没问题，最后发现我在写 api 的时候进行了处理，这个 api 呢又不能改动，改了影响我自己的模块。只能它在重新写一个api，这样显得很繁杂了，不够干净优雅。</p>
 </blockquote>
-<pre><code class="js">import { fetch, post } from &#39;@/utils/http&#39;
+<pre><code class="js">import &#123; fetch, post &#125; from &#39;@/utils/http&#39;
 // 用户登陆
 export const login = data =&gt; post(&#39;/user/login&#39;, data)
 // 获取用户信息
-export const getUserInfo = (data) =&gt; fetch(&#39;/api/user/info&#39;, data)
-</code></pre>
+export const getUserInfo = (data) =&gt; fetch(&#39;/api/user/info&#39;, data)</code></pre>
 <p>如果需要处理数据，要么使用一个中间工具处理，要么在页面里面处理。当然还是实际问题实际分析。</p>
 <h3 id="如何使用mock模拟数据"><a href="#如何使用mock模拟数据" class="headerlink" title="如何使用mock模拟数据"></a>如何使用<code>mock</code>模拟数据</h3><h4 id="原理与解决方案-6"><a href="#原理与解决方案-6" class="headerlink" title="原理与解决方案"></a>原理与解决方案</h4><p>一般就是两种方案，一是模拟后端，使用远程在线 JSON 服务器。另外一种搭建本地 JSON 或者 使用现成的 Node 服务器拦截请求。</p>
 <blockquote>
@@ -1130,33 +1093,31 @@ export const getUserInfo = (data) =&gt; fetch(&#39;/api/user/info&#39;, data)
 <h4 id="本地JSON-mock"><a href="#本地JSON-mock" class="headerlink" title="本地JSON mock"></a>本地JSON mock</h4><ul>
 <li>使用 <code>webpack</code> 内部 mock 配置</li>
 </ul>
-<pre><code class="js">devServer: {
+<pre><code class="js">devServer: &#123;
     // 接口未实现情况下，使用mock
     before: require(&#39;./mock&#39;)
-}
-</code></pre>
+&#125;</code></pre>
 <p>基本原理：主要是使用 node 读取文件，转换成 JSON 格式，使用<code>mock.js</code> 模拟数据，最后 webpack 拦截请求生成<code>json</code>响应数据</p>
 <pre><code class="js">const Mock = require(&#39;mockjs&#39;)
 
-module.exports = (app) =&gt; {
-    function getJsonFile (filePath) {
+module.exports = (app) =&gt; &#123;
+    function getJsonFile (filePath) &#123;
         var json = fs.readFileSync(path.resolve(__dirname, filePath), &#39;utf-8&#39;)
         return JSON.parse(json)
-    },
-    const returnMock = (datafile, res, req) =&gt; {
-        setTimeout(() =&gt; {
+    &#125;,
+    const returnMock = (datafile, res, req) =&gt; &#123;
+        setTimeout(() =&gt; &#123;
             var json
-            if (/\.json$/.test(datafile)) {
+            if (/\.json$/.test(datafile)) &#123;
                 // json文件暴露的是mock的模板
                 json = getJsonFile(datafile)
-            } else if (/\.js$/.test(datafile)) {
+            &#125; else if (/\.js$/.test(datafile)) &#123;
                 json = require(datafile)(req.query)
-            }
+            &#125;
             res.json(Mock.mock(json))
-        }, 500)
-    }
-}
-</code></pre>
+        &#125;, 500)
+    &#125;
+&#125;</code></pre>
 <ul>
 <li>使用 <code>json-server</code> 搭建<br>主要分为下面几步</li>
 </ul>
@@ -1178,16 +1139,16 @@ module.exports = (app) =&gt; {
 <ul>
 <li>不用查看编辑<code>api</code>文档</li>
 <li>在代码中就可以更改和查看<code>mock</code>数据</li>
-<li>支持使用<code>JavaScipt</code>动态处<code>mock</code>，可以与单元测试结合使用</li>
+<li>支持使用<code>JavaScipt</code>动态处<code> mock</code>，可以与单元测试结合使用</li>
 </ul>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
-<li><a href="https://github.com/commitizen/cz-cli" target="_blank" rel="noopener">commitizen</a></li>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/import" target="_blank" rel="noopener">MDN import()</a></li>
-<li><a href="https://youzan.github.io/vant/#/zh-CN/intro" target="_blank" rel="noopener">vant 文档</a></li>
-<li><a href="https://eslint.org/" target="_blank" rel="noopener">eslint 文档</a></li>
-<li><a href="https://router.vuejs.org/zh/" target="_blank" rel="noopener">vue-router 文档</a></li>
-<li><a href="https://www.sasscss.com/getting-started/" target="_blank" rel="noopener">sass 文档</a></li>
-<li><a href="https://github.com/axios/axios" target="_blank" rel="noopener">axios 文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/commitizen/cz-cli">commitizen</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/import">MDN import()</a></li>
+<li><a target="_blank" rel="noopener" href="https://youzan.github.io/vant/#/zh-CN/intro">vant 文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://eslint.org/">eslint 文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://router.vuejs.org/zh/">vue-router 文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.sasscss.com/getting-started/">sass 文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/axios/axios">axios 文档</a></li>
 </ul>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
@@ -1213,7 +1174,7 @@ module.exports = (app) =&gt; {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -1247,7 +1208,7 @@ module.exports = (app) =&gt; {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概览"><span class="toc-number">1.</span> <span class="toc-text">概览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#问题"><span class="toc-number">2.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实践"><span class="toc-number">3.</span> <span class="toc-text">实践</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#如何规范-git-提交"><span class="toc-number">3.1.</span> <span class="toc-text">如何规范 git 提交</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何管理代码风格"><span class="toc-number">3.2.</span> <span class="toc-text">如何管理代码风格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何提升编码效率"><span class="toc-number">3.3.</span> <span class="toc-text">如何提升编码效率</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vue-中写样式要注意哪些方面，有哪些技巧呢？"><span class="toc-number">3.4.</span> <span class="toc-text">vue 中写样式要注意哪些方面，有哪些技巧呢？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何使用-pug"><span class="toc-number">3.5.</span> <span class="toc-text">如何使用 pug</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何管理你的资源"><span class="toc-number">3.6.</span> <span class="toc-text">如何管理你的资源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何管理你的路由"><span class="toc-number">3.7.</span> <span class="toc-text">如何管理你的路由</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#组件化开发"><span class="toc-number">3.8.</span> <span class="toc-text">组件化开发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何封装请求"><span class="toc-number">3.9.</span> <span class="toc-text">如何封装请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何管理-api"><span class="toc-number">3.10.</span> <span class="toc-text">如何管理 api</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何使用mock模拟数据"><span class="toc-number">3.11.</span> <span class="toc-text">如何使用mock模拟数据</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">4.</span> <span class="toc-text">参考资料</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%A7%88"><span class="toc-number">1.</span> <span class="toc-text">概览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98"><span class="toc-number">2.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E8%B7%B5"><span class="toc-number">3.</span> <span class="toc-text">实践</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E8%A7%84%E8%8C%83-git-%E6%8F%90%E4%BA%A4"><span class="toc-number">3.1.</span> <span class="toc-text">如何规范 git 提交</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86%E4%BB%A3%E7%A0%81%E9%A3%8E%E6%A0%BC"><span class="toc-number">3.2.</span> <span class="toc-text">如何管理代码风格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E6%8F%90%E5%8D%87%E7%BC%96%E7%A0%81%E6%95%88%E7%8E%87"><span class="toc-number">3.3.</span> <span class="toc-text">如何提升编码效率</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vue-%E4%B8%AD%E5%86%99%E6%A0%B7%E5%BC%8F%E8%A6%81%E6%B3%A8%E6%84%8F%E5%93%AA%E4%BA%9B%E6%96%B9%E9%9D%A2%EF%BC%8C%E6%9C%89%E5%93%AA%E4%BA%9B%E6%8A%80%E5%B7%A7%E5%91%A2%EF%BC%9F"><span class="toc-number">3.4.</span> <span class="toc-text">vue 中写样式要注意哪些方面，有哪些技巧呢？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-pug"><span class="toc-number">3.5.</span> <span class="toc-text">如何使用 pug</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86%E4%BD%A0%E7%9A%84%E8%B5%84%E6%BA%90"><span class="toc-number">3.6.</span> <span class="toc-text">如何管理你的资源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86%E4%BD%A0%E7%9A%84%E8%B7%AF%E7%94%B1"><span class="toc-number">3.7.</span> <span class="toc-text">如何管理你的路由</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E5%8C%96%E5%BC%80%E5%8F%91"><span class="toc-number">3.8.</span> <span class="toc-text">组件化开发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%B0%81%E8%A3%85%E8%AF%B7%E6%B1%82"><span class="toc-number">3.9.</span> <span class="toc-text">如何封装请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86-api"><span class="toc-number">3.10.</span> <span class="toc-text">如何管理 api</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8mock%E6%A8%A1%E6%8B%9F%E6%95%B0%E6%8D%AE"><span class="toc-number">3.11.</span> <span class="toc-text">如何使用mock模拟数据</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">4.</span> <span class="toc-text">参考资料</span></a></li></ol>
                 </div>
             </div>
             

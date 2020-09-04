@@ -45,7 +45,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -108,13 +108,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    31k
+                    32k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    28 mins.
+                    29 mins.
                 </span>
                 
                 
@@ -148,7 +148,7 @@
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <p><a href="https://juejin.im/post/5e15932ee51d4540f02fae27" target="_blank" rel="noopener">原文地址</a></p>
+            <p><a target="_blank" rel="noopener" href="https://juejin.im/post/5e15932ee51d4540f02fae27">原文地址</a></p>
 <h1 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h1><p><img src="https://user-gold-cdn.xitu.io/2019/12/30/16f5676f7940d72a?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="概览"></p>
 <h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><blockquote>
 <p>本节内容主要围绕下列问题展开：</p>
@@ -167,52 +167,48 @@
 .demo      h1 hello
 &lt;/template&gt;
 &lt;script&gt;
-export default {
+export default &#123;
   name: &#39;demo&#39;,
-  data() {
-    return {}
-  }
-}
+  data() &#123;
+    return &#123;&#125;
+  &#125;
+&#125;
 &lt;/script&gt;&lt;style lang=&quot;scss&quot; scoped&gt;
-.demo {
-  h1 {
+.demo &#123;
+  h1 &#123;
     color: #f00;
-  }
-}
-&lt;/style&gt;
-</code></pre>
+  &#125;
+&#125;
+&lt;/style&gt;</code></pre>
 <p>这里的template 也可以使用 <code>render</code> 函数来编写</p>
-<pre><code class="js">Vue.component(&#39;demo&#39;, {
-    render: function (createElement) {
+<pre><code class="js">Vue.component(&#39;demo&#39;, &#123;
+    render: function (createElement) &#123;
       return createElement(
         &#39;h1&#39;,      &#39;hello&#39;, 
         // ...    
       )  
-    }
-})
-</code></pre>
+    &#125;
+&#125;)</code></pre>
 <p>我们可以发现<code>render</code>函数写模版让我们更有编程的感觉。<br>对模版也可以编程，在vue 里面我们可以很容易联想到，很多地方都有两种写法，一种是 <code>template</code> ， 一种是<code>js</code>。<br>比如：对于路由，我们既可以使用<code>:to=&quot;&quot;</code>，又可以使用<code>$router.push</code>，这也许是 vue 用起来比较爽的原因。</p>
-<h4 id="函数式组件是什么呢？"><a href="#函数式组件是什么呢？" class="headerlink" title="函数式组件是什么呢？"></a>函数式组件是什么呢？</h4><p><code>functional</code>，这意味它<strong>无状态 (没有响应式数据)</strong>，也没有<strong>实例</strong> (没有 this 上下文)</p>
+<h4 id="函数式组件是什么呢？"><a href="#函数式组件是什么呢？" class="headerlink" title="函数式组件是什么呢？"></a>函数式组件是什么呢？</h4><p><code>functional</code>，这意味它<strong>无状态 (没有响应式数据)**，也没有</strong>实例** (没有 this 上下文)</p>
 <ul>
 <li>单文件形式 2.5.0+</li>
 </ul>
-<pre><code class="html">&lt;template functional&gt;&lt;/template&gt;
-</code></pre>
+<pre><code class="html">&lt;template functional&gt;&lt;/template&gt;</code></pre>
 <ul>
 <li>Render 函数形式</li>
 </ul>
-<pre><code class="js">Vue.component(&#39;my-component&#39;, {
+<pre><code class="js">Vue.component(&#39;my-component&#39;, &#123;
   functional: true,
-  render function (createElement, context) {
+  render function (createElement, context) &#123;
     return createElement(&#39;div&#39;)    
-  }
-}
-</code></pre>
+  &#125;
+&#125;</code></pre>
 <h4 id="为什么要使用函数组件呢？"><a href="#为什么要使用函数组件呢？" class="headerlink" title="为什么要使用函数组件呢？"></a>为什么要使用函数组件呢？</h4><p>最重要的原因就是<strong>函数组件开销低</strong>，也就是对性能有好处，在不需要响应式和this的情况下，写成函数式组件算是一种优化方案。</p>
 <p>组件写好了，需要将组件注册才能使用</p>
 <h3 id="组件注册的两种方式"><a href="#组件注册的两种方式" class="headerlink" title="组件注册的两种方式"></a>组件注册的两种方式</h3><p>组件注册分为两种，一种是全局注册，一种是局部注册</p>
-<p><code>局部注册</code>就是我们常用的 <code>Vue.component(&#39;s-button&#39;, { /* ... */ })</code>，比较简单不详细论述</p>
-<p><code>全局注册</code>上节已经提到，在<code>new Vue</code> 之前在 <code>mian.js</code>注册，这里还提到一种自动全局注册的方法 <code>**require.text**</code></p>
+<p><code>局部注册</code>就是我们常用的 <code>Vue.component(&#39;s-button&#39;, &#123; /* ... */ &#125;)</code>，比较简单不详细论述</p>
+<p><code>全局注册</code>上节已经提到，在<code>new Vue</code> 之前在 <code>mian.js </code>注册，这里还提到一种自动全局注册的方法 <code>**require.text**</code></p>
 <pre><code class="js">import Vue from &#39;vue&#39;
 import upperFirst from &#39;lodash/upperFirst&#39;
 import camelCase from &#39;lodash/camelCase&#39;
@@ -220,7 +216,7 @@ const requireComponent = require.context(  &#39;./components&#39;,
 // 是否查询其子目录
   false,  /Base[A-Z]\w+\.(vue|js)$/
 )
-requireComponent.keys().forEach(fileName =&gt; {
+requireComponent.keys().forEach(fileName =&gt; &#123;
     // 获取组件配置 
     const componentConfig = requireComponent(fileName)
     const componentName = upperFirst( 
@@ -234,9 +230,8 @@ requireComponent.keys().forEach(fileName =&gt; {
       componentName,
       componentConfig.default || componentConfig  
     )
-})
-</code></pre>
-<p>基本原理和全局注册一样，就是将 <code>components</code> 中的组件文件名，<code>appButton</code>变成 <code>AppButton</code> 作为注册的组件名。<br>把原来需要手动复制的，变成之间使用 <code>keys</code> 方法批量注册。</p>
+&#125;)</code></pre>
+<p>基本原理和全局注册一样，就是将 <code>components</code> 中的组件文件名，<code>appButton </code>变成 <code>AppButton</code> 作为注册的组件名。<br>把原来需要手动复制的，变成之间使用 <code>keys</code> 方法批量注册。</p>
 <h3 id="实践开发一个-button-组件"><a href="#实践开发一个-button-组件" class="headerlink" title="实践开发一个 button 组件"></a>实践开发一个 button 组件</h3><p>现在，我们以写一个简单的原生 <code>button</code>组件为例，探讨一下组件开发的一些关键点。 写之前，我们需要抓住 4 个核心的要点：</p>
 <ul>
 <li><strong>用哪个标签作为组件主体， <code>button</code> 还是 <code>div</code> 标签</strong></li>
@@ -279,29 +274,27 @@ requireComponent.keys().forEach(fileName =&gt; {
 <pre><code class="html">&lt;template lang=&quot;pug&quot;&gt;   
 button.s-button(:class=&quot;xxx&quot; :style=&quot;xxx&quot; )
      slot
-&lt;/template&gt;
-</code></pre>
+&lt;/template&gt;</code></pre>
 <p>然后，我们看第二个问题：</p>
 <p><strong>如何根据属性来控制 <code>button</code> 的样式</strong> 其实这个很简单，基本原理就是：</p>
 <ol>
 <li>使用 <code>props</code> 获取父组件传过来的属性。</li>
-<li>根据相关属性，生成不同的 <code>class</code>，使用 <code>:class=&quot;{xxx: true, xxx: &#39;s-button--&#39; + size}&quot;</code> 这种形式，在 <code>style</code> 里面对不同的 <code>s-button--xxx</code> 做出不同的处理。</li>
+<li>根据相关属性，生成不同的 <code>class</code>，使用 <code>:class=&quot;&#123;xxx: true, xxx: &#39;s-button--&#39; + size&#125;&quot;</code> 这种形式，在 <code>style</code> 里面对不同的 <code>s-button--xxx</code> 做出不同的处理。</li>
 </ol>
 <pre><code class="html">&lt;template lang=&quot;pug&quot;&gt;
   button.s-button(:class=&quot;&quot; :style=&quot;&quot; )    slot
 &lt;/template&gt;
 &lt;script&gt;
-export default {  
+export default &#123;  
   name: &#39;s-button&#39;  
-  data: return {}  
-  props: {    
-    theme: {},    
-    size: {},    
-    type: {}  
-  }
-}
-&lt;/script&gt;  
-</code></pre>
+  data: return &#123;&#125;  
+  props: &#123;    
+    theme: &#123;&#125;,    
+    size: &#123;&#125;,    
+    type: &#123;&#125;  
+  &#125;
+&#125;
+&lt;/script&gt;  </code></pre>
 <p><strong>如何使用事件以及如何扩展组件</strong></p>
 <p>扩展组件的原理，主要就是使用 <code>props</code> 控制组件属性，模版中使用 <code>v-if/v-show</code> 增加组件功，比如增加内部 ICON，使用 <code>:style class</code>控制组件样式。</p>
 <p><img src="https://user-gold-cdn.xitu.io/2020/1/13/16f9d9414f682625?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="type"> </p>
@@ -312,35 +305,33 @@ slot
 s-icon(v-if=&quot;icon &amp;&amp; $slots.icon&quot; name=&quot;loading&quot;)
 &lt;/template&gt;
 &lt;script&gt;
-export default {  
+export default &#123;  
   name: &#39;s-button&#39;  
-  data: return {}  
-  props: {    
-    nativeType: {      
+  data: return &#123;&#125;  
+  props: &#123;    
+    nativeType: &#123;      
       type: String,      
       default: &#39;button&#39;    
-    },    
-    theme: {},    
-    size: {},    
-    type: {}  
-  }
-}
-&lt;/script&gt;
-</code></pre>
+    &#125;,    
+    theme: &#123;&#125;,    
+    size: &#123;&#125;,    
+    type: &#123;&#125;  
+  &#125;
+&#125;
+&lt;/script&gt;</code></pre>
 <p>控制事件，直接使用 <code>@click=&quot;&quot;</code> + <code>emit</code></p>
 <pre><code class="html">&lt;template lang=&quot;pug&quot;&gt;  
 button.s-button(@click=&quot;handleClick&quot;)
 &lt;/template&gt;
 &lt;script&gt;
-export default {  
-  methods: {    
-    handleClick (evt) {      
+export default &#123;  
+  methods: &#123;    
+    handleClick (evt) &#123;      
       this.$emit(&#39;click&#39;, evt)    
-      }  
-    }
-}
-&lt;/script&gt;
-</code></pre>
+      &#125;  
+    &#125;
+&#125;
+&lt;/script&gt;</code></pre>
 <h4 id="最后总结下："><a href="#最后总结下：" class="headerlink" title="最后总结下："></a>最后总结下：</h4><blockquote>
 <p>一般就直接使用 <code>template</code>单文件编写组件，需要增强 js编写能力可以使用 <code>render()</code><br>常规编写组件需要考虑：1. 使用什么标签 2. 如何控制各种属性的表现 3. 如何增强组件扩展性 4. 如何处理组件事件</p>
 </blockquote>
@@ -365,25 +356,23 @@ export default {
 div.component-1
 &lt;template&gt;
 &lt;script&gt;
-export default {  
-  mounted() {    
+export default &#123;  
+  mounted() &#123;    
     this.$emit(&#39;eventName&#39;, params)  
-    }}
-&lt;/script&gt;
-</code></pre>
+    &#125;&#125;
+&lt;/script&gt;</code></pre>
 <pre><code class="html">&lt;!-- 父组件--&gt;
 &lt;template lang=&quot;pug&quot;&gt;    
 Component-1(@eventName=&quot;handleEventName&quot;)
 &lt;template&gt;
 &lt;script&gt;
-export default {  
-  methods: {    
-    handleEventName (params) {      
+export default &#123;  
+  methods: &#123;    
+    handleEventName (params) &#123;      
       console.log(params)    
-    }  
-}
-&lt;/script&gt;
-</code></pre>
+    &#125;  
+&#125;
+&lt;/script&gt;</code></pre>
 <h4 id="3-集中式通信事件，主要用于简单的非父子组件通信"><a href="#3-集中式通信事件，主要用于简单的非父子组件通信" class="headerlink" title="3. 集中式通信事件，主要用于简单的非父子组件通信"></a>3. 集中式通信事件，主要用于简单的非父子组件通信</h4><p>原理很简单其实就是在 <code>emit</code> 与 <code>on</code> 的基础上加了一个事件中转站 “bus”。我觉得更像是现实生活中的集线器。</p>
 <p>普遍的实现原理大概是这样的 “bus” 为 <code>vue</code> 的一个实例，实例里面可以调用 <code>emit</code>, <code>off</code>, <code>on</code> 这些方法。</p>
 <pre><code class="js">var eventHub = new Vue()
@@ -392,8 +381,7 @@ eventHub.$emit(&#39;add&#39;, params)
 // 订阅/响应
 eventHub.$on(&#39;add&#39;, params)
 // 销毁
-eventHub.$off(&#39;add&#39;, params)
-</code></pre>
+eventHub.$off(&#39;add&#39;, params)</code></pre>
 <p>但是稍微复杂点的情况，使用这种方式就太繁锁了。还是使用 vuex 比较好。</p>
 <p>从某种意义而言，我觉得 vuex 不仅仅是它的一种进化版。</p>
 <ol>
@@ -427,113 +415,102 @@ import mutations from &#39;./mutations&#39;
 import actions from &#39;./actions&#39;
 import user from &#39;./modules/user&#39;
 Vue.use(Vuex)
-export default new Vuex.Store({    
+export default new Vuex.Store(&#123;    
   //在非生产环境下，使用严格模式    
   strict: process.env.NODE_ENV !== &#39;production&#39;,     
   state,    
   getters,    
   mutations,    
   actions,    
-  modules: {        
+  modules: &#123;        
     user    
-  }
-})
-</code></pre>
+  &#125;
+&#125;)</code></pre>
 <p><strong>操作状态两种方式</strong></p>
 <ol>
 <li>获取状态</li>
 </ol>
-<pre><code class="js">console.log(store.state.count)
-</code></pre>
+<pre><code class="js">console.log(store.state.count)</code></pre>
 <ol start="2">
 <li>改变状态</li>
 </ol>
-<pre><code class="js">store.commit(&#39;xxx&#39;)
-</code></pre>
+<pre><code class="js">store.commit(&#39;xxx&#39;)</code></pre>
 <h4 id="管理状态-states"><a href="#管理状态-states" class="headerlink" title="管理状态 states"></a>管理状态 states</h4><blockquote>
 <p>单一状态树, 这也意味着，每个应用将仅仅包含一个 store 实例。单一状态树让我们能够直接地定位任一特定的状态片段，在调试的过程中也能轻易地取得整个当前应用状态的快照。</p>
 </blockquote>
 <pre><code class="js">// states 文件
-export default {    
+export default &#123;    
   count: 0
-}
-</code></pre>
+&#125;</code></pre>
 <p>计算属性中返回，每当 <code>state</code> 中属性变化的时候, 其他组件都会重新求取计算属性，并且触发更新相关联的 DOM</p>
-<pre><code class="js">const Counter = {    
-  template: &#39;&lt;div&gt;{{count}}&lt;div&gt;&#39;,    
-  computed: {        
-    count() {            
+<pre><code class="js">const Counter = &#123;    
+  template: &#39;&lt;div&gt;&#123;&#123;count&#125;&#125;&lt;div&gt;&#39;,    
+  computed: &#123;        
+    count() &#123;            
       return store.state.count        
-    }    
-  }
-}
-</code></pre>
+    &#125;    
+  &#125;
+&#125;</code></pre>
 <h4 id="管理取值器-getters"><a href="#管理取值器-getters" class="headerlink" title="管理取值器 getters"></a>管理取值器 getters</h4><blockquote>
 <p><code>getters</code> 相当于 <code>store</code> 的计算属性。不需要每次都要在计算属性中过滤一下，也是一种代码复用。 我们在 <code>getters</code>文件中管理</p>
 </blockquote>
-<pre><code class="js">export default {    
+<pre><code class="js">export default &#123;    
   count: (state) =&gt; Math.floor(state.count)
-}
-</code></pre>
+&#125;</code></pre>
 <h4 id="管理-mutations"><a href="#管理-mutations" class="headerlink" title="管理 mutations"></a>管理 mutations</h4><blockquote>
 <p>更改 Vuex 的 store 中的状态的唯一方法是提交 mutation。Vuex 中的 mutation 非常类似于事件：每个 mutation 都有一个字符串的 事件类型 (type) 和 一个 回调函数 (handler)。这个回调函数就是我们实际进行状态更改的地方</p>
 </blockquote>
 <p>使用 types 大写用于调试，在 <code>mutationTypes</code> 文件中 <code>export const ROUTE_ADD = &#39;ROUTE_ADD&#39;</code></p>
 <p>然后在 <code>mutations</code> 文件中管理</p>
 <pre><code class="js">import * as MutationTypes from &#39;./mutationTypes&#39;
-export default {    
-  [MutationTypes.ADDONE]: function(state) {
+export default &#123;    
+  [MutationTypes.ADDONE]: function(state) &#123;
     state.count = state.count + 1    
-  },    
+  &#125;,    
   //...
-}
-</code></pre>
-<pre><code class="js">this.$store.commit(MutationTypes.ADDONE)
-</code></pre>
+&#125;</code></pre>
+<pre><code class="js">this.$store.commit(MutationTypes.ADDONE)</code></pre>
 <h4 id="管理-actions"><a href="#管理-actions" class="headerlink" title="管理 actions"></a>管理 actions</h4><p>和 <code>mutations</code> 类似， <code>actions</code> 对应的是 <code>dispatch</code>，不同的是 <code>action</code>可以使用异步函数，有种更高一级的封装。</p>
 <pre><code class="js">// 简化
-actions: {  
-  increment ({ commit }) {    
-    setTimeout(() =&gt; {        
-      commit(MutationTypes.ADDONE)    }
+actions: &#123;  
+  increment (&#123; commit &#125;) &#123;    
+    setTimeout(() =&gt; &#123;        
+      commit(MutationTypes.ADDONE)    &#125;
     , 1000)  
-  }
-}
+  &#125;
+&#125;
 // 触发
-store.dispatch(&#39;increment&#39;)
-</code></pre>
+store.dispatch(&#39;increment&#39;)</code></pre>
 <blockquote>
 <p>上述用法都可以使用 <strong>载荷</strong>的形式，引入也可以使用 <code>mapXxxx</code> 进行批量引入，这里不详细论述，有兴趣可以查看官网。</p>
 </blockquote>
 <h4 id="分模块管理状态"><a href="#分模块管理状态" class="headerlink" title="分模块管理状态"></a>分模块管理状态</h4><p>状态太多太杂，分模块管理是一个良好的代码组织方式。</p>
 <pre><code class="js">import count from &#39;./modules/count&#39;
-export default new Vuex.Store({    
-  modules: {        
+export default new Vuex.Store(&#123;    
+  modules: &#123;        
     count    
-  }
-})
-</code></pre>
+  &#125;
+&#125;)</code></pre>
 <p>每一个模块都可以有独立的相关属性</p>
 <pre><code class="js">import * as ActionTypes from &#39;./../actionTypes&#39;
-export default {    
-  state: {        
+export default &#123;    
+  state: &#123;        
     count: 0    
-  },    
-  mutations: {        
-    ADD_ONE: function(state) {             
+  &#125;,    
+  mutations: &#123;        
+    ADD_ONE: function(state) &#123;             
       state.count = state.count + 1        
-      }    
-  },    
-  actions: {        
-    [ActionTypes.INIT_INTENT_ORDER]: function({ commit }) {            
+      &#125;    
+  &#125;,    
+  actions: &#123;        
+    [ActionTypes.INIT_INTENT_ORDER]: function(&#123; commit &#125;) &#123;            
       commit(&#39;ADD_ONE&#39;)        
-    }    
-  },    
-  getters: {        
+    &#125;    
+  &#125;,    
+  getters: &#123;        
     pageBackToLoan: (state) =&gt; Math.floor(state.count)    
-  }
-}
-</code></pre>
+  &#125;
+&#125;</code></pre>
 <p><img src="https://user-gold-cdn.xitu.io/2020/1/13/16f9e11d627d9b4d?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="如图所示"></p>
 <h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><p><code>vuex</code> 主要有几个应用场景，一个是用于 <strong>组件通信</strong>和 <strong>状态共享</strong>，一个是用于 <strong>数据缓存</strong>，还有就是用于 <strong>减少请求</strong>。这些场景归根节点都是对于 <strong>缓存</strong>和 <strong>共享</strong>来说的。</p>
 <h4 id="组件通信"><a href="#组件通信" class="headerlink" title="组件通信"></a>组件通信</h4><p>首先，状态统一管理在仓库，就实现了组件通信的可能性。</p>
@@ -543,34 +520,34 @@ export default {
 <pre><code class="js">/** * 
  * 判断用户有没有权限访问页面 
  */
-function hasPermission(routeItem, menus) {  
-  return menus.some(menuItem =&gt; {    
+function hasPermission(routeItem, menus) &#123;  
+  return menus.some(menuItem =&gt; &#123;    
     return menuItem.name === routeItem.name  
-  })
-}
+  &#125;)
+&#125;
 /** * 
  * 递归过滤异步路由表，返回符合用户角色权限的路由表 * 
- * @param {*} routes 路由表 * 
- * @param {*} menus 菜单信息 
+ * @param &#123;*&#125; routes 路由表 * 
+ * @param &#123;*&#125; menus 菜单信息 
  * */
-function filterRoutes(routes, menus) {  
-  return routes.filter(routeItem =&gt; {    
-    if (routeItem.hidden) {      
+function filterRoutes(routes, menus) &#123;  
+  return routes.filter(routeItem =&gt; &#123;    
+    if (routeItem.hidden) &#123;      
       return true    
-    } else if (hasPermission(routeItem, menus)) {      
+    &#125; else if (hasPermission(routeItem, menus)) &#123;      
       const menuItem = menus.find(item =&gt; item.name === routeItem.name)      
-      if (menuItem &amp;&amp; menuItem.children &amp;&amp; menuItem.children.length &gt; 0) {        
+      if (menuItem &amp;&amp; menuItem.children &amp;&amp; menuItem.children.length &gt; 0) &#123;        
         routeItem.children = filterRoutes(routeItem.children, menuItem.children)        
         if (!routeItem.children.length) return false      
-        }      
+        &#125;      
         return true    
-        } else {      
+        &#125; else &#123;      
           return false    
-          }  
-      })
-  }
-  const permission = {  
-    state: {    
+          &#125;  
+      &#125;)
+  &#125;
+  const permission = &#123;  
+    state: &#123;    
       routers: constantRouterMap,    
       addRouters: [],    
       roles: [],    
@@ -580,44 +557,40 @@ function filterRoutes(routes, menus) {
       menus: null,    
       personal: true,    
       teamList: []  
-    },  
-    mutations: {}
-  }
-  export default permission
-</code></pre>
+    &#125;,  
+    mutations: &#123;&#125;
+  &#125;
+  export default permission</code></pre>
 <p>而且权限还可以被更改，更改后的权限直接分发到其他页面组件中。这个场景要是不使用 <code>vuex</code> ，代码将会比较复杂。</p>
 <h4 id="数据缓存"><a href="#数据缓存" class="headerlink" title="数据缓存"></a>数据缓存</h4><p><code>store</code> 是一个仓库，它从创建开始就一直存在，只有页面 <code>Vuex.store</code> 实例被销毁，state 才会被清空。具体表现就是刷新页面。</p>
 <p>这个数据缓存适用于：页面加载后缓存数据，刷新页面请求数据的场景。在一般 <code>Hybrid</code>中，一般不存在刷新页面这个按钮，所以使用 vuex 缓存数据可以应对大多数场景。</p>
-<pre><code class="js">export default {    
-  state: {        
+<pre><code class="js">export default &#123;    
+  state: &#123;        
     // 缓存修改手机号需要的信息        
-    changePhoneInfo: {            
+    changePhoneInfo: &#123;            
       nameUser: &#39;&#39;,            
       email: &#39;&#39;,            
       phone: &#39;&#39;        
-    },    
-  }
-}
-</code></pre>
+    &#125;,    
+  &#125;
+&#125;</code></pre>
 <p>如果需要持久化缓存，结合浏览器或 APP 缓存更佳。</p>
-<pre><code class="js">export default {    
+<pre><code class="js">export default &#123;    
   // 登陆成功后，vuex 写入token，并写入app缓存，存储持久化    
-  [ActionTypes.LOGIN_SUCCESS]: function(store, token) {        
+  [ActionTypes.LOGIN_SUCCESS]: function(store, token) &#123;        
     store.commit(MutationTypes.SET_TOKEN, token)        
     setStorage(&#39;token&#39;, token)        
-    router.replace({ name: &#39;Home&#39;, params: { source: &#39;login&#39; } })    
-  }
-}
-</code></pre>
+    router.replace(&#123; name: &#39;Home&#39;, params: &#123; source: &#39;login&#39; &#125; &#125;)    
+  &#125;
+&#125;</code></pre>
 <h4 id="减少请求-数据缓存的变种"><a href="#减少请求-数据缓存的变种" class="headerlink" title="减少请求(数据缓存的变种)"></a>减少请求(数据缓存的变种)</h4><p>在写后台管理平台时候，经常会有 <code>list</code> 选型组件，里面数据从服务端拿的数据。如果我们把这个 <code>list</code> 数据存储起来，下次再次使用，直接从 <code>store</code> 里面拿，这样我们就不用再去请求数据了。相当于减少了一次请求。</p>
 <h2 id="如何使用过滤器，编写自己的过滤器"><a href="#如何使用过滤器，编写自己的过滤器" class="headerlink" title="如何使用过滤器，编写自己的过滤器"></a>如何使用过滤器，编写自己的过滤器</h2><h3 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h3><p>假设我现在有个需求，需要将性别0、1、2，分别转换成男、女、不确定这三个汉字展示。页面中多处地方需要使用。</p>
 <pre><code class="html">&lt;template lang=&quot;pug&quot;&gt;  
 .user-info    
 .gender      
   label(for=&quot;性别&quot;) 性别      
-  span {{gender}}
-&lt;/template&gt;
-</code></pre>
+  span &#123;&#123;gender&#125;&#125;
+&lt;/template&gt;</code></pre>
 <p>完成这个需求，我们知道有 <strong>4</strong> 种方式：</p>
 <ol>
 <li>使用 computed 方法</li>
@@ -632,17 +605,16 @@ function filterRoutes(routes, menus) {
 <li>使用 <code>computed</code> 实现成功，我们知道 <code>computed</code> 不是一个函数是无法传参的，这里有个技巧， <code>return</code> 一个函数接受传过来的参数</li>
 </ul>
 <pre><code class="js">    // ...  
-    computed: {    
-      convertIdToName() {      
-        return function(value) {        
-          const item = list.find(function(item) {          
+    computed: &#123;    
+      convertIdToName() &#123;      
+        return function(value) &#123;        
+          const item = list.find(function(item) &#123;          
               return item.id === value        
-            })        
+            &#125;)        
             return item.name      
-          }    
-        }  
-    }
-</code></pre>
+          &#125;    
+        &#125;  
+    &#125;</code></pre>
 <p><img src="https://user-gold-cdn.xitu.io/2020/1/13/16f9eb7a20ecdcdf?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="如图所示"></p>
 <ul>
 <li>使用 <code>methods</code> 实现成功，这里直接可以传参数，一种常规的写法。</li>
@@ -651,29 +623,27 @@ function filterRoutes(routes, menus) {
 <p>注意 <code>methods</code>、 <code>computed</code>和 <code>data</code> 相互之前是不能同名的</p>
 </blockquote>
 <pre><code class="js">  // ...  
-  methods: {    
-    convertIdToName(value) {      
-      const item = list.find(function(item) {        
+  methods: &#123;    
+    convertIdToName(value) &#123;      
+      const item = list.find(function(item) &#123;        
         return item.id === value      
-      })      
+      &#125;)      
       return item.name    
-    }  
-  }
-</code></pre>
+    &#125;  
+  &#125;</code></pre>
 <ul>
 <li>使用 <code>utils</code> 和 <code>methods</code> 差不多基本上也可以实现</li>
 <li>使用 <code>filter</code> 也是实现的，有个可以和 <code>methods</code> 、 <code>computed</code> 同名哦</li>
 </ul>
-<pre><code class="js">    filters: {    
+<pre><code class="js">    filters: &#123;    
       console.log(this.render)    
-      convertIdToName(value) {      
-        const item = list.find(function(item) {        
+      convertIdToName(value) &#123;      
+        const item = list.find(function(item) &#123;        
           return item.id === value      
-        })      
+        &#125;)      
         return item.name    
-      }  
-    },
-</code></pre>
+      &#125;  
+    &#125;,</code></pre>
 <p><strong>总的来说他们全部都可以实现这个需求</strong></p>
 <p><strong>2. 局限性</strong></p>
 <ul>
@@ -682,112 +652,104 @@ function filterRoutes(routes, menus) {
 </ul>
 <p><strong>3. 总结比较</strong></p>
 <p><code>filters</code> 与 <code>utils</code> 归属一对，他们既是脱离了 <code>this</code>，获得了自由，又是被 <code>this</code> 弃之门外。相反 <code>methods</code> 与 <code>computed</code> 与 <code>this</code> 紧紧站在一起，但又是无法获得自由。</p>
-<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><h4 id="编写一个简单的千分位过滤器"><a href="#编写一个简单的千分位过滤器" class="headerlink" title="编写一个简单的千分位过滤器"></a>编写一个简单的千分位过滤器</h4><pre><code class="js">export const thousandBitSeparator = (value) =&gt; {  
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><h4 id="编写一个简单的千分位过滤器"><a href="#编写一个简单的千分位过滤器" class="headerlink" title="编写一个简单的千分位过滤器"></a>编写一个简单的千分位过滤器</h4><pre><code class="js">export const thousandBitSeparator = (value) =&gt; &#123;  
   return 
-  value &amp;&amp; (value.toString().indexOf(&#39;.&#39;) !== -1 ? value.toString().replace(/(\d)(?=(\d{3})+\.)/g, function($0, $1) {      
+  value &amp;&amp; (value.toString().indexOf(&#39;.&#39;) !== -1 ? value.toString().replace(/(\d)(?=(\d&#123;3&#125;)+\.)/g, function($0, $1) &#123;      
     return $1 + &#39;,&#39;;    
-  }) : 
-  value.toString().replace(/(\d)(?=(\d{3})+$)/g, function($0, $1) {      
+  &#125;) : 
+  value.toString().replace(/(\d)(?=(\d&#123;3&#125;)+$)/g, function($0, $1) &#123;      
     return $1 + &#39;,&#39;;    
-  })
+  &#125;)
   );
-}
-</code></pre>
+&#125;</code></pre>
 <h4 id="使用-vue-filter-插件"><a href="#使用-vue-filter-插件" class="headerlink" title="使用 vue-filter 插件"></a>使用 vue-filter 插件</h4><p>两款插件</p>
-<p><a href="https://www.npmjs.com/package/vue-filter" target="_blank" rel="noopener">vue-filter</a> 使用 <code>use</code> 引入</p>
-<p><a href="https://www.npmjs.com/package/vue-filters" target="_blank" rel="noopener">vue2-filters</a> 使用 <code>mixins</code> 引入</p>
+<p><a target="_blank" rel="noopener" href="https://www.npmjs.com/package/vue-filter">vue-filter</a> 使用 <code>use</code> 引入</p>
+<p><a target="_blank" rel="noopener" href="https://www.npmjs.com/package/vue-filters">vue2-filters</a> 使用 <code>mixins</code> 引入</p>
 <blockquote>
 <p>有需要的话，我一般就用第二个了，大多数都是自己写一下小过滤器</p>
 </blockquote>
 <p>自定义过滤器之后，直接全局自动注册，其他地方都可以使用</p>
 <h4 id="注册全局过滤器"><a href="#注册全局过滤器" class="headerlink" title="注册全局过滤器"></a>注册全局过滤器</h4><p>遍历过滤属性值，一次性全部注册</p>
-<pre><code class="js">for (const key in filters) {    
+<pre><code class="js">for (const key in filters) &#123;    
   Vue.filter(key, filters[key])
-}
-</code></pre>
+&#125;</code></pre>
 <h2 id="如何使用-Jest-测试你的代码"><a href="#如何使用-Jest-测试你的代码" class="headerlink" title="如何使用 Jest 测试你的代码"></a>如何使用 Jest 测试你的代码</h2><h3 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a>原理</h3><p>我们思考一下测试 js 代码需要哪些东西</p>
 <ol>
 <li>浏览器运行环境</li>
 <li>断言库</li>
 </ol>
 <p>如果是测试 vue 代码呢？ 那得再加一个 vue 测试容器</p>
-<h3 id="Jest-Vue"><a href="#Jest-Vue" class="headerlink" title="Jest + Vue"></a>Jest + Vue</h3><h4 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h4><pre><code class="json">{    
+<h3 id="Jest-Vue"><a href="#Jest-Vue" class="headerlink" title="Jest + Vue"></a>Jest + Vue</h3><h4 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h4><pre><code class="json">&#123;    
   &quot;@vue/cli-plugin-unit-jest&quot;: &quot;^4.0.5&quot;,    
   &quot;@vue/test-utils&quot;: &quot;1.0.0-beta.29&quot;,    
   &quot;jest&quot;: &quot;^24.9.0&quot;,    
   // ...
-}
-</code></pre>
+&#125;</code></pre>
 <h3 id="项目配置"><a href="#项目配置" class="headerlink" title="项目配置"></a>项目配置</h3><pre><code class="js">// For a detailed explanation regarding each configuration property, visit:// https://jestjs.io/docs/en/configuration.html
-module.exports = {  
+module.exports = &#123;  
   preset: &#39;@vue/cli-plugin-unit-jest&#39;,  
   automock: false, &quot;/private/var/folders/10/bb2hb93j34999j9cqr587ts80000gn/T/jest_dx&quot;,  
   clearMocks: true,  
   // collectCoverageFrom: null,  
   coverageDirectory: &#39;tests/coverage&#39;  
   //...
-}
-</code></pre>
+&#125;</code></pre>
 <h3 id="单元测试"><a href="#单元测试" class="headerlink" title="单元测试"></a>单元测试</h3><h4 id="测试-utils-工具类"><a href="#测试-utils-工具类" class="headerlink" title="测试 utils 工具类"></a>测试 utils 工具类</h4><blockquote>
 <p>对我们之前写的一个性别名称转换工具进行测试</p>
 </blockquote>
-<pre><code class="js">import { convertIdToName } from &#39;./convertIdToName&#39;
-describe(&#39;测试convertIdToName方法&#39;, () =&gt; {  
+<pre><code class="js">import &#123; convertIdToName &#125; from &#39;./convertIdToName&#39;
+describe(&#39;测试convertIdToName方法&#39;, () =&gt; &#123;  
   const list = [    
-    { id: 0, name: &#39;男&#39; },    
-    { id: 1, name: &#39;女&#39; },    
-    { id: 2, name: &#39;未知&#39; }  
+    &#123; id: 0, name: &#39;男&#39; &#125;,    
+    &#123; id: 1, name: &#39;女&#39; &#125;,    
+    &#123; id: 2, name: &#39;未知&#39; &#125;  
   ]  
-  it(&#39;测试正常输入&#39;, () =&gt; {    
+  it(&#39;测试正常输入&#39;, () =&gt; &#123;    
     const usage = list    
-    usage.forEach((item) =&gt; {      
+    usage.forEach((item) =&gt; &#123;      
       expect(convertIdToName(item.id, list)).toBe(item.name)    
-    })
-  })  
-  it(&#39;测试非正常输入&#39;, () =&gt; {    
+    &#125;)
+  &#125;)  
+  it(&#39;测试非正常输入&#39;, () =&gt; &#123;    
     const usage = [&#39;a&#39;, null, undefined, NaN]    
-    usage.forEach((item) =&gt; {      
+    usage.forEach((item) =&gt; &#123;      
       expect(convertIdToName(item, list)).toBe(&#39;&#39;)    
-    })  
-  })
-})
-</code></pre>
+    &#125;)  
+  &#125;)
+&#125;)</code></pre>
 <p><img src="https://user-gold-cdn.xitu.io/2020/1/13/16f9eda87016bfe2?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="如图所示"><br>这样一测试，发现原来我们之前写的工具有这么多漏洞 测试正常输入全部通过了，非正常输入失败了，根据测试用例改进我们的代码</p>
-<pre><code class="js">export const convertIdToName = (value, list) =&gt; {  
+<pre><code class="js">export const convertIdToName = (value, list) =&gt; &#123;  
   if (value !== 0 &amp;&amp; value !== 1 &amp;&amp; value !== 2) return &#39;&#39;  
-  const item = list.find(function(item) {    
+  const item = list.find(function(item) &#123;    
     return item.id === value  
-  }) 
+  &#125;) 
   return item.name
-}
-</code></pre>
+&#125;</code></pre>
 <p>现在测试都通过了呢</p>
 <h4 id="测试-components-单文件组件"><a href="#测试-components-单文件组件" class="headerlink" title="测试 components 单文件组件"></a>测试 components 单文件组件</h4><blockquote>
 <p>对我们最简单的 <code>hello world</code> 进行测试</p>
 </blockquote>
 <pre><code class="html">&lt;template lang=&quot;pug&quot;&gt;  
-.hello    h1 {{ msg }}
+.hello    h1 &#123;&#123; msg &#125;&#125;
 &lt;/template&gt;
 &lt;script&gt;
-export default {  
-  props: {    
+export default &#123;  
+  props: &#123;    
     msg: String  
-  }
-}
-&lt;/script&gt;
-</code></pre>
-<pre><code class="js">import { shallowMount } from &#39;@vue/test-utils&#39;
+  &#125;
+&#125;
+&lt;/script&gt;</code></pre>
+<pre><code class="js">import &#123; shallowMount &#125; from &#39;@vue/test-utils&#39;
 import HelloWorld from &#39;@/components/HelloWorld.vue&#39;
-describe(&#39;HelloWorld.vue&#39;, () =&gt; {  
-  it(&#39;renders props.msg when passed&#39;, () =&gt; {    
+describe(&#39;HelloWorld.vue&#39;, () =&gt; &#123;  
+  it(&#39;renders props.msg when passed&#39;, () =&gt; &#123;    
     const msg = &#39;new message&#39;    
-    const wrapper = shallowMount(HelloWorld, {      
-      propsData: { msg }    
-    })    
+    const wrapper = shallowMount(HelloWorld, &#123;      
+      propsData: &#123; msg &#125;    
+    &#125;)    
     expect(wrapper.text()).toMatch(msg)  
-  })
-})
-</code></pre>
+  &#125;)
+&#125;)</code></pre>
 <h4 id="测试-api-请求"><a href="#测试-api-请求" class="headerlink" title="测试 api 请求"></a>测试 api 请求</h4><p>异步测试有几种常见写法</p>
 <ul>
 <li><code>async</code> 与 <code>await</code></li>
@@ -796,36 +758,34 @@ describe(&#39;HelloWorld.vue&#39;, () =&gt; {
 <blockquote>
 <p>简单的异步测试，测试一个简单的登陆请求</p>
 </blockquote>
-<pre><code class="js">export const login = (data) =&gt; post(&#39;/user/login&#39;, data)
-</code></pre>
+<pre><code class="js">export const login = (data) =&gt; post(&#39;/user/login&#39;, data)</code></pre>
 <p>测试代码</p>
-<pre><code class="js">import { login } from &#39;@/api/index&#39;
-describe(&#39;login api&#39;, () =&gt; {  
-  const response = {    
+<pre><code class="js">import &#123; login &#125; from &#39;@/api/index&#39;
+describe(&#39;login api&#39;, () =&gt; &#123;  
+  const response = &#123;    
     code: &#39;1000&#39;,    
-    data: {}  
-  }  
-  const errorResponse = {    
+    data: &#123;&#125;  
+  &#125;  
+  const errorResponse = &#123;    
     code: &#39;5000&#39;,    
-    data: {},   
+    data: &#123;&#125;,   
     message: &#39;用户名或密码错误&#39;  
-  }  
-  it(&#39;测试正常登陆&#39;, async () =&gt; {    
-    const params = {      
+  &#125;  
+  it(&#39;测试正常登陆&#39;, async () =&gt; &#123;    
+    const params = &#123;      
       user: &#39;admin&#39;,      
       password: &#39;123456&#39;    
-    }    
+    &#125;    
     expect(await login(params)).toEqual(response)  
-  })  
-  it(&#39;测试异常登陆&#39;, async () =&gt; {    
-    const params = {      
+  &#125;)  
+  it(&#39;测试异常登陆&#39;, async () =&gt; &#123;    
+    const params = &#123;      
       user: &#39;admin&#39;,     
       password: &#39;123123&#39;    
-    }    
+    &#125;    
     expect(await login(params)).toEqual(errorResponse)  
-  })
-})
-</code></pre>
+  &#125;)
+&#125;)</code></pre>
 <p><img src="https://user-gold-cdn.xitu.io/2020/1/13/16f9efc734a64747?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="如图所示"></p>
 <h3 id="功能模块测试"><a href="#功能模块测试" class="headerlink" title="功能模块测试"></a>功能模块测试</h3><p>组件， <code>api</code>，工具这些零零碎碎都测试了，而且这些都是比较通用、和业务关系不大的代码，它们改动较少，测试到这里其实已经足够了，已经达到了 <code>20%</code> 的测试工作量了很大一部分代码的目的。</p>
 <blockquote>
@@ -835,29 +795,27 @@ describe(&#39;login api&#39;, () =&gt; {
 <p>经常得回归的业务，那种迭代对原有的系统比较大，避免改动之后使旧的代码各种新的问题。这种经常回归测试，采用 <code>BDD</code> + 集成测试，比不停改 <code>bug</code> 要轻松的多。</p>
 <h3 id="快照测试"><a href="#快照测试" class="headerlink" title="快照测试"></a>快照测试</h3><p>像版本一样，每次测试之后生成一个版本，比较与上一个版本的区别。 这是一种粒度及其小的测试，可以测试到每一个符号。</p>
 <h4 id="比如我用它来测试一个配置文件的变动"><a href="#比如我用它来测试一个配置文件的变动" class="headerlink" title="比如我用它来测试一个配置文件的变动"></a>比如我用它来测试一个配置文件的变动</h4><p>这是我们一个配置文件</p>
-<pre><code class="js">export const api = {  
+<pre><code class="js">export const api = &#123;  
   develop: &#39;http://xxxx:8080&#39;,  
   mock: &#39;http://xxxx&#39;,  
   feature: &#39;http://xxxx&#39;,  
   test: &#39;http://xxxx&#39;,  
   production: &#39;http://xxxx&#39;
-}
-export default api[process.env.NODE_ENV || &#39;dev&#39;]
-</code></pre>
+&#125;
+export default api[process.env.NODE_ENV || &#39;dev&#39;]</code></pre>
 <p>使用快照测试</p>
-<pre><code class="js">import { api } from &#39;./config&#39;
-describe(&#39;配置文件测试&#39;, () =&gt; {  
-  it(&#39;测试配置文件是否变动&#39;, () =&gt; {    
-    expect(api).toMatchSnapshot({      
+<pre><code class="js">import &#123; api &#125; from &#39;./config&#39;
+describe(&#39;配置文件测试&#39;, () =&gt; &#123;  
+  it(&#39;测试配置文件是否变动&#39;, () =&gt; &#123;    
+    expect(api).toMatchSnapshot(&#123;      
       develop: &#39;http://xxxx:8080&#39;,     
        mock: &#39;http://xxxx&#39;,      
        feature: &#39;http://xxxx&#39;,      
        test: &#39;http://xxxx&#39;,      
        production: &#39;http://xxxx&#39;    
-      })  
-  })
-})
-</code></pre>
+      &#125;)  
+  &#125;)
+&#125;)</code></pre>
 <p>使用快照第一次测试后，通过测试，代码被写入快照<br><img src="https://user-gold-cdn.xitu.io/2020/1/13/16f9f1b5e3b2e64f?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="快照测试1"><br><img src="https://user-gold-cdn.xitu.io/2020/1/13/16f9f1d9415200e8?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="快照测试2"><br>改动配置再次测试，未通过测试 这时如果要改变配置怎么办呢？ 只需同时改一下用例就好了。快照将再次写入快照生成版本2，这样配置改动也有根据了<br><img src="https://user-gold-cdn.xitu.io/2020/1/13/16f9f1eeb7396fdc?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="快照测试3"></p>
 <h3 id="TDD-与-BDD"><a href="#TDD-与-BDD" class="headerlink" title="TDD 与 BDD"></a>TDD 与 BDD</h3><p>最近讨论比较多的算是 <strong>测试驱动开发</strong>和 <strong>行为驱动开发</strong>，其实总得来说是 4 种</p>
 <ol>
@@ -893,7 +851,7 @@ describe(&#39;配置文件测试&#39;, () =&gt; {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -927,7 +885,7 @@ describe(&#39;配置文件测试&#39;, () =&gt; {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概览"><span class="toc-number">1.</span> <span class="toc-text">概览</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#问题"><span class="toc-number">2.</span> <span class="toc-text">问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#如何编写原生组件"><span class="toc-number">2.1.</span> <span class="toc-text">如何编写原生组件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#组件编写原理"><span class="toc-number">2.1.1.</span> <span class="toc-text">组件编写原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#组件注册的两种方式"><span class="toc-number">2.1.2.</span> <span class="toc-text">组件注册的两种方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实践开发一个-button-组件"><span class="toc-number">2.1.3.</span> <span class="toc-text">实践开发一个 button 组件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何使用-vuex-以及它的应用"><span class="toc-number">2.2.</span> <span class="toc-text">如何使用 vuex 以及它的应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#由来以及原理"><span class="toc-number">2.2.1.</span> <span class="toc-text">由来以及原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#管理-vuex"><span class="toc-number">2.2.2.</span> <span class="toc-text">管理 vuex</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#应用场景"><span class="toc-number">2.2.3.</span> <span class="toc-text">应用场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何使用过滤器，编写自己的过滤器"><span class="toc-number">2.3.</span> <span class="toc-text">如何使用过滤器，编写自己的过滤器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#原理-1"><span class="toc-number">2.3.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例子"><span class="toc-number">2.3.2.</span> <span class="toc-text">例子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何使用-Jest-测试你的代码"><span class="toc-number">2.4.</span> <span class="toc-text">如何使用 Jest 测试你的代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#原理-2"><span class="toc-number">2.4.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Jest-Vue"><span class="toc-number">2.4.2.</span> <span class="toc-text">Jest + Vue</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#项目配置"><span class="toc-number">2.4.3.</span> <span class="toc-text">项目配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#单元测试"><span class="toc-number">2.4.4.</span> <span class="toc-text">单元测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#功能模块测试"><span class="toc-number">2.4.5.</span> <span class="toc-text">功能模块测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#快照测试"><span class="toc-number">2.4.6.</span> <span class="toc-text">快照测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TDD-与-BDD"><span class="toc-number">2.4.7.</span> <span class="toc-text">TDD 与 BDD</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A6%82%E8%A7%88"><span class="toc-number">1.</span> <span class="toc-text">概览</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%97%AE%E9%A2%98"><span class="toc-number">2.</span> <span class="toc-text">问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E7%BC%96%E5%86%99%E5%8E%9F%E7%94%9F%E7%BB%84%E4%BB%B6"><span class="toc-number">2.1.</span> <span class="toc-text">如何编写原生组件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E7%BC%96%E5%86%99%E5%8E%9F%E7%90%86"><span class="toc-number">2.1.1.</span> <span class="toc-text">组件编写原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E6%B3%A8%E5%86%8C%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="toc-number">2.1.2.</span> <span class="toc-text">组件注册的两种方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E8%B7%B5%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AA-button-%E7%BB%84%E4%BB%B6"><span class="toc-number">2.1.3.</span> <span class="toc-text">实践开发一个 button 组件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-vuex-%E4%BB%A5%E5%8F%8A%E5%AE%83%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-number">2.2.</span> <span class="toc-text">如何使用 vuex 以及它的应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%B1%E6%9D%A5%E4%BB%A5%E5%8F%8A%E5%8E%9F%E7%90%86"><span class="toc-number">2.2.1.</span> <span class="toc-text">由来以及原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%A1%E7%90%86-vuex"><span class="toc-number">2.2.2.</span> <span class="toc-text">管理 vuex</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">2.2.3.</span> <span class="toc-text">应用场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E8%BF%87%E6%BB%A4%E5%99%A8%EF%BC%8C%E7%BC%96%E5%86%99%E8%87%AA%E5%B7%B1%E7%9A%84%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="toc-number">2.3.</span> <span class="toc-text">如何使用过滤器，编写自己的过滤器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-1"><span class="toc-number">2.3.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90"><span class="toc-number">2.3.2.</span> <span class="toc-text">例子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-Jest-%E6%B5%8B%E8%AF%95%E4%BD%A0%E7%9A%84%E4%BB%A3%E7%A0%81"><span class="toc-number">2.4.</span> <span class="toc-text">如何使用 Jest 测试你的代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-2"><span class="toc-number">2.4.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Jest-Vue"><span class="toc-number">2.4.2.</span> <span class="toc-text">Jest + Vue</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AE"><span class="toc-number">2.4.3.</span> <span class="toc-text">项目配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95"><span class="toc-number">2.4.4.</span> <span class="toc-text">单元测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97%E6%B5%8B%E8%AF%95"><span class="toc-number">2.4.5.</span> <span class="toc-text">功能模块测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%AB%E7%85%A7%E6%B5%8B%E8%AF%95"><span class="toc-number">2.4.6.</span> <span class="toc-text">快照测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TDD-%E4%B8%8E-BDD"><span class="toc-number">2.4.7.</span> <span class="toc-text">TDD 与 BDD</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
             

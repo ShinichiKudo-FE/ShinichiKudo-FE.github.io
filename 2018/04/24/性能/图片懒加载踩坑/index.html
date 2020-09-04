@@ -38,7 +38,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -100,7 +100,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    7.3k
+                    7.5k
                 </span>
                 
                 
@@ -147,6 +147,7 @@
 <p>懒加载的实现主要是判断当前图片是否到了可视区域这一核心逻辑。我们先来整理一下实现思路：<br>1.拿到所有的图片 img dom 。<br>2.遍历每个图片判断当前图片是否到了可视区范围内。<br>3.如果到了就设置图片的 src 属性。<br>4.绑定 window 的 scroll 事件，对其进行事件监听。</p>
 </blockquote>
 <a id="more"></a>
+
 <h3 id="HTML-结构"><a href="#HTML-结构" class="headerlink" title="HTML 结构"></a>HTML 结构</h3><pre><code class="html">&lt;div class=&quot;container&quot;&gt;
     &lt;div class=&quot;img-area&quot;&gt;
         &lt;img id=&quot;first&quot; data-src=&quot;./img/ceng.png&quot; alt=&quot;&quot;&gt;
@@ -167,75 +168,67 @@
         &lt;img data-src=&quot;./img/steve-jobs.jpg&quot; alt=&quot;&quot;&gt;
     &lt;/div&gt;
 &lt;/div&gt;
-
 </code></pre>
 <p>此时 img 标签是没有 <code>src</code> 属性的，我们把真实的图片地址放在一个属性里，这里我们使用 HTML5 的 data 属性，将真实地址放在自定义的 <code>data-src</code> 中。</p>
 <h3 id="判断图片是否进入了可视区域"><a href="#判断图片是否进入了可视区域" class="headerlink" title="判断图片是否进入了可视区域"></a>判断图片是否进入了可视区域</h3><h4 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h4><p>第一种方法我们通过计算该图片距离 document 顶部的高度是否小于当前可视区域相对于 document 顶部高度来判断。</p>
 <p>可视区域相对于 document 顶部高度的计算方法：</p>
 <pre><code class="js">const clientHeight = document.documentElement.clientHeight; // 视口高度，也就是窗口的高度。
-const scrollHeight = document.documentElement.scrollTop + clientHeight; // 滚动条偏移文档顶部的高度（也就是文档从顶部开始到可视区域被抹去的高度） + 视口高度
-</code></pre>
+const scrollHeight = document.documentElement.scrollTop + clientHeight; // 滚动条偏移文档顶部的高度（也就是文档从顶部开始到可视区域被抹去的高度） + 视口高度</code></pre>
 <p>画了一张图方便理解:<br><img src="https://user-gold-cdn.xitu.io/2018/4/23/162f0988f351ecca?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="dataimg"></p>
 <p>然后就是计算该图片距离文档顶部的高度。有两种方法，第一种方法是通过元素的 <code>offsetTop</code> 属性来计算。从上图我们了解到元素的 offsetTop 属性是相对于一个 position 为 非 static 的祖先元素，也就是 <code>child.offsetParent</code> 。同时需要将祖先元素的 border 考虑在内，我们通过<code>child.offsetParent.clientTop</code>可以拿到边框厚度。</p>
 <p>由此我们得到元素距离文档顶部的高度的计算方法：</p>
-<pre><code class="js">function getTop(el, initVal) {
+<pre><code class="js">function getTop(el, initVal) &#123;
     let top = el.offsetTop + initVal;
-    if (el.offsetParent !== null) {
+    if (el.offsetParent !== null) &#123;
         top += el.offsetParent.clientTop;
         return getTop(el.offsetParent, top);
-    } else {
+    &#125; else &#123;
         return top;
-    }
-}
-</code></pre>
+    &#125;
+&#125;</code></pre>
 <p>这里的这个方法使用了 <code>尾递归调用</code> 。可以提高递归性能。当然这里也可以用循环来实现：</p>
-<pre><code class="js">function getTop(el) {
+<pre><code class="js">function getTop(el) &#123;
     let top = el.offsetTop;
     var parent = el.offsetParent;
-    while(parent !== null) {
+    while(parent !== null) &#123;
         top += parent.offsetTop + parent.clientTop;
         parent = parent.offsetParent;
-    }
+    &#125;
     return top;
-}
-
+&#125;
 </code></pre>
 <p>第二种方法是使用 <code>element.getBoundingClientRect() API</code> 直接得到 top 值。</p>
 <pre><code class="js">var first  = document.getElementById(&#39;first&#39;);
 getTop(first, 0);  // 130
-console.log(first.getBoundingClientRect().top); // 130
-</code></pre>
+console.log(first.getBoundingClientRect().top); // 130</code></pre>
 <p>于是我们得到判断方法：</p>
-<pre><code class="js">function inSight(el) {
+<pre><code class="js">function inSight(el) &#123;
     const clientHeight = document.documentElement.clientHeight;
     const scrollHeight = document.documentElement.scrollTop + clientHeight;
     // 方法一
     return getTop(el, 0) &lt; scrollHeight;
     // 方法二
     // return el.getBoundingClientRect().top &lt; clientHeight;
-}
-</code></pre>
+&#125;</code></pre>
 <p>接下来就是对每个图片进行判断和赋值。</p>
-<pre><code class="js">function loadImg(el) {
-    if (!el.src) {
+<pre><code class="js">function loadImg(el) &#123;
+    if (!el.src) &#123;
         el.src = el.dataset.src;
-    }
-}
+    &#125;
+&#125;
 
-function checkImgs() {
+function checkImgs() &#123;
     const imgs = document.getElementsByTagName(&#39;img&#39;);
-    Array.from(imgs).forEach(el =&gt; {
-        if (inSight(el)) {
+    Array.from(imgs).forEach(el =&gt; &#123;
+        if (inSight(el)) &#123;
             loadImg(el);
-        }
-    })
+        &#125;
+    &#125;)
     console.log(count++);
-}
-</code></pre>
+&#125;</code></pre>
 <p>最后给 window 绑定 onscroll 事件以及 onload 事件：</p>
 <pre><code class="js">window.addEventListener(&#39;scroll&#39;, checkImgs, false);
-window.onload = checkImgs;
-</code></pre>
+window.onload = checkImgs;</code></pre>
 <p>我们知道类似 scroll 或 resize 这样的事件浏览器可能在很短的时间内触发很多次，为了提高网页性能，我们需要一个<strong>节流函数</strong>来控制函数的多次触发，在一段时间内（如 500ms）只执行一次回调。</p>
 <pre><code class="js">/**
  * 持续触发事件，每隔一段时间，只执行一次事件。
@@ -243,26 +236,25 @@ window.onload = checkImgs;
  * @param delay 延迟时间
  * @param time 在 time 时间内必须执行一次
  */
-function throttle(fun, delay, time) {
+function throttle(fun, delay, time) &#123;
     var timeout;
     var previous = +new Date();
-    return function () {
+    return function () &#123;
         var now = +new Date();
         var context = this;
         var args = arguments;
         clearTimeout(timeout);
-        if (now - previous &gt;= time) {
+        if (now - previous &gt;= time) &#123;
             fun.apply(context, args);
             previous = now;
-        } else {
-            timeout = setTimeout(function () {
+        &#125; else &#123;
+            timeout = setTimeout(function () &#123;
                 fun.apply(context, args);
-            }, delay);
-        }
-    }
-}
+            &#125;, delay);
+        &#125;
+    &#125;
+&#125;
 window.addEventListener(&#39;scroll&#39;, throttle(checkImgs, 200, 1000), false);
-
 </code></pre>
 <h3 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h3><p>HTML5 有一个新的 IntersectionObserver API，它可以自动观察元素是否可见。</p>
 <p>主要用法：</p>
@@ -275,18 +267,17 @@ observer.observe(document.getElementById(&#39;first&#39;));
 observer.unobserve(document.getElementById(&#39;first&#39;));
 
 // 关闭观察器
-observer.disconnect();
-</code></pre>
+observer.disconnect();</code></pre>
 <p>目标的可见性发生变化时就会调用观察器的 callback。</p>
-<pre><code class="js">function callback(changes: IntersectionObserverEntry[]) {
+<pre><code class="js">function callback(changes: IntersectionObserverEntry[]) &#123;
     console.log(changes[0])
-}
+&#125;
 
 // IntersectionObserverEntry
-{
+&#123;
     time: 29.499999713152647,
     intersectionRatio: 1,
-    boundingClientRect: DOMRectReadOnly {
+    boundingClientRect: DOMRectReadOnly &#123;
         bottom: 144,
         height: 4,
         left: 289,
@@ -295,37 +286,35 @@ observer.disconnect();
         width: 4,
         x: 289,
         y: 140
-    },
+    &#125;,
     intersectionRect: DOMRectReadOnly,
     isIntersecting: true,
     rootBounds: DOMRectReadOnly,
     target: img#first
 
-}
-</code></pre>
+&#125;</code></pre>
 <blockquote>
 <p>详细释义：<br>time： 可见性发生变化的时间，是一个高精度时间戳，单位为毫秒<br>intersectionRatio： 目标元素的可见比例，即 intersectionRect 占 boundingClientRect 的比例，完全可见时为 1 ，完全不可见时小于等于 0<br>boundingClientRect： 目标元素的矩形区域的信息<br>intersectionRect： 目标元素与视口（或根元素）的交叉区域的信息<br>rootBounds： 根元素的矩形区域的信息，getBoundingClientRect() 方法的返回值，如果没有根元素（即直接相对于视口滚动），则返回 null<br>isIntersecting： 是否进入了视口，boolean 值<br>target： 被观察的目标元素，是一个 DOM 节点对象</p>
 </blockquote>
 <p>使用 IntersectionObserver 实现图片懒加载：</p>
-<pre><code class="js">function query(tag) {
+<pre><code class="js">function query(tag) &#123;
     return Array.from(document.getElementsByTagName(tag));
-}
+&#125;
 var observer = new IntersectionObserver(
-    (changes) =&gt; {
-        changes.forEach((change) =&gt; {
-            if (change.intersectionRatio &gt; 0) {
+    (changes) =&gt; &#123;
+        changes.forEach((change) =&gt; &#123;
+            if (change.intersectionRatio &gt; 0) &#123;
                 var img = change.target;
                 img.src = img.dataset.src;
                 observer.unobserve(img);
-            }
-        })
-    }
+            &#125;
+        &#125;)
+    &#125;
 )
-query(&#39;img&#39;).forEach((item) =&gt; {
+query(&#39;img&#39;).forEach((item) =&gt; &#123;
     observer.observe(item);
-})
-</code></pre>
-<p><a href="https://juejin.im/post/5add55dd6fb9a07aad171f76?utm_source=gold_browser_extension" target="_blank" rel="noopener">原文地址</a></p>
+&#125;)</code></pre>
+<p><a target="_blank" rel="noopener" href="https://juejin.im/post/5add55dd6fb9a07aad171f76?utm_source=gold_browser_extension">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -350,7 +339,7 @@ query(&#39;img&#39;).forEach((item) =&gt; {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -384,7 +373,7 @@ query(&#39;img&#39;).forEach((item) =&gt; {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#原理"><span class="toc-number">1.</span> <span class="toc-text">原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#实现"><span class="toc-number">1.1.</span> <span class="toc-text">实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HTML-结构"><span class="toc-number">1.1.1.</span> <span class="toc-text">HTML 结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#判断图片是否进入了可视区域"><span class="toc-number">1.1.2.</span> <span class="toc-text">判断图片是否进入了可视区域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法二"><span class="toc-number">1.1.3.</span> <span class="toc-text">方法二</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">1.</span> <span class="toc-text">原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.1.</span> <span class="toc-text">实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HTML-%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.1.</span> <span class="toc-text">HTML 结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E5%9B%BE%E7%89%87%E6%98%AF%E5%90%A6%E8%BF%9B%E5%85%A5%E4%BA%86%E5%8F%AF%E8%A7%86%E5%8C%BA%E5%9F%9F"><span class="toc-number">1.1.2.</span> <span class="toc-text">判断图片是否进入了可视区域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C"><span class="toc-number">1.1.3.</span> <span class="toc-text">方法二</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
             

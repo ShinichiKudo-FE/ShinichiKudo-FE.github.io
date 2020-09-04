@@ -37,7 +37,7 @@ fs.readFile(&amp;#39;./test.txt&amp;#39;, (error, buffer) =&amp;g,">
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -100,13 +100,13 @@ fs.readFile(&amp;#39;./test.txt&amp;#39;, (error, buffer) =&amp;g,">
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    6k
+                    6.1k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    5 mins.
+                    6 mins.
                 </span>
                 
                 
@@ -141,15 +141,14 @@ fs.readFile(&amp;#39;./test.txt&amp;#39;, (error, buffer) =&amp;g,">
     <div class='main'>
         <div class="content markdown animated fadeIn">
             <h2 id="File-System的问题"><a href="#File-System的问题" class="headerlink" title="File System的问题"></a>File System的问题</h2><p>我们通常会使用File System模块对文件进行读取，如下：</p>
-<pre><code class="js">fs.readFile(&#39;./test.txt&#39;, (error, buffer) =&gt; {
-  if (error) {
+<pre><code class="js">fs.readFile(&#39;./test.txt&#39;, (error, buffer) =&gt; &#123;
+  if (error) &#123;
     console.error(error)
-  } else {
+  &#125; else &#123;
     // 读取文件成功
     res.write(buffer)
-  }
-})
-</code></pre>
+  &#125;
+&#125;)</code></pre>
 <p>这样操作简单有效，但这也存在一些问题：</p>
 <p>1.占用内存<br>使用fs读取文件，它是一次性将文件的所有内容读取到内存中，再一次性发送到客户端，因此会占用大量内存。</p>
 <p>2.资源使用效率低<br>从磁盘读取文件期间，磁盘处于忙碌状态，而网络处于空闲状态。<br>磁盘读取完成后，开始发送文件时，情况正相反，网络处于忙碌状态，此时磁盘却处于空闲状态</p>
@@ -167,15 +166,14 @@ const writeStream = fs.createWriteStream(&#39;./2.txt&#39;)
 readStream.pipe(writeStream)
 
 // 读取出现错误时会触发error事件。
-readStream.on(&#39;error&#39;, (error) =&gt; {
+readStream.on(&#39;error&#39;, (error) =&gt; &#123;
   console.error(error)
-})
+&#125;)
 
 // 写入完成时，触发finish事件。
-writeStream.on(&#39;finish&#39;, () =&gt; {
+writeStream.on(&#39;finish&#39;, () =&gt; &#123;
   console.log(&#39;finish&#39;)
-})
-</code></pre>
+&#125;)</code></pre>
 <h2 id="使用Zlib压缩文件"><a href="#使用Zlib压缩文件" class="headerlink" title="使用Zlib压缩文件"></a>使用Zlib压缩文件</h2><p>可以使用Zlib模块，配合Stream流，实现文件压缩功能，如下：</p>
 <pre><code class="js">const fs = require(&#39;fs&#39;)
 // 引入zlib模块，用于实现压缩功能
@@ -195,16 +193,16 @@ const gzip = zlib.createGzip()
 readStream.pipe(gzip).pipe(writeStream)
 
 // 读取出现错误时会触发error事件。
-readStream.on(&#39;error&#39;, (error) =&gt; {
+readStream.on(&#39;error&#39;, (error) =&gt; &#123;
   console.error(error)
-})
+&#125;)
 
 // 写入完成时，触发finish事件。
-writeStream.on(&#39;finish&#39;, () =&gt; {
+writeStream.on(&#39;finish&#39;, () =&gt; &#123;
   console.log(&#39;finish&#39;)
-})
-</code></pre>
+&#125;)</code></pre>
 <a id="more"></a>
+
 <h2 id="使用流传输文件到前台"><a href="#使用流传输文件到前台" class="headerlink" title="使用流传输文件到前台"></a>使用流传输文件到前台</h2><p>学习了流，我们就可以更加高效地将文件传输到前台：</p>
 <!-- more -->
 <pre><code class="js">const http = require(&#39;http&#39;)
@@ -212,13 +210,13 @@ const zlib = require(&#39;zlib&#39;)
 const url = require(&#39;url&#39;)
 const fs = require(&#39;fs&#39;)
 
-const server = http.createServer((req, res) =&gt; {
-  const {
+const server = http.createServer((req, res) =&gt; &#123;
+  const &#123;
     pathname
-  } = url.parse(req.url, true)
+  &#125; = url.parse(req.url, true)
 
 // 创建一个可读流。
-  const readStream = fs.createReadStream(`./${pathname}`)
+  const readStream = fs.createReadStream(`./$&#123;pathname&#125;`)
 
   // 创建一个Gzip对象，用于将文件压缩成.gz文件
   const gzip = zlib.createGzip()
@@ -227,16 +225,15 @@ const server = http.createServer((req, res) =&gt; {
   readStream.pipe(res)
 
   // 处理可读流报错，防止请求不存在的文件
-  readStream.on(&#39;error&#39;, (error) =&gt; {
+  readStream.on(&#39;error&#39;, (error) =&gt; &#123;
     console.error(error);
     res.writeHead(404)
     res.write(&#39;Not Found&#39;)
     res.end()
-  })
-})
+  &#125;)
+&#125;)
 
-server.listen(8080)
-</code></pre>
+server.listen(8080)</code></pre>
 <p>但可以看到，在这个例子里，虽然实现了使用流传输文件，但并没有用到gzip压缩，在传输时还是更多地消耗网络资源，接下来可以引入gzip压缩。</p>
 <h2 id="文件经过gzip压缩后传输到前台"><a href="#文件经过gzip压缩后传输到前台" class="headerlink" title="文件经过gzip压缩后传输到前台"></a>文件经过gzip压缩后传输到前台</h2><p>但此时如果只是简单的用<code>readStream.pipe(gzip).pipe(res)</code>传输文件，浏览器在访问时无法直接打开，而是会触发文件下载。<br>这是因为未设置请求头属性<code>content-encoding</code>的值，导致浏览器无法识别用gzip压缩过的文件，这就需要修改请求头<code>res.setHeader(&#39;content-encoding&#39;, &#39;gzip&#39;)</code>，让浏览器可以识别。</p>
 <p>这样浏览器就可以正常打开文件了，但若浏览器访问的是不存在的文件，浏览器会报错“无法访问此网站”，这是因为请求头属性<code>content-encoding</code>已被设置为gzip，但服务端传给浏览器的是Not Found字符串，浏览器无法识别。</p>
@@ -246,23 +243,23 @@ const zlib = require(&#39;zlib&#39;)
 const url = require(&#39;url&#39;)
 const fs = require(&#39;fs&#39;)
 
-const server = http.createServer((req, res) =&gt; {
-  const {
+const server = http.createServer((req, res) =&gt; &#123;
+  const &#123;
     pathname
-  } = url.parse(req.url, true)
+  &#125; = url.parse(req.url, true)
 
   // 文件的相对路径
-  const filepath = `./${pathname}`
+  const filepath = `./$&#123;pathname&#125;`
 
   // 检查文件是否存在
-  fs.stat(filepath, (error, stat) =&gt; {
-    if (error) {
+  fs.stat(filepath, (error, stat) =&gt; &#123;
+    if (error) &#123;
       console.error(error);
       res.setHeader(&#39;content-encoding&#39;, &#39;identity&#39;)
       res.writeHead(404)
       res.write(&#39;Not Found&#39;)
       res.end()
-    } else {
+    &#125; else &#123;
       // 创建一个可读流。
       const readStream = fs.createReadStream(filepath)
 
@@ -275,24 +272,23 @@ const server = http.createServer((req, res) =&gt; {
       readStream.pipe(gzip).pipe(res)
 
       // 处理可读流报错，防止文件中途被删除或出错，导致报错。
-      readStream.on(&#39;error&#39;, (error) =&gt; {
+      readStream.on(&#39;error&#39;, (error) =&gt; &#123;
         console.error(error);
         res.setHeader(&#39;content-encoding&#39;, &#39;identity&#39;)
         res.writeHead(404)
         res.write(&#39;Not Found&#39;)
         res.end()
-      })
-    }
-  })
-})
+      &#125;)
+    &#125;
+  &#125;)
+&#125;)
 
 server.listen(8080)
-
 </code></pre>
 <h2 id="启动器"><a href="#启动器" class="headerlink" title="启动器"></a>启动器</h2><p>常用的启动器有forever、pm2等，它们主要用在项目部署阶段</p>
 <p>1.使应用不间断运行，如果不使用启动器，命令行窗口一旦关闭，或者出现报错，应用就会停止运行，启动器会帮助应用自动重启。<br>2.若出现服务器重启，启动器会自动启动应用，不需要手动操作。</p>
 <p>常用的启动器有<code>forever、pm2</code>等，接下来介绍一下forever的使用。</p>
-<h3 id="forever"><a href="#forever" class="headerlink" title="forever"></a>forever</h3><p>forever文档可参考：<a href="https://github.com/foreverjs/forever#readme" target="_blank" rel="noopener">github.com/foreverjs/f…</a></p>
+<h3 id="forever"><a href="#forever" class="headerlink" title="forever"></a>forever</h3><p>forever文档可参考：<a target="_blank" rel="noopener" href="https://github.com/foreverjs/forever#readme">github.com/foreverjs/f…</a></p>
 <blockquote>
 <p>使用forever启动一个服务：</p>
 </blockquote>
@@ -328,7 +324,7 @@ server.listen(8080)
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -362,7 +358,7 @@ server.listen(8080)
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#File-System的问题"><span class="toc-number">1.</span> <span class="toc-text">File System的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Stream流"><span class="toc-number">2.</span> <span class="toc-text">Stream流</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用Zlib压缩文件"><span class="toc-number">3.</span> <span class="toc-text">使用Zlib压缩文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用流传输文件到前台"><span class="toc-number">4.</span> <span class="toc-text">使用流传输文件到前台</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件经过gzip压缩后传输到前台"><span class="toc-number">5.</span> <span class="toc-text">文件经过gzip压缩后传输到前台</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#启动器"><span class="toc-number">6.</span> <span class="toc-text">启动器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#forever"><span class="toc-number">6.1.</span> <span class="toc-text">forever</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#File-System%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">1.</span> <span class="toc-text">File System的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Stream%E6%B5%81"><span class="toc-number">2.</span> <span class="toc-text">Stream流</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8Zlib%E5%8E%8B%E7%BC%A9%E6%96%87%E4%BB%B6"><span class="toc-number">3.</span> <span class="toc-text">使用Zlib压缩文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%B5%81%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E5%88%B0%E5%89%8D%E5%8F%B0"><span class="toc-number">4.</span> <span class="toc-text">使用流传输文件到前台</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%BB%8F%E8%BF%87gzip%E5%8E%8B%E7%BC%A9%E5%90%8E%E4%BC%A0%E8%BE%93%E5%88%B0%E5%89%8D%E5%8F%B0"><span class="toc-number">5.</span> <span class="toc-text">文件经过gzip压缩后传输到前台</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E5%99%A8"><span class="toc-number">6.</span> <span class="toc-text">启动器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#forever"><span class="toc-number">6.1.</span> <span class="toc-text">forever</span></a></li></ol></li></ol>
                 </div>
             </div>
             

@@ -36,7 +36,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -99,7 +99,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    4.6k
+                    4.5k
                 </span>
                 
                 
@@ -145,62 +145,59 @@
 &lt;form&gt;
     &lt;input type=&quot;file&quot; accept=&quot;image/*&quot;&gt;
     &lt;input type=&quot;submit&quot;&gt;
-&lt;form&gt;
-</code></pre>
+&lt;form&gt;</code></pre>
 <p>在<code>Android4以上，iOS7以上</code>设备实测，当用户点击这个文件选择器的时候，手机会自动调出图片库，并带有拍照选择。</p>
-<h2 id="读文件生成预览"><a href="#读文件生成预览" class="headerlink" title="读文件生成预览"></a>读文件生成预览</h2><p>用户选择了图片之后，需要读取文件内容，读出的内容可供生成预览图，也可以供后面压缩使用。使用HTML5的<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/FileReader" target="_blank" rel="noopener">FileReader API</a>可以达成这一目的。</p>
+<h2 id="读文件生成预览"><a href="#读文件生成预览" class="headerlink" title="读文件生成预览"></a>读文件生成预览</h2><p>用户选择了图片之后，需要读取文件内容，读出的内容可供生成预览图，也可以供后面压缩使用。使用HTML5的<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/FileReader">FileReader API</a>可以达成这一目的。</p>
 <pre><code class="js">var file = document.querySeletor(&quot;[type=file]&quot;);
-file.addEventListener(&#39;change&#39;,function(e){
-    for(var i = 0,f; f &lt; e.target.file[i]; i++){
+file.addEventListener(&#39;change&#39;,function(e)&#123;
+    for(var i = 0,f; f &lt; e.target.file[i]; i++)&#123;
         if(f.type.indexOf(&#39;image&#39;) != 0) continue;
         var render = new FileReader();
-        render.onload = function(e){
+        render.onload = function(e)&#123;
             var img = document.createElement(&#39;img&#39;);
             img.src = e.targte.result;
             document.getElementById(&#39;preview&#39;).appendChild(img);
-        }
+        &#125;
         render.readAsDataURL(f)
-    }
-},false)
-</code></pre>
+    &#125;
+&#125;,false)</code></pre>
 <a id="more"></a>
 <p>如果不需要预览图，可以不把img对象添加到DOM上。</p>
-<h2 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h2><p>利用Canvas渲染上下文的<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/drawImage" target="_blank" rel="noopener">drawImage</a>接口，可以把一张图片绘制到Canvas上，在这个过程中可以重新定义图片尺寸，然后再用Canvas的<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLCanvasElement/toDataURL" target="_blank" rel="noopener">toDataURL</a>接口可以生成出压缩后的图片。</p>
+<h2 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h2><p>利用Canvas渲染上下文的<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/drawImage">drawImage</a>接口，可以把一张图片绘制到Canvas上，在这个过程中可以重新定义图片尺寸，然后再用Canvas的<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLCanvasElement/toDataURL">toDataURL</a>接口可以生成出压缩后的图片。</p>
 <pre><code class="js">var images = document.querySeletorAll(&#39;#preview img&#39;);
 var iWidth = 400,iHeight = 300;
 var compressedImages = [];
-[].forEach.call(images,function(image){
+[].forEach.call(images,function(image)&#123;
     var canvas = document.createElement(&#39;canvas&#39;);
     canvas.width = iWidth;
     canvas.height = iHeight;
     canvas.getContent(&#39;2d&#39;).drawImage(image);
     var compressed = canvas.toDataURL(&quot;imgae/jepg&quot;,0.7);
     compressedImages.push(compressed);
-})
-</code></pre>
+&#125;)</code></pre>
 <h2 id="上传"><a href="#上传" class="headerlink" title="上传"></a>上传</h2><p>上面一步骤生成的压缩后图片是Data URL形式的，上传前需要把开头部分的<code>data:image/jpeg;base64</code>,截掉才是图片的<code>Base64</code>编码形式。</p>
-<p>可以直接把<code>Base64</code>的字符串上传到服务器，然后由服务端解码为JPG图片，也可以在前端解码上传。如果要在前端解码并以文件方式上传，先要用<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/WindowBase64/atob" target="_blank" rel="noopener">atob</a>函数把<code>Base64</code>解开，然后转换为<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer" target="_blank" rel="noopener">ArrayBuffer</a>，再用它创建一个<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Blob" target="_blank" rel="noopener">Blob</a>对象。文件方式上传需要用<code>multipart/form-data</code>格式，可以利用<a href="https://developer.mozilla.org/zh-CN/docs/Web/Guide/Using_FormData_Objects" target="_blank" rel="noopener">FormData</a>对象组装生成好的Blob对象来实现。</p>
-<pre><code class="js">function b64toBlob(b64Data,contentType,sliceSize){
+<p>可以直接把<code>Base64</code>的字符串上传到服务器，然后由服务端解码为JPG图片，也可以在前端解码上传。如果要在前端解码并以文件方式上传，先要用<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/WindowBase64/atob">atob</a>函数把<code>Base64</code>解开，然后转换为<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer">ArrayBuffer</a>，再用它创建一个<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Blob">Blob</a>对象。文件方式上传需要用<code>multipart/form-data</code>格式，可以利用<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/Guide/Using_FormData_Objects">FormData</a>对象组装生成好的Blob对象来实现。</p>
+<pre><code class="js">function b64toBlob(b64Data,contentType,sliceSize)&#123;
     contentType = contentType || &#39;&#39;;
     sliceSize = sliceSize || 512;
 
     var byteCharacters = atob(b64Data);
     var byteData = [];
-    for(var offset = 0; offset &lt; byteCharacters.length; offset += sliceSize){
+    for(var offset = 0; offset &lt; byteCharacters.length; offset += sliceSize)&#123;
         var slice = byteCharacters.slice(offset, offset + sliceSize);
 
         var byteNumbers = new Array(slice.length);
-        for (var i = 0; i &lt; slice.length; i++) {
+        for (var i = 0; i &lt; slice.length; i++) &#123;
             byteNumbers[i] = slice.charCodeAt(i);
-        }
+        &#125;
 
         var byteArray = new Uint8Array(byteNumbers);
 
         byteArrays.push(byteArray);
-    }
-    var blob = new Blob(byteArray,{type:content})
+    &#125;
+    var blob = new Blob(byteArray,&#123;type:content&#125;)
     return blob;
-}
+&#125;
 
 var fileBlob = b64toBlob(compressed.substr(23),&#39;images/jepg&#39;);
 var formData = new FormData();
@@ -208,7 +205,6 @@ formData.append(&#39;file&#39;,fileBlob);
 var xhr = new XMLHttpRequest();
 xhr.open(&#39;POST&#39;,&#39;upload.php&#39;);
 xhr.send(formData);
-
 </code></pre>
 <h2 id="安全"><a href="#安全" class="headerlink" title="安全"></a>安全</h2><p>最后，请不要忘记在服务端对用户上传的文件数据进行合法性检查，毕竟黑客也可能用非浏览器上传垃圾文件或者恶意脚本。</p>
 <h2 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h2><p><img src="https://lib.xts.so/xts-img/x/2017/02/3037522307.png" alt="扫描查看"></p>
@@ -236,7 +232,7 @@ xhr.send(formData);
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -270,7 +266,7 @@ xhr.send(formData);
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#过滤文件类型"><span class="toc-number">1.1.</span> <span class="toc-text">过滤文件类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#读文件生成预览"><span class="toc-number">1.2.</span> <span class="toc-text">读文件生成预览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#压缩"><span class="toc-number">1.3.</span> <span class="toc-text">压缩</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#上传"><span class="toc-number">1.4.</span> <span class="toc-text">上传</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安全"><span class="toc-number">1.5.</span> <span class="toc-text">安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Demo"><span class="toc-number">1.6.</span> <span class="toc-text">Demo</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4%E6%96%87%E4%BB%B6%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.1.</span> <span class="toc-text">过滤文件类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%BB%E6%96%87%E4%BB%B6%E7%94%9F%E6%88%90%E9%A2%84%E8%A7%88"><span class="toc-number">1.2.</span> <span class="toc-text">读文件生成预览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%8B%E7%BC%A9"><span class="toc-number">1.3.</span> <span class="toc-text">压缩</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8A%E4%BC%A0"><span class="toc-number">1.4.</span> <span class="toc-text">上传</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8"><span class="toc-number">1.5.</span> <span class="toc-text">安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Demo"><span class="toc-number">1.6.</span> <span class="toc-text">Demo</span></a></li></ol></li></ol>
                 </div>
             </div>
             
