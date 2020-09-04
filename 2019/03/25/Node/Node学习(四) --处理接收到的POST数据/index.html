@@ -37,7 +37,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -100,7 +100,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    8.7k
+                    9.3k
                 </span>
                 
                 
@@ -142,62 +142,61 @@
         <div class="content markdown animated fadeIn">
             <p>POST数据量通常较大，通常不会一次性从客户端发送到服务端，具体每次发送的大小由协议，以及客户端与服务端之间的协商决定。</p>
 <p>因此，Nodejs在处理POST数据时，需要通过request对象的data事件，获取每次传输的数据，并在end事件调用时，处理所有获取的数据。</p>
-<p>request对象是一个<a href="https://link.juejin.im/?target=http%3A%2F%2Fnodejs.cn%2Fapi%2Fhttp.html%23http_class_http_incomingmessage">http.IncomingMessage</a> 类，而它实现了<a href="https://link.juejin.im/?target=http%3A%2F%2Fnodejs.cn%2Fapi%2Fstream.html%23stream_class_stream_readable">可读流接口</a>，因此具有了可读流的data、end等事件。</p>
+<p>request对象是一个<a href="https://link.juejin.im/?target=http://nodejs.cn/api/http.html%23http_class_http_incomingmessage">http.IncomingMessage</a> 类，而它实现了<a href="https://link.juejin.im/?target=http://nodejs.cn/api/stream.html%23stream_class_stream_readable">可读流接口</a>，因此具有了可读流的data、end等事件。</p>
 <p>需要注意的是，data事件中传入的参数是<code>Buffer</code>，<code>Buffer</code>只是一个二进制的数据，它有可能只是一段字符串数据，也有可能是文件的一部分，所以处理Buffer数据的时候要注意这一点。</p>
 <pre><code class="js">const http = require(&#39;http&#39;)
 const querystring = require(&#39;querystring&#39;)
 
-const server = http.createServer((req, res) =&gt; {
+const server = http.createServer((req, res) =&gt; &#123;
   let bufferArray = []  // 用于存储data事件获取的Buffer数据。
 
-  req.on(&#39;data&#39;, (buffer) =&gt; {
+  req.on(&#39;data&#39;, (buffer) =&gt; &#123;
     bufferArray.push(buffer)  // 将Buffer数据存储在数组中。
-  })
+  &#125;)
 
-  req.on(&#39;end&#39;, () =&gt; {
+  req.on(&#39;end&#39;, () =&gt; &#123;
     // Buffer 类是一个全局变量，使用时无需 require(&#39;buffer&#39;).Buffer。
     // Buffer.concat方法用于合并Buffer数组。
     const buffer = Buffer.concat(bufferArray)
     // 已知Buffer数据只是字符串，则可以直接用toString将其转换成字符串。
     const post = querystring.parse(buffer.toString())
     console.log(post)
-  })
-})
+  &#125;)
+&#125;)
 
-server.listen(8080)
-</code></pre>
+server.listen(8080)</code></pre>
 <h2 id="同时处理GET-POST请求"><a href="#同时处理GET-POST请求" class="headerlink" title="同时处理GET/POST请求"></a>同时处理GET/POST请求</h2><p>通常在开发过程中，同一台服务器需要接收多种类型的请求，并区分不同接口，向客户端返回数据。</p>
 <p>最常用的方式，<strong>就是对请求的方法、url进行区分判断，获取到每个请求的数据后，统一由一个回调函数进行处理</strong>。</p>
 <pre><code class="js">const http = require(&#39;http&#39;)
 const url = require(&#39;url&#39;)
 const querystring = require(&#39;querystring&#39;)
 
-const server = http.createServer((req, res) =&gt; {
+const server = http.createServer((req, res) =&gt; &#123;
   // 定义公共变量，存储请求方法、路径、数据
   const method = req.method
   let path = &#39;&#39;
-  let get = {}
-  let post = {}
+  let get = &#123;&#125;
+  let post = &#123;&#125;
 
   // 判断请求方法为GET还是POST，区分处理数据
-  if (method === &#39;GET&#39;) {
+  if (method === &#39;GET&#39;) &#123;
     // 使用url.parse解析get数据
-    const { pathname, query } = url.parse(req.url, true)
+    const &#123; pathname, query &#125; = url.parse(req.url, true)
 
     path = pathname
     get = query
 
     complete()
-  } else if (method === &#39;POST&#39;) {
+  &#125; else if (method === &#39;POST&#39;) &#123;
     path = req.url
     let arr = []
 
-    req.on(&#39;data&#39;, (buffer) =&gt; {
+    req.on(&#39;data&#39;, (buffer) =&gt; &#123;
       // 获取POST请求的Buffer数据
       arr.push(buffer)
-    })
+    &#125;)
 
-    req.on(&#39;end&#39;, () =&gt; {
+    req.on(&#39;end&#39;, () =&gt; &#123;
       // 将Buffer数据合并
       let buffer = Buffer.concat(arr)
 
@@ -205,18 +204,18 @@ const server = http.createServer((req, res) =&gt; {
       post = querystring.parse(buffer.toString())
 
       complete()
-    })
-  }
+    &#125;)
+  &#125;
 
   // 在回调函数中统一处理解析后的数据
-  function complete() {
+  function complete() &#123;
     console.log(method, path, get, post)
-  }
-})
+  &#125;
+&#125;)
 
-server.listen(8080)
-</code></pre>
+server.listen(8080)</code></pre>
 <a id="more"></a>
+
 <h2 id="实现一个带接口请求的简单服务器"><a href="#实现一个带接口请求的简单服务器" class="headerlink" title="实现一个带接口请求的简单服务器"></a>实现一个带接口请求的简单服务器</h2><p>虽然当前还未涉及到数据库的知识，但已经可以通过文件读写，实现一个简单的服务器，需求如下：</p>
 <ul>
 <li>用户通过GET方法请求/reg接口，实现注册流程。</li>
@@ -245,61 +244,60 @@ server.listen(8080)
   &lt;input type=&quot;button&quot; value=&quot;登录&quot; id=&quot;login&quot;&gt;
   &lt;script&gt;
     // 注册
-    document.querySelector(&#39;#reg&#39;).addEventListener(&#39;click&#39;, async function () {
-      const response = await fetch(`/reg?username=${document.querySelector(&#39;#username&#39;).value}&amp;password=${document.querySelector(&#39;#password&#39;).value}`)
+    document.querySelector(&#39;#reg&#39;).addEventListener(&#39;click&#39;, async function () &#123;
+      const response = await fetch(`/reg?username=$&#123;document.querySelector(&#39;#username&#39;).value&#125;&amp;password=$&#123;document.querySelector(&#39;#password&#39;).value&#125;`)
       const result = await response.json()
       console.log(result)
       alert(result.msg)
-    })
+    &#125;)
 
     // 登录
-    document.querySelector(&#39;#login&#39;).addEventListener(&#39;click&#39;, async function () {
-      const response = await fetch(`/login`, {
+    document.querySelector(&#39;#login&#39;).addEventListener(&#39;click&#39;, async function () &#123;
+      const response = await fetch(`/login`, &#123;
         method: &#39;POST&#39;,
-        body: JSON.stringify({
+        body: JSON.stringify(&#123;
           username: document.querySelector(&#39;#username&#39;).value,
           password: document.querySelector(&#39;#password&#39;).value
-        })
-      })
+        &#125;)
+      &#125;)
       const result = await response.json()
       console.log(result)
       alert(result.msg)
-    })
+    &#125;)
   &lt;/script&gt;
 &lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
+&lt;/html&gt;</code></pre>
 <h4 id="server-js"><a href="#server-js" class="headerlink" title="server.js"></a>server.js</h4><pre><code class="js">const http = require(&#39;http&#39;)
 const url = require(&#39;url&#39;)
 const fs = require(&#39;fs&#39;)
 const querystring = require(&#39;querystring&#39;)
 
-const server = http.createServer((req, res) =&gt; {
+const server = http.createServer((req, res) =&gt; &#123;
   // 定义公共变量，存储请求方法、路径、数据
   const method = req.method
   let path = &#39;&#39;
-  let get = {}
-  let post = {}
+  let get = &#123;&#125;
+  let post = &#123;&#125;
 
   // 判断请求方法为GET还是POST，区分处理数据
-  if (method === &#39;GET&#39;) {
+  if (method === &#39;GET&#39;) &#123;
     // 使用url.parse解析get数据
-    const { pathname, query } = url.parse(req.url, true)
+    const &#123; pathname, query &#125; = url.parse(req.url, true)
 
     path = pathname
     get = query
 
     complete()
-  } else if (method === &#39;POST&#39;) {
+  &#125; else if (method === &#39;POST&#39;) &#123;
     path = req.url
     let arr = []
 
-    req.on(&#39;data&#39;, (buffer) =&gt; {
+    req.on(&#39;data&#39;, (buffer) =&gt; &#123;
       // 获取POST请求的Buffer数据
       arr.push(buffer)
-    })
+    &#125;)
 
-    req.on(&#39;end&#39;, () =&gt; {
+    req.on(&#39;end&#39;, () =&gt; &#123;
       // 将Buffer数据合并
       let buffer = Buffer.concat(arr)
 
@@ -307,117 +305,116 @@ const server = http.createServer((req, res) =&gt; {
       post = JSON.parse(buffer.toString())
 
       complete()
-    })
-  }
+    &#125;)
+  &#125;
 
   // 在回调函数中统一处理解析后的数据
-  function complete() {
-    try {
-      if (path === &#39;/reg&#39;) {
+  function complete() &#123;
+    try &#123;
+      if (path === &#39;/reg&#39;) &#123;
         // 获取get请求数据
-        const {
+        const &#123;
           username,
           password
-        } = get
+        &#125; = get
 
         // 读取user.json文件
-        fs.readFile(&#39;./users.json&#39;, (error, data) =&gt; {
-          if (error) {
+        fs.readFile(&#39;./users.json&#39;, (error, data) =&gt; &#123;
+          if (error) &#123;
             res.writeHead(404)
-          } else {
+          &#125; else &#123;
             // 读取用户数据
             const users = JSON.parse(data.toString())
-            const usernameIndex = users.findIndex((item) =&gt; {
+            const usernameIndex = users.findIndex((item) =&gt; &#123;
               return username === item.username
-            })
+            &#125;)
 
             // 判断用户名是否存在
-            if (usernameIndex &gt;= 0) {
-              res.write(JSON.stringify({
+            if (usernameIndex &gt;= 0) &#123;
+              res.write(JSON.stringify(&#123;
                 error: 1,
                 msg: &#39;此用户名已存在&#39;
-              }))
+              &#125;))
               res.end()
-            } else {
+            &#125; else &#123;
               // 用户名不存在则在用户列表中增加一个用户
-              users.push({
+              users.push(&#123;
                 username,
                 password
-              })
+              &#125;)
 
               // 将新的用户列表保存到user.json文件中
-              fs.writeFile(&#39;./users.json&#39;, JSON.stringify(users), (error) =&gt; {
-                if (error) {
+              fs.writeFile(&#39;./users.json&#39;, JSON.stringify(users), (error) =&gt; &#123;
+                if (error) &#123;
                   res.writeHead(404)
-                } else {
-                  res.write(JSON.stringify({
+                &#125; else &#123;
+                  res.write(JSON.stringify(&#123;
                     error: 0,
                     msg: &#39;注册成功&#39;
-                  }))
-                }
+                  &#125;))
+                &#125;
                 res.end()
-              })
-            }
-          }
-        })
-      } else if (path === &#39;/login&#39;) {
-        const {
+              &#125;)
+            &#125;
+          &#125;
+        &#125;)
+      &#125; else if (path === &#39;/login&#39;) &#123;
+        const &#123;
           username,
           password
-        } = post
+        &#125; = post
 
         // 读取users.json
-        fs.readFile(&#39;./users.json&#39;, (error, data) =&gt; {
-          if (error) {
+        fs.readFile(&#39;./users.json&#39;, (error, data) =&gt; &#123;
+          if (error) &#123;
             res.writeHead(404)
-          } else {
+          &#125; else &#123;
             // 获取user列表数据
             const users = JSON.parse(data.toString())
-            const usernameIndex = users.findIndex((item) =&gt; {
+            const usernameIndex = users.findIndex((item) =&gt; &#123;
               return username === item.username
-            })
+            &#125;)
 
-            if (usernameIndex &gt;= 0) {
+            if (usernameIndex &gt;= 0) &#123;
               // 用户名存在，则校验密码是否正确
-              if (users[usernameIndex].password === password) {
-                res.write(JSON.stringify({
+              if (users[usernameIndex].password === password) &#123;
+                res.write(JSON.stringify(&#123;
                   error: 0,
                   msg: &#39;登录成功&#39;
-                }))
-              } else {
-                res.write(JSON.stringify({
+                &#125;))
+              &#125; else &#123;
+                res.write(JSON.stringify(&#123;
                   error: 1,
                   msg: &#39;密码错误&#39;
-                }))
-              }
-            } else {
-              res.write(JSON.stringify({
+                &#125;))
+              &#125;
+            &#125; else &#123;
+              res.write(JSON.stringify(&#123;
                 error: 1,
                 msg: &#39;该用户不存在&#39;
-              }))
-            }
-          }
+              &#125;))
+            &#125;
+          &#125;
           res.end()
-        })
-      } else {
+        &#125;)
+      &#125; else &#123;
         // 若不是注册或登录接口，则直接返回相应文件
-        fs.readFile(`.${path}`, (error, data) =&gt; {
-          if (error) {
+        fs.readFile(`.$&#123;path&#125;`, (error, data) =&gt; &#123;
+          if (error) &#123;
             res.writeHead(404)
-          } else {
+          &#125; else &#123;
             res.write(data)
-          }
+          &#125;
           res.end()
-        })
-      }
-    } catch (error) {
+        &#125;)
+      &#125;
+    &#125; catch (error) &#123;
       console.error(error);
-    }
-  }
-})
+    &#125;
+  &#125;
+&#125;)
 
 server.listen(8080)
-
 </code></pre>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
@@ -443,7 +440,7 @@ server.listen(8080)
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -477,7 +474,7 @@ server.listen(8080)
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#同时处理GET-POST请求"><span class="toc-number">1.</span> <span class="toc-text">同时处理GET&#x2F;POST请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现一个带接口请求的简单服务器"><span class="toc-number">2.</span> <span class="toc-text">实现一个带接口请求的简单服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#代码及示例"><span class="toc-number">2.1.</span> <span class="toc-text">代码及示例</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8C%E6%97%B6%E5%A4%84%E7%90%86GET-POST%E8%AF%B7%E6%B1%82"><span class="toc-number">1.</span> <span class="toc-text">同时处理GET&#x2F;POST请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%B8%A6%E6%8E%A5%E5%8F%A3%E8%AF%B7%E6%B1%82%E7%9A%84%E7%AE%80%E5%8D%95%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">2.</span> <span class="toc-text">实现一个带接口请求的简单服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%8F%8A%E7%A4%BA%E4%BE%8B"><span class="toc-number">2.1.</span> <span class="toc-text">代码及示例</span></a></li></ol></li></ol>
                 </div>
             </div>
             

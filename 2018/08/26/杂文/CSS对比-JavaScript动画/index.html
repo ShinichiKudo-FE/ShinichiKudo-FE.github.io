@@ -41,7 +41,7 @@ TL;DR
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -104,7 +104,7 @@ TL;DR
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    4.6k
+                    4.7k
                 </span>
                 
                 
@@ -153,7 +153,7 @@ TL;DR
 <li>当您需要高级效果（例如弹跳、停止、暂停、倒退或减速）时，请使用 JavaScript 动画。</li>
 <li>如果选择使用 JavaScript 来编写动画，可选用 Web Animations API 或用起来顺手的现代框架。</li>
 </ul>
-<p>大多数基本动画可以使用 CSS 或 JavaScript 来创建，但工作量和时间将有所不同（另请参考 <a href="https://developers.google.com/web/fundamentals/design-and-ux/animations/animations-and-performance?hl=zh-cn#css-vs-javascript-performance" target="_blank" rel="noopener">CSS 对比 JavaScript 的性能</a>）。每一种方法都有其优点和缺点，但以下内容是很好的指导原则：</p>
+<p>大多数基本动画可以使用 CSS 或 JavaScript 来创建，但工作量和时间将有所不同（另请参考 <a target="_blank" rel="noopener" href="https://developers.google.com/web/fundamentals/design-and-ux/animations/animations-and-performance?hl=zh-cn#css-vs-javascript-performance">CSS 对比 JavaScript 的性能</a>）。每一种方法都有其优点和缺点，但以下内容是很好的指导原则：</p>
 <ul>
 <li><p>当您为 UI 元素采用较小的独立状态时，使用 CSS。 CSS 变换和动画非常适合于从侧面引入导航菜单，或显示工具提示。最后，可以使用 JavaScript 来控制状态，但动画本身是采用 CSS。</p>
 </li>
@@ -164,34 +164,32 @@ TL;DR
 </ul>
 <p>或者，如果您已使用包括动画功能的 JavaScript 框架，比如通过 jQuery 的 .animate() 方法或 GreenSock 的 TweenMax，则可能发现继续使用该方法实现动画在总体上更方便。</p>
 <a id="more"></a>
+
 <h2 id="使用-CSS-编写动画"><a href="#使用-CSS-编写动画" class="headerlink" title="使用 CSS 编写动画"></a>使用 CSS 编写动画</h2><p>使用 CSS 编写动画是使内容在屏幕上移动的最简单方式。此方法被称为声明式，因为您可以指定您想要的结果。</p>
 <p>以下是一些 CSS 代码，让一个元素同时在 X 轴和 Y 轴上移动 100px。其实现方法是使用 CSS 变换，用时设置为 500 毫秒。当添加了 move 类时，transform 值被改变并且变换开始。</p>
-<pre><code class="js">.box {
+<pre><code class="js">.box &#123;
   -webkit-transform: translate(0, 0);
   -webkit-transition: -webkit-transform 500ms;
 
   transform: translate(0, 0);
   transition: transform 500ms;
-}
+&#125;
 
-.box.move {
+.box.move &#123;
   -webkit-transform: translate(100px, 100px);
   transform: translate(100px, 100px);
-}
-</code></pre>
+&#125;</code></pre>
 <p>除了变换的持续时间之外，还有针对缓动的选项，缓动基本上是动画表现的方式</p>
 <p>如果在上述代码段中，您创建单独的 CSS 类来管理动画，则可以使用 JavaScript 来打开和关闭每个动画：</p>
-<pre><code class="js">box.classList.add(&#39;move&#39;)；
-</code></pre>
+<pre><code class="js">box.classList.add(&#39;move&#39;)；</code></pre>
 <p>此操作将给您的应用带来良好的平衡。您可以侧重于使用 JavaScript 来管理状态，只需在目标元素上设置相应的类，让浏览器去处理动画。如果您按照这种方法，则可以侦听元素的 <code>transitionend</code> 事件，但前提是您能够放弃对 Internet Explorer 较旧版本的支持；IE 10 是支持这些事件的首个版本。所有其他浏览器均已支持此事件有一段时间了。</p>
 <p>侦听变换结束所需的 JavaScript 如下所示：</p>
 <pre><code class="js">var box = document.querySelector(&#39;.box&#39;);
 box.addEventListener(&#39;transitionend&#39;, onTransitionEnd, false);
 
-function onTransitionEnd() {
+function onTransitionEnd() &#123;
   // Handle the transition finishing.
-}
-</code></pre>
+&#125;</code></pre>
 <p>除了使用 CSS 变换之外，还可以使用 CSS 动画，这允许您对单个动画关键帧、持续时间和迭代进行更多控制。</p>
 <p>例如，可以使用与变换相同的方式为方框设置动画，但是设置动画时没有任何用户交互（例如点击），而是采用无限重复。还可以同时更改多个属性：</p>
 <pre><code class="css">/**
@@ -200,7 +198,7 @@ function onTransitionEnd() {
  * (which you will need), things get far
  * more verbose!
  */
-.box {
+.box &#123;
   /* Choose the animation */
   animation-name: movingBox;
 
@@ -214,42 +212,40 @@ function onTransitionEnd() {
   /* Causes the animation to reverse
       on every odd iteration */
   animation-direction: alternate;
-}
+&#125;
 
-@keyframes movingBox {
-  0% {
+@keyframes movingBox &#123;
+  0% &#123;
     transform: translate(0, 0);
     opacity: 0.3;
-  }
+  &#125;
 
-  25% {
+  25% &#123;
     opacity: 0.9;
-  }
+  &#125;
 
-  50% {
+  50% &#123;
     transform: translate(100px, 100px);
     opacity: 0.2;
-  }
+  &#125;
 
-  100% {
+  100% &#123;
     transform: translate(30px, 30px);
     opacity: 0.8;
-  }
-}
-</code></pre>
+  &#125;
+&#125;</code></pre>
 <p>借助 CSS 动画，可独立于目标元素来定义动画本身，并且使用 animation-name 属性来选择所需的动画。</p>
 <p>CSS 动画在某种程度上仍采用供应商前缀，在 Safari、Safari Mobile 和 Android 浏览器中使用-webkit-。Chrome、Opera、Internet Explorer 和 Firefox 均不采用前缀。许多工具可帮助您创建所需的 CSS 前缀版本，使您能够在源文件中编写无前缀的版本。</p>
 <h2 id="使用-JavaScript-和-Web-Animations-API-编写动画"><a href="#使用-JavaScript-和-Web-Animations-API-编写动画" class="headerlink" title="使用 JavaScript 和 Web Animations API 编写动画"></a>使用 JavaScript 和 Web Animations API 编写动画</h2><p>比较而言，使用 JavaScript 创建动画比编写 CSS 变换或动画更复杂，但它一般可为开发者提供更多功能。您可以使用 Web Animations API 给特定的 CSS 属性设置动画，或构建可组合的效果对象。</p>
 <p>JavaScript 动画是命令式，因为您将它们作为代码的一部分嵌入代码中。您还可以将它们封装在其他对象内。以下是在重新创建我们之前所讨论的 CSS 变换时需要编写的 JavaScript：</p>
 <pre><code class="js">var target = document.querySelector(&#39;.box&#39;);
 var player = target.animate([
-  {transform: &#39;translate(0)&#39;},
-  {transform: &#39;translate(100px, 100px)&#39;}
+  &#123;transform: &#39;translate(0)&#39;&#125;,
+  &#123;transform: &#39;translate(100px, 100px)&#39;&#125;
 ], 500);
-player.addEventListener(&#39;finish&#39;, function() {
+player.addEventListener(&#39;finish&#39;, function() &#123;
   target.style.transform = &#39;translate(100px, 100px)&#39;;
-});
-</code></pre>
+&#125;);</code></pre>
 <p>默认情况下，Web Animations 仅修改元素的呈现形式。如果您想让您的对象保持在它已移动到的位置，则应在动画完成时，按照我们的示例修改其底层样式。</p>
 <p>Web Animations API 是来自 W3C 的新标准，在 Chrome 和 Opera 中受原生支持，且正在进行针对 Firefox 的开发。对于其他的现代浏览器，提供 polyfill。</p>
 <p>使用 JavaScript 动画，您可以完全控制元素在每个步骤的样式。这意味着您可以在您认为合适时减慢动画、暂停动画、停止动画、倒退动画和操纵元素。如果您正在构建复杂的对象导向型应用，则此方法特别有用，因为您可以正确封装您的行为。</p>
@@ -277,7 +273,7 @@ player.addEventListener(&#39;finish&#39;, function() {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -311,7 +307,7 @@ player.addEventListener(&#39;finish&#39;, function() {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#使用-CSS-编写动画"><span class="toc-number">1.1.</span> <span class="toc-text">使用 CSS 编写动画</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用-JavaScript-和-Web-Animations-API-编写动画"><span class="toc-number">1.2.</span> <span class="toc-text">使用 JavaScript 和 Web Animations API 编写动画</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-CSS-%E7%BC%96%E5%86%99%E5%8A%A8%E7%94%BB"><span class="toc-number">1.1.</span> <span class="toc-text">使用 CSS 编写动画</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-JavaScript-%E5%92%8C-Web-Animations-API-%E7%BC%96%E5%86%99%E5%8A%A8%E7%94%BB"><span class="toc-number">1.2.</span> <span class="toc-text">使用 JavaScript 和 Web Animations API 编写动画</span></a></li></ol></li></ol>
                 </div>
             </div>
             

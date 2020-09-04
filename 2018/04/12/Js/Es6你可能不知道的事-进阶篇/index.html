@@ -39,7 +39,7 @@ Module是ES6的一个新特性，是语言层面对模块化的支持。
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -102,13 +102,13 @@ Module是ES6的一个新特性，是语言层面对模块化的支持。
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    12k
+                    13k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    11 mins.
+                    12 mins.
                 </span>
                 
                 
@@ -153,71 +153,80 @@ Module是ES6的一个新特性，是语言层面对模块化的支持。
 export default 5;      // 默认导出
 
 // b.js
-import b, {a} from &#39;./a.js&#39;;    // 默认导入，不需要加花括号
+import b, &#123;a&#125; from &#39;./a.js&#39;;    // 默认导入，不需要加花括号
 
 // 2. 动态的加载机制
 
 // a.js
 export let a = 10;
 export let b = 10;
-export function add() {
+export function add() &#123;
   a = 15;
   b = 20;
   return a+b;
-};
+&#125;;
 
 // b.js
-import {a, b, add} from &#39;./a.js&#39;;
+import &#123;a, b, add&#125; from &#39;./a.js&#39;;
 a+b;    // 20
 add();  // 35
 a+b;    // 35
-
 </code></pre>
 <h2 id="Symbol"><a href="#Symbol" class="headerlink" title="Symbol"></a>Symbol</h2><p>symbol是es6的一个新特性，他有如下特点：</p>
-<p>1.symbol是“新”的基本数据类型，从es6开始基本数据类型变成了6个，<strong>undefind,null,number,boolean,string,symbol</strong><br>2.symbol可以用作object的<em>key</em><br>3.symbol存在全局作用域，利用<strong>Symbol.for(key)方法</strong>，可以创建(全局作用域无指定键)或获取全局作用域的symbol；利用<strong>symbol.keyFor(sym)</strong>可以获取指定的symbol的值<br>4.Javascript内部使用了很多内置symbol值，作为特殊的键，来实现一些内部功能；例如：<strong>symbol.iterator</strong>用于标示对象的迭代器</p>
+<p>1.symbol是“新”的基本数据类型，从es6开始基本数据类型变成了6个，<strong>undefind,null,number,boolean,string,symbol</strong><br>2.symbol可以用作object的<em>key</em><br>3.symbol存在全局作用域，利用<strong>Symbol.for(key)方法</strong>，可以创建(全局作用域无指定键)或获取全局作用域的symbol；利用<strong>symbol.keyFor(sym)**可以获取指定的symbol的值<br>4.Javascript内部使用了很多内置symbol值，作为特殊的键，来实现一些内部功能；例如：</strong>symbol.iterator**用于标示对象的迭代器</p>
 <blockquote>
-<p>“新” 仅仅是针对前端开发人员来说的，其实 Symbol 概念本身已经在 JavaScript 语言内部长时间使用了<br><a id="more"></a><br><code>`</code>javascript<br>// 1. “Symbol(desc)” 方法用于创建一个新的 symbol，参数 “desc” 仅用做 symbol 的描述，并不用于唯一标示 symbol<br>Symbol(‘abc’) === Symbol(‘abc’); // false，’abc’仅作为两个 symbol 的描述信息</p>
+<p>“新” 仅仅是针对前端开发人员来说的，其实 Symbol 概念本身已经在 JavaScript 语言内部长时间使用了</p>
 </blockquote>
-<p>// 2. “Symbol.for(key)” 方法，参数 “key” 是用于在全局作用域中标示 symbol 的唯一键，同时也作为该 symbol 的描述信息<br>Symbol.for(‘abc’) === Symbol(‘abc’); //true 左侧为创建，右侧为获取<br>Symbol.for(‘abc’) === Symbol(‘abc’); //false</p>
-<p>// 3. symbol 无法被 for…in 遍历到 (不可枚举)，可以利用 Object.getOwnPropertySymbols 获取<br>const obj = {<br>    [Symbol(‘abc’)]:’abc’,<br>    ‘abc’:’abc’<br>};<br>for(let i in obj){<br>    console.log(i);//abc<br>}<br>Object.getOwnPropertySymbols(obj);//[Symbol(abc)]</p>
-<pre><code>
-## Iterator + for ...of
+<a id="more"></a>
+<pre><code class="javascript">// 1. &quot;Symbol(desc)&quot; 方法用于创建一个新的 symbol，参数 &quot;desc&quot; 仅用做 symbol 的描述，并不用于唯一标示 symbol
+Symbol(&#39;abc&#39;) === Symbol(&#39;abc&#39;); // false，&#39;abc&#39;仅作为两个 symbol 的描述信息
 
-ES6 中除了新特性外，还有一个新的规范，那就是关于迭代的规范，他包括两部分分别是 “可迭代规范（iterable protocol）” 和 “迭代器规范（iterator protocol）”。任何实现了前者的对象，都可以进行 for…of 循环。
+// 2. &quot;Symbol.for(key)&quot; 方法，参数 &quot;key&quot; 是用于在全局作用域中标示 symbol 的唯一键，同时也作为该 symbol 的描述信息
+Symbol.for(&#39;abc&#39;) === Symbol(&#39;abc&#39;); //true 左侧为创建，右侧为获取
+Symbol.for(&#39;abc&#39;) === Symbol(&#39;abc&#39;); //false
 
-**String,Map,Set,Array**等是原生可迭代对象，因为他们都是在原型(prototype)对象中实现了`Symbol.iterator`键对应的方法。
-
-&gt; for...of是对对象迭代器的遍历（键和值都可以遍历），而for...in是对象可枚举值的遍历
-
-下面用代码来解释一下两个规范：
-```javascript
-//1.迭代器规范
-const iter = {
+// 3. symbol 无法被 for...in 遍历到 (不可枚举)，可以利用 Object.getOwnPropertySymbols 获取
+const obj = &#123;
+    [Symbol(&#39;abc&#39;)]:&#39;abc&#39;,
+    &#39;abc&#39;:&#39;abc&#39;
+&#125;;
+for(let i in obj)&#123;
+    console.log(i);//abc
+&#125;
+Object.getOwnPropertySymbols(obj);//[Symbol(abc)]</code></pre>
+<h2 id="Iterator-for-…of"><a href="#Iterator-for-…of" class="headerlink" title="Iterator + for …of"></a>Iterator + for …of</h2><p>ES6 中除了新特性外，还有一个新的规范，那就是关于迭代的规范，他包括两部分分别是 “可迭代规范（iterable protocol）” 和 “迭代器规范（iterator protocol）”。任何实现了前者的对象，都可以进行 for…of 循环。</p>
+<p><strong>String,Map,Set,Array</strong>等是原生可迭代对象，因为他们都是在原型(prototype)对象中实现了<code>Symbol.iterator</code>键对应的方法。</p>
+<blockquote>
+<p>for…of是对对象迭代器的遍历（键和值都可以遍历），而for…in是对象可枚举值的遍历</p>
+</blockquote>
+<p>下面用代码来解释一下两个规范：</p>
+<pre><code class="javascript">//1.迭代器规范
+const iter = &#123;
     conter:0,
-    next(){ // 迭代器是实现了 &quot;next()&quot; 函数的对象
-        if(++this.conter &lt; 10){
-            return{ // 返回一个含有两个键值对的对象，Object {done =&gt; boolean, value =&gt; any}
+    next()&#123; // 迭代器是实现了 &quot;next()&quot; 函数的对象
+        if(++this.conter &lt; 10)&#123;
+            return&#123; // 返回一个含有两个键值对的对象，Object &#123;done =&gt; boolean, value =&gt; any&#125;
                 done:false,
                 value:this.conter
-            }
-        }else{
+            &#125;
+        &#125;else&#123;
             this.conter = 0;
-            return { // done = true 时，value非必须
+            return &#123; // done = true 时，value非必须
                 done : true;
-            }
-        }
-    }
-}
+            &#125;
+        &#125;
+    &#125;
+&#125;
 // 2. 可迭代规范，实现 &quot;Symbol.iterator =&gt; func()&quot; 键值对；而 &quot;func()&quot; 返回一个 迭代器对象
-const iterObj = {};
-for(let i of iterObj){};
-iterObj[Symbol.iterator] = function(){
+const iterObj = &#123;&#125;;
+for(let i of iterObj)&#123;&#125;;
+iterObj[Symbol.iterator] = function()&#123;
     return iter;
-}
-for(let i of iterObj){
+&#125;
+for(let i of iterObj)&#123;
     console.log(i);//1,2,3,4,5,6,7,8,9
-}
-</code></pre><h2 id="关于集合"><a href="#关于集合" class="headerlink" title="关于集合"></a>关于集合</h2><p>原来我们使用集合，多数情况下会直接用 Object 代替，ES6新增了两个特性，<em>Map</em> 和 <em>Set</em>，他们是对 JavaScript 关于集合概念的补充。</p>
+&#125;</code></pre>
+<h2 id="关于集合"><a href="#关于集合" class="headerlink" title="关于集合"></a>关于集合</h2><p>原来我们使用集合，多数情况下会直接用 Object 代替，ES6新增了两个特性，<em>Map</em> 和 <em>Set</em>，他们是对 JavaScript 关于集合概念的补充。</p>
 <h3 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h3><p>为什么要有Map这种数据结构？直接使用Object不好吗？是不是完全可以使用Map取代object用于数据存取？</p>
 <blockquote>
 <p>Map和Object的区别？<br>1.Map和Object都可以用作数据存取，Map适用于存取需要<strong>常需要变化(增减键值对)或遍历的数剧集</strong>，而Object适用于<strong>存取静态（例如配置信息）</strong>的数据集<br>2.Object的key必须是<code>String</code>或者<code>symbol</code>类型，而Map却无此限制，可以是<code>任何值</code><br>3.Map可以很方便的取到键对值的数量，而Object则需要用额外途径</p>
@@ -226,11 +235,10 @@ for(let i of iterObj){
 <p>1.Set可以存储任何类型的值，<strong>遍历顺序与插入顺序相同</strong></p>
 <p>2.Set内<strong>无重复值</strong></p>
 <pre><code class="javascript">// 1. Set 的构造函数可以传入一个 “可迭代的对象（例如数组）”，其中包含任意值
-const first = new Set([&#39;a&#39;, 1, {&#39;b&#39;: 1}, null]);    // Set {&quot;a&quot;, 1, Object {b: 1}, null}
+const first = new Set([&#39;a&#39;, 1, &#123;&#39;b&#39;: 1&#125;, null]);    // Set &#123;&quot;a&quot;, 1, Object &#123;b: 1&#125;, null&#125;
 
 // 2. Set 无法插入重复的值
-first.add(1);    // Set {&quot;a&quot;, 1, Object {b: 1}, null}
-</code></pre>
+first.add(1);    // Set &#123;&quot;a&quot;, 1, Object &#123;b: 1&#125;, null&#125;</code></pre>
 <h2 id="WeakMap-WeakSet"><a href="#WeakMap-WeakSet" class="headerlink" title="WeakMap + WeakSet"></a>WeakMap + WeakSet</h2><p><code>WeakMap</code> 与 <code>WeakSet</code> 作为一个比较新颖的概念，其主要特点在于弱引用。</p>
 <p>相比于 Map 与 Set 的强引用，弱引用可以令对象在 “适当” 情况下正确被 GC 回收，减少内存资源浪费。</p>
 <p><strong>但由于不是强引用，所以无法进行遍历或取得值数量，只能用于值的存取（WeakMap）或是否存在值得判断（WeakSet）</strong></p>
@@ -243,34 +251,32 @@ first.add(1);    // Set {&quot;a&quot;, 1, Object {b: 1}, null}
 const err = new WeakMap([[&#39;a&#39;,1]]);    // TypeError: Invalid value used as weak map key
 
 // 2. WeakMap/WeakSet 的弱引用
-const wm = new WeakMap([[{&#39;a&#39;:1},1]]);    // Object {&#39;a&#39;: 1} 会正常被 GC 回收
+const wm = new WeakMap([[&#123;&#39;a&#39;:1&#125;,1]]);    // Object &#123;&#39;a&#39;: 1&#125; 会正常被 GC 回收
 
 const ws = new WeakSet(); 
-ws.add({&#39;a&#39;:1});    // Object {&#39;a&#39;: 1} 会正常被 GC 回收
+ws.add(&#123;&#39;a&#39;:1&#125;);    // Object &#123;&#39;a&#39;: 1&#125; 会正常被 GC 回收
 
-const obj = {&#39;b&#39;: 1};
-ws.add(obj);        // Object {&#39;b&#39;: 1} 不会被正常 GC 回收，因为存在一个强引用
-obj = undefined;    // Object {&#39;b&#39;: 1} 会正常被 GC 回收
-</code></pre>
+const obj = &#123;&#39;b&#39;: 1&#125;;
+ws.add(obj);        // Object &#123;&#39;b&#39;: 1&#125; 不会被正常 GC 回收，因为存在一个强引用
+obj = undefined;    // Object &#123;&#39;b&#39;: 1&#125; 会正常被 GC 回收</code></pre>
 <h2 id="异步编程"><a href="#异步编程" class="headerlink" title="异步编程"></a>异步编程</h2><p>在 ES6 之前，JavaScript 的异步编程都跳不出回调函数这个方式。回调函数方式使用非常简单，在简单异步任务调用时候没有任何问题，但如果出现复杂的异步任务场景时，就显得力不从心了，最主要的问题就是多层回调函数的嵌套会导致代码的横向发展，难以维护；ES6 带来了两个新特性来解决异步编程的难题。</p>
 <pre><code class="javascript">// 一个简单的多层嵌套回调函数的例子 (Node.js)
 const git = require(&#39;shell&#39;).git;
 const commitMsg = &#39;...&#39;;
 
-git.add(&#39;pattern/for/some/files/*&#39;, (err) =&gt; {
-  if(!err){
-    git.commit(commitMsg, (err) =&gt; {
-      if(!err){
+git.add(&#39;pattern/for/some/files/*&#39;, (err) =&gt; &#123;
+  if(!err)&#123;
+    git.commit(commitMsg, (err) =&gt; &#123;
+      if(!err)&#123;
         git.push(pushOption);
-      }else{
+      &#125;else&#123;
         console.log(err);
-      }
-    });
-  }else{
+      &#125;
+    &#125;);
+  &#125;else&#123;
     console.log(err);
-  }
-});
-</code></pre>
+  &#125;
+&#125;);</code></pre>
 <h3 id="Promise"><a href="#Promise" class="headerlink" title="Promise"></a>Promise</h3><p>Promise是ES6的一个新特性，ta他有如下特点：</p>
 <p>1.本质还是回调函数<br>2.区分成功和失败的回调，省去嵌套在内层的判断逻辑<br>3.可以很轻松的完成回调函数模式到promise模式的转化<br>4.代码由回调函数嵌套的横向扩展，变为链式调用的纵向扩展，便于编程和维护</p>
 <p>promise 虽然优势颇多，但是代码结构仍与同步代码区别较大</p>
@@ -282,10 +288,9 @@ const commitMsg = &#39;...&#39;;
 git.add(&#39;pattern/for/some/files/*&#39;)
   .then(() =&gt; git.commit(commitMsg))
   .then(git.push)
-  .catch((err) =&gt; {
+  .catch((err) =&gt; &#123;
     console.log(err);
-  });
-</code></pre>
+  &#125;);</code></pre>
 <h3 id="generator"><a href="#generator" class="headerlink" title="generator"></a>generator</h3><p>Generator 作为 ES6 的新特性，是一个语言层面的升级。它有以下几个特点：<br>1.可以使用yield关键字，终止执行返回（内到外）<br>2.可以通过next(val)方法调用重新唤醒，继续执行（外回内）<br>3.运行时（包括挂起态），<strong>共享局部变量</strong><br>4.<code>Generator</code> 执行会返回一个结果对象，结果对象本身既是迭代器，同时也是可迭代对象（同时满足两个迭代规范），所以 Generator 可以<code>直接用于 自定义对象迭代器</code></p>
 <p>由于具备以上特点（第四点除外），Generator 也是 JavaScript 对 协程（coroutine）的实现，协程可以理解为 “可由开发人员控制调度的多线程”</p>
 <blockquote>
@@ -314,32 +319,30 @@ git.add(&#39;pattern/for/some/files/*&#39;)
 const co = require(&#39;co&#39;);
 const git = require(&#39;shell&#39;).git;
 
-co(function* (){
+co(function* ()&#123;
   const commitMsg = &#39;...&#39;;      // 共享的局部变量
 
   yield git.add(&#39;pattern/for/some/files/*&#39;);
   yield git.commit(commitMsg);
   yield git.push();
-}).catch((err) =&gt; {
+&#125;).catch((err) =&gt; &#123;
   console.log(err);
-});
-</code></pre>
+&#125;);</code></pre>
 <p>Generator 是一个 ES6 最佳的异步编程选择么？显然不是，因为除了基本语法外，我们还要额外去实现执行器来达到执行的目的，但是它整体的代码结构是优于回调函数嵌套和 Promise 模式的。</p>
 <h3 id="Async-Await"><a href="#Async-Await" class="headerlink" title="Async-Await"></a>Async-Await</h3><p>这并不是一个 ES6 新特性，而是 ES7 的语法，放在这里是因为它将是 JavaScript 目前支持异步编程最好的方式</p>
 <pre><code class="javascript">// 上例用 async-await 实现
 // 假定 git.add, git.commit, git.push 均做了 Promise 封装，返回一个 Promise 对象
 const git = require(&#39;shell&#39;).git;
-(async function(){
+(async function()&#123;
     const commitMsg = &#39;&#39;; //共享局部变量
-    try(){
+    try()&#123;
         await git.add(&#39;pattern/for/some/files/*&#39;);
         await git.commit(commitMsg);
         await git.push();
-    }catch(err){
+    &#125;catch(err)&#123;
         console.log(err);
-    }
-})()
-</code></pre>
+    &#125;
+&#125;)()</code></pre>
 <h2 id="元编程"><a href="#元编程" class="headerlink" title="元编程"></a>元编程</h2><p>元编程是指的是开发人员对 “语言本身进行编程”。一般是编程语言暴露了一些 API，供开发人员来操作语言本身的某些特性。ES6 两个新特性 Proxy 和 Reflect 是 JavaScript 关于对象元编程能力的扩展。</p>
 <h3 id="proxy"><a href="#proxy" class="headerlink" title="proxy"></a>proxy</h3><p>Proxy 是 ES6 加入的一个新特性，它可以 <code>“代理” 对象的原生行为</code>，替换为<code>执行自定义行为</code>。</p>
 <p>这样的元编程能力使得我们可以更轻松的扩展出一些特殊对象。</p>
@@ -350,63 +353,61 @@ const git = require(&#39;shell&#39;).git;
 </ul>
 </blockquote>
 <pre><code class="javascript">// 简单 element 选择控制工具的实现
-const cacheElement = function(target, prop) {
-  if(target.hasOwnProperty(prop)){
+const cacheElement = function(target, prop) &#123;
+  if(target.hasOwnProperty(prop))&#123;
       return target[prop];
-    }else{
+    &#125;else&#123;
       return target[prop] = document.getElementById(prop);
-    }
-}
+    &#125;
+&#125;
 
-const elControl = new Proxy(cacheElement, {
-  get: (target, prop) =&gt; {
+const elControl = new Proxy(cacheElement, &#123;
+  get: (target, prop) =&gt; &#123;
     return cacheElement(target, prop);
-  },
-  set: (target, prop, val) =&gt; {
+  &#125;,
+  set: (target, prop, val) =&gt; &#123;
     cacheElement(target, prop).textContent = val;
-  },
-  apply: (target, thisArg, args) =&gt; {
+  &#125;,
+  apply: (target, thisArg, args) =&gt; &#123;
     return Reflect.ownKeys(target);
-  }
-});
+  &#125;
+&#125;);
 
 elControl.first;     // div#first
 elControl.second;    // div#second
 elControl.first = 5;    // div#first =&gt; 5
 elControl.second = 10;  // div#second =&gt; 10
-elControl();    // [&#39;first&#39;, &#39;second&#39;]
-</code></pre>
+elControl();    // [&#39;first&#39;, &#39;second&#39;]</code></pre>
 <h3 id="Reflect"><a href="#Reflect" class="headerlink" title="Reflect"></a>Reflect</h3><p>ES6 中引入的 <code>Reflect</code> 是另一个元编程的特性，它使得我们可以直接操纵对象的原生行为。<code>Reflect</code> 可操纵的行为与 <code>Proxy</code> 可代理的行为是一一对应的，这使得可以在 <code>Proxy</code> 的自定义方法中方便的使用 <code>Reflect</code> 调起原生行为</p>
 <pre><code class="javascript">// 1. Proxy 的自定义方法中，通过 Reflect 调用原生行为
-const customProxy = new Proxy({
+const customProxy = new Proxy(&#123;
   &#39;custom&#39;: 1
-}, {
-  get: (target, prop) =&gt; {
-    console.log(`get ${prop} !`);
+&#125;, &#123;
+  get: (target, prop) =&gt; &#123;
+    console.log(`get $&#123;prop&#125; !`);
     return Reflect.get(target, undefined, prop);
-  }
-});
+  &#125;
+&#125;);
 
 customProxy.custom;  // get custom, 1
 
 // 2. 与 Object 对象上已经开放的操作原生行为方法相比，语法更加清晰易用（例如：Object.hasOwnProperty 与 Reflect.has）
 const symb = Symbol(&#39;b&#39;);
-const a = {
+const a = &#123;
   [symb]: 1,
   &#39;b&#39;: 2
-};
+&#125;;
 
-if(Reflect.has(a, symb) &amp;&amp; Reflect.has(a, &#39;b&#39;)){  // good
+if(Reflect.has(a, symb) &amp;&amp; Reflect.has(a, &#39;b&#39;))&#123;  // good
   console.log(&#39;good&#39;);
-}
-Reflect.ownKeys(a);  // [&quot;b&quot;, Symbol(b)]
-</code></pre>
-<h2 id="进阶阅读"><a href="#进阶阅读" class="headerlink" title="进阶阅读"></a>进阶阅读</h2><p>如果你关注兼容性，推荐看：<a href="https://kangax.github.io/compat-table/es6/，这里介绍了从" target="_blank" rel="noopener">https://kangax.github.io/compat-table/es6/，这里介绍了从</a> ES5 到 ES2016+ 的所有特性（包括仍未定稿的特性）及其在各环境的兼容性</p>
-<p>如果你关注性能，推荐看：<a href="http://kpdecker.github.io/six-speed/，这里通过性能测试，将" target="_blank" rel="noopener">http://kpdecker.github.io/six-speed/，这里通过性能测试，将</a> ES6 特性的原生实现与 ES5 polyfill 版本进行对比，覆盖了各主流环境；同时也可以侧面对比出各环境在原生实现上的性能优劣</p>
-<p>如果你想全面了解特性，推荐看：<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript，覆盖特性的各方面，包括全面的" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Web/JavaScript，覆盖特性的各方面，包括全面的</a> API（包括不推荐和废弃的）和基础用法</p>
-<p>如果你想看特性更多的使用示例和对应的 polyfill 实现，推荐看：<a href="http://es6-features.org/#Constants，这里对各个特性都给出了使用丰富的例子和一个" target="_blank" rel="noopener">http://es6-features.org/#Constants，这里对各个特性都给出了使用丰富的例子和一个</a> polyfill 实现，简单明了</p>
-<p>如果想了解 ECMA Script 最多最全面的细节，英语又比较过硬，推荐在需要时看：<a href="http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf，（或者直接看最新的：https://tc39.github.io/ecma262/）" target="_blank" rel="noopener">http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf，（或者直接看最新的：https://tc39.github.io/ecma262/）</a></p>
-<p><a href="http://taobaofed.org/blog/2016/11/03/es6-advanced/" target="_blank" rel="noopener">原文地址</a></p>
+&#125;
+Reflect.ownKeys(a);  // [&quot;b&quot;, Symbol(b)]</code></pre>
+<h2 id="进阶阅读"><a href="#进阶阅读" class="headerlink" title="进阶阅读"></a>进阶阅读</h2><p>如果你关注兼容性，推荐看：<a target="_blank" rel="noopener" href="https://kangax.github.io/compat-table/es6/%EF%BC%8C%E8%BF%99%E9%87%8C%E4%BB%8B%E7%BB%8D%E4%BA%86%E4%BB%8E">https://kangax.github.io/compat-table/es6/，这里介绍了从</a> ES5 到 ES2016+ 的所有特性（包括仍未定稿的特性）及其在各环境的兼容性</p>
+<p>如果你关注性能，推荐看：<a target="_blank" rel="noopener" href="http://kpdecker.github.io/six-speed/%EF%BC%8C%E8%BF%99%E9%87%8C%E9%80%9A%E8%BF%87%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%EF%BC%8C%E5%B0%86">http://kpdecker.github.io/six-speed/，这里通过性能测试，将</a> ES6 特性的原生实现与 ES5 polyfill 版本进行对比，覆盖了各主流环境；同时也可以侧面对比出各环境在原生实现上的性能优劣</p>
+<p>如果你想全面了解特性，推荐看：<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript%EF%BC%8C%E8%A6%86%E7%9B%96%E7%89%B9%E6%80%A7%E7%9A%84%E5%90%84%E6%96%B9%E9%9D%A2%EF%BC%8C%E5%8C%85%E6%8B%AC%E5%85%A8%E9%9D%A2%E7%9A%84">https://developer.mozilla.org/en-US/docs/Web/JavaScript，覆盖特性的各方面，包括全面的</a> API（包括不推荐和废弃的）和基础用法</p>
+<p>如果你想看特性更多的使用示例和对应的 polyfill 实现，推荐看：<a target="_blank" rel="noopener" href="http://es6-features.org/#Constants%EF%BC%8C%E8%BF%99%E9%87%8C%E5%AF%B9%E5%90%84%E4%B8%AA%E7%89%B9%E6%80%A7%E9%83%BD%E7%BB%99%E5%87%BA%E4%BA%86%E4%BD%BF%E7%94%A8%E4%B8%B0%E5%AF%8C%E7%9A%84%E4%BE%8B%E5%AD%90%E5%92%8C%E4%B8%80%E4%B8%AA">http://es6-features.org/#Constants，这里对各个特性都给出了使用丰富的例子和一个</a> polyfill 实现，简单明了</p>
+<p>如果想了解 ECMA Script 最多最全面的细节，英语又比较过硬，推荐在需要时看：<a target="_blank" rel="noopener" href="http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf%EF%BC%8C%EF%BC%88%E6%88%96%E8%80%85%E7%9B%B4%E6%8E%A5%E7%9C%8B%E6%9C%80%E6%96%B0%E7%9A%84%EF%BC%9Ahttps://tc39.github.io/ecma262/%EF%BC%89">http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf，（或者直接看最新的：https://tc39.github.io/ecma262/）</a></p>
+<p><a target="_blank" rel="noopener" href="http://taobaofed.org/blog/2016/11/03/es6-advanced/">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -431,7 +432,7 @@ Reflect.ownKeys(a);  // [&quot;b&quot;, Symbol(b)]
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -465,7 +466,7 @@ Reflect.ownKeys(a);  // [&quot;b&quot;, Symbol(b)]
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#正文"><span class="toc-number">1.</span> <span class="toc-text">正文</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Module"><span class="toc-number">1.1.</span> <span class="toc-text">Module</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Symbol"><span class="toc-number">1.2.</span> <span class="toc-text">Symbol</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于集合"><span class="toc-number">1.3.</span> <span class="toc-text">关于集合</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Map"><span class="toc-number">1.3.1.</span> <span class="toc-text">Map</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Set"><span class="toc-number">1.3.2.</span> <span class="toc-text">Set</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WeakMap-WeakSet"><span class="toc-number">1.4.</span> <span class="toc-text">WeakMap + WeakSet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#异步编程"><span class="toc-number">1.5.</span> <span class="toc-text">异步编程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise"><span class="toc-number">1.5.1.</span> <span class="toc-text">Promise</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#generator"><span class="toc-number">1.5.2.</span> <span class="toc-text">generator</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Async-Await"><span class="toc-number">1.5.3.</span> <span class="toc-text">Async-Await</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#元编程"><span class="toc-number">1.6.</span> <span class="toc-text">元编程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#proxy"><span class="toc-number">1.6.1.</span> <span class="toc-text">proxy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reflect"><span class="toc-number">1.6.2.</span> <span class="toc-text">Reflect</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进阶阅读"><span class="toc-number">1.7.</span> <span class="toc-text">进阶阅读</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%AD%A3%E6%96%87"><span class="toc-number">1.</span> <span class="toc-text">正文</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Module"><span class="toc-number">1.1.</span> <span class="toc-text">Module</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Symbol"><span class="toc-number">1.2.</span> <span class="toc-text">Symbol</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Iterator-for-%E2%80%A6of"><span class="toc-number">1.3.</span> <span class="toc-text">Iterator + for …of</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E9%9B%86%E5%90%88"><span class="toc-number">1.4.</span> <span class="toc-text">关于集合</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Map"><span class="toc-number">1.4.1.</span> <span class="toc-text">Map</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Set"><span class="toc-number">1.4.2.</span> <span class="toc-text">Set</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WeakMap-WeakSet"><span class="toc-number">1.5.</span> <span class="toc-text">WeakMap + WeakSet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B"><span class="toc-number">1.6.</span> <span class="toc-text">异步编程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise"><span class="toc-number">1.6.1.</span> <span class="toc-text">Promise</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#generator"><span class="toc-number">1.6.2.</span> <span class="toc-text">generator</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Async-Await"><span class="toc-number">1.6.3.</span> <span class="toc-text">Async-Await</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%83%E7%BC%96%E7%A8%8B"><span class="toc-number">1.7.</span> <span class="toc-text">元编程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#proxy"><span class="toc-number">1.7.1.</span> <span class="toc-text">proxy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reflect"><span class="toc-number">1.7.2.</span> <span class="toc-text">Reflect</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E9%98%B6%E9%98%85%E8%AF%BB"><span class="toc-number">1.8.</span> <span class="toc-text">进阶阅读</span></a></li></ol></li></ol>
                 </div>
             </div>
             

@@ -37,7 +37,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -100,7 +100,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    4.2k
+                    4k
                 </span>
                 
                 
@@ -145,19 +145,16 @@
 <p>既然是国内厂商发布的，所以只针对安卓用户。</p>
 <p>怎么感觉都是在对微信小程序一家独大的应对。</p>
 <p>废话少说开撸吧。</p>
-<p><em>快应用开发者文档</em> <a href="https://doc.quickapp.cn/" target="_blank" rel="noopener">https://doc.quickapp.cn/</a>   看了这个就是表示入门了</p>
-<p><em>快应用开发者论坛</em> <a href="http://bbs.quickapp.cn/" target="_blank" rel="noopener">http://bbs.quickapp.cn/</a></p>
+<p><em>快应用开发者文档</em> <a target="_blank" rel="noopener" href="https://doc.quickapp.cn/">https://doc.quickapp.cn/</a>   看了这个就是表示入门了</p>
+<p><em>快应用开发者论坛</em> <a target="_blank" rel="noopener" href="http://bbs.quickapp.cn/">http://bbs.quickapp.cn/</a></p>
 <h2 id="搭建环境"><a href="#搭建环境" class="headerlink" title="搭建环境"></a>搭建环境</h2><h3 id="安装nodejs"><a href="#安装nodejs" class="headerlink" title="安装nodejs"></a>安装nodejs</h3><p>需安装<font color = "red">6.0以上版本</font>的nodejs，请从NodeJS官网下载，<font color = "red">推荐v6.11.3 LTS</font></p>
-<p><strong>注意: 不要使用8.0.*版本．这个版本内部ZipStream实现与node-archive包不兼容，会引起报错</strong></p>
-<h3 id="安装hap-toolkit-快应用命令"><a href="#安装hap-toolkit-快应用命令" class="headerlink" title="安装hap-toolkit (快应用命令)"></a>安装hap-toolkit (快应用命令)</h3><pre><code class="javascript">npm install - g hap-toolkit
-</code></pre>
+<p>*<em>注意: 不要使用8.0.<em>版本．这个版本内部ZipStream实现与node-archive包不兼容，会引起报错</em></em></p>
+<h3 id="安装hap-toolkit-快应用命令"><a href="#安装hap-toolkit-快应用命令" class="headerlink" title="安装hap-toolkit (快应用命令)"></a>安装hap-toolkit (快应用命令)</h3><pre><code class="javascript">npm install - g hap-toolkit</code></pre>
 <a id="more"></a>
 <p>在命令行中执行hap -V会输出版本信息表示hap-toolkit安装成功，如下命令所示：</p>
-<pre><code class="javascript">hap -V
-</code></pre>
+<pre><code class="javascript">hap -V</code></pre>
 <p>目前版本是0.0.26</p>
-<h2 id="创建新的项目"><a href="#创建新的项目" class="headerlink" title="创建新的项目"></a>创建新的项目</h2><pre><code class="javascript">hap init &lt;ProjectName&gt;
-</code></pre>
+<h2 id="创建新的项目"><a href="#创建新的项目" class="headerlink" title="创建新的项目"></a>创建新的项目</h2><pre><code class="javascript">hap init &lt;ProjectName&gt;</code></pre>
 <p>成功后即显示项目目录结构</p>
 <pre><code class="html">├── node_modules              npm 包
 ├── sign                      rpk包签名模块
@@ -171,14 +168,11 @@
 │   |   └── index.ux          页面文件，文件名不必与父文件夹相同
 │   ├── app.ux                APP文件（用于包括公用资源）
 │   └── manifest.json         项目配置文件（如：应用描述、接口申明、页面路由等）
-└── package.json              定义项目需要的各种模块及配置信息，npm install根据这个配置文件，自动下载所需的运行和开发环境
-</code></pre>
+└── package.json              定义项目需要的各种模块及配置信息，npm install根据这个配置文件，自动下载所需的运行和开发环境</code></pre>
 <h2 id="编译项目"><a href="#编译项目" class="headerlink" title="编译项目"></a>编译项目</h2><p>1.在项目根目录下，运行如下命令安装依赖包（webpack，babel等）</p>
-<pre><code class="javascript">npm install
-</code></pre>
+<pre><code class="javascript">npm install</code></pre>
 <ol start="2">
-<li>在项目的根目录下，运行如下命令进行编译打包，生成rpk包<pre><code class="javascript">npm run build
-</code></pre>
+<li>在项目的根目录下，运行如下命令进行编译打包，生成rpk包<pre><code class="javascript">npm run build</code></pre>
 </li>
 </ol>
 <blockquote>
@@ -191,25 +185,23 @@
 </ul>
 </blockquote>
 <p>3.自动重新编译</p>
-<pre><code class="javascript">npm run watch
-</code></pre>
-<font color = "red">注意：npm run watch后还需要另外运行npm run server来运行server才能实现热更新</font>
+<pre><code class="javascript">npm run watch</code></pre>
+<p><font color = "red">注意：npm run watch后还需要另外运行npm run server来运行server才能实现热更新</font></p>
+<font color = "red">
+**注意**：
 
-<font color = "red"><br><strong>注意</strong>：<br><br>如果报错遇到Cannot find module ‘…/webpack.config.js’，请重新执行一次hap update –force。这是由于高版本的npm在npm install时，会校验并删除了node_modules下部分文件夹，导致报错。而hap update –force会重新复制hap-toolkit文件夹到node_modules中</font>
-
+<p>如果报错遇到Cannot find module ‘…/webpack.config.js’，请重新执行一次hap update –force。这是由于高版本的npm在npm install时，会校验并删除了node_modules下部分文件夹，导致报错。而hap update –force会重新复制hap-toolkit文件夹到node_modules中</font></p>
 <h2 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h2><p>需要安装两个APP应用程序(必须！需要在真机上调试预览)</p>
-<p><a href="https://statres.quickapp.cn/quickapp/quickapp/201803/file/201803200129552999556.apk" target="_blank" rel="noopener">快应用调试器</a><br><a href="https://statres.quickapp.cn/quickapp/quickapp/201803/file/201803200130021102030.apk" target="_blank" rel="noopener">平台预览版</a></p>
+<p><a target="_blank" rel="noopener" href="https://statres.quickapp.cn/quickapp/quickapp/201803/file/201803200129552999556.apk">快应用调试器</a><br><a target="_blank" rel="noopener" href="https://statres.quickapp.cn/quickapp/quickapp/201803/file/201803200130021102030.apk">平台预览版</a></p>
 <h3 id="二维码预览"><a href="#二维码预览" class="headerlink" title="二维码预览"></a>二维码预览</h3><p>在终端输入,启动本地服务器</p>
-<pre><code class="javascript">npm run server
-</code></pre>
+<pre><code class="javascript">npm run server</code></pre>
 <p>自定义端口（如：8080）</p>
-<pre><code class="javascript">npm run server -- --port 8080
-</code></pre>
+<pre><code class="javascript">npm run server -- --port 8080</code></pre>
 <p>在调试器APP选择扫描二维码；</p>
 <p>如果提示安装失败，建议重新起一遍npm run server 重新来过。</p>
 <h2 id="本地安装"><a href="#本地安装" class="headerlink" title="本地安装"></a>本地安装</h2><p>选择dist目录下的.rpk文件传输到手机 在调试器中选择手动安装找到你的.rpk即可安装<br>出现了这个，代表你安装成功，这就是Demo效果<br><img src="https://doc.quickapp.cn/tutorial/getting-started/hello-world.2.png" alt="qck"></p>
-<p>应用上传流程 <a href="http://bbs.quickapp.cn/posts/detail?id=249" target="_blank" rel="noopener">http://bbs.quickapp.cn/posts/detail?id=249</a></p>
-<p>账号注册流程 <a href="http://bbs.quickapp.cn/posts/detail?id=248" target="_blank" rel="noopener">http://bbs.quickapp.cn/posts/detail?id=248</a></p>
+<p>应用上传流程 <a target="_blank" rel="noopener" href="http://bbs.quickapp.cn/posts/detail?id=249">http://bbs.quickapp.cn/posts/detail?id=249</a></p>
+<p>账号注册流程 <a target="_blank" rel="noopener" href="http://bbs.quickapp.cn/posts/detail?id=248">http://bbs.quickapp.cn/posts/detail?id=248</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -234,7 +226,7 @@
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -268,7 +260,7 @@
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#QuickApp"><span class="toc-number">1.</span> <span class="toc-text">QuickApp</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#搭建环境"><span class="toc-number">1.1.</span> <span class="toc-text">搭建环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装nodejs"><span class="toc-number">1.1.1.</span> <span class="toc-text">安装nodejs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装hap-toolkit-快应用命令"><span class="toc-number">1.1.2.</span> <span class="toc-text">安装hap-toolkit (快应用命令)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建新的项目"><span class="toc-number">1.2.</span> <span class="toc-text">创建新的项目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编译项目"><span class="toc-number">1.3.</span> <span class="toc-text">编译项目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#调试"><span class="toc-number">1.4.</span> <span class="toc-text">调试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#二维码预览"><span class="toc-number">1.4.1.</span> <span class="toc-text">二维码预览</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#本地安装"><span class="toc-number">1.5.</span> <span class="toc-text">本地安装</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#QuickApp"><span class="toc-number">1.</span> <span class="toc-text">QuickApp</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%90%AD%E5%BB%BA%E7%8E%AF%E5%A2%83"><span class="toc-number">1.1.</span> <span class="toc-text">搭建环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85nodejs"><span class="toc-number">1.1.1.</span> <span class="toc-text">安装nodejs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85hap-toolkit-%E5%BF%AB%E5%BA%94%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.1.2.</span> <span class="toc-text">安装hap-toolkit (快应用命令)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%96%B0%E7%9A%84%E9%A1%B9%E7%9B%AE"><span class="toc-number">1.2.</span> <span class="toc-text">创建新的项目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E9%A1%B9%E7%9B%AE"><span class="toc-number">1.3.</span> <span class="toc-text">编译项目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E8%AF%95"><span class="toc-number">1.4.</span> <span class="toc-text">调试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E7%BB%B4%E7%A0%81%E9%A2%84%E8%A7%88"><span class="toc-number">1.4.1.</span> <span class="toc-text">二维码预览</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E5%AE%89%E8%A3%85"><span class="toc-number">1.5.</span> <span class="toc-text">本地安装</span></a></li></ol></li></ol>
                 </div>
             </div>
             

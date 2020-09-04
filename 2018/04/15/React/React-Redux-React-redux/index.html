@@ -10,8 +10,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="TriDiamond Obsidian,"> 
-    <meta name="description" content="一枚前端搬砖队队员的记录册,Reactreact一些小型项目，只使用 React 完全够用了，数据管理使用props、state即可，那什么时候需要引入Redux呢？
-当渲染一个组件的数据是通过props从父组件中获取时，通常,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,Reactreact一些小型项目，只使用 React 完全够用了，数据管理使用props、state即可，那什么时候需要引入Redux呢？ 当渲染一个组件的数据是通过props从父组件中获取时，通常,"> 
     <meta name="author" content="张白告丶"> 
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -37,7 +36,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -100,7 +99,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    5.6k
+                    5.7k
                 </span>
                 
                 
@@ -140,10 +139,9 @@
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <h2 id="React"><a href="#React" class="headerlink" title="React"></a>React</h2><p><a href="">react</a><br>一些小型项目，只使用 <code>React</code> 完全够用了，数据管理使用props、state<code>即可，那什么时候需要引入Redux呢？
-当渲染一个组件的数据是通过props从父组件中获取时，通常情况下是</code>A –&gt; B<code>，但随着业务复杂度的增加，有可能是这样的：</code>A –&gt; B –&gt; C –&gt; D –&gt; E<code>，E需要的数据需要从A那里通过props传递过来，以及对应的</code>E –&gt; A<code>逆向传递</code>callback<code>。组件BCD是不需要这些数据的，但是又必须经由它们来传递，这确实有点不爽，而且传递的</code>props<code>以及</code>callback<code>对BCD组件的复用也会造成影响。或者兄弟组件之间想要共享某些数据，也不是很方便传递、获取等。诸如此类的情况，就有必要引入</code>Redux`了。</p>
+            <h2 id="React"><a href="#React" class="headerlink" title="React"></a>React</h2><p><a href="">react</a><br>一些小型项目，只使用 <code>React</code> 完全够用了，数据管理使用props、state<code>即可，那什么时候需要引入Redux呢？ 当渲染一个组件的数据是通过props从父组件中获取时，通常情况下是 </code>A –&gt; B<code>，但随着业务复杂度的增加，有可能是这样的：</code>A –&gt; B –&gt; C –&gt; D –&gt; E<code>，E需要的数据需要从A那里通过props传递过来，以及对应的 </code>E –&gt; A<code>逆向传递</code>callback<code>。组件BCD是不需要这些数据的，但是又必须经由它们来传递，这确实有点不爽，而且传递的</code>props<code>以及</code>callback<code>对BCD组件的复用也会造成影响。或者兄弟组件之间想要共享某些数据，也不是很方便传递、获取等。诸如此类的情况，就有必要引入</code>Redux`了。</p>
 <blockquote>
-<p>其实 <code>A --&gt; B --&gt; C --&gt; D --&gt; E</code> 这种情况，React不使用props层层传递也是能拿到数据的，使用<a href="https://reactjs.org/docs/context.html" target="_blank" rel="noopener">Context</a>即可。后面要讲到的<code>react-redux</code>就是通过<code>Context</code>让各个子组件拿到<code>store</code>中的数据的。</p>
+<p>其实 <code>A --&gt; B --&gt; C --&gt; D --&gt; E</code> 这种情况，React不使用props层层传递也是能拿到数据的，使用<a target="_blank" rel="noopener" href="https://reactjs.org/docs/context.html">Context</a>即可。后面要讲到的<code>react-redux</code>就是通过<code>Context</code>让各个子组件拿到<code>store</code>中的数据的。</p>
 </blockquote>
 <h2 id="Redux"><a href="#Redux" class="headerlink" title="Redux"></a>Redux</h2><p><a href="">Redux</a><br>其实我们只是想找个地方存放一些共享数据而已，大家都可以获取到，也都可以进行修改，仅此而已。<br>那放在一个全部变量里面行不行？行，当然行，但是太不优雅，也不安全，因为是全局变量嘛，谁都能访问、谁都能修改，有可能一不小心被哪个小伙伴覆盖了也说不定。那全局变量不行就用私有变量呗，<code>私有变量</code>、不能轻易被修改<code>，是不是立马就想到</code>闭包`了…</p>
 <p>现在要写这样一个函数，其满足：</p>
@@ -154,38 +152,37 @@
 <li>当数据有变化的时候，通知订阅者</li>
 </ul>
 <a id="more"></a>
-<pre><code class="javascript">function createStore(reducer, initialState) {
+<pre><code class="javascript">function createStore(reducer, initialState) &#123;
   // currentState就是那个数据
   let currentState = initialState;
-  let listener = () =&gt; {};
+  let listener = () =&gt; &#123;&#125;;
 
-  function getState() {
+  function getState() &#123;
     return currentState;
-  }
-  function dispatch(action) {
+  &#125;
+  function dispatch(action) &#123;
     currentState = reducer(currentState, action); // 更新数据
     listener(); // 执行订阅函数
     return action;
-  }
-  function subscribe(newListener) {
+  &#125;
+  function subscribe(newListener) &#123;
     listener = newListener;
     // 取消订阅函数
-    return function unsubscribe() {
-      listener = () =&gt; {};
-    };
-  }
-  return {
+    return function unsubscribe() &#123;
+      listener = () =&gt; &#123;&#125;;
+    &#125;;
+  &#125;
+  return &#123;
     getState,
     dispatch,
     subscribe
-  };
-}
+  &#125;;
+&#125;
 
 const store = createStore(reducer);
 store.getState(); // 获取数据
-store.dispatch({type: &#39;ADD_TODO&#39;}); // 更新数据
-store.subscribe(() =&gt; {/* update UI */}); // 注册订阅函数
-
+store.dispatch(&#123;type: &#39;ADD_TODO&#39;&#125;); // 更新数据
+store.subscribe(() =&gt; &#123;/* update UI */&#125;); // 注册订阅函数
 </code></pre>
 <p>更新数据执行的步骤：</p>
 <ul>
@@ -195,80 +192,77 @@ store.subscribe(() =&gt; {/* update UI */}); // 注册订阅函数
 </ul>
 <p>这样就实现了一个store，提供一个数据存储中心，可以供外部访问、修改等，这就是Redux的主要思想。<br>所以，Redux确实和React没有什么本质关系，Redux可以结合其他库正常使用。只不过Redux这种数据管理方式，跟React的数据驱动视图理念很合拍，它俩结合在一起，开发非常便利。</p>
 <p>现在既然有了一个安全的地方存取数据，怎么结合到React里面呢？<br>我们可以在应用初始化的时候，创建一个<code>window.store = createStore(reducer)</code>，然后在需要的地方通过<code>store.getState()</code>去获取数据，通过<code>store.dispatch</code>去更新数据，通过<code>store.subscribe</code>去订阅数据变化然后进行<code>setState...</code>如果很多地方都这样做一遍，实在是不堪其重，而且，还是没有避免掉全局变量的不优雅。</p>
-<h2 id="React-Redux"><a href="#React-Redux" class="headerlink" title="React-Redux"></a>React-Redux</h2><p><a href="https://github.com/reactjs/react-redux" target="_blank" rel="noopener">React-Redux</a></p>
+<h2 id="React-Redux"><a href="#React-Redux" class="headerlink" title="React-Redux"></a>React-Redux</h2><p><a target="_blank" rel="noopener" href="https://github.com/reactjs/react-redux">React-Redux</a></p>
 <p>由于全局变量有诸多的缺点，那就换个思路，把store直接集成到React应用的顶层props里面，只要各个子组件能访问到顶层props就行了，比如这样：</p>
-<pre><code class="javascript">&lt;TopWrapComponent store={store}&gt;
+<pre><code class="javascript">&lt;TopWrapComponent store=&#123;store&#125;&gt;
   &lt;App /&gt;
-&lt;/TopWrapComponent&gt;,
-</code></pre>
-<p>React恰好提供了这么一个钩子，<a href="https://reactjs.org/docs/context.html" target="_blank" rel="noopener">Context</a>，用法很简单，看一下官方demo就明了。现在各个子组件已经能够轻易地访问到store了，接下来就是子组件把store中用到的数据取出来、修改、以及订阅更新UI等。每个子组件都需要这样做一遍，显然，肯定有更便利的方法：<a href="https://reactjs.org/docs/higher-order-components.html" target="_blank" rel="noopener">高阶组件</a>。通过高阶组件把<code>store.getState()</code>、<code>store.dispatch</code>、<code>store.subscribe</code>封装起来，子组件对store就无感知了，子组件正常使用props获取数据以及正常使用callback触发回调，相当于没有store存在一样。</p>
-<pre><code class="javascript">function connect(mapStateToProps, mapDispatchToProps) {
-  return function(WrappedComponent) {
-    class Connect extends React.Component {
-      componentDidMount() {
+&lt;/TopWrapComponent&gt;,</code></pre>
+<p>React恰好提供了这么一个钩子，<a target="_blank" rel="noopener" href="https://reactjs.org/docs/context.html">Context</a>，用法很简单，看一下官方demo就明了。现在各个子组件已经能够轻易地访问到store了，接下来就是子组件把store中用到的数据取出来、修改、以及订阅更新UI等。每个子组件都需要这样做一遍，显然，肯定有更便利的方法：<a target="_blank" rel="noopener" href="https://reactjs.org/docs/higher-order-components.html">高阶组件</a>。通过高阶组件把<code>store.getState()</code>、<code>store.dispatch</code>、<code>store.subscribe</code>封装起来，子组件对store就无感知了，子组件正常使用props获取数据以及正常使用callback触发回调，相当于没有store存在一样。</p>
+<pre><code class="javascript">function connect(mapStateToProps, mapDispatchToProps) &#123;
+  return function(WrappedComponent) &#123;
+    class Connect extends React.Component &#123;
+      componentDidMount() &#123;
         // 组件加载完成后订阅store变化，如果store有变化则更新UI
         this.unsubscribe = this.context.store.subscribe(this.handleStoreChange.bind(this));
-      }
-      componentWillUnmount() {
+      &#125;
+      componentWillUnmount() &#123;
         // 组件销毁后，取消订阅事件
         this.unsubscribe();
-      }
-      handleStoreChange() {
+      &#125;
+      handleStoreChange() &#123;
         // 更新UI
         this.forceUpdate();
-      }
-      render() {
+      &#125;
+      render() &#123;
         return (
           &lt;WrappedComponent
-            {...this.props}
-            {...mapStateToProps(this.context.store.getState())} // 参数是store里面的数据
-            {...mapDispatchToProps(this.context.store.dispatch)} // 参数是store.dispatch
+            &#123;...this.props&#125;
+            &#123;...mapStateToProps(this.context.store.getState())&#125; // 参数是store里面的数据
+            &#123;...mapDispatchToProps(this.context.store.dispatch)&#125; // 参数是store.dispatch
           /&gt;
         );
-      }
-    }
-    Connect.contextTypes = {
+      &#125;
+    &#125;
+    Connect.contextTypes = &#123;
       store: PropTypes.object
-    };
+    &#125;;
     return Connect;
-  };
-}
-</code></pre>
+  &#125;;
+&#125;</code></pre>
 <p>使用connect的时候，我们知道要写一些样板化的代码，比如<code>mapStateToProps</code>、<code>mapDispatchToProps</code>这两个函数：</p>
-<pre><code class="javascript">const mapStateToProps = state =&gt; {
-  return {
+<pre><code class="javascript">const mapStateToProps = state =&gt; &#123;
+  return &#123;
     count: state.count
-  };
-};
+  &#125;;
+&#125;;
 
-const mapDispatchToProps = dispatch =&gt; {
-  return {
+const mapDispatchToProps = dispatch =&gt; &#123;
+  return &#123;
     dispatch
-  };
-};
+  &#125;;
+&#125;;
 
 export default connect(mapStateToProps, mapDispatchToProps)(Child);
 
 // 上述代码执行之后，可以看到connect函数里面的
   &lt;WrappedComponent
-    {...this.props}
-    {...mapStateToProps(this.context.store.getState())}
-    {...mapDispatchToProps(this.context.store.dispatch)}
+    &#123;...this.props&#125;
+    &#123;...mapStateToProps(this.context.store.getState())&#125;
+    &#123;...mapDispatchToProps(this.context.store.dispatch)&#125;
   /&gt;
 
 // 就变成了
   &lt;WrappedComponent
-    {...this.props}
-    {count: store.getState().count}
-    {dispatch: store.dispatch}
+    &#123;...this.props&#125;
+    &#123;count: store.getState().count&#125;
+    &#123;dispatch: store.dispatch&#125;
   /&gt;
 
 // 这样，子组件Child的props里面就多了count和dispatch两个属性
 // count可以用来渲染UI，dispatch可以用来触发回调
-
 </code></pre>
 <p>So，这样就OK了？OK了。<br>通过一个闭包生成一个数据中心store，然后把这个store绑定到React的顶层props里面，子组件通过HOC建立与顶层props.store的联系，进而获取数据、修改数据、更新UI。<br>这里主要讲了一下三者怎么窜在一起的，如果想了解更高级的功能，比如redux中间件、reducer拆分、connect的其他参数等，可以去看一下对应的源码。</p>
-<p><a href="https://juejin.im/post/5acce5ac5188257cc20da02d" target="_blank" rel="noopener">原文链接：</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.im/post/5acce5ac5188257cc20da02d">原文链接：</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -293,7 +287,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(Child);
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 

@@ -38,7 +38,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -101,13 +101,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    10k
+                    11k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    9 mins.
+                    10 mins.
                 </span>
                 
                 
@@ -141,75 +141,74 @@
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <p><a href="https://juejin.im/post/5eca8607e51d457890602072?utm_source=gold_browser_extension#heading-15" target="_blank" rel="noopener">原文地址</a></p>
+            <p><a target="_blank" rel="noopener" href="https://juejin.im/post/5eca8607e51d457890602072?utm_source=gold_browser_extension#heading-15">原文地址</a></p>
 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>近年来，JavaScript 的发展非常迅速。 尤其是在2015 年 ES6 发布之后，情况变得更好。</p>
 <p>现在 许多新的特性被提议包括在 <code>ES2020</code>版本中。好消息是这些已经已经敲定。 现在，我们获得了最终定稿的功能清单，它们将在被批准发布之后出现在备受期待的 <code>ES2020</code> 中。 其中一些功能使我非常兴奋，因为在它们存在之前编写代码时遇到将会遇到很多麻烦。 让我们看看它们是什么吧！</p>
 <h2 id="可选链操作符（Optional-Chaining-Operator）"><a href="#可选链操作符（Optional-Chaining-Operator）" class="headerlink" title="可选链操作符（Optional Chaining Operator）"></a>可选链操作符（Optional Chaining Operator）</h2><p>对我个人来说，这是 ES2020最令人兴奋的特点之一。 我已经编写了很多程序，这些程序将会从这个新特性中获益匪浅。</p>
 <p>可选链操作符<strong>允许您安全地访问对象的深嵌套属性，而不必检查每个属性是否存在</strong>。 让我们看看这个特性对我们有什么帮助。</p>
-<h3 id="拥有可选链操作符之前"><a href="#拥有可选链操作符之前" class="headerlink" title="拥有可选链操作符之前"></a>拥有可选链操作符之前</h3><pre><code class="js">const user = {
-  firstName: &quot;Joseph&quot;,
-  lastName: &quot;Kuruvilla&quot;,
-  age: 38,
-  address: {
-    number: &quot;239&quot;,
-    street: &quot;Ludwig Lane&quot;,
-    city: &quot;Chennai&quot;,
-    zip: &quot;600028&quot;,
-    prop1: {
-      prop2: {
-        prop3: {
-          prop4: {
-            value: &quot;sample&quot;,
-          },
-        },
-      },
-    },
-  },
-};
+<h3 id="拥有可选链操作符之前"><a href="#拥有可选链操作符之前" class="headerlink" title="拥有可选链操作符之前"></a>拥有可选链操作符之前</h3><pre><code class="js">const user = &#123;
+  firstName: &quot;Joseph&quot;,
+  lastName: &quot;Kuruvilla&quot;,
+  age: 38,
+  address: &#123;
+    number: &quot;239&quot;,
+    street: &quot;Ludwig Lane&quot;,
+    city: &quot;Chennai&quot;,
+    zip: &quot;600028&quot;,
+    prop1: &#123;
+      prop2: &#123;
+        prop3: &#123;
+          prop4: &#123;
+            value: &quot;sample&quot;,
+          &#125;,
+        &#125;,
+      &#125;,
+    &#125;,
+  &#125;,
+&#125;;
 
-if (user &amp;&amp; user.address) {
-  console.log(user.address.zip);
-  //600028
-}
+if (user &amp;&amp; user.address) &#123;
+  console.log(user.address.zip);
+  //600028
+&#125;
 
 if (
-  user &amp;&amp;
-  user.address &amp;&amp;
-  user.address.prop1 &amp;&amp;
-  user.address.prop1.prop2 &amp;&amp;
-  user.address.prop1.prop2.prop3 &amp;&amp;
-  user.address.prop1.prop2.prop3.prop4
-) {
-  console.log(user.address.prop1.prop2.prop3.prop4.value);
-  //sample
-}
+  user &amp;&amp;
+  user.address &amp;&amp;
+  user.address.prop1 &amp;&amp;
+  user.address.prop1.prop2 &amp;&amp;
+  user.address.prop1.prop2.prop3 &amp;&amp;
+  user.address.prop1.prop2.prop3.prop4
+) &#123;
+  console.log(user.address.prop1.prop2.prop3.prop4.value);
+  //sample
+&#125;
 
 //Accessing unexisting property
 console.log(user.address.prop102.po);
-//Error
-</code></pre>
+//Error</code></pre>
 <p>正如您在上面看到的，您<strong>必须检查每个级别中是否存在该属性，以避免出现无法读取未定义属性“ po”的错误</strong>。 随着嵌套级别的增加，手动检查的属性数量也会增加。 这意味着我们必须检查每个级别，以确保它不会在遇到未定义或空对象时崩溃。</p>
 <h3 id="拥有可选链式操作符之后"><a href="#拥有可选链式操作符之后" class="headerlink" title="拥有可选链式操作符之后"></a>拥有可选链式操作符之后</h3><p>随着<code>可选链式操作符 (Optional Chaining)</code> 的引入，我们前端的工作变得容易多了。 通过简单地使用可选链式操作符  <code>?.</code>  我们可以访问深嵌套的对象，而不必检查未定义或空对象。</p>
-<pre><code class="js">const user = {
-  firstName: &quot;Joseph&quot;,
-  lastName: &quot;Kuruvilla&quot;,
-  age: 38,
-  address: {
-    number: &quot;239&quot;,
-    street: &quot;Ludwig Lane&quot;,
-    city: &quot;Chennai&quot;,
-    zip: &quot;600028&quot;,
-    prop1: {
-      prop2: {
-        prop3: {
-          prop4: {
-            value: &quot;sample&quot;,
-          },
-        },
-      },
-    },
-  },
-};
+<pre><code class="js">const user = &#123;
+  firstName: &quot;Joseph&quot;,
+  lastName: &quot;Kuruvilla&quot;,
+  age: 38,
+  address: &#123;
+    number: &quot;239&quot;,
+    street: &quot;Ludwig Lane&quot;,
+    city: &quot;Chennai&quot;,
+    zip: &quot;600028&quot;,
+    prop1: &#123;
+      prop2: &#123;
+        prop3: &#123;
+          prop4: &#123;
+            value: &quot;sample&quot;,
+          &#125;,
+        &#125;,
+      &#125;,
+    &#125;,
+  &#125;,
+&#125;;
 
 console.log(user?.address?.zip);
 // 600028
@@ -219,21 +218,20 @@ console.log(user?.address?.prop1?.prop2?.prop3?.prop4?.value);
 
 //Accessing unexisting property
 console.log(user?.address?.prop102?.po);
-//undefined
-</code></pre>
+//undefined</code></pre>
 <h2 id="空值合并操作符（Nullish-coalescing-operator）"><a href="#空值合并操作符（Nullish-coalescing-operator）" class="headerlink" title="空值合并操作符（Nullish coalescing operator）"></a>空值合并操作符（Nullish coalescing operator）</h2><p>这是另一个令我兴奋的功能，当我第一次在<strong>proposal stage</strong>， 了解到的时候，我由衷的喜欢这个特性，因为我已经历了编写单独的函数来手动检查这个特性的麻烦。</p>
-<p><code>空值合并操作符</code>允许您检查  <code>nullish</code>  值而不是  <code>falsey</code>  值。 <code>Nullish</code> 值是指  <code>null 或 undefined</code> 的值。 而 falsey 值是诸如<code>空字符串、数字0、  undefined 、  null 、  false 、  NaN</code>  等等的值。 这对你来说可能听起来没什么不同，但是在现实中，这意味着很多。</p>
+<p><code>空值合并操作符</code>允许您检查  <code>nullish</code>  值而不是  <code>falsey</code>  值。 <code>Nullish</code> 值是指  <code>null 或 undefined</code> 的值。 而 falsey 值是诸如<code>空字符串、数字0、  undefined 、  null 、  false 、  NaN</code>  等等的值。 这对你来说可能听起来没什么不同，但是在现实中，这意味着很多。</p>
 <h3 id="在有空值合并操作符之前"><a href="#在有空值合并操作符之前" class="headerlink" title="在有空值合并操作符之前"></a>在有空值合并操作符之前</h3><p>我最近做了一个项目，我需要允许黑暗模式（Dark Mode）切换功能。 我必须检查输入是  <code>true</code> 还是  <code>false</code> 。 如果用户没有设置任何值，则默认为  <code>true</code> 。 下面就是我如何在有<code>空值合并操作符</code>之前实现它的：</p>
 <pre><code class="js">const darkModePreference1 = true;
 const darkModePreference2 = false;
 const darkModePreference3 = undefined;
 const darkModePreference4 = null;
-const getUserDarkModePreference = (darkModePreference) =&gt; {
-  if (darkModePreference || darkModePreference === false) {
-    return darkModePreference;
-  }
-  return true;
-};
+const getUserDarkModePreference = (darkModePreference) =&gt; &#123;
+  if (darkModePreference || darkModePreference === false) &#123;
+    return darkModePreference;
+  &#125;
+  return true;
+&#125;;
 getUserDarkModePreference(darkModePreference1);
 // true
 getUserDarkModePreference(darkModePreference2);
@@ -241,16 +239,15 @@ getUserDarkModePreference(darkModePreference2);
 getUserDarkModePreference(darkModePreference3);
 // true
 getUserDarkModePreference(darkModePreference4);
-// true
-</code></pre>
+// true</code></pre>
 <h3 id="在有空值合并操作符之后"><a href="#在有空值合并操作符之后" class="headerlink" title="在有空值合并操作符之后"></a>在有空值合并操作符之后</h3><p>在有空值合并操作符之后，您所要做的就是使用  <code>??</code>  操作符。不需要  <code>if</code>  语句：\</p>
 <pre><code class="js">const darkModePreference1 = true;
 const darkModePreference2 = false;
 const darkModePreference3 = undefined;
 const darkModePreference4 = null;
-const getUserDarkModePreference = (darkModePreference) =&gt; {
-  return darkModePreference ?? true;
-};
+const getUserDarkModePreference = (darkModePreference) =&gt; &#123;
+  return darkModePreference ?? true;
+&#125;;
 getUserDarkModePreference(darkModePreference1);
 // true
 getUserDarkModePreference(darkModePreference2);
@@ -258,62 +255,57 @@ getUserDarkModePreference(darkModePreference2);
 getUserDarkModePreference(darkModePreference3);
 // true
 getUserDarkModePreference(darkModePreference4);
-// true
-</code></pre>
+// true</code></pre>
 <p>这里基本上发生的情况是，如果变量 darkModePreference 包含一个  <code>nullish</code>  值，那么将值 <code>true</code> 赋给它。 简单，简短，易于理解。</p>
 <h2 id="动态-import（Dynamic-Imports）"><a href="#动态-import（Dynamic-Imports）" class="headerlink" title="动态 import（Dynamic Imports）"></a>动态 import（Dynamic Imports）</h2><p>这个特性将帮助您的应用程序更加高效的执行， <code>动态 import</code> 允许您将 JS 文件作为原生应用用程序中的模块动态导入。 在 <code>ES2020</code>之前，不管是否使用模块，都应该导入模块。<br>例如，假设我们需要添加一个功能来下载 pdf 格式的文件。<br>让我们看看如何在 <code>动态 import</code> 之前和之后实现这一点。</p>
 <h3 id="在-动态-import-之前"><a href="#在-动态-import-之前" class="headerlink" title="在 动态 import  之前"></a>在 动态 import  之前</h3><p>实际上，不会所有的页面访问者使用下载 pdf 的选项。 但是，无论我们的访客是否使用它，它仍然需要被导入。 这意味着这个 pdf 模块也可以在页面加载期间被下载。</p>
-<pre><code class="js">import { exportAsPdf } from &quot;./export-as-pdf.js&quot;;
+<pre><code class="js">import &#123; exportAsPdf &#125; from &quot;./export-as-pdf.js&quot;;
 const exportPdfButton = document.querySelector(&quot;.exportPdfBtn&quot;);
-exportPdfButton.addEventListener(&quot;click&quot;, exportAsPdf);
-</code></pre>
+exportPdfButton.addEventListener(&quot;click&quot;, exportAsPdf);</code></pre>
 <p>这种开销可以通过使用<code>延迟加载模块（lazy loaded modules</code>）来减少。 可以通过称为<code>代码分割 （code-splitting）</code>的方法来实现，这在 Webpack 或其他模块打包工具已经可以使用了。<br>但是对于 ES2020，我们可以直接使用它了，而不需要模块打包工具，如 Webpack。</p>
 <h3 id="在动态导入（动态-import）之后"><a href="#在动态导入（动态-import）之后" class="headerlink" title="在动态导入（动态 import）之后"></a>在动态导入（动态 import）之后</h3><pre><code class="js">const exportPdfButton = document.querySelector(&#39;.exportPdfBtn&#39;);
-exportPdfButton.addEventListener(&#39;click&#39;, () =&gt; {
-  import(&#39;./export-as-pdf.js&#39;)
-    .then(module =&gt; {
-      module.exportAsPdf()
-    })
-    .catch(err =&gt; {
-      // handle the error if the module fails to load
-    })
-})
-
+exportPdfButton.addEventListener(&#39;click&#39;, () =&gt; &#123;
+  import(&#39;./export-as-pdf.js&#39;)
+    .then(module =&gt; &#123;
+      module.exportAsPdf()
+    &#125;)
+    .catch(err =&gt; &#123;
+      // handle the error if the module fails to load
+    &#125;)
+&#125;)
 </code></pre>
 <p>正如您在上面的代码中看到的，现在只有在需要模块时才延迟加载模块。 从而减少开销和页面加载时间。</p>
-<h3 id="Promise-allSettled"><a href="#Promise-allSettled" class="headerlink" title="Promise.allSettled"></a>Promise.allSettled</h3><p>如果你有一个场景，在所有 <code>Promise</code> 都完成之后必须执行一个任务，那么你可能使用  <code>Promise.all()</code> 方法。 但是这个方法有一个缺点。 当你的任何一个 <code>Promise</code> 被 <code>Rejected</code> 时，<code>Promise</code> 方法就会抛出一个错误。 这意味着您的代码不会等到所有的 <code>Promise</code> 都完成。<br>这可能不是你想要的。 如果你想要这样的东西: “我不在乎他们的结果。 只需全部运行” ，那么你可以使用新的  <code>Promise.allSettled()</code> 方法。 这种方法只有在你的所有 Promise 都  <code>settled</code> ーー 要么  <code>Resolved</code> ，要么  <code>Rejected</code> ーー 时才会  <code>Resolved</code> 。</p>
+<h3 id="Promise-allSettled"><a href="#Promise-allSettled" class="headerlink" title="Promise.allSettled"></a>Promise.allSettled</h3><p>如果你有一个场景，在所有 <code>Promise</code> 都完成之后必须执行一个任务，那么你可能使用  <code>Promise.all()</code> 方法。 但是这个方法有一个缺点。 当你的任何一个 <code>Promise</code> 被 <code>Rejected</code> 时，<code>Promise</code> 方法就会抛出一个错误。 这意味着您的代码不会等到所有的 <code>Promise</code> 都完成。<br>这可能不是你想要的。 如果你想要这样的东西: “我不在乎他们的结果。 只需全部运行” ，那么你可以使用新的  <code>Promise.allSettled()</code> 方法。 这种方法只有在你的所有 Promise 都  <code>settled</code> ーー 要么  <code>Resolved</code> ，要么  <code>Rejected</code> ーー 时才会  <code>Resolved</code> 。</p>
 <h3 id="在拥有-Promise-allSettled-之前"><a href="#在拥有-Promise-allSettled-之前" class="headerlink" title="在拥有 Promise.allSettled 之前"></a>在拥有 Promise.allSettled 之前</h3><pre><code class="js">const PromiseArray = [
-  Promise.resolve(100),
-  Promise.reject(null),
-  Promise.resolve(&quot;Data release&quot;),
-  Promise.reject(new Error(&quot;Something went wrong&quot;)),
+  Promise.resolve(100),
+  Promise.reject(null),
+  Promise.resolve(&quot;Data release&quot;),
+  Promise.reject(new Error(&quot;Something went wrong&quot;)),
 ];
 Promise.all(PromiseArray)
-  .then((data) =&gt;
-    console.log(&quot;all resolved! here are the resolve values:&quot;, data)
-  )
-  .catch((err) =&gt; console.log(&quot;got rejected! reason:&quot;, err));
-//got rejected! reason: null
-</code></pre>
+  .then((data) =&gt;
+    console.log(&quot;all resolved! here are the resolve values:&quot;, data)
+  )
+  .catch((err) =&gt; console.log(&quot;got rejected! reason:&quot;, err));
+//got rejected! reason: null</code></pre>
 <p>如上所述，当其中一个 Promise 被  rejected 时， Promise 就会抛出错误。</p>
 <h3 id="在拥有-Promise-allSettled-之后"><a href="#在拥有-Promise-allSettled-之后" class="headerlink" title="在拥有 Promise.allSettled 之后"></a>在拥有 Promise.allSettled 之后</h3><pre><code class="js">const PromiseArray = [
-  Promise.resolve(100),
-  Promise.reject(null),
-  Promise.resolve(&quot;Data release&quot;),
-  Promise.reject(new Error(&quot;Something went wrong&quot;)),
+  Promise.resolve(100),
+  Promise.reject(null),
+  Promise.resolve(&quot;Data release&quot;),
+  Promise.reject(new Error(&quot;Something went wrong&quot;)),
 ];
 Promise.allSettled(PromiseArray)
-  .then((res) =&gt; {
-    console.log(res);
-  })
-  .catch((err) =&gt; console.log(err));
+  .then((res) =&gt; &#123;
+    console.log(res);
+  &#125;)
+  .catch((err) =&gt; console.log(err));
 //[
-//  {status: &quot;fulfilled&quot;, value: 100},
-//  {status: &quot;rejected&quot;, reason: null},
-//  {status: &quot;fulfilled&quot;, value: &quot;Data release&quot;},
-//  {status: &quot;rejected&quot;, reason: Error: Something went wrong ...}
-//]
-</code></pre>
+//  &#123;status: &quot;fulfilled&quot;, value: 100&#125;,
+//  &#123;status: &quot;rejected&quot;, reason: null&#125;,
+//  &#123;status: &quot;fulfilled&quot;, value: &quot;Data release&quot;&#125;,
+//  &#123;status: &quot;rejected&quot;, reason: Error: Something went wrong ...&#125;
+//]</code></pre>
 <p>尽管有些 Promise 被 rejected 了，Promise.allSettled 返回了所有的 Promise 的结果</p>
 <h2 id="globalThis"><a href="#globalThis" class="headerlink" title="globalThis"></a>globalThis</h2><p><code>globalThis</code>  包含对全局对象的引用，与环境无关。 在浏览器中，全局对象是  <code>window 对象</code>。 在 Node 环境中，全局对象是   <code>global</code> 或者 Web workers 中的  <code>self</code>。</p>
 <h3 id="在拥有-globalThis-之前"><a href="#在拥有-globalThis-之前" class="headerlink" title="在拥有 globalThis 之前"></a>在拥有 globalThis 之前</h3><p>我们在工作中会有需要编写一份同时运行在 Node 和浏览器中的通用代码，当我们要取得全局对象时，通常需要做很多工作和逻辑判断：</p>
@@ -325,14 +317,12 @@ Promise.allSettled(PromiseArray)
     ? global
     : this);
 
-beforeGlobalThis.tuture = &#39;小若燕雀，亦可一展宏图&#39;;
-</code></pre>
+beforeGlobalThis.tuture = &#39;小若燕雀，亦可一展宏图&#39;;</code></pre>
 <h2 id="在拥有-globalThis-之后"><a href="#在拥有-globalThis-之后" class="headerlink" title="在拥有 globalThis 之后"></a>在拥有 globalThis 之后</h2><p>我们可以直接使用 <code>globalThis</code> 去引用全局对象，而不用去担心环境的问题：</p>
-<pre><code class="js">globalThis.tuture = &#39;小若燕雀，亦可一展宏图&#39;;
-</code></pre>
+<pre><code class="js">globalThis.tuture = &#39;小若燕雀，亦可一展宏图&#39;;</code></pre>
 <p>上面的代码在浏览器或者 Node 环境中都是通用的，你可以放心使用！</p>
-<h2 id="BigInt"><a href="#BigInt" class="headerlink" title="BigInt"></a>BigInt</h2><p>允许您使用大于 <code>Javascript</code> 中允许的最大值的数字。 这个数字是 <code>pow(2,53)-1</code> 。 尽管这不能向后兼容，因为传统的数字系统<code>(IEEE 754)</code>不能支持这种大小的数字。</p>
-<h2 id="String-matchall"><a href="#String-matchall" class="headerlink" title="String.matchall"></a>String.matchall</h2><p><code>matchAll()</code> 是一个与<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions" target="_blank" rel="noopener">正则表达式</a>相关的方法。 此方法返回与正则表达式匹配的字符串的所有结果的<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Iterators_and_Generators" target="_blank" rel="noopener">迭代器</a>，包括捕获组。 这个方法已经被添加到 String 原型中。</p>
+<h2 id="BigInt"><a href="#BigInt" class="headerlink" title="BigInt"></a>BigInt</h2><p>允许您使用大于 <code>Javascript</code> 中允许的最大值的数字。 这个数字是 <code> pow(2,53)-1</code> 。 尽管这不能向后兼容，因为传统的数字系统<code>(IEEE 754)</code>不能支持这种大小的数字。</p>
+<h2 id="String-matchall"><a href="#String-matchall" class="headerlink" title="String.matchall"></a>String.matchall</h2><p><code>matchAll()</code> 是一个与<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions">正则表达式</a>相关的方法。 此方法返回与正则表达式匹配的字符串的所有结果的<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Iterators_and_Generators">迭代器</a>，包括捕获组。 这个方法已经被添加到 String 原型中。</p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -357,7 +347,7 @@ beforeGlobalThis.tuture = &#39;小若燕雀，亦可一展宏图&#39;;
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -391,7 +381,7 @@ beforeGlobalThis.tuture = &#39;小若燕雀，亦可一展宏图&#39;;
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#可选链操作符（Optional-Chaining-Operator）"><span class="toc-number">1.1.</span> <span class="toc-text">可选链操作符（Optional Chaining Operator）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#拥有可选链操作符之前"><span class="toc-number">1.1.1.</span> <span class="toc-text">拥有可选链操作符之前</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#拥有可选链式操作符之后"><span class="toc-number">1.1.2.</span> <span class="toc-text">拥有可选链式操作符之后</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#空值合并操作符（Nullish-coalescing-operator）"><span class="toc-number">1.2.</span> <span class="toc-text">空值合并操作符（Nullish coalescing operator）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#在有空值合并操作符之前"><span class="toc-number">1.2.1.</span> <span class="toc-text">在有空值合并操作符之前</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#在有空值合并操作符之后"><span class="toc-number">1.2.2.</span> <span class="toc-text">在有空值合并操作符之后</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#动态-import（Dynamic-Imports）"><span class="toc-number">1.3.</span> <span class="toc-text">动态 import（Dynamic Imports）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#在-动态-import-之前"><span class="toc-number">1.3.1.</span> <span class="toc-text">在 动态 import  之前</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#在动态导入（动态-import）之后"><span class="toc-number">1.3.2.</span> <span class="toc-text">在动态导入（动态 import）之后</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-allSettled"><span class="toc-number">1.3.3.</span> <span class="toc-text">Promise.allSettled</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#在拥有-Promise-allSettled-之前"><span class="toc-number">1.3.4.</span> <span class="toc-text">在拥有 Promise.allSettled 之前</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#在拥有-Promise-allSettled-之后"><span class="toc-number">1.3.5.</span> <span class="toc-text">在拥有 Promise.allSettled 之后</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#globalThis"><span class="toc-number">1.4.</span> <span class="toc-text">globalThis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#在拥有-globalThis-之前"><span class="toc-number">1.4.1.</span> <span class="toc-text">在拥有 globalThis 之前</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在拥有-globalThis-之后"><span class="toc-number">1.5.</span> <span class="toc-text">在拥有 globalThis 之后</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BigInt"><span class="toc-number">1.6.</span> <span class="toc-text">BigInt</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#String-matchall"><span class="toc-number">1.7.</span> <span class="toc-text">String.matchall</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E9%80%89%E9%93%BE%E6%93%8D%E4%BD%9C%E7%AC%A6%EF%BC%88Optional-Chaining-Operator%EF%BC%89"><span class="toc-number">1.1.</span> <span class="toc-text">可选链操作符（Optional Chaining Operator）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%A5%E6%9C%89%E5%8F%AF%E9%80%89%E9%93%BE%E6%93%8D%E4%BD%9C%E7%AC%A6%E4%B9%8B%E5%89%8D"><span class="toc-number">1.1.1.</span> <span class="toc-text">拥有可选链操作符之前</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%A5%E6%9C%89%E5%8F%AF%E9%80%89%E9%93%BE%E5%BC%8F%E6%93%8D%E4%BD%9C%E7%AC%A6%E4%B9%8B%E5%90%8E"><span class="toc-number">1.1.2.</span> <span class="toc-text">拥有可选链式操作符之后</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A9%BA%E5%80%BC%E5%90%88%E5%B9%B6%E6%93%8D%E4%BD%9C%E7%AC%A6%EF%BC%88Nullish-coalescing-operator%EF%BC%89"><span class="toc-number">1.2.</span> <span class="toc-text">空值合并操作符（Nullish coalescing operator）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E6%9C%89%E7%A9%BA%E5%80%BC%E5%90%88%E5%B9%B6%E6%93%8D%E4%BD%9C%E7%AC%A6%E4%B9%8B%E5%89%8D"><span class="toc-number">1.2.1.</span> <span class="toc-text">在有空值合并操作符之前</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E6%9C%89%E7%A9%BA%E5%80%BC%E5%90%88%E5%B9%B6%E6%93%8D%E4%BD%9C%E7%AC%A6%E4%B9%8B%E5%90%8E"><span class="toc-number">1.2.2.</span> <span class="toc-text">在有空值合并操作符之后</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%80%81-import%EF%BC%88Dynamic-Imports%EF%BC%89"><span class="toc-number">1.3.</span> <span class="toc-text">动态 import（Dynamic Imports）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8-%E5%8A%A8%E6%80%81-import-%E4%B9%8B%E5%89%8D"><span class="toc-number">1.3.1.</span> <span class="toc-text">在 动态 import  之前</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E5%8A%A8%E6%80%81%E5%AF%BC%E5%85%A5%EF%BC%88%E5%8A%A8%E6%80%81-import%EF%BC%89%E4%B9%8B%E5%90%8E"><span class="toc-number">1.3.2.</span> <span class="toc-text">在动态导入（动态 import）之后</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-allSettled"><span class="toc-number">1.3.3.</span> <span class="toc-text">Promise.allSettled</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E6%8B%A5%E6%9C%89-Promise-allSettled-%E4%B9%8B%E5%89%8D"><span class="toc-number">1.3.4.</span> <span class="toc-text">在拥有 Promise.allSettled 之前</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E6%8B%A5%E6%9C%89-Promise-allSettled-%E4%B9%8B%E5%90%8E"><span class="toc-number">1.3.5.</span> <span class="toc-text">在拥有 Promise.allSettled 之后</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#globalThis"><span class="toc-number">1.4.</span> <span class="toc-text">globalThis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E6%8B%A5%E6%9C%89-globalThis-%E4%B9%8B%E5%89%8D"><span class="toc-number">1.4.1.</span> <span class="toc-text">在拥有 globalThis 之前</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E6%8B%A5%E6%9C%89-globalThis-%E4%B9%8B%E5%90%8E"><span class="toc-number">1.5.</span> <span class="toc-text">在拥有 globalThis 之后</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BigInt"><span class="toc-number">1.6.</span> <span class="toc-text">BigInt</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#String-matchall"><span class="toc-number">1.7.</span> <span class="toc-text">String.matchall</span></a></li></ol></li></ol>
                 </div>
             </div>
             

@@ -38,7 +38,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -101,7 +101,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    4.2k
+                    4.3k
                 </span>
                 
                 
@@ -144,13 +144,12 @@
             <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>有时候我们需要在用户离开页面的时候，做一些上报来记录用户行为。又或者是发送服务器ajax请求，通知服务器用户已经离开，比如直播间内的退房操作。</p>
 <p>本文主要分两部分来讲解怎么完成退出行为的上报。</p>
 <h2 id="事件监听"><a href="#事件监听" class="headerlink" title="事件监听"></a>事件监听</h2><p>浏览器有两个事件可以用来监听页面关闭，<code>beforeunload</code>和<code>unload</code>。<br><code>beforeunload</code>是在文档和资源将要关闭的时候调用的， 这时候文档还是可见的，并且在这个关闭的事件还是可以取消的。比如下面这种写法就会让用户导致在刷新或者关闭页面时候，有个弹窗提醒用户是否关闭。</p>
-<pre><code class="js">window.addEventListener(&quot;beforeunload&quot;, function (event) {
+<pre><code class="js">window.addEventListener(&quot;beforeunload&quot;, function (event) &#123;
   // Cancel the event as stated by the standard.
   event.preventDefault();
   // Chrome requires returnValue to be set.
   event.returnValue = &#39;&#39;;
-});
-</code></pre>
+&#125;);</code></pre>
 <blockquote>
 <p>unload则是在页面已经正在被卸载时发生，此时文档所处的状态是：<br>1.所有资源仍存在（图片，iframe等）；<br>2.对于用户所有资源不可见；<br>3.界面交互无效（window.open, alert, confirm 等）；<br>4.错误不会停止卸载文档的过程。</p>
 </blockquote>
@@ -163,16 +162,15 @@ oAjax.open(&#39;POST&#39;, url + &#39;/user/register&#39;, false);//false表示�
 
 oAjax.setRequestHeader(&quot;Content-type&quot;, &quot;application/x-www-form-urlencoded&quot;);
 
-oAjax.onreadystatechange = function() {
-    if (oAjax.readyState == 4 &amp;&amp; oAjax.status == 200) {
+oAjax.onreadystatechange = function() &#123;
+    if (oAjax.readyState == 4 &amp;&amp; oAjax.status == 200) &#123;
         var data = JSON.parse(oAjax.responseText);
-    } else {
+    &#125; else &#123;
         console.log(oAjax);
-    }
-};
+    &#125;
+&#125;;
 
-oAjax.send(&#39;a=1&amp;b=2&#39;);
-</code></pre>
+oAjax.send(&#39;a=1&amp;b=2&#39;);</code></pre>
 <p>这种方式虽然有效，但是用户需要等待请求结束才可以关闭页面。对用户的体验不好。</p>
 <a id="more"></a>
 <h3 id="发送异步请求，并且在服务端忽略ajax的abort"><a href="#发送异步请求，并且在服务端忽略ajax的abort" class="headerlink" title="发送异步请求，并且在服务端忽略ajax的abort"></a>发送异步请求，并且在服务端忽略ajax的abort</h3><p>虽然异步请求会被浏览器abort，但是如果服务端可以忽略abort，仍然正常执行，也是可以的。比如PHP有<code>ignore_user_abort</code>函数可以忽略abort。这样需要改造后台，一般不太可行..</p>
@@ -180,27 +178,23 @@ oAjax.send(&#39;a=1&amp;b=2&#39;);
 <blockquote>
 <p>这个方法主要用于满足 统计和诊断代码 的需要，这些代码通常尝试在卸载（unload）文档之前向web服务器发送数据。过早的发送数据可能导致错过收集数据的机会。然而， 对于开发者来说保证在文档卸载期间发送数据一直是一个困难。因为用户代理通常会忽略在卸载事件处理器中产生的异步 <code>XMLHttpRequest</code> 。</p>
 </blockquote>
-<pre><code class="js">navigator.sendBeacon(url [, data]);
-</code></pre>
+<pre><code class="js">navigator.sendBeacon(url [, data]);</code></pre>
 <p><code>sendBeacon</code>支持发送的data可以是<code>ArrayBufferView, Blob, DOMString</code>, 或者 <code>FormData</code> 类型的数据。</p>
 <p>下面是几种使用<code>sendBeacon</code>发送请求的方式，可以修改header和内容的格式，因为一般和服务器的通信方式都是固定的，如果修改了header或者内容，服务器就无法正常识别出来了。</p>
 <p>（1）使用Blob来发送 使用blob发送的好处是可以自己定义内容的格式和header。比如下面这种设置方式，就是可以设置content-type为application/x-www-form-urlencoded。</p>
-<pre><code class="js">blob = new Blob([`room_id=123`], {type : &#39;application/x-www-form-urlencoded&#39;});
-navigator.sendBeacon(&quot;/cgi-bin/leave_room&quot;, blob);
-</code></pre>
+<pre><code class="js">blob = new Blob([`room_id=123`], &#123;type : &#39;application/x-www-form-urlencoded&#39;&#125;);
+navigator.sendBeacon(&quot;/cgi-bin/leave_room&quot;, blob);</code></pre>
 <p><img src="https://user-gold-cdn.xitu.io/2019/3/5/1694d78d66686fa5?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="1"></p>
 <p>（2）使用FormData对象，但是这时<code>content-type</code>会被设置成<code>&quot;multipart/form-data&quot;</code>。</p>
 <pre><code class="js">var fd = new FormData();
 fd.append(&#39;room_id&#39;, 123);
-navigator.sendBeacon(&quot;/cgi-bin/leave_room&quot;, fd);
-</code></pre>
+navigator.sendBeacon(&quot;/cgi-bin/leave_room&quot;, fd);</code></pre>
 <p><img src="https://user-gold-cdn.xitu.io/2019/3/5/1694d78d632c79f3?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="2"></p>
 <p>（3）数据也可以使用<code>URLSearchParams</code> 对象，content-type会被设置成”text/plain;charset=UTF-8” 。</p>
-<pre><code class="js">var params = new URLSearchParams({ room_id: 123 })
-navigator.sendBeacon(&quot;/cgi-bin/leave_room&quot;, params);
-</code></pre>
+<pre><code class="js">var params = new URLSearchParams(&#123; room_id: 123 &#125;)
+navigator.sendBeacon(&quot;/cgi-bin/leave_room&quot;, params);</code></pre>
 <p><img src="https://user-gold-cdn.xitu.io/2019/3/5/1694d78d64c21552?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="3"><br>通过尝试，可以发现使用blob发送比较方便，内容的设置也比较灵活，如果发送的消息抓包后发现后台没有识别出来，可以尝试修改内容的string或者header，来找到合适的方式发送请求。</p>
-<p><a href="https://juejin.im/post/5c7e541b6fb9a049e06415a5#comment" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.im/post/5c7e541b6fb9a049e06415a5#comment">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -225,7 +219,7 @@ navigator.sendBeacon(&quot;/cgi-bin/leave_room&quot;, params);
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -259,7 +253,7 @@ navigator.sendBeacon(&quot;/cgi-bin/leave_room&quot;, params);
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#事件监听"><span class="toc-number">1.1.</span> <span class="toc-text">事件监听</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#请求发送"><span class="toc-number">1.2.</span> <span class="toc-text">请求发送</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#方案1-发送同步的ajax请求"><span class="toc-number">1.2.1.</span> <span class="toc-text">方案1: 发送同步的ajax请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#发送异步请求，并且在服务端忽略ajax的abort"><span class="toc-number">1.2.2.</span> <span class="toc-text">发送异步请求，并且在服务端忽略ajax的abort</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方案3：使用navigator-sendBeacon发送异步请求"><span class="toc-number">1.2.3.</span> <span class="toc-text">方案3：使用navigator.sendBeacon发送异步请求</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E7%9B%91%E5%90%AC"><span class="toc-number">1.1.</span> <span class="toc-text">事件监听</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E5%8F%91%E9%80%81"><span class="toc-number">1.2.</span> <span class="toc-text">请求发送</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%A1%881-%E5%8F%91%E9%80%81%E5%90%8C%E6%AD%A5%E7%9A%84ajax%E8%AF%B7%E6%B1%82"><span class="toc-number">1.2.1.</span> <span class="toc-text">方案1: 发送同步的ajax请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%91%E9%80%81%E5%BC%82%E6%AD%A5%E8%AF%B7%E6%B1%82%EF%BC%8C%E5%B9%B6%E4%B8%94%E5%9C%A8%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%BF%BD%E7%95%A5ajax%E7%9A%84abort"><span class="toc-number">1.2.2.</span> <span class="toc-text">发送异步请求，并且在服务端忽略ajax的abort</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%A1%883%EF%BC%9A%E4%BD%BF%E7%94%A8navigator-sendBeacon%E5%8F%91%E9%80%81%E5%BC%82%E6%AD%A5%E8%AF%B7%E6%B1%82"><span class="toc-number">1.2.3.</span> <span class="toc-text">方案3：使用navigator.sendBeacon发送异步请求</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
             

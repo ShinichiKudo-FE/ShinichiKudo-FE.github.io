@@ -37,7 +37,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -100,7 +100,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    6.1k
+                    6.3k
                 </span>
                 
                 
@@ -147,40 +147,39 @@
 <li>在函数中声明变量时没有var关键字，就代表是 <strong>全局变量</strong></li>
 <li>在函数中声明变量带有var关键字的即是 <strong>局部变量</strong>，局部变量只能&lt;在函数内才能访问到&gt;</li>
 </ul>
-<pre><code class="js">function fn() {
+<pre><code class="js">function fn() &#123;
     var a = 110;     // a为局部变量
     console.log(a);  // 110
-}
+&#125;
 fn();
-console.log(a);     // a is not defined  外部访问不到内部的变量
-</code></pre>
+console.log(a);     // a is not defined  外部访问不到内部的变量</code></pre>
 <p>上面代码展示了在函数中声明的局部变量a在函数外部确实无法拿到。小样儿的还挺嚣张，对于迎难而上的coder来说，还不信拿不下a了</p>
 <p>函数可以创造函数作用域，在函数作用域中如果要查找一个变量的时候，如果在该函数内没有声明这个变量，就会向该函数的外层继续查找，一直查到全局变量为止</p>
-<p>所以变量的查找是<code>由内而外</code>的，这也形成了所谓的<code>作用域链</code><br><a id="more"></a></p>
+<p>所以变量的查找是<code>由内而外</code>的，这也形成了所谓的<code>作用域链</code></p>
+<a id="more"></a>
+
 <pre><code class="js">var a = 7;
-function outer() {
+function outer() &#123;
     var b = 9;
-    function inner() {
+    function inner() &#123;
         var c = 8;
         alert(b);
         alert(a);
-    }
+    &#125;
     inner();
     alert(c);   // c is not defined
-}
-outer();    // 调用函数
-</code></pre>
+&#125;
+outer();    // 调用函数</code></pre>
 <p>利用作用域链，我们试着去拿到a，改造一下 <strong>fn函数</strong></p>
-<pre><code class="js">function fn() {
+<pre><code class="js">function fn() &#123;
     var a = 110;     // a为局部变量
-    return function() {
+    return function() &#123;
         console.log(a);
-    }
+    &#125;
     console.log(a);  // 110
-}
+&#125;
 var fn2 = fn();
 fn2();      // 110
-
 </code></pre>
 <p>如此这般，这般如此，轻而易举，小case的事，就可以从外面访问到局部变量a了</p>
 <p>那么到此为止，我们已经发现了闭包的其中一个意义：<strong>闭包就是能够读取其他函数内部变量的函数</strong>，嗯，没毛病，继续往下看</p>
@@ -192,26 +191,24 @@ fn2();      // 110
 <li>而对于在函数中通过var声明的局部变量来说，就没那么幸运了，当函数执行完毕，局部变量们就失去了价值，就被垃圾回收机制给当成垃圾处理掉了</li>
 </ul>
 <p>比如像下面这样的代码就很可怜</p>
-<pre><code class="js">function fn() {
+<pre><code class="js">function fn() &#123;
     var a = 123;    // fn执行完毕后，变量a就将被销毁了
     console.log(a);
-}
-fn();
-</code></pre>
+&#125;
+fn();</code></pre>
 <p>虽然以上垃圾回收的过程我们无法亲眼看见，但是听者伤心闻者流泪啊。可不可以不要如此残忍，我愿倾其所有，换你三生三世。</p>
 <p>悲伤的到来，我们无法拒绝，那就让我们想办法去改变这一切。现在再让我们来看下这段代码：</p>
-<pre><code class="js">function add() {
+<pre><code class="js">function add() &#123;
     var a = 1;
-    return function() {
+    return function() &#123;
         a++;
         console.log(a);
-    }
-}
+    &#125;
+&#125;
 var fn = add();
 fn();   // 2
 fn();   // 3
-fn();   // 4
-</code></pre>
+fn();   // 4</code></pre>
 <p>这段代码最神奇的地方就是，当add函数执行完后，局部变量a并没有被销毁，而是依然存在，这其中到底发生了什么？让我们慢慢分析一下：</p>
 <ul>
 <li>当fn = add()时，fn返回了一个函数的引用，这个函数里有局部变量a</li>
@@ -226,13 +223,12 @@ fn();   // 4
     &lt;/ul&gt;
     &lt;script&gt;
         var aLi = document.getElementsByTagName(&#39;li&#39;);
-        for (var i = 0; i &lt; aLi.length; i++) {
-            aLi[i].onclick = function() {
+        for (var i = 0; i &lt; aLi.length; i++) &#123;
+            aLi[i].onclick = function() &#123;
                 console.log(i);     // ?
-            };
-        }
+            &#125;;
+        &#125;
     &lt;/script&gt;
-
 </code></pre>
 <p>过这道题的观众请举手，确实这道题的目的就是为了考对闭包的理解。上面的答案无论怎么点结果都是4。</p>
 <p>这是因为li节点的onclick事件属于异步的，在click被触发的时候，for循环以迅雷不及掩耳盗铃的速度就执行完毕了，此时变量i的值已经是4了</p>
@@ -240,55 +236,51 @@ fn();   // 4
 <p><strong>解决方法</strong><br>就需要通过闭包，把每次循环的i值都存下来。然后当click事件继续顺着作用域链查找的时候，会先找到被存下来的i，这样每一个li点击都可以找到对应的i值了</p>
 <pre><code class="js"> &lt;script&gt;
         var aLi = document.getElementsByTagName(&#39;li&#39;);
-        for (var i = 0; i &lt; aLi.length; i++) {
-            (function(n) {    // n为对应的索引值
-                aLi[i].onclick = function() {  
+        for (var i = 0; i &lt; aLi.length; i++) &#123;
+            (function(n) &#123;    // n为对应的索引值
+                aLi[i].onclick = function() &#123;  
                     console.log(n);     // 0, 1, 2, 3
-                };
-            })(i);  // 这里i每循环一次都存一下，然后把0,1,2,3传给上面的形参n
-        }
-&lt;/script&gt;
-</code></pre>
+                &#125;;
+            &#125;)(i);  // 这里i每循环一次都存一下，然后把0,1,2,3传给上面的形参n
+        &#125;
+&lt;/script&gt;</code></pre>
 <h2 id="其他作用"><a href="#其他作用" class="headerlink" title="其他作用"></a>其他作用</h2><p>闭包应用非常广泛，我们这里就说一下大家熟知的，比如可以 <strong>封装私有变量</strong>，可以把一些不需要暴露在全局的变量封装成私有变量，这样可以防止造成变量的全局污染</p>
-<pre><code class="js">var sum = (function() {
-    var cache = {};     // 将cache放入函数内部，避免被其他地方修改
-    return function() {
+<pre><code class="js">var sum = (function() &#123;
+    var cache = &#123;&#125;;     // 将cache放入函数内部，避免被其他地方修改
+    return function() &#123;
         var args = Array.prototype.join.call(arguments, &#39;,&#39;);
-        if (args in cache) {
+        if (args in cache) &#123;
             return cache[args];
-        }
+        &#125;
         var a = 0;
-        for (var i = 0; i &lt; arguments.length; i++) {
+        for (var i = 0; i &lt; arguments.length; i++) &#123;
             a += arguments[i];
-        }
+        &#125;
         return cache[args] = a;
-    }
-})();
-
+    &#125;
+&#125;)();
 </code></pre>
 <p>除此之外相信很多人都见过一些库如<code>jQuery</code>,<code>underscore</code>他们的最外层都是类似如下样子的代码</p>
-<pre><code class="js">(function(win, undefined) {
+<pre><code class="js">(function(win, undefined) &#123;
     var a = 1;
-    var obj = {};
-    obj.fn = function() {};
+    var obj = &#123;&#125;;
+    obj.fn = function() &#123;&#125;;
 
     // 最后把想要暴露出去的内容可以挂载到window上
     win.obj = obj;
-})(window);
-
+&#125;)(window);
 </code></pre>
 <p>是的，没错，利用闭包也可以做到<code>模块化</code>。另外还可以将<code>变量的使用延长</code>，再来看一个例子</p>
-<pre><code class="js">var monitor = (function() {
+<pre><code class="js">var monitor = (function() &#123;
     var imgs = [];
-    return function(src){
+    return function(src)&#123;
         var img = new Image();
         imgs.push(img);
         img.src = src;
-    }
-})();
+    &#125;
+&#125;)();
 
 monitor(&#39;http://dd.com/srp.gif&#39;);
-
 </code></pre>
 <p>上面的代码是用于打点进行统计数据的情形，在之前的一些浏览器中，会出现打点丢失的情况，因为img是函数内的局部变量，当函数执行完后img就被销毁了，而此时可能http请求还没有发出。</p>
 <p>所以遇到这种情况的时候，把img变量用闭包封装起来，就可以解决了</p>
@@ -318,7 +310,7 @@ monitor(&#39;http://dd.com/srp.gif&#39;);
 <li>可以用来封装私有变量，实现模块化</li>
 <li>可以保存变量到内存中</li>
 </ul>
-<p><a href="https://juejin.im/post/5acfeb7ff265da239867a97f" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.im/post/5acfeb7ff265da239867a97f">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -343,7 +335,7 @@ monitor(&#39;http://dd.com/srp.gif&#39;);
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -377,7 +369,7 @@ monitor(&#39;http://dd.com/srp.gif&#39;);
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#变量作用域"><span class="toc-number">1.1.</span> <span class="toc-text">变量作用域</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#变量声明周期"><span class="toc-number">1.2.</span> <span class="toc-text">变量声明周期</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他作用"><span class="toc-number">1.3.</span> <span class="toc-text">其他作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内存管理"><span class="toc-number">1.4.</span> <span class="toc-text">内存管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#这不是终点"><span class="toc-number">1.5.</span> <span class="toc-text">这不是终点</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%98%E9%87%8F%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="toc-number">1.1.</span> <span class="toc-text">变量作用域</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%98%E9%87%8F%E5%A3%B0%E6%98%8E%E5%91%A8%E6%9C%9F"><span class="toc-number">1.2.</span> <span class="toc-text">变量声明周期</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E4%BD%9C%E7%94%A8"><span class="toc-number">1.3.</span> <span class="toc-text">其他作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="toc-number">1.4.</span> <span class="toc-text">内存管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%99%E4%B8%8D%E6%98%AF%E7%BB%88%E7%82%B9"><span class="toc-number">1.5.</span> <span class="toc-text">这不是终点</span></a></li></ol></li></ol>
                 </div>
             </div>
             

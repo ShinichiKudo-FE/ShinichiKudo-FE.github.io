@@ -36,7 +36,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -99,7 +99,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    8.9k
+                    9.1k
                 </span>
                 
                 
@@ -143,8 +143,7 @@
 <pre><code class="javascript">ReactDOM.render(
   &lt;h1&gt;Hello, world!&lt;/h1&gt;,
   document.getElementById(&#39;example&#39;)
-);
-</code></pre>
+);</code></pre>
 <p>经过babel转码后为</p>
 <pre><code class="javascript">ReactDOM.render(
         React.createElement(
@@ -153,8 +152,7 @@
           &#39;Hello, world!&#39;   // children，子组件.这儿为文本组件
         ),
         document.getElementById(&#39;example&#39;)
-)
-</code></pre>
+)</code></pre>
 <p>那么React底层是怎么将组件插入DOM中的呢。本文来详细分析它的前因后果。</p>
 <h1 id="ReactMount-renderSubtreeIntoContainer"><a href="#ReactMount-renderSubtreeIntoContainer" class="headerlink" title="ReactMount._renderSubtreeIntoContainer()"></a>ReactMount._renderSubtreeIntoContainer()</h1><p>ReactDOM.render()实际调用ReactMount.render(),接着调用到ReactMount._renderSubtreeIntoContainer().</p>
 <p>这个调用链比较简单，不分析了。下面重点分析_renderSubtreeIntoContainer(). 我们去除掉开发调试阶段的报错代码（比如 “development” !== ‘production’）。</p>
@@ -164,14 +162,14 @@
    * ReactElement是React元素在内存中的表示形式，可以理解为一个数据类，包含type，key，refs，props等成员变量
    * ReactComponent是React元素的操作类，包含mountComponent(), updateComponent()等很多操作组件的方法
    *
-   * @param {parentComponent} 父组件，对于第一次渲染，为null
-   * @param {nextElement} 要插入到DOM中的组件，对应上面例子中的&lt;h1&gt;Hello, world!&lt;/h1&gt;经过babel转译后的元素
-   * @param {container} 要插入到的容器，对应上面例子中的document.getElementById(&#39;example&#39;)获取的DOM对象
-   * @param {callback} 第一次渲染为null
+   * @param &#123;parentComponent&#125; 父组件，对于第一次渲染，为null
+   * @param &#123;nextElement&#125; 要插入到DOM中的组件，对应上面例子中的&lt;h1&gt;Hello, world!&lt;/h1&gt;经过babel转译后的元素
+   * @param &#123;container&#125; 要插入到的容器，对应上面例子中的document.getElementById(&#39;example&#39;)获取的DOM对象
+   * @param &#123;callback&#125; 第一次渲染为null
    *
-   * @return {component}  返回ReactComponent，对于ReactDOM.render()调用，不用管返回值。
+   * @return &#123;component&#125;  返回ReactComponent，对于ReactDOM.render()调用，不用管返回值。
    */ 
-_renderSubtreeIntoContainer: function (parentComponent, nextElement, container, callback) {
+_renderSubtreeIntoContainer: function (parentComponent, nextElement, container, callback) &#123;
     // 刚开始一段开发阶段的报错代码，省去
     ...
 
@@ -181,26 +179,26 @@ _renderSubtreeIntoContainer: function (parentComponent, nextElement, container, 
     // 对于ReactDOM.render()调用，prevComponent为null
     var prevComponent = getTopLevelWrapperInContainer(container);
 
-    if (prevComponent) {
+    if (prevComponent) &#123;
       // 从prevComponent中获取到prevElement这个数据对象。一定要搞清楚ReactElement和ReactComponent的作用，他们很关键
       var prevWrappedElement = prevComponent._currentElement;
       var prevElement = prevWrappedElement.props;
       // DOM diff精髓，同一层级内，type和key不变时，只用update就行。否则先unmount组件再mount组件
       // 这是React为了避免递归太深，而做的DOM diff前提假设。它只对同一DOM层级，type相同，key(如果有)相同的组件做DOM diff，否则不用比较，直接先unmount再mount。这个假设使得diff算法复杂度从O(n^3)降低为O(n).
       // shouldUpdateReactComponent源码请看后面的分析
-      if (shouldUpdateReactComponent(prevElement, nextElement)) {
+      if (shouldUpdateReactComponent(prevElement, nextElement)) &#123;
         var publicInst = prevComponent._renderedComponent.getPublicInstance();
-        var updatedCallback = callback &amp;&amp; function () {
+        var updatedCallback = callback &amp;&amp; function () &#123;
           callback.call(publicInst);
-        };
+        &#125;;
         // 只需要update，调用_updateRootComponent，然后直接return了
         ReactMount._updateRootComponent(prevComponent, nextWrappedElement, container, updatedCallback);
         return publicInst;
-      } else {
+      &#125; else &#123;
         // 不做update，直接先卸载再挂载。即unmountComponent,再mountComponent。mountComponent在后面代码中进行
         ReactMount.unmountComponentAtNode(container);
-      }
-    }
+      &#125;
+    &#125;
 
     var reactRootElement = getReactRootElementInContainer(container);
     var containerHasReactMarkup = reactRootElement &amp;&amp; !!internalGetID(reactRootElement);
@@ -210,39 +208,37 @@ _renderSubtreeIntoContainer: function (parentComponent, nextElement, container, 
     // 初始化，渲染组件，然后插入到DOM中。_renderNewRootComponent很关键，后面详细分析
     var component = ReactMount._renderNewRootComponent(nextWrappedElement, container, shouldReuseMarkup, parentComponent != null ? parentComponent._reactInternalInstance._processChildContext(parentComponent._reactInternalInstance._context) : emptyObject)._renderedComponent.getPublicInstance();
     // render方法中带入的回调，ReactDOM.render()调用时一般不传入
-    if (callback) {
+    if (callback) &#123;
       callback.call(component);
-    }
+    &#125;
     return component;
-  },
-</code></pre>
+  &#125;,</code></pre>
 <p>shouldUpdateReactComponent()源码如下：</p>
-<pre><code class="javascript">function shouldUpdateReactComponent(prevElement, nextElement) {
+<pre><code class="javascript">function shouldUpdateReactComponent(prevElement, nextElement) &#123;
   // 前后两次ReactElement中任何一个为null，则必须另一个为null才返回true。这种情况一般不会碰到
   var prevEmpty = prevElement === null || prevElement === false;
   var nextEmpty = nextElement === null || nextElement === false;
-  if (prevEmpty || nextEmpty) {
+  if (prevEmpty || nextEmpty) &#123;
     return prevEmpty === nextEmpty;
-  }
+  &#125;
 
   var prevType = typeof prevElement;
   var nextType = typeof nextElement;
 
   // React DOM diff算法
-  if (prevType === &#39;string&#39; || prevType === &#39;number&#39;) {
+  if (prevType === &#39;string&#39; || prevType === &#39;number&#39;) &#123;
     // 如果前后两次为数字或者字符,则认为只需要update(处理文本元素)，返回true
     return (nextType === &#39;string&#39; || nextType === &#39;number&#39;);
-  } else {
+  &#125; else &#123;
       // 如果前后两次为DOM元素或React元素,则必须type和key不变(key用于listView等组件,很多时候我们没有设置key，故只需type相同)才update,否则先unmount再重新mount。返回false
     return (
       nextType === &#39;object&#39; &amp;&amp;
       prevElement.type === nextElement.type &amp;&amp;
       prevElement.key === nextElement.key
     );
-  }
-}
-</code></pre>
-<h1 id="ReactMount-renderNewRootComponent"><a href="#ReactMount-renderNewRootComponent" class="headerlink" title="ReactMount._renderNewRootComponent"></a>ReactMount._renderNewRootComponent</h1><pre><code class="javascript"> _renderNewRootComponent: function (nextElement, container, shouldReuseMarkup, context) {
+  &#125;
+&#125;</code></pre>
+<h1 id="ReactMount-renderNewRootComponent"><a href="#ReactMount-renderNewRootComponent" class="headerlink" title="ReactMount._renderNewRootComponent"></a>ReactMount._renderNewRootComponent</h1><pre><code class="javascript"> _renderNewRootComponent: function (nextElement, container, shouldReuseMarkup, context) &#123;
     ReactBrowserEventEmitter.ensureScrollValueMonitoring();
     // 初始化ReactComponent，根据ReactElement中不同的type字段，创建不同类型的组件对象，即ReactComponent
     // 前一篇文章中已经分析了。http://blog.csdn.net/u013510838/article/details/55669769
@@ -255,18 +251,17 @@ _renderSubtreeIntoContainer: function (parentComponent, nextElement, container, 
     instancesByReactRootID[wrapperID] = componentInstance;
 
     return componentInstance;
-  },
-</code></pre>
+  &#125;,</code></pre>
 <p>batchedMountComponentIntoNode以transaction事务的形式调用mountComponentIntoNode，源码分析如下。</p>
-<pre><code class="javascript">function mountComponentIntoNode(wrapperInstance, container, transaction, shouldReuseMarkup, context) {
+<pre><code class="javascript">function mountComponentIntoNode(wrapperInstance, container, transaction, shouldReuseMarkup, context) &#123;
   var markerName;
   // 一段log，可以不管
-  if (ReactFeatureFlags.logTopLevelRenders) {
+  if (ReactFeatureFlags.logTopLevelRenders) &#123;
     var wrappedElement = wrapperInstance._currentElement.props;
     var type = wrappedElement.type;
     markerName = &#39;React mount: &#39; + (typeof type === &#39;string&#39; ? type : type.displayName || type.name);
     console.time(markerName);
-  }
+  &#125;
 
   // 调用对应ReactComponent中的mountComponent方法来渲染组件，这个是React生命周期的重要方法。后面详细分析。
   // mountComponent返回React组件解析的HTML。不同的ReactComponent的mountComponent策略不同，可以看做多态
@@ -274,36 +269,34 @@ _renderSubtreeIntoContainer: function (parentComponent, nextElement, container, 
   // &lt;h1 data-reactroot=&quot;&quot;&gt;Hello, world!&lt;/h1&gt;
   var markup = ReactReconciler.mountComponent(wrapperInstance, transaction, null, ReactDOMContainerInfo(wrapperInstance, container), context);
 
-  if (markerName) {
+  if (markerName) &#123;
     console.timeEnd(markerName);
-  }
+  &#125;
 
   wrapperInstance._renderedComponent._topLevelWrapper = wrapperInstance;
   // 将解析出来的HTML插入DOM中
   ReactMount._mountImageIntoNode(markup, container, wrapperInstance, shouldReuseMarkup, transaction);
-}
-</code></pre>
+&#125;</code></pre>
 <p>_mountImageIntoNode源码如下</p>
-<pre><code class="javascript">_mountImageIntoNode: function (markup, container, instance, shouldReuseMarkup, transaction) {
+<pre><code class="javascript">_mountImageIntoNode: function (markup, container, instance, shouldReuseMarkup, transaction) &#123;
     // 对于ReactDOM.render()调用，shouldReuseMarkup为false
-    if (shouldReuseMarkup) {
+    if (shouldReuseMarkup) &#123;
       ...
-    }
+    &#125;
 
-    if (transaction.useCreateElement) {
+    if (transaction.useCreateElement) &#123;
       // 清空container的子节点，这个地方不明白为什么这么做
-      while (container.lastChild) {
+      while (container.lastChild) &#123;
         container.removeChild(container.lastChild);
-      }
+      &#125;
       DOMLazyTree.insertTreeBefore(container, markup, null);
-    } else {
+    &#125; else &#123;
       // 将markup这个HTML设置到container这个DOM元素的innerHTML属性上，这样就插入到了DOM中了
       setInnerHTML(container, markup);
       // 将instance这个ReactComponent渲染后的对象，即Virtual DOM，保存到container这个DOM元素的firstChild这个原生节点上。简单理解就是将Virtual DOM保存到内存中，这样可以大大提高交互效率
       ReactDOMComponentTree.precacheNode(instance, container.firstChild);
-    }
-  }
-</code></pre>
+    &#125;
+  &#125;</code></pre>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>ReactDOM.render(）是渲染React组件并插入到DOM中的入口方法，它的执行流程大概为</p>
 <p>1.React.createElement(),创建ReactElement对象。他的重要的成员变量有type,key,ref,props。这个过程中会调用getInitialState(), 初始化state，只在挂载的时候才调用。后面update时不再调用了。</p>
 <p>2.instantiateReactComponent()，根据ReactElement的type分别创建ReactDOMComponent， ReactCompositeComponent，ReactDOMTextComponent等对象</p>
@@ -311,7 +304,7 @@ _renderSubtreeIntoContainer: function (parentComponent, nextElement, container, 
 <p>4._mountImageIntoNode(), 将HTML插入到DOM父节点中，通过设置DOM父节点的innerHTML属性。</p>
 <p>5.缓存节点在React中的对应对象，即Virtual DOM。</p>
 <p>!()[]</p>
-<p><a href="https://zhuanlan.zhihu.com/p/25882202" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/25882202">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -336,7 +329,7 @@ _renderSubtreeIntoContainer: function (parentComponent, nextElement, container, 
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -370,7 +363,7 @@ _renderSubtreeIntoContainer: function (parentComponent, nextElement, container, 
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ReactMount-renderSubtreeIntoContainer"><span class="toc-number">2.</span> <span class="toc-text">ReactMount._renderSubtreeIntoContainer()</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ReactMount-renderNewRootComponent"><span class="toc-number">3.</span> <span class="toc-text">ReactMount._renderNewRootComponent</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ReactMount-renderSubtreeIntoContainer"><span class="toc-number">2.</span> <span class="toc-text">ReactMount._renderSubtreeIntoContainer()</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ReactMount-renderNewRootComponent"><span class="toc-number">3.</span> <span class="toc-text">ReactMount._renderNewRootComponent</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
                 </div>
             </div>
             

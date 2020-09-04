@@ -38,7 +38,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -101,13 +101,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    13k
+                    15k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    12 mins.
+                    13 mins.
                 </span>
                 
                 
@@ -141,7 +141,7 @@
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <p><a href="https://juejin.im/post/5ea1af9f518825737a316cc3?utm_source=gold_browser_extension" target="_blank" rel="noopener">原文地址</a></p>
+            <p><a target="_blank" rel="noopener" href="https://juejin.im/post/5ea1af9f518825737a316cc3?utm_source=gold_browser_extension">原文地址</a></p>
 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近在做B端的产品，借助该博主的文章学习下通用表单，以下为博文信息</p>
 <p>这篇文章是一篇应用性极强的文章，我们通过一个实际的应用场景，去解决某一类的问题，提供一种或者几种解决方案，来探索技术的魅力。接下来笔者主要分析表单定制平台的实现思路和技术方案，来实现一个类似于金数据或者问卷星一样的表单配置平台，大家也可以基于此方案，扩展出功能更加强大的可视化平台。</p>
 <h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>为什么要做一个这样的平台呢？一方面是因为笔者多年来一直服务于B端产品，对于动态表单以及配置化表单有一定的项目积累，并且深知配置化表单的价值所在。举一个很传统的B端表单配置化的例子：传统2B企业在提供saas服务时，为了满足不同企业的定制化需求，往往会给企业客户提供定制化或者自由配置的功能，如下图：</p>
@@ -183,246 +183,241 @@
 <h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>要想开发这样一个表单定制平台, 核心在于如何实现表单动态配置的机制.这里笔者将其划分为两部分:<strong>基础表单物料和表单编辑生成器</strong>, 如下图所示拆分图:</p>
 <p><img src="https://user-gold-cdn.xitu.io/2020/4/24/171abbf0cdd52a43?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="表单定制模块"></p>
 <h3 id="基础表单物料"><a href="#基础表单物料" class="headerlink" title="基础表单物料"></a>基础表单物料</h3><p>基础表单物料主要是为了用户选择自定义表单控件使用，我们常用的表单动态渲染有map循环+条件判断和单层map+对象法，前者如果要渲染一个动态表单，可能实现如下：</p>
-<pre><code class="js">{
-    list.map((item, i) =&gt; {
-        return &lt;React.Fragment key={i}&gt;
-            {
+<pre><code class="js">&#123;
+    list.map((item, i) =&gt; &#123;
+        return &lt;React.Fragment key=&#123;i&#125;&gt;
+            &#123;
                item.type === &#39;input&#39; &amp;&amp; &lt;Input /&gt;
-            }
-            {
+            &#125;
+            &#123;
                item.type === &#39;radio&#39; &amp;&amp; &lt;Radio /&gt;
-            }
+            &#125;
             // ...
         &lt;/React.Fragment&gt;
-    })
-}
-</code></pre>
+    &#125;)
+&#125;</code></pre>
 <p>但是这样做有个明显的缺点就是会产生很多没必要的判断，如果对于复杂表单，性能往往很低，所以笔者采用后者来实现，复杂度可以降到O(n).我们先来做配置模版：</p>
 <pre><code class="js">// 基础模版数据
 const tpl = [
-  {
+  &#123;
     label: &#39;文本框&#39;,
     placeholder: &#39;请输入内容&#39;,
     type: &#39;text&#39;,
     value: &#39;&#39;,
     index: uuid(5)
-  },
-  {
+  &#125;,
+  &#123;
     label: &#39;单选框&#39;,
     type: &#39;radio&#39;,
-    option: [{label: &#39;男&#39;, value: 0}, {label: &#39;女&#39;, value: 1}],
+    option: [&#123;label: &#39;男&#39;, value: 0&#125;, &#123;label: &#39;女&#39;, value: 1&#125;],
     index: uuid(5)
-  },
-  {
+  &#125;,
+  &#123;
     label: &#39;复选框&#39;,
     type: &#39;checkbox&#39;,
-    option: [{label: &#39;男&#39;, value: 0}, {label: &#39;女&#39;, value: 1}],
+    option: [&#123;label: &#39;男&#39;, value: 0&#125;, &#123;label: &#39;女&#39;, value: 1&#125;],
     index: uuid(5)
-  },
-  {
+  &#125;,
+  &#123;
     label: &#39;多行文本&#39;,
     placeholder: &#39;请输入内容&#39;,
     type: &#39;textarea&#39;,
     index: uuid(5)
-  },
-  {
+  &#125;,
+  &#123;
     label: &#39;选择框&#39;,
     placeholder: &#39;请选择&#39;,
     type: &#39;select&#39;,
-    option: [{label: &#39;中国&#39;, value: 0}, {label: &#39;俄罗斯&#39;, value: 1}],
+    option: [&#123;label: &#39;中国&#39;, value: 0&#125;, &#123;label: &#39;俄罗斯&#39;, value: 1&#125;],
     index: uuid(5)
-  },
-  {
+  &#125;,
+  &#123;
     label: &#39;文件上传&#39;,
     type: &#39;upload&#39;,
     index: uuid(5)
-  }
+  &#125;
 ]
 
 // 模版渲染组件
-const tplMap = {
-  text: {
-    component: (props) =&gt; {
-      const { placeholder, label } = props
-      return &lt;div className={styles.fieldOption}&gt;&lt;span className={styles.fieldLabel}&gt;{label}:&lt;/span&gt;&lt;Input placeholder={placeholder} /&gt;&lt;/div&gt;
-    }
-  },
-  textarea: {
-    component: (props) =&gt; {
-      const { placeholder, label } = props
-      return &lt;div className={styles.fieldOption}&gt;&lt;span className={styles.fieldLabel}&gt;{label}:&lt;/span&gt;&lt;TextArea placeholder={placeholder} /&gt;&lt;/div&gt;
-    }
-  },
-  radio: {
-    component: (props) =&gt; {
-      const { option, label } = props
-      return &lt;div className={styles.fieldOption}&gt;
-              &lt;span className={styles.fieldLabel}&gt;{label}:&lt;/span&gt;
+const tplMap = &#123;
+  text: &#123;
+    component: (props) =&gt; &#123;
+      const &#123; placeholder, label &#125; = props
+      return &lt;div className=&#123;styles.fieldOption&#125;&gt;&lt;span className=&#123;styles.fieldLabel&#125;&gt;&#123;label&#125;:&lt;/span&gt;&lt;Input placeholder=&#123;placeholder&#125; /&gt;&lt;/div&gt;
+    &#125;
+  &#125;,
+  textarea: &#123;
+    component: (props) =&gt; &#123;
+      const &#123; placeholder, label &#125; = props
+      return &lt;div className=&#123;styles.fieldOption&#125;&gt;&lt;span className=&#123;styles.fieldLabel&#125;&gt;&#123;label&#125;:&lt;/span&gt;&lt;TextArea placeholder=&#123;placeholder&#125; /&gt;&lt;/div&gt;
+    &#125;
+  &#125;,
+  radio: &#123;
+    component: (props) =&gt; &#123;
+      const &#123; option, label &#125; = props
+      return &lt;div className=&#123;styles.fieldOption&#125;&gt;
+              &lt;span className=&#123;styles.fieldLabel&#125;&gt;&#123;label&#125;:&lt;/span&gt;
               &lt;Radio.Group&gt;
-                {
-                  option &amp;&amp; option.map((item, i) =&gt; {
-                    return &lt;Radio style={radioStyle} value={item.value} key={item.label}&gt;
-                      { item.label }
+                &#123;
+                  option &amp;&amp; option.map((item, i) =&gt; &#123;
+                    return &lt;Radio style=&#123;radioStyle&#125; value=&#123;item.value&#125; key=&#123;item.label&#125;&gt;
+                      &#123; item.label &#125;
                     &lt;/Radio&gt;
-                  })
-                }
+                  &#125;)
+                &#125;
             &lt;/Radio.Group&gt;
         &lt;/div&gt;
-    }
-  },
-  checkbox: {
-    component: (props) =&gt; {
-      const { option, label } = props
-      return &lt;div className={styles.fieldOption}&gt;
-              &lt;span className={styles.fieldLabel}&gt;{label}:&lt;/span&gt;
+    &#125;
+  &#125;,
+  checkbox: &#123;
+    component: (props) =&gt; &#123;
+      const &#123; option, label &#125; = props
+      return &lt;div className=&#123;styles.fieldOption&#125;&gt;
+              &lt;span className=&#123;styles.fieldLabel&#125;&gt;&#123;label&#125;:&lt;/span&gt;
               &lt;Checkbox.Group&gt;
                 &lt;Row&gt;
-                  {
-                    option &amp;&amp; option.map(item =&gt; {
-                      return &lt;Col span={16} key={item.label}&gt;
-                              &lt;Checkbox value={item.value} style={{ lineHeight: '32px' }}&gt;
-                                { item.label }
+                  &#123;
+                    option &amp;&amp; option.map(item =&gt; &#123;
+                      return &lt;Col span=&#123;16&#125; key=&#123;item.label&#125;&gt;
+                              &lt;Checkbox value=&#123;item.value&#125; style=&#123;&#123; lineHeight: '32px' &#125;&#125;&gt;
+                                &#123; item.label &#125;
                               &lt;/Checkbox&gt;
                             &lt;/Col&gt;
-                    })
-                  }
+                    &#125;)
+                  &#125;
                 &lt;/Row&gt;
             &lt;/Checkbox.Group&gt;
         &lt;/div&gt;
-    }
-  },
-  select: {
-    component: (props) =&gt; {
-      const { placeholder, option, label } = props
-      return &lt;div className={styles.fieldOption}&gt;
-              &lt;span className={styles.fieldLabel}&gt;{label}:&lt;/span&gt;
-              &lt;Select placeholder={placeholder} style={{width: '100%'}}&gt;
-                {
-                  option &amp;&amp; option.map(item =&gt; {
-                    return &lt;Option value={item.value} key={item.label}&gt;{item.label}&lt;/Option&gt;
-                  })
-                }
+    &#125;
+  &#125;,
+  select: &#123;
+    component: (props) =&gt; &#123;
+      const &#123; placeholder, option, label &#125; = props
+      return &lt;div className=&#123;styles.fieldOption&#125;&gt;
+              &lt;span className=&#123;styles.fieldLabel&#125;&gt;&#123;label&#125;:&lt;/span&gt;
+              &lt;Select placeholder=&#123;placeholder&#125; style=&#123;&#123;width: '100%'&#125;&#125;&gt;
+                &#123;
+                  option &amp;&amp; option.map(item =&gt; &#123;
+                    return &lt;Option value=&#123;item.value&#125; key=&#123;item.label&#125;&gt;&#123;item.label&#125;&lt;/Option&gt;
+                  &#125;)
+                &#125;
             &lt;/Select&gt;
         &lt;/div&gt;
-    }
-  },
-  upload: {
-    component: (props) =&gt; {
-      return &lt;div className={styles.fieldOption}&gt;
-              &lt;span className={styles.fieldLabel}&gt;{props.label}:&lt;/span&gt;
+    &#125;
+  &#125;,
+  upload: &#123;
+    component: (props) =&gt; &#123;
+      return &lt;div className=&#123;styles.fieldOption&#125;&gt;
+              &lt;span className=&#123;styles.fieldLabel&#125;&gt;&#123;props.label&#125;:&lt;/span&gt;
               &lt;Upload
               listType=&quot;picture-card&quot;
               className=&quot;avatar-uploader&quot;
-              showUploadList={false}
+              showUploadList=&#123;false&#125;
               action=&quot;https://www.mocky.io/v2/5cc8019d300000980a055e76&quot;
             &gt;
               &lt;div&gt;+&lt;/div&gt;
             &lt;/Upload&gt;
         &lt;/div&gt;
-    }
-  }
-}
+    &#125;
+  &#125;
+&#125;
 
-export {
+export &#123;
   tpl,
   tplMap
-}
-</code></pre>
+&#125;</code></pre>
 <p>基础物料在下图所示中使用：</p>
 <p><img src="https://user-gold-cdn.xitu.io/2020/4/25/171ad0ca3515ae67?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="基础物料使用"></p>
 <p>当我们要添加一个表单项时，我们就可以在左边预览操作区看到添加的项，并可以基于表单编辑生成器来编辑表单字段。</p>
 <h3 id="表单编辑生成器"><a href="#表单编辑生成器" class="headerlink" title="表单编辑生成器"></a>表单编辑生成器</h3><p>表单编辑生成器分为2部分， 第一部分是用来生成表单项的容器组件，封装了添加，删除，编辑操作功能，代码如下：</p>
 <pre><code class="js">// 表单容器组件
-const BaseFormEl = (props) =&gt; {
-  const {isEdit, onEdit, onDel, onAdd} = props
-  const handleEdit = (v) =&gt; {
+const BaseFormEl = (props) =&gt; &#123;
+  const &#123;isEdit, onEdit, onDel, onAdd&#125; = props
+  const handleEdit = (v) =&gt; &#123;
     onEdit &amp;&amp; onEdit(v)
-  }
-  return &lt;div className={styles.formControl}&gt;
-    &lt;div className={styles.formItem}&gt;{ props.children }&lt;/div&gt;
-    &lt;div className={styles.actionBar}&gt;
-      &lt;span className={styles.actionItem} onClick={onDel}&gt;&lt;MinusCircleOutlined /&gt;&lt;/span&gt;
-      &lt;span className={styles.actionItem} onClick={onAdd}&gt;&lt;PlusCircleOutlined /&gt;&lt;/span&gt;
-      &lt;span className={styles.actionItem} onClick={handleEdit}&gt;&lt;EditOutlined /&gt;&lt;/span&gt;
+  &#125;
+  return &lt;div className=&#123;styles.formControl&#125;&gt;
+    &lt;div className=&#123;styles.formItem&#125;&gt;&#123; props.children &#125;&lt;/div&gt;
+    &lt;div className=&#123;styles.actionBar&#125;&gt;
+      &lt;span className=&#123;styles.actionItem&#125; onClick=&#123;onDel&#125;&gt;&lt;MinusCircleOutlined /&gt;&lt;/span&gt;
+      &lt;span className=&#123;styles.actionItem&#125; onClick=&#123;onAdd&#125;&gt;&lt;PlusCircleOutlined /&gt;&lt;/span&gt;
+      &lt;span className=&#123;styles.actionItem&#125; onClick=&#123;handleEdit&#125;&gt;&lt;EditOutlined /&gt;&lt;/span&gt;
     &lt;/div&gt;
   &lt;/div&gt;
-}
-</code></pre>
+&#125;</code></pre>
 <p>第二部分主要用来渲染操作区模版，基于BaseFormEl包装不同类型的表单组件, 这里举一个比较复杂的select来说明，其他表单控件类似：</p>
-<pre><code class="js">const formMap = {
-  title: {},
-  text: {},
-  textarea: {},
-  radio: {},
-  checkbox: {},
-  select: {
-    component: (props) =&gt; {
-      const { onDel, onAdd, onEdit, curIndex, index, type, label, placeholder, required, message, option } = props
+<pre><code class="js">const formMap = &#123;
+  title: &#123;&#125;,
+  text: &#123;&#125;,
+  textarea: &#123;&#125;,
+  radio: &#123;&#125;,
+  checkbox: &#123;&#125;,
+  select: &#123;
+    component: (props) =&gt; &#123;
+      const &#123; onDel, onAdd, onEdit, curIndex, index, type, label, placeholder, required, message, option &#125; = props
       return &lt;BaseFormEl 
-        onDel={onDel.bind(this, index)}
-        onAdd={onAdd.bind(this, index)}
-        onEdit={onEdit.bind(this, {index, type, placeholder, label, option, required})}
-        isEdit={curIndex === index}
+        onDel=&#123;onDel.bind(this, index)&#125;
+        onAdd=&#123;onAdd.bind(this, index)&#125;
+        onEdit=&#123;onEdit.bind(this, &#123;index, type, placeholder, label, option, required&#125;)&#125;
+        isEdit=&#123;curIndex === index&#125;
       &gt;
-        &lt;Form.Item name={label} label={label} rules={[{ message, required }]}&gt;
-          &lt;Select placeholder={placeholder}&gt;
-            {
-              option &amp;&amp; option.map(item =&gt; {
-                return &lt;Option value={item.value} key={item.label}&gt;{item.label}&lt;/Option&gt;
-              })
-            }
+        &lt;Form.Item name=&#123;label&#125; label=&#123;label&#125; rules=&#123;[&#123; message, required &#125;]&#125;&gt;
+          &lt;Select placeholder=&#123;placeholder&#125;&gt;
+            &#123;
+              option &amp;&amp; option.map(item =&gt; &#123;
+                return &lt;Option value=&#123;item.value&#125; key=&#123;item.label&#125;&gt;&#123;item.label&#125;&lt;/Option&gt;
+              &#125;)
+            &#125;
           &lt;/Select&gt;
         &lt;/Form.Item&gt;
       &lt;/BaseFormEl&gt;
-    },
+    &#125;,
     editAttrs: [
-      {
+      &#123;
         title: &#39;字段名称&#39;,
         key: &#39;label&#39;
-      },
-      {
+      &#125;,
+      &#123;
         title: &#39;选项&#39;,
         key: &#39;option&#39;
-      },
-      {
+      &#125;,
+      &#123;
         title: &#39;提示文本&#39;,
         key: &#39;placeholder&#39;
-      },
-      {
+      &#125;,
+      &#123;
         title: &#39;是否必填&#39;,
         key: &#39;required&#39;
-      },
+      &#125;,
     ]
-  },
-  upload: {}
-}
-</code></pre>
+  &#125;,
+  upload: &#123;&#125;
+&#125;</code></pre>
 <p>editAttrs主要用来渲染编辑列表，说明哪些表单项可以编辑，这部分代码比较简单，这里直接用图举例：</p>
 <p><img src="https://user-gold-cdn.xitu.io/2020/4/25/171ad19928734c82?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="在线表单制作平台"></p>
 <p>最后我们来渲染表单生成器组件：</p>
-<pre><code class="js">export default (props) =&gt; {
-  const { 
+<pre><code class="js">export default (props) =&gt; &#123;
+  const &#123; 
     formData, 
     handleDelete, 
     handleAdd, 
     handleEdit, 
     curEditRowIdx 
-  } = props
+  &#125; = props
   return &lt;Form name=&quot;customForm&quot;&gt;
-            {
-              formData &amp;&amp; formData.map(item =&gt; {
+            &#123;
+              formData &amp;&amp; formData.map(item =&gt; &#123;
                 let CP = formMap[item.type].component
-                return &lt;CP {...item} key={item.index}
-                  onDel={handleDelete} 
-                  onAdd={handleAdd}
-                  onEdit={handleEdit}
-                  curIndex={curEditRowIdx}
+                return &lt;CP &#123;...item&#125; key=&#123;item.index&#125;
+                  onDel=&#123;handleDelete&#125; 
+                  onAdd=&#123;handleAdd&#125;
+                  onEdit=&#123;handleEdit&#125;
+                  curIndex=&#123;curEditRowIdx&#125;
                 /&gt;
-              })
-            }
+              &#125;)
+            &#125;
          &lt;/Form&gt;
-}
-</code></pre>
+&#125;</code></pre>
 <p>至此，基本功能模块已经开发完成，我们只需要将这些物料和组件导入到编辑页面，基于业务来操作和请求即可。</p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
@@ -448,7 +443,7 @@ const BaseFormEl = (props) =&gt; {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -482,7 +477,7 @@ const BaseFormEl = (props) =&gt; {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#正文"><span class="toc-number">2.</span> <span class="toc-text">正文</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#设计思路"><span class="toc-number">2.1.</span> <span class="toc-text">设计思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现效果与分析"><span class="toc-number">2.2.</span> <span class="toc-text">实现效果与分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#表单定制管理列表"><span class="toc-number">2.2.1.</span> <span class="toc-text">表单定制管理列表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#表单定制页面"><span class="toc-number">2.2.2.</span> <span class="toc-text">表单定制页面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#草稿管理"><span class="toc-number">2.2.3.</span> <span class="toc-text">草稿管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#生成前台表单访问链接"><span class="toc-number">2.2.4.</span> <span class="toc-text">生成前台表单访问链接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看用户已有数据录入"><span class="toc-number">2.2.5.</span> <span class="toc-text">查看用户已有数据录入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#表单数据分析"><span class="toc-number">2.2.6.</span> <span class="toc-text">表单数据分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用场景"><span class="toc-number">2.3.</span> <span class="toc-text">应用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码实现"><span class="toc-number">2.4.</span> <span class="toc-text">代码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基础表单物料"><span class="toc-number">2.4.1.</span> <span class="toc-text">基础表单物料</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#表单编辑生成器"><span class="toc-number">2.4.2.</span> <span class="toc-text">表单编辑生成器</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%AD%A3%E6%96%87"><span class="toc-number">2.</span> <span class="toc-text">正文</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF"><span class="toc-number">2.1.</span> <span class="toc-text">设计思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E6%95%88%E6%9E%9C%E4%B8%8E%E5%88%86%E6%9E%90"><span class="toc-number">2.2.</span> <span class="toc-text">实现效果与分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A8%E5%8D%95%E5%AE%9A%E5%88%B6%E7%AE%A1%E7%90%86%E5%88%97%E8%A1%A8"><span class="toc-number">2.2.1.</span> <span class="toc-text">表单定制管理列表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A8%E5%8D%95%E5%AE%9A%E5%88%B6%E9%A1%B5%E9%9D%A2"><span class="toc-number">2.2.2.</span> <span class="toc-text">表单定制页面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8D%89%E7%A8%BF%E7%AE%A1%E7%90%86"><span class="toc-number">2.2.3.</span> <span class="toc-text">草稿管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E5%89%8D%E5%8F%B0%E8%A1%A8%E5%8D%95%E8%AE%BF%E9%97%AE%E9%93%BE%E6%8E%A5"><span class="toc-number">2.2.4.</span> <span class="toc-text">生成前台表单访问链接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E7%94%A8%E6%88%B7%E5%B7%B2%E6%9C%89%E6%95%B0%E6%8D%AE%E5%BD%95%E5%85%A5"><span class="toc-number">2.2.5.</span> <span class="toc-text">查看用户已有数据录入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A8%E5%8D%95%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"><span class="toc-number">2.2.6.</span> <span class="toc-text">表单数据分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">2.3.</span> <span class="toc-text">应用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.4.</span> <span class="toc-text">代码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E8%A1%A8%E5%8D%95%E7%89%A9%E6%96%99"><span class="toc-number">2.4.1.</span> <span class="toc-text">基础表单物料</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A8%E5%8D%95%E7%BC%96%E8%BE%91%E7%94%9F%E6%88%90%E5%99%A8"><span class="toc-number">2.4.2.</span> <span class="toc-text">表单编辑生成器</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
             

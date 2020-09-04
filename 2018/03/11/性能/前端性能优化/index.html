@@ -40,7 +40,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -183,22 +183,19 @@
 </ul>
 </blockquote>
 <a id="more"></a>
+
 <h3 id="将外部脚本置底（将脚本内容在页面信息内容加载后再加载）"><a href="#将外部脚本置底（将脚本内容在页面信息内容加载后再加载）" class="headerlink" title="将外部脚本置底（将脚本内容在页面信息内容加载后再加载）"></a>将外部脚本置底（将脚本内容在页面信息内容加载后再加载）</h3><p>如果将脚本放在比较靠前的位置，则会影响整个页面的加载速度从而影响用户体验。解决这一问题的方法有很多，在 这里有比较详细的介绍 (这里是译文和 更详细的例子 )，而最简单可依赖的方法就是将脚本尽可能的往后挪，减少对并发下载的影响。</p>
-<h3 id="异步执行-inline脚本-其实原理和上面是一样，保证脚本在页面内容后面加载。"><a href="#异步执行-inline脚本-其实原理和上面是一样，保证脚本在页面内容后面加载。" class="headerlink" title="异步执行 inline脚本(其实原理和上面是一样，保证脚本在页面内容后面加载。)"></a>异步执行 inline脚本(其实原理和上面是一样，保证脚本在页面内容后面加载。)</h3><h3 id="Lazy-Load-Javascript（只有在需要加载的时候加载，在一般情况下并不加载信息内容。）"><a href="#Lazy-Load-Javascript（只有在需要加载的时候加载，在一般情况下并不加载信息内容。）" class="headerlink" title="Lazy Load Javascript（只有在需要加载的时候加载，在一般情况下并不加载信息内容。）"></a>Lazy Load Javascript（只有在需要加载的时候加载，在一般情况下并不加载信息内容。）</h3><h3 id="将-CSS放在-HEAD中"><a href="#将-CSS放在-HEAD中" class="headerlink" title="将 CSS放在 HEAD中"></a>将 CSS放在 HEAD中</h3><pre><code>如果将 CSS放在其他地方比如 BODY中，则浏览器有可能还未下载和解析到 CSS就已经开始渲染页面了，这就导致页面由无 CSS状态跳转到 CSS状态，用户体验比较糟糕。除此之外，有些浏览器会在 CSS下载完成后才开始渲染页面，如果 CSS放在靠下的位置则会导致浏览器将渲染时间推迟。
-</code></pre><h3 id="异步请求-Callback（就是将一些行为样式提取出来，慢慢的加载信息的内容）"><a href="#异步请求-Callback（就是将一些行为样式提取出来，慢慢的加载信息的内容）" class="headerlink" title="异步请求 Callback（就是将一些行为样式提取出来，慢慢的加载信息的内容）"></a>异步请求 Callback（就是将一些行为样式提取出来，慢慢的加载信息的内容）</h3><h3 id="减少不必要的-HTTP跳转"><a href="#减少不必要的-HTTP跳转" class="headerlink" title="减少不必要的 HTTP跳转"></a>减少不必要的 HTTP跳转</h3><pre><code>对于以目录形式访问的 HTTP链接，很多人都会忽略链接最后是否带 ’/&#39;，假如你的服务器对此是区别对待的话，那么你也需要注意，这其中很可能隐藏了 301跳转，增加了多余请求。具体参见下图，其中第一个链接是以无 ’/&#39;结尾的方式访问的，于是服务器有了一次跳转
-</code></pre><h3 id="避免重复的资源请求"><a href="#避免重复的资源请求" class="headerlink" title="避免重复的资源请求"></a>避免重复的资源请求</h3><pre><code>这种情况主要是由于疏忽或页面由多个模块拼接而成，然后每个模块中请求了同样的资源时，会导致资源的重复请求
-</code></pre><h2 id="代码级优化"><a href="#代码级优化" class="headerlink" title="代码级优化"></a>代码级优化</h2><h3 id="Javascript"><a href="#Javascript" class="headerlink" title="Javascript"></a>Javascript</h3><h4 id="DOM"><a href="#DOM" class="headerlink" title="DOM　　"></a>DOM　　</h4><p>DOM操作应该是脚本中最耗性能的一类操作，例如增加、修改、删除 DOM元素或者对 DOM集合进行操作。<br>如果脚本中包含了大量的 DOM操作则需要注意以下几点：　　</p>
+<h3 id="异步执行-inline脚本-其实原理和上面是一样，保证脚本在页面内容后面加载。"><a href="#异步执行-inline脚本-其实原理和上面是一样，保证脚本在页面内容后面加载。" class="headerlink" title="异步执行 inline脚本(其实原理和上面是一样，保证脚本在页面内容后面加载。)"></a>异步执行 inline脚本(其实原理和上面是一样，保证脚本在页面内容后面加载。)</h3><h3 id="Lazy-Load-Javascript（只有在需要加载的时候加载，在一般情况下并不加载信息内容。）"><a href="#Lazy-Load-Javascript（只有在需要加载的时候加载，在一般情况下并不加载信息内容。）" class="headerlink" title="Lazy Load Javascript（只有在需要加载的时候加载，在一般情况下并不加载信息内容。）"></a>Lazy Load Javascript（只有在需要加载的时候加载，在一般情况下并不加载信息内容。）</h3><h3 id="将-CSS放在-HEAD中"><a href="#将-CSS放在-HEAD中" class="headerlink" title="将 CSS放在 HEAD中"></a>将 CSS放在 HEAD中</h3><pre><code>如果将 CSS放在其他地方比如 BODY中，则浏览器有可能还未下载和解析到 CSS就已经开始渲染页面了，这就导致页面由无 CSS状态跳转到 CSS状态，用户体验比较糟糕。除此之外，有些浏览器会在 CSS下载完成后才开始渲染页面，如果 CSS放在靠下的位置则会导致浏览器将渲染时间推迟。</code></pre>
+<h3 id="异步请求-Callback（就是将一些行为样式提取出来，慢慢的加载信息的内容）"><a href="#异步请求-Callback（就是将一些行为样式提取出来，慢慢的加载信息的内容）" class="headerlink" title="异步请求 Callback（就是将一些行为样式提取出来，慢慢的加载信息的内容）"></a>异步请求 Callback（就是将一些行为样式提取出来，慢慢的加载信息的内容）</h3><h3 id="减少不必要的-HTTP跳转"><a href="#减少不必要的-HTTP跳转" class="headerlink" title="减少不必要的 HTTP跳转"></a>减少不必要的 HTTP跳转</h3><pre><code>对于以目录形式访问的 HTTP链接，很多人都会忽略链接最后是否带 ’/&#39;，假如你的服务器对此是区别对待的话，那么你也需要注意，这其中很可能隐藏了 301跳转，增加了多余请求。具体参见下图，其中第一个链接是以无 ’/&#39;结尾的方式访问的，于是服务器有了一次跳转</code></pre>
+<h3 id="避免重复的资源请求"><a href="#避免重复的资源请求" class="headerlink" title="避免重复的资源请求"></a>避免重复的资源请求</h3><pre><code>这种情况主要是由于疏忽或页面由多个模块拼接而成，然后每个模块中请求了同样的资源时，会导致资源的重复请求</code></pre>
+<h2 id="代码级优化"><a href="#代码级优化" class="headerlink" title="代码级优化"></a>代码级优化</h2><h3 id="Javascript"><a href="#Javascript" class="headerlink" title="Javascript"></a>Javascript</h3><h4 id="DOM"><a href="#DOM" class="headerlink" title="DOM　　"></a>DOM　　</h4><p>DOM操作应该是脚本中最耗性能的一类操作，例如增加、修改、删除 DOM元素或者对 DOM集合进行操作。<br>如果脚本中包含了大量的 DOM操作则需要注意以下几点：　　</p>
 <h5 id="HTML-Collection（HTML收集器，返回的是一个数组内容信息）"><a href="#HTML-Collection（HTML收集器，返回的是一个数组内容信息）" class="headerlink" title="HTML Collection（HTML收集器，返回的是一个数组内容信息）　"></a>HTML Collection（HTML收集器，返回的是一个数组内容信息）　</h5><p>　 在脚本中 document.images、document.forms 、getElementsByTagName()返回的都是 HTMLCollection类型的集合，在平时使用的时候大多将它作为数组来使用，因为它有 length属性，也可以使用索引访问每一个元素。不过在访问性能上则比数组要差很多，原因是这个集合并不是一个静态的结果，它表示的仅仅是一个特定的查询，每次访问该集合时都会重新执行这个查询从而更新查询结果。所谓的 “访问集合” 包括读取集合的 length属性、访问集合中的元素。<br>　　<br>因此，当你需要遍历 HTML Collection的时候，尽量将它转为数组后再访问，以提高性能。即使不转换为数组，也请尽可能少的访问它，例如在遍历的时候可以将 length属性、成员保存到局部变量后再使用局部变量。　</p>
 <p>　</p>
 <h5 id="reflow-回流-和-repaint-重绘"><a href="#reflow-回流-和-repaint-重绘" class="headerlink" title="reflow(回流)和 repaint(重绘)"></a>reflow(回流)和 repaint(重绘)</h5><p>简要：整个在浏览器的渲染过程中（页面初始化，用户行为改变界面样式，动画改变界面样式等）reflow(回流)和repaint(重绘) 会大大影响web性能，尤其是手机页面。因此我们在页面设计的时候要尽量减少reflow和repaint。</p>
 <p><strong>什么是reflow和repain</strong></p>
-<font color = "blue">reflow：例如某个子元素样式发生改变，直接影响到了其父元素以及往上追溯很多祖先元素（包括兄弟元素），这个时候浏览器要重新去渲染这个子元素相关联的所有元素的过程称为回流。</font>
-
-<font color = "blue">reflow：几乎是无法避免的。现在界面上流行的一些效果，比如树状目录的折叠、展开（实质上是元素的显 示与隐藏）等，都将引起浏览器的 reflow。鼠标滑过、点击……只要这些行为引起了页面上某些元素的占位面积、定位方式、边距等属性的变化，都会引起它内部、周围甚至整个页面的重新渲 染。通常我们都无法预估浏览器到底会 reflow 哪一部分的代码，它们都彼此相互影响着。</font>
-
-<font color = "blue">repaint：如果只是改变某个元素的背景色、文 字颜色、边框颜色等等不影响它周围或内部布局的属性，将只会引起浏览器 repaint（重绘）。repaint 的速度明显快于 reflow</font>
-
-
+<p><font color = "blue">reflow：例如某个子元素样式发生改变，直接影响到了其父元素以及往上追溯很多祖先元素（包括兄弟元素），这个时候浏览器要重新去渲染这个子元素相关联的所有元素的过程称为回流。</font></p>
+<p><font color = "blue">reflow：几乎是无法避免的。现在界面上流行的一些效果，比如树状目录的折叠、展开（实质上是元素的显 示与隐藏）等，都将引起浏览器的 reflow。鼠标滑过、点击……只要这些行为引起了页面上某些元素的占位面积、定位方式、边距等属性的变化，都会引起它内部、周围甚至整个页面的重新渲 染。通常我们都无法预估浏览器到底会 reflow 哪一部分的代码，它们都彼此相互影响着。</font></p>
+<p><font color = "blue">repaint：如果只是改变某个元素的背景色、文 字颜色、边框颜色等等不影响它周围或内部布局的属性，将只会引起浏览器 repaint（重绘）。repaint 的速度明显快于 reflow</font></p>
 <p>下面情况会导致<font color = "red">reflow</font>发生</p>
 <blockquote>
 <ul>
@@ -299,46 +296,43 @@
 <p>如果我们要经常去获取和操作这些值，则可以先将这些值缓存起来例如：</p>
 <pre><code class="javascript">var windowHeight = window.innerHeight;//reflow
 
-for(i=0;i&lt;10;i++){
+for(i=0;i&lt;10;i++)&#123;
 
 　　$body.height(windowHeight++);
 
 　　一系列关于windowHeight的操作.......
 
-}
-</code></pre>
+&#125;</code></pre>
 <p>(2). 慎用 with<br>with(obj){ p = 1}; 代码块的行为实际上是修改了代码块中的 执行环境 ，将obj放在了其作用域链的最前端，在 with代码块中访问非局部变量是都是先从 obj上开始查找，如果没有再依次按作用域链向上查找，因此使用 with相当于增加了作用域链长度。而每次查找作用域链都是要消耗时间的，过长的作用域链会导致查找性能下降。　<br>　<br>因此，除非你能肯定在 with代码中只访问 obj中的属性，否则慎用 with，替代的可以使用局部变量缓存需要访问的属性。<br>　　<br>(3). 避免使用 eval和 Function　　<br>每次 eval 或 Function 构造函数作用于字符串表示的源代码时，脚本引擎都需要将源代码转换成可执行代码。这是很消耗资源的操作 —— 通常比简单的函数调用慢 100倍以上。　<br>　<br>eval 函数效率特别低，由于事先无法知晓传给 eval 的字符串中的内容，eval在其上下文中解释要处理的代码，也就是说编译器无法优化上下文，因此只能有浏览器在运行时解释代码。这对性能影响很大。　　</p>
 <p>Function 构造函数比 eval略好，因为使用此代码不会影响周围代码 ;但其速度仍很慢。　　此外，使用 eval和 Function也不利于Javascript 压缩工具执行压缩。　　</p>
 <p>(4). 减少作用域链查找（这方面设计到一些内容的相关问题）　　<br>前文谈到了作用域链查找问题，这一点在循环中是尤其需要注意的问题。如果在循环中需要访问非本作用域下的变量时请在遍历之前用局部变量缓存该变量，并在遍历结束后再重写那个变量，这一点对全局变量尤其重要，因为全局变量处于作用域链的最顶端，访问时的查找次数是最多的。</p>
 <p><strong>低效率的写法：</strong></p>
-<pre><code class="javascript">// 全局变量 var globalVar = 1; function myCallback(info){   
-     for( var i = 100000; i--;){      
+<pre><code class="javascript">// 全局变量 var globalVar = 1; function myCallback(info)&#123;   
+     for( var i = 100000; i--;)&#123;      
           //每次访问 globalVar 都需要查找到作用域链最顶端，本例中需要访问 100000 次   
-        globalVar += i;    }
-    } 　　
-</code></pre>
+        globalVar += i;    &#125;
+    &#125; 　　</code></pre>
 <p><strong>更高效的写法：</strong></p>
 <pre><code class="javascript">// 全局变量 
 var globalVar = 1; 
-function myCallback(info){ 
+function myCallback(info)&#123; 
        //局部变量缓存全局变量  
     var localVar = globalVar;  
-    for( var i = 100000; i--;){     
+    for( var i = 100000; i--;)&#123;     
         //访问局部变量是最快的        
         localVar += i;   
-        }    
+        &#125;    
         //本例中只需要访问 2次全局变量在函数中只需要将 globalVar中内容的值赋给localVar 中区  
         globalVar = localVar; 
-    }　　
-</code></pre>
+    &#125;　　</code></pre>
 <p>此外，要减少作用域链查找还应该减少闭包的使用。</p>
 <p>(5). 数据访问　<br>　Javascript中的数据访问包括直接量 (字符串、正则表达式 )、变量、对象属性以及数组，其中对直接量和局部变量的访问是最快的，对对象属性以及数组的访问需要更大的开销。当出现以下情况时，建议将数据放入局部变量：<br>　　<br>a. 对任何对象属性的访问超过 1次　　<br>b. 对任何数组成员的访问次数超过 1次　</p>
 <p>另外，还应当尽可能的减少对对象以及数组深度查找。</p>
 <p>(6). 字符串拼接　　<br>在 Javascript中使用”+” 号来拼接字符串效率是比较低的，因为每次运行都会开辟新的内存并生成新的字符串变量，然后将拼接结果赋值给新变量。与之相比更为高效的做法是使用数组的 join方法，即将需要拼接的字符串放在数组中最后调用其 join方法得到结果。</p>
 <p>不过由于使用数组也有一定的开销，因此当需要拼接的字符串较多的时候可以考虑用此方法。</p>
 <h3 id="CSS选择符"><a href="#CSS选择符" class="headerlink" title="CSS选择符"></a>CSS选择符</h3><p>在大多数人的观念中，都觉得浏览器对 CSS选择符的解析式从左往右进行的，例如#toc A { color: #444; }　　这样一个选择符，如果是从右往左解析则效率会很高，因为第一个 ID选择基本上就把查找的范围限定了，但实际上浏览器对选择符的解析是从右往左进行的。如上面的选择符，浏览器必须遍历查找每一个 A标签的祖先节点，效率并不像之前想象的那样高。根据浏览器的这一行为特点，在写选择符的时候需要注意很多事项</p>
-<h3 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h3><p>对 HTML本身的优化现如今也越来越多的受人关注了，详情可以参见这篇<a href="https://www.cnblogs.com/zhangyongl/p/6154981.html" target="_blank" rel="noopener">总结性文章</a></p>
-<h3 id="Image压缩"><a href="#Image压缩" class="headerlink" title="Image压缩"></a>Image压缩</h3><p><a href="https://tinypng.com/" target="_blank" rel="noopener">一个非常实用的Image压缩的网站</a></p>
+<h3 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h3><p>对 HTML本身的优化现如今也越来越多的受人关注了，详情可以参见这篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/zhangyongl/p/6154981.html">总结性文章</a></p>
+<h3 id="Image压缩"><a href="#Image压缩" class="headerlink" title="Image压缩"></a>Image压缩</h3><p><a target="_blank" rel="noopener" href="https://tinypng.com/">一个非常实用的Image压缩的网站</a></p>
 <p>图片压缩是个技术活，不过现如今这方面的工具也非常多，压缩之后往往能带来不错的效果，具体的压缩原理以及方法在《 Even Faster Web Sites》第10 章有很详细的介绍，有兴趣的可以去看看。 </p>
 <p>《高性能网站建设指南》提出的规则</p>
 <p>规则1——-减少HTTP请求</p>
@@ -379,7 +373,7 @@ function myCallback(info){
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -413,7 +407,7 @@ function myCallback(info){
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#页面级优化"><span class="toc-number">1.</span> <span class="toc-text">页面级优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#减少http请求"><span class="toc-number">1.1.</span> <span class="toc-text">减少http请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#将外部脚本置底（将脚本内容在页面信息内容加载后再加载）"><span class="toc-number">1.2.</span> <span class="toc-text">将外部脚本置底（将脚本内容在页面信息内容加载后再加载）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异步执行-inline脚本-其实原理和上面是一样，保证脚本在页面内容后面加载。"><span class="toc-number">1.3.</span> <span class="toc-text">异步执行 inline脚本(其实原理和上面是一样，保证脚本在页面内容后面加载。)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Lazy-Load-Javascript（只有在需要加载的时候加载，在一般情况下并不加载信息内容。）"><span class="toc-number">1.4.</span> <span class="toc-text">Lazy Load Javascript（只有在需要加载的时候加载，在一般情况下并不加载信息内容。）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#将-CSS放在-HEAD中"><span class="toc-number">1.5.</span> <span class="toc-text">将 CSS放在 HEAD中</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异步请求-Callback（就是将一些行为样式提取出来，慢慢的加载信息的内容）"><span class="toc-number">1.6.</span> <span class="toc-text">异步请求 Callback（就是将一些行为样式提取出来，慢慢的加载信息的内容）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#减少不必要的-HTTP跳转"><span class="toc-number">1.7.</span> <span class="toc-text">减少不必要的 HTTP跳转</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#避免重复的资源请求"><span class="toc-number">1.8.</span> <span class="toc-text">避免重复的资源请求</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码级优化"><span class="toc-number">2.</span> <span class="toc-text">代码级优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Javascript"><span class="toc-number">2.1.</span> <span class="toc-text">Javascript</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CSS选择符"><span class="toc-number">2.2.</span> <span class="toc-text">CSS选择符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTML"><span class="toc-number">2.3.</span> <span class="toc-text">HTML</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Image压缩"><span class="toc-number">2.4.</span> <span class="toc-text">Image压缩</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B5%E9%9D%A2%E7%BA%A7%E4%BC%98%E5%8C%96"><span class="toc-number">1.</span> <span class="toc-text">页面级优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%8F%E5%B0%91http%E8%AF%B7%E6%B1%82"><span class="toc-number">1.1.</span> <span class="toc-text">减少http请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%86%E5%A4%96%E9%83%A8%E8%84%9A%E6%9C%AC%E7%BD%AE%E5%BA%95%EF%BC%88%E5%B0%86%E8%84%9A%E6%9C%AC%E5%86%85%E5%AE%B9%E5%9C%A8%E9%A1%B5%E9%9D%A2%E4%BF%A1%E6%81%AF%E5%86%85%E5%AE%B9%E5%8A%A0%E8%BD%BD%E5%90%8E%E5%86%8D%E5%8A%A0%E8%BD%BD%EF%BC%89"><span class="toc-number">1.2.</span> <span class="toc-text">将外部脚本置底（将脚本内容在页面信息内容加载后再加载）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%82%E6%AD%A5%E6%89%A7%E8%A1%8C-inline%E8%84%9A%E6%9C%AC-%E5%85%B6%E5%AE%9E%E5%8E%9F%E7%90%86%E5%92%8C%E4%B8%8A%E9%9D%A2%E6%98%AF%E4%B8%80%E6%A0%B7%EF%BC%8C%E4%BF%9D%E8%AF%81%E8%84%9A%E6%9C%AC%E5%9C%A8%E9%A1%B5%E9%9D%A2%E5%86%85%E5%AE%B9%E5%90%8E%E9%9D%A2%E5%8A%A0%E8%BD%BD%E3%80%82"><span class="toc-number">1.3.</span> <span class="toc-text">异步执行 inline脚本(其实原理和上面是一样，保证脚本在页面内容后面加载。)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Lazy-Load-Javascript%EF%BC%88%E5%8F%AA%E6%9C%89%E5%9C%A8%E9%9C%80%E8%A6%81%E5%8A%A0%E8%BD%BD%E7%9A%84%E6%97%B6%E5%80%99%E5%8A%A0%E8%BD%BD%EF%BC%8C%E5%9C%A8%E4%B8%80%E8%88%AC%E6%83%85%E5%86%B5%E4%B8%8B%E5%B9%B6%E4%B8%8D%E5%8A%A0%E8%BD%BD%E4%BF%A1%E6%81%AF%E5%86%85%E5%AE%B9%E3%80%82%EF%BC%89"><span class="toc-number">1.4.</span> <span class="toc-text">Lazy Load Javascript（只有在需要加载的时候加载，在一般情况下并不加载信息内容。）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%86-CSS%E6%94%BE%E5%9C%A8-HEAD%E4%B8%AD"><span class="toc-number">1.5.</span> <span class="toc-text">将 CSS放在 HEAD中</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%82%E6%AD%A5%E8%AF%B7%E6%B1%82-Callback%EF%BC%88%E5%B0%B1%E6%98%AF%E5%B0%86%E4%B8%80%E4%BA%9B%E8%A1%8C%E4%B8%BA%E6%A0%B7%E5%BC%8F%E6%8F%90%E5%8F%96%E5%87%BA%E6%9D%A5%EF%BC%8C%E6%85%A2%E6%85%A2%E7%9A%84%E5%8A%A0%E8%BD%BD%E4%BF%A1%E6%81%AF%E7%9A%84%E5%86%85%E5%AE%B9%EF%BC%89"><span class="toc-number">1.6.</span> <span class="toc-text">异步请求 Callback（就是将一些行为样式提取出来，慢慢的加载信息的内容）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%8F%E5%B0%91%E4%B8%8D%E5%BF%85%E8%A6%81%E7%9A%84-HTTP%E8%B7%B3%E8%BD%AC"><span class="toc-number">1.7.</span> <span class="toc-text">减少不必要的 HTTP跳转</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%81%BF%E5%85%8D%E9%87%8D%E5%A4%8D%E7%9A%84%E8%B5%84%E6%BA%90%E8%AF%B7%E6%B1%82"><span class="toc-number">1.8.</span> <span class="toc-text">避免重复的资源请求</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E7%BA%A7%E4%BC%98%E5%8C%96"><span class="toc-number">2.</span> <span class="toc-text">代码级优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Javascript"><span class="toc-number">2.1.</span> <span class="toc-text">Javascript</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CSS%E9%80%89%E6%8B%A9%E7%AC%A6"><span class="toc-number">2.2.</span> <span class="toc-text">CSS选择符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTML"><span class="toc-number">2.3.</span> <span class="toc-text">HTML</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Image%E5%8E%8B%E7%BC%A9"><span class="toc-number">2.4.</span> <span class="toc-text">Image压缩</span></a></li></ol></li></ol>
                 </div>
             </div>
             

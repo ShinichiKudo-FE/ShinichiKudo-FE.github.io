@@ -36,7 +36,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -99,7 +99,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    5.2k
+                    5.5k
                 </span>
                 
                 
@@ -140,64 +140,61 @@
     <div class='main'>
         <div class="content markdown animated fadeIn">
             <h1 id="Context-API"><a href="#Context-API" class="headerlink" title="Context API"></a>Context API</h1><p>Context API总是很让人迷惑。这个API是官方的，但是官方又不希望开发者们使用这个API，说是这个API会在以后发生改变。现在就是那个改变的时刻。新的API已经被merge了。而且它看起来更加的“用户友好”了。尤其是你不得不使用redux、mobx的时候，可以选择新的Context API实现更加简单的状态管理。</p>
-<p>新的API用起来非常的简单：<strong>React.createContext()</strong>，这样就创建了两个组件：</p>
-<pre><code class="javascript">import {context} from &#39;react&#39;;
-const ThemeContext = createContext({
+<p>新的API用起来非常的简单：**React.createContext()**，这样就创建了两个组件：</p>
+<pre><code class="javascript">import &#123;context&#125; from &#39;react&#39;;
+const ThemeContext = createContext(&#123;
   background: &#39;yellow&#39;,
   color: &#39;white&#39;
-});
-</code></pre>
+&#125;);</code></pre>
 <p>调用createContext方法会返回两个对象，一个是<code>Provider</code>，一个是<code>Consumer</code>。</p>
 <p>那个Provider是一个特殊的组件。它可以用来给子树里的组件提供数据。一个例子：</p>
-<pre><code class="javascript">class Application extends React.Component {
-  render() {
-    &lt;ThemeContext.Provider value={{background: 'black', color: 'white'}}&gt;
+<pre><code class="javascript">class Application extends React.Component &#123;
+  render() &#123;
+    &lt;ThemeContext.Provider value=&#123;&#123;background: 'black', color: 'white'&#125;&#125;&gt;
       &lt;Header /&gt;
       &lt;Main /&gt;
       &lt;Footer /&gt;
     &lt;/ThemeContext.Provider&gt;
-  }
-}
-</code></pre>
+  &#125;
+&#125;</code></pre>
 <p>上例展示了如何传递“theme” context的。当然这些值可以是动态的（比如，基于this.state）。</p>
 <a id="more"></a>
+
 <p>下一步就是使用Consumer。</p>
-<pre><code class="javascript">const Header = () =&gt; {
+<pre><code class="javascript">const Header = () =&gt; &#123;
   &lt;ThemeContext.Consumer&gt;
-    {(context) =&gt; {
+    &#123;(context) =&gt; &#123;
       return (
-        &lt;p style={{background: context.background, color: context.color}}&gt;
+        &lt;p style=&#123;&#123;background: context.background, color: context.color&#125;&#125;&gt;
           Welcome!
         &lt;/p&gt;
       );
-    }}
+    &#125;&#125;
   &lt;/ThemeContext.Consumer&gt;
-}
-</code></pre>
+&#125;</code></pre>
 <p>接下来，定义Header、Title组件。注意：</p>
 <p>Title组件用到了Consumer组件，表示要消费Provider传递的数据。<br>Title组件是App的孙组件，但跳过了Header消费数据。</p>
-<pre><code class="javascript">    class Header extends React.Component {
-  render () {
+<pre><code class="javascript">    class Header extends React.Component &#123;
+  render () &#123;
     return (
       &lt;Title&gt;Hello React Context API&lt;/Title&gt;
     );
-  }
-}
+  &#125;
+&#125;
 
-class Title extends React.Component {
-  render () {
+class Title extends React.Component &#123;
+  render () &#123;
     return (
       &lt;ThemeContext.Consumer&gt;
-        {context =&gt; (
-          &lt;h1 style={{background: context.background, color: context.color}}&gt;
-            {this.props.children}
+        &#123;context =&gt; (
+          &lt;h1 style=&#123;&#123;background: context.background, color: context.color&#125;&#125;&gt;
+            &#123;this.props.children&#125;
           &lt;/h1&gt;
-        )}
+        )&#125;
       &lt;/ThemeContext.Consumer&gt;
     );
-  }
-}
-</code></pre>
+  &#125;
+&#125;</code></pre>
 <p>如果在render Consumer的时候没有嵌套在一个Provider里面。那么就会使用createContext方法调用的时候设置的默认值。</p>
 <p><strong>注意：</strong><br>Consumer必须可以访问到同一个Context组件。如果你要创建一个新的context，用的是同样的入参，那么这个新建的context的数据是不可访问的。因此，可以把Context当做一个组件，它可以创建一次，然后可以export，可以import。</p>
 <p>这个新的语法用了function as child模式（有时也叫做render prop模式）。如果不是很熟悉这个模式，那么推荐你看一下这些文章。<br>新的API不再要求你声明<code>contextProps</code>了。<br>Context传递的数据和Context.Provider组件的value属性是一样的。对Provider数据的修改会引起所有的消费者<code>（consumer）</code>重绘。</p>
@@ -214,42 +211,39 @@ class Title extends React.Component {
 <p>什么是静态方法？一个静态方法就是存在于类内，而不是类的实例内的方法。静态方法访问不到this，并且在声明的时候有static关键字在前面修饰。</p>
 <p>但是，问题来了。既然这个方法没有办法访问this，那么如何调用this.setState呢？答案就是，不调用。这个方法直接返回需要更新的state的数据，或者返回null，如果没有什么需要更新的话。</p>
 <pre><code class="javascript">
-static getDerivedStateFromProps(nextProps, prevState) {
-  if(nextProps.currentRow === prevState.lastRow) {
+static getDerivedStateFromProps(nextProps, prevState) &#123;
+  if(nextProps.currentRow === prevState.lastRow) &#123;
     return null;
-  }
+  &#125;
 
-  return {
+  return &#123;
     lastRow: nextProps.currentRow,
     isCrollingDown: nextProps.curentRow &gt; prevState.lastRow
-  }
-}
-</code></pre>
+  &#125;
+&#125;</code></pre>
 <p>调用这个方法和之前调用this.setState的效果是一样的。只会修改这些返回的值，如果是null的话则不修改state。state的其他值都会保留。</p>
 <p>值得注意是<br>你需要定义初始state的值。无论是在constructor里，或者是类属性。否则会报警告。<br>这个方法getDerivedStateFromProps()会在第一次挂载和重绘的时候都会调用到，因此你基本不用在constructor里根据传入的props来setState。</p>
 <p>如果定义了getDerivedStateFromProps后，又定义了componentWillReceiveProps。那么，只有前者会被调用，并且你会收到一个警告。</p>
 <p>一般你会使用一个回调来保证某些代码实在state更新之后才被调用的。那么，请把这些代码都移到componentDidUpdate里。<br>如果你不喜欢使用static关键字，那么你可以这样：</p>
-<pre><code class="javascript">ComponentName.getDerivedStateFromProps = (nextProps, prevState) =&gt; {
+<pre><code class="javascript">ComponentName.getDerivedStateFromProps = (nextProps, prevState) =&gt; &#123;
   // Your code here
-}
-</code></pre>
+&#125;</code></pre>
 <h2 id="static-mode"><a href="#static-mode" class="headerlink" title="static mode"></a>static mode</h2><p>严格模式是一个新的方式来确保你的代码是按照最佳实践开发的。它实际是一个在React.StrictMode下的组件。它可以用在你的组件树的任何一部分上。</p>
-<pre><code class="javascript">import {StrictMode} from &#39;react&#39;
+<pre><code class="javascript">import &#123;StrictMode&#125; from &#39;react&#39;
 
-class Application extends React.Component {
-  render() {
+class Application extends React.Component &#123;
+  render() &#123;
     return (
       &lt;StrictMode&gt;
-        &lt;Context.Provider value={{background: 'black', color: 'white'}}&gt;
+        &lt;Context.Provider value=&#123;&#123;background: 'black', color: 'white'&#125;&#125;&gt;
           &lt;Header /&gt;
           &lt;Main /&gt;
           &lt;Footer /&gt;
         &lt;/Context.Provider&gt;
       &lt;/StrictMode&gt;
     );
-  }
-}
-</code></pre>
+  &#125;
+&#125;</code></pre>
 <p>如果一个在StricMode子树里的组件使用了componentWillMount方法，那么你会看到一个报错消息。</p>
 <h2 id="asyncMode"><a href="#asyncMode" class="headerlink" title="asyncMode"></a>asyncMode</h2><p>异步模式在React.unsafe_AsyncMode下。使用AsncMode也会打开StrictMode模式下的警告。</p>
 
@@ -276,7 +270,7 @@ class Application extends React.Component {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -310,7 +304,7 @@ class Application extends React.Component {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Context-API"><span class="toc-number">1.</span> <span class="toc-text">Context API</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#新的声明周期方法"><span class="toc-number">2.</span> <span class="toc-text">新的声明周期方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#static-getDerivedStateFromProps"><span class="toc-number">2.1.</span> <span class="toc-text">static getDerivedStateFromProps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#static-mode"><span class="toc-number">2.2.</span> <span class="toc-text">static mode</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#asyncMode"><span class="toc-number">2.3.</span> <span class="toc-text">asyncMode</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Context-API"><span class="toc-number">1.</span> <span class="toc-text">Context API</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%B0%E7%9A%84%E5%A3%B0%E6%98%8E%E5%91%A8%E6%9C%9F%E6%96%B9%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">新的声明周期方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#static-getDerivedStateFromProps"><span class="toc-number">2.1.</span> <span class="toc-text">static getDerivedStateFromProps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#static-mode"><span class="toc-number">2.2.</span> <span class="toc-text">static mode</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#asyncMode"><span class="toc-number">2.3.</span> <span class="toc-text">asyncMode</span></a></li></ol></li></ol>
                 </div>
             </div>
             

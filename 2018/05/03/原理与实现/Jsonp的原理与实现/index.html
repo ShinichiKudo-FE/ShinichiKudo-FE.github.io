@@ -39,7 +39,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -102,13 +102,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    4.9k
+                    5.1k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    4 mins.
+                    5 mins.
                 </span>
                 
                 
@@ -149,63 +149,60 @@
 <li>3.由于使用script的src属性，所以只支持get方法</li>
 </ul>
 <h2 id="实现流程"><a href="#实现流程" class="headerlink" title="实现流程"></a>实现流程</h2><p>1.设定一个script标签</p>
-<pre><code class="js">&lt;script src=&quot;http://jsonp.js?callback=xxx&quot;&gt;&lt;/script&gt;
-</code></pre>
+<pre><code class="js">&lt;script src=&quot;http://jsonp.js?callback=xxx&quot;&gt;&lt;/script&gt;</code></pre>
 <p>2.callback定义了一个函数名，而远程服务端通过调用指定的函数并传入参数实现参数传递，将fn(response)传递回客户端</p>
 <pre><code class="js">$callback = !empty($_GET[&#39;callback&#39;]) ? $_GET[&#39;callback&#39;]: &#39;callback&#39;;
-echo $callback.&#39;(.json_encode($data))&#39;;
-</code></pre>
-<p>3.客户端接收到返回的js脚本，开始解析和执行fn(response)<br><a id="more"></a></p>
+echo $callback.&#39;(.json_encode($data))&#39;;</code></pre>
+<p>3.客户端接收到返回的js脚本，开始解析和执行fn(response)</p>
+<a id="more"></a>
+
 <h2 id="jsonp的简单实现"><a href="#jsonp的简单实现" class="headerlink" title="jsonp的简单实现"></a>jsonp的简单实现</h2><p>一个简单的jsonp实现，其实就是拼接url字符串，动态的添加到script元素的头部</p>
-<pre><code class="js">function jsonp(req){
+<pre><code class="js">function jsonp(req)&#123;
     var script = document.createElement(&#39;script&#39;);
     var url = req.url + &#39;?callback=&#39; + req.callback.name;
     script.src = url;
     document.getElementsByTagName(&#39;head&#39;)[0].appendChild(&#39;script&#39;);
-}
-</code></pre>
+&#125;</code></pre>
 <p>前端js示例</p>
-<pre><code class="js">function hello(res){
+<pre><code class="js">function hello(res)&#123;
     alert(&#39;hello&#39; + res.data);
-}
-jsonp({
+&#125;
+jsonp(&#123;
     url:&#39;&#39;,
     callback: hello
-})
-</code></pre>
+&#125;)</code></pre>
 <p>服务器端代码</p>
 <pre><code class="js">var http = requrie(&#39;http&#39;);
 var urllib = require(&#39;url&#39;);
 var port = 8080;
-var data = {&#39;data&#39;:&#39;world&#39;};
+var data = &#123;&#39;data&#39;:&#39;world&#39;&#125;;
 
-http.createServer(function(req,res){
+http.createServer(function(req,res)&#123;
     var params = urllib.parse(req.url,true);
-    if(params.query.callback){
+    if(params.query.callback)&#123;
         console.log(params.query.callback);
         //jsonp
         var str = params.query.callback + &#39;(&#39; + JSON.stringify(data) + &#39;)&#39;;
         res.end(str);
-    } else {
+    &#125; else &#123;
         res.end();
-    }
-}).listen(port,function(){
+    &#125;
+&#125;).listen(port,function()&#123;
     console.log(&#39;jsonp server is on&#39;);
-});
-
+&#125;);
 </code></pre>
 <p>然而，这个实现虽然简单，但有一些不足的地方：</p>
 <p>1.我们传递的回调必须是一个全局方法，我们都知道要尽量减少全局的方法。<br>2.需要加入一些参数校验，确保接口可以正常执行。</p>
 <h2 id="可靠的jsonp实现"><a href="#可靠的jsonp实现" class="headerlink" title="可靠的jsonp实现"></a>可靠的jsonp实现</h2><p>jsonp部分源码</p>
-<pre><code class="js">(function (global) {
+<pre><code class="js">(function (global) &#123;
     var id = 0,
         container = document.getElementsByTagName(&quot;head&quot;)[0];
 
-    function jsonp(options) {
+    function jsonp(options) &#123;
         if(!options || !options.url) return;
 
         var scriptNode = document.createElement(&quot;script&quot;),
-            data = options.data || {},
+            data = options.data || &#123;&#125;,
             url = options.url,
             callback = options.callback,
             fnName = &quot;jsonp&quot; + id++;
@@ -215,44 +212,42 @@ http.createServer(function(req,res){
 
         // 拼接url
         var params = [];
-        for (var key in data) {
+        for (var key in data) &#123;
             params.push(encodeURIComponent(key) + &quot;=&quot; + encodeURIComponent(data[key]));
-        }
+        &#125;
         url = url.indexOf(&quot;?&quot;) &gt; 0 ? (url + &quot;&amp;&quot;) : (url + &quot;?&quot;);
         url += params.join(&quot;&amp;&quot;);
         scriptNode.src = url;
 
         // 传递的是一个匿名的回调函数，要执行的话，暴露为一个全局方法
-        global[fnName] = function (ret) {
+        global[fnName] = function (ret) &#123;
             callback &amp;&amp; callback(ret);
             container.removeChild(scriptNode);
             delete global[fnName];
-        }
+        &#125;
 
         // 出错处理
-        scriptNode.onerror = function () {
-            callback &amp;&amp; callback({error:&quot;error&quot;});
+        scriptNode.onerror = function () &#123;
+            callback &amp;&amp; callback(&#123;error:&quot;error&quot;&#125;);
             container.removeChild(scriptNode);
             global[fnName] &amp;&amp; delete global[fnName];
-        }
+        &#125;
 
         scriptNode.type = &quot;text/javascript&quot;;
         container.appendChild(scriptNode)
-    }
+    &#125;
 
     global.jsonp = jsonp;
 
-})(this);
-</code></pre>
+&#125;)(this);</code></pre>
 <p>使用示例</p>
-<pre><code class="js">jsonp({
+<pre><code class="js">jsonp(&#123;
     url: &#39;www.example.com&#39;,
-    data: {id :1},
-    callback: function(ret){
+    data: &#123;id :1&#125;,
+    callback: function(ret)&#123;
         console.log(ret)
-    }
-})
-</code></pre>
+    &#125;
+&#125;)</code></pre>
 <h2 id="JSONP的优缺点"><a href="#JSONP的优缺点" class="headerlink" title="JSONP的优缺点"></a>JSONP的优缺点</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
 <li>它不像XMLHttpRequest对象实现的Ajax请求那样受到同源策略的限制，JSONP可以跨越同源策略；</li>
 <li>它的兼容性更好，在更加古老的浏览器中都可以运行，不需要XMLHttpRequest或ActiveX的支持</li>
@@ -293,7 +288,7 @@ http.createServer(function(req,res){
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -327,7 +322,7 @@ http.createServer(function(req,res){
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#实现流程"><span class="toc-number">1.1.</span> <span class="toc-text">实现流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jsonp的简单实现"><span class="toc-number">1.2.</span> <span class="toc-text">jsonp的简单实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可靠的jsonp实现"><span class="toc-number">1.3.</span> <span class="toc-text">可靠的jsonp实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSONP的优缺点"><span class="toc-number">1.4.</span> <span class="toc-text">JSONP的优缺点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#优点"><span class="toc-number">1.4.1.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缺点"><span class="toc-number">1.4.2.</span> <span class="toc-text">缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安全防范"><span class="toc-number">1.4.3.</span> <span class="toc-text">安全防范</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E6%B5%81%E7%A8%8B"><span class="toc-number">1.1.</span> <span class="toc-text">实现流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jsonp%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.2.</span> <span class="toc-text">jsonp的简单实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E9%9D%A0%E7%9A%84jsonp%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.3.</span> <span class="toc-text">可靠的jsonp实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSONP%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-number">1.4.</span> <span class="toc-text">JSONP的优缺点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9"><span class="toc-number">1.4.1.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">1.4.2.</span> <span class="toc-text">缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E9%98%B2%E8%8C%83"><span class="toc-number">1.4.3.</span> <span class="toc-text">安全防范</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
             

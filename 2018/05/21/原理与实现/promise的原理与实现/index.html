@@ -38,7 +38,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -142,40 +142,40 @@
     <div class='main'>
         <div class="content markdown animated fadeIn">
             <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>先上一图!<br><img src="https://mengera88.github.io/images/promises.png" alt="promise"></p>
-<p>本文的promise源码是按照<a href="https://promisesaplus.com/" target="_blank" rel="noopener">Promise/A+规范</a>来编写的（不想看英文版的移步<a href="http://www.ituring.com.cn/article/66566" target="_blank" rel="noopener">Promise/A+规范中文翻译</a>）</p>
+<p>本文的promise源码是按照<a target="_blank" rel="noopener" href="https://promisesaplus.com/">Promise/A+规范</a>来编写的（不想看英文版的移步<a target="_blank" rel="noopener" href="http://www.ituring.com.cn/article/66566">Promise/A+规范中文翻译</a>）</p>
 <h2 id="引子"><a href="#引子" class="headerlink" title="引子"></a>引子</h2><p>为了让大家更容易理解，我们从一个场景开始讲解，让大家一步一步跟着思路思考，相信你一定会更容易看懂。</p>
 <p>考虑下面一种获取用户id的请求处理</p>
-<pre><code class="js">function getUrlId() {
-    return new Promise(function(resolve) {
+<pre><code class="js">function getUrlId() &#123;
+    return new Promise(function(resolve) &#123;
         //异步请求
-        http.get(url,function(results) {
+        http.get(url,function(results) &#123;
             resolve(results.id);
-        })
-    })
-}
-getUrlId().then(function(id){
+        &#125;)
+    &#125;)
+&#125;
+getUrlId().then(function(id)&#123;
     //一些处理
-})
-</code></pre>
-<p><code>getUserId</code>方法返回一个<code>promise</code>，可以通过它的<code>then</code>方法注册(注意注册这个词)在<code>promise</code>异步操作成功时执行的回调。这种执行方式，使得异步调用变得十分顺手。<br><a id="more"></a></p>
+&#125;)</code></pre>
+<p><code>getUserId</code>方法返回一个<code>promise</code>，可以通过它的<code>then</code>方法注册(注意注册这个词)在<code>promise</code>异步操作成功时执行的回调。这种执行方式，使得异步调用变得十分顺手。</p>
+<a id="more"></a>
+
 <h2 id="原理剖析"><a href="#原理剖析" class="headerlink" title="原理剖析"></a>原理剖析</h2><p>那么类似这种功能的Promise怎么实现呢？其实按照上面一句话，实现一个最基础的雏形还是很easy的。</p>
-<h3 id="极简promise雏形"><a href="#极简promise雏形" class="headerlink" title="极简promise雏形"></a>极简promise雏形</h3><pre><code class="js">function Promise(fn) {
+<h3 id="极简promise雏形"><a href="#极简promise雏形" class="headerlink" title="极简promise雏形"></a>极简promise雏形</h3><pre><code class="js">function Promise(fn) &#123;
     var value = null,
         callbacks = [];  //callbacks为数组，因为可能同时有很多个回调
 
-    this.then = function (onFulfilled) {
+    this.then = function (onFulfilled) &#123;
         callbacks.push(onFulfilled);
-    };
+    &#125;;
 
-    function resolve(value) {
-        callbacks.forEach(function (callback) {
+    function resolve(value) &#123;
+        callbacks.forEach(function (callback) &#123;
             callback(value);
-        });
-    }
+        &#125;);
+    &#125;
 
     fn(resolve);
-}
-</code></pre>
+&#125;</code></pre>
 <p>上述代码很简单，大致的逻辑是这样的：</p>
 <ul>
 <li>调用then方法，将想要在Promise异步操作成功时执行的回调放入callbacks队列，其实也就是注册回调函数，可以向观察者模式方向思考；</li>
@@ -183,158 +183,150 @@ getUrlId().then(function(id){
 </ul>
 <p>可以结合例1中的代码来看，首先new Promise时，传给promise的函数发送异步请求，接着调用promise对象的then属性，注册请求成功的回调函数，然后当异步请求发送成功时，调用resolve(results.id)方法, 该方法执行then方法注册的回调数组。</p>
 <p>相信仔细的人应该可以看出来，then方法应该能够链式调用，但是上面的最基础简单的版本显然无法支持链式调用。想让then方法支持链式调用，其实也是很简单的：</p>
-<pre><code class="js">this.then = function (onFulfilled) {
+<pre><code class="js">this.then = function (onFulfilled) &#123;
     callbacks.push(onFulfilled);
     return this;
-};
-</code></pre>
+&#125;;</code></pre>
 <p>see?只要简单一句话就可以实现类似下面的链式调用：</p>
 <pre><code class="js">// 例2
-getUserId().then(function (id) {
+getUserId().then(function (id) &#123;
     // 一些处理
-}).then(function (id) {
+&#125;).then(function (id) &#123;
     // 一些处理
-});
-</code></pre>
+&#125;);</code></pre>
 <h3 id="加入延时机制"><a href="#加入延时机制" class="headerlink" title="加入延时机制"></a>加入延时机制</h3><p>细心的同学应该发现，上述代码可能还存在一个问题：如果在then方法注册回调之前，resolve函数就执行了，怎么办？比如promise内部的函数是同步函数：</p>
 <pre><code class="js">// 例3
-function getUserId() {
-    return new Promise(function (resolve) {
+function getUserId() &#123;
+    return new Promise(function (resolve) &#123;
         resolve(9876);
-    });
-}
-getUserId().then(function (id) {
+    &#125;);
+&#125;
+getUserId().then(function (id) &#123;
     // 一些处理
-});
-</code></pre>
+&#125;);</code></pre>
 <p>这显然是不允许的，Promises/A+规范明确要求回调需要通过异步方式执行，用以保证一致可靠的执行顺序。因此我们要加入一些处理，保证在resolve执行之前，then方法已经注册完所有的回调。我们可以这样改造下resolve函数:</p>
-<pre><code class="js">function resolve(value) {
-    setTimeout(function() {
-        callbacks.forEach(function (callback) {
+<pre><code class="js">function resolve(value) &#123;
+    setTimeout(function() &#123;
+        callbacks.forEach(function (callback) &#123;
             callback(value);
-        });
-    }, 0)
-}
-</code></pre>
+        &#125;);
+    &#125;, 0)
+&#125;</code></pre>
 <p>上述代码的思路也很简单，就是通过setTimeout机制，将resolve中执行回调的逻辑放置到JS任务队列末尾，以保证在resolve执行时，then方法的回调函数已经注册完成.</p>
 <p>但是，这样好像还存在一个问题，可以细想一下：如果Promise异步操作已经成功，这时，在异步操作成功之前注册的回调都会执行，但是在Promise异步操作成功这之后调用的then注册的回调就再也不会执行了，这显然不是我们想要的。</p>
 <h3 id="加入状态"><a href="#加入状态" class="headerlink" title="加入状态"></a>加入状态</h3><p>恩，为了解决上一节抛出的问题，我们必须加入状态机制，也就是大家熟知的pending、fulfilled、rejected。</p>
 <p>Promises/A+规范中的2.1Promise States中明确规定了，pending可以转化为fulfilled或rejected并且只能转化一次，也就是说如果pending转化到fulfilled状态，那么就不能再转化到rejected。并且fulfilled和rejected状态只能由pending转化而来，两者之间不能互相转换。一图胜千言</p>
-<p><img src="https://segmentfault.com/img/remote/1460000009478380?w=353&amp;h=260" alt="promise状态"></p>
+<p><img src="https://segmentfault.com/img/remote/1460000009478380?w=353&h=260" alt="promise状态"></p>
 <p>改进后的代码是这样的：</p>
-<pre><code class="js">function Promise(fn) {
+<pre><code class="js">function Promise(fn) &#123;
     var state = &#39;pending&#39;,
         value = null,
         callbacks = [];
 
-    this.then = function (onFulfilled) {
-        if (state === &#39;pending&#39;) {
+    this.then = function (onFulfilled) &#123;
+        if (state === &#39;pending&#39;) &#123;
             callbacks.push(onFulfilled);
             return this;
-        }
+        &#125;
         onFulfilled(value);
         return this;
-    };
+    &#125;;
 
-    function resolve(newValue) {
+    function resolve(newValue) &#123;
         value = newValue;
         state = &#39;fulfilled&#39;;
-        setTimeout(function () {
-            callbacks.forEach(function (callback) {
+        setTimeout(function () &#123;
+            callbacks.forEach(function (callback) &#123;
                 callback(value);
-            });
-        }, 0);
-    }
+            &#125;);
+        &#125;, 0);
+    &#125;
 
     fn(resolve);
-}
-</code></pre>
+&#125;</code></pre>
 <p>上述代码的思路是这样的：resolve执行时，会将状态设置为fulfilled，在此之后调用then添加的新回调，都会立即执行。</p>
 <p>这里没有任何地方将state设为rejected，为了让大家聚焦在核心代码上，这个问题后面会有一小节专门加入。</p>
 <h3 id="链式Promise"><a href="#链式Promise" class="headerlink" title="链式Promise"></a>链式Promise</h3><p>那么这里问题又来了，如果用户再then函数里面注册的仍然是一个Promise，该如何解决？比如下面的例4：</p>
 <pre><code class="js">// 例4
 getUserId()
     .then(getUserJobById)
-    .then(function (job) {
+    .then(function (job) &#123;
         // 对job的处理
-    });
+    &#125;);
 
-function getUserJobById(id) {
-    return new Promise(function (resolve) {
-        http.get(baseUrl + id, function(job) {
+function getUserJobById(id) &#123;
+    return new Promise(function (resolve) &#123;
+        http.get(baseUrl + id, function(job) &#123;
             resolve(job);
-        });
-    });
-}
-</code></pre>
+        &#125;);
+    &#125;);
+&#125;</code></pre>
 <p>这种场景相信用过promise的人都知道会有很多，那么类似这种就是所谓的链式Promise。</p>
 <p>链式Promise是指在当前promise达到fulfilled状态后，即开始进行下一个promise（后邻promise）。那么我们如何衔接当前promise和后邻promise呢？（这是这里的难点）。</p>
 <p>其实也不是辣么难，只要在then方法里面return一个promise就好啦。Promises/A+规范中的2.2.7就是这么说哒(微笑脸)~</p>
 <p>下面来看看这段暗藏玄机的then方法和resolve方法改造代码：</p>
-<pre><code class="js">function Promise(fn) {
+<pre><code class="js">function Promise(fn) &#123;
     var state = &#39;pending&#39;,
         value = null,
         callbacks = [];
 
-    this.then = function (onFulfilled) {
-        return new Promise(function (resolve) {
-            handle({
+    this.then = function (onFulfilled) &#123;
+        return new Promise(function (resolve) &#123;
+            handle(&#123;
                 onFulfilled: onFulfilled || null,
                 resolve: resolve
-            });
-        });
-    };
+            &#125;);
+        &#125;);
+    &#125;;
 
-    function handle(callback) {
-        if (state === &#39;pending&#39;) {
+    function handle(callback) &#123;
+        if (state === &#39;pending&#39;) &#123;
             callbacks.push(callback);
             return;
-        }
+        &#125;
         //如果then中没有传递任何东西
-        if(!callback.onFulfilled) {
+        if(!callback.onFulfilled) &#123;
             callback.resolve(value);
             return;
-        }
+        &#125;
 
         var ret = callback.onFulfilled(value);
         callback.resolve(ret);
-    }
-    function resolve(newValue) {
-        if (newValue &amp;&amp; (typeof newValue === &#39;object&#39; || typeof newValue === &#39;function&#39;)) {
+    &#125;
+    function resolve(newValue) &#123;
+        if (newValue &amp;&amp; (typeof newValue === &#39;object&#39; || typeof newValue === &#39;function&#39;)) &#123;
             var then = newValue.then;
-            if (typeof then === &#39;function&#39;) {
+            if (typeof then === &#39;function&#39;) &#123;
                 then.call(newValue, resolve);
                 return;
-            }
-        }
+            &#125;
+        &#125;
         state = &#39;fulfilled&#39;;
         value = newValue;
-        setTimeout(function () {
-            callbacks.forEach(function (callback) {
+        setTimeout(function () &#123;
+            callbacks.forEach(function (callback) &#123;
                 handle(callback);
-            });
-        }, 0);
-    }
+            &#125;);
+        &#125;, 0);
+    &#125;
 
     fn(resolve);
-}
-</code></pre>
+&#125;</code></pre>
 <p>我们结合例4的代码，分析下上面的代码逻辑，为了方便阅读，我把例4的代码贴在这里：</p>
 <pre><code class="js">// 例4
 getUserId()
     .then(getUserJobById)
-    .then(function (job) {
+    .then(function (job) &#123;
         // 对job的处理
-    });
+    &#125;);
 
-function getUserJobById(id) {
-    return new Promise(function (resolve) {
-        http.get(baseUrl + id, function(job) {
+function getUserJobById(id) &#123;
+    return new Promise(function (resolve) &#123;
+        http.get(baseUrl + id, function(job) &#123;
             resolve(job);
-        });
-    });
-}
-
+        &#125;);
+    &#125;);
+&#125;
 </code></pre>
 <ul>
 <li>then方法中，创建并返回了新的Promise实例，这是串行Promise的基础，并且支持链式调用。</li>
@@ -345,125 +337,121 @@ function getUserJobById(id) {
 <li>在getUserJobById promise异步操作成功时，执行其callbacks中的回调：getUserId bridge promise中的resolve方法</li>
 <li>最后执行getUserId bridge promise的后邻promise的callbacks中的回调。</li>
 </ul>
-<p><img src="https://segmentfault.com/img/remote/1460000009478381?w=2137&amp;h=1262" alt="promiseimg"></p>
+<p><img src="https://segmentfault.com/img/remote/1460000009478381?w=2137&h=1262" alt="promiseimg"></p>
 <h3 id="失败处理"><a href="#失败处理" class="headerlink" title="失败处理"></a>失败处理</h3><p>在异步操作失败时，标记其状态为rejected，并执行注册的失败回调:</p>
 <pre><code class="js">//例5
-function getUserId() {
-    return new Promise(function(resolve) {
+function getUserId() &#123;
+    return new Promise(function(resolve) &#123;
         //异步请求
-        http.get(url, function(error, results) {
-            if (error) {
+        http.get(url, function(error, results) &#123;
+            if (error) &#123;
                 reject(error);
-            }
+            &#125;
             resolve(results.id)
-        })
-    })
-}
+        &#125;)
+    &#125;)
+&#125;
 
-getUserId().then(function(id) {
+getUserId().then(function(id) &#123;
     //一些处理
-}, function(error) {
+&#125;, function(error) &#123;
     console.log(error)
-})
-</code></pre>
+&#125;)</code></pre>
 <p>有了之前处理<code>fulfilled</code>状态的经验，支持错误处理变得很容易,只需要在注册回调、处理状态变更上都要加入新的逻辑：</p>
-<pre><code class="js">function Promise(fn) {
+<pre><code class="js">function Promise(fn) &#123;
     var state = &#39;pending&#39;,
         value = null,
         callbacks = [];
 
-    this.then = function (onFulfilled, onRejected) {
-        return new Promise(function (resolve, reject) {
-            handle({
+    this.then = function (onFulfilled, onRejected) &#123;
+        return new Promise(function (resolve, reject) &#123;
+            handle(&#123;
                 onFulfilled: onFulfilled || null,
                 onRejected: onRejected || null,
                 resolve: resolve,
                 reject: reject
-            });
-        });
-    };
+            &#125;);
+        &#125;);
+    &#125;;
 
-    function handle(callback) {
-        if (state === &#39;pending&#39;) {
+    function handle(callback) &#123;
+        if (state === &#39;pending&#39;) &#123;
             callbacks.push(callback);
             return;
-        }
+        &#125;
 
         var cb = state === &#39;fulfilled&#39; ? callback.onFulfilled : callback.onRejected,
             ret;
-        if (cb === null) {
+        if (cb === null) &#123;
             cb = state === &#39;fulfilled&#39; ? callback.resolve : callback.reject;
             cb(value);
             return;
-        }
+        &#125;
         ret = cb(value);
         callback.resolve(ret);
-    }
+    &#125;
 
-    function resolve(newValue) {
-        if (newValue &amp;&amp; (typeof newValue === &#39;object&#39; || typeof newValue === &#39;function&#39;)) {
+    function resolve(newValue) &#123;
+        if (newValue &amp;&amp; (typeof newValue === &#39;object&#39; || typeof newValue === &#39;function&#39;)) &#123;
             var then = newValue.then;
-            if (typeof then === &#39;function&#39;) {
+            if (typeof then === &#39;function&#39;) &#123;
                 then.call(newValue, resolve, reject);
                 return;
-            }
-        }
+            &#125;
+        &#125;
         state = &#39;fulfilled&#39;;
         value = newValue;
         execute();
-    }
+    &#125;
 
-    function reject(reason) {
+    function reject(reason) &#123;
         state = &#39;rejected&#39;;
         value = reason;
         execute();
-    }
+    &#125;
 
-    function execute() {
-        setTimeout(function () {
-            callbacks.forEach(function (callback) {
+    function execute() &#123;
+        setTimeout(function () &#123;
+            callbacks.forEach(function (callback) &#123;
                 handle(callback);
-            });
-        }, 0);
-    }
+            &#125;);
+        &#125;, 0);
+    &#125;
 
     fn(resolve, reject);
-}
-</code></pre>
+&#125;</code></pre>
 <p>上述代码增加了新的reject方法，供异步操作失败时调用，同时抽出了resolve和reject共用的部分，形成execute方法。</p>
 <p>错误冒泡是上述代码已经支持，且非常实用的一个特性。在handle中发现没有指定异步操作失败的回调时，会直接将bridge promise(then函数返回的promise，后同)设为rejected状态，如此达成执行后续失败回调的效果。这有利于简化串行Promise的失败处理成本，因为一组异步操作往往会对应一个实际功能，失败处理方法通常是一致的：</p>
 <pre><code class="js">//例6
 getUserId()
     .then(getUserJobById)
-    .then(function (job) {
+    .then(function (job) &#123;
         // 处理job
-    }, function (error) {
+    &#125;, function (error) &#123;
         // getUserId或者getUerJobById时出现的错误
         console.log(error);
-    });
-</code></pre>
+    &#125;);</code></pre>
 <h3 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h3><p>细心的同学会想到：如果在执行成功回调、失败回调时代码出错怎么办？对于这类异常，可以使用try-catch捕获错误，并将bridge promise设为rejected状态。handle方法改造如下：</p>
-<pre><code class="js">function handle(callback) {
-    if (state === &#39;pending&#39;) {
+<pre><code class="js">function handle(callback) &#123;
+    if (state === &#39;pending&#39;) &#123;
         callbacks.push(callback);
         return;
-    }
+    &#125;
 
     var cb = state === &#39;fulfilled&#39; ? callback.onFulfilled : callback.onRejected,
         ret;
-    if (cb === null) {
+    if (cb === null) &#123;
         cb = state === &#39;fulfilled&#39; ? callback.resolve : callback.reject;
         cb(value);
         return;
-    }
-    try {
+    &#125;
+    try &#123;
         ret = cb(value);
         callback.resolve(ret);
-    } catch (e) {
+    &#125; catch (e) &#123;
         callback.reject(e);
-    }
-}
-</code></pre>
+    &#125;
+&#125;</code></pre>
 <p>如果在异步操作中，多次执行resolve或者reject会重复处理后续回调，可以通过内置一个标志位解决。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>刚开始看promise源码的时候总不能很好的理解then和resolve函数的运行机理，但是如果你静下心来，反过来根据执行promise时的逻辑来推演，就不难理解了。这里一定要注意的点是：promise里面的then函数仅仅是注册了后续需要执行的代码，真正的执行是在resolve方法里面执行的，理清了这层，再来分析源码会省力的多。</p>
 <p>现在回顾下Promise的实现过程，其主要使用了设计模式中的观察者模式：</p>
@@ -471,7 +459,7 @@ getUserId()
 <li>通过Promise.prototype.then和Promise.prototype.catch方法将观察者方法注册到被观察者Promise对象中，同时返回一个新的Promise对象，以便可以链式调用。</li>
 <li>被观察者管理内部pending、fulfilled和rejected的状态转变，同时通过构造函数中传递的resolve和reject方法以主动触发状态转变和通知观察者。</li>
 </ul>
-<p><a href="https://segmentfault.com/a/1190000009478377" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000009478377">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -496,7 +484,7 @@ getUserId()
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -530,7 +518,7 @@ getUserId()
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#引子"><span class="toc-number">1.1.</span> <span class="toc-text">引子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原理剖析"><span class="toc-number">1.2.</span> <span class="toc-text">原理剖析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#极简promise雏形"><span class="toc-number">1.2.1.</span> <span class="toc-text">极简promise雏形</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#加入延时机制"><span class="toc-number">1.2.2.</span> <span class="toc-text">加入延时机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#加入状态"><span class="toc-number">1.2.3.</span> <span class="toc-text">加入状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#链式Promise"><span class="toc-number">1.2.4.</span> <span class="toc-text">链式Promise</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#失败处理"><span class="toc-number">1.2.5.</span> <span class="toc-text">失败处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异常处理"><span class="toc-number">1.2.6.</span> <span class="toc-text">异常处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.3.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E5%AD%90"><span class="toc-number">1.1.</span> <span class="toc-text">引子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86%E5%89%96%E6%9E%90"><span class="toc-number">1.2.</span> <span class="toc-text">原理剖析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%81%E7%AE%80promise%E9%9B%8F%E5%BD%A2"><span class="toc-number">1.2.1.</span> <span class="toc-text">极简promise雏形</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A0%E5%85%A5%E5%BB%B6%E6%97%B6%E6%9C%BA%E5%88%B6"><span class="toc-number">1.2.2.</span> <span class="toc-text">加入延时机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A0%E5%85%A5%E7%8A%B6%E6%80%81"><span class="toc-number">1.2.3.</span> <span class="toc-text">加入状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E5%BC%8FPromise"><span class="toc-number">1.2.4.</span> <span class="toc-text">链式Promise</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%B1%E8%B4%A5%E5%A4%84%E7%90%86"><span class="toc-number">1.2.5.</span> <span class="toc-text">失败处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86"><span class="toc-number">1.2.6.</span> <span class="toc-text">异常处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.3.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
                 </div>
             </div>
             

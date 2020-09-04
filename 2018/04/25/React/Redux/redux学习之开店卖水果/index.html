@@ -36,7 +36,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -99,13 +99,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    12k
+                    13k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    11 mins.
+                    12 mins.
                 </span>
                 
                 
@@ -139,74 +139,69 @@
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <h1 id="Redux-是什么"><a href="#Redux-是什么" class="headerlink" title="Redux 是什么"></a>Redux 是什么</h1><p>每当我们谈及到 <a href="https://github.com/reactjs/redux" target="_blank" rel="noopener">redux</a>，大家都会说是 <a href="https://github.com/facebook/react" target="_blank" rel="noopener">react</a> 的状态管理工具。这么说确实没错，毕竟 redux 项目也是 <code>React Community</code> 组织下的一个子项目。而且 redux 的诞生也是和 react 这个 ui 库急需一个状态管理解决方案有很大的联系。但是 redux 和 react 并没有任何的耦合。虽然它们经常一起用，但是 <code>redux 的用途并不局限于 react</code>，或者说，和 <code>react 的结合只是 redux 的使用方式之一</code>。</p>
+            <h1 id="Redux-是什么"><a href="#Redux-是什么" class="headerlink" title="Redux 是什么"></a>Redux 是什么</h1><p>每当我们谈及到 <a target="_blank" rel="noopener" href="https://github.com/reactjs/redux">redux</a>，大家都会说是 <a target="_blank" rel="noopener" href="https://github.com/facebook/react">react</a> 的状态管理工具。这么说确实没错，毕竟 redux 项目也是 <code>React Community</code> 组织下的一个子项目。而且 redux 的诞生也是和 react 这个 ui 库急需一个状态管理解决方案有很大的联系。但是 redux 和 react 并没有任何的耦合。虽然它们经常一起用，但是 <code>redux 的用途并不局限于 react</code>，或者说，和 <code>react 的结合只是 redux 的使用方式之一</code>。</p>
 <p>那么撇开 react 不谈， redux 到底是什么呢？我们看一下这个例子。</p>
 <p>在实际的开发当中，我们可能会碰到这样的需求：监听一个事件，当事件触发的时候，我们可以做一些想做的事情。</p>
 <h2 id="redux基础用法—卖水果"><a href="#redux基础用法—卖水果" class="headerlink" title="redux基础用法—卖水果"></a>redux基础用法—卖水果</h2><p>一天，程序员阿大（化名）想要去买水果吃，发现小区周围居然没有水果店，于是就打算自己开一个水果店赚点小钱。<br>阿大分析了一下水果店的营业模式。其实就是<strong>处理每一位顾客的需求</strong>，然后记账看看每天的盈亏。那么抽象成程序就是<code>监听顾客的行为，并把每个行为的结果都记在账上</code>，这正好是 <strong>redux</strong> 所擅长的。阿大胸有成竹，说着就开始写了起来：</p>
-<h3 id="首先模拟顾客的购买行为："><a href="#首先模拟顾客的购买行为：" class="headerlink" title="首先模拟顾客的购买行为："></a>首先模拟顾客的购买行为：</h3><pre><code class="js">const action = {
+<h3 id="首先模拟顾客的购买行为："><a href="#首先模拟顾客的购买行为：" class="headerlink" title="首先模拟顾客的购买行为："></a>首先模拟顾客的购买行为：</h3><pre><code class="js">const action = &#123;
   type: &#39;BUY_APPLE&#39;, // 买苹果
-  payload: {
+  payload: &#123;
     count: 2 // 买 2 斤
-  }
-}
-</code></pre>
+  &#125;
+&#125;</code></pre>
 <p>那不同的顾客要的斤数可能不同，于是他写了下面这个方法：</p>
 <pre><code class="js">/**
  * 只要知道斤数就可以快速生成顾客的各种需求
- * @param {number} num 顾客要买的斤数
+ * @param &#123;number&#125; num 顾客要买的斤数
  */
-function buyApple(num) {
-  return {
+function buyApple(num) &#123;
+  return &#123;
     type: &#39;BUY_APPLE&#39;,
-    payload: {
+    payload: &#123;
       count: num
-    }
-  }
-}
-</code></pre>
-<p>然后是账本的结构，记录每天卖了多少斤：<br><a id="more"></a></p>
+    &#125;
+  &#125;
+&#125;</code></pre>
+<p>然后是账本的结构，记录每天卖了多少斤：</p>
+<a id="more"></a>
+
 <pre><code class="js">// 被托管的数据 state
 // 账本，今天已卖的苹果：0 斤；为了简便，就只举一个例子，事实上还有很多其他水果，大家自行脑补
-const state = { apple: 0 };
-</code></pre>
+const state = &#123; apple: 0 &#125;;</code></pre>
 <p>好了，现在顾客需求，账本都有了，那谁来记账呢？所以阿大请了一个<code>收银员</code>负责记账，并告诉他这么记账：</p>
 <pre><code class="js">/**
  * 监听函数 listener
  * 收银员只要知道顾客的需求就能正确的操作账本
- * @param {object} state 账本
- * @param {object} action 顾客的需求
+ * @param &#123;object&#125; state 账本
+ * @param &#123;object&#125; action 顾客的需求
  */
-function reducer(state, action) {
+function reducer(state, action) &#123;
 
   // 注册 ‘买苹果’ 事件
   // 如果有人买了苹果，加上顾客买的斤数，更新账本
-  if (action.type === &#39;BUY_APPLE&#39;) {
-    return Object.assign({}, state, {
+  if (action.type === &#39;BUY_APPLE&#39;) &#123;
+    return Object.assign(&#123;&#125;, state, &#123;
       apple: state.apple + action.payload.count
-    });
-  }
+    &#125;);
+  &#125;
 
   // 没注册的事件不作处理
   // 买咱们店里没有的东西，不更新账本，原样返回
   return state;
-}
-</code></pre>
+&#125;</code></pre>
 <p>好，万事俱备，可以正式的监听顾客的购买需求并更新账本了：</p>
-<pre><code class="js">const {createStore} = require(&#39;redux&#39;);
+<pre><code class="js">const &#123;createStore&#125; = require(&#39;redux&#39;);
 
 // 创建水果店需要收银员（监听函数 listener）和账本（被托管的数据）
-const store = createStore(reducer, state);
-</code></pre>
+const store = createStore(reducer, state);</code></pre>
 <p>不仅如此，redux 还提供了一个功能，每服务一个顾客，都可以额外做一些事情，于是阿大就想看看每笔交易之后的账本：</p>
 <pre><code class="js">// store.getState() 可以获取最新的 state
-store.subscribe(() =&gt; console.log(JSON.stringify(store.getState())));
-</code></pre>
+store.subscribe(() =&gt; console.log(JSON.stringify(store.getState())));</code></pre>
 <p>好了，顾客开始来买水果了：</p>
 <pre><code class="js">// 触发用户购买水果的事件
 // 销售员开始销售
-store.dispatch(buyApple(3)); // {&quot;apple&quot;:3}
-store.dispatch(buyApple(4)); // {&quot;apple&quot;:7}
-</code></pre>
+store.dispatch(buyApple(3)); // &#123;&quot;apple&quot;:3&#125;
+store.dispatch(buyApple(4)); // &#123;&quot;apple&quot;:7&#125;</code></pre>
 <p>店铺稳定的运营了下去，阿大心里美滋滋~</p>
 <h3 id="讲解"><a href="#讲解" class="headerlink" title="讲解"></a>讲解</h3><p>不过在此之前要先说 redux 特别讲究也是特别重要的 3 点：</p>
 <ul>
@@ -215,37 +210,34 @@ store.dispatch(buyApple(4)); // {&quot;apple&quot;:7}
 <li>reducer 必须是纯函数</li>
 </ul>
 <h4 id="action"><a href="#action" class="headerlink" title="action"></a>action</h4><p>action 是行为信息的抽象，对象类型，它描述发生了什么。这个对象必须有一个 type 属性，对于对象里面的其他内容，redux 不做限制。但是推荐符合 Flux Standard Action 规范：</p>
-<pre><code class="js">{
+<pre><code class="js">&#123;
   type: &#39;ACTION_TYPE&#39;,
   payload, // action 携带的数据
-}
-</code></pre>
+&#125;</code></pre>
 <h4 id="action-creator"><a href="#action-creator" class="headerlink" title="action creator"></a>action creator</h4><p>action creator 顾名思义就是用来创建 action 的，action creator 只简单的返回 action。</p>
-<pre><code class="js">function createAction(num) {
-  return {
+<pre><code class="js">function createAction(num) &#123;
+  return &#123;
     type: &#39;ACTION_TYPE&#39;,
     payload,
-  }
-}
-</code></pre>
+  &#125;
+&#125;</code></pre>
 <h4 id="state"><a href="#state" class="headerlink" title="state"></a>state</h4><p>state 是被托管的数据，也就是每次触发监听事件，我们要操作的数据。</p>
 <h4 id="reducer"><a href="#reducer" class="headerlink" title="reducer"></a>reducer</h4><p>reducer 是用来控制 state 改变的函数。action 描述了发生了什么，但是并不会知道相应的 state 该怎么改变。对于不同的 action，相应的 state 变化是用 reducer 来描述的。</p>
 <p>reducer 接受两个函数，第一个是 <code>state</code>，第二个是 <code>action</code>，并返回计算之后新的 state。reducer 必须是一个<strong>纯函数</strong>，对于相同的输入 state 和 action，一定会返回相同的新的 state。</p>
-<pre><code class="js">nextState = reducer(prevState, action);
-</code></pre>
+<pre><code class="js">nextState = reducer(prevState, action);</code></pre>
 <p>因为 reducer 是纯函数，所以原来的 <strong>prevState</strong> 并不会改变，新的 <strong>nextState</strong> 是一个最新的快照。</p>
 <h4 id="store"><a href="#store" class="headerlink" title="store"></a>store</h4><p>store 是把上面三个元素合起来的一个大对象:</p>
-<pre><code class="js">{
+<pre><code class="js">&#123;
   createStore,
   combineReducers,
   bindActionCreators,
   applyMiddleware,
   compose,
   __DO_NOT_USE__ActionTypes
-}
-</code></pre>
+&#125;</code></pre>
 <blockquote>
 <p>它负责：</p>
+</blockquote>
 <ul>
 <li>托管应用的 state</li>
 <li>允许通过 store.getState() 方法访问到托管的 state</li>
@@ -253,69 +245,62 @@ store.dispatch(buyApple(4)); // {&quot;apple&quot;:7}
 <li>允许通过 store.subscribe() 注册监听函数监听每一次的 action 触发</li>
 <li>允许注销通过 store.subscribe() 方法注册的监听函数</li>
 </ul>
-</blockquote>
 <pre><code class="js">// 注册
-const unsubscribe = store.subscribe(() =&gt; { /** do something */});
+const unsubscribe = store.subscribe(() =&gt; &#123; /** do something */&#125;);
 
 // 注销
-unsubscribe();
-</code></pre>
+unsubscribe();</code></pre>
 <p><img src="https://user-gold-cdn.xitu.io/2018/4/18/162d7d65eb48257f?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="图解"></p>
 <h2 id="reducer拆分"><a href="#reducer拆分" class="headerlink" title="reducer拆分"></a>reducer拆分</h2><p>谁知道水果店生意越来越好，于是阿大开始拓展业务，不仅卖水果，还卖起了生鲜，于是有了水果部和生鲜部。</p>
 <p>于是阿大想了想未来购买生鲜的顾客的行为：</p>
 <pre><code class="js">// 买生鲜 - 鸡蛋
-function buyEgg(num) {
-  return {
+function buyEgg(num) &#123;
+  return &#123;
     type: &#39;BUY_EGG&#39;,
-    payload: {
+    payload: &#123;
       count: num
-    }
-  }
-}
-</code></pre>
+    &#125;
+  &#125;
+&#125;</code></pre>
 <p>分了不同的部门之后，不同的业务有不同的记账方式，得分账记了，开来要增加一个生鲜的记账本：</p>
-<pre><code class="js">const freshState = {
+<pre><code class="js">const freshState = &#123;
   egg: 0
-};
-</code></pre>
+&#125;;</code></pre>
 <p>原来的水果账本也要改个名字：</p>
-<pre><code class="js">//- const state = {
-+ const fruitsState = {
+<pre><code class="js">//- const state = &#123;
++ const fruitsState = &#123;
     apple: 0
-  };
-</code></pre>
+  &#125;;</code></pre>
 <p>然后增加生鲜部的收银员, 管理生鲜账本 <code>freshState</code>：</p>
 <pre><code class="js">// 生鲜部收银员
-function freshReducer(state = freshState, action) {
-  if (action.type === &#39;BUY_EGG&#39;) {
-    return Object.assign({}, state, {
+function freshReducer(state = freshState, action) &#123;
+  if (action.type === &#39;BUY_EGG&#39;) &#123;
+    return Object.assign(&#123;&#125;, state, &#123;
       egg: state.egg + action.payload.count
-    });
-  }
+    &#125;);
+  &#125;
   return state;
-}
-</code></pre>
+&#125;</code></pre>
 <p>然后原来水果部的收银员管理水果账本 fruitsState 需要修改下：</p>
 <pre><code class="js">// 水果部收银员
-//- function reducer(state, action) {
-+ function fruitReducer(state = fruitState, action) {
-   if (action.type === &#39;BUY_APPLE&#39;) {
-     return Object.assign({}, state, {
+//- function reducer(state, action) &#123;
++ function fruitReducer(state = fruitState, action) &#123;
+   if (action.type === &#39;BUY_APPLE&#39;) &#123;
+     return Object.assign(&#123;&#125;, state, &#123;
        apple: state.apple + action.payload.count
-     });
-   }
+     &#125;);
+   &#125;
    return state;
- }
-</code></pre>
+ &#125;</code></pre>
 <p>但是阿大并不想看各个部门的分账本，他只想看一个总账本就好了。刚好 redux 提供了 <strong>combineReducers</strong> 功能，可以把各个收银员管理的账本合起来：</p>
-<pre><code class="js">//- const { createStore } = require(&#39;redux&#39;);
-+ const { createStore, combineReducers } = require(&#39;redux&#39;);
+<pre><code class="js">//- const &#123; createStore &#125; = require(&#39;redux&#39;);
++ const &#123; createStore, combineReducers &#125; = require(&#39;redux&#39;);
 
 // 总账本
-+ const state = {
++ const state = &#123;
 +   fruits: fruitsReducer,
 +   fresh: freshReducer
-+ };
++ &#125;;
 
 // 总收银员
 + const reducer = combineReducers(state);
@@ -323,128 +308,121 @@ function freshReducer(state = freshState, action) {
 // 创建新的水果生鲜店
 //- const store = createStore(reducer, state);
 + const store = createStore(reducer);
-
 </code></pre>
 <p>这样，水果生鲜店就可以营业了，销售员又开始处理顾客的购物需求了：</p>
-<pre><code class="js">store.dispatch(buyApple(3)); // {&quot;fruit&quot;:{&quot;apple&quot;:3},&quot;fresh&quot;:{&quot;egg&quot;:0}}
-store.dispatch(buyEgg(1)); // {&quot;fruit&quot;:{&quot;apple&quot;:3},&quot;fresh&quot;:{&quot;egg&quot;:1}}
-store.dispatch(buyApple(4)); // {&quot;fruit&quot;:{&quot;apple&quot;:7},&quot;fresh&quot;:{&quot;egg&quot;:1}}
-store.dispatch(buyEgg(8)); // {&quot;fruit&quot;:{&quot;apple&quot;:7},&quot;fresh&quot;:{&quot;egg&quot;:9}}
-// ...
-</code></pre>
+<pre><code class="js">store.dispatch(buyApple(3)); // &#123;&quot;fruit&quot;:&#123;&quot;apple&quot;:3&#125;,&quot;fresh&quot;:&#123;&quot;egg&quot;:0&#125;&#125;
+store.dispatch(buyEgg(1)); // &#123;&quot;fruit&quot;:&#123;&quot;apple&quot;:3&#125;,&quot;fresh&quot;:&#123;&quot;egg&quot;:1&#125;&#125;
+store.dispatch(buyApple(4)); // &#123;&quot;fruit&quot;:&#123;&quot;apple&quot;:7&#125;,&quot;fresh&quot;:&#123;&quot;egg&quot;:1&#125;&#125;
+store.dispatch(buyEgg(8)); // &#123;&quot;fruit&quot;:&#123;&quot;apple&quot;:7&#125;,&quot;fresh&quot;:&#123;&quot;egg&quot;:9&#125;&#125;
+// ...</code></pre>
 <h3 id="图解："><a href="#图解：" class="headerlink" title="图解："></a>图解：</h3><p><img src="https://user-gold-cdn.xitu.io/2018/4/18/162d7f51769b18c2?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="reducer"></p>
 <h4 id="combineReducers"><a href="#combineReducers" class="headerlink" title="combineReducers"></a>combineReducers</h4><p>当业务场景越来越复杂的时候，state 的结构也会变得越来越复杂而且庞大。如果只用一个 reducer 来计算 state 的变化势必会特别麻烦。这个时候我们就可以把 state 里独立的数据分离出来，单独用一个 reducer 来计算，然后再通过 <strong>combineReducers</strong> 方法合入到 state 中。<br>combineReducers 接收一个对象，这个对象就是最终的 state</p>
-<pre><code class="js">const reducer = combineReducers({
+<pre><code class="js">const reducer = combineReducers(&#123;
   fruits: fruitsReducer,
   fresh: freshReducer
-});
-</code></pre>
+&#125;);</code></pre>
 <h2 id="处理-async-action"><a href="#处理-async-action" class="headerlink" title="处理 async action"></a>处理 async action</h2><p>阿大通过 redux 的 bindReducers 方法将水果店的业务分治成功，店铺也越做越大。以至于有顾客开始想要买一些进口的水果生鲜。</p>
 <p>阿大考虑了一下，决定继续拓展这个店铺，从事进口商品的销售。首先是顾客的需求行为需要购买进口水果生鲜：</p>
 <pre><code class="js">
 // 买水果 - 进口苹果
-+ function buyImportedApple(num) {
-+   return {
++ function buyImportedApple(num) &#123;
++   return &#123;
 +     type: &#39;BUY_IMPORTED_APPLE&#39;,
-+     payload: {
++     payload: &#123;
 +       num
-+     }
-+   }
-+ }
++     &#125;
++   &#125;
++ &#125;
 
 // 买生鲜 - 进口鸡蛋
-+ function buyImportedEgg(num) {
-+   return  {
++ function buyImportedEgg(num) &#123;
++   return  &#123;
 +     type: &#39;BUY_IMPORTED_EGG&#39;,
-+     payload: {
++     payload: &#123;
 +       num
-+     }
-+   }
-+ }
-
++     &#125;
++   &#125;
++ &#125;
 </code></pre>
 <p>然后水果部和生鲜部的账本也要更新啦：</p>
 <pre><code class="js">// 水果账本
- const fruitState = {
+ const fruitState = &#123;
    orange: 0,
    apple: 0,
    banana: 0,
 +  importedApple: 0
- };
+ &#125;;
 
  // 生鲜账本
- const freshState = {
+ const freshState = &#123;
    egg: 0,
    fish: 0,
    vegetable: 0,
 +  importedEgg: 0
- };
-
+ &#125;;
 </code></pre>
 <p>同样的，相应部门的收银员们也要学会怎么处理进口水果生鲜的记账，他们的记账方式要改成下面这样：</p>
 <pre><code class="js">// 水果部收银员
-function fruitReducer(state = fruitState, action) {
+function fruitReducer(state = fruitState, action) &#123;
 
   // 如果有人买了相应的水果，更新账本
-  switch (action.type) {
+  switch (action.type) &#123;
     case &#39;BUY_APPLE&#39;:
-      return Object.assign({}, state, {
+      return Object.assign(&#123;&#125;, state, &#123;
         apple: state.apple + action.payload.count
-      });
+      &#125;);
     case &#39;BUY_IMPORTED_APPLE&#39;:
-      return Object.assign({}, state, {
+      return Object.assign(&#123;&#125;, state, &#123;
         importedApple: state.importedApple + action.payload.count
-      });
+      &#125;);
 
     // 买其他的东西，不更新账本，原样返回
     default: return state;
-  } ;
-}
+  &#125; ;
+&#125;
 
 // 生鲜部收银员
-function freshReducer(state = freshState, action) {
-  switch (action.type) {
+function freshReducer(state = freshState, action) &#123;
+  switch (action.type) &#123;
     case &#39;BUY_EGG&#39;:
-      return Object.assign({}, state, {
+      return Object.assign(&#123;&#125;, state, &#123;
         egg: state.egg + action.payload.count
-      });
+      &#125;);
     case &#39;BUY_IMPORTED_EGG&#39;:
-      return Object.assign({}, state, {
+      return Object.assign(&#123;&#125;, state, &#123;
         importedEgg: state.importedEgg + action.payload.count
-      });
+      &#125;);
     default: return state;
-  } ;
-}
-</code></pre>
+  &#125; ;
+&#125;</code></pre>
 <p>可是这时候阿大发现，进口水果生鲜不能大量存在自己仓库卖，因为它们又贵又容易坏，只有当顾客需要买的时候，才能去采购这些水果生鲜，于是阿大又雇了一个<strong>采购员</strong>专门负责处理要买进口水果和生鲜的顾客，等到货了再通知销售员取货给顾客：</p>
 <pre><code class="js">// 采购商品生成器，不同的商品需要不同的时间采购
-function fetchGoodsGenerator(time, action) {
+function fetchGoodsGenerator(time, action) &#123;
 
   // 用延时模拟采购时间
-  const timer = setTimeout(() =&gt; {
+  const timer = setTimeout(() =&gt; &#123;
     clearTimeout(timer);
 
     // 采购完成，通知销售员
     store.dispatch(action);
-  }, time);
-}
+  &#125;, time);
+&#125;
 
 // 采购进口苹果需要 2 天（2s）
-function fetchImportedApple(action) {
+function fetchImportedApple(action) &#123;
   fetchGoodsGenerator(2000, action);
-}
+&#125;
 
 // 采购进口鸡蛋需要 3 天（3s）
-function fetchImportedEgg(action) {
+function fetchImportedEgg(action) &#123;
   fetchGoodsGenerator(3000, action);
-}
+&#125;
 
 // 采购员
-const API = {
+const API = &#123;
   fetchImportedApple, // 采购进口苹果
   fetchImportedEgg // 采购进口鸡蛋
-}
-</code></pre>
+&#125;</code></pre>
 <p>好了，布置完了之后，顾客开始来买水果生鲜了：</p>
 <pre><code class="js">// 销售员开始销售，采购员开始采购
 store.dispatch(buyApple(3));
@@ -455,18 +433,17 @@ store.dispatch(buyApple(4));
 API.fetchImportedApple(buyImportedApple(10));
 store.dispatch(buyEgg(8));
 API.fetchImportedEgg(buyImportedEgg(10));
-// {&quot;fruit&quot;:{&quot;apple&quot;:3,&quot;importedApple&quot;:0},&quot;fresh&quot;:{&quot;egg&quot;:0,&quot;importedEgg&quot;:0}}
-// {&quot;fruit&quot;:{&quot;apple&quot;:3,&quot;importedApple&quot;:0},&quot;fresh&quot;:{&quot;egg&quot;:1,&quot;importedEgg&quot;:0}}
-// {&quot;fruit&quot;:{&quot;apple&quot;:7,&quot;importedApple&quot;:0},&quot;fresh&quot;:{&quot;egg&quot;:1,&quot;importedEgg&quot;:0}}
-// {&quot;fruit&quot;:{&quot;apple&quot;:7,&quot;importedApple&quot;:0},&quot;fresh&quot;:{&quot;egg&quot;:9,&quot;importedEgg&quot;:0}}
-// {&quot;fruit&quot;:{&quot;apple&quot;:7,&quot;importedApple&quot;:10},&quot;fresh&quot;:{&quot;egg&quot;:9,&quot;importedEgg&quot;:0}}
-// {&quot;fruit&quot;:{&quot;apple&quot;:7,&quot;importedApple&quot;:20},&quot;fresh&quot;:{&quot;egg&quot;:9,&quot;importedEgg&quot;:0}}
-// {&quot;fruit&quot;:{&quot;apple&quot;:7,&quot;importedApple&quot;:20},&quot;fresh&quot;:{&quot;egg&quot;:9,&quot;importedEgg&quot;:10}}
-// {&quot;fruit&quot;:{&quot;apple&quot;:7,&quot;importedApple&quot;:20},&quot;fresh&quot;:{&quot;egg&quot;:9,&quot;importedEgg&quot;:20}}
-</code></pre>
+// &#123;&quot;fruit&quot;:&#123;&quot;apple&quot;:3,&quot;importedApple&quot;:0&#125;,&quot;fresh&quot;:&#123;&quot;egg&quot;:0,&quot;importedEgg&quot;:0&#125;&#125;
+// &#123;&quot;fruit&quot;:&#123;&quot;apple&quot;:3,&quot;importedApple&quot;:0&#125;,&quot;fresh&quot;:&#123;&quot;egg&quot;:1,&quot;importedEgg&quot;:0&#125;&#125;
+// &#123;&quot;fruit&quot;:&#123;&quot;apple&quot;:7,&quot;importedApple&quot;:0&#125;,&quot;fresh&quot;:&#123;&quot;egg&quot;:1,&quot;importedEgg&quot;:0&#125;&#125;
+// &#123;&quot;fruit&quot;:&#123;&quot;apple&quot;:7,&quot;importedApple&quot;:0&#125;,&quot;fresh&quot;:&#123;&quot;egg&quot;:9,&quot;importedEgg&quot;:0&#125;&#125;
+// &#123;&quot;fruit&quot;:&#123;&quot;apple&quot;:7,&quot;importedApple&quot;:10&#125;,&quot;fresh&quot;:&#123;&quot;egg&quot;:9,&quot;importedEgg&quot;:0&#125;&#125;
+// &#123;&quot;fruit&quot;:&#123;&quot;apple&quot;:7,&quot;importedApple&quot;:20&#125;,&quot;fresh&quot;:&#123;&quot;egg&quot;:9,&quot;importedEgg&quot;:0&#125;&#125;
+// &#123;&quot;fruit&quot;:&#123;&quot;apple&quot;:7,&quot;importedApple&quot;:20&#125;,&quot;fresh&quot;:&#123;&quot;egg&quot;:9,&quot;importedEgg&quot;:10&#125;&#125;
+// &#123;&quot;fruit&quot;:&#123;&quot;apple&quot;:7,&quot;importedApple&quot;:20&#125;,&quot;fresh&quot;:&#123;&quot;egg&quot;:9,&quot;importedEgg&quot;:20&#125;&#125;</code></pre>
 <h3 id="图解"><a href="#图解" class="headerlink" title="图解"></a>图解</h3><p><img src="https://user-gold-cdn.xitu.io/2018/4/18/162d925e3fdc050d?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="async action"></p>
 <p>在实际的开发当中我们经常会调用一些 API 接口获取数据更新 state。刚开始使用 redux 的一个误区就是在 reducer 里接收到异步的 action 之后，就在 reducer 里做异步操作，调用 API。但是这样是错误的。reducer 只能是纯函数，不能有任何副作用。这样才能保证对于相同的输入，一定会有相同的输出。</p>
-<p><a href="https://juejin.im/user/57d8a928d203090069c13a21/likes" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.im/user/57d8a928d203090069c13a21/likes">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -491,7 +468,7 @@ API.fetchImportedEgg(buyImportedEgg(10));
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -525,7 +502,7 @@ API.fetchImportedEgg(buyImportedEgg(10));
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Redux-是什么"><span class="toc-number">1.</span> <span class="toc-text">Redux 是什么</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#redux基础用法—卖水果"><span class="toc-number">1.1.</span> <span class="toc-text">redux基础用法—卖水果</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#首先模拟顾客的购买行为："><span class="toc-number">1.1.1.</span> <span class="toc-text">首先模拟顾客的购买行为：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#讲解"><span class="toc-number">1.1.2.</span> <span class="toc-text">讲解</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reducer拆分"><span class="toc-number">1.2.</span> <span class="toc-text">reducer拆分</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#图解："><span class="toc-number">1.2.1.</span> <span class="toc-text">图解：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#处理-async-action"><span class="toc-number">1.3.</span> <span class="toc-text">处理 async action</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#图解"><span class="toc-number">1.3.1.</span> <span class="toc-text">图解</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Redux-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.</span> <span class="toc-text">Redux 是什么</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#redux%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95%E2%80%94%E5%8D%96%E6%B0%B4%E6%9E%9C"><span class="toc-number">1.1.</span> <span class="toc-text">redux基础用法—卖水果</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A6%96%E5%85%88%E6%A8%A1%E6%8B%9F%E9%A1%BE%E5%AE%A2%E7%9A%84%E8%B4%AD%E4%B9%B0%E8%A1%8C%E4%B8%BA%EF%BC%9A"><span class="toc-number">1.1.1.</span> <span class="toc-text">首先模拟顾客的购买行为：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%B2%E8%A7%A3"><span class="toc-number">1.1.2.</span> <span class="toc-text">讲解</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reducer%E6%8B%86%E5%88%86"><span class="toc-number">1.2.</span> <span class="toc-text">reducer拆分</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BE%E8%A7%A3%EF%BC%9A"><span class="toc-number">1.2.1.</span> <span class="toc-text">图解：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%84%E7%90%86-async-action"><span class="toc-number">1.3.</span> <span class="toc-text">处理 async action</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BE%E8%A7%A3"><span class="toc-number">1.3.1.</span> <span class="toc-text">图解</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
             

@@ -19,9 +19,8 @@ POST
 
 
 
-
 主要用于获取数据
-主,"> 
+主要,"> 
     <meta name="author" content="张白告丶"> 
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -47,7 +46,7 @@ POST
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -155,28 +154,25 @@ POST
 <thead>
 <tr>
 <th>GET</th>
-<th style="text-align:right">POST</th>
+<th align="right">POST</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>主要用于获取数据</td>
-<td style="text-align:right">主要用于发送数据</td>
+<td align="right">主要用于发送数据</td>
 </tr>
 <tr>
 <td>数据放在HTTP请求Header中，通过URL进行传输，容量&lt;=32k</td>
-<td style="text-align:right">数据放在HTTP请求body中,容量大，通常上限2G</td>
+<td align="right">数据放在HTTP请求body中,容量大，通常上限2G</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <h2 id="处理Get数据"><a href="#处理Get数据" class="headerlink" title="处理Get数据"></a>处理Get数据</h2><p>我们可以使用Nodejs自带的url和querystring模块处理接收到的GET数据。</p>
 <p>首先新建一个带form表单的HTML文件，讲输入的数据提交到服务器地址：</p>
 <pre><code class="html">&lt;form action=&quot;http://localhost:8080/login&quot; method=&quot;get&quot;&gt;
   用户：&lt;input type=&quot;text&quot; name=&quot;username&quot;&gt;&lt;br/&gt;
   密码：&lt;input type=&quot;text&quot; name=&quot;password&quot;&gt;&lt;br/&gt;
   &lt;input type=&quot;submit&quot; value=&quot;提交&quot;&gt;
-&lt;/form&gt;
-</code></pre>
+&lt;/form&gt;</code></pre>
 <p>服务端在接收到请求数据时，可以有3种方式处理数据：</p>
 <ol>
 <li>将请求数据中的req.url进行字符串切割，再用querystring模块获取数据。</li>
@@ -184,23 +180,20 @@ POST
 <pre><code class="js">const [ pathname, queryStr ] = req.url.split(&#39;?&#39;)
 const query = querystring.parse(queryStr)
 console.log(pathname, query)
-
 </code></pre>
 <ol start="2">
 <li>用URL构造函数实例化一个url对象，从中获取到pathname和search值，再用querystring模块解析search数据</li>
 </ol>
-<pre><code class="js">const url = new URL(`http://localhost:8080${req.url}`)
-const { pathname, search } = url
+<pre><code class="js">const url = new URL(`http://localhost:8080$&#123;req.url&#125;`)
+const &#123; pathname, search &#125; = url
 const query = querystring.parse(search.substring(1, url.search.length))
-console.log(pathname, query)
-</code></pre>
+console.log(pathname, query)</code></pre>
 <ol start="3">
 <li>使用url模块的parse方法，直接解析出数据。</li>
 </ol>
 <pre><code class="js">// parse方法第二个参数若传true，则会直接将解析出的query值转为对象形式，否则它只是字符串形式
-const { pathname, query } = url.parse(req.url, true)
+const &#123; pathname, query &#125; = url.parse(req.url, true)
 console.log(pathname, query)
-
 </code></pre>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
@@ -226,7 +219,7 @@ console.log(pathname, query)
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -260,7 +253,7 @@ console.log(pathname, query)
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#常用请求方式"><span class="toc-number">1.</span> <span class="toc-text">常用请求方式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#处理Get数据"><span class="toc-number">1.1.</span> <span class="toc-text">处理Get数据</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E8%AF%B7%E6%B1%82%E6%96%B9%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">常用请求方式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%84%E7%90%86Get%E6%95%B0%E6%8D%AE"><span class="toc-number">1.1.</span> <span class="toc-text">处理Get数据</span></a></li></ol></li></ol>
                 </div>
             </div>
             

@@ -38,7 +38,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -101,13 +101,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    18k
+                    19k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    17 mins.
+                    18 mins.
                 </span>
                 
                 
@@ -147,11 +147,9 @@
 <h2 id="判断当前所处环境"><a href="#判断当前所处环境" class="headerlink" title="判断当前所处环境"></a>判断当前所处环境</h2><p>通常项目在开发环境和生产环境要采用不同的，服务器、账号、域名、端口等配置，如果用人工进行切换操作麻烦且容易出错，因此通常使用环境变量进行判断。</p>
 <p>首先引入process模块<code>const process=require(&#39;process&#39;)</code>，该模块提供了当前Node.js进程的信息。</p>
 <p>1.可以通过process.env环境变量获取开发环境和生产环境系统等参数差异，如开发环境运行在Windows系统上，而生产环境运行在Linux系统，那么就可以使用<code>process.env.OS === &#39;Windows_NT&#39;</code>判断当前所处的是否开发环境。</p>
-<pre><code class="js">const mode = process.env.OS === &#39;Windows_NT&#39; ? &#39;env&#39; : &#39;prod&#39;
-</code></pre>
+<pre><code class="js">const mode = process.env.OS === &#39;Windows_NT&#39; ? &#39;env&#39; : &#39;prod&#39;</code></pre>
 <p>2.也可以通过package.json中配置的启动命令判断处于开发还是生产环境，如开发环境命令<code>npm start --dev</code>和生产环境命令<code>npm run build --build</code>。</p>
-<pre><code class="js">const mode = process.argv[2] === &#39;--dev&#39; ? &#39;env&#39; : &#39;prod&#39;
-</code></pre>
+<pre><code class="js">const mode = process.argv[2] === &#39;--dev&#39; ? &#39;env&#39; : &#39;prod&#39;</code></pre>
 <h2 id="初始化开发和生产环境配置"><a href="#初始化开发和生产环境配置" class="headerlink" title="初始化开发和生产环境配置"></a>初始化开发和生产环境配置</h2><p>在/config/index.js中，判断所处的环境，并将相应环境的标识和参数作为模块导出。开发过程中，可以直接引用相应的配置使用。</p>
 <pre><code class="js">const process = require(&#39;process&#39;)
 
@@ -161,13 +159,12 @@
 // 也可以通过package.json中配置的启动命令判断处于开发还是生产环境。
 const mode = process.argv[2] === &#39;--dev&#39; ? &#39;env&#39; : &#39;prod&#39;
 
-module.exports = {
+module.exports = &#123;
   mode, // 当前所处环境
   ...(mode === &#39;env&#39; ? require(&#39;./config.dev&#39;) : require(&#39;./config.prod&#39;))  // 当前环境的配置
-}
-</code></pre>
+&#125;</code></pre>
 <p>1.以开发环境为例，需要使用的配置为服务器域名、端口号、账号、密码、数据库名，以及HTTP端口、静态文件绝对路径、上传文件保存绝对路径，如下：</p>
-<pre><code class="js">module.exports = {
+<pre><code class="js">module.exports = &#123;
   // 数据库配置
   DB_HOST: &#39;localhost&#39;,
   DB_PORT: 3306,
@@ -181,82 +178,77 @@ module.exports = {
   HTTP_ROOT: path.resolve(__dirname, &#39;../static/&#39;),
   // 上传文件保存绝对路径
   HTTP_UPLOAD: path.resolve(__dirname, &#39;../static/upload&#39;)
-}
-</code></pre>
+&#125;</code></pre>
 <h2 id="连接数据库"><a href="#连接数据库" class="headerlink" title="连接数据库"></a>连接数据库</h2><p>在lib文件夹下，创建database.js，用于连接数据库。</p>
 <a id="more"></a>
+
 <pre><code class="js">// 引入mysql和co-mysql，用于连接数据库
 const mysql = require(&#39;mysql&#39;)
 const coMysql = require(&#39;co-mysql&#39;)
 
 // 引入数据库配置
-const {
+const &#123;
   DB_HOST,
   DB_PORT,
   DB_USER,
   DB_PASS,
   DB_NAME
-} = require(&#39;../config&#39;)
+&#125; = require(&#39;../config&#39;)
 
 // 1. 创建服务器连接池
-const pool = mysql.createPool({
+const pool = mysql.createPool(&#123;
   host: DB_HOST,
   port: DB_PORT,
   user: DB_USER,
   password: DB_PASS,
   database: DB_NAME
-})
+&#125;)
 
 // 2. 使用co-mysql包装连接池，将连接转换为Async/Await异步方式
 const connection = coMysql(pool)
 
 // 3. 作为模块导出使用
-module.exports = connection
-</code></pre>
+module.exports = connection</code></pre>
 <p>创建数据库连接后，可以在server.js中，创建一个数据库连接，并查看item_table表的数据</p>
 <pre><code class="js">const connection = require(&#39;./lib/database&#39;)
 
-;(async () =&gt; {
+;(async () =&gt; &#123;
   // 查询item_table表中的数据
   const response = await connection.query(`SELECT * FROM item_table`)
   console.log(response)
-})()
-</code></pre>
+&#125;)()</code></pre>
 <p>若正常连接，即可打印数据如下：</p>
-<pre><code class="js">[ RowDataPacket { ID: 1, title: &#39;运动服&#39;, price: 299, count: 998 } ]ice: 199, count: 999 },
-  RowDataPacket { ID: 2, title: &#39;运动裤&#39;, price: 299, count: 998 } ]
-</code></pre>
+<pre><code class="js">[ RowDataPacket &#123; ID: 1, title: &#39;运动服&#39;, price: 299, count: 998 &#125; ]ice: 199, count: 999 &#125;,
+  RowDataPacket &#123; ID: 2, title: &#39;运动裤&#39;, price: 299, count: 998 &#125; ]</code></pre>
 <h2 id="创建路由"><a href="#创建路由" class="headerlink" title="创建路由"></a>创建路由</h2><p>在之前的例子中，我们总是要通过if else语句来判断请求的接口路径，并进行相应操作。</p>
 <p>这样会极大地降低开发效率，也不利于后期代码维护。</p>
 <p>因此，通常的开发中，都会使用路由对不同的接口进行操作。</p>
 <p>现在我们就来自己实现一个简单的路由：</p>
 <p><strong>1.先创建一个router对象，用于存储路由表。其中有2个属性，分别为get、post，分别用于存储相应get、post请求地址的回调方法</strong></p>
 <pre><code class="js">// 创建路由表
-let router = {
+let router = &#123;
   // 存储get请求的路由
-  get: {
+  get: &#123;
 
-  },
+  &#125;,
   // 存储post请求的路由
-  post: {
+  post: &#123;
 
-  }
-}
-</code></pre>
+  &#125;
+&#125;</code></pre>
 <p><strong>2. 创建一个addRouter方法，用于添加路由配置，参数method为请求方法，url为请求地址，callback为处理该请求的回调函数。</strong></p>
 <pre><code class="js">// 添加路由的方法，method为请求方法，url为请求地址，callback为处理该请求的回调函数
-function addRouter(method, url, callback) {
+function addRouter(method, url, callback) &#123;
   // 为便于处理，将method和url统一转换成小写
   method = method.toLowerCase()
   url = url.toLowerCase()
 
   // 将处理请求的回调函数，按方法名和地址储存到路由表中
   router[method][url] = callback
-}
-</code></pre>
+&#125;</code></pre>
 <p><strong>3. 创建一个findRouter方法，用于查找相应路由的回调函数。参数method为请求方法，url为请求地址，返回处理路由的回调函数。</strong></p>
 <pre><code class="js">// 查找处理请求的回调函数的方法，method为请求方法，url为请求地址，返回处理路由的回调函数
-function findRouter(method, url) {
+function findRouter(method, url) &#123;
   // 为便于处理，将method和url统一转换成小写
   method = method.toLowerCase()
   url = url.toLowerCase()
@@ -266,15 +258,13 @@ function findRouter(method, url) {
 
   // 将回调函数返回
   return callback
-}
-</code></pre>
+&#125;</code></pre>
 <p><strong>4. 将路由配置作为模块导出</strong></p>
 <pre><code class="js">// 将添加路由和查找路由方法导出
-module.exports = {
+module.exports = &#123;
   addRouter,
   findRouter
-}
-</code></pre>
+&#125;</code></pre>
 <h2 id="创建服务器"><a href="#创建服务器" class="headerlink" title="创建服务器"></a>创建服务器</h2><p>在实现了路由之后，就可以以此为基础实现服务器了。</p>
 <p>实现服务器分为以下几个步骤：</p>
 <p>1.引入所需Node.js模块、服务器配置、路由模块<br>2.封装统一处理请求数据的方法<br>3.接收到的请求分为POST请求、GET请求，区分并进行处理<br>4.POST请求分为数据请求、文件上传请求，区分并进行处理<br>5.GET请求分为数据请求、读取文件请求，区分并进行处理</p>
@@ -286,27 +276,26 @@ const url = require(&#39;url&#39;)
 const querystring = require(&#39;querystring&#39;)
 const zlib = require(&#39;zlib&#39;)
 const fs = require(&#39;fs&#39;)
-const { Form } = require(&#39;multiparty&#39;)
+const &#123; Form &#125; = require(&#39;multiparty&#39;)
 
 // 引入服务器配置
-const {
+const &#123;
   HTTP_PORT,
   HTTP_ROOT,
   HTTP_UPLOAD
-} = require(&#39;../config&#39;)
+&#125; = require(&#39;../config&#39;)
 
 // 引入路由模块的查找路由方法
-const { findRouter } = require(&#39;./router&#39;)
+const &#123; findRouter &#125; = require(&#39;./router&#39;)
 
-const server = http.createServer((req, res) =&gt; {
+const server = http.createServer((req, res) =&gt; &#123;
   // 服务器代码
-})
+&#125;)
 
 // 监听配置的端口
 server.listen(HTTP_PORT)
 // 打印创建服务器成功信息
-console.log(`Server started at ${HTTP_PORT}`)
-</code></pre>
+console.log(`Server started at $&#123;HTTP_PORT&#125;`)</code></pre>
 <p><strong>2. 封装统一处理请求数据的方法</strong></p>
 <p>要处理所有请求接口，需要的参数为method（请求方法）、pathname（请求接口路径）、query（query数据）、post（post数据）、files（文件数据）。</p>
 <p>首先，根据method（请求方法）、pathname（请求接口路径），获取在路由配置时，已经配置好的相应接口的回调函数。<br>其次，若回调函数存在，则直接将参数传入回调函数处理。<br>最后，若回调函数不存在，则默认为请求一个静态文件，即可将文件读取之后发送给前端。</p>
@@ -319,34 +308,33 @@ console.log(`Server started at ${HTTP_PORT}`)
 // 引入路由模块的查找路由方法
 ...
 
-const server = http.createServer((req, res) =&gt; {
+const server = http.createServer((req, res) =&gt; &#123;
   // 通过路由处理请求数据的公共方法
-  async function processData(method, pathname, query, post, files) {
+  async function processData(method, pathname, query, post, files) &#123;
     const callback = findRouter(method, pathname)  // 获取处理请求的回调函数
 
     // 若回调函数存在，则表示路由有配置相应的数据处理，即该请求不是获取静态文件。
-    if (callback) {
-      try {
+    if (callback) &#123;
+      try &#123;
         // 根据路由处理接口数据
         await callback(res, query, post, files)
-      } catch (error) {
+      &#125; catch (error) &#123;
         // 出现错误的处理
         res.writeHead(500)
         res.write(&#39;Internal Server Error&#39;)
         res.end()
-      }
-    } else {
+      &#125;
+    &#125; else &#123;
       // 若回调函数不存在，则表示该请求为请求一个静态文件，如html、css、js等
       ...
-    }
-  }
-})
+    &#125;
+  &#125;
+&#125;)
 
 // 监听配置的端口
 server.listen(HTTP_PORT)
 // 打印创建服务器成功信息
-console.log(`Server started at ${HTTP_PORT}`)
-</code></pre>
+console.log(`Server started at $&#123;HTTP_PORT&#125;`)</code></pre>
 <p><strong>3. 接收到的请求分为POST请求、GET请求，区分并进行处理</strong></p>
 <p>根据请求的method，将请求分为POST请求、GET请求。</p>
 <p>若为POST请求，则需要进一步判断是普通数据请求，还是文件请求，并分别进行处理。</p>
@@ -360,35 +348,34 @@ console.log(`Server started at ${HTTP_PORT}`)
 // 引入路由模块的查找路由方法
 ...
 
-const server = http.createServer((req, res) =&gt; {
+const server = http.createServer((req, res) =&gt; &#123;
   // 解析请求数据
   // 获取请求路径及query数据
   const method = req.method
-  const {
+  const &#123;
     pathname,
     query
-  } = url.parse(req.url, true)
+  &#125; = url.parse(req.url, true)
 
   // 处理POST请求
-  if (method === &#39;POST&#39;) {
+  if (method === &#39;POST&#39;) &#123;
     // POST请求分为数据请求、文件上传请求，区分并进行处理
     ...
-  } else {  // 处理GET请求
+  &#125; else &#123;  // 处理GET请求
     // 通过路由处理数据，因为此时是GET请求，只有query数据
-    processData(method, url, query, {}, {})
-  }
+    processData(method, url, query, &#123;&#125;, &#123;&#125;)
+  &#125;
 
   // 通过路由处理请求数据的公共方法
-  async function processData(method, pathname, query, post, files) {
+  async function processData(method, pathname, query, post, files) &#123;
     ...
-  }
-})
+  &#125;
+&#125;)
 
 // 监听配置的端口
 server.listen(HTTP_PORT)
 // 打印创建服务器成功信息
-console.log(`Server started at ${HTTP_PORT}`)
-</code></pre>
+console.log(`Server started at $&#123;HTTP_PORT&#125;`)</code></pre>
 <p><strong>4. POST请求分为数据请求、文件上传请求，区分并进行处理</strong></p>
 <p>判断请求头的content-type为<code>application/x-www-form-urlencoded</code>时，表示该请求只是单纯传输数据，可以直接当做字符串处理。<br>若请求头的content-type不对，则表示该请求是上传文件，可以用multiparty进行处理。</p>
 <pre><code class="js">// 引入创建服务器所需的模块
@@ -400,86 +387,85 @@ console.log(`Server started at ${HTTP_PORT}`)
 // 引入路由模块的查找路由方法
 ...
 
-const server = http.createServer((req, res) =&gt; {
+const server = http.createServer((req, res) =&gt; &#123;
   // 解析请求数据
   // 获取请求路径及query数据
   const method = req.method
-  const {
+  const &#123;
     pathname,
     query
-  } = url.parse(req.url, true)
+  &#125; = url.parse(req.url, true)
 
   // 处理POST请求
-  if (method === &#39;POST&#39;) {
+  if (method === &#39;POST&#39;) &#123;
     // 根据请求头的content-type属性值，区分是普通POST请求，还是文件请求。
     // content-type为application/x-www-form-urlencoded时，表示是普通POST请求
     // 普通POST请求直接进行处理，文件请求使用multiparty处理
-    if (req.headers[&#39;content-type&#39;].startsWith(&#39;application/x-www-form-urlencoded&#39;)) {
+    if (req.headers[&#39;content-type&#39;].startsWith(&#39;application/x-www-form-urlencoded&#39;)) &#123;
       // 普通POST请求
       let arr = []  // 存储Buffer数据
 
       // 接收数据
-      req.on(&#39;data&#39;, (buffer) =&gt; {
+      req.on(&#39;data&#39;, (buffer) =&gt; &#123;
         arr.push(buffer)
-      })
+      &#125;)
 
       // 数据接收完成
-      req.on(&#39;end&#39;, () =&gt; {
+      req.on(&#39;end&#39;, () =&gt; &#123;
         const data = Buffer.concat(arr)  // 合并接收到的数据
         const post = querystring.parse(data.toString()) // 将接收到的数据转换为JSON
 
         // 通过路由处理数据，因为此时是普通POST请求，不存在文件数据
-        processData(method, pathname, query, post, {})
-      })
-    } else {
+        processData(method, pathname, query, post, &#123;&#125;)
+      &#125;)
+    &#125; else &#123;
       // 文件POST请求
-      const form = new Form({
+      const form = new Form(&#123;
         uploadDir: HTTP_UPLOAD  // 指定文件存储目录
-      })
+      &#125;)
 
       // 处理请求数据
       form.parse(req)
 
-      let post = {} // 存储数据参数
-      let files = {}  // 存储文件数据
+      let post = &#123;&#125; // 存储数据参数
+      let files = &#123;&#125;  // 存储文件数据
 
       // 通过field事件处理普通数据
-      form.on(&#39;field&#39;, (name, value) =&gt; {
+      form.on(&#39;field&#39;, (name, value) =&gt; &#123;
         post[name] = value
-      })
+      &#125;)
 
       // 通过file时间处理文件数据
-      form.on(&#39;file&#39;, (name, file) =&gt; {
+      form.on(&#39;file&#39;, (name, file) =&gt; &#123;
         files[name] = file
-      })
+      &#125;)
 
       // 处理错误
-      form.on(&#39;error&#39;, (error) =&gt; {
+      form.on(&#39;error&#39;, (error) =&gt; &#123;
         console.error(error)
-      })
+      &#125;)
 
       // 数据传输完成时，触发close事件
-      form.on(&#39;close&#39;, () =&gt; {
+      form.on(&#39;close&#39;, () =&gt; &#123;
         // 通过路由处理数据，因为此时是POST文件请求，query、post、files数据都存在
         processData(method, pathname, query, post, files)
-      })
-    }
-  } else {  // 处理GET请求
+      &#125;)
+    &#125;
+  &#125; else &#123;  // 处理GET请求
     // 通过路由处理数据，因为此时是GET请求，只有query数据
-    processData(method, url, query, {}, {})
-  }
+    processData(method, url, query, &#123;&#125;, &#123;&#125;)
+  &#125;
 
   // 通过路由处理请求数据的公共方法
-  async function processData(method, pathname, query, post, files) {
+  async function processData(method, pathname, query, post, files) &#123;
     ...
-  }
-})
+  &#125;
+&#125;)
 
 // 监听配置的端口
 server.listen(HTTP_PORT)
 // 打印创建服务器成功信息
-console.log(`Server started at ${HTTP_PORT}`)
-</code></pre>
+console.log(`Server started at $&#123;HTTP_PORT&#125;`)</code></pre>
 <p><strong>5. GET请求分为数据请求、读取文件请求，区分并进行处理</strong></p>
 <p>GET请求可以直接用<code>processData</code>方法统一处理，若路由中未配置处理数据的方法，则表示该请求为获取静态文件，需要进行单独处理，否则只需要调用路由配置的回调函数处理即可。</p>
 <pre><code class="js">// 引入创建服务器所需的模块
@@ -491,50 +477,50 @@ console.log(`Server started at ${HTTP_PORT}`)
 // 引入路由模块的查找路由方法
 ...
 
-const server = http.createServer((req, res) =&gt; {
+const server = http.createServer((req, res) =&gt; &#123;
   // 解析请求数据
   // 获取请求路径及query数据
   const method = req.method
-  const {
+  const &#123;
     pathname,
     query
-  } = url.parse(req.url, true)
+  &#125; = url.parse(req.url, true)
 
   // 处理POST请求
-  if (method === &#39;POST&#39;) {
+  if (method === &#39;POST&#39;) &#123;
     ...
-  } else {  // 处理GET请求
+  &#125; else &#123;  // 处理GET请求
     // 通过路由处理数据，因为此时是GET请求，只有query数据
-    processData(method, url, query, {}, {})
-  }
+    processData(method, url, query, &#123;&#125;, &#123;&#125;)
+  &#125;
 
   // 通过路由处理请求数据的公共方法
-  async function processData(method, pathname, query, post, files) {
+  async function processData(method, pathname, query, post, files) &#123;
     const callback = findRouter(method, pathname)  // 获取处理请求的回调函数
 
     // 若回调函数存在，则表示路由有配置相应的数据处理，即该请求不是获取静态文件。
-    if (callback) {
-      try {
+    if (callback) &#123;
+      try &#123;
         // 根据路由处理接口数据
         await callback(res, query, post, files)
-      } catch (error) {
+      &#125; catch (error) &#123;
         // 出现错误的处理
         res.writeHead(500)
         res.write(&#39;Internal Server Error&#39;)
         res.end()
-      }
-    } else {
+      &#125;
+    &#125; else &#123;
       // 若回调函数不存在，则表示该请求为请求一个静态文件，如html、css、js等
       const filePath = HTTP_ROOT + pathname
 
       // 检查文件是否存在
-      fs.stat(filePath, (error, stat) =&gt; {
-        if (error) {
+      fs.stat(filePath, (error, stat) =&gt; &#123;
+        if (error) &#123;
           // 出现错误表示文件不存在
           res.writeHead(404)
           res.write(&#39;Not Found&#39;)
           res.end()
-        } else {
+        &#125; else &#123;
           // 文件存在则进行读取
           // 创建一个可读流。
           const readStream = fs.createReadStream(filePath)
@@ -548,130 +534,123 @@ const server = http.createServer((req, res) =&gt; {
           // 将读取的内容，通过gzip压缩之后，在通过管道推送到res中，由于res继承自Stream流，因此也可以接收管道的推送。
           readStream.pipe(gz).pipe(res)
 
-          readStream.on(&#39;error&#39;, (error) =&gt; {
+          readStream.on(&#39;error&#39;, (error) =&gt; &#123;
             console.error(error)
-          })
-        }
-      })
-    }
-  }
-})
+          &#125;)
+        &#125;
+      &#125;)
+    &#125;
+  &#125;
+&#125;)
 
 // 监听配置的端口
 server.listen(HTTP_PORT)
 // 打印创建服务器成功信息
-console.log(`Server started at ${HTTP_PORT}`)
-</code></pre>
+console.log(`Server started at $&#123;HTTP_PORT&#125;`)</code></pre>
 <h2 id="测试服务器"><a href="#测试服务器" class="headerlink" title="测试服务器"></a>测试服务器</h2><p>在server.js中引入封装的http模块：</p>
-<pre><code class="js">const http = require(&#39;./lib/http&#39;)
-</code></pre>
+<pre><code class="js">const http = require(&#39;./lib/http&#39;)</code></pre>
 <p>再使用node server.js启动服务器，就可以在浏览器中访问<code>http://localhost:8080/index.html</code>，看到html页面</p>
 <h2 id="添加各接口路由配置"><a href="#添加各接口路由配置" class="headerlink" title="添加各接口路由配置"></a>添加各接口路由配置</h2><p>获取商品列表路由回调函数</p>
 <p>查询<code>item_table</code>表中的商品数据后，返回给前台，并将回调函数作为模块导出。</p>
 <pre><code class="js">const connection = require(&#39;../lib/database&#39;)
 
-module.exports = async (res, query, post, files) =&gt; {
-  try {
+module.exports = async (res, query, post, files) =&gt; &#123;
+  try &#123;
     // 查询商品列表
     const data = await connection.query(`SELECT * FROM item_table`)
 
-    res.writeJson({
+    res.writeJson(&#123;
       error: 0, // error为0则表示接口正常
       data  // 查询到的商品列表数据
-    })
-  } catch (error) {
+    &#125;)
+  &#125; catch (error) &#123;
     console.error(error)
-    res.writeJson({
+    res.writeJson(&#123;
       error: 1, // error为1则表示接口出错
       msg: &#39;数据库出错&#39; // 接口的错误信息
-    })
-  }
+    &#125;)
+  &#125;
   res.end()
-}
-</code></pre>
-<h3 id="添加商品路由回调函数"><a href="#添加商品路由回调函数" class="headerlink" title="添加商品路由回调函数"></a>添加商品路由回调函数</h3><p>应禁止query语句使用如下写法，容易造成注入攻击。<br><code>connection.query(INSERT INTO item_table (title, price, count) VALUES(&#39;${title}, ${price} ${count}&#39;))</code><br>此时若用户传入参数如下：</p>
+&#125;</code></pre>
+<h3 id="添加商品路由回调函数"><a href="#添加商品路由回调函数" class="headerlink" title="添加商品路由回调函数"></a>添加商品路由回调函数</h3><p>应禁止query语句使用如下写法，容易造成注入攻击。<br><code>connection.query(INSERT INTO item_table (title, price, count) VALUES(&#39;$&#123;title&#125;, $&#123;price&#125; $&#123;count&#125;&#39;))</code><br>此时若用户传入参数如下：</p>
 <p><code>http://localhost:8080/add?title=a&#39;)%3B%20DELETE%20FROM%20item_table%3B%20SELECT%20(1&amp;price=19.8&amp;count=200</code></p>
 <p>就会让服务器执行一个这样的语句：</p>
-<pre><code class="js">INSERT INTO item_table (title, price, count) VALUES(&#39;a&#39;); DELETE FROM item_table; SELECT (&#39;1&#39;, 19.8, 200)
-</code></pre>
+<pre><code class="js">INSERT INTO item_table (title, price, count) VALUES(&#39;a&#39;); DELETE FROM item_table; SELECT (&#39;1&#39;, 19.8, 200)</code></pre>
 <p>其意义为：</p>
 <p>1.插入一个虚假数据<br>2.删除item_table表中所有数据<br>3.返回一个虚假数据</p>
 <p>这样就会导致item_table表中的所有数据被删除。</p>
 <p>为防止注入攻击，可以使用占位符?代替需要插入数据库的参数，第二个数组参数中的3个值会按顺序填充占位符，该方法可以避免大部分注入攻击，如下：</p>
-<pre><code class="js">await connection.query(`INSERT INTO item_table (title, price, count) VALUES(?,?,?)`, [title, price, count])
-</code></pre>
+<pre><code class="js">await connection.query(`INSERT INTO item_table (title, price, count) VALUES(?,?,?)`, [title, price, count])</code></pre>
 <pre><code class="js">const connection = require(&#39;../lib/database&#39;)
 
-module.exports = async (res, query, post, files) =&gt; {
-  let {
+module.exports = async (res, query, post, files) =&gt; &#123;
+  let &#123;
     title,
     price,
     count
-  } = post
+  &#125; = post
 
   // 判断是否有传参
-  if (!title || !price || !count) {
-    res.writeJson({
+  if (!title || !price || !count) &#123;
+    res.writeJson(&#123;
       error: 1,
       msg: &#39;参数不合法&#39;
-    })
-  } else {
+    &#125;)
+  &#125; else &#123;
     // 将价格和数量转为数字
     price = Number(price)
     count = Number(count)
 
     // 判断价格和数量是否非数字
-    if (isNaN(price) || isNaN(count)) {
-      res.writeJson({
+    if (isNaN(price) || isNaN(count)) &#123;
+      res.writeJson(&#123;
         error: 1,
         msg: &#39;参数不合法&#39;
-      })
-    } else {
-      try {
+      &#125;)
+    &#125; else &#123;
+      try &#123;
         // 使用占位符?代替需要插入数据库的参数，第二个数组参数中的3个值会按顺序填充占位符，该方法可以避免大部分注入攻击。
         await connection.query(`INSERT INTO item_table (title, price, count) VALUES(?,?,?)`, [title, price, count])
 
-        res.writeJson({
+        res.writeJson(&#123;
           error: 0,
           msg: &#39;添加商品成功&#39;
-        })
-      } catch (error) {
+        &#125;)
+      &#125; catch (error) &#123;
         console.error(error)
-        res.writeJson({
+        res.writeJson(&#123;
           error: 1,
           msg: &#39;数据库内部错误&#39;
-        })
-      }
-    }
-  }
+        &#125;)
+      &#125;
+    &#125;
+  &#125;
   res.end()
-}
-</code></pre>
+&#125;</code></pre>
 <h3 id="删除商品路由回调函数"><a href="#删除商品路由回调函数" class="headerlink" title="删除商品路由回调函数"></a>删除商品路由回调函数</h3><pre><code class="js">const connection = require(&#39;../lib/database&#39;)
 
-module.exports = async (res, query, post, files) =&gt; {
+module.exports = async (res, query, post, files) =&gt; &#123;
   const ID = query.id
 
-  if (!ID) {
-    res.writeJson({
+  if (!ID) &#123;
+    res.writeJson(&#123;
       error: 1,
       msg: &#39;参数不合法&#39;
-    })
-  } else {
-    await connection.query(`DELETE FROM item_table WHERE ID=${ID}`)
+    &#125;)
+  &#125; else &#123;
+    await connection.query(`DELETE FROM item_table WHERE ID=$&#123;ID&#125;`)
 
-    res.writeJson({
+    res.writeJson(&#123;
       error: 0,
       msg: &#39;删除成功&#39;
-    })
-  }
+    &#125;)
+  &#125;
   res.end()
-}
-</code></pre>
+&#125;</code></pre>
 <h3 id="添加各接口路由配置-1"><a href="#添加各接口路由配置-1" class="headerlink" title="添加各接口路由配置"></a>添加各接口路由配置</h3><p>在<code>/router/index.js</code>中，引用各个接口的配置，并用addRouter方法添加到路由表中，即可在接收到请求时，查找路由并进行处理。</p>
-<pre><code class="js">const {
+<pre><code class="js">const &#123;
   addRouter
-} = require(&#39;../lib/router&#39;)
+&#125; = require(&#39;../lib/router&#39;)
 
 // 添加获取商品列表接口
 addRouter(&#39;get&#39;, &#39;/list&#39;, require(&#39;./list&#39;))
@@ -680,71 +659,68 @@ addRouter(&#39;get&#39;, &#39;/list&#39;, require(&#39;./list&#39;))
 addRouter(&#39;post&#39;, &#39;/add&#39;, require(&#39;./add&#39;))
 
 // 删除商品接口
-addRouter(&#39;get&#39;, &#39;/del&#39;, require(&#39;./del&#39;))
-</code></pre>
+addRouter(&#39;get&#39;, &#39;/del&#39;, require(&#39;./del&#39;))</code></pre>
 <h3 id="在主模块中引用路由"><a href="#在主模块中引用路由" class="headerlink" title="在主模块中引用路由"></a>在主模块中引用路由</h3><p>在/server.js中，引用router模块，就可以完成整个服务端的配置。</p>
 <pre><code class="js">const connection = require(&#39;./lib/database&#39;)
 const http = require(&#39;./lib/http&#39;)
-const router = require(&#39;./router&#39;)
-</code></pre>
+const router = require(&#39;./router&#39;)</code></pre>
 <h3 id="完成前端功能"><a href="#完成前端功能" class="headerlink" title="完成前端功能"></a>完成前端功能</h3><p>在/static/index.html中，使用jquery为前端页面实现如下功能：</p>
 <p>1.显示商品列表<br>2.添加随机名称、价格、库存的商品<br>3.删除对应商品</p>
 <pre><code class="js">// 查询商品列表的方法
-function getList() {
-  $.ajax({
+function getList() &#123;
+  $.ajax(&#123;
     url: &#39;/list&#39;,
     dataType: &#39;json&#39;
-  }).then(res =&gt; {
+  &#125;).then(res =&gt; &#123;
     let html = ``
 
-    res.data.forEach((item, index) =&gt; {
+    res.data.forEach((item, index) =&gt; &#123;
       html += (
         `
             &lt;tr&gt;
-              &lt;td&gt;${item.title}&lt;/td&gt;
-              &lt;td&gt;￥${item.price}&lt;/td&gt;
-              &lt;td&gt;${item.count}&lt;/td&gt;
+              &lt;td&gt;$&#123;item.title&#125;&lt;/td&gt;
+              &lt;td&gt;￥$&#123;item.price&#125;&lt;/td&gt;
+              &lt;td&gt;$&#123;item.count&#125;&lt;/td&gt;
               &lt;td&gt;
-                &lt;a data-id=&quot;${item.ID}&quot; href=&quot;#&quot; class=&quot;glyphicon glyphicon-trash&quot;&gt;删除&lt;/a&gt;
+                &lt;a data-id=&quot;$&#123;item.ID&#125;&quot; href=&quot;#&quot; class=&quot;glyphicon glyphicon-trash&quot;&gt;删除&lt;/a&gt;
               &lt;/td&gt;
             &lt;/tr&gt;
           `
       )
-    })
+    &#125;)
 
     $(&#39;tbody&#39;).html(html)
-  });
-} getList()
+  &#125;);
+&#125; getList()
 
 // 点击添加按钮，随机添加一个商品
-$(&#39;#addBtn&#39;).on(&#39;click&#39;, function () {
-  $.ajax({
+$(&#39;#addBtn&#39;).on(&#39;click&#39;, function () &#123;
+  $.ajax(&#123;
     url: &#39;/add&#39;,
     method: &#39;post&#39;,
-    data: {
-      title: `test${Math.floor(Math.random() * 100)}`,
+    data: &#123;
+      title: `test$&#123;Math.floor(Math.random() * 100)&#125;`,
       price: Math.floor(Math.random() * 100),
       count: Math.floor(Math.random() * 100)
-    }
-  })
-    .then((response) =&gt; {
+    &#125;
+  &#125;)
+    .then((response) =&gt; &#123;
       getList()
-    })
-})
+    &#125;)
+&#125;)
 
 // 点击删除按钮
-$(&#39;tbody&#39;).on(&#39;click&#39;, &#39;a&#39;, function () {
-  $.ajax({
+$(&#39;tbody&#39;).on(&#39;click&#39;, &#39;a&#39;, function () &#123;
+  $.ajax(&#123;
     url: &#39;/del&#39;,
-    data: {
+    data: &#123;
       id: $(this).attr(&#39;data-id&#39;)
-    }
-  })
-    .then((response) =&gt; {
+    &#125;
+  &#125;)
+    .then((response) =&gt; &#123;
       getList()
-    })
-})
-</code></pre>
+    &#125;)
+&#125;)</code></pre>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -769,7 +745,7 @@ $(&#39;tbody&#39;).on(&#39;click&#39;, &#39;a&#39;, function () {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -803,7 +779,7 @@ $(&#39;tbody&#39;).on(&#39;click&#39;, &#39;a&#39;, function () {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Node-js项目介绍"><span class="toc-number">1.</span> <span class="toc-text">Node.js项目介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#项目的文件夹结构"><span class="toc-number">1.1.</span> <span class="toc-text">项目的文件夹结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#判断当前所处环境"><span class="toc-number">1.2.</span> <span class="toc-text">判断当前所处环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#初始化开发和生产环境配置"><span class="toc-number">1.3.</span> <span class="toc-text">初始化开发和生产环境配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#连接数据库"><span class="toc-number">1.4.</span> <span class="toc-text">连接数据库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建路由"><span class="toc-number">1.5.</span> <span class="toc-text">创建路由</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建服务器"><span class="toc-number">1.6.</span> <span class="toc-text">创建服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试服务器"><span class="toc-number">1.7.</span> <span class="toc-text">测试服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加各接口路由配置"><span class="toc-number">1.8.</span> <span class="toc-text">添加各接口路由配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#添加商品路由回调函数"><span class="toc-number">1.8.1.</span> <span class="toc-text">添加商品路由回调函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除商品路由回调函数"><span class="toc-number">1.8.2.</span> <span class="toc-text">删除商品路由回调函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#添加各接口路由配置-1"><span class="toc-number">1.8.3.</span> <span class="toc-text">添加各接口路由配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#在主模块中引用路由"><span class="toc-number">1.8.4.</span> <span class="toc-text">在主模块中引用路由</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#完成前端功能"><span class="toc-number">1.8.5.</span> <span class="toc-text">完成前端功能</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Node-js%E9%A1%B9%E7%9B%AE%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">Node.js项目介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B9%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">项目的文件夹结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E5%BD%93%E5%89%8D%E6%89%80%E5%A4%84%E7%8E%AF%E5%A2%83"><span class="toc-number">1.2.</span> <span class="toc-text">判断当前所处环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%BC%80%E5%8F%91%E5%92%8C%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-number">1.3.</span> <span class="toc-text">初始化开发和生产环境配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">1.4.</span> <span class="toc-text">连接数据库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E8%B7%AF%E7%94%B1"><span class="toc-number">1.5.</span> <span class="toc-text">创建路由</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">1.6.</span> <span class="toc-text">创建服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">1.7.</span> <span class="toc-text">测试服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%90%84%E6%8E%A5%E5%8F%A3%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE"><span class="toc-number">1.8.</span> <span class="toc-text">添加各接口路由配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%95%86%E5%93%81%E8%B7%AF%E7%94%B1%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0"><span class="toc-number">1.8.1.</span> <span class="toc-text">添加商品路由回调函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E5%95%86%E5%93%81%E8%B7%AF%E7%94%B1%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0"><span class="toc-number">1.8.2.</span> <span class="toc-text">删除商品路由回调函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%90%84%E6%8E%A5%E5%8F%A3%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE-1"><span class="toc-number">1.8.3.</span> <span class="toc-text">添加各接口路由配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E4%B8%BB%E6%A8%A1%E5%9D%97%E4%B8%AD%E5%BC%95%E7%94%A8%E8%B7%AF%E7%94%B1"><span class="toc-number">1.8.4.</span> <span class="toc-text">在主模块中引用路由</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E6%88%90%E5%89%8D%E7%AB%AF%E5%8A%9F%E8%83%BD"><span class="toc-number">1.8.5.</span> <span class="toc-text">完成前端功能</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
             

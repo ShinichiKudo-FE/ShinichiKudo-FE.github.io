@@ -36,7 +36,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -99,13 +99,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    4.9k
+                    5k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    4 mins.
+                    5 mins.
                 </span>
                 
                 
@@ -141,51 +141,48 @@
         <div class="content markdown animated fadeIn">
             <h1 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h1><p>首先我们说下作用域，简单地来说作用域指的是一个区域，里面包括变量，函数，常量等等定义信息和赋值信息，以及这个区域内代码书写的结构信息。作用域可以嵌套，我们通常知道js函数内是可以产生作用域的。<br>下面我们用具体代码来示例下：</p>
 <p><img src="https://image-static.segmentfault.com/114/508/1145089023-5923b87dde95f_articlex" alt="scope"></p>
-<p><code>全局作用域</code>（global scope）里面定义了两个变量，一个函数。walk 函数生成的作用域里面定义了一个变量，两个函数。innerFunc 和 anotherInnerFunc 这两个函数生成的作用域里面分别定义了一个变量。在规范中作用域更官方的叫法是词法环境（Lexical Environments）。什么意思？就是作用域包含哪些内容取决于你代码怎么写，你把定义 go 变量写在了 walk 函数里面，那么 go 变量就属于<code>walk 函数作用域</code>。</p>
+<p><code>全局作用域</code>（global scope）里面定义了两个变量，一个函数。walk 函数生成的作用域里面定义了一个变量，两个函数。innerFunc 和 anotherInnerFunc 这两个函数生成的作用域里面分别定义了一个变量。在规范中作用域更官方的叫法是词法环境（Lexical Environments）。什么意思？就是作用域包含哪些内容取决于你代码怎么写，你把定义 go 变量写在了 walk 函数里面，那么 go 变量就属于<code> walk 函数作用域</code>。</p>
 <blockquote>
-<p>作用域其实由两部分组成(全局作用域，局部作用域)<br>1.记录作用域内变量信息（我们假设变量，常量，函数等统称为变量）和代码结构信息的东西，称之为 Environment Record。<br>2.一个引用 <code>__outer__</code>，这个引用指向当前作用域的父作用域。拿上面代码为例。innerFunc 的函数作用域有一个引用指向 walk 函数作用域，walk 函数作用域有一个引用指向全局作用域。全局作用域的 <code>__outer__</code>为 null。</p>
+<p>作用域其实由两部分组成(全局作用域，局部作用域)<br>1.记录作用域内变量信息（我们假设变量，常量，函数等统称为变量）和代码结构信息的东西，称之为 Environment Record。<br>2.一个引用 <code>__outer__</code>，这个引用指向当前作用域的父作用域。拿上面代码为例。innerFunc 的函数作用域有一个引用指向 walk 函数作用域，walk 函数作用域有一个引用指向全局作用域。全局作用域的 <code>__outer__ </code>为 null。</p>
 </blockquote>
 <h2 id="生成作用域的语法"><a href="#生成作用域的语法" class="headerlink" title="生成作用域的语法"></a>生成作用域的语法</h2><a id="more"></a>
 <p>1.函数声明</p>
-<pre><code class="javascript">function f(){
+<pre><code class="javascript">function f()&#123;
     var inner = &#39;inner&#39;;
     console.log(inner);
-}
+&#125;
 f();//inner
-console.log( inner );//Uncaught ReferenceError: inner is not defined
-</code></pre>
+console.log( inner );//Uncaught ReferenceError: inner is not defined</code></pre>
 <p>2.catch语句</p>
 <pre><code class="javascript">
-try {
+try &#123;
   throw new Error( &#39;customized error&#39; );
-} catch( err ) {
+&#125; catch( err ) &#123;
   var iamnoterror = &#39;not error&#39;;
   console.log( iamnoterror ); // not error
   console.log( err ); // Error: customized error
-}
+&#125;
 console.log( iamnoterror ); // not error
 console.log( err ); // Uncaught ReferenceError: e is not defined
-
 </code></pre>
 <p>catch语句生成的作用域只会框住参数部分的变量，使其不能在外部访问。对于 catch 语句体里面声明的变量并不起作用</p>
 <p>3.语句块</p>
-<pre><code class="javascript">if ( true ) {
+<pre><code class="javascript">if ( true ) &#123;
   let bv = &#39;bv&#39;;
   const B_C = &#39;BC&#39;;
-  let blockFunc = function() {}
-  function notBlockFunc() {}
+  let blockFunc = function() &#123;&#125;
+  function notBlockFunc() &#123;&#125;
 
   console.log( bv ); // bv
   console.log( B_C ); // BC
-  console.log( notBlockFunc ); // function notBlockFunc() {}
-  console.log( blockFunc ); // function () {}
+  console.log( notBlockFunc ); // function notBlockFunc() &#123;&#125;
+  console.log( blockFunc ); // function () &#123;&#125;
 
-}
+&#125;
 console.log( bv ); // Uncaught ReferenceError: bv is not defined
 console.log( B_C ); // Uncaught ReferenceError: B_C is not defined
-console.log( notBlockFunc ); // function notBlockFunc() {}
-console.log( blockFunc ); // ReferenceError: blockFunc is not defined
-</code></pre>
+console.log( notBlockFunc ); // function notBlockFunc() &#123;&#125;
+console.log( blockFunc ); // ReferenceError: blockFunc is not defined</code></pre>
 <p>语句块 {} 会生成一个新的作用域，但是这个作用域只绑定块级变量，常量等，即 let，const 声明的属于块级作用域，而 var 声明的还是属于块级作用域的父作用域。</p>
 <h1 id="执行上下文（execution-context）"><a href="#执行上下文（execution-context）" class="headerlink" title="执行上下文（execution context）"></a>执行上下文（execution context）</h1><p>执行上下文是用于跟踪代码的运行情况，其特征如下:</p>
 <blockquote>
@@ -224,7 +221,7 @@ console.log( blockFunc ); // ReferenceError: blockFunc is not defined
 </blockquote>
 <p>1.Let envRec be GetThisEnvironment( ).</p>
 <p>2.Return envRec.GetThisBinding().</p>
-<p><a href="https://segmentfault.com/a/1190000009522006" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000009522006">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -249,7 +246,7 @@ console.log( blockFunc ); // ReferenceError: blockFunc is not defined
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -283,7 +280,7 @@ console.log( blockFunc ); // ReferenceError: blockFunc is not defined
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#作用域"><span class="toc-number">1.</span> <span class="toc-text">作用域</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#生成作用域的语法"><span class="toc-number">1.1.</span> <span class="toc-text">生成作用域的语法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#执行上下文（execution-context）"><span class="toc-number">2.</span> <span class="toc-text">执行上下文（execution context）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#作用域与执行上下文的关系"><span class="toc-number">3.</span> <span class="toc-text">作用域与执行上下文的关系</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#变量查找"><span class="toc-number">3.1.</span> <span class="toc-text">变量查找</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#this"><span class="toc-number">3.2.</span> <span class="toc-text">this</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="toc-number">1.</span> <span class="toc-text">作用域</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E4%BD%9C%E7%94%A8%E5%9F%9F%E7%9A%84%E8%AF%AD%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">生成作用域的语法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%EF%BC%88execution-context%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">执行上下文（execution context）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%8E%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">3.</span> <span class="toc-text">作用域与执行上下文的关系</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%98%E9%87%8F%E6%9F%A5%E6%89%BE"><span class="toc-number">3.1.</span> <span class="toc-text">变量查找</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#this"><span class="toc-number">3.2.</span> <span class="toc-text">this</span></a></li></ol></li></ol>
                 </div>
             </div>
             

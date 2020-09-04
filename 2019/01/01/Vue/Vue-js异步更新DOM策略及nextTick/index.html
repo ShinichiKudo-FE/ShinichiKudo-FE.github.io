@@ -39,7 +39,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -145,70 +145,67 @@
             <h2 id="操作DOM"><a href="#操作DOM" class="headerlink" title="操作DOM"></a>操作DOM</h2><p>在使用vue.js的时候，有时候因为一些特定的业务场景，不得不去操作DOM，比如这样：</p>
 <pre><code class="html">&lt;template&gt;
   &lt;div&gt;
-    &lt;div ref=&quot;test&quot;&gt;{{test}}&lt;/div&gt;
+    &lt;div ref=&quot;test&quot;&gt;&#123;&#123;test&#125;&#125;&lt;/div&gt;
     &lt;button @click=&quot;handleClick&quot;&gt;tet&lt;/button&gt;
   &lt;/div&gt;
 &lt;/template&gt;
-
 </code></pre>
-<pre><code class="js">export default {
-    data () {
-        return {
+<pre><code class="js">export default &#123;
+    data () &#123;
+        return &#123;
             test: &#39;begin&#39;
-        };
-    },
-    methods () {
-        handleClick () {
+        &#125;;
+    &#125;,
+    methods () &#123;
+        handleClick () &#123;
             this.test = &#39;end&#39;;
             console.log(this.$refs.test.innerText);//打印“begin”
-        }
-    }
-}
-</code></pre>
+        &#125;
+    &#125;
+&#125;</code></pre>
 <p>打印的结果是begin，为什么我们明明已经将test设置成了“end”，获取真实DOM节点的innerText却没有得到我们预期中的“end”，而是得到之前的值“begin”呢？</p>
 <h2 id="Watcher队列"><a href="#Watcher队列" class="headerlink" title="Watcher队列"></a>Watcher队列</h2><p>带着疑问，我们找到了Vue.js源码的Watch实现。当某个响应式数据发生变化的时候，它的setter函数会通知闭包中的Dep，Dep则会调用它管理的所有Watch对象。触发Watch对象的update实现。我们来看一下update的实现。</p>
-<pre><code class="js">update () {
+<pre><code class="js">update () &#123;
     /* istanbul ignore else */
-    if (this.lazy) {
+    if (this.lazy) &#123;
         this.dirty = true
-    } else if (this.sync) {
+    &#125; else if (this.sync) &#123;
         /*同步则执行run直接渲染视图*/
         this.run()
-    } else {
+    &#125; else &#123;
         /*异步推送到观察者队列中，下一个tick时调用。*/
         queueWatcher(this)
-    }
-}
-</code></pre>
+    &#125;
+&#125;</code></pre>
 <p>我们发现Vue.js默认是使用异步执行DOM更新。 当异步执行update的时候，会调用queueWatcher函数。</p>
 <pre><code class="js">//将一个观察者对象push进观察者队列，在队列中已经存在相同的id则该观察者对象将被跳过，除非它是在队列被刷新时推送*/
-export function queueWatcher (watcher: Watcher) {
+export function queueWatcher (watcher: Watcher) &#123;
   /*获取watcher的id*/
   const id = watcher.id
   /*检验id是否存在，已经存在则直接跳过，不存在则标记哈希表has，用于下次检验*/
-  if (has[id] == null) {
+  if (has[id] == null) &#123;
     has[id] = true
-    if (!flushing) {
+    if (!flushing) &#123;
       /*如果没有flush掉，直接push到队列中即可*/
       queue.push(watcher)
-    } else {
+    &#125; else &#123;
       // if already flushing, splice the watcher based on its id
       // if already past its id, it will be run next immediately.
       let i = queue.length - 1
-      while (i &gt;= 0 &amp;&amp; queue[i].id &gt; watcher.id) {
+      while (i &gt;= 0 &amp;&amp; queue[i].id &gt; watcher.id) &#123;
         i--
-      }
+      &#125;
       queue.splice(Math.max(i, index) + 1, 0, watcher)
-    }
+    &#125;
     // queue the flush
-    if (!waiting) {
+    if (!waiting) &#123;
       waiting = true
       nextTick(flushSchedulerQueue)
-    }
-  }
-}
-</code></pre>
+    &#125;
+  &#125;
+&#125;</code></pre>
 <a id="more"></a>
+
 <p>查看queueWatcher的源码我们发现，Watch对象并不是立即更新视图，而是被push进了一个队列queue，此时状态处于waiting的状态，这时候会继续会有Watch对象被push进这个队列queue，等到下一个tick运行时，这些Watch对象才会被遍历取出，更新视图。同时，id重复的Watcher不会被多次加入到queue中去，因为在最终渲染时，我们只需要关心数据的最终结果。</p>
 <p>那么，什么是下一个tick？</p>
 <h2 id="nextTick"><a href="#nextTick" class="headerlink" title="nextTick"></a>nextTick</h2><p>vue.js提供了一个<code>nextTick</code>函数，其实也就是上面调用的nextTick。</p>
@@ -221,7 +218,7 @@ export function queueWatcher (watcher: Watcher) {
     这个函数的作用是在task或者microtask中推入一个timerFunc，在当前调用栈执行完以后以此执行直到执行到timerFunc
     目的是延迟到当前调用栈执行完以后执行
 */
-export const nextTick = (function () {
+export const nextTick = (function () &#123;
   /*存放异步执行的回调*/
   const callbacks = []
   /*一个标记位，如果已经有timerFunc被推送到任务队列中去则不需要重复推送*/
@@ -230,16 +227,16 @@ export const nextTick = (function () {
   let timerFunc
 
   /*下一个tick时的回调*/
-  function nextTickHandler () {
+  function nextTickHandler () &#123;
     /*一个标记位，标记等待状态（即函数已经被推入任务队列或者主线程，已经在等待当前栈执行完毕去执行），这样就不需要在push多个回调到callbacks时将timerFunc多次推入任务队列或者主线程*/
     pending = false
     /*执行所有callback*/
     const copies = callbacks.slice(0)
     callbacks.length = 0
-    for (let i = 0; i &lt; copies.length; i++) {
+    for (let i = 0; i &lt; copies.length; i++) &#123;
       copies[i]()
-    }
-  }
+    &#125;
+  &#125;
 
   // the nextTick behavior leverages the microtask queue, which can be accessed
   // via either native Promise.then or MutationObserver.
@@ -255,11 +252,11 @@ export const nextTick = (function () {
     如果上述两种方法都不支持的环境则会使用setTimeout，在task尾部推入这个函数，等待调用执行。
     参考：https://www.zhihu.com/question/55364497
   */
-  if (typeof Promise !== &#39;undefined&#39; &amp;&amp; isNative(Promise)) {
+  if (typeof Promise !== &#39;undefined&#39; &amp;&amp; isNative(Promise)) &#123;
     /*使用Promise*/
     var p = Promise.resolve()
-    var logError = err =&gt; { console.error(err) }
-    timerFunc = () =&gt; {
+    var logError = err =&gt; &#123; console.error(err) &#125;
+    timerFunc = () =&gt; &#123;
       p.then(nextTickHandler).catch(logError)
       // in problematic UIWebViews, Promise.then doesn&#39;t completely break, but
       // it can get stuck in a weird state where callbacks are pushed into the
@@ -267,65 +264,64 @@ export const nextTick = (function () {
       // needs to do some other work, e.g. handle a timer. Therefore we can
       // &quot;force&quot; the microtask queue to be flushed by adding an empty timer.
       if (isIOS) setTimeout(noop)
-    }
-  } else if (typeof MutationObserver !== &#39;undefined&#39; &amp;&amp; (
+    &#125;
+  &#125; else if (typeof MutationObserver !== &#39;undefined&#39; &amp;&amp; (
     isNative(MutationObserver) ||
     // PhantomJS and iOS 7.x
     MutationObserver.toString() === &#39;[object MutationObserverConstructor]&#39;
-  )) {
+  )) &#123;
     // use MutationObserver where native Promise is not available,
     // e.g. PhantomJS IE11, iOS7, Android 4.4
     /*新建一个textNode的DOM对象，用MutationObserver绑定该DOM并指定回调函数，在DOM变化的时候则会触发回调,该回调会进入主线程（比任务队列优先执行），即textNode.data = String(counter)时便会触发回调*/
     var counter = 1
     var observer = new MutationObserver(nextTickHandler)
     var textNode = document.createTextNode(String(counter))
-    observer.observe(textNode, {
+    observer.observe(textNode, &#123;
       characterData: true
-    })
-    timerFunc = () =&gt; {
+    &#125;)
+    timerFunc = () =&gt; &#123;
       counter = (counter + 1) % 2
       textNode.data = String(counter)
-    }
-  } else {
+    &#125;
+  &#125; else &#123;
     // fallback to setTimeout
     /* istanbul ignore next */
     /*使用setTimeout将回调推入任务队列尾部*/
-    timerFunc = () =&gt; {
+    timerFunc = () =&gt; &#123;
       setTimeout(nextTickHandler, 0)
-    }
-  }
+    &#125;
+  &#125;
 
   /*
     推送到队列中下一个tick时执行
     cb 回调函数
     ctx 上下文
   */
-  return function queueNextTick (cb?: Function, ctx?: Object) {
+  return function queueNextTick (cb?: Function, ctx?: Object) &#123;
     let _resolve
     /*cb存到callbacks中*/
-    callbacks.push(() =&gt; {
-      if (cb) {
-        try {
+    callbacks.push(() =&gt; &#123;
+      if (cb) &#123;
+        try &#123;
           cb.call(ctx)
-        } catch (e) {
+        &#125; catch (e) &#123;
           handleError(e, ctx, &#39;nextTick&#39;)
-        }
-      } else if (_resolve) {
+        &#125;
+      &#125; else if (_resolve) &#123;
         _resolve(ctx)
-      }
-    })
-    if (!pending) {
+      &#125;
+    &#125;)
+    if (!pending) &#123;
       pending = true
       timerFunc()
-    }
-    if (!cb &amp;&amp; typeof Promise !== &#39;undefined&#39;) {
-      return new Promise((resolve, reject) =&gt; {
+    &#125;
+    if (!cb &amp;&amp; typeof Promise !== &#39;undefined&#39;) &#123;
+      return new Promise((resolve, reject) =&gt; &#123;
         _resolve = resolve
-      })
-    }
-  }
-})()
-</code></pre>
+      &#125;)
+    &#125;
+  &#125;
+&#125;)()</code></pre>
 <p>它是一个立即执行函数,返回一个queueNextTick接口。</p>
 <p>传入的cb会被push进callbacks中存放起来，然后执行timerFunc（pending是一个状态标记，保证timerFunc在下一个tick之前只执行一次）。</p>
 <p>timerFunc是什么？</p>
@@ -333,7 +329,7 @@ export const nextTick = (function () {
 <p>这里解释一下，一共有Promise、MutationObserver以及setTimeout三种尝试得到timerFunc的方法。 优先使用Promise，在Promise不存在的情况下使用MutationObserver，这两个方法的回调函数都会在microtask中执行，它们会比setTimeout更早执行，所以优先使用。 如果上述两种方法都不支持的环境则会使用setTimeout，在task尾部推入这个函数，等待调用执行。</p>
 <p>为什么要优先使用microtask？我在顾轶灵在知乎的回答中学习到：</p>
 <ul>
-<li>JS 的 event loop 执行时会区分 task 和 microtask，引擎在每个 task 执行完毕，从队列中取下一个 task 来执行之前，会先执行完所有 microtask 队列中的 microtask。<br>setTimeout 回调会被分配到一个新的 task 中执行，而 Promise 的 resolver、MutationObserver 的回调都会被安排到一个新的 microtask 中执行，会比 setTimeout 产生的 task 先执行。<br>要创建一个新的 microtask，优先使用 Promise，如果浏览器不支持，再尝试 MutationObserver。<br>实在不行，只能用 setTimeout 创建 task 了。<br>为啥要用 microtask？<br>根据 HTML Standard，在每个 task 运行完以后，UI 都会重渲染，那么在 microtask 中就完成数据更新，当前 task 结束就可以得到最新的 UI 了。<br>反之如果新建一个 task 来做数据更新，那么渲染就会进行两次。<br>参考顾轶灵知乎的回答：[<a href="https://www.zhihu.com/question/55364497/answer/144215284]" target="_blank" rel="noopener">https://www.zhihu.com/question/55364497/answer/144215284]</a></li>
+<li>JS 的 event loop 执行时会区分 task 和 microtask，引擎在每个 task 执行完毕，从队列中取下一个 task 来执行之前，会先执行完所有 microtask 队列中的 microtask。<br>setTimeout 回调会被分配到一个新的 task 中执行，而 Promise 的 resolver、MutationObserver 的回调都会被安排到一个新的 microtask 中执行，会比 setTimeout 产生的 task 先执行。<br>要创建一个新的 microtask，优先使用 Promise，如果浏览器不支持，再尝试 MutationObserver。<br>实在不行，只能用 setTimeout 创建 task 了。<br>为啥要用 microtask？<br>根据 HTML Standard，在每个 task 运行完以后，UI 都会重渲染，那么在 microtask 中就完成数据更新，当前 task 结束就可以得到最新的 UI 了。<br>反之如果新建一个 task 来做数据更新，那么渲染就会进行两次。<br>参考顾轶灵知乎的回答：[<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/55364497/answer/144215284]">https://www.zhihu.com/question/55364497/answer/144215284]</a></li>
 </ul>
 <p>首先是Promise，(Promise.resolve()).then()可以在microtask中加入它的回调，</p>
 <p>MutationObserver新建一个textNode的DOM对象，用MutationObserver绑定该DOM并指定回调函数，在DOM变化的时候则会触发回调,该回调会进入microtask，即textNode.data = String(counter)时便会加入该回调。</p>
@@ -344,7 +340,7 @@ export const nextTick = (function () {
  * Flush both queues and run the watchers.
  */
  /*nextTick的回调函数，在下一个tick时flush掉两个队列同时运行watchers*/
-function flushSchedulerQueue () {
+function flushSchedulerQueue () &#123;
   flushing = true
   let watcher, id
 
@@ -367,7 +363,7 @@ function flushSchedulerQueue () {
   // do not cache length because more watchers might be pushed
   // as we run existing watchers
   /*这里不用index = queue.length;index &gt; 0; index--的方式写是因为不要将length进行缓存，因为在执行处理现有watcher对象期间，更多的watcher对象可能会被push进queue*/
-  for (index = 0; index &lt; queue.length; index++) {
+  for (index = 0; index &lt; queue.length; index++) &#123;
     watcher = queue[index]
     id = watcher.id
     /*将has的标记删除*/
@@ -378,28 +374,28 @@ function flushSchedulerQueue () {
     /*
       在测试环境中，检测watch是否在死循环中
       比如这样一种情况
-      watch: {
-        test () {
+      watch: &#123;
+        test () &#123;
           this.test++;
-        }
-      }
+        &#125;
+      &#125;
       持续执行了一百次watch代表可能存在死循环
     */
-    if (process.env.NODE_ENV !== &#39;production&#39; &amp;&amp; has[id] != null) {
+    if (process.env.NODE_ENV !== &#39;production&#39; &amp;&amp; has[id] != null) &#123;
       circular[id] = (circular[id] || 0) + 1
-      if (circular[id] &gt; MAX_UPDATE_COUNT) {
+      if (circular[id] &gt; MAX_UPDATE_COUNT) &#123;
         warn(
           &#39;You may have an infinite update loop &#39; + (
             watcher.user
-              ? `in watcher with expression &quot;${watcher.expression}&quot;`
+              ? `in watcher with expression &quot;$&#123;watcher.expression&#125;&quot;`
               : `in a component render function.`
           ),
           watcher.vm
         )
         break
-      }
-    }
-  }
+      &#125;
+    &#125;
+  &#125;
 
   // keep copies of post queues before resetting state
   /**/
@@ -418,60 +414,55 @@ function flushSchedulerQueue () {
 
   // devtool hook
   /* istanbul ignore if */
-  if (devtools &amp;&amp; config.devtools) {
+  if (devtools &amp;&amp; config.devtools) &#123;
     devtools.emit(&#39;flush&#39;)
-  }
-}
-</code></pre>
+  &#125;
+&#125;</code></pre>
 <p>flushSchedulerQueue是下一个tick时的回调函数，主要目的是执行Watcher的run函数，用来更新视图</p>
 <h2 id="为什么要异步更新视图"><a href="#为什么要异步更新视图" class="headerlink" title="为什么要异步更新视图"></a>为什么要异步更新视图</h2><p>来看一下下面这一段代码</p>
 <pre><code class="html">&lt;template&gt;
   &lt;div&gt;
-    &lt;div&gt;{{test}}&lt;/div&gt;
+    &lt;div&gt;&#123;&#123;test&#125;&#125;&lt;/div&gt;
   &lt;/div&gt;
-&lt;/template&gt;
-</code></pre>
-<pre><code class="js">export default {
-    data () {
-        return {
+&lt;/template&gt;</code></pre>
+<pre><code class="js">export default &#123;
+    data () &#123;
+        return &#123;
             test: 0
-        };
-    },
-    mounted () {
-      for(let i = 0; i &lt; 1000; i++) {
+        &#125;;
+    &#125;,
+    mounted () &#123;
+      for(let i = 0; i &lt; 1000; i++) &#123;
         this.test++;
-      }
-    }
-}
-</code></pre>
+      &#125;
+    &#125;
+&#125;</code></pre>
 <p>现在有这样的一种情况，mounted的时候test的值会被++循环执行1000次。 每次++时，都会根据响应式触发setter-&gt;Dep-&gt;Watcher-&gt;update-&gt;patch。 如果这时候没有异步更新视图，那么每次++都会直接操作DOM更新视图，这是非常消耗性能的。 所以Vue.js实现了一个queue队列，在下一个tick的时候会统一执行queue中Watcher的run。同时，拥有相同id的Watcher不会被重复加入到该queue中去，所以不会执行1000次Watcher的run。最终更新视图只会直接将test对应的DOM的0变成1000。 保证更新视图操作DOM的动作是在当前栈执行完以后下一个tick的时候调用，大大优化了性能。</p>
 <h2 id="访问真实DOM节点更新后的数据"><a href="#访问真实DOM节点更新后的数据" class="headerlink" title="访问真实DOM节点更新后的数据"></a>访问真实DOM节点更新后的数据</h2><p>所以我们需要在修改data中的数据后访问真实的DOM节点更新后的数据，只需要这样，我们把文章第一个例子进行修改。</p>
 <pre><code class="html">&lt;template&gt;
   &lt;div&gt;
-    &lt;div ref=&quot;test&quot;&gt;{{test}}&lt;/div&gt;
+    &lt;div ref=&quot;test&quot;&gt;&#123;&#123;test&#125;&#125;&lt;/div&gt;
     &lt;button @click=&quot;handleClick&quot;&gt;tet&lt;/button&gt;
   &lt;/div&gt;
-&lt;/template&gt;
-</code></pre>
-<pre><code class="js">export default {
-    data () {
-        return {
+&lt;/template&gt;</code></pre>
+<pre><code class="js">export default &#123;
+    data () &#123;
+        return &#123;
             test: &#39;begin&#39;
-        };
-    },
-    methods () {
-        handleClick () {
+        &#125;;
+    &#125;,
+    methods () &#123;
+        handleClick () &#123;
             this.test = &#39;end&#39;;
-            this.$nextTick(() =&gt; {
+            this.$nextTick(() =&gt; &#123;
                 console.log(this.$refs.test.innerText);//打印&quot;end&quot;
-            });
+            &#125;);
             console.log(this.$refs.test.innerText);//打印“begin”
-        }
-    }
-}
-</code></pre>
+        &#125;
+    &#125;
+&#125;</code></pre>
 <p>使用Vue.js的global API的$nextTick方法，即可在回调中获取已经更新好的DOM实例了。</p>
-<p><a href="https://github.com/answershuto/learnVue/blob/master/docs/Vue.js%E5%BC%82%E6%AD%A5%E6%9B%B4%E6%96%B0DOM%E7%AD%96%E7%95%A5%E5%8F%8AnextTick.MarkDown" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/answershuto/learnVue/blob/master/docs/Vue.js%E5%BC%82%E6%AD%A5%E6%9B%B4%E6%96%B0DOM%E7%AD%96%E7%95%A5%E5%8F%8AnextTick.MarkDown">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -496,7 +487,7 @@ function flushSchedulerQueue () {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -530,7 +521,7 @@ function flushSchedulerQueue () {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#操作DOM"><span class="toc-number">1.</span> <span class="toc-text">操作DOM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Watcher队列"><span class="toc-number">2.</span> <span class="toc-text">Watcher队列</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nextTick"><span class="toc-number">3.</span> <span class="toc-text">nextTick</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#flushSchedulerQueue"><span class="toc-number">4.</span> <span class="toc-text">flushSchedulerQueue</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么要异步更新视图"><span class="toc-number">5.</span> <span class="toc-text">为什么要异步更新视图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#访问真实DOM节点更新后的数据"><span class="toc-number">6.</span> <span class="toc-text">访问真实DOM节点更新后的数据</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%93%8D%E4%BD%9CDOM"><span class="toc-number">1.</span> <span class="toc-text">操作DOM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Watcher%E9%98%9F%E5%88%97"><span class="toc-number">2.</span> <span class="toc-text">Watcher队列</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nextTick"><span class="toc-number">3.</span> <span class="toc-text">nextTick</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#flushSchedulerQueue"><span class="toc-number">4.</span> <span class="toc-text">flushSchedulerQueue</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%BC%82%E6%AD%A5%E6%9B%B4%E6%96%B0%E8%A7%86%E5%9B%BE"><span class="toc-number">5.</span> <span class="toc-text">为什么要异步更新视图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E7%9C%9F%E5%AE%9EDOM%E8%8A%82%E7%82%B9%E6%9B%B4%E6%96%B0%E5%90%8E%E7%9A%84%E6%95%B0%E6%8D%AE"><span class="toc-number">6.</span> <span class="toc-text">访问真实DOM节点更新后的数据</span></a></li></ol>
                 </div>
             </div>
             

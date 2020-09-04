@@ -37,7 +37,7 @@ ES6，正式名称是ECMAScript2015，但是ES6这个名称更加简洁。ES6已
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -100,7 +100,7 @@ ES6，正式名称是ECMAScript2015，但是ES6这个名称更加简洁。ES6已
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    6.8k
+                    7k
                 </span>
                 
                 
@@ -140,202 +140,179 @@ ES6，正式名称是ECMAScript2015，但是ES6这个名称更加简洁。ES6已
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <h1 id="10个最佳ES6特性"><a href="#10个最佳ES6特性" class="headerlink" title="10个最佳ES6特性"></a>10个最佳ES6特性</h1><p><a href="https://segmentfault.com/a/1190000010907053" target="_blank" rel="noopener">原文地址</a></p>
+            <h1 id="10个最佳ES6特性"><a href="#10个最佳ES6特性" class="headerlink" title="10个最佳ES6特性"></a>10个最佳ES6特性</h1><p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000010907053">原文地址</a></p>
 <p>ES6，正式名称是ECMAScript2015，但是ES6这个名称更加简洁。ES6已经不再是JavaScript最新的标准，但是它已经广泛用于编程实践中。如果你还没用过ES6，现在还不算太晚…</p>
 <h2 id="函数参数默认值"><a href="#函数参数默认值" class="headerlink" title="函数参数默认值"></a>函数参数默认值</h2><p><strong>不使用ES6</strong><br>为函数设置默认值</p>
 <pre><code class="javascript">function foo(height, color)
-{
+&#123;
     var height = height || 50;
     var color = color || &#39;red&#39;;
     //...
-}
-</code></pre>
+&#125;</code></pre>
 <p>这样写一般没问题，但是，当参数的布尔值为false时，是会出事情的！比如，我们这样调用foo函数：</p>
 <a id="more"></a>
-<pre><code class="javascript">foo(0, &quot;&quot;, &quot;&quot;)
-</code></pre>
+
+<pre><code class="javascript">foo(0, &quot;&quot;, &quot;&quot;)</code></pre>
 <p>因为0的布尔值为false，这样height的取值将是50。同理color的取值为’red’。<br><strong>使用ES6</strong></p>
 <pre><code class="javascript">function foo(height = 50, color = &#39;red&#39;)
-{
+&#123;
     // ...
-}
-</code></pre>
+&#125;</code></pre>
 <h2 id="模板字符串"><a href="#模板字符串" class="headerlink" title="模板字符串"></a>模板字符串</h2><p><strong>不使用ES6</strong><br>使用+号将变量拼接成字符串</p>
-<pre><code class="javascript">var name = &#39;Your name is &#39; + first + &#39; &#39; + last + &#39;.&#39;
-</code></pre>
-<p><strong>使用ES6</strong><br>将变量放到<strong><code></code></strong>括号中</p>
-<pre><code class="javascript">var name = `Your name is ${first} ${last}.`
-</code></pre>
+<pre><code class="javascript">var name = &#39;Your name is &#39; + first + &#39; &#39; + last + &#39;.&#39;</code></pre>
+<p><strong>使用ES6</strong><br>将变量放到**``**括号中</p>
+<pre><code class="javascript">var name = `Your name is $&#123;first&#125; $&#123;last&#125;.`</code></pre>
 <p>ES6的写法更加简洁、直观。</p>
 <h2 id="多行字符串"><a href="#多行字符串" class="headerlink" title="多行字符串"></a>多行字符串</h2><p><strong>不使用ES6</strong><br>使用”nt”将多行字符串拼接起来：</p>
 <pre><code class="javascript">var roadPoem = &#39;Then took the other, as just as fair,\n\t&#39;
     + &#39;And having perhaps the better claim\n\t&#39;
     + &#39;Because it was grassy and wanted wear,\n\t&#39;
     + &#39;Though as for that the passing there\n\t&#39;
-    + &#39;Had worn them really about the same,\n\t&#39;
-</code></pre>
-<p><strong>使用ES6</strong><br>将多行字符串放在反引号<code></code>之间就好了：</p>
+    + &#39;Had worn them really about the same,\n\t&#39;</code></pre>
+<p><strong>使用ES6</strong><br>将多行字符串放在反引号``之间就好了：</p>
 <pre><code class="javascript">var roadPoem = `Then took the other, as just as fair,
     And having perhaps the better claim
     Because it was grassy and wanted wear,
     Though as for that the passing there
-    Had worn them really about the same,`
-</code></pre>
+    Had worn them really about the same,`</code></pre>
 <h2 id="解构赋值"><a href="#解构赋值" class="headerlink" title="解构赋值"></a>解构赋值</h2><p><strong>不使用ES6</strong><br>当需要获取某个对象的属性值时，需要单独获取：</p>
 <pre><code class="javascript">var data = $(&#39;body&#39;).data(); // data有house和mouse属性
 var house = data.house;
-var mouse = data.mouse;
-</code></pre>
+var mouse = data.mouse;</code></pre>
 <p><strong>使用ES6</strong><br>一次性获取对象的子属性：</p>
-<pre><code class="javascript">var { house, mouse} = $(&#39;body&#39;).data()
-</code></pre>
+<pre><code class="javascript">var &#123; house, mouse&#125; = $(&#39;body&#39;).data()</code></pre>
 <p>对于数组也是一样的：</p>
-<pre><code class="javascript">var [col1, col2] = $(&#39;.column&#39;)；
-</code></pre>
+<pre><code class="javascript">var [col1, col2] = $(&#39;.column&#39;)；</code></pre>
 <h2 id="对象属性简写"><a href="#对象属性简写" class="headerlink" title="对象属性简写"></a>对象属性简写</h2><p><strong>不使用ES6</strong><br>对象中必须包含属性和值，显得非常多余：</p>
 <pre><code class="javascript">var bar = &#39;bar&#39;;
 var foo = function ()
-{
+&#123;
     // ...
-}
+&#125;
 
-var baz = {
+var baz = &#123;
   bar: bar,
   foo: foo
-};
-</code></pre>
+&#125;;</code></pre>
 <p><strong>使用ES6</strong><br>对象中直接写变量，非常简单：</p>
 <pre><code class="javascript">var bar = &#39;bar&#39;;
-var foo = function(){// ...}
-var baz = {bar,foo}
-</code></pre>
+var foo = function()&#123;// ...&#125;
+var baz = &#123;bar,foo&#125;</code></pre>
 <h2 id="箭头函数"><a href="#箭头函数" class="headerlink" title="箭头函数"></a>箭头函数</h2><p><strong>不使用ES6</strong><br>普通函数体内的this，指向调用时所在的对象。</p>
-<pre><code class="javascript">function foo(){
+<pre><code class="javascript">function foo()&#123;
     console.log(this.id);
-}
+&#125;
 
 var id = 1;
 
 foo(); // 输出1
 
-foo.call({ id: 2 }); // 输出2
-</code></pre>
+foo.call(&#123; id: 2 &#125;); // 输出2</code></pre>
 <p><strong>使用ES6</strong><br>箭头函数体内的this，就是定义时所在的对象，而不是调用时所在的对象。</p>
-<pre><code class="javascript">var foo = () =&gt; {
+<pre><code class="javascript">var foo = () =&gt; &#123;
   console.log(this.id);
-}
+&#125;
 
 var id = 1;
 
 foo(); // 输出1
 
-foo.call({ id: 2 }); // 输出1
-</code></pre>
+foo.call(&#123; id: 2 &#125;); // 输出1</code></pre>
 <h2 id="promise"><a href="#promise" class="headerlink" title="promise"></a>promise</h2><p><strong>不使用ES6</strong><br>嵌套两个setTimeout回调函数：</p>
 <pre><code class="javascript">setTimeout(function()
-{
+&#123;
     console.log(&#39;Hello&#39;); // 1秒后输出&quot;Hello&quot;
     setTimeout(function()
-    {
+    &#123;
         console.log(&#39;Fundebug&#39;); // 2秒后输出&quot;Fundebug&quot;
-    }, 1000);
-}, 1000);
-</code></pre>
+    &#125;, 1000);
+&#125;, 1000);</code></pre>
 <p><strong>使用ES6</strong><br>使用两个then是异步编程串行化，避免了回调地狱：</p>
 <pre><code class="javascript">var wait1000 = new Promise(function(resolve, reject)
-{
+&#123;
     setTimeout(resolve, 1000);
-});
+&#125;);
 
 wait1000
     .then(function()
-    {
+    &#123;
         console.log(&quot;Hello&quot;); // 1秒后输出&quot;Hello&quot;
         return wait1000;
-    })
+    &#125;)
     .then(function()
-    {
+    &#123;
         console.log(&quot;Fundebug&quot;); // 2秒后输出&quot;Fundebug&quot;
-    });
-</code></pre>
+    &#125;);</code></pre>
 <h2 id="let与const"><a href="#let与const" class="headerlink" title="let与const"></a>let与const</h2><p><strong>使用Var</strong><br><strong>var</strong>定义的变量未函数级作用域：</p>
-<pre><code class="javascript">{
+<pre><code class="javascript">&#123;
   var a = 10;
-}
+&#125;
 
-console.log(a); // 输出10
-</code></pre>
+console.log(a); // 输出10</code></pre>
 <p><strong>使用let与const</strong><br>let定义的变量为块级作用域，因此会报错：(如果你希望实时监控JavaScript应用的错误，欢迎免费使用Fundebug)</p>
-<pre><code class="javascript">{
+<pre><code class="javascript">&#123;
   let a = 10;
-}
+&#125;
 
-console.log(a); // 报错“ReferenceError: a is not defined”
-</code></pre>
+console.log(a); // 报错“ReferenceError: a is not defined”</code></pre>
 <p>const与let一样，也是块级作用域。const是用来定义常量</p>
 <h2 id="类"><a href="#类" class="headerlink" title="类"></a>类</h2><p><strong>不使用ES6</strong><br>使用构造函数创建对象：</p>
 <pre><code class="javascript">function Point(x, y)
-{
+&#123;
     this.x = x;
     this.y = y;
     this.add = function()
-    {
+    &#123;
         return this.x + this.y;
-    };
-}
+    &#125;;
+&#125;
 
 var p = new Point(1, 2);
 
-console.log(p.add()); // 输出3
-</code></pre>
+console.log(p.add()); // 输出3</code></pre>
 <p><strong>使用ES6</strong><br>使用<strong>Class</strong>定义类，更加规范，且你能够继承：</p>
 <pre><code class="javascript">class Point
-{
+&#123;
     constructor(x, y)
-    {
+    &#123;
         this.x = x;
         this.y = y;
-    }
+    &#125;
 
     add()
-    {
+    &#123;
         return this.x + this.y;
-    }
-}
+    &#125;
+&#125;
 
 var p = new Point(1, 2);
 
-console.log(p.add()); // 输出3
-</code></pre>
+console.log(p.add()); // 输出3</code></pre>
 <h2 id="模块化"><a href="#模块化" class="headerlink" title="模块化"></a>模块化</h2><p>JavaScript一直没有官方的模块化解决方案，开发者在实践中主要采用CommonJS和AMD规范。而ES6制定了模块(Module)功能。</p>
 <p><strong>不使用ES6</strong><br>Node.js采用<strong>CommenJS</strong>规范实现了模块化，而前端也可以采用，只是在部署时需要使用<strong>Browserify</strong>等工具打包。这里不妨介绍一下<strong>CommenJS</strong>规范。</p>
 <p>module.js中使用module.exports导出port变量和getAccounts函数：</p>
-<pre><code class="javascript">module.exports = {
+<pre><code class="javascript">module.exports = &#123;
   port: 3000,
-  getAccounts: function() {
+  getAccounts: function() &#123;
     ...
-  }
-}
+  &#125;
+&#125;
 main.js中使用require导入module.js：
 
 var service = require(&#39;module.js&#39;)
-console.log(service.port) // 输出3000
-</code></pre>
+console.log(service.port) // 输出3000</code></pre>
 <p><strong>使用ES6</strong><br>ES6中使用export与import关键词实现模块化。</p>
 <p>module.js中使用export导出port变量和getAccounts函数：</p>
 <pre><code class="javascript">export var port = 3000
-export function getAccounts(url) {
+export function getAccounts(url) &#123;
   ...
-}
-</code></pre>
+&#125;</code></pre>
 <p>main.js中使用import导入module.js，可以指定需要导入的变量：</p>
-<pre><code class="javascript">import {port, getAccounts} from &#39;module&#39;
-console.log(port) // 输出3000
-</code></pre>
+<pre><code class="javascript">import &#123;port, getAccounts&#125; from &#39;module&#39;
+console.log(port) // 输出3000</code></pre>
 <p>也可以将全部变量导入：</p>
 <pre><code class="javascript">import * as service from &#39;module&#39;
-console.log(service.port) // 3000
-</code></pre>
+console.log(service.port) // 3000</code></pre>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -360,7 +337,7 @@ console.log(service.port) // 3000
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -394,7 +371,7 @@ console.log(service.port) // 3000
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#10个最佳ES6特性"><span class="toc-number">1.</span> <span class="toc-text">10个最佳ES6特性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#函数参数默认值"><span class="toc-number">1.1.</span> <span class="toc-text">函数参数默认值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模板字符串"><span class="toc-number">1.2.</span> <span class="toc-text">模板字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多行字符串"><span class="toc-number">1.3.</span> <span class="toc-text">多行字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解构赋值"><span class="toc-number">1.4.</span> <span class="toc-text">解构赋值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对象属性简写"><span class="toc-number">1.5.</span> <span class="toc-text">对象属性简写</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#箭头函数"><span class="toc-number">1.6.</span> <span class="toc-text">箭头函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#promise"><span class="toc-number">1.7.</span> <span class="toc-text">promise</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#let与const"><span class="toc-number">1.8.</span> <span class="toc-text">let与const</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类"><span class="toc-number">1.9.</span> <span class="toc-text">类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模块化"><span class="toc-number">1.10.</span> <span class="toc-text">模块化</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#10%E4%B8%AA%E6%9C%80%E4%BD%B3ES6%E7%89%B9%E6%80%A7"><span class="toc-number">1.</span> <span class="toc-text">10个最佳ES6特性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E9%BB%98%E8%AE%A4%E5%80%BC"><span class="toc-number">1.1.</span> <span class="toc-text">函数参数默认值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">1.2.</span> <span class="toc-text">模板字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E8%A1%8C%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">1.3.</span> <span class="toc-text">多行字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC"><span class="toc-number">1.4.</span> <span class="toc-text">解构赋值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E5%B1%9E%E6%80%A7%E7%AE%80%E5%86%99"><span class="toc-number">1.5.</span> <span class="toc-text">对象属性简写</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0"><span class="toc-number">1.6.</span> <span class="toc-text">箭头函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#promise"><span class="toc-number">1.7.</span> <span class="toc-text">promise</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#let%E4%B8%8Econst"><span class="toc-number">1.8.</span> <span class="toc-text">let与const</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB"><span class="toc-number">1.9.</span> <span class="toc-text">类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%9D%97%E5%8C%96"><span class="toc-number">1.10.</span> <span class="toc-text">模块化</span></a></li></ol></li></ol>
                 </div>
             </div>
             

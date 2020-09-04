@@ -36,7 +36,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -105,7 +105,7 @@
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    16 mins.
+                    17 mins.
                 </span>
                 
                 
@@ -146,7 +146,7 @@
 <p>每次创建React实例对象时，它都会被调用。</p>
 <h2 id="mountComponent"><a href="#mountComponent" class="headerlink" title="mountComponent"></a>mountComponent</h2><p>componentWillMount，render，componentDidMount都是在mountComponent中被调用.它是在渲染新的ReactComponent中被调用的。输入ReactComponent，返回组件对应的HTML。把这个HTML插入到DOM中，就可以生成组件对应的DOM对象了。所以mountComponent尤其关键。</p>
 <p>和Java中的多态一样，不同的React组件的mountComponent实现都有所区别。下面我们来重点分析React自定义组件类，也就是ReactCompositeComponent的mountComponent。</p>
-<pre><code class="javascript"> mountComponent: function (transaction, nativeParent, nativeContainerInfo, context) {
+<pre><code class="javascript"> mountComponent: function (transaction, nativeParent, nativeContainerInfo, context) &#123;
     this._context = context;
     this._mountOrder = nextMountID++;
     this._nativeParent = nativeParent;
@@ -164,11 +164,11 @@
 
     // inst或者inst.render为空对应的是stateless组件，也就是无状态组件
     // 无状态组件没有实例对象，它本质上只是一个返回JSX的函数而已。是一种轻量级的React组件
-    if (!shouldConstruct(Component) &amp;&amp; (inst == null || inst.render == null)) {
+    if (!shouldConstruct(Component) &amp;&amp; (inst == null || inst.render == null)) &#123;
       renderedElement = inst;
       warnIfInvalidElement(Component, renderedElement);
       inst = new StatelessComponent(Component);
-    }
+    &#125;
 
     // 设置变量
     inst.props = publicProps;
@@ -182,71 +182,69 @@
 
     // 初始化state，队列等
     var initialState = inst.state;
-    if (initialState === undefined) {
+    if (initialState === undefined) &#123;
       inst.state = initialState = null;
-    }
+    &#125;
     this._pendingStateQueue = null;
     this._pendingReplaceState = false;
     this._pendingForceUpdate = false;
 
     var markup;
-    if (inst.unstable_handleError) {
+    if (inst.unstable_handleError) &#123;
       // 挂载时出错，进行一些错误处理，然后performInitialMount，初始化挂载
       markup = this.performInitialMountWithErrorHandling(renderedElement, nativeParent, nativeContainerInfo, transaction, context);
-    } else {
+    &#125; else &#123;
       // 初始化挂载
       markup = this.performInitialMount(renderedElement, nativeParent, nativeContainerInfo, transaction, context);
-    }
+    &#125;
 
-    if (inst.componentDidMount) {
+    if (inst.componentDidMount) &#123;
       // 调用componentDidMount，以事务的形式
       transaction.getReactMountReady().enqueue(inst.componentDidMount, inst);
-    }
+    &#125;
 
     return markup;
-  },
-</code></pre>
+  &#125;,</code></pre>
 <a id="more"></a>
 <p>mountComponent先做实例对象的props,state等初始化，然后调用performInitialMount初始化挂载，完成后调用componentDidMount。这个调用链还是很清晰的。下面我们重点来分析performInitialMountWithErrorHandling和performInitialMount</p>
-<pre><code class="javascript"> performInitialMountWithErrorHandling: function (renderedElement, nativeParent, nativeContainerInfo, transaction, context) {
+<pre><code class="javascript"> performInitialMountWithErrorHandling: function (renderedElement, nativeParent, nativeContainerInfo, transaction, context) &#123;
     var markup;
     var checkpoint = transaction.checkpoint();
-    try {
+    try &#123;
       // 放到try-catch中，如果没有出错则调用performInitialMount初始化挂载。可见这里没有什么特别的操作，也就是做一些错误处理而已
       markup = this.performInitialMount(renderedElement, nativeParent, nativeContainerInfo, transaction, context);
-    } catch (e) {
+    &#125; catch (e) &#123;
       // handleError，卸载组件，然后重新performInitialMount初始化挂载
       transaction.rollback(checkpoint);
       this._instance.unstable_handleError(e);
-      if (this._pendingStateQueue) {
+      if (this._pendingStateQueue) &#123;
         this._instance.state = this._processPendingState(this._instance.props, this._instance.context);
-      }
+      &#125;
       checkpoint = transaction.checkpoint();
 
       this._renderedComponent.unmountComponent(true);
       transaction.rollback(checkpoint);
 
       markup = this.performInitialMount(renderedElement, nativeParent, nativeContainerInfo, transaction, context);
-    }
+    &#125;
     return markup;
-  },
-</code></pre>
+  &#125;,</code></pre>
 <p>可见performInitialMountWithErrorHandling只是多了一层错误处理而已，关键还是在performInitialMount中。</p>
-<pre><code class="javascript">performInitialMount: function (renderedElement, nativeParent, nativeContainerInfo, transaction, context) {
+<pre><code class="javascript">performInitialMount: function (renderedElement, nativeParent, nativeContainerInfo, transaction, context) &#123;
     var inst = this._instance;
-    if (inst.componentWillMount) {
+    if (inst.componentWillMount) &#123;
       // render前调用componentWillMount
       inst.componentWillMount();
       // 将state提前合并，故在componentWillMount中调用setState不会触发重新render，而是做一次state合并。这样做的目的是减少不必要的重新渲染
-      if (this._pendingStateQueue) {
+      if (this._pendingStateQueue) &#123;
         inst.state = this._processPendingState(inst.props, inst.context);
-      }
-    }
+      &#125;
+    &#125;
 
     // 如果不是stateless，即无状态组件，则调用render，返回ReactElement
-    if (renderedElement === undefined) {
+    if (renderedElement === undefined) &#123;
       renderedElement = this._renderValidatedComponent();
-    }
+    &#125;
 
     // 得到组件类型，如空组件ReactNodeTypes.EMPTY，自定义React组件ReactNodeTypes.COMPOSITE，DOM原生组件ReactNodeTypes.NATIVE
     this._renderedNodeType = ReactNodeTypes.getType(renderedElement);
@@ -258,56 +256,54 @@
     var markup = ReactReconciler.mountComponent(this._renderedComponent, transaction, nativeParent, nativeContainerInfo, this._processChildContext(context));
 
     return markup;
-  },
-</code></pre>
+  &#125;,</code></pre>
 <p>performInitialMount中先调用componentWillMount()，再将setState()产生的state改变进行state合并，然后调用_renderValidatedComponent()返回ReactElement，它会调用render()方法。然后由ReactElement创建ReactComponent。最后进行递归渲染。下面来看renderValidatedComponent()</p>
-<pre><code class="javascript">  _renderValidatedComponent: function () {
+<pre><code class="javascript">  _renderValidatedComponent: function () &#123;
     var renderedComponent;
     ReactCurrentOwner.current = this;
-    try {
+    try &#123;
       renderedComponent = this._renderValidatedComponentWithoutOwnerOrContext();
-    } finally {
+    &#125; finally &#123;
       ReactCurrentOwner.current = null;
-    }
+    &#125;
     !(
     return renderedComponent;
-  },
+  &#125;,
 
-  _renderValidatedComponentWithoutOwnerOrContext: function () {
+  _renderValidatedComponentWithoutOwnerOrContext: function () &#123;
     var inst = this._instance;
     // 调用render方法，得到ReactElement。JSX经过babel转译后其实就是createElement()方法。这一点在前面也讲解过
     var renderedComponent = inst.render();
     return renderedComponent;
-  },
-</code></pre>
+  &#125;,</code></pre>
 <h1 id="存在期生命周期"><a href="#存在期生命周期" class="headerlink" title="存在期生命周期"></a>存在期生命周期</h1><p>组件实例对象已经生成时，我们可以通过setState()来更新组件。setState机制后面会有单独文章分析，现在只用知道它会调用updateComponent()来完成更新即可。下面来分析updateComponent</p>
 <pre><code class="javascript">updateComponent: function(transaction, prevParentElement, nextParentElement, prevUnmaskedContext, nextUnmaskedContext
-  ) {
+  ) &#123;
     var inst = this._instance;
     var willReceive = false;
     var nextContext;
     var nextProps;
 
     // context对象如果有改动,则检查propTypes等,这在开发阶段可以报错提醒
-    if (this._context === nextUnmaskedContext) {
+    if (this._context === nextUnmaskedContext) &#123;
       nextContext = inst.context;
-    } else {
+    &#125; else &#123;
       nextContext = this._processContext(nextUnmaskedContext);
       willReceive = true;
-    }
+    &#125;
 
     // 如果父元素类型相同,则跳过propTypes类型检查
-    if (prevParentElement === nextParentElement) {
+    if (prevParentElement === nextParentElement) &#123;
       nextProps = nextParentElement.props;
-    } else {
+    &#125; else &#123;
       nextProps = this._processProps(nextParentElement.props);
       willReceive = true;
-    }
+    &#125;
 
     // 调用componentWillReceiveProps,如果通过setState进入的updateComponent，则没有这一步
-    if (willReceive &amp;&amp; inst.componentWillReceiveProps) {
+    if (willReceive &amp;&amp; inst.componentWillReceiveProps) &#123;
       inst.componentWillReceiveProps(nextProps, nextContext);
-    }
+    &#125;
 
     // 提前合并state,componentWillReceiveProps中调用setState不会重新渲染,在此处做合并即可,因为后面也是要调用render的
     // 这样可以避免没必要的渲染
@@ -316,13 +312,13 @@
     // 调用shouldComponentUpdate给shouldUpdate赋值
     // 如果通过forceUpdate进入的updateComponent，即_pendingForceUpdate不为空，则不用判断shouldComponentUpdate.
     var shouldUpdate = true;
-    if (!this._pendingForceUpdate &amp;&amp; inst.shouldComponentUpdate) {
+    if (!this._pendingForceUpdate &amp;&amp; inst.shouldComponentUpdate) &#123;
       shouldUpdate = inst.shouldComponentUpdate(nextProps, nextState, nextContext);
-    }
+    &#125;
 
     // 如果shouldUpdate为true,则会执行渲染,否则不会
     this._updateBatchNumber = null;
-    if (shouldUpdate) {
+    if (shouldUpdate) &#123;
       this._pendingForceUpdate = false;
       // 执行更新渲染,后面详细分析
       this._performComponentUpdate(
@@ -333,20 +329,19 @@
         transaction,
         nextUnmaskedContext
       );
-    } else {
+    &#125; else &#123;
       // shouldUpdate为false,则不会更新渲染
       this._currentElement = nextParentElement;
       this._context = nextUnmaskedContext;
       inst.props = nextProps;
       inst.state = nextState;
       inst.context = nextContext;
-    }
-},
-</code></pre>
+    &#125;
+&#125;,</code></pre>
 <p>updateComponent中，先调用componentWillReceiveProps，然后合并setState导致的state变化。然后调用shouldComponentUpdate判断是否需要更新渲染。如果需要，则调用_performComponentUpdate执行渲染更新，下面接着分析performComponentUpdate。</p>
 <pre><code class="javascript">_performComponentUpdate: function(nextElement,nextProps,nextState,nextContext,transaction,
                                      unmaskedContext
-  ) {
+  ) &#123;
     var inst = this._instance;
 
     // 判断是否已经update了
@@ -354,16 +349,16 @@
     var prevProps;
     var prevState;
     var prevContext;
-    if (hasComponentDidUpdate) {
+    if (hasComponentDidUpdate) &#123;
       prevProps = inst.props;
       prevState = inst.state;
       prevContext = inst.context;
-    }
+    &#125;
 
     // render前调用componentWillUpdate
-    if (inst.componentWillUpdate) {
+    if (inst.componentWillUpdate) &#123;
       inst.componentWillUpdate(nextProps, nextState, nextContext);
-    }
+    &#125;
 
     // state props等属性设置到内部变量inst上
     this._currentElement = nextElement;
@@ -376,16 +371,15 @@
     this._updateRenderedComponent(transaction, unmaskedContext);
 
     // render后调用componentDidUpdate
-    if (hasComponentDidUpdate) {
+    if (hasComponentDidUpdate) &#123;
       transaction.getReactMountReady().enqueue(
         inst.componentDidUpdate.bind(inst, prevProps, prevState, prevContext),
         inst
       );
-    }
-},
-</code></pre>
+    &#125;
+&#125;,</code></pre>
 <p>_performComponentUpdate会调用componentWillUpdate，然后在调用updateRenderedComponent进行更新渲染，最后调用componentDidUpdate。下面来看看updateRenderedComponent中怎么调用render方法的。</p>
-<pre><code class="javascript">_updateRenderedComponent: function(transaction, context) {
+<pre><code class="javascript">_updateRenderedComponent: function(transaction, context) &#123;
     var prevComponentInstance = this._renderedComponent;
     var prevRenderedElement = prevComponentInstance._currentElement;
 
@@ -393,10 +387,10 @@
     var nextRenderedElement = this._renderValidatedComponent();
 
     // 判断是否做DOM diff。React为了简化递归diff,认为组件层级不变,且type和key不变(key用于listView等组件,很多时候我们没有设置type)才update,否则先unmount再重新mount
-    if (shouldUpdateReactComponent(prevRenderedElement, nextRenderedElement)) {
+    if (shouldUpdateReactComponent(prevRenderedElement, nextRenderedElement)) &#123;
       // 递归updateComponent,更新子组件的Virtual DOM
       ReactReconciler.receiveComponent(prevComponentInstance, nextRenderedElement, transaction, this._processChildContext(context));
-    } else {
+    &#125; else &#123;
       var oldNativeNode = ReactReconciler.getNativeNode(prevComponentInstance);
 
       // 不做DOM diff,则先卸载掉,然后再加载。也就是先unMountComponent,再mountComponent
@@ -412,81 +406,79 @@
 
       // 将HTML插入DOM中
       this._replaceNodeWithMarkup(oldNativeNode, nextMarkup, prevComponentInstance);
-    }
-},
+    &#125;
+&#125;,
 
-_renderValidatedComponent: function() {
+_renderValidatedComponent: function() &#123;
     var renderedComponent;
     ReactCurrentOwner.current = this;
-    try {
+    try &#123;
       renderedComponent =
         this._renderValidatedComponentWithoutOwnerOrContext();
-    } finally {
+    &#125; finally &#123;
       ReactCurrentOwner.current = null;
-    }
+    &#125;
 
     return renderedComponent;
-},
+&#125;,
 
-_renderValidatedComponentWithoutOwnerOrContext: function() {
+_renderValidatedComponentWithoutOwnerOrContext: function() &#123;
     var inst = this._instance;
     // 看到render方法了把，应该放心了把~
     var renderedComponent = inst.render();
 
     return renderedComponent;
-},
-
+&#125;,
 </code></pre>
 <p>和mountComponent中一样，updateComponent也是用递归的方式将各子组件进行update的。这里要特别注意的是DOM diff。DOM diff是React中渲染加速的关键所在，它会帮我们算出virtual DOM中真正变化的部分，并对这部分进行原生DOM操作。为了避免循环递归对比节点的低效率，React中做了假设，即只对层级不变，type不变，key不变的组件进行Virtual DOM更新。这其中的关键是shouldUpdateReactComponent，下面分析</p>
-<pre><code class="javascript">function shouldUpdateReactComponent(prevElement, nextElement) {
+<pre><code class="javascript">function shouldUpdateReactComponent(prevElement, nextElement) &#123;
   var prevEmpty = prevElement === null || prevElement === false;
   var nextEmpty = nextElement === null || nextElement === false;
-  if (prevEmpty || nextEmpty) {
+  if (prevEmpty || nextEmpty) &#123;
     return prevEmpty === nextEmpty;
-  }
+  &#125;
 
   var prevType = typeof prevElement;
   var nextType = typeof nextElement;
   // React DOM diff算法
   // 如果前后两次为数字或者字符,则认为只需要update(处理文本元素)
   // 如果前后两次为DOM元素或React元素,则必须在同一层级内,且type和key不变(key用于listView等组件,很多时候我们没有设置type)才update,否则先unmount再重新mount
-  if (prevType === &#39;string&#39; || prevType === &#39;number&#39;) {
+  if (prevType === &#39;string&#39; || prevType === &#39;number&#39;) &#123;
     return (nextType === &#39;string&#39; || nextType === &#39;number&#39;);
-  } else {
+  &#125; else &#123;
     return (
       nextType === &#39;object&#39; &amp;&amp;
       prevElement.type === nextElement.type &amp;&amp;
       prevElement.key === nextElement.key
     );
-  }
-}
-</code></pre>
+  &#125;
+&#125;</code></pre>
 <h1 id="销毁"><a href="#销毁" class="headerlink" title="销毁"></a>销毁</h1><p>前面提到过，更新组件时，如果不满足DOM diff条件，会先unmountComponent, 然后再mountComponent，下面我们来分析下unmountComponent时都发生了什么事。和mountComponent的多态一样，不同type的ReactComponent也会有不同的unmountComponent行为。我们来分析下React自定义组件，也就是ReactCompositeComponent中的unmountComponent。</p>
-<pre><code class="javascript"> unmountComponent: function(safely) {
-    if (!this._renderedComponent) {
+<pre><code class="javascript"> unmountComponent: function(safely) &#123;
+    if (!this._renderedComponent) &#123;
       return;
-    }
+    &#125;
     var inst = this._instance;
 
     // 调用componentWillUnmount
-    if (inst.componentWillUnmount &amp;&amp; !inst._calledComponentWillUnmount) {
+    if (inst.componentWillUnmount &amp;&amp; !inst._calledComponentWillUnmount) &#123;
       inst._calledComponentWillUnmount = true;
       // 安全模式下，将componentWillUnmount包在try-catch中。否则直接componentWillUnmount
-      if (safely) {
+      if (safely) &#123;
         var name = this.getName() + &#39;.componentWillUnmount()&#39;;
         ReactErrorUtils.invokeGuardedCallback(name, inst.componentWillUnmount.bind(inst));
-      } else {
+      &#125; else &#123;
         inst.componentWillUnmount();
-      }
-    }
+      &#125;
+    &#125;
 
     // 递归调用unMountComponent来销毁子组件
-    if (this._renderedComponent) {
+    if (this._renderedComponent) &#123;
       ReactReconciler.unmountComponent(this._renderedComponent, safely);
       this._renderedNodeType = null;
       this._renderedComponent = null;
       this._instance = null;
-    }
+    &#125;
 
     // reset等待队列和其他等待状态
     this._pendingStateQueue = null;
@@ -502,15 +494,14 @@ _renderValidatedComponentWithoutOwnerOrContext: function() {
 
     // 将组件从map中移除,还记得我们在mountComponent中将它加入了map中的吧
     ReactInstanceMap.remove(inst);
-  },
-
+  &#125;,
 </code></pre>
 <blockquote>
 <p>可见，unmountComponent还是比较简单的，它就做三件事<br>1.调用componentWillUnmount()<br>2.递归调用unmountComponent(),销毁子组件<br>3.将内部变量置空，防止内存泄漏</p>
 </blockquote>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>React自定义组件创建期，存在期，销毁期三个阶段的生命周期调用上面都讲完了。三个入口函数mountComponent，updateComponent，unmountComponent尤其关键。大家如果有兴趣，还可以自行分析ReactDOMEmptyComponent，ReactDOMComponent和ReactDOMTextComponent的这三个方法。</p>
 <p>深入学习React生命周期源码可以帮我们理清各个方法的调用顺序，明白它们都是什么时候被调用的，哪些条件下才会被调用等等。阅读源码虽然有点枯燥，但能够大大加深对上层API接口的理解，并体会设计者设计这些API的良苦用心。</p>
-<h1 id="React组件生命周期过程说明"><a href="#React组件生命周期过程说明" class="headerlink" title="React组件生命周期过程说明"></a><a href="http://react-china.org/t/react/1740" target="_blank" rel="noopener">React组件生命周期过程说明</a></h1><p>实例化<br>首次实例化</p>
+<h1 id="React组件生命周期过程说明"><a href="#React组件生命周期过程说明" class="headerlink" title="React组件生命周期过程说明"></a><a target="_blank" rel="noopener" href="http://react-china.org/t/react/1740">React组件生命周期过程说明</a></h1><p>实例化<br>首次实例化</p>
 <p>getDefaultProps<br>getInitialState<br>componentWillMount<br>render<br>componentDidMount<br>实例化完成后的更新</p>
 <p>getInitialState<br>componentWillMount<br>render<br>componentDidMount<br>存在期<br>组件已存在时的状态改变</p>
 <p>componentWillReceiveProps<br>shouldComponentUpdate<br>componentWillUpdate<br>render<br>componentDidUpdate<br>销毁&amp;清理期<br>componentWillUnmount<br>说明<br>生命周期共提供了10个不同的API。</p>
@@ -521,19 +512,19 @@ _renderValidatedComponentWithoutOwnerOrContext: function() {
 <p>只能通过this.props和this.state访问数据<br>可以返回null、false或任何React组件<br>只能出现一个顶级组件（不能返回数组）<br>不能改变组件的状态<br>不能修改DOM的输出<br>5.componentDidMount<br>真实的DOM被渲染出来后调用，在该方法中可通过this.getDOMNode()访问到真实的DOM元素。此时已可以使用其他类库来操作这个DOM。</p>
 <p>在服务端中，该方法不会被调用。</p>
 <p>6.componentWillReceiveProps<br>组件接收到新的props时调用，并将其作为参数nextProps使用，此时可以更改组件props及state。</p>
-<pre><code>componentWillReceiveProps: function(nextProps) {
-    if (nextProps.bool) {
-        this.setState({
+<pre><code>componentWillReceiveProps: function(nextProps) &#123;
+    if (nextProps.bool) &#123;
+        this.setState(&#123;
             bool: true
-        });
-    }
-}
-</code></pre><p>7.shouldComponentUpdate<br>组件是否应当渲染新的props或state，返回false表示跳过后续的生命周期方法，通常不需要使用以避免出现bug。在出现应用的瓶颈时，可通过该方法进行适当的优化。</p>
+        &#125;);
+    &#125;
+&#125;</code></pre>
+<p>7.shouldComponentUpdate<br>组件是否应当渲染新的props或state，返回false表示跳过后续的生命周期方法，通常不需要使用以避免出现bug。在出现应用的瓶颈时，可通过该方法进行适当的优化。</p>
 <p>在首次渲染期间或者调用了forceUpdate方法后，该方法不会被调用</p>
 <p>8.componentWillUpdate<br>接收到新的props或者state后，进行渲染之前调用，此时不允许更新props或state。</p>
 <p>9.componentDidUpdate<br>完成渲染新的props或者state后调用，此时可以访问到新的DOM元素。</p>
 <p>10.componentWillUnmount<br>组件被移除之前被调用，可以用于做一些清理工作，在componentDidMount方法中添加的所有任务都需要在该方法中撤销，比如创建的定时器或添加的事件监听器。</p>
-<p><a href="https://yq.aliyun.com/articles/72330?spm=a2c4e.11153940.blogcont72329.20.38732a71NEGBnM" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://yq.aliyun.com/articles/72330?spm=a2c4e.11153940.blogcont72329.20.38732a71NEGBnM">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -558,7 +549,7 @@ _renderValidatedComponentWithoutOwnerOrContext: function() {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -592,7 +583,7 @@ _renderValidatedComponentWithoutOwnerOrContext: function() {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#React生命周期流程"><span class="toc-number">1.</span> <span class="toc-text">React生命周期流程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#实例化生命周期"><span class="toc-number">2.</span> <span class="toc-text">实例化生命周期</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#getDefaultProps"><span class="toc-number">2.1.</span> <span class="toc-text">getDefaultProps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#getlnitialState"><span class="toc-number">2.2.</span> <span class="toc-text">getlnitialState</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mountComponent"><span class="toc-number">2.3.</span> <span class="toc-text">mountComponent</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#存在期生命周期"><span class="toc-number">3.</span> <span class="toc-text">存在期生命周期</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#销毁"><span class="toc-number">4.</span> <span class="toc-text">销毁</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#React组件生命周期过程说明"><span class="toc-number">6.</span> <span class="toc-text">React组件生命周期过程说明</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#React%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%B5%81%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">React生命周期流程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B%E5%8C%96%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-number">2.</span> <span class="toc-text">实例化生命周期</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#getDefaultProps"><span class="toc-number">2.1.</span> <span class="toc-text">getDefaultProps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#getlnitialState"><span class="toc-number">2.2.</span> <span class="toc-text">getlnitialState</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mountComponent"><span class="toc-number">2.3.</span> <span class="toc-text">mountComponent</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%98%E5%9C%A8%E6%9C%9F%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-number">3.</span> <span class="toc-text">存在期生命周期</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%94%80%E6%AF%81"><span class="toc-number">4.</span> <span class="toc-text">销毁</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#React%E7%BB%84%E4%BB%B6%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E8%BF%87%E7%A8%8B%E8%AF%B4%E6%98%8E"><span class="toc-number">6.</span> <span class="toc-text">React组件生命周期过程说明</span></a></li></ol>
                 </div>
             </div>
             

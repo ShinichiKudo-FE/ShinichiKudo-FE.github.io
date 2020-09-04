@@ -36,7 +36,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 
 <body class="loading">
@@ -99,7 +99,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    7.4k
+                    7.7k
                 </span>
                 
                 
@@ -143,38 +143,37 @@
 <p>在大概ES6的时代，推出了<code>Generator/yield</code>两个关键字，使用<code>Generator</code>可以很方便的帮助我们建立一个处理Promise的解释器。</p>
 <p>然后，在ES7左右，我们又得到了<code>async/await</code>这样的语法，可以让我们以接近编写同步代码的方式来编写异步代码（无需使用<code>.then()</code>或者回调函数）。</p>
 <p>两者都能够帮助我们很方便的进行异步编程，但同样，这两者之间也是有不少区别的。</p>
-<h2 id="generator"><a href="#generator" class="headerlink" title="generator"></a>generator</h2><p><code>Generator</code>是一个函数，可以在函数内部通过yield返回一个值（此时，<strong>Generator函数的执行会暂定，直到下次触发<code>.next()</code></strong>）<br>创建一个Generator函数的方法是在function关键字后添加<code>*</code>标识。</p>
+<h2 id="generator"><a href="#generator" class="headerlink" title="generator"></a>generator</h2><p><code>Generator</code>是一个函数，可以在函数内部通过yield返回一个值（此时，**Generator函数的执行会暂定，直到下次触发<code>.next()</code>**）<br>创建一个Generator函数的方法是在function关键字后添加<code>*</code>标识。</p>
 <p>在调用一个Generator函数后，并不会立即执行其中的代码，函数会返回一个Generator对象，通过调用对象的next函数，可以获得yield/return的返回值。<br>无论是触发了yield还是return，next()函数总会返回一个带有value和done属性的对象。</p>
 <p>value为返回值，done则是一个Boolean对象，用来标识Generator是否还能继续提供返回值。</p>
 <p>PS: <strong>generator()函数的执行是惰性的，yield后的代码只在触发next()后执行</strong></p>
-<pre><code class="js">function * oddGenerator () {
+<pre><code class="js">function * oddGenerator () &#123;
   yield 1
   yield 3
 
   return 5
-}
+&#125;
 
 let iterator = oddGenerator()
 
-let first = iterator.next()  // { value: 1, done: false }
-let second = iterator.next() // { value: 3, done: false }
-let third = iterator.next()  // { value: 5, done: true  }
-</code></pre>
+let first = iterator.next()  // &#123; value: 1, done: false &#125;
+let second = iterator.next() // &#123; value: 3, done: false &#125;
+let third = iterator.next()  // &#123; value: 5, done: true  &#125;</code></pre>
 <a id="more"></a>
+
 <h3 id="next-的参数传递"><a href="#next-的参数传递" class="headerlink" title="next()的参数传递"></a>next()的参数传递</h3><p>我们可以在调用next()的时候传递一个参数，可以在上次yield前接收到这个参数：</p>
-<pre><code class="js">function * outputGenerator () {
+<pre><code class="js">function * outputGenerator () &#123;
   let ret1 = yield 1
-  console.log(`got ret1: ${ret1}`)
+  console.log(`got ret1: $&#123;ret1&#125;`)
   let ret2 = yield 2
-  console.log(`got ret2: ${ret2}`)
-}
+  console.log(`got ret2: $&#123;ret2&#125;`)
+&#125;
 
 let iterator = outputGenerator()
 
 iterator.next(1)
 iterator.next(2) // got ret1: 2
-iterator.next(3) // got ret2: 3
-</code></pre>
+iterator.next(3) // got ret2: 3</code></pre>
 <p>第一眼看上去可能会有些诡异，为什么第一条log是在第二次调用next时才进行输出的</p>
 <p>这就又要说到上边的Generator的实现了，上边说到了，yield与return都是用来返回值的语法。<br>函数在执行时遇到这两个关键字后就会暂停执行，等待下次激活。</p>
 <p>然后<code>let ret1 = yield 1</code>，这是一个赋值表达式，也就是说会先执行=右边的部分，在=右边执行的过程中遇到了yield关键字，函数也就在此处暂停了，在下次触发next()时才被激活，此时，我们继续进行上次未完成的赋值语句<code>let ret1 = XXX</code>，并在再次遇到yield时暂停。</p>
@@ -185,99 +184,95 @@ iterator.next(3) // got ret2: 3
 <blockquote>
 <p>但是要注意的是，用作迭代器中的使用，则只会作用于yield,return的返回值不计入迭代</p>
 </blockquote>
-<pre><code class="js">function * oddGenerator () {
+<pre><code class="js">function * oddGenerator () &#123;
   yield 1
   yield 3
   yield 5
 
   return &#39;won\&#39;t be iterate&#39;
-}
+&#125;
 
-for (let value of oddGenerator()) {
+for (let value of oddGenerator()) &#123;
   console.log(value)
-}
+&#125;
 // &gt; 1
 // &gt; 3
-// &gt; 5
-</code></pre>
+// &gt; 5</code></pre>
 <h3 id="Generator函数内部的Generator"><a href="#Generator函数内部的Generator" class="headerlink" title="Generator函数内部的Generator"></a>Generator函数内部的Generator</h3><p>除了yield语法以外，其实还有一个<code>yield*</code>语法，可以粗略的理解为是 <strong>Generator函数版的[…]</strong><br>用来展开Generator迭代器的。</p>
-<pre><code class="js">function * gen1 () {
+<pre><code class="js">function * gen1 () &#123;
   yield 1
   yield* gen2()
   yield 5
-}
+&#125;
 
-function * gen2 () {
+function * gen2 () &#123;
   yield 2
   yield 3
   yield 4
   return &#39;won\&#39;t be iterate&#39;
-}
+&#125;
 
-for (let value of gen1()) {
+for (let value of gen1()) &#123;
   console.log(value)
-}
+&#125;
 // &gt; 1
 // &gt; 2
 // &gt; 3
 // &gt; 4
-// &gt; 5
-</code></pre>
+// &gt; 5</code></pre>
 <h3 id="模拟实现Promise执行器"><a href="#模拟实现Promise执行器" class="headerlink" title="模拟实现Promise执行器"></a>模拟实现Promise执行器</h3><p>然后我们结合着Promise，来实现一个简易的执行器。</p>
-<p>最受欢迎的类似的库是： <a href="https://www.npmjs.com/package/co" target="_blank" rel="noopener">co</a></p>
-<pre><code class="js">function run (gen) {
+<p>最受欢迎的类似的库是： <a target="_blank" rel="noopener" href="https://www.npmjs.com/package/co">co</a></p>
+<pre><code class="js">function run (gen) &#123;
   gen = gen()
   return next(gen.next())
 
-  function next ({done, value}) {
-    return new Promise(resolve =&gt; {
-     if (done) { // finish
+  function next (&#123;done, value&#125;) &#123;
+    return new Promise(resolve =&gt; &#123;
+     if (done) &#123; // finish
        resolve(value)
-     } else { // not yet
-       value.then(data =&gt; {
+     &#125; else &#123; // not yet
+       value.then(data =&gt; &#123;
          next(gen.next(data)).then(resolve)
-       })
-     }
-   })
-  }
-}
+       &#125;)
+     &#125;
+   &#125;)
+  &#125;
+&#125;
 
-function getRandom () {
-  return new Promise(resolve =&gt; {
+function getRandom () &#123;
+  return new Promise(resolve =&gt; &#123;
     setTimeout(_ =&gt; resolve(Math.random() * 10 | 0), 1000)
-  })
-}
+  &#125;)
+&#125;
 
-function * main () {
+function * main () &#123;
   let num1 = yield getRandom()
   let num2 = yield getRandom()
 
   return num1 + num2
-}
+&#125;
 
-run(main).then(data =&gt; {
-  console.log(`got data: ${data}`);
-})
-</code></pre>
+run(main).then(data =&gt; &#123;
+  console.log(`got data: $&#123;data&#125;`);
+&#125;)</code></pre>
 <ul>
 <li>一个简单的解释器的模拟（仅作举例说明）</li>
 </ul>
 <p>在例子中，我们约定yield后边的必然是一个Promise函数<br>我们只看main()函数的代码，使用Generator确实能够让我们让近似同步的方式来编写异步代码<br>但是，这样写就意味着我们必须有一个外部函数负责帮我们执行main()函数这个Generator，并处理其中生成的Promise，然后在then回调中将结果返回到Generator函数，以便可以执行下边的代码。</p>
 <h2 id="async"><a href="#async" class="headerlink" title="async"></a>async</h2><p>我们用作async/awiat重写上面generator的例子：</p>
-<pre><code class="js">function getRandom () {
-  return new Promise(resolve =&gt; {
+<pre><code class="js">function getRandom () &#123;
+  return new Promise(resolve =&gt; &#123;
     setTimeout(_ =&gt; resolve(Math.random() * 10 | 0), 1000)
-  })
-}
+  &#125;)
+&#125;
 
-async function main () {
+async function main () &#123;
   let num1 = await getRandom()
   let num2 = await getRandom()
 
   return num1 + num2
-}
-console.log(`got data: ${await main()}`)
-</code></pre>
+&#125;
+console.log(`got data: $&#123;await main()&#125;`)</code></pre>
 <blockquote>
 <p>这样看上去，好像我们从Generator/yield换到async/await只需要把*都改为async，yield都改为await就可以了。 所以很多人都直接拿Generator/yield来解释async/await的行为，但这会带来如下几个问题：</p>
 </blockquote>
@@ -287,56 +282,52 @@ console.log(`got data: ${await main()}`)
 </ul>
 <p>async/await是 <strong>处理Promise的一个极其方便的方法，但如果使用不当的话，也会造成一些令人头疼的问题</strong></p>
 <h3 id="Async函数始终返回一个Promise"><a href="#Async函数始终返回一个Promise" class="headerlink" title="Async函数始终返回一个Promise"></a>Async函数始终返回一个Promise</h3><p>一个async函数，无论你return 1或者throw new Error()。<br>在调用方来讲，接收到的始终是一个Promise对象：</p>
-<pre><code class="js">async function throwError () {
+<pre><code class="js">async function throwError () &#123;
   throw new Error()
-}
-async function returnNumber () {
+&#125;
+async function returnNumber () &#123;
   return 1
-}
+&#125;
 
 console.log(returnNumber() instanceof Promise) // true
-console.log(throwError() instanceof Promise)   // true
-</code></pre>
+console.log(throwError() instanceof Promise)   // true</code></pre>
 <p>也就是说，无论函数是做什么用的，你都要按照Promise的方式来处理它。</p>
 <h3 id="Await是按照顺序执行的，并不能并行执行"><a href="#Await是按照顺序执行的，并不能并行执行" class="headerlink" title="Await是按照顺序执行的，并不能并行执行"></a>Await是按照顺序执行的，并不能并行执行</h3><p>JavaScript是单线程的，这就意味着await一只能一次处理一个，如果你有多个Promise需要处理，则就意味着，你要等到前一个Promise处理完成才能进行下一个的处理，这就意味着，如果我们同时发送大量的请求，这样处理就会非常慢，one by one：</p>
 <pre><code class="js">const bannerImages = [];
-async function getImageInfo(){
+async function getImageInfo()&#123;
     return bannerImages.map(async banner =&gt; await getImageInfo(banner));
-}
-</code></pre>
+&#125;</code></pre>
 <p>就像这样的四个定时器，我们需要等待4s才能执行完毕：</p>
-<pre><code class="js">function delay () {
+<pre><code class="js">function delay () &#123;
   return new Promise(resolve =&gt; setTimeout(resolve, 1000))
-}
+&#125;
 
 let tasks = [1, 2, 3, 4]
 
-async function runner (tasks) {
-  for (let task of tasks) {
+async function runner (tasks) &#123;
+  for (let task of tasks) &#123;
     await delay()
-  }
-}
+  &#125;
+&#125;
 
 console.time(&#39;runner&#39;)
 await runner(tasks)
-console.timeEnd(&#39;runner&#39;)
-</code></pre>
+console.timeEnd(&#39;runner&#39;)</code></pre>
 <p>像这种情况，我们可以通过<code>Promise.all()</code>进行如下优化：</p>
-<pre><code class="js">function delay () {
+<pre><code class="js">function delay () &#123;
   return new Promise(resolve =&gt; setTimeout(resolve, 1000))
-}
+&#125;
 
 let tasks = [1, 2, 3, 4]
 
-async function runner (tasks) {
+async function runner (tasks) &#123;
   tasks = tasks.map(delay)
   await Promise.all(tasks)
-}
+&#125;
 
 console.time(&#39;runner&#39;)
 await runner(tasks)
-console.timeEnd(&#39;runner&#39;)
-</code></pre>
+console.timeEnd(&#39;runner&#39;)</code></pre>
 <p>草案中提到过await*，但现在貌似还不是标准，所以还是采用Promise.all包裹一层的方法来实现</p>
 <p>我们知道，Promise对象在创建时就会执行函数内部的代码，也就意味着，在我们使用map创建这个数组时，所有的Promise代码都会执行，也就是说，所有的请求都会同时发出去，然后我们通过await Promise.all来监听所有Promise的响应。</p>
 <h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>Generator与async function都是返回一个特定类型的对象：</p>
@@ -366,7 +357,7 @@ console.timeEnd(&#39;runner&#39;)
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -400,7 +391,7 @@ console.timeEnd(&#39;runner&#39;)
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#generator"><span class="toc-number">1.1.</span> <span class="toc-text">generator</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#next-的参数传递"><span class="toc-number">1.1.1.</span> <span class="toc-text">next()的参数传递</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#用作迭代器使用"><span class="toc-number">1.1.2.</span> <span class="toc-text">用作迭代器使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generator函数内部的Generator"><span class="toc-number">1.1.3.</span> <span class="toc-text">Generator函数内部的Generator</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#模拟实现Promise执行器"><span class="toc-number">1.1.4.</span> <span class="toc-text">模拟实现Promise执行器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#async"><span class="toc-number">1.2.</span> <span class="toc-text">async</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Async函数始终返回一个Promise"><span class="toc-number">1.2.1.</span> <span class="toc-text">Async函数始终返回一个Promise</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Await是按照顺序执行的，并不能并行执行"><span class="toc-number">1.2.2.</span> <span class="toc-text">Await是按照顺序执行的，并不能并行执行</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-number">1.3.</span> <span class="toc-text">结论</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#generator"><span class="toc-number">1.1.</span> <span class="toc-text">generator</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#next-%E7%9A%84%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92"><span class="toc-number">1.1.1.</span> <span class="toc-text">next()的参数传递</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E4%BD%9C%E8%BF%AD%E4%BB%A3%E5%99%A8%E4%BD%BF%E7%94%A8"><span class="toc-number">1.1.2.</span> <span class="toc-text">用作迭代器使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generator%E5%87%BD%E6%95%B0%E5%86%85%E9%83%A8%E7%9A%84Generator"><span class="toc-number">1.1.3.</span> <span class="toc-text">Generator函数内部的Generator</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E6%8B%9F%E5%AE%9E%E7%8E%B0Promise%E6%89%A7%E8%A1%8C%E5%99%A8"><span class="toc-number">1.1.4.</span> <span class="toc-text">模拟实现Promise执行器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#async"><span class="toc-number">1.2.</span> <span class="toc-text">async</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Async%E5%87%BD%E6%95%B0%E5%A7%8B%E7%BB%88%E8%BF%94%E5%9B%9E%E4%B8%80%E4%B8%AAPromise"><span class="toc-number">1.2.1.</span> <span class="toc-text">Async函数始终返回一个Promise</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Await%E6%98%AF%E6%8C%89%E7%85%A7%E9%A1%BA%E5%BA%8F%E6%89%A7%E8%A1%8C%E7%9A%84%EF%BC%8C%E5%B9%B6%E4%B8%8D%E8%83%BD%E5%B9%B6%E8%A1%8C%E6%89%A7%E8%A1%8C"><span class="toc-number">1.2.2.</span> <span class="toc-text">Await是按照顺序执行的，并不能并行执行</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E8%AE%BA"><span class="toc-number">1.3.</span> <span class="toc-text">结论</span></a></li></ol></li></ol>
                 </div>
             </div>
             
