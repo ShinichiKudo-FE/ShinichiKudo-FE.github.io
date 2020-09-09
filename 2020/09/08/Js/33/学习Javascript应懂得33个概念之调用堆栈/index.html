@@ -1,0 +1,525 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>学习Javascript应懂得33个概念之调用堆栈 - 默默默默燃</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="一枚前端搬砖队队员的记录册,原文学习地址
+前言堆栈的概念对于我来说是熟悉又陌生的感觉，之前看过很多相关的文章及写过一些demo可后面用不到后，就慢慢淡忘了，今天要好好理解并记录下
+JavaScript 引擎Google V8引,"> 
+    <meta name="author" content="张白告丶"> 
+    <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">默默默默燃</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://ShinichiKudo-FE.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">学习Javascript应懂得33个概念之调用堆栈</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/Js"><b>「
+                    </b>JS<b> 」</b></a>
+                
+                September 08, 2020
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2020/09/08/Js/33/%E5%AD%A6%E4%B9%A0Javascript%E5%BA%94%E6%87%82%E5%BE%9733%E4%B8%AA%E6%A6%82%E5%BF%B5%E4%B9%8B%E8%B0%83%E7%94%A8%E5%A0%86%E6%A0%88/" title="学习Javascript应懂得33个概念之调用堆栈" class="">学习Javascript应懂得33个概念之调用堆栈</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    4k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    4 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%AD%A6%E4%B9%A0Javascript%E5%BA%94%E6%87%82%E5%BE%9733%E4%B8%AA%E6%A6%82%E5%BF%B5/" rel="tag">学习Javascript应懂得33个概念</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <p><a href="https://www.oschina.net/translate/how-does-javascript-actually-work-part-1" target="_blank" rel="noopener">原文学习地址</a></p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>堆栈的概念对于我来说是熟悉又陌生的感觉，之前看过很多相关的文章及写过一些demo可后面用不到后，就慢慢淡忘了，今天要好好理解并记录下</p>
+<h2 id="JavaScript-引擎"><a href="#JavaScript-引擎" class="headerlink" title="JavaScript 引擎"></a>JavaScript 引擎</h2><p>Google V8引擎是一个比较流行的javascript引擎示例，该引擎包括两个主要组件：</p>
+<ul>
+<li><ol>
+<li>Memory Heap内存堆 — 这是内存分配的地方</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>call stack调用堆栈 — 这是你代码执行时栈帧存放的位置</li>
+</ol>
+</li>
+</ul>
+<h2 id="RunTime-运行时"><a href="#RunTime-运行时" class="headerlink" title="RunTime 运行时"></a>RunTime 运行时</h2><p><img src="https://static.oschina.net/uploads/space/2017/1213/104047_yNc9_2896879.png" alt="runtime"></p>
+<h2 id="Call-Stack-调用堆栈"><a href="#Call-Stack-调用堆栈" class="headerlink" title="Call Stack 调用堆栈"></a>Call Stack 调用堆栈</h2><p>JavaScript 是一种<strong>单线程编程语言</strong>，这意味着它只有一个 <code>Call Stack</code> 。因此，它一次仅能做一件事。</p>
+<p><code>Call Stack</code> 是一个数据结构，它基本上记录了我们在程序中的所处的位置。如果我们进入一个函数，我们把它放在堆栈的顶部。如果我们从一个函数中返回，我们弹出堆栈的顶部。这是所有的堆栈可以做的东西。</p>
+<p>我们看一个示例：</p>
+<pre><code class="js">function multiply(x,y){
+  return x * y
+}
+function printSqure(x){
+  var s = multiply(x,x)
+  console.log(s)
+}
+printSqure(5)
+</code></pre>
+<p>当引擎开始执行这个代码时，Call Stack 将会变成空的。之后，执行的步骤如下：</p>
+<p><img src="https://static.oschina.net/uploads/space/2017/1213/104147_KJwy_2896879.png" alt="call stack"></p>
+<p>Call Stack 的每个入口被称为 <strong>Stack Frame（栈帧）</strong>。</p>
+<p>这正是在抛出异常时如何构建 <code>stack trace</code> 的方法 - 这基本上是在异常发生时的 <code>Call Stack</code> 的状态。看看下面的代码：</p>
+<pre><code class="js">function foo(){
+  throw new Error(&#39;SessionStack will help you resolve crashes :)&#39;);
+}
+function bar(){
+  foo()
+}
+function start() {
+  bar();
+}
+start();
+</code></pre>
+<p>如果这是在 Chrome 中执行的（假设这个代码在一个名为 foo.js 的文件中），那么会产生下面的 <code>stack trace</code>:</p>
+<p><code>Blowing the stack</code>—当达到最大调用堆栈大小时，会发生这种情况。这可能会很容易发生，特别是如果你使用递归，而不是非常广泛地测试你的代码。看看这个示例代码：</p>
+<pre><code class="js">function foo() {
+    foo();
+}
+foo();
+</code></pre>
+<p>当引擎开始执行这个代码时，它首先调用函数“foo”。然而，这个函数是递归的，并且开始调用自己而没有任何终止条件。所以在执行的每个步骤中，同一个函数会一次又一次地添加到调用堆栈中。它看起来像这样：</p>
+<p><img src="https://static.oschina.net/uploads/space/2017/1213/104326_4B9u_2896879.png" alt="call stack 递归"></p>
+<p>然而，在某些情况下，调用堆栈中函数调用的数量超出了调用堆栈的实际大小，浏览器通过抛出一个错误（如下所示）来决定采取行动：</p>
+<p><img src="https://static.oschina.net/uploads/space/2017/1213/104350_JCtB_2896879.png" alt="max stack"></p>
+<p>在单线程上运行代码可能非常容易，因为你不必处理多线程环境中出现的复杂场景，例如<strong>死锁</strong>。</p>
+<p>但是在单线程上运行也是非常有限的。由于<code>JavaScript</code>只有一个调用堆栈，所以当事情很慢时会发生什么？</p>
+<h2 id="并发与事件循环"><a href="#并发与事件循环" class="headerlink" title="并发与事件循环"></a>并发与事件循环</h2><p>如果在调用堆栈中执行的函数调用需要花费大量时间才能进行处理，会发生什么？ 例如，假设你想在浏览器中使用 <code>JavaScript</code> 进行一些复杂的图像转换。</p>
+<p>你可能会问 - 为什么这会是一个问题？问题是，虽然调用堆栈有要执行的函数，浏览器实际上不能做任何事情 - 它被阻塞了。这意味着浏览器无法渲染，它不能运行任何其他代码，它就是被卡住了。如果你想在你的应用程序中使用流畅的 UI ，这就会产生问题。</p>
+<p>而且这并不是唯一的问题。一旦你的浏览器开始在 Call Stack 中处理过多的任务，它可能会停止响应相当长的时间。大多数浏览器会通过触发错误来采取行动，询问你是否要终止网页。</p>
+<p><img src="https://static.oschina.net/uploads/space/2017/1213/104412_G1jc_2896879.png" alt="阻塞"></p>
+<p>所以，这并不是最好的用户体验，对吗？</p>
+<p>那么，我们如何执行大量代码而不阻塞 UI 使得浏览器无法响应？ <strong>解决方案就是异步回调</strong>。</p>
+<p>这将在“ JavaScript 工作原理”教程的第2部分中更详细地解释：<a href="https://www.oschina.net/translate/how-does-javascript-actually-work-part-2" target="_blank" rel="noopener">“V8 引擎内部+关于如何编写优化代码的5个技巧”</a>。</p>
+<p>同时，如果你在 JavaScript 应用程序中难以复现和理解问题，请查看 <code>SessionStack</code> 。 <code>SessionStack</code> 会记录你的 Web 应用中的所有东西：所有的 DOM 更改、用户交互、JavaScript 异常、堆栈跟踪、网络请求失败、调试消息等。</p>
+<p>通过 SessionStack ，你可以以视频的方式重现问题，并查看发生在用户身上的所有事情。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>虽然JavaScript是单线程，但Event Loop是javascript的执行机制，可以很好的处理事件，它也分为同步与异步，当为同步时JavaScript的顺序必须一个完成之后才会完成下一个，如果前面出现无限循环后就会出现爆栈，导致后面的无法执行；而异步时又分为宏观任务（script，setTimeout，setInterval）及微观任务（Promise，process.nextTick）进入整体代码(宏任务)后，开始第一次循环。接着执行所有的微任务。然后再次从宏任务开始，找到其中一个任务队列执行完毕，再执行所有的微任务</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d='undefined'
+    >Comments</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="https://res.cloudinary.com/tridiamond/image/upload/v1573019751/TriDiamond_logo_ui_xeublz.jpg" height=300 width=300></img>
+                    <p>张白告丶</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/zhanghao-web" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd>
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/categories">27 <p>Categories</p></a></li>
+                    <li><a href="/tags">55 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#JavaScript-引擎"><span class="toc-number">1.1.</span> <span class="toc-text">JavaScript 引擎</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RunTime-运行时"><span class="toc-number">1.2.</span> <span class="toc-text">RunTime 运行时</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Call-Stack-调用堆栈"><span class="toc-number">1.3.</span> <span class="toc-text">Call Stack 调用堆栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#并发与事件循环"><span class="toc-number">1.4.</span> <span class="toc-text">并发与事件循环</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.5.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            张白告丶
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.3" target="_blank" rel="noopener">v1.4.3</a></small>
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+
+    
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+
+
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+
+    
+<script src="/js/busuanzi.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+
+</html>
