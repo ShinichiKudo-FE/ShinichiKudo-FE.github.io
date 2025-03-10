@@ -37,7 +37,7 @@ MPEG4 = ,">
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -100,7 +100,7 @@ MPEG4 = ,">
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    15k
+                    16k
                 </span>
                 
                 
@@ -164,7 +164,7 @@ Your browser does not support the video tag.
 <h4 id="video方法，属性及事件："><a href="#video方法，属性及事件：" class="headerlink" title="video方法，属性及事件："></a>video方法，属性及事件：</h4><p>paly() 视频播放<br>pasue() 视频暂停<br>load()  视频加载</p>
 <h3 id="audio"><a href="#audio" class="headerlink" title="audio"></a>audio</h3><h4 id="audio支持的音频格式"><a href="#audio支持的音频格式" class="headerlink" title="audio支持的音频格式"></a>audio支持的音频格式</h4><p>Ogg Vorbis （.ogg）<br>Mp3 (.mp3)<br>Wav (.wav)</p>
 <h4 id="audio标签的属性"><a href="#audio标签的属性" class="headerlink" title="audio标签的属性"></a>audio标签的属性</h4><p>autoplay 自动播放<br>controls 音频控件<br>loop 循环播放<br>preload 如果出现该属性，则视频在页面加载时进行加载，并预备播放。如果使用 “autoplay”，则忽略该属性。<br>src 要播放的音频的 URL</p>
-<h2 id="html5拖放（drag和drop"><a href="#html5拖放（drag和drop" class="headerlink" title="html5拖放（drag和drop)"></a>html5拖放（drag和drop)</h2><a id="more"></a>
+<h2 id="html5拖放（drag和drop"><a href="#html5拖放（drag和drop" class="headerlink" title="html5拖放（drag和drop)"></a>html5拖放（drag和drop)</h2><span id="more"></span>
 <h3 id="浏览器支持"><a href="#浏览器支持" class="headerlink" title="浏览器支持"></a>浏览器支持</h3><p>Internet Explorer 9、Firefox、Opera 12、Chrome 以及 Safari 5 支持拖放。</p>
 <p>注释：在 Safari 5.1.2 中不支持拖放。</p>
 <p>一个简单地例子</p>
@@ -172,19 +172,19 @@ Your browser does not support the video tag.
 &lt;html&gt;
 &lt;head&gt;
 &lt;script type=&quot;text/javascript&quot;&gt;
-function allowDrop(ev){
+function allowDrop(ev)&#123;
     ev.preventDefault();
-}
+&#125;
 
-function drag(ev){
+function drag(ev)&#123;
     ev.dataTransfer.setData(&quot;Text&quot;,ev.target.id);
-}
+&#125;
 
-function drop(ev){
+function drop(ev)&#123;
     ev.preventDefault();
     var data=ev.dataTransfer.getData(&quot;Text&quot;);
     ev.target.appendChild(document.getElementById(data));
-}
+&#125;
 &lt;/script&gt;
 &lt;/head&gt;
 &lt;body&gt;
@@ -201,9 +201,9 @@ ondragstart=&quot;drag(event)&quot; width=&quot;336&quot; height=&quot;69&quot; 
 <pre><code class="html">&lt;img draggable=&quot;true&quot; /&gt;
 </code></pre>
 <h3 id="拖动什么-ondragstart-和-setData"><a href="#拖动什么-ondragstart-和-setData" class="headerlink" title="拖动什么 - ondragstart 和 setData()"></a>拖动什么 - ondragstart 和 setData()</h3><p>然后，规定当元素被拖动时，会发生什么。<br>在上面的例子中，ondragstart 属性调用了一个函数，drag(event)，它规定了被拖动的数据。<br>dataTransfer.setData() 方法设置被拖数据的数据类型和值：</p>
-<pre><code class="js">function drag(ev){
+<pre><code class="js">function drag(ev)&#123;
     ev.dataTransfer.setData(&quot;Text&quot;,ev.target.id);
-}
+&#125;
 </code></pre>
 <p>在这个例子中，数据类型是 “Text”，值是可拖动元素的 id (“drag1”)。</p>
 <h3 id="放到何处-ondragover"><a href="#放到何处-ondragover" class="headerlink" title="放到何处 - ondragover"></a>放到何处 - ondragover</h3><p>ondragover 事件规定在何处放置被拖动的数据。</p>
@@ -270,18 +270,18 @@ cxt.fillRect(0,0,150,75);
 <pre><code class="js">&lt;script&gt;
 var x=document.getElementById(&quot;demo&quot;);
 function getLocation()
-  {
+  &#123;
   if (navigator.geolocation)
-    {
+    &#123;
     navigator.geolocation.getCurrentPosition(showPosition);
-    }
-  else{x.innerHTML=&quot;Geolocation is not supported by this browser.&quot;;}
-  }
+    &#125;
+  else&#123;x.innerHTML=&quot;Geolocation is not supported by this browser.&quot;;&#125;
+  &#125;
 function showPosition(position)
-  {
+  &#123;
   x.innerHTML=&quot;Latitude: &quot; + position.coords.latitude +
   &quot;&lt;br /&gt;Longitude: &quot; + position.coords.longitude;
-  }
+  &#125;
 &lt;/script&gt;
 </code></pre>
 <blockquote>
@@ -289,9 +289,9 @@ function showPosition(position)
 </blockquote>
 <p>处理错误：</p>
 <pre><code class="js">function showError(error)
-  {
+  &#123;
   switch(error.code)
-    {
+    &#123;
     case error.PERMISSION_DENIED:// 用户不允许地理定位
       x.innerHTML=&quot;User denied the request for Geolocation.&quot;
       break;
@@ -304,8 +304,8 @@ function showPosition(position)
     case error.UNKNOWN_ERROR: // 错误处理
       x.innerHTML=&quot;An unknown error occurred.&quot;
       break;
-    }
-  }
+    &#125;
+  &#125;
 </code></pre>
 <h2 id="HTML-5-Web-存储"><a href="#HTML-5-Web-存储" class="headerlink" title="HTML 5 Web 存储"></a>HTML 5 Web 存储</h2><p>HTML5 提供了两种在客户端存储数据的新方法：</p>
 <p>localStorage - 没有时间限制的数据存储<br>sessionStorage - 针对一个 session 的数据存储</p>
@@ -339,8 +339,7 @@ document.write(sessionStorage.lastname);
 <p><em>CACHE MANIFEST</em> - 在此标题下列出的文件将在首次下载后进行缓存<br><em>NETWORK</em> - 在此标题下列出的文件需要与服务器的连接，且不会被缓存<br><em>FALLBACK</em> - 在此标题下列出的文件规定当页面无法访问时的回退页面（比如 404 页面）</p>
 <h3 id="更新缓存"><a href="#更新缓存" class="headerlink" title="更新缓存"></a>更新缓存</h3><p>一旦应用被缓存，它就会保持缓存直到发生下列情况：</p>
 <p>用户清空浏览器缓存<br>manifest 文件被修改（参阅下面的提示）<br>由程序来更新应用缓存</p>
-<h3 id="实例-完整的-Manifest-文件"><a href="#实例-完整的-Manifest-文件" class="headerlink" title="实例 - 完整的 Manifest 文件"></a>实例 - 完整的 Manifest 文件</h3><p>CACHE MANIFEST</p>
-<p> #2012-02-21 v1.0.0<br>/theme.css<br>/logo.gif<br>/main.js</p>
+<h3 id="实例-完整的-Manifest-文件"><a href="#实例-完整的-Manifest-文件" class="headerlink" title="实例 - 完整的 Manifest 文件"></a>实例 - 完整的 Manifest 文件</h3><p>CACHE MANIFEST<br> #2012-02-21 v1.0.0<br>/theme.css<br>/logo.gif<br>/main.js</p>
 <p>NETWORK:<br>login.asp</p>
 <p>FALLBACK:<br>/html5/ /404.html</p>
 <p><font color = "red">重要的提示：</font>以 “#” 开头的是注释行，但也可满足其他用途。应用的缓存会在其 manifest 文件更改时被更新。如果您编辑了一幅图片，或者修改了一个 JavaScript 函数，这些改变都不会被重新缓存。更新注释行中的日期和版本号是一种使浏览器重新缓存文件的办法。</p>
@@ -355,9 +354,9 @@ document.write(sessionStorage.lastname);
 <p>例子：Facebook/Twitter 更新、估价更新、新的博文、赛事结果等</p>
 <pre><code class="js">var source=new EventSource(&quot;demo_sse.php&quot;);
 source.onmessage=function(event)
-  {
+  &#123;
   document.getElementById(&quot;result&quot;).innerHTML+=event.data + &quot;&lt;br /&gt;&quot;;
-  };
+  &#125;;
 </code></pre>
 <p>EventSource 对象<br>在上面的例子中，我们使用 onmessage 事件来获取消息。不过还可以使用其他事件：</p>
 <p>onopen    当通往服务器的连接被打开<br>onmessage    当接收到消息<br>onerror    当错误发生</p>
@@ -365,12 +364,16 @@ source.onmessage=function(event)
 <p>本章全面介绍这些新的输入类型：</p>
 <p>email 在提交表单时，会自动验证 email 域的值。<br>url 在提交表单时，会自动验证 url 域的值。<br>number number类型用于应该包含数值的输入域。<br>range range 类型显示为滑动条。<br>Date pickers (date, month, week, time, datetime, datetime-local) 日期选择器<br>search 搜索域，比如站点搜索或 Google 搜索。<br>color </p>
 <h2 id="HTML5-表单元素"><a href="#HTML5-表单元素" class="headerlink" title="HTML5 表单元素"></a>HTML5 表单元素</h2><blockquote>
-<p>HTML5 的新的表单元素：<br>datalist datalist 元素规定输入域的选项列表。<br><code>`</code>html<br>Webpage: <input type="url" list="url_list" name="link" /></p>
+<p>HTML5 的新的表单元素：<br>datalist datalist 元素规定输入域的选项列表。</p>
 </blockquote>
-<p><datalist id="url_list"></p>
-<p><option label="W3School" value="http://www.W3School.com.cn" /></p>
-<p><option label="Google" value="http://www.google.com" /></p>
-<p><option label="Microsoft" value="http://www.microsoft.com" /><br></datalist><br><code>`</code><br>提示：option 元素永远都要设置 value 属性。</p>
+<pre><code class="html">Webpage: &lt;input type=&quot;url&quot; list=&quot;url_list&quot; name=&quot;link&quot; /&gt;
+&lt;datalist id=&quot;url_list&quot;&gt;
+&lt;option label=&quot;W3School&quot; value=&quot;http://www.W3School.com.cn&quot; /&gt;
+&lt;option label=&quot;Google&quot; value=&quot;http://www.google.com&quot; /&gt;
+&lt;option label=&quot;Microsoft&quot; value=&quot;http://www.microsoft.com&quot; /&gt;
+&lt;/datalist&gt;
+</code></pre>
+<p>提示：option 元素永远都要设置 value 属性。</p>
 <p>keygen keygen 元素的作用是提供一种验证用户的可靠方法。<br>output output 元素用于不同类型的输出，比如计算或脚本输出：</p>
 <h2 id="HTML5-表单属性"><a href="#HTML5-表单属性" class="headerlink" title="HTML5 表单属性"></a>HTML5 表单属性</h2><h3 id="新的-form-属性："><a href="#新的-form-属性：" class="headerlink" title="新的 form 属性："></a>新的 form 属性：</h3><p>autocomplete autocomplete 属性规定 form 或 input 域应该拥有自动完成功能。<br>novalidate</p>
 <h3 id="新的-input-属性："><a href="#新的-input-属性：" class="headerlink" title="新的 input 属性："></a>新的 input 属性：</h3><p>autocomplete<br>autofocus autofocus 属性规定在页面加载时，域自动地获得焦点。<br>form<br>form overrides (formaction, formenctype, formmethod, formnovalidate, formtarget) 允许您重写 form 元素的某些属性设定<br>height 和 width height 和 width 属性规定用于 image 类型的 input 标签的图像高度和宽度。<br>list list 属性规定输入域的 datalist。datalist 是输入域的选项列表。<br>min, max 和 step step 属性为输入域规定合法的数字间隔<br>multiple multiple 属性适用于以下类型的 <input> 标签：email 和 file。<br>pattern (regexp) pattern 属性规定用于验证 input 域的模式（pattern）。<br>placeholder 属性提供一种提示（hint），描述输入域所期待的值。<br>required  属性规定必须在提交之前填写输入域（不能为空）。</p>
@@ -398,7 +401,7 @@ source.onmessage=function(event)
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -421,7 +424,7 @@ source.onmessage=function(event)
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -432,7 +435,7 @@ source.onmessage=function(event)
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#html5特性"><span class="toc-number">1.</span> <span class="toc-text">html5特性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#用于媒介回放的-video-和-audio-元素"><span class="toc-number">1.1.</span> <span class="toc-text">用于媒介回放的 video 和 audio 元素</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Video"><span class="toc-number">1.1.1.</span> <span class="toc-text">Video</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#audio"><span class="toc-number">1.1.2.</span> <span class="toc-text">audio</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#html5拖放（drag和drop"><span class="toc-number">1.2.</span> <span class="toc-text">html5拖放（drag和drop)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#浏览器支持"><span class="toc-number">1.2.1.</span> <span class="toc-text">浏览器支持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设置元素为可拖放"><span class="toc-number">1.2.2.</span> <span class="toc-text">设置元素为可拖放</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#拖动什么-ondragstart-和-setData"><span class="toc-number">1.2.3.</span> <span class="toc-text">拖动什么 - ondragstart 和 setData()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#放到何处-ondragover"><span class="toc-number">1.2.4.</span> <span class="toc-text">放到何处 - ondragover</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进行放置-ondrop"><span class="toc-number">1.2.5.</span> <span class="toc-text">进行放置 - ondrop</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Canvas-画布"><span class="toc-number">1.3.</span> <span class="toc-text">Canvas(画布)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是-Canvas？"><span class="toc-number">1.3.1.</span> <span class="toc-text">什么是 Canvas？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建-Canvas-元素"><span class="toc-number">1.3.2.</span> <span class="toc-text">创建 Canvas 元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#通过-JavaScript-来绘制"><span class="toc-number">1.3.3.</span> <span class="toc-text">通过 JavaScript 来绘制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SVG"><span class="toc-number">1.4.</span> <span class="toc-text">SVG</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是SVG？"><span class="toc-number">1.4.1.</span> <span class="toc-text">什么是SVG？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SVG-的优势"><span class="toc-number">1.4.2.</span> <span class="toc-text">SVG 的优势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例子"><span class="toc-number">1.4.3.</span> <span class="toc-text">例子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Canvas-与-SVG-的比较"><span class="toc-number">1.5.</span> <span class="toc-text">Canvas 与 SVG 的比较</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Html5地理定位"><span class="toc-number">1.6.</span> <span class="toc-text">Html5地理定位</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTML-5-Web-存储"><span class="toc-number">1.7.</span> <span class="toc-text">HTML 5 Web 存储</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#localStorage-方法"><span class="toc-number">1.7.1.</span> <span class="toc-text">localStorage 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sessionStorage-方法"><span class="toc-number">1.7.2.</span> <span class="toc-text">sessionStorage 方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTML-5-应用程序缓存"><span class="toc-number">1.8.</span> <span class="toc-text">HTML 5 应用程序缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是应用程序缓存（Application-Cache）？"><span class="toc-number">1.8.1.</span> <span class="toc-text">什么是应用程序缓存（Application Cache）？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cache-Manifest-基础"><span class="toc-number">1.8.2.</span> <span class="toc-text">Cache Manifest 基础</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Manifest-文件"><span class="toc-number">1.8.3.</span> <span class="toc-text">Manifest 文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#更新缓存"><span class="toc-number">1.8.4.</span> <span class="toc-text">更新缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实例-完整的-Manifest-文件"><span class="toc-number">1.8.5.</span> <span class="toc-text">实例 - 完整的 Manifest 文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTML-5-Web-Workers"><span class="toc-number">1.9.</span> <span class="toc-text">HTML 5 Web Workers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTML-5-服务器发送事件"><span class="toc-number">1.10.</span> <span class="toc-text">HTML 5 服务器发送事件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#html5表单"><span class="toc-number">1.11.</span> <span class="toc-text">html5表单</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTML5-表单元素"><span class="toc-number">1.12.</span> <span class="toc-text">HTML5 表单元素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTML5-表单属性"><span class="toc-number">1.13.</span> <span class="toc-text">HTML5 表单属性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#新的-form-属性："><span class="toc-number">1.13.1.</span> <span class="toc-text">新的 form 属性：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#新的-input-属性："><span class="toc-number">1.13.2.</span> <span class="toc-text">新的 input 属性：</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#html5%E7%89%B9%E6%80%A7"><span class="toc-number">1.</span> <span class="toc-text">html5特性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E4%BA%8E%E5%AA%92%E4%BB%8B%E5%9B%9E%E6%94%BE%E7%9A%84-video-%E5%92%8C-audio-%E5%85%83%E7%B4%A0"><span class="toc-number">1.1.</span> <span class="toc-text">用于媒介回放的 video 和 audio 元素</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Video"><span class="toc-number">1.1.1.</span> <span class="toc-text">Video</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#audio"><span class="toc-number">1.1.2.</span> <span class="toc-text">audio</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#html5%E6%8B%96%E6%94%BE%EF%BC%88drag%E5%92%8Cdrop"><span class="toc-number">1.2.</span> <span class="toc-text">html5拖放（drag和drop)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E6%94%AF%E6%8C%81"><span class="toc-number">1.2.1.</span> <span class="toc-text">浏览器支持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E5%85%83%E7%B4%A0%E4%B8%BA%E5%8F%AF%E6%8B%96%E6%94%BE"><span class="toc-number">1.2.2.</span> <span class="toc-text">设置元素为可拖放</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%96%E5%8A%A8%E4%BB%80%E4%B9%88-ondragstart-%E5%92%8C-setData"><span class="toc-number">1.2.3.</span> <span class="toc-text">拖动什么 - ondragstart 和 setData()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BE%E5%88%B0%E4%BD%95%E5%A4%84-ondragover"><span class="toc-number">1.2.4.</span> <span class="toc-text">放到何处 - ondragover</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E8%A1%8C%E6%94%BE%E7%BD%AE-ondrop"><span class="toc-number">1.2.5.</span> <span class="toc-text">进行放置 - ondrop</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Canvas-%E7%94%BB%E5%B8%83"><span class="toc-number">1.3.</span> <span class="toc-text">Canvas(画布)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-Canvas%EF%BC%9F"><span class="toc-number">1.3.1.</span> <span class="toc-text">什么是 Canvas？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA-Canvas-%E5%85%83%E7%B4%A0"><span class="toc-number">1.3.2.</span> <span class="toc-text">创建 Canvas 元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87-JavaScript-%E6%9D%A5%E7%BB%98%E5%88%B6"><span class="toc-number">1.3.3.</span> <span class="toc-text">通过 JavaScript 来绘制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SVG"><span class="toc-number">1.4.</span> <span class="toc-text">SVG</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFSVG%EF%BC%9F"><span class="toc-number">1.4.1.</span> <span class="toc-text">什么是SVG？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SVG-%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="toc-number">1.4.2.</span> <span class="toc-text">SVG 的优势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90"><span class="toc-number">1.4.3.</span> <span class="toc-text">例子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Canvas-%E4%B8%8E-SVG-%E7%9A%84%E6%AF%94%E8%BE%83"><span class="toc-number">1.5.</span> <span class="toc-text">Canvas 与 SVG 的比较</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Html5%E5%9C%B0%E7%90%86%E5%AE%9A%E4%BD%8D"><span class="toc-number">1.6.</span> <span class="toc-text">Html5地理定位</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTML-5-Web-%E5%AD%98%E5%82%A8"><span class="toc-number">1.7.</span> <span class="toc-text">HTML 5 Web 存储</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#localStorage-%E6%96%B9%E6%B3%95"><span class="toc-number">1.7.1.</span> <span class="toc-text">localStorage 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sessionStorage-%E6%96%B9%E6%B3%95"><span class="toc-number">1.7.2.</span> <span class="toc-text">sessionStorage 方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTML-5-%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E7%BC%93%E5%AD%98"><span class="toc-number">1.8.</span> <span class="toc-text">HTML 5 应用程序缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E7%BC%93%E5%AD%98%EF%BC%88Application-Cache%EF%BC%89%EF%BC%9F"><span class="toc-number">1.8.1.</span> <span class="toc-text">什么是应用程序缓存（Application Cache）？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cache-Manifest-%E5%9F%BA%E7%A1%80"><span class="toc-number">1.8.2.</span> <span class="toc-text">Cache Manifest 基础</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Manifest-%E6%96%87%E4%BB%B6"><span class="toc-number">1.8.3.</span> <span class="toc-text">Manifest 文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E7%BC%93%E5%AD%98"><span class="toc-number">1.8.4.</span> <span class="toc-text">更新缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B-%E5%AE%8C%E6%95%B4%E7%9A%84-Manifest-%E6%96%87%E4%BB%B6"><span class="toc-number">1.8.5.</span> <span class="toc-text">实例 - 完整的 Manifest 文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTML-5-Web-Workers"><span class="toc-number">1.9.</span> <span class="toc-text">HTML 5 Web Workers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTML-5-%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%91%E9%80%81%E4%BA%8B%E4%BB%B6"><span class="toc-number">1.10.</span> <span class="toc-text">HTML 5 服务器发送事件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#html5%E8%A1%A8%E5%8D%95"><span class="toc-number">1.11.</span> <span class="toc-text">html5表单</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTML5-%E8%A1%A8%E5%8D%95%E5%85%83%E7%B4%A0"><span class="toc-number">1.12.</span> <span class="toc-text">HTML5 表单元素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTML5-%E8%A1%A8%E5%8D%95%E5%B1%9E%E6%80%A7"><span class="toc-number">1.13.</span> <span class="toc-text">HTML5 表单属性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B0%E7%9A%84-form-%E5%B1%9E%E6%80%A7%EF%BC%9A"><span class="toc-number">1.13.1.</span> <span class="toc-text">新的 form 属性：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B0%E7%9A%84-input-%E5%B1%9E%E6%80%A7%EF%BC%9A"><span class="toc-number">1.13.2.</span> <span class="toc-text">新的 input 属性：</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
             
@@ -451,7 +454,7 @@ source.onmessage=function(event)
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

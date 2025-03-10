@@ -38,7 +38,7 @@ Express 是一个简洁而灵活的 node.js Web应用框架, 提供一系列强�
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -101,7 +101,7 @@ Express 是一个简洁而灵活的 node.js Web应用框架, 提供一系列强�
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    4.1k
+                    4k
                 </span>
                 
                 
@@ -147,28 +147,30 @@ Express 是一个简洁而灵活的 node.js Web应用框架, 提供一系列强�
 <li>Express 不对 node.js 已有的特性进行二次抽象，我们只是在它之上扩展了Web应用所需的功能</li>
 </ul>
 <p>使用 Express 可以快速地搭建一个完整功能的网站，它有一套健壮的特性，可用于开发单页、多页和混合Web应用。</p>
-<h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>在确认已经安装了node之后(<a href="https://nodejs.org/en/#download" target="_blank" rel="noopener">下载</a>), 在你的机器上创建一个目录，让我们来开始你的第一个应用程序吧</p>
+<h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>在确认已经安装了node之后(<a target="_blank" rel="noopener" href="https://nodejs.org/en/#download">下载</a>), 在你的机器上创建一个目录，让我们来开始你的第一个应用程序吧</p>
 <pre><code class="js">//新建一个目录文件夹,初始化一个packjson.json文件
     $mkdir express-demo &amp;&amp; cd express-demo  &amp;&amp; npm init
 </code></pre>
 <pre><code class="js">//安装Express
 $ npm install express -g
 </code></pre>
-<p>现在我们来写真正的代码了！创建一个名为app.js 或者 server.js的文件，叫什么看你个人喜好了。 载入express 然后使用代码 express()创建一个新的应用程序:<br><a id="more"></a></p>
+<p>现在我们来写真正的代码了！创建一个名为app.js 或者 server.js的文件，叫什么看你个人喜好了。 载入express 然后使用代码 express()创建一个新的应用程序:</p>
+<span id="more"></span>
+
 <pre><code class="js">var express = require(&#39;express&#39;);
 var app = express();
 </code></pre>
 <p>在这个应用程序实例里，你可以通过 app.VERB()定义路由，下面的例子是”GET /“返回 “Hello World” 字符串。 req 和 res 对象是和node原生提供给你的一致的，你也可以执行 res.pipe(), req.on(‘data’, callback) 等任何事情在没有Express的情况下可以做的事情。</p>
 <p>Express 给这些对象加了一个封装好的方法，比如 res.send(), 它会帮你设置Content-Length:</p>
-<pre><code class="js">app.get(&#39;./&#39;,function(req,res){
+<pre><code class="js">app.get(&#39;./&#39;,function(req,res)&#123;
     console.log(&quot;GET 请求成功&quot;)；
     req.send(&#39;Hello Express&#39;);
-})
+&#125;)
 </code></pre>
 <p>现在我们通过执行 app.listen() 来绑定并监听连接。 它接受的参数和nodenet.Server#listen()的方法一致:</p>
-<pre><code class="js">app.listen(3000,function(){
+<pre><code class="js">app.listen(3000,function()&#123;
     console.log(&#39;Listening on port %d&#39;, server.address().port);
-})
+&#125;)
 </code></pre>
 <p>然后在终端执行<code>node app.js</code> 打开3000端口的页面就会看到<code>Hello Express</code>了</p>
 <h2 id="使用express-generator-快速生成一个应用程序"><a href="#使用express-generator-快速生成一个应用程序" class="headerlink" title="使用express-generator 快速生成一个应用程序"></a>使用express-generator 快速生成一个应用程序</h2><h3 id="安装express-generator"><a href="#安装express-generator" class="headerlink" title="安装express-generator"></a>安装express-generator</h3><pre><code class="js">$ npm install express-generator -g
@@ -188,8 +190,8 @@ Options:
 <h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><pre><code class="js"> $ express myapp
 </code></pre>
 <p>生成目录的如下:<br><img src="http://hexobed.oss-cn-beijing.aliyuncs.com/18-4-28/74845117.jpg" alt="express"></p>
-<p>默认为<a href="http://jade-lang.com/" target="_blank" rel="noopener">jade</a>和<code>css</code>的结构</p>
-<p><strong>如果你想生成一个支持<a href="https://ejs.bootcss.com/" target="_blank" rel="noopener">ejs</a>, <a href="http://stylus-lang.com/" target="_blank" rel="noopener">Stylus</a>的应用程序，只需要简单的执行下面的命令</strong>：</p>
+<p>默认为<a target="_blank" rel="noopener" href="http://jade-lang.com/">jade</a>和<code>css</code>的结构</p>
+<p><strong>如果你想生成一个支持<a target="_blank" rel="noopener" href="https://ejs.bootcss.com/">ejs</a>, <a target="_blank" rel="noopener" href="http://stylus-lang.com/">Stylus</a>的应用程序，只需要简单的执行下面的命令</strong>：</p>
 <p>则生成的目录为<br><img src="http://hexobed.oss-cn-beijing.aliyuncs.com/18-4-28/16498387.jpg" alt="ejs"></p>
 <ul>
 <li>app.js：启动文件，或者说入口文件</li>
@@ -206,8 +208,8 @@ npm install
 DEBUG=myapp:* npm start
 </code></pre>
 <p>打开3000端口就会看到如下页面：<br><img src="http://hexobed.oss-cn-beijing.aliyuncs.com/18-4-28/44690178.jpg" alt="expressapp"></p>
-<p>这些就是一个简单的应用程序创建和运行的所有步骤。 记住Express没有限定任何的目录结构，这只是一个方便你工作的基本结构。 如果你想得到更多怎么组织目录结构选择，可以查看github上的<a href="https://github.com/expressjs/express/tree/master/examples" target="_blank" rel="noopener">示例</a>。</p>
-<h2 id="推荐"><a href="#推荐" class="headerlink" title="推荐"></a>推荐</h2><p>最后给大家推荐一个更详细的例子：<a href="http://ourjs.com/detail/56b2a6f088feaf2d031d2468" target="_blank" rel="noopener">使用express搭建一个简单的博客</a>;</p>
+<p>这些就是一个简单的应用程序创建和运行的所有步骤。 记住Express没有限定任何的目录结构，这只是一个方便你工作的基本结构。 如果你想得到更多怎么组织目录结构选择，可以查看github上的<a target="_blank" rel="noopener" href="https://github.com/expressjs/express/tree/master/examples">示例</a>。</p>
+<h2 id="推荐"><a href="#推荐" class="headerlink" title="推荐"></a>推荐</h2><p>最后给大家推荐一个更详细的例子：<a target="_blank" rel="noopener" href="http://ourjs.com/detail/56b2a6f088feaf2d031d2468">使用express搭建一个简单的博客</a>;</p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -232,7 +234,7 @@ DEBUG=myapp:* npm start
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -255,7 +257,7 @@ DEBUG=myapp:* npm start
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -266,7 +268,7 @@ DEBUG=myapp:* npm start
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Express介绍"><span class="toc-number">1.</span> <span class="toc-text">Express介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#开始"><span class="toc-number">1.1.</span> <span class="toc-text">开始</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用express-generator-快速生成一个应用程序"><span class="toc-number">1.2.</span> <span class="toc-text">使用express-generator 快速生成一个应用程序</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装express-generator"><span class="toc-number">1.2.1.</span> <span class="toc-text">安装express-generator</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用"><span class="toc-number">1.2.2.</span> <span class="toc-text">使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#推荐"><span class="toc-number">1.3.</span> <span class="toc-text">推荐</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Express%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">Express介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B"><span class="toc-number">1.1.</span> <span class="toc-text">开始</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8express-generator-%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E4%B8%80%E4%B8%AA%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.2.</span> <span class="toc-text">使用express-generator 快速生成一个应用程序</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85express-generator"><span class="toc-number">1.2.1.</span> <span class="toc-text">安装express-generator</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-number">1.2.2.</span> <span class="toc-text">使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A8%E8%8D%90"><span class="toc-number">1.3.</span> <span class="toc-text">推荐</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -285,7 +287,7 @@ DEBUG=myapp:* npm start
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

@@ -39,7 +39,7 @@ npm install @type/jquery --save-dev
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -102,7 +102,7 @@ npm install @type/jquery --save-dev
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    10k
+                    11k
                 </span>
                 
                 
@@ -150,13 +150,13 @@ npm install @type/jquery --save-dev
 <pre><code class="js">import * as $ from &#39;jquery&#39;
 </code></pre>
 <p>可以在<code>typeconfig.json</code>中可以配置有意义的类型</p>
-<pre><code class="js">{
-    compilerOptions{
+<pre><code class="js">&#123;
+    compilerOptions&#123;
         &quot;type&quot; :[
             &quot;jquery&quot;
         ]
-    }
-}
+    &#125;
+&#125;
 </code></pre>
 <h2 id="声明文件"><a href="#声明文件" class="headerlink" title="声明文件"></a>声明文件</h2><p>可以使用<code>declear</code>关键字来告诉typescript，你试图表诉一个其他地方已经存在的代码</p>
 <pre><code class="ts">foo = 123
@@ -167,81 +167,80 @@ foo = 123
 <h2 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h2><p>接口运行时的影响为0.有多种方式可以声明变量的结构</p>
 <pre><code class="js">//等效声明
 //内联注解
-declear const myPoint = {x:number,y:number}
+declear const myPoint = &#123;x:number,y:number&#125;
 //接口实现  
-interface myPoint{
+interface myPoint&#123;
     x: number,
     y: number
-}
+&#125;
 </code></pre>
-<h3 id="类来实现接口"><a href="#类来实现接口" class="headerlink" title="类来实现接口"></a>类来实现接口</h3><pre><code class="js">interface myPoint{
+<h3 id="类来实现接口"><a href="#类来实现接口" class="headerlink" title="类来实现接口"></a>类来实现接口</h3><pre><code class="js">interface myPoint&#123;
     x: string,
     y: string
-}
+&#125;
 
-class point implements myPoint{
+class point implements myPoint&#123;
     x: string,
     y: string
-}
+&#125;
 </code></pre>
 <p><strong>注意：并非每个接口都容易实现</strong></p>
-<pre><code class="js">interface Crazy{
-    new() {
+<pre><code class="js">interface Crazy&#123;
+    new() &#123;
         value: number
-    }
-}
+    &#125;
+&#125;
 
-class CrazyClass implements Crazy{
-    constructor(){
-        return {
+class CrazyClass implements Crazy&#123;
+    constructor()&#123;
+        return &#123;
             value: 123
-        }
-    }
-}
+        &#125;
+    &#125;
+&#125;
 
 const crazy = new CrazyClass()
 </code></pre>
 <h2 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h2><p>枚举是收集有关连变量的一种方式, 作用就是管理常量，让常量更规范统一</p>
-<h3 id="数字枚举"><a href="#数字枚举" class="headerlink" title="数字枚举"></a>数字枚举</h3><pre><code class="js">enum CradSuit{
+<h3 id="数字枚举"><a href="#数字枚举" class="headerlink" title="数字枚举"></a>数字枚举</h3><pre><code class="js">enum CradSuit&#123;
     Clubs,
     Diamonds,
     Hearts,
     Spades
-}
+&#125;
 let clubs = CradSuot.Clubs
 </code></pre>
-<h3 id="字符串枚举"><a href="#字符串枚举" class="headerlink" title="字符串枚举"></a>字符串枚举</h3><pre><code class="js">enum CradSuit{
+<h3 id="字符串枚举"><a href="#字符串枚举" class="headerlink" title="字符串枚举"></a>字符串枚举</h3><pre><code class="js">enum CradSuit&#123;
     Clubs,
     Diamonds,
     Hearts,
     Spades
-}
+&#125;
 console.log(CardSuit.Clubs[0]) // &#39;Clubs&#39;
 console.log(CardSuit.[&#39;Diamonds&#39;]) // 0
 </code></pre>
 <p>改变与枚举关联的数字</p>
-<pre><code class="js">enum CradSuit{
+<pre><code class="js">enum CradSuit&#123;
     Clubs , // 0
     Diamonds, // 1
     Hearts, // 2
     Spades // 3
-}
-enum CradSuit{
+&#125;
+enum CradSuit&#123;
     Clubs  = 3, // 3
     Diamonds, // 4
     Hearts, // 5
     Spades // 6
-
 </code></pre>
-<h3 id="常量枚举"><a href="#常量枚举" class="headerlink" title="常量枚举"></a>常量枚举</h3><pre><code class="js">enum Fruit {
+<h3 id="常量枚举"><a href="#常量枚举" class="headerlink" title="常量枚举"></a>常量枚举</h3><pre><code class="js">enum Fruit &#123;
     Apple,
     banner,
     orange
-}
+&#125;
 
 console.log(Fruit.orange) // 2
 </code></pre>
-<h4 id="静态方法的枚举"><a href="#静态方法的枚举" class="headerlink" title="静态方法的枚举"></a>静态方法的枚举</h4><pre><code class="js">enum Weekday{
+<h4 id="静态方法的枚举"><a href="#静态方法的枚举" class="headerlink" title="静态方法的枚举"></a>静态方法的枚举</h4><pre><code class="js">enum Weekday&#123;
     Monday,
     Tuesday,
     Wednesday,
@@ -249,18 +248,18 @@ console.log(Fruit.orange) // 2
     Friday,
     Saturday
     Sunday
-}
-namesapce Weekday{
-    export function isBusinessDay(weekday: Weekday){
-        switch(weekday){
+&#125;
+namesapce Weekday&#123;
+    export function isBusinessDay(weekday: Weekday)&#123;
+        switch(weekday)&#123;
             case Weekday.Saturday:
         case Weekday.Sunday:
             return false;
         default:
             return true;
-        }
-    }
-}
+        &#125;
+    &#125;
+&#125;
 const mon = Weekday.Monday;
 const sun = Weekday.Sunday;
 
@@ -269,65 +268,65 @@ console.log(Weekday.isBusinessDay(sun));
 </code></pre>
 <h2 id="lib-d-ts"><a href="#lib-d-ts" class="headerlink" title="lib.d.ts"></a>lib.d.ts</h2><p>安装typescript的时候会有附带一个<code>lib.d.ts</code>的文件，里面的内容定义了(window,document,math，data,string)的变量声明</p>
 <h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><p>可组合系统的核心构建块</p>
-<h3 id="返回函数类型注解"><a href="#返回函数类型注解" class="headerlink" title="返回函数类型注解"></a>返回函数类型注解</h3><pre><code class="js">interface Foo {
+<h3 id="返回函数类型注解"><a href="#返回函数类型注解" class="headerlink" title="返回函数类型注解"></a>返回函数类型注解</h3><pre><code class="js">interface Foo &#123;
     foo: string
-}
+&#125;
 
-function foo(sameple: foo) :foo{
+function foo(sameple: foo) :foo&#123;
     console.log(foo)
-}
+&#125;
 </code></pre>
-<h3 id="可选参数及默认参数值属性"><a href="#可选参数及默认参数值属性" class="headerlink" title="可选参数及默认参数值属性"></a>可选参数及默认参数值属性</h3><pre><code class="js">function person(speak:string =&quot;hello world&quot;,age?:number){
+<h3 id="可选参数及默认参数值属性"><a href="#可选参数及默认参数值属性" class="headerlink" title="可选参数及默认参数值属性"></a>可选参数及默认参数值属性</h3><pre><code class="js">function person(speak:string =&quot;hello world&quot;,age?:number)&#123;
     console.log(speak,age)
-}
+&#125;
 person(&#39;你好&#39;)
 person(...12)
 </code></pre>
-<h3 id="函数重载"><a href="#函数重载" class="headerlink" title="函数重载"></a>函数重载</h3><pre><code class="js">function addOne(a:number,y?:number,z?:number,x?:number){
-    if(x === undefined &amp;&amp; y === undefined &amp;&amp; z === undefined){
+<h3 id="函数重载"><a href="#函数重载" class="headerlink" title="函数重载"></a>函数重载</h3><pre><code class="js">function addOne(a:number,y?:number,z?:number,x?:number)&#123;
+    if(x === undefined &amp;&amp; y === undefined &amp;&amp; z === undefined)&#123;
         x = y = z = a
-    }else if( y === undefined &amp;&amp; z === undefined ){
+    &#125;else if( y === undefined &amp;&amp; z === undefined )&#123;
         z = a 
         x = y
-    }
-    return {
+    &#125;
+    return &#123;
         top: a,
         left: x,
         right: y,
         bottom: z
-    }
-}
+    &#125;
+&#125;
 addOne(1)
 addOne(1,1,1,1)
 </code></pre>
-<h3 id="函数声明"><a href="#函数声明" class="headerlink" title="函数声明"></a>函数声明</h3><pre><code class="js">type londHand = {
+<h3 id="函数声明"><a href="#函数声明" class="headerlink" title="函数声明"></a>函数声明</h3><pre><code class="js">type londHand = &#123;
     (a:number) : number
-}
-type ShortHand = (a:number) =&gt;{number}
+&#125;
+type ShortHand = (a:number) =&gt;&#123;number&#125;
 </code></pre>
-<h2 id="可调用的"><a href="#可调用的" class="headerlink" title="可调用的"></a>可调用的</h2><pre><code class="js">interface Complex {
+<h2 id="可调用的"><a href="#可调用的" class="headerlink" title="可调用的"></a>可调用的</h2><pre><code class="js">interface Complex &#123;
     (foo:string,age?:number,...other,boolean[]):number
-}
+&#125;
 </code></pre>
 <h2 id="类型断言"><a href="#类型断言" class="headerlink" title="类型断言"></a>类型断言</h2><p>TypeScript 允许你覆盖它的推断，并且能以你任何你想要的方式分析它，这种机制被称为「类型断言」</p>
 <p><code>as foo 与 &lt;foo&gt;</code></p>
 <p><code>&lt;foo&gt;</code>可能会与jsx中冲突，推荐使用<code>as foo</code></p>
-<h3 id="双重断言"><a href="#双重断言" class="headerlink" title="双重断言"></a>双重断言</h3><pre><code class="js">function handle(event:Event){
+<h3 id="双重断言"><a href="#双重断言" class="headerlink" title="双重断言"></a>双重断言</h3><pre><code class="js">function handle(event:Event)&#123;
     console.log(element = (event as any) as HTMLElement)
-}
+&#125;
 </code></pre>
 <h2 id="Freshness"><a href="#Freshness" class="headerlink" title="Freshness"></a>Freshness</h2><p>为了能让检查对象字面量类型更容易，提供Freshness更严格的类型检查</p>
 <h2 id="类型保护"><a href="#类型保护" class="headerlink" title="类型保护"></a>类型保护</h2><p>你可以使用更小范围的对象类型</p>
 <p><code>typeof</code> <code>instanceof</code></p>
 <h2 id="字面量类型"><a href="#字面量类型" class="headerlink" title="字面量类型"></a>字面量类型</h2><p>你可以使用一个准备的类型来定义一个对象</p>
 <h2 id="readOnly"><a href="#readOnly" class="headerlink" title="readOnly"></a>readOnly</h2><p>如字面意思一样，是只读的，不能随便更改的，是一种更安全的方式</p>
-<pre><code class="js">type Foo = {
+<pre><code class="js">type Foo = &#123;
   readonly bar: number;
   readonly bas: number;
-};
+&#125;;
 
 // 初始化
-const foo: Foo = { bar: 123, bas: 456 };
+const foo: Foo = &#123; bar: 123, bas: 456 &#125;;
 
 // 不能被改变
 foo.bar = 456; // Error: foo.bar 为仅读属性
@@ -343,11 +342,11 @@ foo.bar = 456; // Error: foo.bar 为仅读属性
 <li>函数参数</li>
 <li>函数返回值</li>
 </ul>
-<pre><code class="js">class Queue&lt;T&gt;{
+<pre><code class="js">class Queue&lt;T&gt;&#123;
     private data: T[] = []
-    push = (item:&lt;T&gt;) =&gt; {this.data.push(item)}
-    pop = ():T | undefiend =&gt; {this.data.shift()}
-}
+    push = (item:&lt;T&gt;) =&gt; &#123;this.data.push(item)&#125;
+    pop = ():T | undefiend =&gt; &#123;this.data.shift()&#125;
+&#125;
 
 const queue = new Queue&lt;number&gt;()
 queue.push(1)
@@ -359,52 +358,52 @@ queue.shift(&#39;1&#39;) //  error &#39;1&#39; is string
 <h2 id="类型兼容性"><a href="#类型兼容性" class="headerlink" title="类型兼容性"></a>类型兼容性</h2><p>用于确定一个类型是否能赋值给其他类型</p>
 <p>协变<br>逆变，<br>双向协变，<br>不变</p>
 <h2 id="never"><a href="#never" class="headerlink" title="never"></a>never</h2><p><code>never</code> 类型是 TypeScript 中的底层类型。它自然被分配的一些例子：</p>
-<p>一个从来不会有返回值的函数（如：如果函数内含有 <code>while(true) {}</code>）；<br>一个总是会抛出错误的函数（如：<code>function foo() { throw new Error(&#39;Not Implemented&#39;)</code> }，foo 的返回类型是 never）；</p>
+<p>一个从来不会有返回值的函数（如：如果函数内含有 <code>while(true) &#123;&#125;</code>）；<br>一个总是会抛出错误的函数（如：<code>function foo() &#123; throw new Error(&#39;Not Implemented&#39;)</code> }，foo 的返回类型是 never）；</p>
 <p>但是，never 类型仅能被赋值给另外一个 never</p>
-<h3 id="用例：详细的检查"><a href="#用例：详细的检查" class="headerlink" title="用例：详细的检查"></a>用例：详细的检查</h3><pre><code class="js">function foo(x:string | number):boolean {
-    if (typeof x === &#39;string&#39;) {
+<h3 id="用例：详细的检查"><a href="#用例：详细的检查" class="headerlink" title="用例：详细的检查"></a>用例：详细的检查</h3><pre><code class="js">function foo(x:string | number):boolean &#123;
+    if (typeof x === &#39;string&#39;) &#123;
         return true;
-    } else if (typeof x === &#39;number&#39;) {
+    &#125; else if (typeof x === &#39;number&#39;) &#123;
         return false;
-    }
+    &#125;
     // 如果不是一个 never 类型，这会报错：
     // - 不是所有条件都有返回值 （严格模式下）
     // - 或者检查到无法访问的代码
     // 但是由于 TypeScript 理解 `fail` 函数返回为 `never` 类型
     // 它可以让你调用它，因为你可能会在运行时用它来做安全或者详细的检查。
     return fail(&#39;Unexhaustive&#39;);
-} 
-function fail(message: string): never {
+&#125; 
+function fail(message: string): never &#123;
   throw new Error(message);
-}
+&#125;
 </code></pre>
 <h3 id="never与void的区别"><a href="#never与void的区别" class="headerlink" title="never与void的区别"></a>never与void的区别</h3><p>void 表示没有任何类型，never 表示永远不存在的值的类型。</p>
 <h2 id="辨析联合类型"><a href="#辨析联合类型" class="headerlink" title="辨析联合类型"></a>辨析联合类型</h2><p>当类中含有字面量成员时，我们可以用该类的属性来辨析联合类型。</p>
-<pre><code class="js">interface Square {
+<pre><code class="js">interface Square &#123;
   kind: &#39;square&#39;;
   size: number;
-}
+&#125;
 
-interface Rectangle {
+interface Rectangle &#123;
   kind: &#39;rectangle&#39;;
   width: number;
   height: number;
-}
+&#125;
 
 type Shape = Square | Rectangle;
 </code></pre>
 <h2 id="流动的类型"><a href="#流动的类型" class="headerlink" title="流动的类型"></a>流动的类型</h2><p>TypeScript 类型系统非常强大，它支持其他任何单一语言无法实现的类型流动和类型片段。<br>关键的动机：当你改变了其中一个时，其他相关的会自动更新，并且当有事情变糟糕时，你会得到一个友好的提示，就好像一个被精心设计过的约束系统。</p>
 <h3 id="复制类型和值"><a href="#复制类型和值" class="headerlink" title="复制类型和值"></a>复制类型和值</h3><p>如果你想移动一个类，你可能会想要做以下事情：</p>
-<pre><code class="js">class Foo {}
+<pre><code class="js">class Foo &#123;&#125;
 
 const Bar = Foo;
 
 let bar: Bar; // Error: 不能找到名称 &#39;Bar&#39;
 
 //这会得到一个错误，因为 const 仅仅是复制了 Foo 到一个变量声明空间，因此你无法把 Bar 当作一个类型声明使用。正确的方式是使用 import 关键字，请注意，如果你在使用 namespace 或者 modules，使用 import 是你唯一能用的方式：
-namespace importing {
-  export class Foo {}
-}
+namespace importing &#123;
+  export class Foo &#123;&#125;
+&#125;
 
 import Bar = importing.Foo;
 let bar: Bar; // ok
@@ -413,20 +412,20 @@ let bar: Bar; // ok
 </code></pre>
 <h3 id="捕获变量的类型"><a href="#捕获变量的类型" class="headerlink" title="捕获变量的类型"></a>捕获变量的类型</h3><p>你可以通过 typeof 操作符在类型注解中使用变量    </p>
 <h2 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h2><p>JavaScript 有一个 Error 类，用于处理异常。你可以通过 throw 关键字来抛出一个错误。然后通过 try/catch 块来捕获此错误：</p>
-<pre><code class="js">try{
+<pre><code class="js">try&#123;
     throw new Error(&#39;Something bad happened&#39;);
-}catch(e){
+&#125;catch(e)&#123;
     console.log(e)
-}
+&#125;
 </code></pre>
 <p>除内置的 Error 类外，还有一些额外的内置错误，它们继承自 Error 类：<code>RangeError,ReferenceError,SyntaxError,TypeError,URIError</code></p>
 <h2 id="混合"><a href="#混合" class="headerlink" title="混合"></a>混合</h2><p>TypeScript (和 JavaScript) 类只能严格的单继承，因此你不能做：</p>
-<pre><code class="js">class User extends Tagged, Timestamped { // ERROR : 不能多重继承
+<pre><code class="js">class User extends Tagged, Timestamped &#123; // ERROR : 不能多重继承
   // ..
-}
+&#125;
 </code></pre>
 <p>从可重用组件构建类的另一种方式是通过基类来构建它们，这种方式称为混合。</p>
-<h2 id="常见的typescript错误"><a href="#常见的typescript错误" class="headerlink" title="常见的typescript错误"></a>常见的typescript错误</h2><p><a href="https://jkchao.github.io/typescript-book-chinese/error/common.html#ts2304" target="_blank" rel="noopener">常见的typescript错误</a></p>
+<h2 id="常见的typescript错误"><a href="#常见的typescript错误" class="headerlink" title="常见的typescript错误"></a>常见的typescript错误</h2><p><a target="_blank" rel="noopener" href="https://jkchao.github.io/typescript-book-chinese/error/common.html#ts2304">常见的typescript错误</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -451,7 +450,7 @@ let bar: Bar; // ok
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -474,7 +473,7 @@ let bar: Bar; // ok
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -485,7 +484,7 @@ let bar: Bar; // ok
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#TypeScript类型系统"><span class="toc-number">1.</span> <span class="toc-text">TypeScript类型系统</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#types"><span class="toc-number">1.1.</span> <span class="toc-text">@types</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#全局-types"><span class="toc-number">1.1.1.</span> <span class="toc-text">全局@types</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#局部-types"><span class="toc-number">1.1.2.</span> <span class="toc-text">局部@types</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#声明文件"><span class="toc-number">1.2.</span> <span class="toc-text">声明文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#接口"><span class="toc-number">1.3.</span> <span class="toc-text">接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#类来实现接口"><span class="toc-number">1.3.1.</span> <span class="toc-text">类来实现接口</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#枚举"><span class="toc-number">1.4.</span> <span class="toc-text">枚举</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数字枚举"><span class="toc-number">1.4.1.</span> <span class="toc-text">数字枚举</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串枚举"><span class="toc-number">1.4.2.</span> <span class="toc-text">字符串枚举</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常量枚举"><span class="toc-number">1.4.3.</span> <span class="toc-text">常量枚举</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lib-d-ts"><span class="toc-number">1.5.</span> <span class="toc-text">lib.d.ts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数"><span class="toc-number">1.6.</span> <span class="toc-text">函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#返回函数类型注解"><span class="toc-number">1.6.1.</span> <span class="toc-text">返回函数类型注解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可选参数及默认参数值属性"><span class="toc-number">1.6.2.</span> <span class="toc-text">可选参数及默认参数值属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#函数重载"><span class="toc-number">1.6.3.</span> <span class="toc-text">函数重载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#函数声明"><span class="toc-number">1.6.4.</span> <span class="toc-text">函数声明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可调用的"><span class="toc-number">1.7.</span> <span class="toc-text">可调用的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类型断言"><span class="toc-number">1.8.</span> <span class="toc-text">类型断言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#双重断言"><span class="toc-number">1.8.1.</span> <span class="toc-text">双重断言</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Freshness"><span class="toc-number">1.9.</span> <span class="toc-text">Freshness</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类型保护"><span class="toc-number">1.10.</span> <span class="toc-text">类型保护</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#字面量类型"><span class="toc-number">1.11.</span> <span class="toc-text">字面量类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#readOnly"><span class="toc-number">1.12.</span> <span class="toc-text">readOnly</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#与const不同"><span class="toc-number">1.12.1.</span> <span class="toc-text">与const不同</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#泛型"><span class="toc-number">1.13.</span> <span class="toc-text">泛型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类型推断"><span class="toc-number">1.14.</span> <span class="toc-text">类型推断</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类型兼容性"><span class="toc-number">1.15.</span> <span class="toc-text">类型兼容性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#never"><span class="toc-number">1.16.</span> <span class="toc-text">never</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#用例：详细的检查"><span class="toc-number">1.16.1.</span> <span class="toc-text">用例：详细的检查</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#never与void的区别"><span class="toc-number">1.16.2.</span> <span class="toc-text">never与void的区别</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#辨析联合类型"><span class="toc-number">1.17.</span> <span class="toc-text">辨析联合类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#流动的类型"><span class="toc-number">1.18.</span> <span class="toc-text">流动的类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#复制类型和值"><span class="toc-number">1.18.1.</span> <span class="toc-text">复制类型和值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#捕获变量的类型"><span class="toc-number">1.18.2.</span> <span class="toc-text">捕获变量的类型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#异常处理"><span class="toc-number">1.19.</span> <span class="toc-text">异常处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#混合"><span class="toc-number">1.20.</span> <span class="toc-text">混合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常见的typescript错误"><span class="toc-number">1.21.</span> <span class="toc-text">常见的typescript错误</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#TypeScript%E7%B1%BB%E5%9E%8B%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.</span> <span class="toc-text">TypeScript类型系统</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#types"><span class="toc-number">1.1.</span> <span class="toc-text">@types</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E5%B1%80-types"><span class="toc-number">1.1.1.</span> <span class="toc-text">全局@types</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B1%80%E9%83%A8-types"><span class="toc-number">1.1.2.</span> <span class="toc-text">局部@types</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A3%B0%E6%98%8E%E6%96%87%E4%BB%B6"><span class="toc-number">1.2.</span> <span class="toc-text">声明文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A5%E5%8F%A3"><span class="toc-number">1.3.</span> <span class="toc-text">接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E6%9D%A5%E5%AE%9E%E7%8E%B0%E6%8E%A5%E5%8F%A3"><span class="toc-number">1.3.1.</span> <span class="toc-text">类来实现接口</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%9A%E4%B8%BE"><span class="toc-number">1.4.</span> <span class="toc-text">枚举</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E5%AD%97%E6%9E%9A%E4%B8%BE"><span class="toc-number">1.4.1.</span> <span class="toc-text">数字枚举</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%9E%9A%E4%B8%BE"><span class="toc-number">1.4.2.</span> <span class="toc-text">字符串枚举</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E9%87%8F%E6%9E%9A%E4%B8%BE"><span class="toc-number">1.4.3.</span> <span class="toc-text">常量枚举</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lib-d-ts"><span class="toc-number">1.5.</span> <span class="toc-text">lib.d.ts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0"><span class="toc-number">1.6.</span> <span class="toc-text">函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%94%E5%9B%9E%E5%87%BD%E6%95%B0%E7%B1%BB%E5%9E%8B%E6%B3%A8%E8%A7%A3"><span class="toc-number">1.6.1.</span> <span class="toc-text">返回函数类型注解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E9%80%89%E5%8F%82%E6%95%B0%E5%8F%8A%E9%BB%98%E8%AE%A4%E5%8F%82%E6%95%B0%E5%80%BC%E5%B1%9E%E6%80%A7"><span class="toc-number">1.6.2.</span> <span class="toc-text">可选参数及默认参数值属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E9%87%8D%E8%BD%BD"><span class="toc-number">1.6.3.</span> <span class="toc-text">函数重载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E5%A3%B0%E6%98%8E"><span class="toc-number">1.6.4.</span> <span class="toc-text">函数声明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E8%B0%83%E7%94%A8%E7%9A%84"><span class="toc-number">1.7.</span> <span class="toc-text">可调用的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E5%9E%8B%E6%96%AD%E8%A8%80"><span class="toc-number">1.8.</span> <span class="toc-text">类型断言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8C%E9%87%8D%E6%96%AD%E8%A8%80"><span class="toc-number">1.8.1.</span> <span class="toc-text">双重断言</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Freshness"><span class="toc-number">1.9.</span> <span class="toc-text">Freshness</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E5%9E%8B%E4%BF%9D%E6%8A%A4"><span class="toc-number">1.10.</span> <span class="toc-text">类型保护</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E9%9D%A2%E9%87%8F%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.11.</span> <span class="toc-text">字面量类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#readOnly"><span class="toc-number">1.12.</span> <span class="toc-text">readOnly</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8Econst%E4%B8%8D%E5%90%8C"><span class="toc-number">1.12.1.</span> <span class="toc-text">与const不同</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%9B%E5%9E%8B"><span class="toc-number">1.13.</span> <span class="toc-text">泛型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E5%9E%8B%E6%8E%A8%E6%96%AD"><span class="toc-number">1.14.</span> <span class="toc-text">类型推断</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E5%9E%8B%E5%85%BC%E5%AE%B9%E6%80%A7"><span class="toc-number">1.15.</span> <span class="toc-text">类型兼容性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#never"><span class="toc-number">1.16.</span> <span class="toc-text">never</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E4%BE%8B%EF%BC%9A%E8%AF%A6%E7%BB%86%E7%9A%84%E6%A3%80%E6%9F%A5"><span class="toc-number">1.16.1.</span> <span class="toc-text">用例：详细的检查</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#never%E4%B8%8Evoid%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.16.2.</span> <span class="toc-text">never与void的区别</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BE%A8%E6%9E%90%E8%81%94%E5%90%88%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.17.</span> <span class="toc-text">辨析联合类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%81%E5%8A%A8%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.18.</span> <span class="toc-text">流动的类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E5%88%B6%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%80%BC"><span class="toc-number">1.18.1.</span> <span class="toc-text">复制类型和值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8D%95%E8%8E%B7%E5%8F%98%E9%87%8F%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.18.2.</span> <span class="toc-text">捕获变量的类型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86"><span class="toc-number">1.19.</span> <span class="toc-text">异常处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%B7%E5%90%88"><span class="toc-number">1.20.</span> <span class="toc-text">混合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84typescript%E9%94%99%E8%AF%AF"><span class="toc-number">1.21.</span> <span class="toc-text">常见的typescript错误</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -504,7 +503,7 @@ let bar: Bar; // ok
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

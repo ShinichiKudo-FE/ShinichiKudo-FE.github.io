@@ -37,7 +37,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -140,7 +140,7 @@
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <p><a href="https://juejin.im/post/5e9f6b3251882573a855cd52?utm_source=gold_browser_extension#heading-15" target="_blank" rel="noopener">原文地址(https://juejin.im/post/5e9f6b3251882573a855cd52?utm_source=gold_browser_extension#heading-15)</a></p>
+            <p><a target="_blank" rel="noopener" href="https://juejin.im/post/5e9f6b3251882573a855cd52?utm_source=gold_browser_extension#heading-15">原文地址(https://juejin.im/post/5e9f6b3251882573a855cd52?utm_source=gold_browser_extension#heading-15)</a></p>
 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>4月21日晚，Vue作者尤雨溪在哔哩哔哩直播分享了Vue.js 3.0 Beta最新进展。 以下是直播内容整理</p>
 <h2 id="全新文档RFCs"><a href="#全新文档RFCs" class="headerlink" title="全新文档RFCs"></a>全新文档RFCs</h2><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719da838e76e8c7?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="全新文档RFCs"></p>
 <p><code>Vue.js 3.0 Beta</code>发布后的工作重点是保证稳定性和推进各类库集成</p>
@@ -185,17 +185,17 @@
 <p>假设要编译以下代码</p>
 <pre><code class="js">&lt;div&gt;
   &lt;span/&gt;
-  &lt;span&gt;{{ msg }}&lt;/span&gt;
+  &lt;span&gt;&#123;&#123; msg &#125;&#125;&lt;/span&gt;
 &lt;/div&gt;
 </code></pre>
-<pre><code class="js">import { createVNode as _createVNode, toDisplayString as _toDisplayString, openBlock as _openBlock, createBlock as _createBlock } from &quot;vue&quot;
+<pre><code class="js">import &#123; createVNode as _createVNode, toDisplayString as _toDisplayString, openBlock as _openBlock, createBlock as _createBlock &#125; from &quot;vue&quot;
 
-export function render(_ctx, _cache) {
+export function render(_ctx, _cache) &#123;
   return (_openBlock(), _createBlock(&quot;div&quot;, null, [
     _createVNode(&quot;span&quot;, null, &quot;static&quot;),
     _createVNode(&quot;span&quot;, null, _toDisplayString(_ctx.msg), 1 /* TEXT */)
   ]))
-}
+&#125;
 
 // Check the console for the AST
 </code></pre>
@@ -207,64 +207,64 @@ export function render(_ctx, _cache) {
 <p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719e6d7d3efe7f1?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="例子2"></p>
 <pre><code class="js">&lt;div&gt;
   &lt;span&gt;static&lt;/span&gt;
-  &lt;span :id=&quot;hello&quot; class=&quot;bar&quot;&gt;{{ msg }}   &lt;/span&gt;
+  &lt;span :id=&quot;hello&quot; class=&quot;bar&quot;&gt;&#123;&#123; msg &#125;&#125;   &lt;/span&gt;
 &lt;/div&gt;
 </code></pre>
-<pre><code class="js">import { createVNode as _createVNode, toDisplayString as _toDisplayString, openBlock as _openBlock, createBlock as _createBlock } from &quot;vue&quot;
+<pre><code class="js">import &#123; createVNode as _createVNode, toDisplayString as _toDisplayString, openBlock as _openBlock, createBlock as _createBlock &#125; from &quot;vue&quot;
 
-export function render(_ctx, _cache) {
+export function render(_ctx, _cache) &#123;
   return (_openBlock(), _createBlock(&quot;div&quot;, null, [
     _createVNode(&quot;span&quot;, null, &quot;static&quot;),
-    _createVNode(&quot;span&quot;, {
+    _createVNode(&quot;span&quot;, &#123;
       id: _ctx.hello,
       class: &quot;bar&quot;
-    }, _toDisplayString(_ctx.msg), 9 /* TEXT, PROPS */, [&quot;id&quot;])
+    &#125;, _toDisplayString(_ctx.msg), 9 /* TEXT, PROPS */, [&quot;id&quot;])
   ]))
-}
+&#125;
 </code></pre>
-<a id="more"></a>
+<span id="more"></span>
 <p><code>PatchFlag</code> 变成了<code>9 /* TEXT, PROPS */, [&quot;id&quot;]</code><br>它会告知我们不光有TEXT变化，还有PROPS变化（id）<br>这样既跳出了<code>virtual dom</code>性能的瓶颈，又保留了可以手写<code>render</code>的灵活性。<br>等于是：既有react的灵活性，又有基于模板的性能保证。</p>
 <h4 id="要点2-事件监听缓存：cacheHandlers"><a href="#要点2-事件监听缓存：cacheHandlers" class="headerlink" title="要点2: 事件监听缓存：cacheHandlers"></a>要点2: 事件监听缓存：cacheHandlers</h4><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719e775146d5a84?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="cacheHandlers"></p>
 <p>假设我们要绑定一个事件：</p>
 <pre><code class="html">&lt;div&gt;
   &lt;span @click=&quot;onClick&quot;&gt;
-    {{msg}}
+    &#123;&#123;msg&#125;&#125;
   &lt;/span&gt;
 &lt;/div&gt;
 </code></pre>
 <p>关闭<code>cacheHandlers</code>后：</p>
-<pre><code class="js">import { toDisplayString as _toDisplayString, createVNode as _createVNode, openBlock as _openBlock, createBlock as _createBlock } from &quot;vue&quot;
+<pre><code class="js">import &#123; toDisplayString as _toDisplayString, createVNode as _createVNode, openBlock as _openBlock, createBlock as _createBlock &#125; from &quot;vue&quot;
 
-export function render(_ctx, _cache) {
+export function render(_ctx, _cache) &#123;
   return (_openBlock(), _createBlock(&quot;div&quot;, null, [
-    _createVNode(&quot;span&quot;, { onClick: _ctx.onClick }, _toDisplayString(_ctx.msg), 9 /* TEXT, PROPS */, [&quot;onClick&quot;])
+    _createVNode(&quot;span&quot;, &#123; onClick: _ctx.onClick &#125;, _toDisplayString(_ctx.msg), 9 /* TEXT, PROPS */, [&quot;onClick&quot;])
   ]))
-}
+&#125;
 </code></pre>
 <p><code>onClick</code>会被视为<code>PROPS</code>动态绑定，后续替换点击事件时需要进行更新。</p>
 <p>开启<code>cacheHandlers</code>后：</p>
-<pre><code class="js">import { toDisplayString as _toDisplayString, createVNode as _createVNode, openBlock as _openBlock, createBlock as _createBlock } from &quot;vue&quot;
+<pre><code class="js">import &#123; toDisplayString as _toDisplayString, createVNode as _createVNode, openBlock as _openBlock, createBlock as _createBlock &#125; from &quot;vue&quot;
 
-export function render(_ctx, _cache) {
+export function render(_ctx, _cache) &#123;
   return (_openBlock(), _createBlock(&quot;div&quot;, null, [
-    _createVNode(&quot;span&quot;, {
+    _createVNode(&quot;span&quot;, &#123;
       onClick: _cache[1] || (_cache[1] = $event =&gt; (_ctx.onClick($event)))
-    }, _toDisplayString(_ctx.msg), 1 /* TEXT */)
+    &#125;, _toDisplayString(_ctx.msg), 1 /* TEXT */)
   ]))
-}
+&#125;
 </code></pre>
 <p><code>cache[1]</code>，会自动生成并缓存一个内联函数，“神奇”的变为一个静态节点。 Ps：相当于<code>React中useCallback</code>自动化。</p>
 <p>并且支持手写内联函数：</p>
 <pre><code class="html">&lt;div&gt;
   &lt;span @click=&quot;()=&gt;foo()&quot;&gt;
-    {{msg}}
+    &#123;&#123;msg&#125;&#125;
   &lt;/span&gt;
 &lt;/div&gt;
 </code></pre>
 <p>补充：<code>PatchFlags</code>枚举定义</p>
 <p>而通过查询Ts枚举定义，我们可以看到分别定义了以下的追踪标记：</p>
-<pre><code class="js">export const enum PatchFlags {
-
+<pre><code class="js">export const enum PatchFlags &#123;
+  
   TEXT = 1,// 表示具有动态textContent的元素
   CLASS = 1 &lt;&lt; 1,  // 表示有动态Class的元素
   STYLE = 1 &lt;&lt; 2,  // 表示动态样式（静态如style=&quot;color: red&quot;，也会提升至动态）
@@ -279,7 +279,7 @@ export function render(_ctx, _cache) {
   // 特殊 FLAGS -------------------------------------------------------------
   HOISTED = -1,  // 特殊标志是负整数表示永远不会用作diff,只需检查 patchFlag === FLAG.
   BAIL = -2 // 一个特殊的标志，指代差异算法（没懂）
-}
+&#125;
 </code></pre>
 <p>感兴趣的可以看源码：<code>packages/shared/src/patchFlags.ts</code></p>
 <h3 id="Tree-shaking-support"><a href="#Tree-shaking-support" class="headerlink" title="Tree shaking support"></a>Tree shaking support</h3><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719db10e9e06382?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="Tree shaking support"></p>
@@ -297,10 +297,10 @@ export function render(_ctx, _cache) {
 <li>vue 3的响应式模块可以和其他框架搭配使用</li>
 </ul>
 <p>混入<code>(mixin)</code> 将不再作为推荐使用， <code>Composition API</code>可以实现更灵活且无副作用的复用代码。</p>
-<p>感兴趣的可以查看：<a href="https://composition-api.vuejs.org/#summary" target="_blank" rel="noopener">composition-api.vuejs.org/#summary</a></p>
+<p>感兴趣的可以查看：<a target="_blank" rel="noopener" href="https://composition-api.vuejs.org/#summary">composition-api.vuejs.org/#summary</a></p>
 <p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719dc20717835c1?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="omposition-api.vuejs.org"></p>
 <p>Composition API包含了六个主要API</p>
-<p><a href="https://composition-api.vuejs.org/api.html#setup" target="_blank" rel="noopener">composition-api.vuejs.org/api.html#setup</a></p>
+<p><a target="_blank" rel="noopener" href="https://composition-api.vuejs.org/api.html#setup">composition-api.vuejs.org/api.html#setup</a></p>
 <p>Ps：其它的均为常见的工具函数，可先忽略不看。</p>
 <h3 id="Fragment"><a href="#Fragment" class="headerlink" title="Fragment"></a>Fragment</h3><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719dcd5c5f2b631?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="Fragment"></p>
 <p>Fragment翻译为：“碎片”</p>
@@ -337,7 +337,7 @@ export function render(_ctx, _cache) {
 <li>正在进行NativeScript Vue集成</li>
 <li>用户可以尝试WebGL自定义渲染器，与普通Vue应用程序一起使用（Vugel）。</li>
 </ul>
-<p>意味着以后可以通过 <code>vue</code>， <code>Dom</code> 编程的方式来进行 <code>webgl</code> 编程 。感兴趣可以看这里：<a href="https://vugel.planning.nl/#application" target="_blank" rel="noopener">Getting started vugel</a></p>
+<p>意味着以后可以通过 <code>vue</code>， <code>Dom</code> 编程的方式来进行 <code>webgl</code> 编程 。感兴趣可以看这里：<a target="_blank" rel="noopener" href="https://vugel.planning.nl/#application">Getting started vugel</a></p>
 <h2 id="剩余工作"><a href="#剩余工作" class="headerlink" title="剩余工作"></a>剩余工作</h2><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719df667b34919f?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="剩余工作"></p>
 <h3 id="Docs-amp-Migration-Guides"><a href="#Docs-amp-Migration-Guides" class="headerlink" title="Docs &amp; Migration Guides"></a>Docs &amp; Migration Guides</h3><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719df8c7c95f9b9?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="Docs &amp; Migration Guides"></p>
 <ul>
@@ -362,7 +362,7 @@ export function render(_ctx, _cache) {
 <li>（wip）CodeMods支持升级Vue 2应用</li>
 </ul>
 <h3 id="新工具：vite（法语-“快”）"><a href="#新工具：vite（法语-“快”）" class="headerlink" title="新工具：vite（法语 “快”）"></a>新工具：vite（法语 “快”）</h3><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719e0c133c3367f?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="vite"></p>
-<p>地址：<a href="https://github.com/vuejs/vite" target="_blank" rel="noopener">github.com/vuejs/vite</a></p>
+<p>地址：<a target="_blank" rel="noopener" href="https://github.com/vuejs/vite">github.com/vuejs/vite</a></p>
 <p>一个简易的http服务器，无需<code>webpack</code>编译打包，根据请求的Vue文件，直接发回渲染，且支持热更新（非常快）</p>
 <h3 id="vue-test-utils"><a href="#vue-test-utils" class="headerlink" title="vue-test-utils"></a>vue-test-utils</h3><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719e0d602d57dc6?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="vue-test-utils"></p>
 <h3 id="DevTools"><a href="#DevTools" class="headerlink" title="DevTools"></a>DevTools</h3><p><img src="https://user-gold-cdn.xitu.io/2020/4/22/1719e0d0e479ec8b?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="devtools"></p>
@@ -400,7 +400,7 @@ export function render(_ctx, _cache) {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -423,7 +423,7 @@ export function render(_ctx, _cache) {
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -434,7 +434,7 @@ export function render(_ctx, _cache) {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#全新文档RFCs"><span class="toc-number">1.1.</span> <span class="toc-text">全新文档RFCs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#六大亮点"><span class="toc-number">1.2.</span> <span class="toc-text">六大亮点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Performance"><span class="toc-number">1.2.1.</span> <span class="toc-text">Performance</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tree-shaking-support"><span class="toc-number">1.2.2.</span> <span class="toc-text">Tree shaking support</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Composition-API"><span class="toc-number">1.2.3.</span> <span class="toc-text">Composition API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fragment"><span class="toc-number">1.2.4.</span> <span class="toc-text">Fragment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#更好的TypeScript支持"><span class="toc-number">1.2.5.</span> <span class="toc-text">更好的TypeScript支持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Custom-Renderer-API：自定义渲染器API"><span class="toc-number">1.2.6.</span> <span class="toc-text">Custom Renderer API：自定义渲染器API</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#剩余工作"><span class="toc-number">1.3.</span> <span class="toc-text">剩余工作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Docs-amp-Migration-Guides"><span class="toc-number">1.3.1.</span> <span class="toc-text">Docs &amp; Migration Guides</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Router"><span class="toc-number">1.3.2.</span> <span class="toc-text">Router</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vuex"><span class="toc-number">1.3.3.</span> <span class="toc-text">Vuex</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CLI"><span class="toc-number">1.3.4.</span> <span class="toc-text">CLI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#新工具：vite（法语-“快”）"><span class="toc-number">1.3.5.</span> <span class="toc-text">新工具：vite（法语 “快”）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vue-test-utils"><span class="toc-number">1.3.6.</span> <span class="toc-text">vue-test-utils</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DevTools"><span class="toc-number">1.3.7.</span> <span class="toc-text">DevTools</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IDE-Support-Vetur"><span class="toc-number">1.3.8.</span> <span class="toc-text">IDE Support (Vetur)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nuxt"><span class="toc-number">1.3.9.</span> <span class="toc-text">Nuxt</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vue-2-x还有2-7版本"><span class="toc-number">1.3.10.</span> <span class="toc-text">Vue 2.x还有2.7版本</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%A8%E6%96%B0%E6%96%87%E6%A1%A3RFCs"><span class="toc-number">1.1.</span> <span class="toc-text">全新文档RFCs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E5%A4%A7%E4%BA%AE%E7%82%B9"><span class="toc-number">1.2.</span> <span class="toc-text">六大亮点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Performance"><span class="toc-number">1.2.1.</span> <span class="toc-text">Performance</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tree-shaking-support"><span class="toc-number">1.2.2.</span> <span class="toc-text">Tree shaking support</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Composition-API"><span class="toc-number">1.2.3.</span> <span class="toc-text">Composition API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fragment"><span class="toc-number">1.2.4.</span> <span class="toc-text">Fragment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E5%A5%BD%E7%9A%84TypeScript%E6%94%AF%E6%8C%81"><span class="toc-number">1.2.5.</span> <span class="toc-text">更好的TypeScript支持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Custom-Renderer-API%EF%BC%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B8%B2%E6%9F%93%E5%99%A8API"><span class="toc-number">1.2.6.</span> <span class="toc-text">Custom Renderer API：自定义渲染器API</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%A9%E4%BD%99%E5%B7%A5%E4%BD%9C"><span class="toc-number">1.3.</span> <span class="toc-text">剩余工作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Docs-amp-Migration-Guides"><span class="toc-number">1.3.1.</span> <span class="toc-text">Docs &amp; Migration Guides</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Router"><span class="toc-number">1.3.2.</span> <span class="toc-text">Router</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vuex"><span class="toc-number">1.3.3.</span> <span class="toc-text">Vuex</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CLI"><span class="toc-number">1.3.4.</span> <span class="toc-text">CLI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B0%E5%B7%A5%E5%85%B7%EF%BC%9Avite%EF%BC%88%E6%B3%95%E8%AF%AD-%E2%80%9C%E5%BF%AB%E2%80%9D%EF%BC%89"><span class="toc-number">1.3.5.</span> <span class="toc-text">新工具：vite（法语 “快”）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vue-test-utils"><span class="toc-number">1.3.6.</span> <span class="toc-text">vue-test-utils</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DevTools"><span class="toc-number">1.3.7.</span> <span class="toc-text">DevTools</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IDE-Support-Vetur"><span class="toc-number">1.3.8.</span> <span class="toc-text">IDE Support (Vetur)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nuxt"><span class="toc-number">1.3.9.</span> <span class="toc-text">Nuxt</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vue-2-x%E8%BF%98%E6%9C%892-7%E7%89%88%E6%9C%AC"><span class="toc-number">1.3.10.</span> <span class="toc-text">Vue 2.x还有2.7版本</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
             
@@ -453,7 +453,7 @@ export function render(_ctx, _cache) {
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

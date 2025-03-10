@@ -36,7 +36,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -99,7 +99,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    4.3k
+                    4.6k
                 </span>
                 
                 
@@ -142,58 +142,59 @@
             <p>react是基于状态实现对DOM控制和渲染。组件状态可分为两种：一种是组件间的状态传递，另一种是组件的内部状态。这两种状态使用<code>props</code>和<code>state</code>表示。<code>props</code>用于父组件向子组件的数据传递，组件内部也有自己的状态：<code>state</code>，这些状态只能在组件内部修改。</p>
 <h1 id="数据流与props"><a href="#数据流与props" class="headerlink" title="数据流与props"></a>数据流与props</h1><p>react的数据流是单向的，只会从父组件传递到子组件。属性props（properties）是父子组件进行传递状态的接口。React会向下遍历整个组件树，并重新渲染使用这个属性的组件。</p>
 <h2 id="设置props"><a href="#设置props" class="headerlink" title="设置props"></a>设置props</h2><p>可以在组件挂载时设置<code>props</code></p>
-<pre><code class="javascript">var sites = [{title:&#39;baidu.com&#39;}];
-&lt;ListSites sites = {sites}/&gt;
+<pre><code class="javascript">var sites = [&#123;title:&#39;baidu.com&#39;&#125;];
+&lt;ListSites sites = &#123;sites&#125;/&gt;
 </code></pre>
 <p>也可以通过调用组件实例的<code>SetProps()</code>方法设置props</p>
-<pre><code class="javascript">var sites = [{title:&#39;baidu.com&#39;}];
+<pre><code class="javascript">var sites = [&#123;title:&#39;baidu.com&#39;&#125;];
 ReactDOM.render(
     &lt;ListSites/&gt;,
     document.getElementById(&#39;example&#39;)
 )
 </code></pre>
-<a id="more"></a>
+<span id="more"></span>
+
 <p>SetProps()方法只能用于组件外部调用，不能在组件内使用<code>this.SetProps()</code>修改组件属性。组件内部的this.props是只读的，只能用于访问props属性，不能修改组件自身的属性。</p>
 <h3 id="JSX语法中的属性设置"><a href="#JSX语法中的属性设置" class="headerlink" title="JSX语法中的属性设置"></a>JSX语法中的属性设置</h3><p>JSX语法中，props可以设置为字符串：</p>
 <pre><code class="javascript">&lt;a href=&quot;http://itbilu.com&quot;&gt;IT笔录&lt;/a&gt;
 </code></pre>
 <p>或是通过{}语法设置：</p>
-<pre><code class="javascript">var obj = {url:&#39;itbilu.com&#39;, name:&#39;IT笔录&#39;};
-&lt;a href=&quot;http://{obj.url}&quot;&gt;{obj.name}&lt;/a&gt;
+<pre><code class="javascript">var obj = &#123;url:&#39;itbilu.com&#39;, name:&#39;IT笔录&#39;&#125;;
+&lt;a href=&quot;http://&#123;obj.url&#125;&quot;&gt;&#123;obj.name&#125;&lt;/a&gt;
 </code></pre>
 <p>JSX还支持将props直接设置为一个对象：</p>
-<pre><code class="javascript">class Site extends React.Component{
-    render(){
-        var obj = ({url:&#39;baidu.com&#39;,name:&#39;IT笔录&#39;})
+<pre><code class="javascript">class Site extends React.Component&#123;
+    render()&#123;
+        var obj = (&#123;url:&#39;baidu.com&#39;,name:&#39;IT笔录&#39;&#125;)
         return(
-            &lt;Site {...obj}/&gt;
+            &lt;Site &#123;...obj&#125;/&gt;
         )
-    }
-}
+    &#125;
+&#125;
 </code></pre>
 <p>props还可以用来添加事件处理：</p>
-<pre><code class="javascript">var saveBtn = React.createClass({
-    render:function(){
-        &lt;a onClick={this.handleClick}&gt;保存&lt;/a&gt;
-    }
-    handleClick:function(){
+<pre><code class="javascript">var saveBtn = React.createClass(&#123;
+    render:function()&#123;
+        &lt;a onClick=&#123;this.handleClick&#125;&gt;保存&lt;/a&gt;
+    &#125;
+    handleClick:function()&#123;
         //...
-    }
-})
+    &#125;
+&#125;)
 </code></pre>
 <h3 id="props的传递"><a href="#props的传递" class="headerlink" title="props的传递"></a>props的传递</h3><p>组件接收上级组件的props，并传递到下级组件，如：</p>
-<pre><code class="javascript">var myCheackBox = React.createClass ({
-    render:myCheackBox(){
+<pre><code class="javascript">var myCheackBox = React.createClass (&#123;
+    render:myCheackBox()&#123;
         var myClass = this.props.cheacked ? &#39;MyCheacked&#39;:&#39;MyCheackBox&#39;;
         return(
-            &lt;div className = {myClass} onClick = {this.props.onClick}&gt;
-                {this.props.children}
+            &lt;div className = &#123;myClass&#125; onClick = &#123;this.props.onClick&#125;&gt;
+                &#123;this.props.children&#125;
             &lt;/div&gt;
         )
-    }
-})
+    &#125;
+&#125;)
 React.render(
-    &lt;MyCheackBox cheacked = {true} onClick = {console.log.bind(console)}&gt;
+    &lt;MyCheackBox cheacked = &#123;true&#125; onClick = &#123;console.log.bind(console)&#125;&gt;
         hello world
     &lt;MyCheackBox/&gt;,
     document.getElementById(&#39;example&#39;)
@@ -201,32 +202,32 @@ React.render(
 </code></pre>
 <h2 id="组件内部状态与State"><a href="#组件内部状态与State" class="headerlink" title="组件内部状态与State"></a>组件内部状态与State</h2><p>props可以理解为父子组件的状态传递，而React有自己内部的状态，这个内部状态则用State表示。</p>
 <p>如，用state定义一个<DropDown />组件的状态：</p>
-<pre><code class="javascript">var SiteDropdown = React.createClass({
-     getInitalState: function() {
-        return: {
+<pre><code class="javascript">var SiteDropdown = React.createClass(&#123;
+     getInitalState: function() &#123;
+        return: &#123;
         showOptions: false
-        }
-     }
-     render:function(){
+        &#125;
+     &#125;
+     render:function()&#123;
          var opts;
-         if(this.state.showOptions){
+         if(this.state.showOptions)&#123;
              &lt;ul&gt;
                 &lt;li&gt;itbilu.com&lt;/li&gt;
                 &lt;li&gt;yijiebuyi.com&lt;/li&gt;
                 &lt;li&gt;niefengjun.cn&lt;/li&gt;
              &lt;/ul&gt;
-         };
-         return( &lt;div onClick={this.handleClick} &gt;
+         &#125;;
+         return( &lt;div onClick=&#123;this.handleClick&#125; &gt;
                 &lt;/div&gt;
         )
-     },
-     handleClick:function(){
-         this.SetState ({
+     &#125;,
+     handleClick:function()&#123;
+         this.SetState (&#123;
              showOptions: true
-         })
-     }
-  }
-})
+         &#125;)
+     &#125;
+  &#125;
+&#125;)
 </code></pre>
 <p>随着state的变化，render也会调用，react会对比render返回的值，如果有变化就会DOM；<br>state与props类似，只能通过setState()方法修改。不同的是，state只能在组件内部使用，其实是对组件本身状态的一个引用</p>
 <h2 id="props与state的比较"><a href="#props与state的比较" class="headerlink" title="props与state的比较"></a>props与state的比较</h2><p><code>React</code>会根据<code>props</code>和<code>state</code>更新视图状态，虽然二者有相似之处，但是两者的应用范围不同。具体表现如下：</p>
@@ -245,7 +246,7 @@ React.render(
 <li>props与state都不能直接修改，而应该分别使用SetProps()和SetProps()修改</li>
 </ul>
 </blockquote>
-<p><a href="https://itbilu.com/javascript/react/4k5RfzDKx.html#props" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://itbilu.com/javascript/react/4k5RfzDKx.html#props">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -270,7 +271,7 @@ React.render(
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -293,7 +294,7 @@ React.render(
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -304,7 +305,7 @@ React.render(
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#数据流与props"><span class="toc-number">1.</span> <span class="toc-text">数据流与props</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#设置props"><span class="toc-number">1.1.</span> <span class="toc-text">设置props</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JSX语法中的属性设置"><span class="toc-number">1.1.1.</span> <span class="toc-text">JSX语法中的属性设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#props的传递"><span class="toc-number">1.1.2.</span> <span class="toc-text">props的传递</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#组件内部状态与State"><span class="toc-number">1.2.</span> <span class="toc-text">组件内部状态与State</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#props与state的比较"><span class="toc-number">1.3.</span> <span class="toc-text">props与state的比较</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%8Eprops"><span class="toc-number">1.</span> <span class="toc-text">数据流与props</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AEprops"><span class="toc-number">1.1.</span> <span class="toc-text">设置props</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JSX%E8%AF%AD%E6%B3%95%E4%B8%AD%E7%9A%84%E5%B1%9E%E6%80%A7%E8%AE%BE%E7%BD%AE"><span class="toc-number">1.1.1.</span> <span class="toc-text">JSX语法中的属性设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#props%E7%9A%84%E4%BC%A0%E9%80%92"><span class="toc-number">1.1.2.</span> <span class="toc-text">props的传递</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E5%86%85%E9%83%A8%E7%8A%B6%E6%80%81%E4%B8%8EState"><span class="toc-number">1.2.</span> <span class="toc-text">组件内部状态与State</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#props%E4%B8%8Estate%E7%9A%84%E6%AF%94%E8%BE%83"><span class="toc-number">1.3.</span> <span class="toc-text">props与state的比较</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -323,7 +324,7 @@ React.render(
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

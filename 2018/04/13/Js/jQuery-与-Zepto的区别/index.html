@@ -39,7 +39,7 @@ jQuery 的意义是在于抹平 DOM、BOM、CSSOM 的多浏览器差异，并统
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -102,7 +102,7 @@ jQuery 的意义是在于抹平 DOM、BOM、CSSOM 的多浏览器差异，并统
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    6.5k
+                    6.6k
                 </span>
                 
                 
@@ -147,89 +147,89 @@ jQuery 的意义是在于抹平 DOM、BOM、CSSOM 的多浏览器差异，并统
 </blockquote>
 <p>虽然 Zepto 和 jQuery 的中的很多 API 的用法是相似的，但仍有一些 API 在用法上差异很大。下面就实际使用中遇到的场景做一下列举。</p>
 <h2 id="创建DOM节点并赋与属性"><a href="#创建DOM节点并赋与属性" class="headerlink" title="创建DOM节点并赋与属性"></a>创建DOM节点并赋与属性</h2><p>使用 <code>$</code> 操作符可以轻松创建节点并赋予属性，具体代码是 <code>$(htmlString, attributes)</code> ，支持链式写法。喜欢刨根问底的同学可以看看下面的文档。</p>
-<p><a href="http://api.jquery.com/jQuery/#jQuery-html-attributes" target="_blank" rel="noopener">jquert文档</a><br><a href="http://zeptojs.com/#" target="_blank" rel="noopener">zepto文档</a></p>
+<p><a target="_blank" rel="noopener" href="http://api.jquery.com/jQuery/#jQuery-html-attributes">jquert文档</a><br><a target="_blank" rel="noopener" href="http://zeptojs.com/#">zepto文档</a></p>
 <h3 id="DOM操作的区别"><a href="#DOM操作的区别" class="headerlink" title="DOM操作的区别"></a>DOM操作的区别</h3><p><strong>jquery操作ul元素时候，添加id不会生效</strong></p>
-<pre><code class="javascript">(function($){
-    $(function){
-         var $list = $(&#39;&lt;ul&gt;&lt;li&gt;jQuery 插入&lt;/li&gt;&lt;/ul&gt;&#39;, {
+<pre><code class="javascript">(function($)&#123;
+    $(function)&#123;
+         var $list = $(&#39;&lt;ul&gt;&lt;li&gt;jQuery 插入&lt;/li&gt;&lt;/ul&gt;&#39;, &#123;
             id: &#39;insert-by-jquery&#39;
-        });
+        &#125;);
         $list.appendTo($(&#39;body&#39;));
-    }
-})(window.jQuery)
+    &#125;
+&#125;)(window.jQuery)
 // Result
 // &lt;ul&gt;&lt;li&gt;jQuery 插入&lt;/li&gt;&lt;/ul&gt;
 </code></pre>
 <p><strong>zepto操作ul元素时候，添加id会生效</strong></p>
-<pre><code class="javascript">zepto(function($){
-
-         var $list = $(&#39;&lt;ul&gt;&lt;li&gt;jQuery 插入&lt;/li&gt;&lt;/ul&gt;&#39;, {
+<pre><code class="javascript">zepto(function($)&#123;
+ 
+         var $list = $(&#39;&lt;ul&gt;&lt;li&gt;jQuery 插入&lt;/li&gt;&lt;/ul&gt;&#39;, &#123;
             id: &#39;insert-by-jquery&#39;
-        });
+        &#125;);
         $list.appendTo($(&#39;body&#39;));
-})
+&#125;)
 // Result
 // &lt;ul id=&quot;insert-by-zepto&quot;&gt;&lt;li&gt;Zepto 插入&lt;/li&gt;&lt;/ul&gt;
 </code></pre>
-<a id="more"></a>
+<span id="more"></span>
 <h3 id="事件触发的区别"><a href="#事件触发的区别" class="headerlink" title="事件触发的区别"></a>事件触发的区别</h3><p><strong>jquery时load事件的处理函数不会执行</strong></p>
-<pre><code class="javascript">(function($) {
-    $(function() {    
-        $script = $(&#39;&lt;script /&gt;&#39;, {
+<pre><code class="javascript">(function($) &#123;
+    $(function() &#123;    
+        $script = $(&#39;&lt;script /&gt;&#39;, &#123;
             src: &#39;http://cdn.amazeui.org/amazeui/1.0.1/js/amazeui.js&#39;,
             id: &#39;ui-jquery&#39;
-        });
+        &#125;);
 
         $script.appendTo($(&#39;body&#39;));
 
-        $script.on(&#39;load&#39;, function() {
+        $script.on(&#39;load&#39;, function() &#123;
             console.log(&#39;jQ script loaded&#39;);//没有打印出
-        });
-    });
-})(window.jQuery);
+        &#125;);
+    &#125;);
+&#125;)(window.jQuery);
 </code></pre>
 <p><strong>使用 Zepto 时 load 事件的处理函数会执行</strong></p>
-<pre><code class="javascript">Zepto(function($) {  
-    $script = $(&#39;&lt;script /&gt;&#39;, {
+<pre><code class="javascript">Zepto(function($) &#123;  
+    $script = $(&#39;&lt;script /&gt;&#39;, &#123;
         src: &#39;http://cdn.amazeui.org/amazeui/1.0.1/js/amazeui.js&#39;,
         id: &#39;ui-zepto&#39;
-    });
+    &#125;);
 
     $script.appendTo($(&#39;body&#39;));
 
-    $script.on(&#39;load&#39;, function() {
+    $script.on(&#39;load&#39;, function() &#123;
         console.log(&#39;zepto script loaded&#39;); //zepto script loaded
-    });
-});
+    &#125;);
+&#125;);
 </code></pre>
 <h3 id="事件委托的区别"><a href="#事件委托的区别" class="headerlink" title="事件委托的区别"></a>事件委托的区别</h3><p><strong>在 Zepto 中，当 a 被点击后，依次弹出了内容为”a事件“和”b事件“的弹出框。说明虽然事件委托在.a上可是却也触发了.b上的委托。</strong></p>
 <p><strong>但是在 jQuery 中只会触发 .a 上面的委托。</strong></p>
 <pre><code class="javascript">var $doc = $(document);
 
 // Class &#39;a&#39; bind event &#39;a&#39;
-$doc.on(&#39;click&#39;, &#39;.a&#39;, function () {
+$doc.on(&#39;click&#39;, &#39;.a&#39;, function () &#123;
     alert(&#39;a事件&#39;);
     // Class &#39;a&#39; change to class &#39;b&#39;
     $(this).removeClass(&#39;a&#39;).addClass(&#39;b&#39;);
-});
+&#125;);
 
 // Class &#39;b&#39; bind event &#39;b&#39;
-$doc.on(&#39;click&#39;, &#39;.b&#39;, function () {
+$doc.on(&#39;click&#39;, &#39;.b&#39;, function () &#123;
     alert(&#39;b事件&#39;);
-});
+&#125;);
 </code></pre>
 <p><strong>原理分析</strong></p>
 <pre><code class="javascript">// Zepto source code
-$.fn.on = function(event, selector, data, callback, one) {
+$.fn.on = function(event, selector, data, callback, one) &#123;
     var autoRemove, delegator, $this = this
-    if (event &amp;&amp; !isString(event)) {
+    if (event &amp;&amp; !isString(event)) &#123;
         // Core code
-        $.each(event, function (type, fn) {
+        $.each(event, function (type, fn) &#123;
             $this.on(type, selector, data, fn, one)
-        }) return $this
-    }
+        &#125;) return $this
+    &#125;
     //...
-}
+&#125;
 </code></pre>
 <blockquote>
 <p>在 Zepto 中代码解析的时候，document上所有的click委托事件都依次放入到一个队列中，点击的时候先看当前元素是不是.a，符合则执行，然后查看是不是.b，符合则执行。</p>
@@ -255,14 +255,13 @@ $.fn.on = function(event, selector, data, callback, one) {
 &lt;div class=&quot;caret&quot;&gt;&lt;/div&gt;
 
 // css
-.caret{
+.caret&#123;
     width:0;
     height:0;
     border-width: 0 20px 20px;
     border-color: transparent transparent blue; 
     border-style: none dotted solid;
-}
-
+&#125;
 </code></pre>
 <blockquote>
 <ul>
@@ -274,7 +273,7 @@ $.fn.on = function(event, selector, data, callback, one) {
 <li>Zepto 使用 .width() 返回 ，使用 .css(‘width’) 返回 0px 。<br>所以，这种场景，jQuery 使用 <code>.outerWidth() /</code> .outerHeight() ；Zepto 使用 <code>.width() / .height()</code> 。</li>
 </ul>
 </blockquote>
-<h3 id="offSet-的区别"><a href="#offSet-的区别" class="headerlink" title="offSet()的区别"></a>offSet()的区别</h3><pre><code class="javascript">// offset() {function}
+<h3 id="offSet-的区别"><a href="#offSet-的区别" class="headerlink" title="offSet()的区别"></a>offSet()的区别</h3><pre><code class="javascript">// offset() &#123;function&#125;
 
 // @desc Zepto
 // @return top|left|width|height
@@ -286,25 +285,25 @@ $.fn.on = function(event, selector, data, callback, one) {
 <h3 id="extend-的区别"><a href="#extend-的区别" class="headerlink" title="extend() 的区别"></a>extend() 的区别</h3><p><strong>jQuery 在原型上拓展方法使用的方式是：</strong></p>
 <pre><code class="javascript">// For example
 // Extend a function named &#39;sayHello&#39; to the protorype of jQuery
-(function($) {
-    $.fn.extend({
-        sayHello: function() {
+(function($) &#123;
+    $.fn.extend(&#123;
+        sayHello: function() &#123;
             $(this).html(&#39;Hello !&#39;);
-        }
-    });
-})(window.jQuery);
+        &#125;
+    &#125;);
+&#125;)(window.jQuery);
 </code></pre>
 <p><strong>Zepto 中并没有为原型定义extend方法，所以如果要是要在 Zepto 的原型上拓展方法可以使用的方式是：</strong></p>
 <pre><code class="javascript">// For example
 // Extend a function named &#39;sayHello&#39; to the protorype of Zepto
-Zepto(function($) {
-    sayHello: function() {
+Zepto(function($) &#123;
+    sayHello: function() &#123;
         $(this).html(&#39;Hello !&#39;);
-    }
-});
+    &#125;
+&#125;);
 </code></pre>
 <p>随着 jQuery 2.x 的发布以及未来 3.0 对浏览器支持的划分，似乎找不到再使用 Zepto 的理由了。如果你真在乎文件大小，那你可以自行打包 jQuery 中需要的模块。这和 Zepto 是一样的，Zepto 官方提供的版本只打包了很基础的模块。</p>
-<p><a href="https://segmentfault.com/a/1190000003409961" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000003409961">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -329,7 +328,7 @@ Zepto(function($) {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -352,7 +351,7 @@ Zepto(function($) {
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -363,7 +362,7 @@ Zepto(function($) {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#创建DOM节点并赋与属性"><span class="toc-number">1.</span> <span class="toc-text">创建DOM节点并赋与属性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DOM操作的区别"><span class="toc-number">1.1.</span> <span class="toc-text">DOM操作的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#事件触发的区别"><span class="toc-number">1.2.</span> <span class="toc-text">事件触发的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#事件委托的区别"><span class="toc-number">1.3.</span> <span class="toc-text">事件委托的区别</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#API方面的区别"><span class="toc-number">2.</span> <span class="toc-text">API方面的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#winth-和-height的区别"><span class="toc-number">2.1.</span> <span class="toc-text">winth() 和 height的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#offSet-的区别"><span class="toc-number">2.2.</span> <span class="toc-text">offSet()的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#获取隐藏元素width和height的区别"><span class="toc-number">2.3.</span> <span class="toc-text">获取隐藏元素width和height的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#extend-的区别"><span class="toc-number">2.4.</span> <span class="toc-text">extend() 的区别</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BADOM%E8%8A%82%E7%82%B9%E5%B9%B6%E8%B5%8B%E4%B8%8E%E5%B1%9E%E6%80%A7"><span class="toc-number">1.</span> <span class="toc-text">创建DOM节点并赋与属性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DOM%E6%93%8D%E4%BD%9C%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.1.</span> <span class="toc-text">DOM操作的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E8%A7%A6%E5%8F%91%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.2.</span> <span class="toc-text">事件触发的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E5%A7%94%E6%89%98%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.3.</span> <span class="toc-text">事件委托的区别</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#API%E6%96%B9%E9%9D%A2%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">2.</span> <span class="toc-text">API方面的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#winth-%E5%92%8C-height%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">2.1.</span> <span class="toc-text">winth() 和 height的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#offSet-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">2.2.</span> <span class="toc-text">offSet()的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E9%9A%90%E8%97%8F%E5%85%83%E7%B4%A0width%E5%92%8Cheight%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">2.3.</span> <span class="toc-text">获取隐藏元素width和height的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#extend-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">2.4.</span> <span class="toc-text">extend() 的区别</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -382,7 +381,7 @@ Zepto(function($) {
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

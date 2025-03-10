@@ -39,7 +39,7 @@ A call stack is a mechanism for an interpreter (like the JavaSc,">
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -154,20 +154,21 @@ A call stack is a mechanism for an interpreter (like the JavaSc,">
 <li>If the stack takes up more space than it had assigned to it, it results in a “stack overflow” error.</li>
 </ul>
 <h2 id="调用栈"><a href="#调用栈" class="headerlink" title="调用栈"></a>调用栈</h2><p>调用栈是一种数据结构。他记录了我们在程序中的位置；如果我们调用一个函数时，他就会将这个函数推入栈顶，当执行完这个函数后，就会从栈顶弹出，这就是调用栈所做的事情；</p>
-<pre><code class="js">function multiply(x,y){
+<pre><code class="js">function multiply(x,y)&#123;
     return x * y;
-}
-function printSquare(x){
+&#125;
+function printSquare(x)&#123;
     var s = multiply(x,x);
     console.log(s)
-}
+&#125;
 printSquare(5);
-
 </code></pre>
-<p>每一个进入调用栈的称为<code>调用帧</code>。<br><a id="more"></a><br>“堆栈溢出”，当你达到调用栈的最大的大小的时候就会发生这种情况；而且这相当容易发生，特别是在你写递归的时候却没有全方位的测试它。我们来看看下面的代码：</p>
-<pre><code class="js">function foo(){
+<p>每一个进入调用栈的称为<code>调用帧</code>。</p>
+<span id="more"></span>
+<p>“堆栈溢出”，当你达到调用栈的最大的大小的时候就会发生这种情况；而且这相当容易发生，特别是在你写递归的时候却没有全方位的测试它。我们来看看下面的代码：</p>
+<pre><code class="js">function foo()&#123;
     foo();
-}
+&#125;
 
 foo()
 </code></pre>
@@ -209,7 +210,7 @@ foo()
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -232,7 +233,7 @@ foo()
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -243,7 +244,7 @@ foo()
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Call-Stack-调用堆栈"><span class="toc-number">1.</span> <span class="toc-text">Call Stack(调用堆栈)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#调用栈"><span class="toc-number">1.1.</span> <span class="toc-text">调用栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是执行上下文？"><span class="toc-number">1.2.</span> <span class="toc-text">什么是执行上下文？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#执行上下文的类型"><span class="toc-number">1.2.1.</span> <span class="toc-text">执行上下文的类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#执行栈"><span class="toc-number">1.2.2.</span> <span class="toc-text">执行栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#怎么创建执行上下文？"><span class="toc-number">1.2.3.</span> <span class="toc-text">怎么创建执行上下文？</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Call-Stack-%E8%B0%83%E7%94%A8%E5%A0%86%E6%A0%88"><span class="toc-number">1.</span> <span class="toc-text">Call Stack(调用堆栈)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E7%94%A8%E6%A0%88"><span class="toc-number">1.1.</span> <span class="toc-text">调用栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">什么是执行上下文？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.2.1.</span> <span class="toc-text">执行上下文的类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E6%A0%88"><span class="toc-number">1.2.2.</span> <span class="toc-text">执行栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%8E%E4%B9%88%E5%88%9B%E5%BB%BA%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%EF%BC%9F"><span class="toc-number">1.2.3.</span> <span class="toc-text">怎么创建执行上下文？</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
             
@@ -262,7 +263,7 @@ foo()
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

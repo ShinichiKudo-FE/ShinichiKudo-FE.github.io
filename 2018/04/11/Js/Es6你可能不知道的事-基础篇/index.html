@@ -37,7 +37,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -100,7 +100,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    8.3k
+                    8.7k
                 </span>
                 
                 
@@ -143,13 +143,13 @@
             <p>ES6，或许应该叫 ES2015（2015 年 6 月正式发布），对于大多数前端同学都不陌生。</p>
 <h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h1 id="let-const"><a href="#let-const" class="headerlink" title="let + const"></a>let + const</h1><p>这个大概是开始了解 ES6 后，我们第一个感觉自己完全明白并兴致勃勃的开始使用的特性。</p>
 <pre><code class="javascript">// 定义常量
-const REG_GET_INPUT = /^\d{1,3}$/;
+const REG_GET_INPUT = /^\d&#123;1,3&#125;$/;
 
 // 定义配置项
-let config = {
+let config = &#123;
   isDev : false,
   pubDir: &#39;./admin/&#39;
-}
+&#125;
 
 // 引入 gulp
 let gulp    = require(&#39;gulp&#39;);
@@ -158,29 +158,29 @@ let gulp    = require(&#39;gulp&#39;);
 let concat  = require(&#39;gulp-concat&#39;);
 let uglify  = require(&#39;gulp-uglify&#39;);
 let cssnano = require(&#39;gulp-cssnano&#39;);
-
 </code></pre>
 <p>很多人看完概念之后，第一印象都是：“const 是表示不可变的值，而 let 则是用来替换原来的 var 的。”</p>
 <p>所以就会出现上面代码中的样子；一段代码中出现大量的 let，只有部分常量用 const 去做定义，这样的使用方式是错误的。</p>
 <h3 id="你可能不知道的事"><a href="#你可能不知道的事" class="headerlink" title="你可能不知道的事"></a>你可能不知道的事</h3><p><code>const</code> 的定义是<code>不可重新赋值</code>的值，与<code>不可变的值</code>(immutable value)不同；const 定义的 Object，在定义之后仍可以修改其属性。</p>
-<p>所以其实他的使用场景很广，包括常量、配置项以及引用的组件、定义的 “大部分” 中间变量等，都应该以<strong>const</strong>做定义。反之就 <strong>let</strong> 而言，他的使用场景应该是相对较少的，我们只会在 <strong>loop(for，while 循环)</strong>及少量必须<strong>重定义</strong>的变量上用到他。</p>
+<p>所以其实他的使用场景很广，包括常量、配置项以及引用的组件、定义的 “大部分” 中间变量等，都应该以<strong>const</strong>做定义。反之就 <strong>let</strong> 而言，他的使用场景应该是相对较少的，我们只会在 <strong>loop(for，while 循环)**及少量必须</strong>重定义**的变量上用到他。</p>
 <blockquote>
 <p>猜想：就执行效率而言，Const由于不可重新赋值，所以可以做更多语法静态分析方面的优化，从而有更高的执行效率</p>
 </blockquote>
-<p>所以上面代码中，所有使用 let 的部分，其实都应该是用 const 的。<br><a id="more"></a></p>
+<p>所以上面代码中，所有使用 let 的部分，其实都应该是用 const 的。</p>
+<span id="more"></span>
 <h2 id="Template-Strings（字符串模板）"><a href="#Template-Strings（字符串模板）" class="headerlink" title="Template Strings（字符串模板）"></a>Template Strings（字符串模板）</h2><p>字符串模板是我刚接触ES6时最喜欢的特性之一，他语法简洁，语义明确，而且很好的解决了之前字符串拼接麻烦的问题<br>我们先来看看他的一般使用场景：</p>
 <pre><code class="javascript">const start = &#39;hi all&#39;;
 
-const getName = () =&gt; {
+const getName = () =&gt; &#123;
   return &#39;jelly&#39;;
-};
+&#125;;
 
-const conf = {
+const conf = &#123;
   fav: &#39;Coding&#39;
-};
+&#125;;
 
 // 模板
-const msg = `${start}, my name is ${getName()}, ${conf.fav} is my favourite`;
+const msg = `$&#123;start&#125;, my name is $&#123;getName()&#125;, $&#123;conf.fav&#125; is my favourite`;
 </code></pre>
 <h3 id="你可能不知道的事-1"><a href="#你可能不知道的事-1" class="headerlink" title="你可能不知道的事"></a>你可能不知道的事</h3><pre><code class="javascript">// 1. 与引号混用
 const wantToSay = `I&#39;m a &quot;tbfed&quot;`;
@@ -203,58 +203,56 @@ const resultTpl =
 <p>当他的使用成为一个习惯时，我们会看到自己代码变得更为优雅。</p>
 <h3 id="你可能不知道的事-2"><a href="#你可能不知道的事-2" class="headerlink" title="你可能不知道的事"></a>你可能不知道的事</h3><pre><code class="javascript">const _bookNum = 4;
 
-const basicConfig = {
+const basicConfig = &#123;
   level: 5
-}
+&#125;
 
-const config = {
+const config = &#123;
   // 直接指定原型对象
   __proto__: basicConfig,
-
+  
   // 属性简写 相当于_bookNum:_bookNum
   _bookNum,
-
+  
   // 方法简写 
-  //相当于 getBookNum:function(){..}
-  getBookNum() {
+  //相当于 getBookNum:function()&#123;..&#125;
+  getBookNum() &#123;
     return this.bookNum;
-  }
-}
-
+  &#125;
+&#125;
 </code></pre>
 <h2 id="Arrows-and-Lexical-This（箭头函数）"><a href="#Arrows-and-Lexical-This（箭头函数）" class="headerlink" title="Arrows and Lexical This（箭头函数）"></a>Arrows and Lexical This（箭头函数）</h2><p>箭头函数是ES6中的一个新的语法特性，他的用法简单，形态优雅，备受人们青睐。<br>大多数同学初识这个特性时，更多的仅仅用它作为函数定义的简写，这其实就有些屈才了。</p>
 <pre><code class="javascript">// 未使用箭头函数的写法
-{
+&#123;
   ...
-
-  addOptions: function (options) {
-
+  
+  addOptions: function (options) &#123;
+  
     var self = this;
-
-    options.forEach(function(name, opts){
-
+  
+    options.forEach(function(name, opts)&#123;
+      
       self[name] = self.addChild(name, opts);
-
-    });
-
-  } 
-}
+      
+    &#125;);
+    
+  &#125; 
+&#125;
 
 // 使用箭头函数后的写法
-{
+&#123;
   ...
-
-  addOptions: function (options) {
-
-    options.forEach((name, opts) =&gt; {
-
+  
+  addOptions: function (options) &#123;
+  
+    options.forEach((name, opts) =&gt; &#123;
+      
       this[name] = this.addChild(name, opts);
-
-    });
-
-  } 
-}
-
+      
+    &#125;);
+    
+  &#125; 
+&#125;
 </code></pre>
 <p>可以注意到上下两段代码的区别。</p>
 <p>在未使用箭头函数前，我们在过程函数中使用父级 this，需要将其显式缓存到另一个中间变量中，因为过程函数有独立的 this 变量，会覆盖父级；使用箭头函数后，不但简写了一个过程函数（ forEach 的参数），还省略掉了 this 的中间变量的定义。</p>
@@ -271,61 +269,60 @@ const config = {
 </ul>
 </blockquote>
 <pre><code class="javascript">// 完整写法
-const getOptions = (name, key) =&gt; {
+const getOptions = (name, key) =&gt; &#123;
   ...
-}
+&#125;
 
 // 省略参数括号
-const getOptions = key =&gt; {
+const getOptions = key =&gt; &#123;
   ... 
-}
+&#125;
 
 // 省略参数和方法体括号
 const getOptions = key =&gt; console.log(key);
 
 // 无参数或方法体，括号不能省略
-const noop = () =&gt; {};
+const noop = () =&gt; &#123;&#125;;
 </code></pre>
 <p>有个简单小栗子，这一灵活的语法在写连续的Promise链式调用时，可以使代码更加优雅</p>
 <pre><code class="javascript">gitPromise
   .then(() =&gt; git.add())
   .then(() =&gt; git.commit())
   .then(() =&gt; git.log())
-  .then((msg) =&gt; {
+  .then((msg) =&gt; &#123;
       ...
-  })
+  &#125;)
   .then(() =&gt; git.push())
-  .catch((err) =&gt; {
+  .catch((err) =&gt; &#123;
       utils.error(err);
-  });
+  &#125;);
 </code></pre>
 <h2 id="Destructuring（解构）"><a href="#Destructuring（解构）" class="headerlink" title="Destructuring（解构）"></a>Destructuring（解构）</h2><p>解构这个特性可以简单解读为分别定义，用于一次定义多个变量，常常用于分解方法返回对象为多个变量，分别使用。<br>使用过ES6的同学应该或多或少接触过这个特性，但是你可能不知道它如下几个用法：</p>
 <h3 id="你可能不知道的事-4"><a href="#你可能不知道的事-4" class="headerlink" title="你可能不知道的事"></a>你可能不知道的事</h3><pre><code class="javascript">const bookSet = [&#39;UED&#39;, &#39;TB fed&#39;, &#39;Not find&#39;];
-const bookCollection = () =&gt; {
-  return {book1: &#39;UED&#39;, book2: &#39;TB fed&#39;};
-};
+const bookCollection = () =&gt; &#123;
+  return &#123;book1: &#39;UED&#39;, book2: &#39;TB fed&#39;&#125;;
+&#125;;
 
 // 1. 解构也可以设置默认值
-const {book1, book3 = &#39;Not find&#39;} = bookCollection();
+const &#123;book1, book3 = &#39;Not find&#39;&#125; = bookCollection();
 
 // 2. 解构数组时候是可以跳过其中某几项的
 const [book1,,book3] = bookSet;  // book1 = &#39;UED&#39;, book3 = &#39;Not find&#39;
 
 // 3. 解构可以取到指定对象的任何属性，包括它包含的方法
-const {length: setLength} = bookSet;  // setLength = 3
-
+const &#123;length: setLength&#125; = bookSet;  // setLength = 3
 </code></pre>
 <h2 id="Rest-Spread"><a href="#Rest-Spread" class="headerlink" title="Rest + Spread"></a>Rest + Spread</h2><p>Rest 和 Spread 主要是应用 <code>... 运算符</code>，完成值的聚合和分解。</p>
 <h3 id="你可能不知道的事-5"><a href="#你可能不知道的事-5" class="headerlink" title="你可能不知道的事"></a>你可能不知道的事</h3><pre><code class="javascript">
 // 1. rest 得到的是一个真正的数组而不是一个伪数组
-const getOptions = function(...args){
+const getOptions = function(...args)&#123;
   console.log(args.join); // function
-};
+&#125;;
 
 // 2. rest 可以配合箭头函数使用，达到取得所有参数的目的
-const getOptions = (...args) =&gt; {
+const getOptions = (...args) =&gt; &#123;
   console.log(args); // array
-};
+&#125;;
 
 // 3. spread 可以用于解构时，聚合所得的值
 const [opt1, ...opts] = [&#39;one&#39;, &#39;two&#39;, &#39;three&#39;, &#39;four&#39;];
@@ -339,25 +336,25 @@ const config = [&#39;other&#39;, ...opts];
 <h3 id="你可能不知道的事-6"><a href="#你可能不知道的事-6" class="headerlink" title="你可能不知道的事"></a>你可能不知道的事</h3><pre><code class="javascript">// 1. 静态变量
 // ES6 的类定义实现了静态方法的定义，但静态变量呢？
 // 可以用如下方式实现:
-class TbFedMembers{
-  static get HuaChen(){
+class TbFedMembers&#123;
+  static get HuaChen()&#123;
     return &#39;jelly&#39;;
-  }
-}
+  &#125;
+&#125;
 TbFedMembers.HuaChen; // &quot;化辰&quot;
 
 
 // 2. 私有属性（私有属性有多种实现方式，只谈及其中一种）
 // 闭包
-const TbFedMembers = (() =&gt; {
+const TbFedMembers = (() =&gt; &#123;
   const HuaChen = &#39;jelly&#39;;
-
-  return class{
-    getOneMemberName(){
+  
+  return class&#123;
+    getOneMemberName()&#123;
       return HuaChen;
-    }
-  };
-})();
+    &#125;
+  &#125;;
+&#125;)();
 </code></pre>
 <h2 id="Promises"><a href="#Promises" class="headerlink" title="Promises"></a>Promises</h2><p>Promise 不只是一个对象、一个语法，他更是一种异步编程方式的变化<br>相信使用过 ES6 的同学都已经开始尝试了 Promise，甚至在不支持ES6的时候，已经开始使用一些基于 Promise 思想的开源框架。</p>
 <p>那么我们之前用 Promise 究竟用的对么？有什么需要注意的点呢？</p>
@@ -366,38 +363,37 @@ const TbFedMembers = (() =&gt; {
 // Promise.all
 Promise
   .all([jsBuildPromise, cssBuildPromise])
-  .then(() =&gt; {
+  .then(() =&gt; &#123;
     ...
-  });
+  &#125;);
 
 // chain
 jsBuildPromise
   .then(() =&gt; cssBuildPromise)
-  .then(() =&gt; {
+  .then(() =&gt; &#123;
     ...
-  });
+  &#125;);
 
 // 2. Promise 的链式调用需要每一个过程返回一个 Promise 对象才能保证顺序执行
 gitPromise
   .then(() =&gt; git.add())  // 正确，箭头函数简写
-  .then(() =&gt; {
+  .then(() =&gt; &#123;
     git.commit(); // 错误，函数返回 undefined，会立即执行下一过程
-  })
-  .then(() =&gt; {
+  &#125;)
+  .then(() =&gt; &#123;
     return git.log(); // 正确
-  });
+  &#125;);
 
 // 3. Promise 需要调用 catch 方法来捕获错误，而且过程内的错误不会阻塞后续代码执行
-new Promise(() =&gt; {
+new Promise(() =&gt; &#123;
   f;  // not define error !
-})
-.catch((err) =&gt; {
+&#125;)
+.catch((err) =&gt; &#123;
   console.log(err)  // show &#39;f is not define&#39;
-});
+&#125;);
 console.log(&#39;error test&#39;);  // 此行可以被正常执行
-
 </code></pre>
-<p><a href="http://taobaofed.org/blog/2016/07/22/es6-basics/" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="http://taobaofed.org/blog/2016/07/22/es6-basics/">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -422,7 +418,7 @@ console.log(&#39;error test&#39;);  // 此行可以被正常执行
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -445,7 +441,7 @@ console.log(&#39;error test&#39;);  // 此行可以被正常执行
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -456,7 +452,7 @@ console.log(&#39;error test&#39;);  // 此行可以被正常执行
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#正文"><span class="toc-number">1.</span> <span class="toc-text">正文</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#let-const"><span class="toc-number">2.</span> <span class="toc-text">let + const</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#你可能不知道的事"><span class="toc-number">2.0.1.</span> <span class="toc-text">你可能不知道的事</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Template-Strings（字符串模板）"><span class="toc-number">2.1.</span> <span class="toc-text">Template Strings（字符串模板）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#你可能不知道的事-1"><span class="toc-number">2.1.1.</span> <span class="toc-text">你可能不知道的事</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enhanced-Object-Literals（增强的对象字面量）"><span class="toc-number">2.2.</span> <span class="toc-text">Enhanced Object Literals（增强的对象字面量）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#你可能不知道的事-2"><span class="toc-number">2.2.1.</span> <span class="toc-text">你可能不知道的事</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Arrows-and-Lexical-This（箭头函数）"><span class="toc-number">2.3.</span> <span class="toc-text">Arrows and Lexical This（箭头函数）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#你可能不知道的事-3"><span class="toc-number">2.3.1.</span> <span class="toc-text">你可能不知道的事</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Destructuring（解构）"><span class="toc-number">2.4.</span> <span class="toc-text">Destructuring（解构）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#你可能不知道的事-4"><span class="toc-number">2.4.1.</span> <span class="toc-text">你可能不知道的事</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rest-Spread"><span class="toc-number">2.5.</span> <span class="toc-text">Rest + Spread</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#你可能不知道的事-5"><span class="toc-number">2.5.1.</span> <span class="toc-text">你可能不知道的事</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Classes"><span class="toc-number">2.6.</span> <span class="toc-text">Classes</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#你可能不知道的事-6"><span class="toc-number">2.6.1.</span> <span class="toc-text">你可能不知道的事</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promises"><span class="toc-number">2.7.</span> <span class="toc-text">Promises</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#你可能不知道的事-7"><span class="toc-number">2.7.1.</span> <span class="toc-text">你可能不知道的事</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%AD%A3%E6%96%87"><span class="toc-number">1.</span> <span class="toc-text">正文</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#let-const"><span class="toc-number">2.</span> <span class="toc-text">let + const</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%A0%E5%8F%AF%E8%83%BD%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84%E4%BA%8B"><span class="toc-number">2.0.1.</span> <span class="toc-text">你可能不知道的事</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Template-Strings%EF%BC%88%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A8%A1%E6%9D%BF%EF%BC%89"><span class="toc-number">2.1.</span> <span class="toc-text">Template Strings（字符串模板）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%A0%E5%8F%AF%E8%83%BD%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84%E4%BA%8B-1"><span class="toc-number">2.1.1.</span> <span class="toc-text">你可能不知道的事</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enhanced-Object-Literals%EF%BC%88%E5%A2%9E%E5%BC%BA%E7%9A%84%E5%AF%B9%E8%B1%A1%E5%AD%97%E9%9D%A2%E9%87%8F%EF%BC%89"><span class="toc-number">2.2.</span> <span class="toc-text">Enhanced Object Literals（增强的对象字面量）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%A0%E5%8F%AF%E8%83%BD%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84%E4%BA%8B-2"><span class="toc-number">2.2.1.</span> <span class="toc-text">你可能不知道的事</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Arrows-and-Lexical-This%EF%BC%88%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0%EF%BC%89"><span class="toc-number">2.3.</span> <span class="toc-text">Arrows and Lexical This（箭头函数）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%A0%E5%8F%AF%E8%83%BD%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84%E4%BA%8B-3"><span class="toc-number">2.3.1.</span> <span class="toc-text">你可能不知道的事</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Destructuring%EF%BC%88%E8%A7%A3%E6%9E%84%EF%BC%89"><span class="toc-number">2.4.</span> <span class="toc-text">Destructuring（解构）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%A0%E5%8F%AF%E8%83%BD%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84%E4%BA%8B-4"><span class="toc-number">2.4.1.</span> <span class="toc-text">你可能不知道的事</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rest-Spread"><span class="toc-number">2.5.</span> <span class="toc-text">Rest + Spread</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%A0%E5%8F%AF%E8%83%BD%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84%E4%BA%8B-5"><span class="toc-number">2.5.1.</span> <span class="toc-text">你可能不知道的事</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Classes"><span class="toc-number">2.6.</span> <span class="toc-text">Classes</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%A0%E5%8F%AF%E8%83%BD%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84%E4%BA%8B-6"><span class="toc-number">2.6.1.</span> <span class="toc-text">你可能不知道的事</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promises"><span class="toc-number">2.7.</span> <span class="toc-text">Promises</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%A0%E5%8F%AF%E8%83%BD%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84%E4%BA%8B-7"><span class="toc-number">2.7.1.</span> <span class="toc-text">你可能不知道的事</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
             
@@ -475,7 +471,7 @@ console.log(&#39;error test&#39;);  // 此行可以被正常执行
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

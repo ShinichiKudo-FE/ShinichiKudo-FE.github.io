@@ -40,7 +40,7 @@ React 全部都是组件化的React 是围绕可重用组件的概念设计的�
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -103,13 +103,13 @@ React 全部都是组件化的React 是围绕可重用组件的概念设计的�
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    19k
+                    20k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    17 mins.
+                    18 mins.
                 </span>
                 
                 
@@ -143,19 +143,18 @@ React 全部都是组件化的React 是围绕可重用组件的概念设计的�
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <p><a href="https://juejin.im/post/599156cc6fb9a03c3a25db08" target="_blank" rel="noopener">原文地址</a></p>
+            <p><a target="_blank" rel="noopener" href="https://juejin.im/post/599156cc6fb9a03c3a25db08">原文地址</a></p>
 <hr>
 <h1 id="学习-React-js-比你想象的要简单"><a href="#学习-React-js-比你想象的要简单" class="headerlink" title="学习 React.js 比你想象的要简单"></a>学习 React.js 比你想象的要简单</h1><p><img src="https://user-gold-cdn.xitu.io/2017/8/14/88e06ce88c09c77c1504b772f5801686?imageView2/1/w/1304/h/734/q/85/format/webp/interlace/1" alt="react"></p>
 <h2 id="React-全部都是组件化的"><a href="#React-全部都是组件化的" class="headerlink" title="React 全部都是组件化的"></a>React 全部都是组件化的</h2><p>React 是围绕可重用组件的概念设计的。你定义小组件并将它们组合在一起形成更大的组件。</p>
 <p>无论大小，所有组件都是可重用的，甚至在不同的项目中也是如此。</p>
 <p>React 组件最简单的形式，就是一个普通的 JavaScript 函数：</p>
-<pre><code class="javascript">function Button (props) {
+<pre><code class="javascript">function Button (props) &#123;
   // 这里返回一个 DOM 元素，例如：
-  return &lt;button type=&quot;submit&quot;&gt;{props.label}&lt;/button&gt;;
-}
+  return &lt;button type=&quot;submit&quot;&gt;&#123;props.label&#125;&lt;/button&gt;;
+&#125;
 // 将按钮组件呈现给浏览器
 ReactDOM.render(&lt;Button label=&quot;Save&quot; /&gt;, mountNode)
-
 </code></pre>
 <p>例 1：编辑上面的代码并按 Ctrl+Enter 键执行（译者注：译文暂时没有这个功能，请访问原文使用此功能，下同）</p>
 <blockquote>
@@ -177,22 +176,22 @@ ReactDOM.render(&lt;Button label=&quot;Save&quot; /&gt;, mountNode)
 <li>在上面 Button 函数组件的返回输出中，我们奇怪地写了段看上去像 HTML 的代码。这实际上既不是 JavaScript 也不是 HTML，老实说，这甚至不是 React.js。然而它非常流行，以至于成为 React 应用程序中的默认值。这就是所谓的 JSX，这是一个JavaScript 的扩展。JSX 也是一个折中方案！继续尝试并在上面的函数中返回其他 HTML 元素，看看它们是如何被支持的（例如，返回一个文本输入元素）。</li>
 </ul>
 </blockquote>
-<a id="more"></a>
+<span id="more"></span>
+
 <h2 id="JSX-输出的是什么？"><a href="#JSX-输出的是什么？" class="headerlink" title="JSX 输出的是什么？"></a>JSX 输出的是什么？</h2><p>上面的例 1 可以用没有 JSX 的纯 React.js 编写，如下：</p>
-<pre><code class="javascript">function Button (props) {
+<pre><code class="javascript">function Button (props) &#123;
   return React.createElement(
     &quot;button&quot;,
-    { type: &quot;submit&quot; },
+    &#123; type: &quot;submit&quot; &#125;,
     props.label
   );
-}
+&#125;
 
 // 要使用 Button，你可以这么做
 ReactDOM.render(
-  React.createElement(Button, { label: &quot;Save&quot; }),
+  React.createElement(Button, &#123; label: &quot;Save&quot; &#125;),
   mountNode
 );
-
 </code></pre>
 <p>例 2：不使用 JSX 编写 React 组件</p>
 <p>在 React 顶级 API 中，createElement 函数是主函数。这是你需要学习的 7 个 API 中的 1 个。React 的 API 就是这么小。</p>
@@ -201,24 +200,23 @@ ReactDOM.render(
 <p>这里就是这样的一个例子：</p>
 <pre><code class="javascript">const InputForm = React.createElement(
   &quot;form&quot;,
-  { target: &quot;_blank&quot;, action: &quot;https://google.com/search&quot; },
+  &#123; target: &quot;_blank&quot;, action: &quot;https://google.com/search&quot; &#125;,
   React.createElement(&quot;div&quot;, null, &quot;Enter input and click Search&quot;),
-  React.createElement(&quot;input&quot;, { className: &quot;big-input&quot; }),
-  React.createElement(Button, { label: &quot;Search&quot; })
+  React.createElement(&quot;input&quot;, &#123; className: &quot;big-input&quot; &#125;),
+  React.createElement(Button, &#123; label: &quot;Search&quot; &#125;)
 );
 
 // InputForm 使用 Button 组件，所以我们需要这样做：
-function Button (props) {
+function Button (props) &#123;
   return React.createElement(
     &quot;button&quot;,
-    { type: &quot;submit&quot; },
+    &#123; type: &quot;submit&quot; &#125;,
     props.label
   );
-}
+&#125;
 
 // 然后我们可以通过 .render 方法直接使用 InputForm
 ReactDOM.render(InputForm, mountNode);
-
 </code></pre>
 <p>例 3：React 创建元素的 API<br>上面例子中的一些事情值得注意：</p>
 <blockquote>
@@ -266,14 +264,13 @@ ReactDOM.render(InputForm, mountNode);
 
 // InputForm “仍然”使用 Button 组件，所以我们也需要这样。
 // JXS 或者普通的表单都会这样做
-function Button (props) {
+function Button (props) &#123;
   // 这里返回一个 DOM 元素。例如：
-  return &lt;button type=&quot;submit&quot;&gt;{props.label}&lt;/button&gt;;
-}
+  return &lt;button type=&quot;submit&quot;&gt;&#123;props.label&#125;&lt;/button&gt;;
+&#125;
 
 // 然后我们可以直接通过 .render 使用 InputForm
 ReactDOM.render(InputForm, mountNode);
-
 </code></pre>
 <p>例 4：为什么在 React 中 JSX 受欢迎（和例 3 相比）<br>注意上面的几件事：</p>
 <blockquote>
@@ -290,21 +287,20 @@ ReactDOM.render(InputForm, mountNode);
 <h2 id="你可以在-JavaScript-的任何地方使用-JSX"><a href="#你可以在-JavaScript-的任何地方使用-JSX" class="headerlink" title="你可以在 JavaScript 的任何地方使用 JSX"></a>你可以在 JavaScript 的任何地方使用 JSX</h2><p>在 JSX 中，你可以在一对花括号内使用任何 JavaScript 表达式。</p>
 <pre><code class="javascript">const RandomValue = () =&gt;
   &lt;div&gt;
-    { Math.floor(Math.random() * 100) }
+    &#123; Math.floor(Math.random() * 100) &#125;
   &lt;/div&gt;;
 
 // 使用：
 ReactDOM.render(&lt;RandomValue /&gt;, mountNode);
-
 </code></pre>
 <p>例 5：在 JSX 中使用 JavaScript 表达式</p>
 <p>任何 JavaScript 表达式可以直接放在花括号中。这相当于在 JavaScript 中插入 ${} 模板。</p>
 <p>这是 JSX 内唯一的约束：只有表达式。例如，你不能使用 if 语句，但三元表达式是可以的。</p>
 <p>JavaScript 变量也是表达式，所以当组件接受属性列表时（不包括 RandomValue 组件，props 是可选择的），你可以在花括号里使用这些属性。我们在上述（例 1）的 Button 组件是这样使用的。</p>
 <p>JavaScript 对象也是表达式。有些时候我们在花括号中使用 JavaScript 对象，这看起来像是使用了两个花括号，但是在花括号中确实只有一个对象。其中一个用例就是将 CSS 样式对象传递给响应中的特殊样式属性：</p>
-<pre><code class="javascript">const ErrorDisplay = ({message}) =&gt;
-  &lt;div style={ { color: &#39;red&#39;, backgroundColor: &#39;yellow&#39; } }&gt;
-    {message}
+<pre><code class="javascript">const ErrorDisplay = (&#123;message&#125;) =&gt;
+  &lt;div style=&#123; &#123; color: &#39;red&#39;, backgroundColor: &#39;yellow&#39; &#125; &#125;&gt;
+    &#123;message&#125;
   &lt;/div&gt;;
 
 // 使用
@@ -314,25 +310,24 @@ ReactDOM.render(
   /&gt;,
   mountNode
 );
-
 </code></pre>
 <p>例 6：一个对象传递特殊的 React 样式参数<br>注意我解构的只是在属性参数之外的信息。这只是 JavaScript。还要注意上面的样式属性是一个特殊的属性（同样，它不是 HTML，它更接近 DOM API）。我们使用一个对象作为样式属性的值并且这个对象定义样式就像我们使用 JavaScript </p>
 <p>你可以在 JSX 中使用 React 元素。因为这也是一个表达式（记住，一个 React 元素只是一个函数调用）：</p>
-<pre><code class="javascript">const MaybeError = ({errorMessage}) =&gt;
+<pre><code class="javascript">const MaybeError = (&#123;errorMessage&#125;) =&gt;
   &lt;div&gt;
-    {errorMessage &amp;&amp; &lt;ErrorDisplay message={errorMessage} /&gt;}
+    &#123;errorMessage &amp;&amp; &lt;ErrorDisplay message=&#123;errorMessage&#125; /&gt;&#125;
   &lt;/div&gt;;
 
 // MaybeError 组件使用 ErrorDisplay 组件
-const ErrorDisplay = ({message}) =&gt;
-  &lt;div style={ { color: &#39;red&#39;, backgroundColor: &#39;yellow&#39; } }&gt;
-    {message}
+const ErrorDisplay = (&#123;message&#125;) =&gt;
+  &lt;div style=&#123; &#123; color: &#39;red&#39;, backgroundColor: &#39;yellow&#39; &#125; &#125;&gt;
+    &#123;message&#125;
   &lt;/div&gt;;
 
 // 现在我们使用 MaybeError 组件：
 ReactDOM.render(
   &lt;MaybeError
-    errorMessage={Math.random() &gt; 0.5 ? &#39;Not good&#39; : &#39;&#39;}
+    errorMessage=&#123;Math.random() &gt; 0.5 ? &#39;Not good&#39; : &#39;&#39;&#125;
   /&gt;,
   mountNode
 );
@@ -340,72 +335,70 @@ ReactDOM.render(
 <p>例 7：一个 React 元素是一个可以通过 {} 使用的表达式</p>
 <p>上述 MaybeError 组件只会在有 errorMessage 传入或者另外有一个空的 div 才会显示 ErrorDisplay 组件。React 认为 {true}、 {false}{undefined} 和 {null} 是有效元素，不呈现任何内容。</p>
 <p>我们也可以在 JSX 中使用所有的 JavaScript 的集合方法（map、reduce 、filter、 concat 等）。因为他们返回的也是表达式：</p>
-<pre><code class="javascript">const Doubler = ({value=[1, 2, 3]}) =&gt;
+<pre><code class="javascript">const Doubler = (&#123;value=[1, 2, 3]&#125;) =&gt;
   &lt;div&gt;
-    {value.map(e =&gt; e * 2)}
+    &#123;value.map(e =&gt; e * 2)&#125;
   &lt;/div&gt;;
 
 // 使用下面内容 
 ReactDOM.render(&lt;Doubler /&gt;, mountNode);
-
 </code></pre>
 <p>例 8：在 {} 中使用数组</p>
 <p>请注意我是如何给出上述 value 属性的默认值的，因为这全部都只是 JavaScript。注意我只是在 div 中输出一个数组表达式。React 是完全可以的。它只会在文本节点中放置每一个加倍的值。</p>
-<h2 id="你可以使用-JavaScript-类写-React-组件"><a href="#你可以使用-JavaScript-类写-React-组件" class="headerlink" title="你可以使用 JavaScript 类写 React 组件"></a>你可以使用 JavaScript 类写 React 组件</h2><p>简单的函数组件非常适合简单的需求，但是有的时候我们需要的更多。React 也支持通过使用 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes" target="_blank" rel="noopener">JavaScript 类</a>来创建组件。这里 Button 组件（在例 1 中）就是使用类的语法编写的。</p>
-<pre><code class="javascript">class Button extends React.Component {
-  render() {
-    return &lt;button&gt;{this.props.label}&lt;/button&gt;;
-  }
-}
+<h2 id="你可以使用-JavaScript-类写-React-组件"><a href="#你可以使用-JavaScript-类写-React-组件" class="headerlink" title="你可以使用 JavaScript 类写 React 组件"></a>你可以使用 JavaScript 类写 React 组件</h2><p>简单的函数组件非常适合简单的需求，但是有的时候我们需要的更多。React 也支持通过使用 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes">JavaScript 类</a>来创建组件。这里 Button 组件（在例 1 中）就是使用类的语法编写的。</p>
+<pre><code class="javascript">class Button extends React.Component &#123;
+  render() &#123;
+    return &lt;button&gt;&#123;this.props.label&#125;&lt;/button&gt;;
+  &#125;
+&#125;
 
 // 使用（相同的语法）
 ReactDOM.render(&lt;Button label=&quot;Save&quot; /&gt;, mountNode);
 </code></pre>
 <p>例 9：使用 JavaScript 类创建组件</p>
-<p>类的语法是非常简单的：定义一个扩展的 React.Component 类（另一个你需要学习的 React 的顶级 API）。该类定义了一个单一的实例函数 —— render()，并使函数返回虚拟 DOM 对象。每一次我们使用基于类的 Button 组件（例如，通过 <Button ... />）,React 将从这个基于类的组件中实例化对象，并在 DOM 树中使用该对象。</p>
+<p>类的语法是非常简单的：定义一个扩展的 React.Component 类（另一个你需要学习的 React 的顶级 API）。该类定义了一个单一的实例函数 —— render()，并使函数返回虚拟 DOM 对象。每一次我们使用基于类的 Button 组件（例如，通过 &lt;Button … /&gt;）,React 将从这个基于类的组件中实例化对象，并在 DOM 树中使用该对象。</p>
 <p>这就是为什么上面的例子中我们可以在 JSX 中使用 this.props.label 渲染输出的原因，因为每一个组件都有一个特殊的称为 props 的 实例 属性，这让所有的值传递给该组件时被实例化。</p>
 <p>由于我们有一个与组件的单个使用相关联的实例，所以我们可以按照自己的意愿定制该实例。例如，我们可以通过使用常规 JavaScript 构造函数来构造它：</p>
-<pre><code class="javascript">class Button extends React.Component {
-  constructor(props) {
+<pre><code class="javascript">class Button extends React.Component &#123;
+  constructor(props) &#123;
     super(props);
     this.id = Date.now();
-  }
-  render() {
-    return &lt;button id={this.id}&gt;{this.props.label}&lt;/button&gt;;
-  }
-}
+  &#125;
+  render() &#123;
+    return &lt;button id=&#123;this.id&#125;&gt;&#123;this.props.label&#125;&lt;/button&gt;;
+  &#125;
+&#125;
 
 // 使用
 ReactDOM.render(&lt;Button label=&quot;Save&quot; /&gt;, mountNode);
-
 </code></pre>
 <p>例 10：自定义组件实例<br>我们也可以定义类的原型并且在任何我们希望的地方使用，包括在返回的 JSX 输出的内部：</p>
-<pre><code class="javascript">class Button extends React.Component {
+<pre><code class="javascript">class Button extends React.Component &#123;
   clickCounter = 0;
 
-  handleClick = () =&gt; {
-    console.log(`Clicked: ${++this.clickCounter}`);
-  };
+  handleClick = () =&gt; &#123;
+    console.log(`Clicked: $&#123;++this.clickCounter&#125;`);
+  &#125;;
 
-  render() {
+  render() &#123;
     return (
-      &lt;button id={this.id} onClick={this.handleClick}&gt;
-        {this.props.label}
+      &lt;button id=&#123;this.id&#125; onClick=&#123;this.handleClick&#125;&gt;
+        &#123;this.props.label&#125;
       &lt;/button&gt;
     );
-  }
-}
+  &#125;
+&#125;
 
 // 使用
 ReactDOM.render(&lt;Button label=&quot;Save&quot; /&gt;, mountNode);
 </code></pre>
 <p>例 11：使用类的属性（通过单击保存按钮进行测试）</p>
-<p>注意上述例 11 中的几件事情<br>handleClick 函数使用 JavaScript 新提出的 <a href="https://github.com/tc39/proposal-class-fields" target="_blank" rel="noopener">class-field syntax</a> 语法。这仍然是 stage-2，但是这是访问组件安装实例（感谢箭头函数）最好的选择（因为很多原因）。然而，你需要使用类似 Babel 的编译器解码为 stage-2（或者仅仅是类字段语法）来让上述代码工作。 jsComplete REPL 有预编译功能。</p>
+<p>注意上述例 11 中的几件事情<br>handleClick 函数使用 JavaScript 新提出的 <a target="_blank" rel="noopener" href="https://github.com/tc39/proposal-class-fields">class-field syntax</a> 语法。这仍然是 stage-2，但是这是访问组件安装实例（感谢箭头函数）最好的选择（因为很多原因）。然而，你需要使用类似 Babel 的编译器解码为 stage-2（或者仅仅是类字段语法）来让上述代码工作。 jsComplete REPL 有预编译功能。</p>
 <pre><code class="javascript">// 错误：
-onClick={this.handleClick()}
+onClick=&#123;this.handleClick()&#125;
 
 // 正确：
-onClick={this.handleClick}
+onClick=&#123;this.handleClick&#125;
 </code></pre>
 <h2 id="React-中的事件：两个重要的区别"><a href="#React-中的事件：两个重要的区别" class="headerlink" title="React 中的事件：两个重要的区别"></a>React 中的事件：两个重要的区别</h2><p>当处理 React 元素中的事件时，我们与 DOM API 的处理方式有两个非常重要的区别：</p>
 <blockquote>
@@ -415,20 +408,20 @@ onClick={this.handleClick}
 </ul>
 </blockquote>
 <p>React 用自己的对象包装 DOM 对象事件以优化事件处理的性能，但是在事件处理程序内部，我们仍然可以访问 DOM 对象上所有可以访问的方法。React 将经过包装的事件对象传递给每个调用函数。例如，为了防止表单提交默认提交操作，你可以这样做</p>
-<pre><code class="javascript">class Form extends React.Component {
-  handleSubmit = (event) =&gt; {
+<pre><code class="javascript">class Form extends React.Component &#123;
+  handleSubmit = (event) =&gt; &#123;
     event.preventDefault();
     console.log(&#39;Form submitted&#39;);
-  };
+  &#125;;
 
-  render() {
+  render() &#123;
     return (
-      &lt;form onSubmit={this.handleSubmit}&gt;
+      &lt;form onSubmit=&#123;this.handleSubmit&#125;&gt;
         &lt;button type=&quot;submit&quot;&gt;Submit&lt;/button&gt;
       &lt;/form&gt;
     );
-  }
-}
+  &#125;
+&#125;
 
 // 使用
 ReactDOM.render(&lt;Form /&gt;, mountNode);
@@ -437,38 +430,37 @@ ReactDOM.render(&lt;Form /&gt;, mountNode);
 <h2 id="每一个-React-组件都有一个故事：第-1-部分"><a href="#每一个-React-组件都有一个故事：第-1-部分" class="headerlink" title="每一个 React 组件都有一个故事：第 1 部分"></a>每一个 React 组件都有一个故事：第 1 部分</h2><p>以下仅适用于类组件（扩展 React.Component）。函数组件有一个稍微不同的故事。</p>
 <h3 id="首先，我们定义了一个模板来创建组件中的元素。"><a href="#首先，我们定义了一个模板来创建组件中的元素。" class="headerlink" title="首先，我们定义了一个模板来创建组件中的元素。"></a>首先，我们定义了一个模板来创建组件中的元素。</h3><h3 id="然后，我们在某处使用-React。例如，在-render-内部调用其他的组件，或者直接使用-ReactDOM-render。"><a href="#然后，我们在某处使用-React。例如，在-render-内部调用其他的组件，或者直接使用-ReactDOM-render。" class="headerlink" title="然后，我们在某处使用 React。例如，在 render 内部调用其他的组件，或者直接使用 ReactDOM.render。"></a>然后，我们在某处使用 React。例如，在 render 内部调用其他的组件，或者直接使用 ReactDOM.render。</h3><h3 id="然后，React-实例化一个对象然后给它设置-props-然后我们可以通过-this-props-访问。这些属性都是我们在第-2-步传入的。"><a href="#然后，React-实例化一个对象然后给它设置-props-然后我们可以通过-this-props-访问。这些属性都是我们在第-2-步传入的。" class="headerlink" title="然后，React 实例化一个对象然后给它设置 props 然后我们可以通过 this.props 访问。这些属性都是我们在第 2 步传入的。"></a>然后，React 实例化一个对象然后给它设置 props 然后我们可以通过 this.props 访问。这些属性都是我们在第 2 步传入的。</h3><h3 id="因为这些全部都是-JavaScript，constructor-方法将会被调用（如果定义的话）。这是我们称之为的第一个：组件生命周期方法。"><a href="#因为这些全部都是-JavaScript，constructor-方法将会被调用（如果定义的话）。这是我们称之为的第一个：组件生命周期方法。" class="headerlink" title="因为这些全部都是 JavaScript，constructor 方法将会被调用（如果定义的话）。这是我们称之为的第一个：组件生命周期方法。"></a>因为这些全部都是 JavaScript，constructor 方法将会被调用（如果定义的话）。这是我们称之为的第一个：组件生命周期方法。</h3><h3 id="接下来-React-计算渲染之后的输出方法（虚拟-DOM-节点）。"><a href="#接下来-React-计算渲染之后的输出方法（虚拟-DOM-节点）。" class="headerlink" title="接下来 React 计算渲染之后的输出方法（虚拟 DOM 节点）。"></a>接下来 React 计算渲染之后的输出方法（虚拟 DOM 节点）。</h3><h3 id="因为这是-React-第一次渲染元素，React-将会与浏览器连通（代表我们使用-DOM-API）来显示元素。这整个过程称为-mounting。"><a href="#因为这是-React-第一次渲染元素，React-将会与浏览器连通（代表我们使用-DOM-API）来显示元素。这整个过程称为-mounting。" class="headerlink" title="因为这是 React 第一次渲染元素，React 将会与浏览器连通（代表我们使用 DOM API）来显示元素。这整个过程称为 mounting。"></a>因为这是 React 第一次渲染元素，React 将会与浏览器连通（代表我们使用 DOM API）来显示元素。这整个过程称为 mounting。</h3><h3 id="接下来-React-调用另一个生命周期函数，称为-componentDidMount。我们可以这样使用这个方法，例如：在-DOM-上做一些我们现在知道的在浏览器中存在的东西。在此生命周期方法之前，我们使用的-DOM-都是虚拟的。"><a href="#接下来-React-调用另一个生命周期函数，称为-componentDidMount。我们可以这样使用这个方法，例如：在-DOM-上做一些我们现在知道的在浏览器中存在的东西。在此生命周期方法之前，我们使用的-DOM-都是虚拟的。" class="headerlink" title="接下来 React 调用另一个生命周期函数，称为 componentDidMount。我们可以这样使用这个方法，例如：在 DOM 上做一些我们现在知道的在浏览器中存在的东西。在此生命周期方法之前，我们使用的 DOM 都是虚拟的。"></a>接下来 React 调用另一个生命周期函数，称为 componentDidMount。我们可以这样使用这个方法，例如：在 DOM 上做一些我们现在知道的在浏览器中存在的东西。在此生命周期方法之前，我们使用的 DOM 都是虚拟的。</h3><h3 id="一些组件的故事到此结束，其他组件得到卸载浏览器-DOM-中的各种原因。在后一种情况发生时，会调用另一个生命周期的方法，componentWillUnmount。"><a href="#一些组件的故事到此结束，其他组件得到卸载浏览器-DOM-中的各种原因。在后一种情况发生时，会调用另一个生命周期的方法，componentWillUnmount。" class="headerlink" title="一些组件的故事到此结束，其他组件得到卸载浏览器 DOM 中的各种原因。在后一种情况发生时，会调用另一个生命周期的方法，componentWillUnmount。"></a>一些组件的故事到此结束，其他组件得到卸载浏览器 DOM 中的各种原因。在后一种情况发生时，会调用另一个生命周期的方法，componentWillUnmount。</h3><h3 id="任何-mounted-的元素的状态都可能会改变。该元素的父级可能会重新渲染。无论哪种情况，mounted-的元素都可能接收到不同的属性集。React-的魔力就是这儿，我们实际上需要的正是-React-的这一点！在这一点之前，说实话，我们并不需要-React。"><a href="#任何-mounted-的元素的状态都可能会改变。该元素的父级可能会重新渲染。无论哪种情况，mounted-的元素都可能接收到不同的属性集。React-的魔力就是这儿，我们实际上需要的正是-React-的这一点！在这一点之前，说实话，我们并不需要-React。" class="headerlink" title="任何 mounted 的元素的状态都可能会改变。该元素的父级可能会重新渲染。无论哪种情况，mounted 的元素都可能接收到不同的属性集。React 的魔力就是这儿，我们实际上需要的正是 React 的这一点！在这一点之前，说实话，我们并不需要 React。"></a>任何 mounted 的元素的状态都可能会改变。该元素的父级可能会重新渲染。无论哪种情况，mounted 的元素都可能接收到不同的属性集。React 的魔力就是这儿，我们实际上需要的正是 React 的这一点！在这一点之前，说实话，我们并不需要 React。</h3><h3 id="组价的故事还在继续，但是在此之前，我们需要理解我所说的这种状态。"><a href="#组价的故事还在继续，但是在此之前，我们需要理解我所说的这种状态。" class="headerlink" title="组价的故事还在继续，但是在此之前，我们需要理解我所说的这种状态。"></a>组价的故事还在继续，但是在此之前，我们需要理解我所说的这种状态。</h3><h2 id="React-组件可以具有私有状态"><a href="#React-组件可以具有私有状态" class="headerlink" title="React 组件可以具有私有状态"></a>React 组件可以具有私有状态</h2><p>以下只适用于类组件。我有没有提到有人叫表象而已的部件 dumb？</p>
 <p>状态类是任何 React 类组件中的一个特殊字段。React 检测每一个组件状态的变化，但是为了 React 更加有效，我们必须通过 React 的另一个 API 改变状态字段，这就是我们要学习的另一个 API —— <strong>this.setState</strong>：</p>
-<pre><code class="javascript">class CounterButton extends React.Component {
-  state = {
+<pre><code class="javascript">class CounterButton extends React.Component &#123;
+  state = &#123;
     clickCounter: 0,
     currentTimestamp: new Date(),
-  };
+  &#125;;
 
-  handleClick = () =&gt; {
-    this.setState((prevState) =&gt; {
-     return { clickCounter: prevState.clickCounter + 1 };
-    });
-  };
+  handleClick = () =&gt; &#123;
+    this.setState((prevState) =&gt; &#123;
+     return &#123; clickCounter: prevState.clickCounter + 1 &#125;;
+    &#125;);
+  &#125;;
 
-  componentDidMount() {
-   setInterval(() =&gt; {
-     this.setState({ currentTimestamp: new Date() })
-    }, 1000);
-  }
+  componentDidMount() &#123;
+   setInterval(() =&gt; &#123;
+     this.setState(&#123; currentTimestamp: new Date() &#125;)
+    &#125;, 1000);
+  &#125;
 
-  render() {
+  render() &#123;
     return (
       &lt;div&gt;
-        &lt;button onClick={this.handleClick}&gt;Click&lt;/button&gt;
-        &lt;p&gt;Clicked: {this.state.clickCounter}&lt;/p&gt;
-        &lt;p&gt;Time: {this.state.currentTimestamp.toLocaleString()}&lt;/p&gt;
+        &lt;button onClick=&#123;this.handleClick&#125;&gt;Click&lt;/button&gt;
+        &lt;p&gt;Clicked: &#123;this.state.clickCounter&#125;&lt;/p&gt;
+        &lt;p&gt;Time: &#123;this.state.currentTimestamp.toLocaleString()&#125;&lt;/p&gt;
       &lt;/div&gt;
     );
-  }
-}
+  &#125;
+&#125;
 
 // 使用
 ReactDOM.render(&lt;CounterButton /&gt;, mountNode);
-
 </code></pre>
 <p>例 13：setState 的 API<br>这可能是最重要的一个例子因为这将是你完全理解 React 基础知识的方式。这个例子之后，还有一些小事情需要学习，但从那时起主要是你和你的 JavaScript 技能。</p>
 <p>让我们来看一下例 13，从类开始，总共有两个，一个是一个初始化的有初始值为 0 的 clickCounter 对象和一个从 new Date() 开始的 currentTimestamp。</p>
@@ -495,7 +487,7 @@ ReactDOM.render(&lt;CounterButton /&gt;, mountNode);
 </ul>
 </blockquote>
 <p>生命周期方法是逃生舱口。如果你没有做什么特别的事情，你可以在没有它们的情况下创建完整的应用程序。它们非常方便地分析应用程序中正在发生的事情，并进一步优化 React 更新的性能。</p>
-<p>信不信由你，通过上面所学的知识（或部分知识），你可以开始创建一些有趣的 React 应用程序。如果你渴望更多，看看我的 Pluralsight 的 <a href="https://www.pluralsight.com/courses/react-js-getting-started?aid=701j0000001heIoAAI&amp;promo=&amp;oid=&amp;utm_source=google&amp;utm_medium=ppc&amp;utm_campaign=US_Dynamic&amp;utm_content=&amp;utm_term=&amp;gclid=CNOAj_2-j9UCFUpNfgod4V0Fdg" target="_blank" rel="noopener">React.js 入门课程</a>。</p>
+<p>信不信由你，通过上面所学的知识（或部分知识），你可以开始创建一些有趣的 React 应用程序。如果你渴望更多，看看我的 Pluralsight 的 <a target="_blank" rel="noopener" href="https://www.pluralsight.com/courses/react-js-getting-started?aid=701j0000001heIoAAI&promo=&oid=&utm_source=google&utm_medium=ppc&utm_campaign=US_Dynamic&utm_content=&utm_term=&gclid=CNOAj_2-j9UCFUpNfgod4V0Fdg">React.js 入门课程</a>。</p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -520,7 +512,7 @@ ReactDOM.render(&lt;CounterButton /&gt;, mountNode);
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -543,7 +535,7 @@ ReactDOM.render(&lt;CounterButton /&gt;, mountNode);
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -554,7 +546,7 @@ ReactDOM.render(&lt;CounterButton /&gt;, mountNode);
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#学习-React-js-比你想象的要简单"><span class="toc-number">1.</span> <span class="toc-text">学习 React.js 比你想象的要简单</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#React-全部都是组件化的"><span class="toc-number">1.1.</span> <span class="toc-text">React 全部都是组件化的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSX-输出的是什么？"><span class="toc-number">1.2.</span> <span class="toc-text">JSX 输出的是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#你可以在-JavaScript-的任何地方使用-JSX"><span class="toc-number">1.3.</span> <span class="toc-text">你可以在 JavaScript 的任何地方使用 JSX</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#你可以使用-JavaScript-类写-React-组件"><span class="toc-number">1.4.</span> <span class="toc-text">你可以使用 JavaScript 类写 React 组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#React-中的事件：两个重要的区别"><span class="toc-number">1.5.</span> <span class="toc-text">React 中的事件：两个重要的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#每一个-React-组件都有一个故事：第-1-部分"><span class="toc-number">1.6.</span> <span class="toc-text">每一个 React 组件都有一个故事：第 1 部分</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#首先，我们定义了一个模板来创建组件中的元素。"><span class="toc-number">1.6.1.</span> <span class="toc-text">首先，我们定义了一个模板来创建组件中的元素。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#然后，我们在某处使用-React。例如，在-render-内部调用其他的组件，或者直接使用-ReactDOM-render。"><span class="toc-number">1.6.2.</span> <span class="toc-text">然后，我们在某处使用 React。例如，在 render 内部调用其他的组件，或者直接使用 ReactDOM.render。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#然后，React-实例化一个对象然后给它设置-props-然后我们可以通过-this-props-访问。这些属性都是我们在第-2-步传入的。"><span class="toc-number">1.6.3.</span> <span class="toc-text">然后，React 实例化一个对象然后给它设置 props 然后我们可以通过 this.props 访问。这些属性都是我们在第 2 步传入的。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#因为这些全部都是-JavaScript，constructor-方法将会被调用（如果定义的话）。这是我们称之为的第一个：组件生命周期方法。"><span class="toc-number">1.6.4.</span> <span class="toc-text">因为这些全部都是 JavaScript，constructor 方法将会被调用（如果定义的话）。这是我们称之为的第一个：组件生命周期方法。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#接下来-React-计算渲染之后的输出方法（虚拟-DOM-节点）。"><span class="toc-number">1.6.5.</span> <span class="toc-text">接下来 React 计算渲染之后的输出方法（虚拟 DOM 节点）。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#因为这是-React-第一次渲染元素，React-将会与浏览器连通（代表我们使用-DOM-API）来显示元素。这整个过程称为-mounting。"><span class="toc-number">1.6.6.</span> <span class="toc-text">因为这是 React 第一次渲染元素，React 将会与浏览器连通（代表我们使用 DOM API）来显示元素。这整个过程称为 mounting。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#接下来-React-调用另一个生命周期函数，称为-componentDidMount。我们可以这样使用这个方法，例如：在-DOM-上做一些我们现在知道的在浏览器中存在的东西。在此生命周期方法之前，我们使用的-DOM-都是虚拟的。"><span class="toc-number">1.6.7.</span> <span class="toc-text">接下来 React 调用另一个生命周期函数，称为 componentDidMount。我们可以这样使用这个方法，例如：在 DOM 上做一些我们现在知道的在浏览器中存在的东西。在此生命周期方法之前，我们使用的 DOM 都是虚拟的。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一些组件的故事到此结束，其他组件得到卸载浏览器-DOM-中的各种原因。在后一种情况发生时，会调用另一个生命周期的方法，componentWillUnmount。"><span class="toc-number">1.6.8.</span> <span class="toc-text">一些组件的故事到此结束，其他组件得到卸载浏览器 DOM 中的各种原因。在后一种情况发生时，会调用另一个生命周期的方法，componentWillUnmount。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#任何-mounted-的元素的状态都可能会改变。该元素的父级可能会重新渲染。无论哪种情况，mounted-的元素都可能接收到不同的属性集。React-的魔力就是这儿，我们实际上需要的正是-React-的这一点！在这一点之前，说实话，我们并不需要-React。"><span class="toc-number">1.6.9.</span> <span class="toc-text">任何 mounted 的元素的状态都可能会改变。该元素的父级可能会重新渲染。无论哪种情况，mounted 的元素都可能接收到不同的属性集。React 的魔力就是这儿，我们实际上需要的正是 React 的这一点！在这一点之前，说实话，我们并不需要 React。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#组价的故事还在继续，但是在此之前，我们需要理解我所说的这种状态。"><span class="toc-number">1.6.10.</span> <span class="toc-text">组价的故事还在继续，但是在此之前，我们需要理解我所说的这种状态。</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#React-组件可以具有私有状态"><span class="toc-number">1.7.</span> <span class="toc-text">React 组件可以具有私有状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#React-将要反应"><span class="toc-number">1.8.</span> <span class="toc-text">React 将要反应</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#React-是你的代码"><span class="toc-number">1.9.</span> <span class="toc-text">React 是你的代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#每一个-React-组件都有一个故事：第-2-部分"><span class="toc-number">1.10.</span> <span class="toc-text">每一个 React 组件都有一个故事：第 2 部分</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0-React-js-%E6%AF%94%E4%BD%A0%E6%83%B3%E8%B1%A1%E7%9A%84%E8%A6%81%E7%AE%80%E5%8D%95"><span class="toc-number">1.</span> <span class="toc-text">学习 React.js 比你想象的要简单</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#React-%E5%85%A8%E9%83%A8%E9%83%BD%E6%98%AF%E7%BB%84%E4%BB%B6%E5%8C%96%E7%9A%84"><span class="toc-number">1.1.</span> <span class="toc-text">React 全部都是组件化的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSX-%E8%BE%93%E5%87%BA%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">JSX 输出的是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%A0%E5%8F%AF%E4%BB%A5%E5%9C%A8-JavaScript-%E7%9A%84%E4%BB%BB%E4%BD%95%E5%9C%B0%E6%96%B9%E4%BD%BF%E7%94%A8-JSX"><span class="toc-number">1.3.</span> <span class="toc-text">你可以在 JavaScript 的任何地方使用 JSX</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%A0%E5%8F%AF%E4%BB%A5%E4%BD%BF%E7%94%A8-JavaScript-%E7%B1%BB%E5%86%99-React-%E7%BB%84%E4%BB%B6"><span class="toc-number">1.4.</span> <span class="toc-text">你可以使用 JavaScript 类写 React 组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#React-%E4%B8%AD%E7%9A%84%E4%BA%8B%E4%BB%B6%EF%BC%9A%E4%B8%A4%E4%B8%AA%E9%87%8D%E8%A6%81%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.5.</span> <span class="toc-text">React 中的事件：两个重要的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AF%8F%E4%B8%80%E4%B8%AA-React-%E7%BB%84%E4%BB%B6%E9%83%BD%E6%9C%89%E4%B8%80%E4%B8%AA%E6%95%85%E4%BA%8B%EF%BC%9A%E7%AC%AC-1-%E9%83%A8%E5%88%86"><span class="toc-number">1.6.</span> <span class="toc-text">每一个 React 组件都有一个故事：第 1 部分</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A6%96%E5%85%88%EF%BC%8C%E6%88%91%E4%BB%AC%E5%AE%9A%E4%B9%89%E4%BA%86%E4%B8%80%E4%B8%AA%E6%A8%A1%E6%9D%BF%E6%9D%A5%E5%88%9B%E5%BB%BA%E7%BB%84%E4%BB%B6%E4%B8%AD%E7%9A%84%E5%85%83%E7%B4%A0%E3%80%82"><span class="toc-number">1.6.1.</span> <span class="toc-text">首先，我们定义了一个模板来创建组件中的元素。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%84%B6%E5%90%8E%EF%BC%8C%E6%88%91%E4%BB%AC%E5%9C%A8%E6%9F%90%E5%A4%84%E4%BD%BF%E7%94%A8-React%E3%80%82%E4%BE%8B%E5%A6%82%EF%BC%8C%E5%9C%A8-render-%E5%86%85%E9%83%A8%E8%B0%83%E7%94%A8%E5%85%B6%E4%BB%96%E7%9A%84%E7%BB%84%E4%BB%B6%EF%BC%8C%E6%88%96%E8%80%85%E7%9B%B4%E6%8E%A5%E4%BD%BF%E7%94%A8-ReactDOM-render%E3%80%82"><span class="toc-number">1.6.2.</span> <span class="toc-text">然后，我们在某处使用 React。例如，在 render 内部调用其他的组件，或者直接使用 ReactDOM.render。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%84%B6%E5%90%8E%EF%BC%8CReact-%E5%AE%9E%E4%BE%8B%E5%8C%96%E4%B8%80%E4%B8%AA%E5%AF%B9%E8%B1%A1%E7%84%B6%E5%90%8E%E7%BB%99%E5%AE%83%E8%AE%BE%E7%BD%AE-props-%E7%84%B6%E5%90%8E%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E9%80%9A%E8%BF%87-this-props-%E8%AE%BF%E9%97%AE%E3%80%82%E8%BF%99%E4%BA%9B%E5%B1%9E%E6%80%A7%E9%83%BD%E6%98%AF%E6%88%91%E4%BB%AC%E5%9C%A8%E7%AC%AC-2-%E6%AD%A5%E4%BC%A0%E5%85%A5%E7%9A%84%E3%80%82"><span class="toc-number">1.6.3.</span> <span class="toc-text">然后，React 实例化一个对象然后给它设置 props 然后我们可以通过 this.props 访问。这些属性都是我们在第 2 步传入的。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%A0%E4%B8%BA%E8%BF%99%E4%BA%9B%E5%85%A8%E9%83%A8%E9%83%BD%E6%98%AF-JavaScript%EF%BC%8Cconstructor-%E6%96%B9%E6%B3%95%E5%B0%86%E4%BC%9A%E8%A2%AB%E8%B0%83%E7%94%A8%EF%BC%88%E5%A6%82%E6%9E%9C%E5%AE%9A%E4%B9%89%E7%9A%84%E8%AF%9D%EF%BC%89%E3%80%82%E8%BF%99%E6%98%AF%E6%88%91%E4%BB%AC%E7%A7%B0%E4%B9%8B%E4%B8%BA%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%EF%BC%9A%E7%BB%84%E4%BB%B6%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%96%B9%E6%B3%95%E3%80%82"><span class="toc-number">1.6.4.</span> <span class="toc-text">因为这些全部都是 JavaScript，constructor 方法将会被调用（如果定义的话）。这是我们称之为的第一个：组件生命周期方法。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A5%E4%B8%8B%E6%9D%A5-React-%E8%AE%A1%E7%AE%97%E6%B8%B2%E6%9F%93%E4%B9%8B%E5%90%8E%E7%9A%84%E8%BE%93%E5%87%BA%E6%96%B9%E6%B3%95%EF%BC%88%E8%99%9A%E6%8B%9F-DOM-%E8%8A%82%E7%82%B9%EF%BC%89%E3%80%82"><span class="toc-number">1.6.5.</span> <span class="toc-text">接下来 React 计算渲染之后的输出方法（虚拟 DOM 节点）。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%A0%E4%B8%BA%E8%BF%99%E6%98%AF-React-%E7%AC%AC%E4%B8%80%E6%AC%A1%E6%B8%B2%E6%9F%93%E5%85%83%E7%B4%A0%EF%BC%8CReact-%E5%B0%86%E4%BC%9A%E4%B8%8E%E6%B5%8F%E8%A7%88%E5%99%A8%E8%BF%9E%E9%80%9A%EF%BC%88%E4%BB%A3%E8%A1%A8%E6%88%91%E4%BB%AC%E4%BD%BF%E7%94%A8-DOM-API%EF%BC%89%E6%9D%A5%E6%98%BE%E7%A4%BA%E5%85%83%E7%B4%A0%E3%80%82%E8%BF%99%E6%95%B4%E4%B8%AA%E8%BF%87%E7%A8%8B%E7%A7%B0%E4%B8%BA-mounting%E3%80%82"><span class="toc-number">1.6.6.</span> <span class="toc-text">因为这是 React 第一次渲染元素，React 将会与浏览器连通（代表我们使用 DOM API）来显示元素。这整个过程称为 mounting。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A5%E4%B8%8B%E6%9D%A5-React-%E8%B0%83%E7%94%A8%E5%8F%A6%E4%B8%80%E4%B8%AA%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E5%87%BD%E6%95%B0%EF%BC%8C%E7%A7%B0%E4%B8%BA-componentDidMount%E3%80%82%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E8%BF%99%E6%A0%B7%E4%BD%BF%E7%94%A8%E8%BF%99%E4%B8%AA%E6%96%B9%E6%B3%95%EF%BC%8C%E4%BE%8B%E5%A6%82%EF%BC%9A%E5%9C%A8-DOM-%E4%B8%8A%E5%81%9A%E4%B8%80%E4%BA%9B%E6%88%91%E4%BB%AC%E7%8E%B0%E5%9C%A8%E7%9F%A5%E9%81%93%E7%9A%84%E5%9C%A8%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%AD%E5%AD%98%E5%9C%A8%E7%9A%84%E4%B8%9C%E8%A5%BF%E3%80%82%E5%9C%A8%E6%AD%A4%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%96%B9%E6%B3%95%E4%B9%8B%E5%89%8D%EF%BC%8C%E6%88%91%E4%BB%AC%E4%BD%BF%E7%94%A8%E7%9A%84-DOM-%E9%83%BD%E6%98%AF%E8%99%9A%E6%8B%9F%E7%9A%84%E3%80%82"><span class="toc-number">1.6.7.</span> <span class="toc-text">接下来 React 调用另一个生命周期函数，称为 componentDidMount。我们可以这样使用这个方法，例如：在 DOM 上做一些我们现在知道的在浏览器中存在的东西。在此生命周期方法之前，我们使用的 DOM 都是虚拟的。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E7%BB%84%E4%BB%B6%E7%9A%84%E6%95%85%E4%BA%8B%E5%88%B0%E6%AD%A4%E7%BB%93%E6%9D%9F%EF%BC%8C%E5%85%B6%E4%BB%96%E7%BB%84%E4%BB%B6%E5%BE%97%E5%88%B0%E5%8D%B8%E8%BD%BD%E6%B5%8F%E8%A7%88%E5%99%A8-DOM-%E4%B8%AD%E7%9A%84%E5%90%84%E7%A7%8D%E5%8E%9F%E5%9B%A0%E3%80%82%E5%9C%A8%E5%90%8E%E4%B8%80%E7%A7%8D%E6%83%85%E5%86%B5%E5%8F%91%E7%94%9F%E6%97%B6%EF%BC%8C%E4%BC%9A%E8%B0%83%E7%94%A8%E5%8F%A6%E4%B8%80%E4%B8%AA%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%8CcomponentWillUnmount%E3%80%82"><span class="toc-number">1.6.8.</span> <span class="toc-text">一些组件的故事到此结束，其他组件得到卸载浏览器 DOM 中的各种原因。在后一种情况发生时，会调用另一个生命周期的方法，componentWillUnmount。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%BB%E4%BD%95-mounted-%E7%9A%84%E5%85%83%E7%B4%A0%E7%9A%84%E7%8A%B6%E6%80%81%E9%83%BD%E5%8F%AF%E8%83%BD%E4%BC%9A%E6%94%B9%E5%8F%98%E3%80%82%E8%AF%A5%E5%85%83%E7%B4%A0%E7%9A%84%E7%88%B6%E7%BA%A7%E5%8F%AF%E8%83%BD%E4%BC%9A%E9%87%8D%E6%96%B0%E6%B8%B2%E6%9F%93%E3%80%82%E6%97%A0%E8%AE%BA%E5%93%AA%E7%A7%8D%E6%83%85%E5%86%B5%EF%BC%8Cmounted-%E7%9A%84%E5%85%83%E7%B4%A0%E9%83%BD%E5%8F%AF%E8%83%BD%E6%8E%A5%E6%94%B6%E5%88%B0%E4%B8%8D%E5%90%8C%E7%9A%84%E5%B1%9E%E6%80%A7%E9%9B%86%E3%80%82React-%E7%9A%84%E9%AD%94%E5%8A%9B%E5%B0%B1%E6%98%AF%E8%BF%99%E5%84%BF%EF%BC%8C%E6%88%91%E4%BB%AC%E5%AE%9E%E9%99%85%E4%B8%8A%E9%9C%80%E8%A6%81%E7%9A%84%E6%AD%A3%E6%98%AF-React-%E7%9A%84%E8%BF%99%E4%B8%80%E7%82%B9%EF%BC%81%E5%9C%A8%E8%BF%99%E4%B8%80%E7%82%B9%E4%B9%8B%E5%89%8D%EF%BC%8C%E8%AF%B4%E5%AE%9E%E8%AF%9D%EF%BC%8C%E6%88%91%E4%BB%AC%E5%B9%B6%E4%B8%8D%E9%9C%80%E8%A6%81-React%E3%80%82"><span class="toc-number">1.6.9.</span> <span class="toc-text">任何 mounted 的元素的状态都可能会改变。该元素的父级可能会重新渲染。无论哪种情况，mounted 的元素都可能接收到不同的属性集。React 的魔力就是这儿，我们实际上需要的正是 React 的这一点！在这一点之前，说实话，我们并不需要 React。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%84%E4%BB%B7%E7%9A%84%E6%95%85%E4%BA%8B%E8%BF%98%E5%9C%A8%E7%BB%A7%E7%BB%AD%EF%BC%8C%E4%BD%86%E6%98%AF%E5%9C%A8%E6%AD%A4%E4%B9%8B%E5%89%8D%EF%BC%8C%E6%88%91%E4%BB%AC%E9%9C%80%E8%A6%81%E7%90%86%E8%A7%A3%E6%88%91%E6%89%80%E8%AF%B4%E7%9A%84%E8%BF%99%E7%A7%8D%E7%8A%B6%E6%80%81%E3%80%82"><span class="toc-number">1.6.10.</span> <span class="toc-text">组价的故事还在继续，但是在此之前，我们需要理解我所说的这种状态。</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#React-%E7%BB%84%E4%BB%B6%E5%8F%AF%E4%BB%A5%E5%85%B7%E6%9C%89%E7%A7%81%E6%9C%89%E7%8A%B6%E6%80%81"><span class="toc-number">1.7.</span> <span class="toc-text">React 组件可以具有私有状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#React-%E5%B0%86%E8%A6%81%E5%8F%8D%E5%BA%94"><span class="toc-number">1.8.</span> <span class="toc-text">React 将要反应</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#React-%E6%98%AF%E4%BD%A0%E7%9A%84%E4%BB%A3%E7%A0%81"><span class="toc-number">1.9.</span> <span class="toc-text">React 是你的代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AF%8F%E4%B8%80%E4%B8%AA-React-%E7%BB%84%E4%BB%B6%E9%83%BD%E6%9C%89%E4%B8%80%E4%B8%AA%E6%95%85%E4%BA%8B%EF%BC%9A%E7%AC%AC-2-%E9%83%A8%E5%88%86"><span class="toc-number">1.10.</span> <span class="toc-text">每一个 React 组件都有一个故事：第 2 部分</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -573,7 +565,7 @@ ReactDOM.render(&lt;CounterButton /&gt;, mountNode);
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

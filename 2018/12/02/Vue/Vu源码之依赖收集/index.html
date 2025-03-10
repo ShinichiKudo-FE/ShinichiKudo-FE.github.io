@@ -11,10 +11,10 @@
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="TriDiamond Obsidian,"> 
     <meta name="description" content="一枚前端搬砖队队员的记录册,为什么要依赖收集？先看这段代码
-new Vue({
+new Vue(&amp;#123;
     template: 
         `&amp;lt;div&amp;gt;
-            &amp;lt;span&amp;gt;text1:&amp;lt;/sp,"> 
+            &amp;lt;span&amp;gt;text1:&amp;l,"> 
     <meta name="author" content="张白告丶"> 
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -40,7 +40,7 @@ new Vue({
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -103,7 +103,7 @@ new Vue({
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    3.5k
+                    3.7k
                 </span>
                 
                 
@@ -144,54 +144,54 @@ new Vue({
     <div class='main'>
         <div class="content markdown animated fadeIn">
             <h1 id="为什么要依赖收集？"><a href="#为什么要依赖收集？" class="headerlink" title="为什么要依赖收集？"></a>为什么要依赖收集？</h1><p>先看这段代码</p>
-<pre><code class="js">new Vue({
+<pre><code class="js">new Vue(&#123;
     template: 
         `&lt;div&gt;
-            &lt;span&gt;text1:&lt;/span&gt; {{text1}}
-            &lt;span&gt;text2:&lt;/span&gt; {{text2}}
+            &lt;span&gt;text1:&lt;/span&gt; &#123;&#123;text1&#125;&#125;
+            &lt;span&gt;text2:&lt;/span&gt; &#123;&#123;text2&#125;&#125;
         &lt;div&gt;`,
-    data: {
+    data: &#123;
         text1: &#39;text1&#39;,
         text2: &#39;text2&#39;,
         text3: &#39;text3&#39;
-    }
-});
+    &#125;
+&#125;);
 </code></pre>
-<p>按照之前<a href="https://github.com/answershuto/learnVue/blob/master/docs/%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86.MarkDown" target="_blank" rel="noopener">《响应式原理》</a>中的方法绑定则会出现一个问题——text3在实际模板中并没有被用到，然而当text3的数据被修改的时候（this.text3 = ‘test’）的时候，同样会触发text3的setter导致重新执行渲染，这显然不正确。</p>
+<p>按照之前<a target="_blank" rel="noopener" href="https://github.com/answershuto/learnVue/blob/master/docs/%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86.MarkDown">《响应式原理》</a>中的方法绑定则会出现一个问题——text3在实际模板中并没有被用到，然而当text3的数据被修改的时候（this.text3 = ‘test’）的时候，同样会触发text3的setter导致重新执行渲染，这显然不正确。</p>
 <h2 id="先说说Dep"><a href="#先说说Dep" class="headerlink" title="先说说Dep"></a>先说说Dep</h2><p>当对data上的对象进行修改值的时候会触发它的<code>setter</code>，那么取值的时候自然就会触发<code>getter</code>事件，所以我们只要在最开始进行一次render，那么所有被渲染所依赖的data中的数据就会被<code>getter</code>收集到<code>Dep</code>的<code>subs</code>中去。在对data中的数据进行修改的时候<code>setter</code>只会触发<code>Dep</code>的<code>subs</code>的函数。</p>
 <p>定义一个依赖收集类Dep。</p>
-<pre><code class="js">class Dep {
-    constructor () {
+<pre><code class="js">class Dep &#123;
+    constructor () &#123;
         this.subs = [];
-    }
+    &#125;
 
-    addSub (sub: Watcher) {
+    addSub (sub: Watcher) &#123;
         this.subs.push(sub)
-    }
+    &#125;
 
-    removeSub (sub: Watcher) {
+    removeSub (sub: Watcher) &#123;
         remove(this.subs, sub)
-    }
+    &#125;
     /*Github:https://github.com/answershuto*/
-    notify () {
+    notify () &#123;
         // stabilize the subscriber list first
         const subs = this.subs.slice()
-        for (let i = 0, l = subs.length; i &lt; l; i++) {
+        for (let i = 0, l = subs.length; i &lt; l; i++) &#123;
             subs[i].update()
-        }
-    }
-}
-function remove (arr, item) {
-    if (arr.length) {
+        &#125;
+    &#125;
+&#125;
+function remove (arr, item) &#123;
+    if (arr.length) &#123;
         const index = arr.indexOf(item)
-        if (index &gt; -1) {
+        if (index &gt; -1) &#123;
             return arr.splice(index, 1)
-    }
-}
+    &#125;
+&#125;
 </code></pre>
 <h2 id="Watcher"><a href="#Watcher" class="headerlink" title="Watcher"></a>Watcher</h2><p>订阅者，当依赖收集的时候会<code>addSub</code>到sub中，在修改data中数据的时候会触发dep对象的<code>notify</code>，通知所有<code>Watcher</code>对象去修改对应视图。</p>
-<pre><code class="js">class Watcher {
-    constructor (vm, expOrFn, cb, options) {
+<pre><code class="js">class Watcher &#123;
+    constructor (vm, expOrFn, cb, options) &#123;
         this.cb = cb;
         this.vm = vm;
 
@@ -200,46 +200,47 @@ function remove (arr, item) {
         /*Github:https://github.com/answershuto*/
         /*触发渲染操作进行依赖收集*/
         this.cb.call(this.vm);
-    }
+    &#125;
 
-    update () {
+    update () &#123;
         this.cb.call(this.vm);
-    }
-}
+    &#125;
+&#125;
 </code></pre>
-<a id="more"></a>
-<h2 id="开始依赖收集"><a href="#开始依赖收集" class="headerlink" title="开始依赖收集"></a>开始依赖收集</h2><pre><code class="js">class Vue {
-    constructor(options) {
+<span id="more"></span>
+
+<h2 id="开始依赖收集"><a href="#开始依赖收集" class="headerlink" title="开始依赖收集"></a>开始依赖收集</h2><pre><code class="js">class Vue &#123;
+    constructor(options) &#123;
         this._data = options.data;
         observer(this._data, options.render);
         let watcher = new Watcher(this, );
-    }
-}
+    &#125;
+&#125;
 
-function defineReactive (obj, key, val, cb) {
+function defineReactive (obj, key, val, cb) &#123;
     /*在闭包内存储一个Dep对象*/
     const dep = new Dep();
 
-    Object.defineProperty(obj, key, {
+    Object.defineProperty(obj, key, &#123;
         enumerable: true,
         configurable: true,
-        get: ()=&gt;{
-            if (Dep.target) {
+        get: ()=&gt;&#123;
+            if (Dep.target) &#123;
                 /*Watcher对象存在全局的Dep.target中*/
                 dep.addSub(Dep.target);
-            }
-        },
-        set:newVal=&gt; {
+            &#125;
+        &#125;,
+        set:newVal=&gt; &#123;
             /*只有之前addSub中的函数才会触发*/
             dep.notify();
-        }
-    })
-}
+        &#125;
+    &#125;)
+&#125;
 
 Dep.target = null;
 </code></pre>
 <p>将观察者Watcher实例赋值给全局的Dep.target，然后触发render操作只有被Dep.target标记过的才会进行依赖收集。有Dep.target的对象会将Watcher的实例push到subs中，在对象被修改出发setter操作的时候dep会调用subs中的Watcher实例的update方法进行渲染。</p>
-<p><a href="https://github.com/answershuto/learnVue/blob/master/docs/%E4%BE%9D%E8%B5%96%E6%94%B6%E9%9B%86.MarkDown" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/answershuto/learnVue/blob/master/docs/%E4%BE%9D%E8%B5%96%E6%94%B6%E9%9B%86.MarkDown">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -264,7 +265,7 @@ Dep.target = null;
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -287,7 +288,7 @@ Dep.target = null;
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -298,7 +299,7 @@ Dep.target = null;
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#为什么要依赖收集？"><span class="toc-number">1.</span> <span class="toc-text">为什么要依赖收集？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#先说说Dep"><span class="toc-number">1.1.</span> <span class="toc-text">先说说Dep</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Watcher"><span class="toc-number">1.2.</span> <span class="toc-text">Watcher</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开始依赖收集"><span class="toc-number">1.3.</span> <span class="toc-text">开始依赖收集</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BE%9D%E8%B5%96%E6%94%B6%E9%9B%86%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">为什么要依赖收集？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%88%E8%AF%B4%E8%AF%B4Dep"><span class="toc-number">1.1.</span> <span class="toc-text">先说说Dep</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Watcher"><span class="toc-number">1.2.</span> <span class="toc-text">Watcher</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B%E4%BE%9D%E8%B5%96%E6%94%B6%E9%9B%86"><span class="toc-number">1.3.</span> <span class="toc-text">开始依赖收集</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -317,7 +318,7 @@ Dep.target = null;
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

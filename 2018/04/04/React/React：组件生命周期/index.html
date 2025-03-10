@@ -37,7 +37,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -100,7 +100,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    8.8k
+                    9.2k
                 </span>
                 
                 
@@ -145,76 +145,77 @@
 <h1 id="实例化"><a href="#实例化" class="headerlink" title="实例化"></a>实例化</h1><p>当组件在<em>客户端</em>被实例化，第一次被创建时，以下方法依次被调用：</p>
 <p>1、getDefaultProps<br>2、getInitialState  </p>
 <p>1、2步骤使用Es6语法则为</p>
-<pre><code class="javascript">constructor(props){
+<pre><code class="javascript">constructor(props)&#123;
     super(props);
-    this.state = {}
-}
+    this.state = &#123;&#125;
+&#125;
 </code></pre>
 <p>3、componentWillMount<br>4、render<br>5、componentDidMount</p>
 <p>当组件在<em>服务端</em>被实例化，首次被创建时，以下方法依次被调用：<br>1、getDefaultProps<br>2、getInitialState<br>3、componentWillMount<br>4、render</p>
 <p>componentDidMount 不会在服务端被渲染的过程中调用。</p>
 <h2 id="getDefaultProps"><a href="#getDefaultProps" class="headerlink" title="getDefaultProps"></a>getDefaultProps</h2><p>对于每个组件实例来讲，这个方法只会调用一次，该组件类的所有后续应用，getDefaultPops 将不会再被调用，其返回的对象可以用于设置默认的 props(properties的缩写) 值。</p>
-<pre><code class="javascript">var Hello = React.createClass({
-    getDefaultProps:function(){
-        return{
+<pre><code class="javascript">var Hello = React.createClass(&#123;
+    getDefaultProps:function()&#123;
+        return&#123;
             name : &quot;tom&quot;,
             git : &quot;dwqs&quot;
-        }
-    },
-    render : function(){
-        return{
-            &lt;div&gt;Hello,{this.props.name},git username is {this.props.git}&lt;/div&gt;
-        }
-    }
-})
+        &#125;
+    &#125;,
+    render : function()&#123;
+        return&#123;
+            &lt;div&gt;Hello,&#123;this.props.name&#125;,git username is &#123;this.props.git&#125;&lt;/div&gt;
+        &#125;
+    &#125;
+&#125;)
 ReactDOM.render(&lt;Hello/&gt;,document.body)
 </code></pre>
-<a id="more"></a>
+<span id="more"></span>
+
 <p>也可以在挂载组件的时候设置 props：</p>
-<pre><code class="javascript">var data = [{title:&#39;Hello&#39;}];
-&lt;Hello data={data}/&gt;&gt;
+<pre><code class="javascript">var data = [&#123;title:&#39;Hello&#39;&#125;];
+&lt;Hello data=&#123;data&#125;/&gt;&gt;
 </code></pre>
 <p>或者调用 <code>setProps</code> （一般不需要调用）来设置其 props</p>
-<pre><code class="javascript">var data = [{title:&#39;data&#39;}];
+<pre><code class="javascript">var data = [&#123;title:&#39;data&#39;&#125;];
 var Hello = ReactDOM.render(&lt;/Demo&gt;,document.body);
-Hello.setProps({data:data})
+Hello.setProps(&#123;data:data&#125;)
 </code></pre>
 <p><strong>但只能在子组件或组件树上调用 setProps。别调用 this.setProps 或者 直接修改 this.props。将其当做只读数据。</strong></p>
 <p>React通过 <code>propTypes</code> 提供了一种验证 props 的方式，propTypes 是一个配置对象，用于定义属性类型：</p>
-<pre><code class="javascript">var survey = React.createClass({
-    propTypes:{
-        survey:React.propTypes.shape({
+<pre><code class="javascript">var survey = React.createClass(&#123;
+    propTypes:&#123;
+        survey:React.propTypes.shape(&#123;
             id: React.propType.number.isRequered;
-        }).isRequiered,
+        &#125;).isRequiered,
         onClick:React.propTypes.func,
         name: React.propTypes.string,
         score: React.propTypes.array
         //...
-    },
+    &#125;,
    // ...
-})
+&#125;)
 </code></pre>
-<p>组件初始化时，如果传递的属性和 propTypes 不匹配，则会打印一个 console.warn 日志。如果是可选配置，可以去掉.isRequired。propTypes 的详解可<a href="https://facebook.github.io/react/docs/typechecking-with-proptypes.html" target="_blank" rel="noopener">戳此</a></p>
+<p>组件初始化时，如果传递的属性和 propTypes 不匹配，则会打印一个 console.warn 日志。如果是可选配置，可以去掉.isRequired。propTypes 的详解可<a target="_blank" rel="noopener" href="https://facebook.github.io/react/docs/typechecking-with-proptypes.html">戳此</a></p>
 <h2 id="getInitalState"><a href="#getInitalState" class="headerlink" title="getInitalState"></a>getInitalState</h2><p>对于组件的每个实例来说，这个方法的调用getInitalState有且只有一次，getInitalState用来初始化每个实例的 state，在这个方法里，可以访问组件的 props。每一个React组件都有自己的 state，其与 props 的区别在于 state只存在组件的内部，props 在所有实例中共享。</p>
 <blockquote>
 <p>getInitialState 和 getDefaultPops 的调用是有区别的，getDefaultPops 是对于组件类来说只调用一次，后续该类的应用都不会被调用，而 getInitialState 是对于每个组件实例来讲都会调用，并且只调一次</p>
 </blockquote>
-<pre><code class="javascript">var LikeButton = React.createClass({
-    getInitalState:function(){
-        return {liked :false}
-    }
-    handleClick:function(event){
-        this.setState({liked : !this.state.liked})
-    }
-    render:function(){
+<pre><code class="javascript">var LikeButton = React.createClass(&#123;
+    getInitalState:function()&#123;
+        return &#123;liked :false&#125;
+    &#125;
+    handleClick:function(event)&#123;
+        this.setState(&#123;liked : !this.state.liked&#125;)
+    &#125;
+    render:function()&#123;
         var text = this.state.liked ? &#39;liked&#39; : &#39;dont like&#39;
         return(
-            &lt;p onClick = {this.handleClick}&gt;
-                you {text} this book;
+            &lt;p onClick = &#123;this.handleClick&#125;&gt;
+                you &#123;text&#125; this book;
             &lt;/p&gt;
         )
-    }
-})
+    &#125;
+&#125;)
 ReactDOM.render(
   &lt;LikeButton /&gt;,
   document.getElementById(&#39;example&#39;)
@@ -229,49 +230,49 @@ ReactDOM.render(
 <p>render方法返回的结果并不是真正的DOM元素，而是一个虚拟的表现，类似于一个DOM tree的结构的对象。react之所以效率高，就是这个原因。</p>
 <h2 id="componentDidMount"><a href="#componentDidMount" class="headerlink" title="componentDidMount"></a>componentDidMount</h2><p>该方法不会在服务端被渲染的过程中调用。该方法被调用时，已经渲染出真实的 DOM，可以再该方法中通过 <code>this.getDOMNode()</code> 访问到真实的 DOM(推荐使用 <code>ReactDOM.findDOMNode()</code>)。</p>
 <pre><code class="javascript">var data = [..];
-var comp = React.createClass({
-    render: function(){
+var comp = React.createClass(&#123;
+    render: function()&#123;
         return &lt;imput .. /&gt;
-    },
-    conponentDidMount: function(){
-        $(this.getDOMNode()).autoComplete({
+    &#125;,
+    conponentDidMount: function()&#123;
+        $(this.getDOMNode()).autoComplete(&#123;
             src: data
-        })
-    }
-})
+        &#125;)
+    &#125;
+&#125;)
 </code></pre>
 <p>由于组件并不是真实的 DOM 节点，而是存在于内存之中的一种数据结构，叫做虚拟 DOM （virtual DOM）。只有当它插入文档以后，才会变成真实的 DOM 。<strong>有时需要从组件获取真实 DOM 的节点，这时就要用到 ref 属性</strong></p>
-<pre><code class="javascript">var Aera = React.createClass ({
+<pre><code class="javascript">var Aera = React.createClass (&#123;
 
-    render:function(){
+    render:function()&#123;
         this.getDOMNode();//render调用时，这里未挂载，会报错
         return(
             return &lt;canvas ref=&#39;mainCanvas&#39;&gt;
         )
-    }，
-    componentDidMount: function(){
+    &#125;，
+    componentDidMount: function()&#123;
         var canvas = this.refs.mainCanvas.getDOMNode();
         //这是有效的，可以访问到 Canvas 节点
-    }
-})
+    &#125;
+&#125;)
 </code></pre>
 <p>需要注意的是，由于 <code>this.refs.[refName]</code> 属性获取的是真实 DOM ，所以必须等到虚拟 DOM 插入文档以后，才能使用这个属性，否则会报错</p>
 <h1 id="存在期"><a href="#存在期" class="headerlink" title="存在期"></a>存在期</h1><p>此时组件已经渲染好并且用户可以与它进行交互，比如鼠标点击，手指点按，或者其它的一些事件，导致应用状态的改变，你将会看到下面的方法依次被调用<br>1、componentWillReceiveProps<br>2、shouldComponentUpdate<br>3、componentWillUpdate<br>4、render<br>5、componentDidUpdate</p>
 <h2 id="componentWillReceiveProps"><a href="#componentWillReceiveProps" class="headerlink" title="componentWillReceiveProps"></a>componentWillReceiveProps</h2><p>组件的 props 属性可以通过父组件来更改，这时，componentWillReceiveProps 将来被调用。可以在这个方法里更新 state,以触发 render 方法重新渲染组件。</p>
-<pre><code class="javascript">componentWillReceliveProps:function(nextProps){
-    if(nextProps.click !== undefined){
-        this.setState({
+<pre><code class="javascript">componentWillReceliveProps:function(nextProps)&#123;
+    if(nextProps.click !== undefined)&#123;
+        this.setState(&#123;
             checked: nextProps.checked
-        })
-    }
-}
+        &#125;)
+    &#125;
+&#125;
 </code></pre>
-<h2 id="shouldComponentUpdate"><a href="#shouldComponentUpdate" class="headerlink" title="shouldComponentUpdate"></a>shouldComponentUpdate</h2><p>如果你确定组件的 props 或者 state 的改变不需要重新渲染，可以通过在这个方法里通过返回 <code>false</code> 来阻止组件的重新渲染，返回 <code>false</code>则不会执行 render 以及后面的 <code>componentWillUpdate</code>，<code>componentDidUpdate</code>方法。</p>
+<h2 id="shouldComponentUpdate"><a href="#shouldComponentUpdate" class="headerlink" title="shouldComponentUpdate"></a>shouldComponentUpdate</h2><p>如果你确定组件的 props 或者 state 的改变不需要重新渲染，可以通过在这个方法里通过返回 <code>false</code> 来阻止组件的重新渲染，返回 <code>false </code>则不会执行 render 以及后面的 <code>componentWillUpdate</code>，<code>componentDidUpdate </code>方法。</p>
 <p>该方法是非必须的，并且大多数情况下没有在开发中使用。</p>
-<pre><code class="javascript">shouldComponentUpdate: function(nextProps, nextState){
+<pre><code class="javascript">shouldComponentUpdate: function(nextProps, nextState)&#123;
     return this.state.checked === nextState.checked;
     //return false 则不更新组件
-}
+&#125;
 </code></pre>
 <h2 id="componentWillUpdate"><a href="#componentWillUpdate" class="headerlink" title="componentWillUpdate"></a>componentWillUpdate</h2><p>这个方法和 componentWillMount 类似，在组件接收到了新的 props 或者 state 即将进行重新渲染前，componentWillUpdate(object nextProps, object nextState) 会被调用，注意<strong>不要在此方面里再去更新 props 或者 state</strong>。</p>
 <h2 id="componentDidUpdate"><a href="#componentDidUpdate" class="headerlink" title="componentDidUpdate"></a>componentDidUpdate</h2><p>这个方法和 componentDidMount 类似，在组件重新被渲染之后，componentDidUpdate(object prevProps, object prevState) 会被调用。可以在这里访问并修改 DOM。</p>
@@ -279,34 +280,34 @@ var comp = React.createClass({
 <p>当再次装载组件时，以下方法会被依次调用：<br>1、getInitialState<br>2、componentWillMount<br>3、render<br>4、componentDidMount</p>
 <h1 id="反模式"><a href="#反模式" class="headerlink" title="反模式"></a>反模式</h1><p>在 getInitialState 方法中，尝试通过 this.props 来创建 state 的做法是一种反模式。</p>
 <pre><code class="javascript">//反模式
-getDefaultProps: function(){
-    return {
+getDefaultProps: function()&#123;
+    return &#123;
         data: new Date()
-    }
-},
-getInitialState: function(){
-    return {
+    &#125;
+&#125;,
+getInitialState: function()&#123;
+    return &#123;
         day: this.props.date - new Date()
-    }
-},
-render: function(){
-    return &lt;div&gt;Day:{this.state.day}&lt;/div&gt;
-}
+    &#125;
+&#125;,
+render: function()&#123;
+    return &lt;div&gt;Day:&#123;this.state.day&#125;&lt;/div&gt;
+&#125;
 </code></pre>
 <p>经过计算后的值不应该赋给 state，正确的模式应该是在渲染时计算这些值。这样保证了计算后的值永远不会与派生出它的 props 值不同步。</p>
-<pre><code class="javascript">getDefaultProps: function(){
-    return {
+<pre><code class="javascript">getDefaultProps: function()&#123;
+    return &#123;
         data: new Date()
-    }
-},
-render: function(){
+    &#125;
+&#125;,
+render: function()&#123;
     var day = this.props.date - new Date();
-    return &lt;div&gt;Day:{day}&lt;/div&gt;
-}
+    return &lt;div&gt;Day:&#123;day&#125;&lt;/div&gt;
+&#125;
 </code></pre>
 <p>如果只是简单的初始化 state，那么应用反模式是没有问题的。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>下面的一张图总结组件的生命周期：<br><img src="https://cloud.githubusercontent.com/assets/7871813/17771719/2c764710-6577-11e6-8393-f6acc6f262c2.png" alt="组件生命"></p>
-<p><a href="https://github.com/dwqs/blog/issues/15" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/dwqs/blog/issues/15">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -331,7 +332,7 @@ render: function(){
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -354,7 +355,7 @@ render: function(){
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -365,7 +366,7 @@ render: function(){
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#实例化"><span class="toc-number">1.</span> <span class="toc-text">实例化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#getDefaultProps"><span class="toc-number">1.1.</span> <span class="toc-text">getDefaultProps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#getInitalState"><span class="toc-number">1.2.</span> <span class="toc-text">getInitalState</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillMount"><span class="toc-number">1.3.</span> <span class="toc-text">componentWillMount</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#render"><span class="toc-number">1.4.</span> <span class="toc-text">render</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#componentDidMount"><span class="toc-number">1.5.</span> <span class="toc-text">componentDidMount</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#存在期"><span class="toc-number">2.</span> <span class="toc-text">存在期</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillReceiveProps"><span class="toc-number">2.1.</span> <span class="toc-text">componentWillReceiveProps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#shouldComponentUpdate"><span class="toc-number">2.2.</span> <span class="toc-text">shouldComponentUpdate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillUpdate"><span class="toc-number">2.3.</span> <span class="toc-text">componentWillUpdate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#componentDidUpdate"><span class="toc-number">2.4.</span> <span class="toc-text">componentDidUpdate</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#销毁期"><span class="toc-number">3.</span> <span class="toc-text">销毁期</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillUnmount"><span class="toc-number">3.1.</span> <span class="toc-text">componentWillUnmount</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#反模式"><span class="toc-number">4.</span> <span class="toc-text">反模式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B%E5%8C%96"><span class="toc-number">1.</span> <span class="toc-text">实例化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#getDefaultProps"><span class="toc-number">1.1.</span> <span class="toc-text">getDefaultProps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#getInitalState"><span class="toc-number">1.2.</span> <span class="toc-text">getInitalState</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillMount"><span class="toc-number">1.3.</span> <span class="toc-text">componentWillMount</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#render"><span class="toc-number">1.4.</span> <span class="toc-text">render</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#componentDidMount"><span class="toc-number">1.5.</span> <span class="toc-text">componentDidMount</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%98%E5%9C%A8%E6%9C%9F"><span class="toc-number">2.</span> <span class="toc-text">存在期</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillReceiveProps"><span class="toc-number">2.1.</span> <span class="toc-text">componentWillReceiveProps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#shouldComponentUpdate"><span class="toc-number">2.2.</span> <span class="toc-text">shouldComponentUpdate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillUpdate"><span class="toc-number">2.3.</span> <span class="toc-text">componentWillUpdate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#componentDidUpdate"><span class="toc-number">2.4.</span> <span class="toc-text">componentDidUpdate</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%94%80%E6%AF%81%E6%9C%9F"><span class="toc-number">3.</span> <span class="toc-text">销毁期</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillUnmount"><span class="toc-number">3.1.</span> <span class="toc-text">componentWillUnmount</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%8D%E6%A8%A1%E5%BC%8F"><span class="toc-number">4.</span> <span class="toc-text">反模式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol>
                 </div>
             </div>
             
@@ -384,7 +385,7 @@ render: function(){
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

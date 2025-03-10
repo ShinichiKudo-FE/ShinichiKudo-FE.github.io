@@ -38,7 +38,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -101,7 +101,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    8.9k
+                    9.2k
                 </span>
                 
                 
@@ -141,27 +141,27 @@
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <p><a href="https://juejin.im/post/5c959f74f265da610c068fa8#heading-11" target="_blank" rel="noopener">原文地址</a></p>
+            <p><a target="_blank" rel="noopener" href="https://juejin.im/post/5c959f74f265da610c068fa8#heading-11">原文地址</a></p>
 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>当回答面试官问及的Vue问题，我们除了照本宣科的回答外，其实还可以根据少量的源码来秀一把，来体现出你对Vue的深度了解。</p>
 <h2 id="“new-Vue-做了什么？”"><a href="#“new-Vue-做了什么？”" class="headerlink" title="“new Vue() 做了什么？”"></a>“new Vue() 做了什么？”</h2><p>new关键字代表实例化一个对象, 而Vue实际上是一个类, 源码位置是<code>/src/core/instance/index.js</code>。</p>
-<pre><code class="js">function Vue (options) {
+<pre><code class="js">function Vue (options) &#123;
   if (process.env.NODE_ENV !== &#39;production&#39; &amp;&amp;
     !(this instanceof Vue)
-  ) {
+  ) &#123;
     warn(&#39;Vue is a constructor and should be called with the `new` keyword&#39;)
-  }
+  &#125;
   this._init(options)
-}
+&#125;
 </code></pre>
-<p>接着我们跳转追踪至<code>this._init()</code>，即<code>Vue.prototype._init</code>,位于<code>src\core\instance\init.js</code>在<code>_init()</code>方法的内部有一系列 <code>init*</code> 的方法</p>
-<pre><code class="js">Vue.prototype._init = function (options?: Object) {
+<p>接着我们跳转追踪至<code>this._init()</code>，即<code>Vue.prototype._init</code>,位于<code>src\core\instance\init.js </code>在<code>_init()</code>方法的内部有一系列 <code>init*</code> 的方法</p>
+<pre><code class="js">Vue.prototype._init = function (options?: Object) &#123;
     const vm: Component = this
     // ...忽略，从第45行看起
-    if (process.env.NODE_ENV !== &#39;production&#39;) {
+    if (process.env.NODE_ENV !== &#39;production&#39;) &#123;
       initProxy(vm)
-    } else {
+    &#125; else &#123;
       vm._renderProxy = vm
-    }
+    &#125;
     // expose real self
     vm._self = vm
     initLifecycle(vm)
@@ -173,11 +173,11 @@
     initProvide(vm) // resolve provide after data/props
     callHook(vm, &#39;created&#39;)
     // ...忽略
-    if (vm.$options.el) {
+    if (vm.$options.el) &#123;
       vm.$mount(vm.$options.el)
-    }
-  }
-}
+    &#125;
+  &#125;
+&#125;
 </code></pre>
 <h3 id="这里我们叙述一下"><a href="#这里我们叙述一下" class="headerlink" title="这里我们叙述一下"></a>这里我们叙述一下</h3><ul>
 <li><code>initProxy</code>，作用域代理，拦截组件内访问其它组件的数据。</li>
@@ -194,14 +194,13 @@
 <li>initProvide，初始化provide。</li>
 <li>vm.$mount，挂载实例。</li>
 </ul>
-<h2 id="“什么阶段才能访问DOM？”"><a href="#“什么阶段才能访问DOM？”" class="headerlink" title="“什么阶段才能访问DOM？”"></a>“什么阶段才能访问DOM？”</h2><p>这个回答可以从<code>beforeCreate</code>以及 <code>created</code>的调用时机谈起，我们根据上面的概述，来简化下代码:</p>
+<h2 id="“什么阶段才能访问DOM？”"><a href="#“什么阶段才能访问DOM？”" class="headerlink" title="“什么阶段才能访问DOM？”"></a>“什么阶段才能访问DOM？”</h2><p>这个回答可以从<code>beforeCreate</code>以及 <code>created </code>的调用时机谈起，我们根据上面的概述，来简化下代码:</p>
 <pre><code class="js">callHook(vm, &#39;beforeCreate&#39;)
 // 初始化 inject
 // 初始化 props、methods、data、computed 和 watch
 // 初始化 provide
 callHook(vm, &#39;created&#39;)
 // 挂载实例 vm.$mount(vm.$options.el)
-
 </code></pre>
 <p>所以当面试官问你：</p>
 <ul>
@@ -210,7 +209,7 @@ callHook(vm, &#39;created&#39;)
 <li>为什么created之后才挂载实例？</li>
 </ul>
 <h2 id="“谈谈你对Vue的生命周期的理解”"><a href="#“谈谈你对Vue的生命周期的理解”" class="headerlink" title="“谈谈你对Vue的生命周期的理解”"></a>“谈谈你对Vue的生命周期的理解”</h2><p>常规回答这里就不说了，来稍微深入点的：</p>
-<a id="more"></a>
+<span id="more"></span>
 <p>1.<code>created/mounted/updated/destroyed</code>，以及对应的<code>before</code>钩子。分别是创建=&gt;挂载=&gt;更新=&gt;销毁。</p>
 <p>2.Vue源码中定义了一个<code>mergeHook</code>函数来遍历一个常量数组<code>LIFECYCLE_HOOKS</code>，该数组实际上是<strong>由与生命周期钩子同名的字符串组成的数组</strong>。</p>
 <pre><code class="js">// v2.6.10 最新版
@@ -229,7 +228,6 @@ var LIFECYCLE_HOOKS = [
     // v2.6+ 
     &#39;serverPrefetch&#39;
 ];
-
 </code></pre>
 <blockquote>
 <p>于是，你可以答多activated &amp; deactivated（keep-alive 组件激活/停用）、errorCaptured（v2.5 以上版本有的一个钩子，用于处理错误）这三个。</p>
@@ -238,50 +236,50 @@ var LIFECYCLE_HOOKS = [
 <p><img src="https://user-gold-cdn.xitu.io/2019/3/25/169b418d400ff0b7?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="serverPrefetch"></p>
 <pre><code class="js">&lt;!-- Item.vue --&gt;
 &lt;template&gt;
-  &lt;div v-if=&quot;item&quot;&gt;{{ item.title }}&lt;/div&gt;
+  &lt;div v-if=&quot;item&quot;&gt;&#123;&#123; item.title &#125;&#125;&lt;/div&gt;
   &lt;div v-else&gt;...&lt;/div&gt;
 &lt;/template&gt;
 
 &lt;script&gt;
-export default {
-  computed: {
-    item () {
+export default &#123;
+  computed: &#123;
+    item () &#123;
       return this.$store.state.items[this.$route.params.id]
-    }
-  },
-  serverPrefetch () {
+    &#125;
+  &#125;,
+  serverPrefetch () &#123;
     return this.fetchItem()
-  },
-  mounted () {
-    if (!this.item) {
+  &#125;,
+  mounted () &#123;
+    if (!this.item) &#123;
       this.fetchItem()
-    }
-  },
-  methods: {
-    fetchItem () {
+    &#125;
+  &#125;,
+  methods: &#123;
+    fetchItem () &#123;
       // return the Promise from the action
       return this.$store.dispatch(&#39;fetchItem&#39;, this.$route.params.id)
-    }
-  }
-}
+    &#125;
+  &#125;
+&#125;
 &lt;/script&gt;
 </code></pre>
 <p>绝大多数的面试官都不会去关注v2.6+ 以后的代码记录和变更。这里如果你说出这个v2.6.10的变化，啧啧…面试官肯定更加欣赏你。</p>
 <h3 id="生命周期钩子的合并策略"><a href="#生命周期钩子的合并策略" class="headerlink" title="生命周期钩子的合并策略"></a>生命周期钩子的合并策略</h3><p>拿<code>callHook(vm, &#39;created&#39;)</code>讲，先判断组件的选项中有无对应名字的生命周期钩子，再判断是否有 <code>parentVal(vm)</code>。若存在<code>parentVal(vm)</code>且都有对应的生命周期钩子，则会将两者<code>concat</code>为一个数组<code>(parentVal.concat(childVal))</code>。所以，生命周期钩子其实是可以写成数组。如：</p>
 <pre><code class="js">created: [
-function () {
+function () &#123;
   console.log(&#39;first&#39;)
-},
-function () {
+&#125;,
+function () &#123;
   console.log(&#39;second&#39;)
-},
-function () {
+&#125;,
+function () &#123;
   console.log(&#39;third&#39;)
-}]
+&#125;]
 </code></pre>
 <p>钩子函数将按顺序执行</p>
 <h2 id="Vue-router-路由模式有几种？”"><a href="#Vue-router-路由模式有几种？”" class="headerlink" title="Vue-router 路由模式有几种？”"></a>Vue-router 路由模式有几种？”</h2><p>三种 <code>&quot;hash&quot; | &quot;history&quot; | &quot;abstract&quot;</code>，一般人只知道两种<code>&quot;hash&quot; | &quot;history&quot;</code>。</p>
-<pre><code class="js">switch (mode) {
+<pre><code class="js">switch (mode) &#123;
   case &#39;history&#39;:
     this.history = new HTML5History(this, options.base)
     break
@@ -292,10 +290,10 @@ function () {
     this.history = new AbstractHistory(this, options.base)
     break
   default:
-    if (process.env.NODE_ENV !== &#39;production&#39;) {
-      assert(false, `invalid mode: ${mode}`)
-    }
-}
+    if (process.env.NODE_ENV !== &#39;production&#39;) &#123;
+      assert(false, `invalid mode: $&#123;mode&#125;`)
+    &#125;
+&#125;
 </code></pre>
 <p><code># mode</code><br>类型: <code>string</code><br>默认值: <code>&quot;hash&quot; (浏览器环境) | &quot;abstract&quot;</code> (Node.js 环境)<br>可选值: <code>&quot;hash&quot; | &quot;history&quot; | &quot;abstract&quot;</code><br>配置路由模式:</p>
 <p><code>hash</code>: 使用 URL hash 值来作路由。支持所有浏览器，包括不支持 HTML5 History Api 的浏览器。<br><code>history</code>: 依赖 HTML5 History API 和服务器配置。查看 HTML5 History 模式。<br><code>abstract</code>: 支持所有 JavaScript 运行环境，如 Node.js 服务器端。如果发现没有浏览器的 API，路由会自动强制进入这个模式.</p>
@@ -305,48 +303,48 @@ function () {
 </blockquote>
 <p>然后你可以开始骚了：</p>
 <p>1.<code>&lt;keep-alive&gt;</code>是 Vue 源码中实现的一个全局抽象组件，通过自定义 <code>render</code> 函数并且利用了<strong>插槽来实现数据缓存和更新</strong>。它的定义在<code>src/core/components/keep-alive.js</code> 中：</p>
-<pre><code class="js">export default {
+<pre><code class="js">export default &#123;
   name: &#39;keep-alive&#39;,
   abstract: true,
   ...
-}
+&#125;
 </code></pre>
 <p>2.所有的抽象组件是通过定义<code>abstract</code>选项来声明的。抽象组件不渲染真实DOM，且不会出现在父子关系的路径上（initLifecycle会忽略抽象组件），相关代码片段：</p>
-<pre><code class="js">if (parent &amp;&amp; !options.abstract) {
+<pre><code class="js">if (parent &amp;&amp; !options.abstract) &#123;
   // abstract 即 `ptions.abstract`
   // while 循环查找第一个非抽象的父组件
-  while (parent.$options.abstract &amp;&amp; parent.$parent) {
+  while (parent.$options.abstract &amp;&amp; parent.$parent) &#123;
     parent = parent.$parent
-  }
+  &#125;
   parent.$children.push(vm)
-}
+&#125;
 </code></pre>
 <h2 id="了解Vue2-6-新全局API：Vue-observable-吗？”"><a href="#了解Vue2-6-新全局API：Vue-observable-吗？”" class="headerlink" title="了解Vue2.6+新全局API：Vue.observable()吗？”"></a>了解Vue2.6+新全局API：Vue.observable()吗？”</h2><p>Vue2.6+新的全局API是<code>Vue.observable()</code>,它的使用方式</p>
 <pre><code class="js">import vue from vue;
-const state = Vue.observable ({
+const state = Vue.observable (&#123;
    counter: 0,
-});
-export default {
-   render () {
+&#125;);
+export default &#123;
+   render () &#123;
      return (
        &lt;div&gt;
-         {state.counter}
-           &lt;button v-on:click={() =&gt; {state.counter ++; }}&gt;
+         &#123;state.counter&#125;
+           &lt;button v-on:click=&#123;() =&gt; &#123;state.counter ++; &#125;&#125;&gt;
            Increment counter
          &lt;/ button&gt;
        &lt;/ div&gt;
      );
-   },
-};
+   &#125;,
+&#125;;
 </code></pre>
 <p>而它定义在<code>/src/core/global-api/index.js</code>第48行：</p>
-<pre><code class="js">import { observe } from &#39;core/observer/index&#39;
+<pre><code class="js">import &#123; observe &#125; from &#39;core/observer/index&#39;
 // ...
 // 2.6 explicit observable API
-Vue.observable = &lt;T&gt;(obj: T): T =&gt; {
+Vue.observable = &lt;T&gt;(obj: T): T =&gt; &#123;
 observe(obj)
 return obj
-}
+&#125;
 </code></pre>
 <p>再看看它import的observe，最近一次提交在<code>12/1/2018</code></p>
 <p>核心就是暴露出<code>observe(obj)</code>观测后的数据，代码啥都没改</p>
@@ -374,7 +372,7 @@ return obj
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -397,7 +395,7 @@ return obj
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -408,7 +406,7 @@ return obj
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#“new-Vue-做了什么？”"><span class="toc-number">1.1.</span> <span class="toc-text">“new Vue() 做了什么？”</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#这里我们叙述一下"><span class="toc-number">1.1.1.</span> <span class="toc-text">这里我们叙述一下</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#“什么阶段才能访问DOM？”"><span class="toc-number">1.2.</span> <span class="toc-text">“什么阶段才能访问DOM？”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#“谈谈你对Vue的生命周期的理解”"><span class="toc-number">1.3.</span> <span class="toc-text">“谈谈你对Vue的生命周期的理解”</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#新生命周期钩子：serverPrefetch是什么？"><span class="toc-number">1.3.1.</span> <span class="toc-text">新生命周期钩子：serverPrefetch是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#生命周期钩子的合并策略"><span class="toc-number">1.3.2.</span> <span class="toc-text">生命周期钩子的合并策略</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Vue-router-路由模式有几种？”"><span class="toc-number">1.4.</span> <span class="toc-text">Vue-router 路由模式有几种？”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#“谈谈你对keep-alive的了解？”"><span class="toc-number">1.5.</span> <span class="toc-text">“谈谈你对keep-alive的了解？”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#了解Vue2-6-新全局API：Vue-observable-吗？”"><span class="toc-number">1.6.</span> <span class="toc-text">了解Vue2.6+新全局API：Vue.observable()吗？”</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%80%9Cnew-Vue-%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9F%E2%80%9D"><span class="toc-number">1.1.</span> <span class="toc-text">“new Vue() 做了什么？”</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%99%E9%87%8C%E6%88%91%E4%BB%AC%E5%8F%99%E8%BF%B0%E4%B8%80%E4%B8%8B"><span class="toc-number">1.1.1.</span> <span class="toc-text">这里我们叙述一下</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%80%9C%E4%BB%80%E4%B9%88%E9%98%B6%E6%AE%B5%E6%89%8D%E8%83%BD%E8%AE%BF%E9%97%AEDOM%EF%BC%9F%E2%80%9D"><span class="toc-number">1.2.</span> <span class="toc-text">“什么阶段才能访问DOM？”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%80%9C%E8%B0%88%E8%B0%88%E4%BD%A0%E5%AF%B9Vue%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%9A%84%E7%90%86%E8%A7%A3%E2%80%9D"><span class="toc-number">1.3.</span> <span class="toc-text">“谈谈你对Vue的生命周期的理解”</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B0%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E9%92%A9%E5%AD%90%EF%BC%9AserverPrefetch%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.3.1.</span> <span class="toc-text">新生命周期钩子：serverPrefetch是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E9%92%A9%E5%AD%90%E7%9A%84%E5%90%88%E5%B9%B6%E7%AD%96%E7%95%A5"><span class="toc-number">1.3.2.</span> <span class="toc-text">生命周期钩子的合并策略</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Vue-router-%E8%B7%AF%E7%94%B1%E6%A8%A1%E5%BC%8F%E6%9C%89%E5%87%A0%E7%A7%8D%EF%BC%9F%E2%80%9D"><span class="toc-number">1.4.</span> <span class="toc-text">Vue-router 路由模式有几种？”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%80%9C%E8%B0%88%E8%B0%88%E4%BD%A0%E5%AF%B9keep-alive%E7%9A%84%E4%BA%86%E8%A7%A3%EF%BC%9F%E2%80%9D"><span class="toc-number">1.5.</span> <span class="toc-text">“谈谈你对keep-alive的了解？”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%86%E8%A7%A3Vue2-6-%E6%96%B0%E5%85%A8%E5%B1%80API%EF%BC%9AVue-observable-%E5%90%97%EF%BC%9F%E2%80%9D"><span class="toc-number">1.6.</span> <span class="toc-text">了解Vue2.6+新全局API：Vue.observable()吗？”</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -427,7 +425,7 @@ return obj
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

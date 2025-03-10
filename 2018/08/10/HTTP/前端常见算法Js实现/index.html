@@ -39,7 +39,7 @@ functio,">
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -102,7 +102,7 @@ functio,">
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    2.9k
+                    3.1k
                 </span>
                 
                 
@@ -145,26 +145,28 @@ functio,">
             <h1 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h1><pre><code class="js">var arr = [2,53,53.2,1,1223,5,2,675,967,2,1231,9344,3855,1];
 </code></pre>
 <h2 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h2><p><strong>原理</strong>：<br>比较相邻的两个元素，比较大的放置右端</p>
-<pre><code class="js">function bubbleSort(arr){
+<pre><code class="js">function bubbleSort(arr)&#123;
     var i = j =0
-    for(var i = 1;i &lt; arr.length;i++){
-        for(var j = 0;j &lt;= arr.length - i;j++){
+    for(var i = 1;i &lt; arr.length;i++)&#123;
+        for(var j = 0;j &lt;= arr.length - i;j++)&#123;
             var temp = 0
-            if(arr[j] &gt; arr[j+1]){
+            if(arr[j] &gt; arr[j+1])&#123;
                 temp = arr[j];
                 arr[j] = arr[j+1];
                 arr[j+1] = temp;
-            }
-        }
-    }
-}
+            &#125;
+        &#125;
+    &#125;
+&#125;
 
 // bubbleSort(arr);
 // console.log(arr)
 </code></pre>
-<h2 id="快排"><a href="#快排" class="headerlink" title="快排"></a>快排</h2><p><strong>原理：</strong><br>根据基数将分为两部分，一部分的数据要比另一部分的所有数据都要小，然后进行递归调用，直到最后一个元素<br><a id="more"></a></p>
-<pre><code class="js">function quickSort(arr){
-    if (arr.length &lt;= 1) { return arr; }
+<h2 id="快排"><a href="#快排" class="headerlink" title="快排"></a>快排</h2><p><strong>原理：</strong><br>根据基数将分为两部分，一部分的数据要比另一部分的所有数据都要小，然后进行递归调用，直到最后一个元素</p>
+<span id="more"></span>
+
+<pre><code class="js">function quickSort(arr)&#123;
+    if (arr.length &lt;= 1) &#123; return arr; &#125;
 
 　　var pivotIndex = Math.floor(arr.length / 2) ;
 
@@ -174,23 +176,23 @@ functio,">
 
 　　var right = [];
 
-　　for (var i = 0; i &lt; arr.length; i++){
+　　for (var i = 0; i &lt; arr.length; i++)&#123;
 
-　　　　if (arr[i] &lt; pivot) {
+　　　　if (arr[i] &lt; pivot) &#123;
 
 　　　　　　left.push(arr[i]);
 
-　　　　} else {
+　　　　&#125; else &#123;
 
 　　　　　　right.push(arr[i]);
 
-　　　　}
+　　　　&#125;
 
-　　}
+　　&#125;
 
    　return quickSort(left).concat([pivot], quickSort(right));
 
-}
+&#125;
 
 // console.log(quickSort(arr));
 </code></pre>
@@ -200,50 +202,50 @@ functio,">
 <p>4） 重复步骤3，直到找到已排序的元素小于或者等于新元素的位置</p>
 <p>5）将新元素插入到下一位置中</p>
 <p>6） 重复步骤2</p>
-<pre><code class="js">function insertSort(arr){
+<pre><code class="js">function insertSort(arr)&#123;
 // 假设第0个元素开始是有序排序，第1个元素之后是无序排序
 // 所以从第1个元素将无需数列的元素插入有序数列中
-for(var i = 1; i &lt; arr.length; i++){
+for(var i = 1; i &lt; arr.length; i++)&#123;
     // 升序
-    if(arr[i] &lt; arr[i - 1]){
+    if(arr[i] &lt; arr[i - 1])&#123;
         // 取出无序数组中弟i个元素作为被插入元素
         var guard = arr[i];
         // 记住有序数列的最后一个元素位置，并将数列位置扩大一个
         var j = i - 1;
         arr[i] = arr[j];
         // 比大小找到被插入元素的位置
-        while (j &gt;= 0 &amp;&amp; guard &lt; arr[j]) {
+        while (j &gt;= 0 &amp;&amp; guard &lt; arr[j]) &#123;
             arr[j + 1] = arr[j];
             j--;
-        }
+        &#125;
         arr[j + 1] = guard; // 插入
-    }
-}
-}
+    &#125;
+&#125;
+&#125;
 insertSort(arr);
 console.log(arr)
 </code></pre>
 <h2 id="二分查找"><a href="#二分查找" class="headerlink" title="二分查找"></a>二分查找</h2><p><strong>原理</strong><br>二分查找，也为折半查找。首先要找到一个中间值，通过与中间值比较，大的放又，小的放在左边。<br>再在两边中寻找中间值，持续以上操作，直到找到所在位置为止。</p>
-<pre><code class="js">function binarySort(left,right){
+<pre><code class="js">function binarySort(left,right)&#123;
     var result = [],
         il = 0,
         ir = 0;
 
-    while (il &lt; left.length &amp;&amp; ir &lt; right.length) {
-        if (left[il] &lt; right[ir]) {
+    while (il &lt; left.length &amp;&amp; ir &lt; right.length) &#123;
+        if (left[il] &lt; right[ir]) &#123;
             result.push(left[il++]);
-        } else {
+        &#125; else &#123;
             result.push(right[ir++]);
-        }
-    }
-    while(left[il]){
+        &#125;
+    &#125;
+    while(left[il])&#123;
         result.push(left[il++]);
-    }
-    while(right[ir]){
+    &#125;
+    while(right[ir])&#123;
         result.push(right[ir++]);
-    }
+    &#125;
     return result;
-}
+&#125;
 console.log(binarySort(arr,1))
 </code></pre>
 
@@ -270,7 +272,7 @@ console.log(binarySort(arr,1))
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -293,7 +295,7 @@ console.log(binarySort(arr,1))
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -304,7 +306,7 @@ console.log(binarySort(arr,1))
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#快速排序"><span class="toc-number">1.</span> <span class="toc-text">快速排序</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#冒泡排序"><span class="toc-number">1.1.</span> <span class="toc-text">冒泡排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#快排"><span class="toc-number">1.2.</span> <span class="toc-text">快排</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#插入排序"><span class="toc-number">1.3.</span> <span class="toc-text">插入排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二分查找"><span class="toc-number">1.4.</span> <span class="toc-text">二分查找</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F"><span class="toc-number">1.</span> <span class="toc-text">快速排序</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F"><span class="toc-number">1.1.</span> <span class="toc-text">冒泡排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BF%AB%E6%8E%92"><span class="toc-number">1.2.</span> <span class="toc-text">快排</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F"><span class="toc-number">1.3.</span> <span class="toc-text">插入排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE"><span class="toc-number">1.4.</span> <span class="toc-text">二分查找</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -323,7 +325,7 @@ console.log(binarySort(arr,1))
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

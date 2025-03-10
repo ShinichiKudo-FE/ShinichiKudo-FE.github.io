@@ -37,7 +37,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -100,13 +100,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    16k
+                    17k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    14 mins.
+                    15 mins.
                 </span>
                 
                 
@@ -142,48 +142,49 @@
         <div class="content markdown animated fadeIn">
             <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>算是最合理的React/JSX编码规范之一了</p>
 <p>此编码规范主要基于目前流行的JavaScript标准，尽管某些其他约定(如async/await，静态class属性)可能在不同的项目中被引入或者被禁用。目前的状态是任何stage-3之前的规范都不包括也不推荐使用。</p>
-<h2 id="Basic-Rules-基本规范"><a href="#Basic-Rules-基本规范" class="headerlink" title="Basic Rules 基本规范"></a>Basic Rules 基本规范</h2><p>每个文件只写一个模块.<br>但是多个<a href="https://reactjs.org/docs/components-and-props.html#stateless-functions" target="_blank" rel="noopener">无状态模块</a>可以放在单个文件中. eslint: <a href="https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-multi-comp.md#ignorestateless" target="_blank" rel="noopener">react/no-multi-comp</a>.<br>推荐使用JSX语法.<br>不要使用 <code>React.createElement</code>，除非从一个非JSX的文件中初始化你的app.</p>
+<h2 id="Basic-Rules-基本规范"><a href="#Basic-Rules-基本规范" class="headerlink" title="Basic Rules 基本规范"></a>Basic Rules 基本规范</h2><p>每个文件只写一个模块.<br>但是多个<a target="_blank" rel="noopener" href="https://reactjs.org/docs/components-and-props.html#stateless-functions">无状态模块</a>可以放在单个文件中. eslint: <a target="_blank" rel="noopener" href="https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-multi-comp.md#ignorestateless">react/no-multi-comp</a>.<br>推荐使用JSX语法.<br>不要使用 <code>React.createElement</code>，除非从一个非JSX的文件中初始化你的app.</p>
 <h2 id="创建模块"><a href="#创建模块" class="headerlink" title="创建模块"></a>创建模块</h2><p>class vs React.createClass vs stateless</p>
 <ul>
 <li>如果你的模块有内部状态或者是refs, 推荐使用 <code>class extends React.Component</code> 而不是 <code>React.createClass</code>. eslint:</li>
 </ul>
-<pre><code class="js">const Listing = React.createClass({
+<pre><code class="js">const Listing = React.createClass(&#123;
   // ...
-  render() {
-    return &lt;div&gt;{this.state.hello}&lt;/div&gt;;
-  }
-});
+  render() &#123;
+    return &lt;div&gt;&#123;this.state.hello&#125;&lt;/div&gt;;
+  &#125;
+&#125;);
 
 // good
-class Listing extends React.Component {
+class Listing extends React.Component &#123;
   // ...
-  render() {
-    return &lt;div&gt;{this.state.hello}&lt;/div&gt;;
-  }
-}
+  render() &#123;
+    return &lt;div&gt;&#123;this.state.hello&#125;&lt;/div&gt;;
+  &#125;
+&#125;
 </code></pre>
 <ul>
 <li>如果你的模块没有状态或是没有引用refs， 推荐使用普通函数（非箭头函数）而不是类:</li>
 </ul>
 <pre><code class="js">// bad
-class Listing extends React.Component {
-  render() {
-    return &lt;div&gt;{this.props.hello}&lt;/div&gt;;
-  }
-}
+class Listing extends React.Component &#123;
+  render() &#123;
+    return &lt;div&gt;&#123;this.props.hello&#125;&lt;/div&gt;;
+  &#125;
+&#125;
 
 // bad (relying on function name inference is discouraged)
-const Listing = ({ hello }) =&gt; (
-  &lt;div&gt;{hello}&lt;/div&gt;
+const Listing = (&#123; hello &#125;) =&gt; (
+  &lt;div&gt;&#123;hello&#125;&lt;/div&gt;
 );
 
 // good
-function Listing({ hello }) {
-  return &lt;div&gt;{hello}&lt;/div&gt;;
-}
+function Listing(&#123; hello &#125;) &#123;
+  return &lt;div&gt;&#123;hello&#125;&lt;/div&gt;;
+&#125;
 </code></pre>
-<a id="more"></a>
-<h2 id="Mixins"><a href="#Mixins" class="headerlink" title="Mixins"></a>Mixins</h2><p><a href="https://reactjs.org/blog/2016/07/13/mixins-considered-harmful.html" target="_blank" rel="noopener">不要使用Mixins</a></p>
+<span id="more"></span>
+
+<h2 id="Mixins"><a href="#Mixins" class="headerlink" title="Mixins"></a>Mixins</h2><p><a target="_blank" rel="noopener" href="https://reactjs.org/blog/2016/07/13/mixins-considered-harmful.html">不要使用Mixins</a></p>
 <h2 id="Naming-命名"><a href="#Naming-命名" class="headerlink" title="Naming 命名"></a>Naming 命名</h2><ul>
 <li>扩展名：React模块使用.jsx扩展名。</li>
 <li>文件名：文件名使用帕斯卡命名。如，ReservationCard.jsx。</li>
@@ -220,25 +221,25 @@ import Footer from &#39;./Footer&#39;;
 <p>为什么？一个模块的 displayName 可能会在开发者工具或者错误信息中使用到，因此有一个能清楚的表达这层关系的值能帮助我们更好的理解模块发生了什么，更好的Debug.</p>
 </blockquote>
 <pre><code class="js">// bad
-export default function withFoo(WrappedComponent) {
-  return function WithFoo(props) {
-    return &lt;WrappedComponent {...props} foo /&gt;;
-  }
-}
+export default function withFoo(WrappedComponent) &#123;
+  return function WithFoo(props) &#123;
+    return &lt;WrappedComponent &#123;...props&#125; foo /&gt;;
+  &#125;
+&#125;
 
 // good
-export default function withFoo(WrappedComponent) {
-  function WithFoo(props) {
-    return &lt;WrappedComponent {...props} foo /&gt;;
-  }
+export default function withFoo(WrappedComponent) &#123;
+  function WithFoo(props) &#123;
+    return &lt;WrappedComponent &#123;...props&#125; foo /&gt;;
+  &#125;
 
   const wrappedComponentName = WrappedComponent.displayName
     || WrappedComponent.name
     || &#39;Component&#39;;
 
-  WithFoo.displayName = `withFoo(${wrappedComponentName})`;
+  WithFoo.displayName = `withFoo($&#123;wrappedComponentName&#125;)`;
   return WithFoo;
-}
+&#125;
 </code></pre>
 <ul>
 <li>属性命名: 避免使用DOM相关的属性来用作其他的用途。</li>
@@ -256,14 +257,14 @@ export default function withFoo(WrappedComponent) {
 <li>不要使用 displayName 来命名React模块，而是使用引用来命名模块， 如 class 名称.</li>
 </ul>
 <pre><code class="js">// bad
-export default React.createClass({
+export default React.createClass(&#123;
   displayName: &#39;ReservationCard&#39;,
   // stuff goes here
-});
+&#125;);
 
 // good
-export default class ReservationCard extends React.Component {
-}
+export default class ReservationCard extends React.Component &#123;
+&#125;
 </code></pre>
 <h2 id="Alignment-代码对齐"><a href="#Alignment-代码对齐" class="headerlink" title="Alignment 代码对齐"></a>Alignment 代码对齐</h2><p>遵循以下的JSX语法缩进/格式.</p>
 <pre><code class="js">// bad
@@ -300,10 +301,10 @@ export default class ReservationCard extends React.Component {
 &lt;Foo bar=&quot;bar&quot; /&gt;
 
 // bad
-&lt;Foo style={{ left: "20px" }} /&gt;
+&lt;Foo style=&#123;&#123; left: "20px" &#125;&#125; /&gt;
 
 // good
-&lt;Foo style={{ left: '20px' }} /&gt;
+&lt;Foo style=&#123;&#123; left: '20px' &#125;&#125; /&gt;
 </code></pre>
 <h2 id="Spacing-空格"><a href="#Spacing-空格" class="headerlink" title="Spacing 空格"></a>Spacing 空格</h2><ul>
 <li>总是在自动关闭的标签前加一个空格，正常情况下也不需要换行.</li>
@@ -325,10 +326,10 @@ export default class ReservationCard extends React.Component {
 <li>不要在JSX {} 引用括号里两边加空格</li>
 </ul>
 <pre><code class="js">// bad
-&lt;Foo bar={ baz } /&gt;
+&lt;Foo bar=&#123; baz &#125; /&gt;
 
 // good
-&lt;Foo bar={baz} /&gt;
+&lt;Foo bar=&#123;baz&#125; /&gt;
 </code></pre>
 <h2 id="Props-属性"><a href="#Props-属性" class="headerlink" title="Props 属性"></a>Props 属性</h2><ul>
 <li>JSX属性名使用骆驼式风格camelCase.</li>
@@ -336,13 +337,13 @@ export default class ReservationCard extends React.Component {
 <pre><code class="js">// bad
 &lt;Foo
   UserName=&quot;hello&quot;
-  phone_number={12345678}
+  phone_number=&#123;12345678&#125;
 /&gt;
 
 // good
 &lt;Foo
   userName=&quot;hello&quot;
-  phoneNumber={12345678}
+  phoneNumber=&#123;12345678&#125;
 /&gt;
 </code></pre>
 <ul>
@@ -350,7 +351,7 @@ export default class ReservationCard extends React.Component {
 </ul>
 <pre><code class="js">// bad
 &lt;Foo
-  hidden={true}
+  hidden=&#123;true&#125;
 /&gt;
 
 // good
@@ -416,20 +417,20 @@ export default class ReservationCard extends React.Component {
 <li>避免使用数组的index来作为属性key的值，推荐使用唯一ID.</li>
 </ul>
 <pre><code class="js">// bad
-{todos.map((todo, index) =&gt;
+&#123;todos.map((todo, index) =&gt;
   &lt;Todo
-    {...todo}
-    key={index}
+    &#123;...todo&#125;
+    key=&#123;index&#125;
   /&gt;
-)}
+)&#125;
 
 // good
-{todos.map(todo =&gt; (
+&#123;todos.map(todo =&gt; (
   &lt;Todo
-    {...todo}
-    key={todo.id}
+    &#123;...todo&#125;
+    key=&#123;todo.id&#125;
   /&gt;
-))}
+))&#125;
 </code></pre>
 <ul>
 <li>对于所有非必须的属性，总是手动去定义defaultProps属性.</li>
@@ -438,28 +439,28 @@ export default class ReservationCard extends React.Component {
 <p>为什么? propTypes 可以作为模块的文档说明, 并且声明 defaultProps 的话意味着阅读代码的人不需要去假设一些默认值。更重要的是, 显示的声明默认属性可以让你的模块跳过属性类型的检查.</p>
 </blockquote>
 <pre><code class="js">// bad
-function SFC({ foo, bar, children }) {
-  return &lt;div&gt;{foo}{bar}{children}&lt;/div&gt;;
-}
-SFC.propTypes = {
+function SFC(&#123; foo, bar, children &#125;) &#123;
+  return &lt;div&gt;&#123;foo&#125;&#123;bar&#125;&#123;children&#125;&lt;/div&gt;;
+&#125;
+SFC.propTypes = &#123;
   foo: PropTypes.number.isRequired,
   bar: PropTypes.string,
   children: PropTypes.node,
-};
+&#125;;
 
 // good
-function SFC({ foo, bar, children }) {
-  return &lt;div&gt;{foo}{bar}{children}&lt;/div&gt;;
-}
-SFC.propTypes = {
+function SFC(&#123; foo, bar, children &#125;) &#123;
+  return &lt;div&gt;&#123;foo&#125;&#123;bar&#125;&#123;children&#125;&lt;/div&gt;;
+&#125;
+SFC.propTypes = &#123;
   foo: PropTypes.number.isRequired,
   bar: PropTypes.string,
   children: PropTypes.node,
-};
-SFC.defaultProps = {
+&#125;;
+SFC.defaultProps = &#123;
   bar: &#39;&#39;,
   children: null,
-};
+&#125;;
 </code></pre>
 <ul>
 <li>尽可能少地使用扩展运算符</li>
@@ -471,41 +472,41 @@ SFC.defaultProps = {
 <ul>
 <li>使用了变量提升的高阶组件</li>
 </ul>
-<pre><code class="js">function HOC(WrappedComponent) {
-  return class Proxy extends React.Component {
-    Proxy.propTypes = {
+<pre><code class="js">function HOC(WrappedComponent) &#123;
+  return class Proxy extends React.Component &#123;
+    Proxy.propTypes = &#123;
       text: PropTypes.string,
       isLoading: PropTypes.bool
-    };
+    &#125;;
 
-    render() {
-      return &lt;WrappedComponent {...this.props} /&gt;
-    }
-  }
-}  
+    render() &#123;
+      return &lt;WrappedComponent &#123;...this.props&#125; /&gt;
+    &#125;
+  &#125;
+&#125;  
 </code></pre>
 <p>只有在清楚明白扩展对象时才使用扩展运算符。这非常有用尤其是在使用Mocha测试组件的时候。</p>
-<pre><code class="js">export default function Foo {
-  const props = {
+<pre><code class="js">export default function Foo &#123;
+  const props = &#123;
     text: &#39;&#39;,
     isPublished: false
-  }
+  &#125;
 
-  return (&lt;div {...props} /&gt;);
-}
+  return (&lt;div &#123;...props&#125; /&gt;);
+&#125;
 </code></pre>
 <p>特别提醒：尽可能地筛选出不必要的属性。同时，使用prop-types-exact来预防问题出现。</p>
 <pre><code class="js"> //good
-render() {
-  const { irrelevantProp, ...relevantProps  } = this.props;
-  return &lt;WrappedComponent {...relevantProps} /&gt;
-}
+render() &#123;
+  const &#123; irrelevantProp, ...relevantProps  &#125; = this.props;
+  return &lt;WrappedComponent &#123;...relevantProps&#125; /&gt;
+&#125;
 
 //bad
-render() {
-  const { irrelevantProp, ...relevantProps  } = this.props;
-  return &lt;WrappedComponent {...this.props} /&gt;
-}
+render() &#123;
+  const &#123; irrelevantProp, ...relevantProps  &#125; = this.props;
+  return &lt;WrappedComponent &#123;...this.props&#125; /&gt;
+&#125;
 </code></pre>
 <h2 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h2><p>总是在Refs里使用回调函数.</p>
 <pre><code class="js">// bad
@@ -515,33 +516,33 @@ render() {
 
 // good
 &lt;Foo
-  ref={(ref) =&gt; { this.myRef = ref; }}
+  ref=&#123;(ref) =&gt; &#123; this.myRef = ref; &#125;&#125;
 /&gt;
 </code></pre>
 <h2 id="Parentheses-括号"><a href="#Parentheses-括号" class="headerlink" title="Parentheses 括号"></a>Parentheses 括号</h2><ul>
 <li>将多行的JSX标签写在()里</li>
 </ul>
 <pre><code class="js">// bad
-render() {
+render() &#123;
   return &lt;MyComponent className=&quot;long body&quot; foo=&quot;bar&quot;&gt;
            &lt;MyChild /&gt;
          &lt;/MyComponent&gt;;
-}
+&#125;
 
 // good
-render() {
+render() &#123;
   return (
     &lt;MyComponent className=&quot;long body&quot; foo=&quot;bar&quot;&gt;
       &lt;MyChild /&gt;
     &lt;/MyComponent&gt;
   );
-}
+&#125;
 
 // good, 单行可以不需要
-render() {
+render() &#123;
   const body = &lt;div&gt;hello&lt;/div&gt;;
-  return &lt;MyComponent&gt;{body}&lt;/MyComponent&gt;;
-}
+  return &lt;MyComponent&gt;&#123;body&#125;&lt;/MyComponent&gt;;
+&#125;
 </code></pre>
 <h2 id="Tags-标签"><a href="#Tags-标签" class="headerlink" title="Tags 标签"></a>Tags 标签</h2><ul>
 <li>没有子元素标签总是自己闭合</li>
@@ -569,18 +570,18 @@ render() {
 <h2 id="Methods函数"><a href="#Methods函数" class="headerlink" title="Methods函数"></a>Methods函数</h2><ul>
 <li>使用箭头函数来获取本地变量.</li>
 </ul>
-<pre><code class="js">function ItemList(props) {
+<pre><code class="js">function ItemList(props) &#123;
   return (
     &lt;ul&gt;
-      {props.items.map((item, index) =&gt; (
+      &#123;props.items.map((item, index) =&gt; (
         &lt;Item
-          key={item.key}
-          onClick={() =&gt; doSomethingWith(item.name, index)}
+          key=&#123;item.key&#125;
+          onClick=&#123;() =&gt; doSomethingWith(item.name, index)&#125;
         /&gt;
-      ))}
+      ))&#125;
     &lt;/ul&gt;
   );
-}
+&#125;
 </code></pre>
 <ul>
 <li>当在 render() 里使用事件处理方法时，提前在构造函数里把 this 绑定上去.</li>
@@ -589,69 +590,69 @@ render() {
 <p>为什么? 在每次 render 过程中， 再调用 bind 都会新建一个新的函数，浪费资源.</p>
 </blockquote>
 <pre><code class="js">// bad
-class extends React.Component {
-  onClickDiv() {
+class extends React.Component &#123;
+  onClickDiv() &#123;
     // do stuff
-  }
+  &#125;
 
-  render() {
-    return &lt;div onClick={this.onClickDiv.bind(this)} /&gt;;
-  }
-}
+  render() &#123;
+    return &lt;div onClick=&#123;this.onClickDiv.bind(this)&#125; /&gt;;
+  &#125;
+&#125;
 
 // good
-class extends React.Component {
-  constructor(props) {
+class extends React.Component &#123;
+  constructor(props) &#123;
     super(props);
 
     this.onClickDiv = this.onClickDiv.bind(this);
-  }
+  &#125;
 
-  onClickDiv() {
+  onClickDiv() &#123;
     // do stuff
-  }
+  &#125;
 
-  render() {
-    return &lt;div onClick={this.onClickDiv} /&gt;;
-  }
-}
+  render() &#123;
+    return &lt;div onClick=&#123;this.onClickDiv&#125; /&gt;;
+  &#125;
+&#125;
 </code></pre>
 <ul>
 <li>在React模块中，不要给所谓的私有函数添加 _ 前缀，本质上它并不是私有的.</li>
 </ul>
 <blockquote>
-<p>为什么？_ 下划线前缀在某些语言中通常被用来表示私有变量或者函数。但是不像其他的一些语言，在JS中没有原生支持所谓的私有变量，所有的变量函数都是共有的。尽管你的意图是使它私有化，在之前加上下划线并不会使这些变量私有化，并且所有的属性（包括有下划线前缀及没有前缀的）都应该被视为是共有的。了解更多详情请查看Issue <a href="https://github.com/airbnb/javascript/issues/1024" target="_blank" rel="noopener">#1024</a>, 和 <a href="https://github.com/airbnb/javascript/issues/490" target="_blank" rel="noopener">#490</a> 。</p>
+<p>为什么？_ 下划线前缀在某些语言中通常被用来表示私有变量或者函数。但是不像其他的一些语言，在JS中没有原生支持所谓的私有变量，所有的变量函数都是共有的。尽管你的意图是使它私有化，在之前加上下划线并不会使这些变量私有化，并且所有的属性（包括有下划线前缀及没有前缀的）都应该被视为是共有的。了解更多详情请查看Issue <a target="_blank" rel="noopener" href="https://github.com/airbnb/javascript/issues/1024">#1024</a>, 和 <a target="_blank" rel="noopener" href="https://github.com/airbnb/javascript/issues/490">#490</a> 。</p>
 </blockquote>
 <pre><code class="js">// bad
-React.createClass({
-  _onClickSubmit() {
+React.createClass(&#123;
+  _onClickSubmit() &#123;
     // do stuff
-  },
+  &#125;,
 
   // other stuff
-});
+&#125;);
 
 // good
-class extends React.Component {
-  onClickSubmit() {
+class extends React.Component &#123;
+  onClickSubmit() &#123;
     // do stuff
-  }
+  &#125;
 
   // other stuff
-}
+&#125;
 </code></pre>
 <ul>
 <li>在 render 方法中总是确保 return 返回值.</li>
 </ul>
 <pre><code class="js">// bad
-render() {
+render() &#123;
   (&lt;div /&gt;);
-}
+&#125;
 
 // good
-render() {
+render() &#123;
   return (&lt;div /&gt;);
-}
+&#125;
 </code></pre>
 <h2 id="Ordering-React-模块生命周期"><a href="#Ordering-React-模块生命周期" class="headerlink" title="Ordering React 模块生命周期"></a>Ordering React 模块生命周期</h2><ul>
 <li>class extends React.Component 的生命周期函数:</li>
@@ -663,31 +664,30 @@ render() {
 <pre><code class="js">import React from &#39;react&#39;;
 import PropTypes from &#39;prop-types&#39;;
 
-const propTypes = {
+const propTypes = &#123;
   id: PropTypes.number.isRequired,
   url: PropTypes.string.isRequired,
   text: PropTypes.string,
-};
+&#125;;
 
-const defaultProps = {
+const defaultProps = &#123;
   text: &#39;Hello World&#39;,
-};
+&#125;;
 
-class Link extends React.Component {
-  static methodsAreOk() {
+class Link extends React.Component &#123;
+  static methodsAreOk() &#123;
     return true;
-  }
+  &#125;
 
-  render() {
-    return &lt;a href={this.props.url} data-id={this.props.id}&gt;{this.props.text}&lt;/a&gt;;
-  }
-}
+  render() &#123;
+    return &lt;a href=&#123;this.props.url&#125; data-id=&#123;this.props.id&#125;&gt;&#123;this.props.text&#125;&lt;/a&gt;;
+  &#125;
+&#125;
 
 Link.propTypes = propTypes;
 Link.defaultProps = defaultProps;
 
 export default Link;
-
 </code></pre>
 <ul>
 <li>React.createClass 的生命周期函数，与使用class稍有不同:</li>
@@ -696,8 +696,8 @@ export default Link;
 <h2 id="isMounted"><a href="#isMounted" class="headerlink" title="isMounted"></a>isMounted</h2><blockquote>
 <p>为什么? isMounted 反人类设计模式:(), 在 ES6 classes 中无法使用， 官方将在未来的版本里删除此方法.</p>
 </blockquote>
-<h2 id="更多编码规范"><a href="#更多编码规范" class="headerlink" title="更多编码规范"></a>更多编码规范</h2><p><a href="https://github.com/airbnb/javascript" target="_blank" rel="noopener">javascript</a><br><a href="https://cn.vuejs.org/v2/style-guide" target="_blank" rel="noopener">vue</a></p>
-<p><a href="https://github.com/JasonBoy/javascript/tree/master/react" target="_blank" rel="noopener">原文地址</a></p>
+<h2 id="更多编码规范"><a href="#更多编码规范" class="headerlink" title="更多编码规范"></a>更多编码规范</h2><p><a target="_blank" rel="noopener" href="https://github.com/airbnb/javascript">javascript</a><br><a target="_blank" rel="noopener" href="https://cn.vuejs.org/v2/style-guide">vue</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/JasonBoy/javascript/tree/master/react">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -722,7 +722,7 @@ export default Link;
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -745,7 +745,7 @@ export default Link;
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -756,7 +756,7 @@ export default Link;
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Basic-Rules-基本规范"><span class="toc-number">1.1.</span> <span class="toc-text">Basic Rules 基本规范</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建模块"><span class="toc-number">1.2.</span> <span class="toc-text">创建模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mixins"><span class="toc-number">1.3.</span> <span class="toc-text">Mixins</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Naming-命名"><span class="toc-number">1.4.</span> <span class="toc-text">Naming 命名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Declaration-声明模块"><span class="toc-number">1.5.</span> <span class="toc-text">Declaration 声明模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Alignment-代码对齐"><span class="toc-number">1.6.</span> <span class="toc-text">Alignment 代码对齐</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Quotes-单引号还是双引号"><span class="toc-number">1.7.</span> <span class="toc-text">Quotes 单引号还是双引号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spacing-空格"><span class="toc-number">1.8.</span> <span class="toc-text">Spacing 空格</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Props-属性"><span class="toc-number">1.9.</span> <span class="toc-text">Props 属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Refs"><span class="toc-number">1.10.</span> <span class="toc-text">Refs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Parentheses-括号"><span class="toc-number">1.11.</span> <span class="toc-text">Parentheses 括号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tags-标签"><span class="toc-number">1.12.</span> <span class="toc-text">Tags 标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Methods函数"><span class="toc-number">1.13.</span> <span class="toc-text">Methods函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ordering-React-模块生命周期"><span class="toc-number">1.14.</span> <span class="toc-text">Ordering React 模块生命周期</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#isMounted"><span class="toc-number">1.15.</span> <span class="toc-text">isMounted</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#更多编码规范"><span class="toc-number">1.16.</span> <span class="toc-text">更多编码规范</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Basic-Rules-%E5%9F%BA%E6%9C%AC%E8%A7%84%E8%8C%83"><span class="toc-number">1.1.</span> <span class="toc-text">Basic Rules 基本规范</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%A8%A1%E5%9D%97"><span class="toc-number">1.2.</span> <span class="toc-text">创建模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mixins"><span class="toc-number">1.3.</span> <span class="toc-text">Mixins</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Naming-%E5%91%BD%E5%90%8D"><span class="toc-number">1.4.</span> <span class="toc-text">Naming 命名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Declaration-%E5%A3%B0%E6%98%8E%E6%A8%A1%E5%9D%97"><span class="toc-number">1.5.</span> <span class="toc-text">Declaration 声明模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Alignment-%E4%BB%A3%E7%A0%81%E5%AF%B9%E9%BD%90"><span class="toc-number">1.6.</span> <span class="toc-text">Alignment 代码对齐</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Quotes-%E5%8D%95%E5%BC%95%E5%8F%B7%E8%BF%98%E6%98%AF%E5%8F%8C%E5%BC%95%E5%8F%B7"><span class="toc-number">1.7.</span> <span class="toc-text">Quotes 单引号还是双引号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spacing-%E7%A9%BA%E6%A0%BC"><span class="toc-number">1.8.</span> <span class="toc-text">Spacing 空格</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Props-%E5%B1%9E%E6%80%A7"><span class="toc-number">1.9.</span> <span class="toc-text">Props 属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Refs"><span class="toc-number">1.10.</span> <span class="toc-text">Refs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Parentheses-%E6%8B%AC%E5%8F%B7"><span class="toc-number">1.11.</span> <span class="toc-text">Parentheses 括号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tags-%E6%A0%87%E7%AD%BE"><span class="toc-number">1.12.</span> <span class="toc-text">Tags 标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Methods%E5%87%BD%E6%95%B0"><span class="toc-number">1.13.</span> <span class="toc-text">Methods函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ordering-React-%E6%A8%A1%E5%9D%97%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-number">1.14.</span> <span class="toc-text">Ordering React 模块生命周期</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#isMounted"><span class="toc-number">1.15.</span> <span class="toc-text">isMounted</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E5%A4%9A%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83"><span class="toc-number">1.16.</span> <span class="toc-text">更多编码规范</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -775,7 +775,7 @@ export default Link;
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

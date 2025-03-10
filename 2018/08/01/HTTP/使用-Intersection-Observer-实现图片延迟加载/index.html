@@ -37,7 +37,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -146,7 +146,9 @@
 <p><img src="https://307a6ed092846b809be7-9cfa4cf7c673a59966ad8296f4c88804.ssl.cf3.rackcdn.com/intersection-observer/intersection-observer.png" alt="lazyimg"></p>
 <p>如果用户访问页面时仅看到了第一张图，我们并不想加载网页底部的比萨图片，除非用户向下滚动直到图片真正进入视区。如果我们延迟加载图片，这意味着用户只在他们需要时下载他们需要的东西，这让你的网页更加精简。</p>
 <p>对于更有经验的开发者，你也许很熟悉延迟加载图片，毕竟这个概念已经有了一段时间。那么有什么新东西呢？！现在有很多延迟加载库可以完成这项工作.</p>
-<p>问题在于，几乎所有这些库都是利用滚动事件或者使用定时器来检查一个元素是否在视区内。这个方法的问题是它强制浏览器重新布局整个页面，而且在特定条件下会导致你的网站卡顿（jank）。我们可以做的更好！<br><a id="more"></a></p>
+<p>问题在于，几乎所有这些库都是利用滚动事件或者使用定时器来检查一个元素是否在视区内。这个方法的问题是它强制浏览器重新布局整个页面，而且在特定条件下会导致你的网站卡顿（jank）。我们可以做的更好！</p>
+<span id="more"></span>
+
 <h2 id="救星-Intersection-Observer！"><a href="#救星-Intersection-Observer！" class="headerlink" title="救星 Intersection Observer！"></a>救星 Intersection Observer！</h2><p>这就是 <code>Intersection Observer</code> 的用武之地。Intersection Observer 内置于大多数现代浏览器，可以让你知道一个被观察元素何时进入或离开了浏览器视口。这使得它很理想，因为它可以异步传输数据，并且不会影响主线程，这让它成为一个提供反馈的有效手段。</p>
 <p>在 Paul 的示例中，它展示了如何使用<br>Intersection Observer 来实现当图片进入视口时延迟加载。我使用了他的初始代码，并稍作修改让它更容易理解。在这篇文章中，我将过一遍 Intersection Observer 的基础知识并向你展示你该如何用一个超级高效的方法来延迟加载图片。</p>
 <h3 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h3><p>想象一个有三张图片的基本的 HTML 页面，就像上面那个一样，在这个网页上，你将有如下代码的图片元素：</p>
@@ -164,8 +166,8 @@
 <p>如果你真的喜欢 Intersection Observer API 的易用性并想使用 polyfill 来替代。WICG 创建了一个放在了他们的 Github 仓库。唯一的缺点是你无法获取到原生实现给你带来的性能优势。</p>
 <p>你甚至可以更进一步，像 Robin Osborne 建议的那样，为不启用 JavaScript 的用户添加支持。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在这篇文章汇总，我们使用 Intersection Observer 来延迟加载图片，但你可以用它来做的更多。它可以用于判断某人是否正在查看广告，或者甚至是 iFrame 中的元素是否在视区中。易于理解的 API 使它获得了更多的可能性。</p>
-<p>如果你想学习更多关于 Intersection Observer 的信息，我推荐阅读 Google Developers 网站上 这篇内容丰富的文章。我也强烈推荐观看 Youtube 上 <a href="https://www.youtube.com/watch?v=ncYQkOrKTaI&amp;list=PLNYkxOF6rcIBykcJ7bvTpqU7vt-oey72J&amp;index=7" target="_blank" rel="noopener">Paul Lewis</a> 的视频系列，它包含了许多很棒的技巧，你绝对会学到些东西。</p>
-<p><a href="https://c7sky.com/lazy-loading-images-using-intersection-observer.html" target="_blank" rel="noopener">原文地址</a></p>
+<p>如果你想学习更多关于 Intersection Observer 的信息，我推荐阅读 Google Developers 网站上 这篇内容丰富的文章。我也强烈推荐观看 Youtube 上 <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=ncYQkOrKTaI&list=PLNYkxOF6rcIBykcJ7bvTpqU7vt-oey72J&index=7">Paul Lewis</a> 的视频系列，它包含了许多很棒的技巧，你绝对会学到些东西。</p>
+<p><a target="_blank" rel="noopener" href="https://c7sky.com/lazy-loading-images-using-intersection-observer.html">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -190,7 +192,7 @@
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -213,7 +215,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -224,7 +226,7 @@
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#延迟加载有什么大不了的？"><span class="toc-number">1.</span> <span class="toc-text">延迟加载有什么大不了的？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#救星-Intersection-Observer！"><span class="toc-number">1.1.</span> <span class="toc-text">救星 Intersection Observer！</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#入门"><span class="toc-number">1.1.1.</span> <span class="toc-text">入门</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#浏览器支持"><span class="toc-number">1.2.</span> <span class="toc-text">浏览器支持</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.3.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD%E6%9C%89%E4%BB%80%E4%B9%88%E5%A4%A7%E4%B8%8D%E4%BA%86%E7%9A%84%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">延迟加载有什么大不了的？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%91%E6%98%9F-Intersection-Observer%EF%BC%81"><span class="toc-number">1.1.</span> <span class="toc-text">救星 Intersection Observer！</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A5%E9%97%A8"><span class="toc-number">1.1.1.</span> <span class="toc-text">入门</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E6%94%AF%E6%8C%81"><span class="toc-number">1.2.</span> <span class="toc-text">浏览器支持</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.3.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -243,7 +245,7 @@
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

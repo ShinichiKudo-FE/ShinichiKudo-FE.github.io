@@ -37,7 +37,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -100,13 +100,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    8.2k
+                    8.4k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    7 mins.
+                    8 mins.
                 </span>
                 
                 
@@ -140,52 +140,52 @@
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <p><a href="https://juejin.im/post/5cffb431f265da1b7401f466?utm_source=gold_browser_extension" target="_blank" rel="noopener">原文地址</a></p>
+            <p><a target="_blank" rel="noopener" href="https://juejin.im/post/5cffb431f265da1b7401f466?utm_source=gold_browser_extension">原文地址</a></p>
 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>用了一段时间的 typescript 之后，深感中大型项目中 typescript 的必要性，它能够提前在编译期避免许多 bug，如很恶心的拼写问题。而越来越多的 package 也开始使用 ts，学习 ts 已是势在必行。</p>
 <h2 id="01-keyof"><a href="#01-keyof" class="headerlink" title="01 keyof"></a>01 keyof</h2><p><code>keyof</code> 与 <code>Object.keys</code> 略有相似，只不过 <code>keyof</code> 取 <code>interface</code> 的键。</p>
-<pre><code class="js">interface Point {
+<pre><code class="js">interface Point &#123;
     x: number;
     y: number;
-}
+&#125;
 
 // type keys = &quot;x&quot; | &quot;y&quot;
 type keys = keyof Point;
 </code></pre>
 <p>假设有一个 <code>object</code> 如下所示，我们需要使用 typescript 实现一个 get 函数来获取它的属性值</p>
-<pre><code class="js">const data = {
+<pre><code class="js">const data = &#123;
   a: 3,
   hello: &#39;world&#39;
-}
+&#125;
 
-function get(o: object, name: string) {
+function get(o: object, name: string) &#123;
   return o[name]
-}
+&#125;
 </code></pre>
 <p>我们刚开始可能会这么写，不过它有很多缺点<br>1.无法确认返回类型：这将损失 ts 最大的类型校验功能<br>2.无法对 key 做约束：可能会犯拼写错误的问题</p>
 <p>这时可以使用 <code>keyof</code> 来加强 <code>get</code> 函数的类型功能，有兴趣的同学可以看看 <code>_.get</code> 的 <code>type</code> 标记以及实现</p>
-<pre><code class="js">function get&lt;T extends object, K extends keyof T&gt;(o: T, name: K): T[K] {
+<pre><code class="js">function get&lt;T extends object, K extends keyof T&gt;(o: T, name: K): T[K] &#123;
   return o[name]
-}
+&#125;
 </code></pre>
 <h2 id="02-Partial-amp-Pick"><a href="#02-Partial-amp-Pick" class="headerlink" title="02 Partial &amp; Pick"></a>02 Partial &amp; Pick</h2><p>既然了解了 <code>keyof</code>，可以使用它对属性做一些扩展， 如实现 <code>Partial</code> 和 <code>Pick</code>，<code>Pick</code> 一般用在 <code>_.pick</code> 中</p>
-<pre><code class="js">type Partial&lt;T&gt; = {
+<pre><code class="js">type Partial&lt;T&gt; = &#123;
   [P in keyof T]?: T[P];
-};
+&#125;;
 
-type Pick&lt;T, K extends keyof T&gt; = {
+type Pick&lt;T, K extends keyof T&gt; = &#123;
   [P in K]: T[P];
-};
+&#125;;
 
-interface User {
+interface User &#123;
   id: number;
   age: number;
   name: string;
-};
+&#125;;
 
-// 相当于: type PartialUser = { id?: number; age?: number; name?: string; }
+// 相当于: type PartialUser = &#123; id?: number; age?: number; name?: string; &#125;
 type PartialUser = Partial&lt;User&gt;
 
-// 相当于: type PickUser = { id: number; age: number; }
+// 相当于: type PickUser = &#123; id: number; age: number; &#125;
 type PickUser = Pick&lt;User, &quot;id&quot; | &quot;age&quot;&gt;
 </code></pre>
 <h2 id="03-Condition-Type"><a href="#03-Condition-Type" class="headerlink" title="03 Condition Type"></a>03 Condition Type</h2><p>类似于 js 中的 <code>?:</code> 运算符，可以使用它扩展一些基本类型</p>
@@ -208,17 +208,18 @@ type t1 = isTrue&lt;false&gt;
 // 相当于: type A = &#39;a&#39;
 type A = Exclude&lt;&#39;x&#39; | &#39;a&#39;, &#39;x&#39; | &#39;y&#39; | &#39;z&#39;&gt;
 </code></pre>
-<a id="more"></a>
+<span id="more"></span>
+
 <p>结合 <code>Exclude</code> 可以推出 <code>Omit</code> 的写法</p>
 <pre><code class="js">type Omit&lt;T, K extends keyof any&gt; = Pick&lt;T, Exclude&lt;keyof T, K&gt;&gt;;
 
-interface User {
+interface User &#123;
   id: number;
   age: number;
   name: string;
-};
+&#125;;
 
-// 相当于: type PickUser = { age: number; name: string; }
+// 相当于: type PickUser = &#123; age: number; name: string; &#125;
 type OmitUser = Omit&lt;User, &quot;id&quot;&gt;
 </code></pre>
 <h2 id="05-typeof"><a href="#05-typeof" class="headerlink" title="05 typeof"></a>05 typeof</h2><p>顾名思义，<code>typeof</code> 代表取某个值的 <code>type</code>，可以从以下示例来展示他们的用法</p>
@@ -231,49 +232,49 @@ const b: typeof a = 4
 <pre><code class="js">import logger from &#39;./logger&#39;
 import utils from &#39;./utils&#39;
 
-interface Context extends KoaContect {
+interface Context extends KoaContect &#123;
   logger: typeof logger,
   utils: typeof utils
-}
+&#125;
 
-app.use((ctx: Context) =&gt; {
+app.use((ctx: Context) =&gt; &#123;
   ctx.logger.info(&#39;hello, world&#39;)
 
   // 会报错，因为 logger.ts 中没有暴露此方法，可以最大限度的避免拼写错误
   ctx.loger.info(&#39;hello, world&#39;)
-})
+&#125;)
 </code></pre>
 <h2 id="06-is"><a href="#06-is" class="headerlink" title="06 is"></a>06 is</h2><p>在此之前，先看一个 koa 的错误处理流程，以下是对 error 进行集中处理，并且标识 code 的过程</p>
-<pre><code class="js">app.use(async (ctx, next) =&gt; {
-  try {
+<pre><code class="js">app.use(async (ctx, next) =&gt; &#123;
+  try &#123;
     await next();
-  } catch (err) {
+  &#125; catch (err) &#123;
     let code = &#39;BAD_REQUEST&#39;
-    if (err.isAxiosError) {
-      code = `Axios-${err.code}`
-    } else if (err instanceof Sequelize.BaseError) {
+    if (err.isAxiosError) &#123;
+      code = `Axios-$&#123;err.code&#125;`
+    &#125; else if (err instanceof Sequelize.BaseError) &#123;
 
-    }
-    ctx.body = {
+    &#125;
+    ctx.body = &#123;
       code
-    }
-  }
-})
+    &#125;
+  &#125;
+&#125;)
 </code></pre>
 <p>在 <code>err.code</code> 处，会编译出错，提示 Property ‘code’ does not exist on type ‘Error’.ts(2339)。</p>
 <p>此时可以使用 <code>as AxiosError</code> 或者 <code>as any</code> 来避免报错，不过强制类型转换也不够友好</p>
-<pre><code class="js">if ((err as AxiosError).isAxiosError) {
-  code = `Axios-${(err as AxiosError).code}`
-}
+<pre><code class="js">if ((err as AxiosError).isAxiosError) &#123;
+  code = `Axios-$&#123;(err as AxiosError).code&#125;`
+&#125;
 </code></pre>
 <p>此时可以使用 is 来判定值的类型</p>
-<pre><code class="js">function isAxiosError (error: any): error is AxiosError {
+<pre><code class="js">function isAxiosError (error: any): error is AxiosError &#123;
   return error.isAxiosError
-}
+&#125;
 
-if (isAxiosError(err)) {
-  code = `Axios-${err.code}`
-}
+if (isAxiosError(err)) &#123;
+  code = `Axios-$&#123;err.code&#125;`
+&#125;
 </code></pre>
 <p>在 <code>GraphQL</code> 的源码中，有很多诸如此类的用法，用以标识类型</p>
 <pre><code class="js">export function isType(type: any): type is GraphQLType;
@@ -285,60 +286,60 @@ export function isObjectType(type: any): type is GraphQLObjectType;
 export function isInterfaceType(type: any): type is GraphQLInterfaceType;
 </code></pre>
 <h2 id="07-interface-amp-type"><a href="#07-interface-amp-type" class="headerlink" title="07 interface &amp; type"></a>07 interface &amp; type</h2><p>interface 与 type 的区别是什么？可以参考以下 stackoverflow 的问题</p>
-<p><a href="https://stackoverflow.com/questions/37233735/typescript-interfaces-vs-types" target="_blank" rel="noopener">https://stackoverflow.com/questions/37233735/typescript-interfaces-vs-types</a></p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/37233735/typescript-interfaces-vs-types">https://stackoverflow.com/questions/37233735/typescript-interfaces-vs-types</a></p>
 <p>一般来说，<code>1</code>interface<code>与</code>type` 区别很小，比如以下两种写法差不多</p>
-<pre><code class="js">interface A {
+<pre><code class="js">interface A &#123;
   a: number;
   b: number;
-};
+&#125;;
 
-type B {
+type B &#123;
   a: number;
   b: number;
-}
+&#125;
 </code></pre>
 <p>其中 interface 可以如下合并多个，而 type 只能使用 &amp; 类进行连接。</p>
-<pre><code class="js">interface A {
+<pre><code class="js">interface A &#123;
     a: number;
-}
+&#125;
 
-interface A {
+interface A &#123;
     b: number;
-}
+&#125;
 
-const a: A = {
+const a: A = &#123;
     a: 3,
     b: 4
-}
+&#125;
 </code></pre>
 <h2 id="08-Dictionary-amp-Many"><a href="#08-Dictionary-amp-Many" class="headerlink" title="08 Dictionary &amp; Many"></a>08 Dictionary &amp; Many</h2><p>这几个语法糖是从 <code>lodash</code> 的 <code>types</code> 源码中学到的，平时工作中的使用频率还挺高。</p>
-<pre><code class="js">interface Dictionary&lt;T&gt; {
+<pre><code class="js">interface Dictionary&lt;T&gt; &#123;
   [index: string]: T;
-};
+&#125;;
 
-interface NumericDictionary&lt;T&gt; {
+interface NumericDictionary&lt;T&gt; &#123;
   [index: number]: T;
-};
+&#125;;
 
-const data:Dictionary&lt;number&gt; = {
+const data:Dictionary&lt;number&gt; = &#123;
   a: 3,
   b: 4
-}
+&#125;
 </code></pre>
 <h2 id="09-使用-const-enum-维护常量表"><a href="#09-使用-const-enum-维护常量表" class="headerlink" title="09 使用 const enum 维护常量表"></a>09 使用 const enum 维护常量表</h2><p>相比使用字面量对象维护常量，const enum 可以提供更安全的类型检查</p>
 <pre><code class="js">// 使用 object 维护常量
-const enum TODO_STATUS {
+const enum TODO_STATUS &#123;
     TODO = &#39;TODO&#39;,
     DONE = &#39;DONE&#39;,
     DOING = &#39;DOING&#39;
-}
+&#125;
 </code></pre>
 <pre><code class="js">// 使用 const enum 伟华常量
-const enum TODO_STATUS {
+const enum TODO_STATUS &#123;
     TODO = &#39;TODO&#39;,
     DONE = &#39;DONE&#39;,
     DOING = &#39;DOING&#39;
-}
+&#125;
 
 function todos (status: TODO_STATUS): Todo[];
 
@@ -347,12 +348,12 @@ todos(TODO_STATUS.TODO)
 <h2 id="10-VS-Code-Tips-amp-Typescript-Command"><a href="#10-VS-Code-Tips-amp-Typescript-Command" class="headerlink" title="10 VS Code Tips &amp; Typescript Command"></a>10 VS Code Tips &amp; Typescript Command</h2><p>使用 VS Code 有时会出现，使用 tsc 编译时产生的问题与 vs code 提示的问题不一致</p>
 <p>找到项目右下角的 Typescript 字样，右侧显示它的版本号，可以点击选择 Use Workspace Version，它表示与项目依赖的 typescript 版本一直。</p>
 <p>或者编辑 <code>.vs-code/settings.json</code></p>
-<pre><code class="js">{
+<pre><code class="js">&#123;
   &quot;typescript.tsdk&quot;: &quot;node_modules/typescript/lib&quot;
-}
+&#125;
 </code></pre>
 <h2 id="11-Typescript-Roadmap"><a href="#11-Typescript-Roadmap" class="headerlink" title="11 Typescript Roadmap"></a>11 Typescript Roadmap</h2><p>最后一条也是最重要的一条，翻阅 Roadmap，了解 ts 的一些新的特性与 bug 修复情况。</p>
-<p><a href="https://github.com/Microsoft/TypeScript/wiki/Roadmap" target="_blank" rel="noopener">Typescript Roadmap</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Microsoft/TypeScript/wiki/Roadmap">Typescript Roadmap</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -377,7 +378,7 @@ todos(TODO_STATUS.TODO)
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -400,7 +401,7 @@ todos(TODO_STATUS.TODO)
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -411,7 +412,7 @@ todos(TODO_STATUS.TODO)
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#01-keyof"><span class="toc-number">1.1.</span> <span class="toc-text">01 keyof</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#02-Partial-amp-Pick"><span class="toc-number">1.2.</span> <span class="toc-text">02 Partial &amp; Pick</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#03-Condition-Type"><span class="toc-number">1.3.</span> <span class="toc-text">03 Condition Type</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#04-never-amp-Exclude-amp-Omit"><span class="toc-number">1.4.</span> <span class="toc-text">04 never &amp; Exclude &amp; Omit</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#05-typeof"><span class="toc-number">1.5.</span> <span class="toc-text">05 typeof</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#06-is"><span class="toc-number">1.6.</span> <span class="toc-text">06 is</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#07-interface-amp-type"><span class="toc-number">1.7.</span> <span class="toc-text">07 interface &amp; type</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#08-Dictionary-amp-Many"><span class="toc-number">1.8.</span> <span class="toc-text">08 Dictionary &amp; Many</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#09-使用-const-enum-维护常量表"><span class="toc-number">1.9.</span> <span class="toc-text">09 使用 const enum 维护常量表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-VS-Code-Tips-amp-Typescript-Command"><span class="toc-number">1.10.</span> <span class="toc-text">10 VS Code Tips &amp; Typescript Command</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-Typescript-Roadmap"><span class="toc-number">1.11.</span> <span class="toc-text">11 Typescript Roadmap</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#01-keyof"><span class="toc-number">1.1.</span> <span class="toc-text">01 keyof</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#02-Partial-amp-Pick"><span class="toc-number">1.2.</span> <span class="toc-text">02 Partial &amp; Pick</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#03-Condition-Type"><span class="toc-number">1.3.</span> <span class="toc-text">03 Condition Type</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#04-never-amp-Exclude-amp-Omit"><span class="toc-number">1.4.</span> <span class="toc-text">04 never &amp; Exclude &amp; Omit</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#05-typeof"><span class="toc-number">1.5.</span> <span class="toc-text">05 typeof</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#06-is"><span class="toc-number">1.6.</span> <span class="toc-text">06 is</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#07-interface-amp-type"><span class="toc-number">1.7.</span> <span class="toc-text">07 interface &amp; type</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#08-Dictionary-amp-Many"><span class="toc-number">1.8.</span> <span class="toc-text">08 Dictionary &amp; Many</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#09-%E4%BD%BF%E7%94%A8-const-enum-%E7%BB%B4%E6%8A%A4%E5%B8%B8%E9%87%8F%E8%A1%A8"><span class="toc-number">1.9.</span> <span class="toc-text">09 使用 const enum 维护常量表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-VS-Code-Tips-amp-Typescript-Command"><span class="toc-number">1.10.</span> <span class="toc-text">10 VS Code Tips &amp; Typescript Command</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-Typescript-Roadmap"><span class="toc-number">1.11.</span> <span class="toc-text">11 Typescript Roadmap</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -430,7 +431,7 @@ todos(TODO_STATUS.TODO)
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

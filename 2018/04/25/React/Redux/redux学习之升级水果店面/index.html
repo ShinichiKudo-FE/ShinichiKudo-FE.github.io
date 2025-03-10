@@ -37,7 +37,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -100,7 +100,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    7.2k
+                    7.8k
                 </span>
                 
                 
@@ -143,24 +143,26 @@
             <h2 id="优雅的处理-async-action"><a href="#优雅的处理-async-action" class="headerlink" title="优雅的处理 async action"></a>优雅的处理 async action</h2><p>阿大通过请了一个采购员完成了耗时的进口商品的售卖。</p>
 <p>但是，阿大同时也发现了一个问题：顾客要买水果生鲜的话需要找<strong>销售员</strong>，要买进口水果生鲜的话要找<strong>采购员</strong>，这样的话，顾客需要找不同的人，很麻烦。阿大想了想，能不能让顾客只找<strong>销售员</strong>，然后<strong>销售员</strong>如果有需求再找<strong>采购员</strong>采购呢。</p>
 <p>阿大想到了办法，让<strong>销售员</strong>把所有的需求都告诉采购员，然后<strong>采购员</strong>再传递给<strong>收银员</strong>，这样，如果是需要采购的水果生鲜，就可以独自去处理了，这样就需要把<strong>采购员</strong>改成这样了：</p>
-<pre><code class="js">const API = store =&gt; {
+<pre><code class="js">const API = store =&gt; &#123;
   // 和 收银员 对接的方式
   const next = store.dispatch;
   // 接管销售员传来的顾客需求
-  store.dispatch = action =&gt; {
+  store.dispatch = action =&gt; &#123;
 
     // 处理完了之后再对接 收银员
-    switch (action.type) {
+    switch (action.type) &#123;
       case &#39;BUY_IMPORTED_APPLE&#39;: fetching(2000, () =&gt; next(action)); break;
       case &#39;BUY_IMPORTED_EGG&#39;: fetching(3000, () =&gt; next(action)); break;
       default: next(action);
-    }
-  }
-}
+    &#125;
+  &#125;
+&#125;
 
 API(store);
 </code></pre>
-<p>然后顾客来了之后就都只用找销售员了：<br><a id="more"></a></p>
+<p>然后顾客来了之后就都只用找销售员了：</p>
+<span id="more"></span>
+
 <pre><code class="js">store.dispatch(buyApple(3));
 store.dispatch(buyImportedApple(10));
 store.dispatch(buyEgg(1));
@@ -169,97 +171,96 @@ store.dispatch(buyApple(4));
 store.dispatch(buyImportedApple(10));
 store.dispatch(buyEgg(8));
 store.dispatch(buyImportedEgg(10));
-// {&quot;fruit&quot;:{&quot;apple&quot;:3,&quot;importedApple&quot;:0},&quot;fresh&quot;:{&quot;egg&quot;:0,&quot;importedEgg&quot;:0}}
-// {&quot;fruit&quot;:{&quot;apple&quot;:3,&quot;importedApple&quot;:0},&quot;fresh&quot;:{&quot;egg&quot;:1,&quot;importedEgg&quot;:0}}
-// {&quot;fruit&quot;:{&quot;apple&quot;:7,&quot;importedApple&quot;:0},&quot;fresh&quot;:{&quot;egg&quot;:1,&quot;importedEgg&quot;:0}}
-// {&quot;fruit&quot;:{&quot;apple&quot;:7,&quot;importedApple&quot;:0},&quot;fresh&quot;:{&quot;egg&quot;:9,&quot;importedEgg&quot;:0}}
-// {&quot;fruit&quot;:{&quot;apple&quot;:7,&quot;importedApple&quot;:10},&quot;fresh&quot;:{&quot;egg&quot;:9,&quot;importedEgg&quot;:0}}
-// {&quot;fruit&quot;:{&quot;apple&quot;:7,&quot;importedApple&quot;:20},&quot;fresh&quot;:{&quot;egg&quot;:9,&quot;importedEgg&quot;:0}}
-// {&quot;fruit&quot;:{&quot;apple&quot;:7,&quot;importedApple&quot;:20},&quot;fresh&quot;:{&quot;egg&quot;:9,&quot;importedEgg&quot;:10}}
-// {&quot;fruit&quot;:{&quot;apple&quot;:7,&quot;importedApple&quot;:20},&quot;fresh&quot;:{&quot;egg&quot;:9,&quot;importedEgg&quot;:20}}
-
+// &#123;&quot;fruit&quot;:&#123;&quot;apple&quot;:3,&quot;importedApple&quot;:0&#125;,&quot;fresh&quot;:&#123;&quot;egg&quot;:0,&quot;importedEgg&quot;:0&#125;&#125;
+// &#123;&quot;fruit&quot;:&#123;&quot;apple&quot;:3,&quot;importedApple&quot;:0&#125;,&quot;fresh&quot;:&#123;&quot;egg&quot;:1,&quot;importedEgg&quot;:0&#125;&#125;
+// &#123;&quot;fruit&quot;:&#123;&quot;apple&quot;:7,&quot;importedApple&quot;:0&#125;,&quot;fresh&quot;:&#123;&quot;egg&quot;:1,&quot;importedEgg&quot;:0&#125;&#125;
+// &#123;&quot;fruit&quot;:&#123;&quot;apple&quot;:7,&quot;importedApple&quot;:0&#125;,&quot;fresh&quot;:&#123;&quot;egg&quot;:9,&quot;importedEgg&quot;:0&#125;&#125;
+// &#123;&quot;fruit&quot;:&#123;&quot;apple&quot;:7,&quot;importedApple&quot;:10&#125;,&quot;fresh&quot;:&#123;&quot;egg&quot;:9,&quot;importedEgg&quot;:0&#125;&#125;
+// &#123;&quot;fruit&quot;:&#123;&quot;apple&quot;:7,&quot;importedApple&quot;:20&#125;,&quot;fresh&quot;:&#123;&quot;egg&quot;:9,&quot;importedEgg&quot;:0&#125;&#125;
+// &#123;&quot;fruit&quot;:&#123;&quot;apple&quot;:7,&quot;importedApple&quot;:20&#125;,&quot;fresh&quot;:&#123;&quot;egg&quot;:9,&quot;importedEgg&quot;:10&#125;&#125;
+// &#123;&quot;fruit&quot;:&#123;&quot;apple&quot;:7,&quot;importedApple&quot;:20&#125;,&quot;fresh&quot;:&#123;&quot;egg&quot;:9,&quot;importedEgg&quot;:20&#125;&#125;
 </code></pre>
 <h3 id="图解"><a href="#图解" class="headerlink" title="图解"></a>图解</h3><p><img src="https://user-gold-cdn.xitu.io/2018/4/20/162e3327a35fb0a4?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="asyncAction"></p>
 <h2 id="编写和使用中间件"><a href="#编写和使用中间件" class="headerlink" title="编写和使用中间件"></a>编写和使用中间件</h2><p>阿大通过改善流程对接完成了水果店的升级。</p>
 <p>但是阿大又有一个新的想法，他想详细的看看每一个顾客的<code>购买需求</code>来了之后，账本的前后变化。看来又要加一个新角色<strong>记录员</strong>了。难道要像加采购员那样手动的一个个的加吗？那可太麻烦了。正好阿大发现 redux 里有一个功能就是<strong>中间件</strong>。中间件是干嘛的呢？简而言之，就是把顾客的需求从销售员到收银员之间加上各种角色来处理。每一个角色就是一个中间件。接下来阿大就开始来写中间件了。</p>
-<p>redux 中间件写起来其实很简单，就是一个函数而已。按照它的要求。这个函数接受一个<strong>{ dispatch, getState }</strong>对象作为参数，然后返回一个 <strong>action</strong></p>
+<p>redux 中间件写起来其实很简单，就是一个函数而已。按照它的要求。这个函数接受一个**{ dispatch, getState }<strong>对象作为参数，然后返回一个 **action</strong></p>
 <p>那这样，就可以把原来的<code>采购员也改造成中间件</code>了，其实采购员就是拿到了顾客需求之后让顾客的需求延迟 <strong>dispatch</strong>，这用<code>延迟用函数</code>就可以做到了:</p>
 <pre><code class="js">// next 是用中间件增强之后的 dispatch
 // dispatch 是最原始的 store.dispatch
-const thunkMiddleware = ({ dispatch }) =&gt; next =&gt; action =&gt; {
-  if (typeof action === &#39;function&#39;) {
+const thunkMiddleware = (&#123; dispatch &#125;) =&gt; next =&gt; action =&gt; &#123;
+  if (typeof action === &#39;function&#39;) &#123;
 
     // 函数形式的 action 就把 dispatch 给这个 action，让 action 决定什么时候 dispatch （控制反转）
     return action(dispatch);
-  }
+  &#125;
 
   // 普通的 action 就直接传递给下一个中间件处理
   return next(action);
-}
+&#125;
 </code></pre>
 <p>然后我们就需要把原来的顾客需求改一下了：</p>
 <pre><code class="js">// 买水果 - 进口苹果
-function buyImportedApple(num) {
+function buyImportedApple(num) &#123;
 
   // 返回一个函数类型的 action，这个函数接受 dispatch，可以决定什么时候 dispatch
-  return dispatch =&gt; API.fetchImportedApple(() =&gt; dispatch({
+  return dispatch =&gt; API.fetchImportedApple(() =&gt; dispatch(&#123;
     type: &#39;BUY_IMPORTED_APPLE&#39;,
     payload: num
-  }));
-}
+  &#125;));
+&#125;
 
 // 买生鲜 - 进口鸡蛋
-function buyImportedEgg(num) {
-  return dispatch =&gt; API.fetchImportedEgg(() =&gt; dispatch({
+function buyImportedEgg(num) &#123;
+  return dispatch =&gt; API.fetchImportedEgg(() =&gt; dispatch(&#123;
     type: &#39;BUY_IMPORTED_EGG&#39;,
     payload: num
-  }));
-}
+  &#125;));
+&#125;
 </code></pre>
 <p>然后<code>采购员</code>就可以只负责采购了，改回去：</p>
 <pre><code class="js">// 采购商品生成器，不同的商品需要不同的时间采购
-function fetching(time, callback) {
+function fetching(time, callback) &#123;
 
   // 用延时模拟采购时间
-  const timer = setTimeout(() =&gt; {
+  const timer = setTimeout(() =&gt; &#123;
     clearTimeout(timer);
 
     // 采购完成，通知销售员
     callback();
-  }, time);
-}
+  &#125;, time);
+&#125;
 
 // 采购进口苹果需要 2 天（2s）
-function fetchImportedApple(callback) {
+function fetchImportedApple(callback) &#123;
   fetching(2000, callback);
-}
+&#125;
 
 // 采购进口苹果需要 3 天（3s）
-function fetchImportedEgg(callback) {
+function fetchImportedEgg(callback) &#123;
   fetching(3000, callback);
-}
+&#125;
 
 // 采购员
-const API = {
+const API = &#123;
   fetchImportedApple, // 采购进口苹果
   fetchImportedEgg // 采购进口鸡蛋
-}
+&#125;
 </code></pre>
 <p>然后，我们在添加一个<code>记录员</code>的中间件：</p>
-<pre><code class="js">const loggerMiddleware = ({ getState }) =&gt; next =&gt; action =&gt; {
-  console.log(`state before: ${JSON.stringify(getState())}`);
-  console.log(`action: ${JSON.stringify(action)}`);
+<pre><code class="js">const loggerMiddleware = (&#123; getState &#125;) =&gt; next =&gt; action =&gt; &#123;
+  console.log(`state before: $&#123;JSON.stringify(getState())&#125;`);
+  console.log(`action: $&#123;JSON.stringify(action)&#125;`);
   const result = next(action);
-  console.log(`state after: ${JSON.stringify(getState())}`);
+  console.log(`state after: $&#123;JSON.stringify(getState())&#125;`);
   console.log(&#39;================================================&#39;);
   return result;
-}
+&#125;
 </code></pre>
 <p>删除掉原来的监听：</p>
 <pre><code class="js">//- store.subscribe(() =&gt; console.log(JSON.stringify(store.getState())));
 </code></pre>
 <p>好了，接下来就可以通过 redux 的 <strong>applyMiddleware</strong> 来串联起这些中间件啦。</p>
-<pre><code class="js">const { createStore, combineReducers, applyMiddleware } = require(&#39;redux&#39;);
+<pre><code class="js">const &#123; createStore, combineReducers, applyMiddleware &#125; = require(&#39;redux&#39;);
 
 // 中间件的调用顺序是从右到左
 const store = createStore(reducer, applyMiddleware(thunkMiddleware, loggerMiddleware));
@@ -268,30 +269,29 @@ const store = createStore(reducer, applyMiddleware(thunkMiddleware, loggerMiddle
 <pre><code class="js">store.dispatch(buyApple(3));
 store.dispatch(buyImportedApple(10));
 
-// state before: {&quot;fruit&quot;:{&quot;apple&quot;:0,&quot;importedApple&quot;:0},&quot;fresh&quot;:{&quot;egg&quot;:0,&quot;importedEgg&quot;:0}}
-// action: {&quot;type&quot;:&quot;BUY_APPLE&quot;,&quot;payload&quot;:3}
-// state after: {&quot;fruit&quot;:{&quot;apple&quot;:3,&quot;importedApple&quot;:0},&quot;fresh&quot;:{&quot;egg&quot;:0,&quot;importedEgg&quot;:0}}
+// state before: &#123;&quot;fruit&quot;:&#123;&quot;apple&quot;:0,&quot;importedApple&quot;:0&#125;,&quot;fresh&quot;:&#123;&quot;egg&quot;:0,&quot;importedEgg&quot;:0&#125;&#125;
+// action: &#123;&quot;type&quot;:&quot;BUY_APPLE&quot;,&quot;payload&quot;:3&#125;
+// state after: &#123;&quot;fruit&quot;:&#123;&quot;apple&quot;:3,&quot;importedApple&quot;:0&#125;,&quot;fresh&quot;:&#123;&quot;egg&quot;:0,&quot;importedEgg&quot;:0&#125;&#125;
 // ================================================
-// state before: {&quot;fruit&quot;:{&quot;apple&quot;:3,&quot;importedApple&quot;:0},&quot;fresh&quot;:{&quot;egg&quot;:0,&quot;importedEgg&quot;:0}}
-// action: {&quot;type&quot;:&quot;BUY_EGG&quot;,&quot;payload&quot;:1}
-// state after: {&quot;fruit&quot;:{&quot;apple&quot;:3,&quot;importedApple&quot;:0},&quot;fresh&quot;:{&quot;egg&quot;:1,&quot;importedEgg&quot;:0}}
+// state before: &#123;&quot;fruit&quot;:&#123;&quot;apple&quot;:3,&quot;importedApple&quot;:0&#125;,&quot;fresh&quot;:&#123;&quot;egg&quot;:0,&quot;importedEgg&quot;:0&#125;&#125;
+// action: &#123;&quot;type&quot;:&quot;BUY_EGG&quot;,&quot;payload&quot;:1&#125;
+// state after: &#123;&quot;fruit&quot;:&#123;&quot;apple&quot;:3,&quot;importedApple&quot;:0&#125;,&quot;fresh&quot;:&#123;&quot;egg&quot;:1,&quot;importedEgg&quot;:0&#125;&#125;
 // ================================================
-
 </code></pre>
 <p>上面我们写的两个中间件其实就是 <code>redux-thunk</code> 和 <code>redux-logger</code> 的简版。在实际中，推荐使用它们，会更可信。</p>
 <h3 id="图解-1"><a href="#图解-1" class="headerlink" title="图解"></a>图解</h3><p><img src="https://user-gold-cdn.xitu.io/2018/4/23/162f0a03fc97dbca?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="redux-chunk"></p>
 <p>编写 redux 中间件需要按照要求来，返回这样的函数</p>
 <pre><code class="js">// 中间件接受一个对象，里面有原始的 dispatch，和 getState 方法用于获取 state
-// 中间件函数返回一个函数，这个函数接受一个 next 参数，这个 next 是下一个中间件要做的事情 action =&gt; { ... }
-function thunkMiddleware({ dispatch, getState }) {
-  return function(next) {
-    return function(action) {
+// 中间件函数返回一个函数，这个函数接受一个 next 参数，这个 next 是下一个中间件要做的事情 action =&gt; &#123; ... &#125;
+function thunkMiddleware(&#123; dispatch, getState &#125;) &#123;
+  return function(next) &#123;
+    return function(action) &#123;
       // 做你的事情
-    }
-  }
-}
+    &#125;
+  &#125;
+&#125;
 </code></pre>
-<p><a href="https://juejin.im/user/57d8a928d203090069c13a21/likes" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.im/user/57d8a928d203090069c13a21/likes">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -316,7 +316,7 @@ function thunkMiddleware({ dispatch, getState }) {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -339,7 +339,7 @@ function thunkMiddleware({ dispatch, getState }) {
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -350,7 +350,7 @@ function thunkMiddleware({ dispatch, getState }) {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#优雅的处理-async-action"><span class="toc-number">1.</span> <span class="toc-text">优雅的处理 async action</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#图解"><span class="toc-number">1.1.</span> <span class="toc-text">图解</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编写和使用中间件"><span class="toc-number">2.</span> <span class="toc-text">编写和使用中间件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#图解-1"><span class="toc-number">2.1.</span> <span class="toc-text">图解</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%98%E9%9B%85%E7%9A%84%E5%A4%84%E7%90%86-async-action"><span class="toc-number">1.</span> <span class="toc-text">优雅的处理 async action</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BE%E8%A7%A3"><span class="toc-number">1.1.</span> <span class="toc-text">图解</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E5%86%99%E5%92%8C%E4%BD%BF%E7%94%A8%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="toc-number">2.</span> <span class="toc-text">编写和使用中间件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BE%E8%A7%A3-1"><span class="toc-number">2.1.</span> <span class="toc-text">图解</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -369,7 +369,7 @@ function thunkMiddleware({ dispatch, getState }) {
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

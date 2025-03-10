@@ -37,7 +37,7 @@ hookEvent,原来可以这样监听组件生命周期1. 内部监听生命周期�
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -100,13 +100,13 @@ hookEvent,原来可以这样监听组件生命周期1. 内部监听生命周期�
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    16k
+                    17k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    14 mins.
+                    15 mins.
                 </span>
                 
                 
@@ -140,36 +140,36 @@ hookEvent,原来可以这样监听组件生命周期1. 内部监听生命周期�
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <p><a href="https://juejin.im/post/5eef7799f265da02cd3b82fe?utm_source=gold_browser_extension" target="_blank" rel="noopener">原文地址</a></p>
+            <p><a target="_blank" rel="noopener" href="https://juejin.im/post/5eef7799f265da02cd3b82fe?utm_source=gold_browser_extension">原文地址</a></p>
 <h2 id="hookEvent-原来可以这样监听组件生命周期"><a href="#hookEvent-原来可以这样监听组件生命周期" class="headerlink" title="hookEvent,原来可以这样监听组件生命周期"></a>hookEvent,原来可以这样监听组件生命周期</h2><h3 id="1-内部监听生命周期函数"><a href="#1-内部监听生命周期函数" class="headerlink" title="1. 内部监听生命周期函数"></a>1. 内部监听生命周期函数</h3><p>今天产品经理又给我甩过来一个需求，需要开发一个图表，拿到需求，瞄了一眼，然后我就去echarts官网复制示例代码了，复制完改了改差不多了，改完代码长这样</p>
 <pre><code class="html">&lt;template&gt;
   &lt;div class=&quot;echarts&quot;&gt;&lt;/div&gt;
 &lt;/template&gt;
 &lt;script&gt;
-export default {
-  mounted() {
+export default &#123;
+  mounted() &#123;
     this.chart = echarts.init(this.$el)
     // 请求数据，赋值数据 等等一系列操作...
     // 监听窗口发生变化，resize组件
     window.addEventListener(&#39;resize&#39;, this.$_handleResizeChart)
-  },
-  updated() {
+  &#125;,
+  updated() &#123;
     // 干了一堆活
-  },
-  created() {
+  &#125;,
+  created() &#123;
     // 干了一堆活
-  },
-  beforeDestroy() {
+  &#125;,
+  beforeDestroy() &#123;
     // 组件销毁时，销毁监听事件
     window.removeEventListener(&#39;resize&#39;, this.$_handleResizeChart)
-  },
-  methods: {
-    $_handleResizeChart() {
+  &#125;,
+  methods: &#123;
+    $_handleResizeChart() &#123;
       this.chart.resize()
-    },
+    &#125;,
     // 其他一堆方法
-  }
-}
+  &#125;
+&#125;
 &lt;/script&gt;
 </code></pre>
 <p>功能写完开开心心的提测了，测试没啥问题，产品经理表示做的很棒。然而<code>code review</code>时候，技术大佬说了，这样有问题。</p>
@@ -180,30 +180,30 @@ export default {
 <li>我：<code>Vue3.0</code>才有啊，咋，咱要升级<code>Vue</code>?</li>
 </ul>
 <p>然后技术大佬就不理我了,并向我扔过来一段代码</p>
-<pre><code class="js">export default {
-  mounted() {
+<pre><code class="js">export default &#123;
+  mounted() &#123;
     this.chart = echarts.init(this.$el)
     // 请求数据，赋值数据 等等一系列操作...
-
+    
     // 监听窗口发生变化，resize组件
     window.addEventListener(&#39;resize&#39;, this.$_handleResizeChart)
     // 通过hook监听组件销毁钩子函数，并取消监听事件
-    this.$once(&#39;hook:beforeDestroy&#39;, () =&gt; {
+    this.$once(&#39;hook:beforeDestroy&#39;, () =&gt; &#123;
       window.removeEventListener(&#39;resize&#39;, this.$_handleResizeChart)
-    })
-  },
-  updated() {},
-  created() {},
-  methods: {
-    $_handleResizeChart() {
+    &#125;)
+  &#125;,
+  updated() &#123;&#125;,
+  created() &#123;&#125;,
+  methods: &#123;
+    $_handleResizeChart() &#123;
       // this.chart.resize()
-    }
-  }
-}
+    &#125;
+  &#125;
+&#125;
 </code></pre>
 <p>看完代码，恍然大悟，大佬不愧是大佬，原来<code>Vue</code>还可以这样监听生命周期函数。</p>
 <blockquote>
-<p>在Vue组件中，可以用过<code>$on,$once</code>去监听所有的生命周期钩子函数，如监听组件的<code>updated</code>钩子函数可以写成 <code>this.$on(&#39;hook:updated&#39;, () =&gt; {})</code></p>
+<p>在Vue组件中，可以用过<code>$on,$once</code>去监听所有的生命周期钩子函数，如监听组件的<code>updated</code>钩子函数可以写成 <code>this.$on(&#39;hook:updated&#39;, () =&gt; &#123;&#125;)</code></p>
 </blockquote>
 <h3 id="2-外部监听生命周期函数"><a href="#2-外部监听生命周期函数" class="headerlink" title="2. 外部监听生命周期函数"></a>2. 外部监听生命周期函数</h3><p>今天同事在公司群里问，想在外部监听组件的生命周期函数，有没有办法啊？</p>
 <p>为什么会有这样的需求呢，原来同事用了一个第三方组件，需要监听第三方组件数据的变化，但是组件又没有提供<code>change</code>事件，同事也没办法了，才想出来要去在外部监听组件的<code>updated</code>钩子函数。查看了一番资料，发现<code>Vue支持在外部监听组件的生命周期钩子函数</code>。</p>
@@ -214,56 +214,56 @@ export default {
 &lt;/template&gt;
 &lt;script&gt;
 import CustomSelect from &#39;../components/custom-select&#39;
-export default {
-  components: {
+export default &#123;
+  components: &#123;
     CustomSelect
-  },
-  methods: {
-    $_handleSelectUpdated() {
+  &#125;,
+  methods: &#123;
+    $_handleSelectUpdated() &#123;
       console.log(&#39;custom-select组件的updated钩子函数被触发&#39;)
-    }
-  }
-}
+    &#125;
+  &#125;
+&#125;
 &lt;/script&gt;
 </code></pre>
 <h2 id="小项目还用Vuex-用Vue-observable手写一个状态管理吧"><a href="#小项目还用Vuex-用Vue-observable手写一个状态管理吧" class="headerlink" title="小项目还用Vuex?用Vue.observable手写一个状态管理吧"></a>小项目还用Vuex?用Vue.observable手写一个状态管理吧</h2><p>在前端项目中，有许多数据需要在各个组件之间进行传递共享，这时候就需要有一个状态管理工具，一般情况下，我们都会使用<code>Vuex</code>，但对于小型项目来说，就像<code>Vuex</code>官网所说：“如果您不打算开发大型单页应用，使用 <code>Vuex</code> 可能是繁琐冗余的。确实是如此——如果您的应用够简单，您最好不要使用 <code>Vuex</code>”。这时候我们就可以使用Vue2.6提供的新API <code>Vue.observable</code>手动打造一个<code>Vuex</code></p>
 <h3 id="创建-store"><a href="#创建-store" class="headerlink" title="创建 store"></a>创建 store</h3><pre><code class="js">import Vue from &#39;vue&#39;
 
 // 通过Vue.observable创建一个可响应的对象
-export const store = Vue.observable({
-  userInfo: {},
+export const store = Vue.observable(&#123;
+  userInfo: &#123;&#125;,
   roleIds: []
-})
+&#125;)
 
 // 定义 mutations, 修改属性
-export const mutations = {
-  setUserInfo(userInfo) {
+export const mutations = &#123;
+  setUserInfo(userInfo) &#123;
     store.userInfo = userInfo
-  },
-  setRoleIds(roleIds) {
+  &#125;,
+  setRoleIds(roleIds) &#123;
     store.roleIds = roleIds
-  }
-}
+  &#125;
+&#125;
 </code></pre>
 <h3 id="在组件中引用"><a href="#在组件中引用" class="headerlink" title="在组件中引用"></a>在组件中引用</h3><pre><code class="html">&lt;template&gt;
   &lt;div&gt;
-    {{ userInfo.name }}
+    &#123;&#123; userInfo.name &#125;&#125;
   &lt;/div&gt;
 &lt;/template&gt;
 &lt;script&gt;
-import { store, mutations } from &#39;../store&#39;
-export default {
-  computed: {
-    userInfo() {
+import &#123; store, mutations &#125; from &#39;../store&#39;
+export default &#123;
+  computed: &#123;
+    userInfo() &#123;
       return store.userInfo
-    }
-  },
-  created() {
-    mutations.setUserInfo({
+    &#125;
+  &#125;,
+  created() &#123;
+    mutations.setUserInfo(&#123;
       name: &#39;白告&#39;
-    })
-  }
-}
+    &#125;)
+  &#125;
+&#125;
 &lt;/script&gt;
 </code></pre>
 <h2 id="开发全局组件，你可能需要了解一下Vue-extend"><a href="#开发全局组件，你可能需要了解一下Vue-extend" class="headerlink" title="开发全局组件，你可能需要了解一下Vue.extend"></a>开发全局组件，你可能需要了解一下Vue.extend</h2><p><code>Vue.extend</code>是一个全局Api,平时我们在开发业务的时候很少会用到它，但有时候我们希望可以开发一些全局组件比如Loading,Notify,Message等组件时，这时候就可以使用<code>Vue.extend</code>。</p>
@@ -276,9 +276,9 @@ loading.close()
 <p>这样写可能没什么特别的，但是如果你这样写</p>
 <pre><code class="js">const loading = this.$loading()
 const loading1 = this.$loading()
-setTimeout(() =&gt; {
+setTimeout(() =&gt; &#123;
   loading.close()
-}, 1000 * 3)
+&#125;, 1000 * 3)
 </code></pre>
 <p>这时候你会发现，我调用了两次loading,但是只出现了一个，而且我只关闭了loading，但是loading1也被关闭了。这是怎么实现的呢？我们现在就是用Vue.extend + 单例模式去实现一个loading</p>
 <h3 id="开发loading组件"><a href="#开发loading组件" class="headerlink" title="开发loading组件"></a>开发loading组件</h3><pre><code class="html">&lt;template&gt;
@@ -289,36 +289,36 @@ setTimeout(() =&gt; {
       &lt;div class=&quot;custom-loading-spinner&quot;&gt;
         &lt;i class=&quot;custom-spinner-icon&quot;&gt;&lt;/i&gt;
         &lt;!--loading上面显示的文字--&gt;
-        &lt;p class=&quot;custom-loading-text&quot;&gt;{{ text }}&lt;/p&gt;
+        &lt;p class=&quot;custom-loading-text&quot;&gt;&#123;&#123; text &#125;&#125;&lt;/p&gt;
       &lt;/div&gt;
     &lt;/div&gt;
   &lt;/transition&gt;
 &lt;/template&gt;
 &lt;script&gt;
-export default {
-  props: {
+export default &#123;
+  props: &#123;
   // 是否显示loading
-    visible: {
+    visible: &#123;
       type: Boolean,
       default: false
-    },
+    &#125;,
     // loading上面的显示文字
-    text: {
+    text: &#123;
       type: String,
       default: &#39;&#39;
-    }
-  }
-}
+    &#125;
+  &#125;
+&#125;
 &lt;/script&gt;
 </code></pre>
-<h3 id="通过Vue-extend将组件转换为全局组件"><a href="#通过Vue-extend将组件转换为全局组件" class="headerlink" title="通过Vue.extend将组件转换为全局组件"></a>通过Vue.extend将组件转换为全局组件</h3><h4 id="改造loading组件，将组件的props改为data"><a href="#改造loading组件，将组件的props改为data" class="headerlink" title="改造loading组件，将组件的props改为data"></a>改造loading组件，将组件的props改为data</h4><pre><code class="js">export default {
-  data() {
-    return {
+<h3 id="通过Vue-extend将组件转换为全局组件"><a href="#通过Vue-extend将组件转换为全局组件" class="headerlink" title="通过Vue.extend将组件转换为全局组件"></a>通过Vue.extend将组件转换为全局组件</h3><h4 id="改造loading组件，将组件的props改为data"><a href="#改造loading组件，将组件的props改为data" class="headerlink" title="改造loading组件，将组件的props改为data"></a>改造loading组件，将组件的props改为data</h4><pre><code class="js">export default &#123;
+  data() &#123;
+    return &#123;
       text: &#39;&#39;,
       visible: false
-    }
-  }
-}
+    &#125;
+  &#125;
+&#125;
 </code></pre>
 <h4 id="通过Vue-extend改造组件"><a href="#通过Vue-extend改造组件" class="headerlink" title="通过Vue.extend改造组件"></a>通过Vue.extend改造组件</h4><pre><code class="js">// loading/index.js
 import Vue from &#39;vue&#39;
@@ -329,64 +329,64 @@ const LoadingConstructor = Vue.extend(LoadingComponent)
 
 let loading = undefined
 
-LoadingConstructor.prototype.close = function() {
+LoadingConstructor.prototype.close = function() &#123;
   // 如果loading 有引用，则去掉引用
-  if (loading) {
+  if (loading) &#123;
     loading = undefined
-  }
+  &#125;
   // 先将组件隐藏
   this.visible = false
   // 延迟300毫秒，等待loading关闭动画执行完之后销毁组件
-  setTimeout(() =&gt; {
+  setTimeout(() =&gt; &#123;
     // 移除挂载的dom元素
-    if (this.$el &amp;&amp; this.$el.parentNode) {
+    if (this.$el &amp;&amp; this.$el.parentNode) &#123;
       this.$el.parentNode.removeChild(this.$el)
-    }
+    &#125;
     // 调用组件的$destroy方法进行组件销毁
     this.$destroy()
-  }, 300)
-}
+  &#125;, 300)
+&#125;
 
-const Loading = (options = {}) =&gt; {
+const Loading = (options = &#123;&#125;) =&gt; &#123;
   // 如果组件已渲染，则返回即可
-  if (loading) {
+  if (loading) &#123;
     return loading
-  }
+  &#125;
   // 要挂载的元素
   const parent = document.body
   // 组件属性
-  const opts = {
+  const opts = &#123;
     text: &#39;&#39;,
     ...options
-  }
+  &#125;
   // 通过构造函数初始化组件 相当于 new Vue()
-  const instance = new LoadingConstructor({
+  const instance = new LoadingConstructor(&#123;
     el: document.createElement(&#39;div&#39;),
     data: opts
-  })
+  &#125;)
   // 将loading元素挂在到parent上面
   parent.appendChild(instance.$el)
   // 显示loading
-  Vue.nextTick(() =&gt; {
+  Vue.nextTick(() =&gt; &#123;
     instance.visible = true
-  })
+  &#125;)
   // 将组件实例赋值给loading
   loading = instance
   return instance
-}
+&#125;
 
 export default Loading
 </code></pre>
 <h4 id="在页面使用loading"><a href="#在页面使用loading" class="headerlink" title="在页面使用loading"></a>在页面使用loading</h4><pre><code class="js">import Loading from &#39;./loading/index.js&#39;
-export default {
-  created() {
-    const loading = Loading({ text: &#39;正在加载。。。&#39; })
+export default &#123;
+  created() &#123;
+    const loading = Loading(&#123; text: &#39;正在加载。。。&#39; &#125;)
     // 三秒钟后关闭
-    setTimeout(() =&gt; {
+    setTimeout(() =&gt; &#123;
       loading.close()
-    }, 3000)
-  }
-}
+    &#125;, 3000)
+  &#125;
+&#125;
 </code></pre>
 <p>通过上面的改造，<code>loading</code>已经可以在全局使用了，如果需要像<code>element-ui</code>一样挂载到<code>Vue.prototype</code>上面，通过<code>this.$loading</code>调用，还需要改造一下</p>
 <h3 id="将组件挂载到Vue-prototype上面"><a href="#将组件挂载到Vue-prototype上面" class="headerlink" title="将组件挂载到Vue.prototype上面"></a>将组件挂载到Vue.prototype上面</h3><pre><code class="js">Vue.prototype.$loading = Loading
@@ -404,65 +404,65 @@ import LoadingComponent from &#39;./loading&#39;
 const LoadingContructor = Vue.extend(LoadingComponent)
 
 // 定义一个名为loading的指令
-Vue.directive(&#39;loading&#39;, {
+Vue.directive(&#39;loading&#39;, &#123;
   /**
    * 只调用一次，在指令第一次绑定到元素时调用，可以在这里做一些初始化的设置
-   * @param {*} el 指令要绑定的元素
-   * @param {*} binding 指令传入的信息，包括 {name:&#39;指令名称&#39;, value: &#39;指令绑定的值&#39;,arg: &#39;指令参数 v-bind:text 对应 text&#39;}
+   * @param &#123;*&#125; el 指令要绑定的元素
+   * @param &#123;*&#125; binding 指令传入的信息，包括 &#123;name:&#39;指令名称&#39;, value: &#39;指令绑定的值&#39;,arg: &#39;指令参数 v-bind:text 对应 text&#39;&#125;
    */
-  bind(el, binding) {
-    const instance = new LoadingContructor({
+  bind(el, binding) &#123;
+    const instance = new LoadingContructor(&#123;
       el: document.createElement(&#39;div&#39;),
-      data: {}
-    })
+      data: &#123;&#125;
+    &#125;)
     el.appendChild(instance.$el)
     el.instance = instance
-    Vue.nextTick(() =&gt; {
+    Vue.nextTick(() =&gt; &#123;
       el.instance.visible = binding.value
-    })
-  },
+    &#125;)
+  &#125;,
   /**
    * 所在组件的 VNode 更新时调用
-   * @param {*} el
-   * @param {*} binding
+   * @param &#123;*&#125; el
+   * @param &#123;*&#125; binding
    */
-  update(el, binding) {
+  update(el, binding) &#123;
     // 通过对比值的变化判断loading是否显示
-    if (binding.oldValue !== binding.value) {
+    if (binding.oldValue !== binding.value) &#123;
       el.instance.visible = binding.value
-    }
-  },
+    &#125;
+  &#125;,
   /**
    * 只调用一次，在 指令与元素解绑时调用
-   * @param {*} el
+   * @param &#123;*&#125; el
    */
-  unbind(el) {
+  unbind(el) &#123;
     const mask = el.instance.$el
-    if (mask.parentNode) {
+    if (mask.parentNode) &#123;
       mask.parentNode.removeChild(mask)
-    }
+    &#125;
     el.instance.$destroy()
     el.instance = undefined
-  }
-})
+  &#125;
+&#125;)
 </code></pre>
 <h3 id="在元素上面使用指令"><a href="#在元素上面使用指令" class="headerlink" title="在元素上面使用指令"></a>在元素上面使用指令</h3><pre><code class="html">&lt;template&gt;
   &lt;div v-loading=&quot;visible&quot;&gt;&lt;/div&gt;
 &lt;/template&gt;
 &lt;script&gt;
-export default {
-  data() {
-    return {
+export default &#123;
+  data() &#123;
+    return &#123;
       visible: false
-    }
-  },
-  created() {
+    &#125;
+  &#125;,
+  created() &#123;
     this.visible = true
-    fetch().then(() =&gt; {
+    fetch().then(() =&gt; &#123;
       this.visible = false
-    })
-  }
-}
+    &#125;)
+  &#125;
+&#125;
 &lt;/script&gt;
 </code></pre>
 <h3 id="项目中哪些场景可以自定义指令"><a href="#项目中哪些场景可以自定义指令" class="headerlink" title="项目中哪些场景可以自定义指令"></a>项目中哪些场景可以自定义指令</h3><p>1.为组件添加<code>loading</code>效果<br>2.按钮级别权限控制 <code>v-permission</code><br>3.代码埋点,根据操作类型定义指令<br>4.input输入框自动获取焦点<br>5.其他等等。。。</p>
@@ -479,96 +479,96 @@ export default {
   &lt;/div&gt;
 &lt;/template&gt;
 &lt;script&gt;
-export default {
-  data() {
-    return {
+export default &#123;
+  data() &#123;
+    return &#123;
       searchValue: &#39;&#39;
-    }
-  },
-  watch: {
+    &#125;
+  &#125;,
+  watch: &#123;
     // 在值发生变化之后，重新加载数据
-    searchValue(newValue, oldValue) {
+    searchValue(newValue, oldValue) &#123;
       // 判断搜索
-      if (newValue !== oldValue) {
+      if (newValue !== oldValue) &#123;
         this.$_loadData()
-      }
-    }
-  },
-  methods: {
-    $_loadData() {
+      &#125;
+    &#125;
+  &#125;,
+  methods: &#123;
+    $_loadData() &#123;
       // 重新加载数据，此处需要通过函数防抖
-    }
-  }
-}
+    &#125;
+  &#125;
+&#125;
 &lt;/script&gt;
 </code></pre>
 <h3 id="立即触发"><a href="#立即触发" class="headerlink" title="立即触发"></a>立即触发</h3><p>通过上面的代码，现在已经可以在值发生变化的时候触发加载数据了，但是如果要在页面初始化时候加载数据，我们还需要在<code>created</code>或者<code>mounted</code>生命周期钩子里面再次调用<code>$_loadData</code>方法。不过，现在可以不用这样写了，通过配置<code>watch</code>的立即触发属性，就可以满足需求了</p>
 <pre><code class="js">// 改造watch
-export default {
-  watch: {
+export default &#123;
+  watch: &#123;
     // 在值发生变化之后，重新加载数据
-    searchValue: {
+    searchValue: &#123;
     // 通过handler来监听属性变化, 初次调用 newValue为&quot;&quot;空字符串， oldValue为 undefined
-      handler(newValue, oldValue) {
-        if (newValue !== oldValue) {
+      handler(newValue, oldValue) &#123;
+        if (newValue !== oldValue) &#123;
           this.$_loadData()
-        }
-      },
+        &#125;
+      &#125;,
       // 配置立即执行属性
       immediate: true
-    }
-  }
-}
+    &#125;
+  &#125;
+&#125;
 </code></pre>
 <h3 id="深度监听（我可以看到你内心的一举一动）"><a href="#深度监听（我可以看到你内心的一举一动）" class="headerlink" title="深度监听（我可以看到你内心的一举一动）"></a>深度监听（我可以看到你内心的一举一动）</h3><p>一个表单页面，需求希望用户在修改表单的任意一项之后，表单页面就需要变更为被修改状态。如果按照上例中watch的写法，那么我们就需要去监听表单每一个属性，太麻烦了，这时候就需要用到<code>watch</code>的深度监听<code>deep</code></p>
-<pre><code class="js">export default {
-  data() {
-    return {
-      formData: {
+<pre><code class="js">export default &#123;
+  data() &#123;
+    return &#123;
+      formData: &#123;
         name: &#39;&#39;,
         sex: &#39;&#39;,
         age: 0,
         deptId: &#39;&#39;
-      }
-    }
-  },
-  watch: {
+      &#125;
+    &#125;
+  &#125;,
+  watch: &#123;
     // 在值发生变化之后，重新加载数据
-    formData: {
+    formData: &#123;
       // 需要注意，因为对象引用的原因， newValue和oldValue的值一直相等
-      handler(newValue, oldValue) {
+      handler(newValue, oldValue) &#123;
         // 在这里标记页面编辑状态
-      },
+      &#125;,
       // 通过指定deep属性为true, watch会监听对象里面每一个值的变化
       deep: true
-    }
-  }
-}
+    &#125;
+  &#125;
+&#125;
 </code></pre>
 <h2 id="函数式组件，函数是组件？"><a href="#函数式组件，函数是组件？" class="headerlink" title="函数式组件，函数是组件？"></a>函数式组件，函数是组件？</h2><p>什么是函数式组件？函数式组件就是函数是组件，感觉在玩文字游戏。使用过React的同学，应该不会对函数式组件感到陌生。函数式组件，我们可以理解为没有内部状态，没有生命周期钩子函数，没有this(不需要实例化的组件)。</p>
 <p>在日常写bug的过程中，经常会开发一些纯展示性的业务组件，比如一些详情页面，列表界面等，它们有一个共同的特点是只需要将外部传入的数据进行展现，不需要有内部状态，不需要在生命周期钩子函数里面做处理，这时候你就可以考虑使用函数式组件。</p>
-<h3 id="先来一个函数式组件的代码"><a href="#先来一个函数式组件的代码" class="headerlink" title="先来一个函数式组件的代码"></a>先来一个函数式组件的代码</h3><pre><code class="js">export default {
+<h3 id="先来一个函数式组件的代码"><a href="#先来一个函数式组件的代码" class="headerlink" title="先来一个函数式组件的代码"></a>先来一个函数式组件的代码</h3><pre><code class="js">export default &#123;
   // 通过配置functional属性指定组件为函数式组件
   functional: true,
   // 组件接收的外部属性
-  props: {
-    avatar: {
+  props: &#123;
+    avatar: &#123;
       type: String
-    }
-  },
+    &#125;
+  &#125;,
   /**
    * 渲染函数
-   * @param {*} h
-   * @param {*} context 函数式组件没有this, props, slots等都在context上面挂着
+   * @param &#123;*&#125; h
+   * @param &#123;*&#125; context 函数式组件没有this, props, slots等都在context上面挂着
    */
-  render(h, context) {
-    const { props } = context
-    if (props.avatar) {
-      return &lt;img src={props.avatar}&gt;&lt;/img&gt;
-    }
+  render(h, context) &#123;
+    const &#123; props &#125; = context
+    if (props.avatar) &#123;
+      return &lt;img src=&#123;props.avatar&#125;&gt;&lt;/img&gt;
+    &#125;
     return &lt;img src=&quot;default-avatar.png&quot;&gt;&lt;/img&gt;
-  }
-}
+  &#125;
+&#125;
 </code></pre>
 <p>在上例中，我们定义了一个头像组件，如果外部传入头像，则显示传入的头像，否则显示默认头像。上面的代码中大家看到有一个<code>render</code>函数，这个是Vue使用<code>JSX</code>的写法，关于<code>JSX</code>,小编将在后续文章中会出详细的使用教程。</p>
 <h3 id="为什么使用函数式组件"><a href="#为什么使用函数式组件" class="headerlink" title="为什么使用函数式组件"></a>为什么使用函数式组件</h3><p>1.最主要最关键的原因是函数式组件不需要实例化，无状态，没有生命周期，所以渲染性能要好于普通组件<br>2.函数式组件结构比较简单，代码结构更清晰</p>
@@ -604,7 +604,7 @@ export default {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -627,7 +627,7 @@ export default {
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -638,7 +638,7 @@ export default {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#hookEvent-原来可以这样监听组件生命周期"><span class="toc-number">1.</span> <span class="toc-text">hookEvent,原来可以这样监听组件生命周期</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-内部监听生命周期函数"><span class="toc-number">1.1.</span> <span class="toc-text">1. 内部监听生命周期函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-外部监听生命周期函数"><span class="toc-number">1.2.</span> <span class="toc-text">2. 外部监听生命周期函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小项目还用Vuex-用Vue-observable手写一个状态管理吧"><span class="toc-number">2.</span> <span class="toc-text">小项目还用Vuex?用Vue.observable手写一个状态管理吧</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建-store"><span class="toc-number">2.1.</span> <span class="toc-text">创建 store</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#在组件中引用"><span class="toc-number">2.2.</span> <span class="toc-text">在组件中引用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开发全局组件，你可能需要了解一下Vue-extend"><span class="toc-number">3.</span> <span class="toc-text">开发全局组件，你可能需要了解一下Vue.extend</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#开发loading组件"><span class="toc-number">3.1.</span> <span class="toc-text">开发loading组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#通过Vue-extend将组件转换为全局组件"><span class="toc-number">3.2.</span> <span class="toc-text">通过Vue.extend将组件转换为全局组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#将组件挂载到Vue-prototype上面"><span class="toc-number">3.3.</span> <span class="toc-text">将组件挂载到Vue.prototype上面</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自定义指令，从底层解决问题"><span class="toc-number">4.</span> <span class="toc-text">自定义指令，从底层解决问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#开发v-loading指令"><span class="toc-number">4.1.</span> <span class="toc-text">开发v-loading指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#在元素上面使用指令"><span class="toc-number">4.2.</span> <span class="toc-text">在元素上面使用指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#项目中哪些场景可以自定义指令"><span class="toc-number">4.3.</span> <span class="toc-text">项目中哪些场景可以自定义指令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#深度watch与watch立即触发回调-我可以监听到你的一举一动"><span class="toc-number">5.</span> <span class="toc-text">深度watch与watch立即触发回调,我可以监听到你的一举一动</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基础用法"><span class="toc-number">5.1.</span> <span class="toc-text">基础用法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#立即触发"><span class="toc-number">5.2.</span> <span class="toc-text">立即触发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#深度监听（我可以看到你内心的一举一动）"><span class="toc-number">5.3.</span> <span class="toc-text">深度监听（我可以看到你内心的一举一动）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数式组件，函数是组件？"><span class="toc-number">6.</span> <span class="toc-text">函数式组件，函数是组件？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#先来一个函数式组件的代码"><span class="toc-number">6.1.</span> <span class="toc-text">先来一个函数式组件的代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么使用函数式组件"><span class="toc-number">6.2.</span> <span class="toc-text">为什么使用函数式组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#函数式组件与普通组件的区别"><span class="toc-number">6.3.</span> <span class="toc-text">函数式组件与普通组件的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#我不想用JSX，能用函数式组件吗？"><span class="toc-number">6.4.</span> <span class="toc-text">我不想用JSX，能用函数式组件吗？</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#hookEvent-%E5%8E%9F%E6%9D%A5%E5%8F%AF%E4%BB%A5%E8%BF%99%E6%A0%B7%E7%9B%91%E5%90%AC%E7%BB%84%E4%BB%B6%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-number">1.</span> <span class="toc-text">hookEvent,原来可以这样监听组件生命周期</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%86%85%E9%83%A8%E7%9B%91%E5%90%AC%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E5%87%BD%E6%95%B0"><span class="toc-number">1.1.</span> <span class="toc-text">1. 内部监听生命周期函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%A4%96%E9%83%A8%E7%9B%91%E5%90%AC%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E5%87%BD%E6%95%B0"><span class="toc-number">1.2.</span> <span class="toc-text">2. 外部监听生命周期函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E9%A1%B9%E7%9B%AE%E8%BF%98%E7%94%A8Vuex-%E7%94%A8Vue-observable%E6%89%8B%E5%86%99%E4%B8%80%E4%B8%AA%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%E5%90%A7"><span class="toc-number">2.</span> <span class="toc-text">小项目还用Vuex?用Vue.observable手写一个状态管理吧</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA-store"><span class="toc-number">2.1.</span> <span class="toc-text">创建 store</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E7%BB%84%E4%BB%B6%E4%B8%AD%E5%BC%95%E7%94%A8"><span class="toc-number">2.2.</span> <span class="toc-text">在组件中引用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%8F%91%E5%85%A8%E5%B1%80%E7%BB%84%E4%BB%B6%EF%BC%8C%E4%BD%A0%E5%8F%AF%E8%83%BD%E9%9C%80%E8%A6%81%E4%BA%86%E8%A7%A3%E4%B8%80%E4%B8%8BVue-extend"><span class="toc-number">3.</span> <span class="toc-text">开发全局组件，你可能需要了解一下Vue.extend</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%8F%91loading%E7%BB%84%E4%BB%B6"><span class="toc-number">3.1.</span> <span class="toc-text">开发loading组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87Vue-extend%E5%B0%86%E7%BB%84%E4%BB%B6%E8%BD%AC%E6%8D%A2%E4%B8%BA%E5%85%A8%E5%B1%80%E7%BB%84%E4%BB%B6"><span class="toc-number">3.2.</span> <span class="toc-text">通过Vue.extend将组件转换为全局组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%86%E7%BB%84%E4%BB%B6%E6%8C%82%E8%BD%BD%E5%88%B0Vue-prototype%E4%B8%8A%E9%9D%A2"><span class="toc-number">3.3.</span> <span class="toc-text">将组件挂载到Vue.prototype上面</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4%EF%BC%8C%E4%BB%8E%E5%BA%95%E5%B1%82%E8%A7%A3%E5%86%B3%E9%97%AE%E9%A2%98"><span class="toc-number">4.</span> <span class="toc-text">自定义指令，从底层解决问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%8F%91v-loading%E6%8C%87%E4%BB%A4"><span class="toc-number">4.1.</span> <span class="toc-text">开发v-loading指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E5%85%83%E7%B4%A0%E4%B8%8A%E9%9D%A2%E4%BD%BF%E7%94%A8%E6%8C%87%E4%BB%A4"><span class="toc-number">4.2.</span> <span class="toc-text">在元素上面使用指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E4%B8%AD%E5%93%AA%E4%BA%9B%E5%9C%BA%E6%99%AF%E5%8F%AF%E4%BB%A5%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4"><span class="toc-number">4.3.</span> <span class="toc-text">项目中哪些场景可以自定义指令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%B1%E5%BA%A6watch%E4%B8%8Ewatch%E7%AB%8B%E5%8D%B3%E8%A7%A6%E5%8F%91%E5%9B%9E%E8%B0%83-%E6%88%91%E5%8F%AF%E4%BB%A5%E7%9B%91%E5%90%AC%E5%88%B0%E4%BD%A0%E7%9A%84%E4%B8%80%E4%B8%BE%E4%B8%80%E5%8A%A8"><span class="toc-number">5.</span> <span class="toc-text">深度watch与watch立即触发回调,我可以监听到你的一举一动</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95"><span class="toc-number">5.1.</span> <span class="toc-text">基础用法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AB%8B%E5%8D%B3%E8%A7%A6%E5%8F%91"><span class="toc-number">5.2.</span> <span class="toc-text">立即触发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B1%E5%BA%A6%E7%9B%91%E5%90%AC%EF%BC%88%E6%88%91%E5%8F%AF%E4%BB%A5%E7%9C%8B%E5%88%B0%E4%BD%A0%E5%86%85%E5%BF%83%E7%9A%84%E4%B8%80%E4%B8%BE%E4%B8%80%E5%8A%A8%EF%BC%89"><span class="toc-number">5.3.</span> <span class="toc-text">深度监听（我可以看到你内心的一举一动）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BB%84%E4%BB%B6%EF%BC%8C%E5%87%BD%E6%95%B0%E6%98%AF%E7%BB%84%E4%BB%B6%EF%BC%9F"><span class="toc-number">6.</span> <span class="toc-text">函数式组件，函数是组件？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%88%E6%9D%A5%E4%B8%80%E4%B8%AA%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BB%84%E4%BB%B6%E7%9A%84%E4%BB%A3%E7%A0%81"><span class="toc-number">6.1.</span> <span class="toc-text">先来一个函数式组件的代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BB%84%E4%BB%B6"><span class="toc-number">6.2.</span> <span class="toc-text">为什么使用函数式组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BB%84%E4%BB%B6%E4%B8%8E%E6%99%AE%E9%80%9A%E7%BB%84%E4%BB%B6%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">6.3.</span> <span class="toc-text">函数式组件与普通组件的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%91%E4%B8%8D%E6%83%B3%E7%94%A8JSX%EF%BC%8C%E8%83%BD%E7%94%A8%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BB%84%E4%BB%B6%E5%90%97%EF%BC%9F"><span class="toc-number">6.4.</span> <span class="toc-text">我不想用JSX，能用函数式组件吗？</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -657,7 +657,7 @@ export default {
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

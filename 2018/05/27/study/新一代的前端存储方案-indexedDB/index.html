@@ -37,7 +37,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -99,7 +99,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    12k
+                    13k
                 </span>
                 
                 
@@ -143,24 +143,28 @@
 <p>我们都知道在前端开发当中,有时会因为某些需求,要将一些数据存储在前端本地当中.比如说:为了优化性能,将一些常用的数据存在本地,这样以后需要的时候直接从本地拿,不需要再向后端进行请求.还有就是为了防止CSRF攻击,后端给前端一个token,前端就需要将这个token存在本地.之后每次请求都需要带上这个token.等等不一而足.</p>
 <p>而这些需求就不油避免的造就一个前端的发展方向–<strong>前端存储</strong></p>
 <p>在前端的’上古时代’里,我们前端想要存储数据,只有一种方式,那就是<code>Cookie</code>.但是<code>Cookie</code>虽然可以做前端存储方案,但是却也有着很多局限性.首先它的存储空间大小只有<code>4K</code>,其次它的存储有效时间有限制,然后存在<code>Cookie</code>中的数据,在你每次进行请求的时候都会将它带上.使得每次的请求数据都会无意义的增大.</p>
-<p>最后,也是最重要的一点.<code>Cookie</code>设计之初就不是就是让我们前端存数据用的.它只是为了让网站验证用户身份用的.至于<code>Cookie</code>的本地存储功能只是它的一个手段而已.关于这点你们可以看下我的另外一篇文章—<a href="https://juejin.im/post/59708bbe518825103c098332" target="_blank" rel="noopener">在HTML5的时代,重新认识Cookie</a></p>
+<p>最后,也是最重要的一点.<code>Cookie</code>设计之初就不是就是让我们前端存数据用的.它只是为了让网站验证用户身份用的.至于<code>Cookie</code>的本地存储功能只是它的一个手段而已.关于这点你们可以看下我的另外一篇文章—<a target="_blank" rel="noopener" href="https://juejin.im/post/59708bbe518825103c098332">在HTML5的时代,重新认识Cookie</a></p>
 <p>  综上所述,使用Cookie作为前端存储有这许多缺点,所以经过前端社区的不断努力,在HTML5中有了真正的前端存储方案Web Storage.它分为两种,一种是<code>永久存储的localStorage</code>,一种是<code>会话期间存储的sessionStorage</code>.对比Cookie,<code>Web Storage</code>的<strong>优势</strong>很明显:</p>
 <blockquote>
 <ul>
 <li>存储空间更大,有5M大小</li>
+</ul>
+</blockquote>
+<ul>
 <li>在浏览器发送请求是不会带上<code>web Storage</code>里的数据</li>
 <li>更加友好的API</li>
 <li>可以做永久存储(localStorage).</li>
 </ul>
-</blockquote>
-<a id="more"></a>
+<span id="more"></span>
 <p>这一切看起来很完美,但是随着前端的不断发展,web Storage也有了一些不太合适的地方:</p>
 <blockquote>
 <ul>
 <li>随着web应用程序的不断发展,5M的存储大小对于一些大型的web应用程序来说有些不够</li>
-<li>web Storage<strong>只能存储string类型</strong>的数据.对于Object类型的数据只能先用<code>JSON.stringify()</code>转换一下在存储.</li>
 </ul>
 </blockquote>
+<ul>
+<li>web Storage<strong>只能存储string类型</strong>的数据.对于Object类型的数据只能先用<code>JSON.stringify()</code>转换一下在存储.</li>
+</ul>
 <p>基于上述原因,前端社区又提出了浏览器数据库存储这个概念.而<code>Web SQL Database</code>和<code>indexedDB</code>(索引数据库)是对这个概念的实现.其中<em>Web SQL Database在目前来说基本已经被放弃</em>.所以目前主流的浏览器数据库的实现就是indexedDB(索引数据库).也就是我们要介绍的 新一代的前端存储方案–<strong>indexedDB</strong></p>
 <h2 id="什么是indexedDB"><a href="#什么是indexedDB" class="headerlink" title="什么是indexedDB"></a>什么是indexedDB</h2><h3 id="indexedDB的介绍"><a href="#indexedDB的介绍" class="headerlink" title="indexedDB的介绍"></a>indexedDB的介绍</h3><blockquote>
 <p>IndexedDB 是一种使用浏览器存储大量数据的方法.它创造的数据可以被查询，并且可以离线使用. IndexedDB对于那些需要存储大量数据，或者是需要离线使用的程序是非常有效的解决方法. — MDN</p>
@@ -168,15 +172,15 @@
 <h3 id="indexedDB的概念"><a href="#indexedDB的概念" class="headerlink" title="indexedDB的概念"></a>indexedDB的概念</h3><blockquote>
 <p>使用IndexedDB，你可以存储或者获取数据，使用一个key索引的。 你可以在事务(transaction)中完成对数据的修改。和大多数web存储解决方案相同，indexedDB也遵从同源协议(same-origin policy). 所以你只能访问同域中存储的数据，而不能访问其他域的。<br>API包含异步(asynchronous) API 和同步(synchronous)API两种。  异步API适合大多数情况, 同步API必须同 WebWorkers一同使用. 目前，没有主流浏览器支持同步API。 即使同步API被支持了，你也会在大多数的情况使用异步API。<br>IndexedDB 是 WebSQL 数据库的取代品, W3C组织在2010年11月18日废弃了webSql.  IndexedDB 和WebSQL的不同点在于WebSQL 是关系型数据库（复杂）IndexedDB 是key-value型数据库（简单好使）.</p>
 </blockquote>
-<p>上面是<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/IndexedDB_API/Basic_Concepts_Behind_IndexedDB" target="_blank" rel="noopener">MDN</a>上对于IndexedDB的介绍.其简单而言,indexedDB就是一个基于事务操作的key-value型数前端数据库.其API大多是异步的</p>
+<p>上面是<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/IndexedDB_API/Basic_Concepts_Behind_IndexedDB">MDN</a>上对于IndexedDB的介绍.其简单而言,indexedDB就是一个基于事务操作的key-value型数前端数据库.其API大多是异步的</p>
 <h2 id="indexedDB的使用"><a href="#indexedDB的使用" class="headerlink" title="indexedDB的使用"></a>indexedDB的使用</h2><h3 id="创建一个indexedDB数据库"><a href="#创建一个indexedDB数据库" class="headerlink" title="创建一个indexedDB数据库"></a>创建一个indexedDB数据库</h3><pre><code class="js">const request = indexedDB.open(&#39;myDatabase&#39;,1);
-request.addEventListener(&#39;success&#39;, e =&gt; {
+request.addEventListener(&#39;success&#39;, e =&gt; &#123;
    console.log(&quot;连接数据库成功&quot;);
-});
+&#125;);
 
-request.addEventListener(&#39;error&#39;, e =&gt; {
+request.addEventListener(&#39;error&#39;, e =&gt; &#123;
     console.log(&quot;连接数据库失败&quot;);
-});
+&#125;);
 </code></pre>
 <p>在上面代码中我们使用<code>indexedDB.open()</code>创建一个<code>indexedDB</code>数据库<code>.open()</code>方法接受可以接受两个参数.</p>
 <p>第一个是数据库名,第二个是数据库的版本号.<br>同时返回一个<code>IDBOpenDBRequest对象</code>用于操作数据库.其中对于open()的第一个参数数据库名,open()会先去查找本地是否已有这个数据库,如果有则直接将这个数据库返回,如果没有,则先创建这个数据库,再返回.对于第二个参数版本号,则是一个可选参数,如果不传,默认为1.但如果传入就必须是一个整数.</p>
@@ -185,55 +189,55 @@ request.addEventListener(&#39;error&#39;, e =&gt; {
 <p>要创建一个对象仓库必须在<code>upgradeneeded</code>事件中,而<code>upgradeneeded</code>事件只会在版本号更新的时候触发.这是因为<em>indexedDB API中不允许数据库中的数据仓库在同一版本中发生变化</em></p>
 <pre><code class="js">const request = indexedDB.open(&#39;myDatabase&#39;,2);
 
-request.addEventListener(&#39;upgradeneeded&#39;,e =&gt; {
+request.addEventListener(&#39;upgradeneeded&#39;,e =&gt; &#123;
     const db = e.target.result;
-    const store = db.createObjectStore(&#39;User&#39;,{keyPath: &#39;userId&#39;,autoIncrement: false});
+    const store = db.createObjectStore(&#39;User&#39;,&#123;keyPath: &#39;userId&#39;,autoIncrement: false&#125;);
     console.log(&#39;创建对象仓库成功&#39;);
-})
+&#125;)
 </code></pre>
 <p>在上述代码中我们监听<code>upgradeneeded</code>事件,并在这个事件触发时使用<code>createObjectStore()</code>方法创建了一个对象仓库.</p>
 <p><code>createObjectStore()</code>方法接受两个参数,第一个是对象仓库的名字,在同一数据库中,<strong>仓库名不能重复</strong>.第二个是可选参数.用于指定数据的主键,以及是否自增主键.</p>
 <h3 id="创建事务"><a href="#创建事务" class="headerlink" title="创建事务"></a>创建事务</h3><p>  OK现在我们有了数据库和对象仓库了,我们是否就可以存储数据了了.很抱歉,还是不行.我们还差最后一样东西—-事务.</p>
 <h4 id="什么是事务"><a href="#什么是事务" class="headerlink" title="什么是事务"></a>什么是事务</h4><blockquote>
 <p>一个数据库事务通常包含了一个序列的对数据库的读/写操作。它的存在包含有以下两个目的</p>
+</blockquote>
 <ul>
 <li>为数据库操作序列提供了一个从失败中恢复到正常状态的方法，同时提供了数据库即使在异常状态下仍能保持一致性的方法。</li>
 <li>当多个应用程序在并发访问数据库时，可以在这些应用程序之间提供一个隔离方法，以防止彼此的操作互相干扰。</li>
 </ul>
-</blockquote>
 <blockquote>
 <p>并非任意的对数据库的操作序列都是数据库事务。数据库事务拥有以下四个特性，习惯上被称之为ACID特性。</p>
+</blockquote>
 <ul>
 <li>原子性（Atomicity）：事务作为一个整体被执行，包含在其中的对数据库的操作要么全部被执行，要么都不执行</li>
 <li>一致性（Consistency）：事务应确保数据库的状态从一个一致状态转变为另一个一致状态。一致状态的含义是数据库中的数据应满足完整性约束</li>
 <li>隔离性（Isolation）：多个事务并发执行时，一个事务的执行不应影响其他事务的执行</li>
 <li>持久性（Durability）：已被提交的事务对数据库的修改应该永久保存在数据库中</li>
 </ul>
-</blockquote>
 <p>上面是维基百科上对数据库事务的解释.简单来说事务就是用来保证数据库操作要么全部成功,要么全部失败的一个限制.比如,在修改多条数据时,前面几条已经成功了.,在中间的某一条是失败了.那么在这时,如果是基于事务的数据库操作,那么这时数据库就应该重置前面数据的修改,放弃后面的数据修改.直接返回错误,一条数据也不修改.</p>
 <pre><code class="js">const request = indexedDB.open(&#39;myDatabase&#39;, 3);
 
-request.addEventListener(&#39;success&#39;, e =&gt; {
+request.addEventListener(&#39;success&#39;, e =&gt; &#123;
     const db = e.target.result;
 
     const tx = db.transaction(&#39;Users&#39;,&#39;readwrite&#39;);
-});
+&#125;);
 </code></pre>
 <p>上述代码中我们使用<code>transaction()</code>来创建一个事务.</p>
 <p><code>transaction()</code>接受两个参数,第一个是你要操作的对象仓库名称,第二个是你创建的事务模式.传入 <code>readonly</code>时只能对对象仓库进行读操作,无法写操作.可以传入<code>readwrite</code>进行读写操作.</p>
 <h3 id="操作数据"><a href="#操作数据" class="headerlink" title="操作数据"></a>操作数据</h3><blockquote>
 <p>好了现在有了数据库,对象仓库,事务之后我们终于可以存储数据了.</p>
+</blockquote>
 <ul>
 <li>add() : 增加数据。接收一个参数，为需要保存到对象仓库中的对象。</li>
 <li>put() : 增加或修改数据。接收一个参数，为需要保存到对象仓库中的对象。</li>
 <li>get() : 获取数据。接收一个参数，为需要获取数据的主键值。</li>
 <li>delete() : 删除数据。接收一个参数，为需要获取数据的主键值。</li>
 </ul>
-</blockquote>
 <p>add 和 put 的作用类似，区别<em>在于 put 保存数据时，如果该数据的主键在数据库中已经有相同主键的时候，则会修改数据库中对应主键的对象，而使用 add 保存数据，如果该主键已经存在，则保存失败</em>。</p>
 <h4 id="添加数据"><a href="#添加数据" class="headerlink" title="添加数据"></a>添加数据</h4><pre><code class="js">const request = indexedDB.open(&#39;myDatabase&#39;, 3);
 
-request.addEventListener(&#39;success&#39;, e =&gt; {
+request.addEventListener(&#39;success&#39;, e =&gt; &#123;
     const db = e.target.result;
 
     const tx = db.transaction(&#39;Users&#39;,&#39;readwrite&#39;);
@@ -241,28 +245,27 @@ request.addEventListener(&#39;success&#39;, e =&gt; {
     const store = tx.objectStore(&#39;Users&#39;);
 
     // 保存数据
-    const reqAdd = store.add({&#39;userId&#39;: 1, &#39;userName&#39;: &#39;李白&#39;, &#39;age&#39;: 24});
+    const reqAdd = store.add(&#123;&#39;userId&#39;: 1, &#39;userName&#39;: &#39;李白&#39;, &#39;age&#39;: 24&#125;);
 
-    reqAdd.addEventListener(&#39;success&#39;, e =&gt; {
+    reqAdd.addEventListener(&#39;success&#39;, e =&gt; &#123;
       console.log(&#39;保存成功&#39;)
-    })
+    &#125;)
 
     // 获取数据
     const reqGet = store.get(1);
 
-    reqGet.addEventListener(&#39;success&#39;, e =&gt; {
+    reqGet.addEventListener(&#39;success&#39;, e =&gt; &#123;
       console.log(this.result.userName);    // 李白
-    })
+    &#125;)
 
     //删除数据
     const reqDelete = store.delete(1);
 
-    reqDelete.addEventListener(&#39;success&#39;, e =&gt; {
+    reqDelete.addEventListener(&#39;success&#39;, e =&gt; &#123;
       console.log(&#39;删除数据成功&#39;);    // 李白
-    })
+    &#125;)
 
-});
-
+&#125;);
 </code></pre>
 <h3 id="使用游标"><a href="#使用游标" class="headerlink" title="使用游标"></a>使用游标</h3><p>  在上面当中我们使用<code>get()</code>方法传入一个主键来获取数据,但是这样只能够获取到一条数据.如果我们想要获取多条数据了怎么办.我们可以<strong>使用游标,来获取一个区间内的数据</strong>.</p>
 <p>要使用游标,我们需要使用对象仓库上的<code>openCursor()</code>方法创建币打开.<code>openCursor()</code>方法接受两个参数.</p>
@@ -284,7 +287,6 @@ var lowerRange = IDBKeyRange.lowerBound(1, false);
 // upperRange 表示小于等于10的主键值的集合。
 // 第二个参数可选，为true则表示不包含最大主键10，false则包含，默认为false
 var upperRange = IDBKeyRange.upperBound(10, false);
-
 </code></pre>
 <p>  第二个参数是方向.主要有一下几种</p>
 <pre><code class="js">next : 游标中的数据按主键值升序排列，主键值相等的数据都被读取
@@ -295,7 +297,7 @@ prevunique : 游标中的数据按主键值降序排列，主键值相等只读�
 <p>  下面让我们来看一个完整的例子</p>
 <pre><code class="js">const request = indexedDB.open(&#39;myDatabase&#39;, 4);
 
-request.addEventListener(&#39;success&#39;, e =&gt; {
+request.addEventListener(&#39;success&#39;, e =&gt; &#123;
     const db = e.target.result;
 
     const tx = db.transaction(&#39;Users&#39;,&#39;readwrite&#39;);
@@ -306,17 +308,16 @@ request.addEventListener(&#39;success&#39;, e =&gt; {
 
     const req = store.openCursor(range, &#39;next&#39;);
 
-    req.addEventListener(&#39;success&#39;, e =&gt; {
+    req.addEventListener(&#39;success&#39;, e =&gt; &#123;
       const cursor = this.result;
-        if(cursor){
+        if(cursor)&#123;
             console.log(cursor.value.userName);
             cursor.continue();
-        }else{
+        &#125;else&#123;
             console.log(&#39;检索结束&#39;);
-        }
-    })
-});
-
+        &#125;
+    &#125;)
+&#125;);
 </code></pre>
 <p>  在上面的代码中如果检索到符合条件的数据时,我们可以:</p>
 <blockquote>
@@ -336,11 +337,11 @@ request.addEventListener(&#39;success&#39;, e =&gt; {
 <p>1.<code>unique</code>: 用来指定索引值是否可以重复,为true代表不能相同,为false时代表可以相同<br>2.<code>multiEntry</code>: 当第二个参数keyPath为一个数组时.如果multiEntry是true,则会以数组中的每个元素建立一条索引.如果是false,则以整个数组为keyPath值,添加一条索引.</p>
 <pre><code class="js">const request = indexedDB.open(&#39;myDatabase&#39;, 5);
 
-request.addEventListener(&#39;upgradeneeded&#39;, e =&gt; {
+request.addEventListener(&#39;upgradeneeded&#39;, e =&gt; &#123;
     const db = e.target.result;
-    const  store = db.createObjectStore(&#39;Users&#39;, {keyPath: &#39;userId&#39;, autoIncrement: false});
-    const idx = store.createIndex(&#39;ageIndex&#39;,&#39;age&#39;,{unique: false})
-});
+    const  store = db.createObjectStore(&#39;Users&#39;, &#123;keyPath: &#39;userId&#39;, autoIncrement: false&#125;);
+    const idx = store.createIndex(&#39;ageIndex&#39;,&#39;age&#39;,&#123;unique: false&#125;)
+&#125;);
 </code></pre>
 <p>  这样我们就创建了一条索引.</p>
 <h4 id="使用索引"><a href="#使用索引" class="headerlink" title="使用索引"></a>使用索引</h4><p>  这在创建了一条索引之后我们就可以来使用它了.我们使用对象仓库上的<code>index</code>方法,通过传入一个索引名.来拿到一个索引对象.</p>
@@ -349,7 +350,7 @@ request.addEventListener(&#39;upgradeneeded&#39;, e =&gt; {
 <p>  然后我们就可以使用这个索引了.比如说我们要拿到年龄在20岁以上的数据,升序排列.</p>
 <pre><code class="js">const request = indexedDB.open(&#39;myDatabase&#39;, 4);
 
-request.addEventListener(&#39;success&#39;, e =&gt; {
+request.addEventListener(&#39;success&#39;, e =&gt; &#123;
     const db = e.target.result;
 
     const tx = db.transaction(&#39;Users&#39;,&#39;readwrite&#39;);
@@ -360,19 +361,19 @@ request.addEventListener(&#39;success&#39;, e =&gt; {
 
     const req = index.openCursor(IDBKeyRange.lowerBound(20), &#39;next&#39;);//20岁以上的数据,升序排列
 
-    req.addEventListener(&#39;success&#39;, e =&gt; {
+    req.addEventListener(&#39;success&#39;, e =&gt; &#123;
       const cursor = e.target.result;
-        if(cursor){
+        if(cursor)&#123;
             console.log(cursor.value.age);
             cursor.continue();
-        }else{
+        &#125;else&#123;
             console.log(&#39;检索结束&#39;);
-        }
-    })
-});
+        &#125;
+    &#125;)
+&#125;);
 </code></pre>
 <h2 id="indexedDB的兼容性"><a href="#indexedDB的兼容性" class="headerlink" title="indexedDB的兼容性"></a>indexedDB的兼容性</h2><p><img src="https://user-gold-cdn.xitu.io/2018/5/27/163a05e409de5bd7?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="indexedDB兼容性"></p>
-<p><a href="https://juejin.im/post/5b09a641f265da0dcd0b674f?utm_source=gold_browser_extension" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.im/post/5b09a641f265da0dcd0b674f?utm_source=gold_browser_extension">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -397,7 +398,7 @@ request.addEventListener(&#39;success&#39;, e =&gt; {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -420,7 +421,7 @@ request.addEventListener(&#39;success&#39;, e =&gt; {
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -431,7 +432,7 @@ request.addEventListener(&#39;success&#39;, e =&gt; {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前端存储"><span class="toc-number">1.</span> <span class="toc-text">前端存储</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是indexedDB"><span class="toc-number">1.1.</span> <span class="toc-text">什么是indexedDB</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#indexedDB的介绍"><span class="toc-number">1.1.1.</span> <span class="toc-text">indexedDB的介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#indexedDB的概念"><span class="toc-number">1.1.2.</span> <span class="toc-text">indexedDB的概念</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#indexedDB的使用"><span class="toc-number">1.2.</span> <span class="toc-text">indexedDB的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建一个indexedDB数据库"><span class="toc-number">1.2.1.</span> <span class="toc-text">创建一个indexedDB数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建一个对象仓库"><span class="toc-number">1.2.2.</span> <span class="toc-text">创建一个对象仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建事务"><span class="toc-number">1.2.3.</span> <span class="toc-text">创建事务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#操作数据"><span class="toc-number">1.2.4.</span> <span class="toc-text">操作数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用游标"><span class="toc-number">1.2.5.</span> <span class="toc-text">使用游标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#索引"><span class="toc-number">1.2.6.</span> <span class="toc-text">索引</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#indexedDB的兼容性"><span class="toc-number">1.3.</span> <span class="toc-text">indexedDB的兼容性</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF%E5%AD%98%E5%82%A8"><span class="toc-number">1.</span> <span class="toc-text">前端存储</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFindexedDB"><span class="toc-number">1.1.</span> <span class="toc-text">什么是indexedDB</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#indexedDB%E7%9A%84%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.1.1.</span> <span class="toc-text">indexedDB的介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#indexedDB%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">1.1.2.</span> <span class="toc-text">indexedDB的概念</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#indexedDB%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text">indexedDB的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AAindexedDB%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">1.2.1.</span> <span class="toc-text">创建一个indexedDB数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%AF%B9%E8%B1%A1%E4%BB%93%E5%BA%93"><span class="toc-number">1.2.2.</span> <span class="toc-text">创建一个对象仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%BA%8B%E5%8A%A1"><span class="toc-number">1.2.3.</span> <span class="toc-text">创建事务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E6%95%B0%E6%8D%AE"><span class="toc-number">1.2.4.</span> <span class="toc-text">操作数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%B8%B8%E6%A0%87"><span class="toc-number">1.2.5.</span> <span class="toc-text">使用游标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95"><span class="toc-number">1.2.6.</span> <span class="toc-text">索引</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#indexedDB%E7%9A%84%E5%85%BC%E5%AE%B9%E6%80%A7"><span class="toc-number">1.3.</span> <span class="toc-text">indexedDB的兼容性</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -450,7 +451,7 @@ request.addEventListener(&#39;success&#39;, e =&gt; {
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

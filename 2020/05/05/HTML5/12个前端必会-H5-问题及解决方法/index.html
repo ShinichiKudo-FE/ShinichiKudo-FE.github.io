@@ -44,7 +44,7 @@ click 点击穿透与延迟
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -147,7 +147,7 @@ click 点击穿透与延迟
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <p><a href="https://github.com/suoyuesmile/suo-blog/blob/master/articals/h5/0003.md" target="_blank" rel="noopener">原文地址</a></p>
+            <p><a target="_blank" rel="noopener" href="https://github.com/suoyuesmile/suo-blog/blob/master/articals/h5/0003.md">原文地址</a></p>
 <h1 id="移动端-H5-相关问题汇总："><a href="#移动端-H5-相关问题汇总：" class="headerlink" title="移动端 H5 相关问题汇总："></a>移动端 H5 相关问题汇总：</h1><ul>
 <li>1px 问题</li>
 <li>响应式布局</li>
@@ -163,7 +163,7 @@ click 点击穿透与延迟
 <li>H5 调试相关方案与策略</li>
 </ul>
 <h1 id="移动端-H5-相关基础技术概览"><a href="#移动端-H5-相关基础技术概览" class="headerlink" title="移动端 H5 相关基础技术概览"></a>移动端 H5 相关基础技术概览</h1><p><img src="https://camo.githubusercontent.com/fd55251b2784c435753d675301fb4bfa7aef733b/68747470733a2f2f757365722d676f6c642d63646e2e786974752e696f2f323031392f31322f32342f313666333638373230643365623432313f773d3232303626683d3131343026663d6a70656726733d323437373332" alt="H5"></p>
-<p><a href="https://juejin.im/post/5df3053ce51d45583d425ada" target="_blank" rel="noopener">1px问题</a><br><a href="https://juejin.im/post/5df59139518825123e7af459" target="_blank" rel="noopener">响应式布局</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.im/post/5df3053ce51d45583d425ada">1px问题</a><br><a target="_blank" rel="noopener" href="https://juejin.im/post/5df59139518825123e7af459">响应式布局</a></p>
 <h2 id="iOS-滑动不流畅"><a href="#iOS-滑动不流畅" class="headerlink" title="iOS 滑动不流畅"></a>iOS 滑动不流畅</h2><h3 id="表现"><a href="#表现" class="headerlink" title="表现"></a>表现</h3><p>上下滑动页面会产生卡顿，手指离开页面，页面立即停止运动。整体表现就是滑动不流畅，没有滑动惯性。</p>
 <h3 id="产生原因"><a href="#产生原因" class="headerlink" title="产生原因"></a>产生原因</h3><p><strong>为什么 iOS 的 webview 中 滑动不流畅，它是如何定义的</strong></p>
 <p>最终我在 <code>safari</code> 文档里面寻找到了答案（文档链接在参考资料项）。</p>
@@ -175,22 +175,22 @@ click 点击穿透与延迟
 </code></pre>
 <h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>1.在滚动容器上增加滚动 touch 方法</p>
 <p>将<code>-webkit-overflow-scrolling</code> 值设置为 <code>touch</code></p>
-<pre><code class="css">.wrapper {
+<pre><code class="css">.wrapper &#123;
     -webkit-overflow-scrolling: touch;
-}
+&#125;
 </code></pre>
 <p>设置滚动条隐藏： </p>
-<pre><code class="css">.container ::-webkit-scrollbar {display: none;}
+<pre><code class="css">.container ::-webkit-scrollbar &#123;display: none;&#125;
 </code></pre>
 <p>可能会导致使用<code>position:fixed;</code> 固定定位的元素，随着页面一起滚动</p>
 <p>2.设置 overflow</p>
 <p>设置外部 <code>overflow</code> 为 <code>hidden</code>,设置内容元素 <code>overflow</code> 为 <code>auto</code>。内部元素超出 body 即产生滚动，超出的部分 body 隐藏。</p>
-<pre><code class="css">body {
+<pre><code class="css">body &#123;
     overflow-y: hidden;
-}
-.wrapper {
+&#125;
+.wrapper &#123;
     overflow-y: auto;
-}
+&#125;
 </code></pre>
 <p><strong>两者结合使用更佳！</strong></p>
 <h2 id="iOS-上拉边界下拉出现白色空白"><a href="#iOS-上拉边界下拉出现白色空白" class="headerlink" title="iOS 上拉边界下拉出现白色空白"></a>iOS 上拉边界下拉出现白色空白</h2><h3 id="表现-1"><a href="#表现-1" class="headerlink" title="表现"></a>表现</h3><p>手指按住屏幕下拉，屏幕顶部会多出一块白色区域。手指按住屏幕上拉，底部多出一块白色区域。</p>
@@ -219,15 +219,15 @@ click 点击穿透与延迟
 <p>由此我们找到解决方案，通过监听 touchmove，让需要滑动的地方滑动，不需要滑动的地方禁止滑动。</p>
 <p>值得注意的是我们要过滤掉具有滚动容器的元素。</p>
 <p>实现如下：</p>
-<pre><code class="js">document.body.addEventListener(&#39;touchmove&#39;, function(e) {
+<pre><code class="js">document.body.addEventListener(&#39;touchmove&#39;, function(e) &#123;
     if(e._isScroller) return;
     // 阻止默认事件
     e.preventDefault();
-}, {
+&#125;, &#123;
     passive: false
-});
+&#125;);
 </code></pre>
-<a id="more"></a>
+<span id="more"></span>
 <ol start="2">
 <li>滚动妥协填充空白，装饰成其他功能<br>在很多时候，我们可以不去解决这个问题，换一直思路。根据场景，我们可以将下拉作为一个功能性的操作。</li>
 </ol>
@@ -252,7 +252,7 @@ click 点击穿透与延迟
 <h3 id="原理与解决方案-1"><a href="#原理与解决方案-1" class="headerlink" title="原理与解决方案"></a>原理与解决方案</h3><p>解决方案一：使用 <code>touchstart</code> 替换 <code>click</code><br>前面已经介绍了，移动设备不仅支持点击，还支持几个触摸事件。 那么我们现在基本思路就是用 touch 事件代替<code>click</code> 事件。</p>
 <p>将 <code>click</code> 替换成 <code>touchstart</code> 不仅解决了 <code>click</code> 事件都延时问题，还解决了穿透问题。因为穿透问题是在 touch 和 <code>click</code> 混用时产生。</p>
 <p>在原生中使用</p>
-<pre><code class="js">el.addEventListener(&quot;touchstart&quot;, () =&gt; { console.log(&quot;ok&quot;); }, false);
+<pre><code class="js">el.addEventListener(&quot;touchstart&quot;, () =&gt; &#123; console.log(&quot;ok&quot;); &#125;, false);
 </code></pre>
 <p>在 vue 中使用</p>
 <pre><code class="html">&lt;button @touchstart=&quot;handleTouchstart()&quot;&gt;点击&lt;/button&gt;
@@ -277,9 +277,9 @@ this.updateScrollParent(targetElement);
 // Don&#39;t send a synthetic click event if the target element is contained within a parent layer that was scrolled
 // and this tap is being used to stop the scrolling (usually initiated by a fling - issue #42).
 scrollParent = targetElement.fastClickScrollParent;
-if (scrollParent &amp;&amp; scrollParent.fastClickLastScrollTop !== scrollParent.scrollTop) {
+if (scrollParent &amp;&amp; scrollParent.fastClickLastScrollTop !== scrollParent.scrollTop) &#123;
     return true;
-}
+&#125;
 </code></pre>
 <p>主要目的就是，在使用 <code>touchstart</code> 合成 <code>click</code> 事件时，保证其不在滚动的父元素之下。</p>
 <p><strong>解决方案二： 使用 <code>fastclick</code> 库</strong></p>
@@ -290,7 +290,7 @@ FastClick.attach(document.body, options);
 </code></pre>
 <p>同样，使用<code>fastclick</code>库后，click 延时和穿透问题都没了</p>
 <p>按照我的惯例，只要涉及开源库，那么我们一定要去了解它实现的原理。主要是将现有的原生事件集合封装合成一个兼容性较强的事件集合。</p>
-<p><a href="https://github.com/ftlabs/fastclick/blob/master/lib/fastclick.js" target="_blank" rel="noopener">fastclick源码</a> 核心代码不长， 1000 行不到。有兴趣可以了解一下!</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ftlabs/fastclick/blob/master/lib/fastclick.js">fastclick源码</a> 核心代码不长， 1000 行不到。有兴趣可以了解一下!</p>
 <h2 id="软键盘将页面顶起来、收起未回落问题"><a href="#软键盘将页面顶起来、收起未回落问题" class="headerlink" title="软键盘将页面顶起来、收起未回落问题"></a>软键盘将页面顶起来、收起未回落问题</h2><h2 id="表现-4"><a href="#表现-4" class="headerlink" title="表现"></a>表现</h2><p>Android 手机中，点击 <code>input</code> 框时，键盘弹出，将页面顶起来，导致页面样式错乱。</p>
 <p>移开焦点时，键盘收起，键盘区域空白，未回落。</p>
 <h2 id="产生原因-4"><a href="#产生原因-4" class="headerlink" title="产生原因"></a>产生原因</h2><p>我们在app 布局中会有个固定的底部。安卓一些版本中，输入弹窗出来，会将解压 <code>absolute</code> 和 <code>fixed</code> 定位的元素。导致可视区域变小，布局错乱。</p>
@@ -298,26 +298,26 @@ FastClick.attach(document.body, options);
 <pre><code class="js">// 记录原有的视口高度
 const originalHeight = document.body.clientHeight || document.documentElement.clientHeight;
 
-window.onresize = function(){
+window.onresize = function()&#123;
   var resizeHeight = document.documentElement.clientHeight || document.body.clientHeight;
-  if(resizeHeight &lt; originalHeight ){
+  if(resizeHeight &lt; originalHeight )&#123;
     // 恢复内容区域高度
     // const container = document.getElementById(&quot;container&quot;)
     // 例如 container.style.height = originalHeight;
-  }
-}
+  &#125;
+&#125;
 </code></pre>
-<p>键盘不能回落问题出现在 <code>iOS 12+</code> 和<code>wechat 6.7.4+</code> 中，而在微信 H5 开发中是比较常见的 Bug。</p>
+<p>键盘不能回落问题出现在 <code>iOS 12+</code> 和<code> wechat 6.7.4+</code> 中，而在微信 H5 开发中是比较常见的 Bug。</p>
 <p>兼容原理，<strong>1.判断版本类型 2.更改滚动的可视区域</strong></p>
 <pre><code class="js">const isWechat = window.navigator.userAgent.match(/MicroMessenger\/([\d\.]+)/i);
 if (!isWechat) return;
 const wechatVersion = wechatInfo[1];
 const version = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
-
+ 
  // 如果设备类型为iOS 12+ 和wechat 6.7.4+，恢复成原来的视口
-if (+wechatVersion.replace(/\./g, &#39;&#39;) &gt;= 674 &amp;&amp; +version[1] &gt;= 12) {
+if (+wechatVersion.replace(/\./g, &#39;&#39;) &gt;= 674 &amp;&amp; +version[1] &gt;= 12) &#123;
   window.scrollTo(0, Math.max(document.body.clientHeight, document.documentElement.clientHeight));
-}
+&#125;
 </code></pre>
 <h2 id="iPhone-X系列安全区域适配问题"><a href="#iPhone-X系列安全区域适配问题" class="headerlink" title="iPhone X系列安全区域适配问题"></a>iPhone X系列安全区域适配问题</h2><h3 id="表现-5"><a href="#表现-5" class="headerlink" title="表现"></a>表现</h3><p>头部刘海两侧区域或者底部区域，出现刘海遮挡文字，或者呈现黑底或白底空白区域。</p>
 <h3 id="产生原因-5"><a href="#产生原因-5" class="headerlink" title="产生原因"></a>产生原因</h3><p>iPhone X 以及它以上的系列，都采用刘海屏设计和全面屏手势。头部、底部、侧边都需要做特殊处理。才能适配 iPhone X 的特殊情况。</p>
@@ -340,23 +340,23 @@ if (+wechatVersion.replace(/\./g, &#39;&#39;) &gt;= 674 &amp;&amp; +version[1] &
 <p><strong>增加适配层</strong></p>
 <p>使用 <code>safe area inset</code> 变量</p>
 <pre><code class="css">/* 适配 iPhone X 顶部填充*/
-@supports (top: env(safe-area-inset-top)){
+@supports (top: env(safe-area-inset-top))&#123;
   body,
-  .header{
+  .header&#123;
       padding-top: constant(safe-area-inset-top, 40px);
       padding-top: env(safe-area-inset-top, 40px);
       padding-top: var(safe-area-inset-top, 40px);
-  }
-}
+  &#125;
+&#125;
 /* 判断iPhoneX 将 footer 的 padding-bottom 填充到最底部 */
-@supports (bottom: env(safe-area-inset-bottom)){
+@supports (bottom: env(safe-area-inset-bottom))&#123;
     body,
-    .footer{
+    .footer&#123;
         padding-bottom: constant(safe-area-inset-bottom, 20px);
         padding-bottom: env(safe-area-inset-bottom, 20px);
         padding-top: var(safe-area-inset-bottom, 20px);
-    }
-}
+    &#125;
+&#125;
 </code></pre>
 <blockquote>
 <p><code>safe-area-inset-top</code>, <code>safe-area-inset-right</code>, <code>safe-area-inset-bottom</code>, <code>safe-area-inset-left</code> <code>safe-area-inset-*</code>由四个定义了视口边缘内矩形的 top, right, bottom 和 left 的环境变量组成，这样可以安全地放入内容，而不会有被非矩形的显示切断的风险。对于矩形视口，例如普通的笔记本电脑显示器，其值等于零。 对于非矩形显示器（如圆形表盘，iPhoneX 屏幕），在用户代理设置的四个值形成的矩形内，所有内容均可见。</p>
@@ -371,23 +371,23 @@ if (+wechatVersion.replace(/\./g, &#39;&#39;) &gt;= 674 &amp;&amp; +version[1] &
 <h3 id="解决方案-3"><a href="#解决方案-3" class="headerlink" title="解决方案"></a>解决方案</h3><h4 id="生成二维码"><a href="#生成二维码" class="headerlink" title="生成二维码"></a>生成二维码</h4><p>使用 <code>QRCode</code> 生成二维码</p>
 <pre><code class="js">import QRCode from &#39;qrcode&#39;;
 // 使用 async 生成图片
-const options = {};
+const options = &#123;&#125;;
 const url = window.location.href;
-async url =&gt; {
-  try {
+async url =&gt; &#123;
+  try &#123;
     console.log(await QRCode.toDataURL(url, options))
-  } catch (err) {
+  &#125; catch (err) &#123;
     console.error(err);
-  }
-}
+  &#125;
+&#125;
 </code></pre>
 <p>将 <code>await QRCode.toDataURL(url, options)</code> 赋值给 图片 url 即可</p>
 <h4 id="生成图片"><a href="#生成图片" class="headerlink" title="生成图片"></a>生成图片</h4><p>主要是使用 <code>htmlToCanvas</code> 生成 <code>canvas</code> 画布</p>
 <pre><code class="js">import html2canvas from &#39;html2canvas&#39;;
 
-html2canvas(document.body).then(function(canvas) {
+html2canvas(document.body).then(function(canvas) &#123;
     document.body.appendChild(canvas);
-});
+&#125;);
 </code></pre>
 <p>但是不单单在此处就完了，由于是 canvas 的原因。移动端生成出来的图片比较模糊。</p>
 <p>我们使用一个新的 canvas 方法多倍生成，放入一倍容器里面，达到更加清晰的效果，<strong>通过超链接下载图片 下载文件简单实现，更完整的实现方式之后更新</strong></p>
@@ -402,10 +402,10 @@ newCanvas.style.width = width + &quot;px&quot;;
 newCanvas.style.height =width + &quot;px&quot;;
 const context = newCanvas.getContext(&quot;2d&quot;);
 context.scale(scaleSize, scaleSize);
-html2canvas(document.querySelector(&#39;.demo&#39;), { canvas: newCanvas }).then(function(canvas) {
+html2canvas(document.querySelector(&#39;.demo&#39;), &#123; canvas: newCanvas &#125;).then(function(canvas) &#123;
   // 简单的通过超链接设置下载功能
   document.querySelector(&quot;.btn&quot;).setAttribute(&#39;href&#39;, canvas.toDataURL());
-}
+&#125;
 </code></pre>
 <p>根据需要设置 <code>scaleSize</code> 大小</p>
 <h2 id="微信公众号分享问题"><a href="#微信公众号分享问题" class="headerlink" title="微信公众号分享问题"></a>微信公众号分享问题</h2><h3 id="表现-7"><a href="#表现-7" class="headerlink" title="表现"></a>表现</h3><p>在微信公众号 H5 开发中，页面内部点击分享按钮调用 SDK，方法不生效。</p>
@@ -417,48 +417,48 @@ html2canvas(document.querySelector(&#39;.demo&#39;), { canvas: newCanvas }).then
 <h2 id="H5-调用-SDK-相关解决方案"><a href="#H5-调用-SDK-相关解决方案" class="headerlink" title="H5 调用 SDK 相关解决方案"></a>H5 调用 SDK 相关解决方案</h2><h3 id="产生原因-6"><a href="#产生原因-6" class="headerlink" title="产生原因"></a>产生原因</h3><p>在 Hybrid App 中使用 H5 是最常见的不过了，刚接触的，肯定会很生疏模糊。不知道 H5 和 Hybrid 是怎么交互的。怎样同时支持 iOS 和 Android 呢？现在来谈谈 Hybrid 技术要点，原生与 H5 的通信。</p>
 <h3 id="解决方案-5"><a href="#解决方案-5" class="headerlink" title="解决方案"></a>解决方案</h3><p>使用 <code>DSBridge</code> 同时支持 iOS 与 Android</p>
 <p>SDK小组 提供方法<br>注册方法 <code>bridge.register</code></p>
-<pre><code class="js">bridge.register(&#39;enterApp&#39;, function() {
+<pre><code class="js">bridge.register(&#39;enterApp&#39;, function() &#123;
   broadcast.emit(&#39;ENTER_APP&#39;)
-})
+&#125;)
 </code></pre>
 <p>回调方法 <code>bridge.call</code></p>
 <pre><code class="js">export const getSDKVersion = () =&gt; bridge.call(&#39;BLT.getSDKVersion&#39;)
 </code></pre>
 <p>事件监听与触发法</p>
-<pre><code class="js">const broadcast = {
-  on: function(name, fn, pluralable) {
+<pre><code class="js">const broadcast = &#123;
+  on: function(name, fn, pluralable) &#123;
     this._on(name, fn, pluralable, false)
-  },
-  once: function(name, fn, pluralable) {
+  &#125;,
+  once: function(name, fn, pluralable) &#123;
     this._on(name, fn, pluralable, true)
-  },
-  _on: function(name, fn, pluralable, once) {
+  &#125;,
+  _on: function(name, fn, pluralable, once) &#123;
     let eventData = broadcast.data
-    let fnObj = { fn: fn, once: once }
-    if (pluralable &amp;&amp; Object.prototype.hasOwnProperty.call(eventData, &#39;name&#39;)) {
+    let fnObj = &#123; fn: fn, once: once &#125;
+    if (pluralable &amp;&amp; Object.prototype.hasOwnProperty.call(eventData, &#39;name&#39;)) &#123;
       eventData[name].push(fnObj)
-    } else {
+    &#125; else &#123;
       eventData[name] = [fnObj]
-    }
+    &#125;
     return this
-  },
-  emit: function(name, data, thisArg) {
+  &#125;,
+  emit: function(name, data, thisArg) &#123;
     let fn, fnList, i, len
     thisArg = thisArg || null
     fnList = broadcast.data[name] || []
-    for (i = 0, len = fnList.length; i &lt; len; i++) {
+    for (i = 0, len = fnList.length; i &lt; len; i++) &#123;
       fn = fnList[i].fn
       fn.apply(thisArg, [data, name])
-      if (fnList[i].once) {
+      if (fnList[i].once) &#123;
         fnList.splice(i, 1)
         i--
         len--
-      }
-    }
+      &#125;
+    &#125;
     return this
-  },
-  data: {}
-}
+  &#125;,
+  data: &#123;&#125;
+&#125;
 export default broadcast
 </code></pre>
 <p>踩坑注意</p>
@@ -466,13 +466,13 @@ export default broadcast
 <p><strong>提供一个判断是否 Android、iOS。根据设备进行判断</strong></p>
 <pre><code class="js">export const hasNativeMethod = (name) =&gt;
   return bridge.hasNativeMethod(&#39;BYJ.&#39; + name)
-}
+&#125;
 
-export const getSDKVersion = function() {
-  if (hasNativeMethod(&#39;getSDKVersion&#39;)) {
+export const getSDKVersion = function() &#123;
+  if (hasNativeMethod(&#39;getSDKVersion&#39;)) &#123;
     bridge.call(&#39;BYJ.getSDKVersion&#39;)
-  }
-}
+  &#125;
+&#125;
 </code></pre>
 <blockquote>
 <p>同一功能需要iOS，Android方法名相同，这样更好处理哦</p>
@@ -488,12 +488,12 @@ export const getSDKVersion = function() {
 
 new Vconsole()
 </code></pre>
-<p>有兴趣看看它实现的基本原理，我们关注的点应该在 <code>vsconsole</code> 如何打印出我们所有 <code>log</code> 的 腾讯开源<a href="https://github.com/Tencent/vConsole/blob/dev/src/core/core.js" target="_blank" rel="noopener">vconsole</a></p>
+<p>有兴趣看看它实现的基本原理，我们关注的点应该在 <code>vsconsole</code> 如何打印出我们所有 <code>log</code> 的 腾讯开源<a target="_blank" rel="noopener" href="https://github.com/Tencent/vConsole/blob/dev/src/core/core.js">vconsole</a></p>
 <p>上述方法仅用于开发和测试。生产环境中不允许出现，所以，<strong>使用时需要对环境进行判断</strong>。</p>
 <pre><code class="js">import Vconsole from &#39;vconsole&#39;
-if (process.env.NODE_ENV !== &#39;production&#39;) {
+if (process.env.NODE_ENV !== &#39;production&#39;) &#123;
     new Vconsole()
-}
+&#125;
 </code></pre>
 <ol start="2">
 <li>代理 + spy-debugger</li>
@@ -511,7 +511,7 @@ if (process.env.NODE_ENV !== &#39;production&#39;) {
 <li>打开桌面日志网站进行调试，点击 npm 控制台监听地址。查看抓包和 H5 页面结构</li>
 </ul>
 <p>这种方式可以调试生成环境的页面，不需要修改代码，可以应付大多数调试需求</p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariCSSRef/Articles/StandardCSSProperties.html#//apple_ref/css/property/-webkit-overflow-scrolling" target="_blank" rel="noopener">Safari CSS Reference</a><br><a href="https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariCSSRef/Articles/StandardCSSProperties.html#//apple_ref/css/property/-webkit-overflow-scrolling" target="_blank" rel="noopener">MDN touch 事件</a><br><a href="https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariCSSRef/Articles/StandardCSSProperties.html#//apple_ref/css/property/-webkit-overflow-scrolling" target="_blank" rel="noopener">MDN css var()</a><br><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/env" target="_blank" rel="noopener">MDN css env()</a><br><a href="https://drafts.csswg.org/css-env-1/" target="_blank" rel="noopener">csswg env() drafts</a><br><a href="https://github.com/ftlabs/fastclick/blob/master/lib/fastclick.js" target="_blank" rel="noopener">fastclick 源码</a><br><a href="https://github.com/wendux/DSBridge-Android" target="_blank" rel="noopener">DSBridge-Android</a> &amp; <a href="https://github.com/wendux/DSBridge-IOS" target="_blank" rel="noopener">DSBridge-iOS</a><br><a href="https://github.com/davidshimjs/qrcodejs" target="_blank" rel="noopener">qrcodejs 源码</a><br><a href="https://github.com/niklasvh/html2canvas" target="_blank" rel="noopener">html2canvas 源码</a><br><a href="https://www.cnblogs.com/lolDragon/p/7795174.html" target="_blank" rel="noopener">关于H5页面在iPhoneX适配</a><br><a href="https://youzan.github.io/vant/#/zh-CN/button" target="_blank" rel="noopener">vant 相关文档</a></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariCSSRef/Articles/StandardCSSProperties.html#//apple_ref/css/property/-webkit-overflow-scrolling">Safari CSS Reference</a><br><a target="_blank" rel="noopener" href="https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariCSSRef/Articles/StandardCSSProperties.html#//apple_ref/css/property/-webkit-overflow-scrolling">MDN touch 事件</a><br><a target="_blank" rel="noopener" href="https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariCSSRef/Articles/StandardCSSProperties.html#//apple_ref/css/property/-webkit-overflow-scrolling">MDN css var()</a><br><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/env">MDN css env()</a><br><a target="_blank" rel="noopener" href="https://drafts.csswg.org/css-env-1/">csswg env() drafts</a><br><a target="_blank" rel="noopener" href="https://github.com/ftlabs/fastclick/blob/master/lib/fastclick.js">fastclick 源码</a><br><a target="_blank" rel="noopener" href="https://github.com/wendux/DSBridge-Android">DSBridge-Android</a> &amp; <a target="_blank" rel="noopener" href="https://github.com/wendux/DSBridge-IOS">DSBridge-iOS</a><br><a target="_blank" rel="noopener" href="https://github.com/davidshimjs/qrcodejs">qrcodejs 源码</a><br><a target="_blank" rel="noopener" href="https://github.com/niklasvh/html2canvas">html2canvas 源码</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/lolDragon/p/7795174.html">关于H5页面在iPhoneX适配</a><br><a target="_blank" rel="noopener" href="https://youzan.github.io/vant/#/zh-CN/button">vant 相关文档</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -536,7 +536,7 @@ if (process.env.NODE_ENV !== &#39;production&#39;) {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -559,7 +559,7 @@ if (process.env.NODE_ENV !== &#39;production&#39;) {
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -570,7 +570,7 @@ if (process.env.NODE_ENV !== &#39;production&#39;) {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#移动端-H5-相关问题汇总："><span class="toc-number">1.</span> <span class="toc-text">移动端 H5 相关问题汇总：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#移动端-H5-相关基础技术概览"><span class="toc-number">2.</span> <span class="toc-text">移动端 H5 相关基础技术概览</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS-滑动不流畅"><span class="toc-number">2.1.</span> <span class="toc-text">iOS 滑动不流畅</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#表现"><span class="toc-number">2.1.1.</span> <span class="toc-text">表现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#产生原因"><span class="toc-number">2.1.2.</span> <span class="toc-text">产生原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决方案"><span class="toc-number">2.1.3.</span> <span class="toc-text">解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS-上拉边界下拉出现白色空白"><span class="toc-number">2.2.</span> <span class="toc-text">iOS 上拉边界下拉出现白色空白</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#表现-1"><span class="toc-number">2.2.1.</span> <span class="toc-text">表现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#产生原因-1"><span class="toc-number">2.2.2.</span> <span class="toc-text">产生原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决方案-1"><span class="toc-number">2.2.3.</span> <span class="toc-text">解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#页面放大或缩小不确定性行为"><span class="toc-number">2.3.</span> <span class="toc-text">页面放大或缩小不确定性行为</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#表现-2"><span class="toc-number">2.3.1.</span> <span class="toc-text">表现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#产生原因-2"><span class="toc-number">2.3.2.</span> <span class="toc-text">产生原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原理与解决方案"><span class="toc-number">2.3.3.</span> <span class="toc-text">原理与解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#click-点击事件延时与穿透"><span class="toc-number">2.4.</span> <span class="toc-text">click 点击事件延时与穿透</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#表现-3"><span class="toc-number">2.4.1.</span> <span class="toc-text">表现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#产生原因-3"><span class="toc-number">2.4.2.</span> <span class="toc-text">产生原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原理与解决方案-1"><span class="toc-number">2.4.3.</span> <span class="toc-text">原理与解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#软键盘将页面顶起来、收起未回落问题"><span class="toc-number">2.5.</span> <span class="toc-text">软键盘将页面顶起来、收起未回落问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#表现-4"><span class="toc-number">2.6.</span> <span class="toc-text">表现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#产生原因-4"><span class="toc-number">2.7.</span> <span class="toc-text">产生原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原理与解决方案-2"><span class="toc-number">2.8.</span> <span class="toc-text">原理与解决方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#iPhone-X系列安全区域适配问题"><span class="toc-number">2.9.</span> <span class="toc-text">iPhone X系列安全区域适配问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#表现-5"><span class="toc-number">2.9.1.</span> <span class="toc-text">表现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#产生原因-5"><span class="toc-number">2.9.2.</span> <span class="toc-text">产生原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决方案-2"><span class="toc-number">2.9.3.</span> <span class="toc-text">解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#页面生成为图片和二维码问题"><span class="toc-number">2.10.</span> <span class="toc-text">页面生成为图片和二维码问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#表现-6"><span class="toc-number">2.10.1.</span> <span class="toc-text">表现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决方案-3"><span class="toc-number">2.10.2.</span> <span class="toc-text">解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#微信公众号分享问题"><span class="toc-number">2.11.</span> <span class="toc-text">微信公众号分享问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#表现-7"><span class="toc-number">2.11.1.</span> <span class="toc-text">表现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决方案-4"><span class="toc-number">2.11.2.</span> <span class="toc-text">解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#H5-调用-SDK-相关解决方案"><span class="toc-number">2.12.</span> <span class="toc-text">H5 调用 SDK 相关解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#产生原因-6"><span class="toc-number">2.12.1.</span> <span class="toc-text">产生原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决方案-5"><span class="toc-number">2.12.2.</span> <span class="toc-text">解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#H5-调试相关方案策略"><span class="toc-number">2.13.</span> <span class="toc-text">H5 调试相关方案策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#表现-8"><span class="toc-number">2.13.1.</span> <span class="toc-text">表现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原理与解决方案-3"><span class="toc-number">2.13.2.</span> <span class="toc-text">原理与解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">2.14.</span> <span class="toc-text">参考资料</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%A7%BB%E5%8A%A8%E7%AB%AF-H5-%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">移动端 H5 相关问题汇总：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%A7%BB%E5%8A%A8%E7%AB%AF-H5-%E7%9B%B8%E5%85%B3%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF%E6%A6%82%E8%A7%88"><span class="toc-number">2.</span> <span class="toc-text">移动端 H5 相关基础技术概览</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS-%E6%BB%91%E5%8A%A8%E4%B8%8D%E6%B5%81%E7%95%85"><span class="toc-number">2.1.</span> <span class="toc-text">iOS 滑动不流畅</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A8%E7%8E%B0"><span class="toc-number">2.1.1.</span> <span class="toc-text">表现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%A7%E7%94%9F%E5%8E%9F%E5%9B%A0"><span class="toc-number">2.1.2.</span> <span class="toc-text">产生原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">2.1.3.</span> <span class="toc-text">解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS-%E4%B8%8A%E6%8B%89%E8%BE%B9%E7%95%8C%E4%B8%8B%E6%8B%89%E5%87%BA%E7%8E%B0%E7%99%BD%E8%89%B2%E7%A9%BA%E7%99%BD"><span class="toc-number">2.2.</span> <span class="toc-text">iOS 上拉边界下拉出现白色空白</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A8%E7%8E%B0-1"><span class="toc-number">2.2.1.</span> <span class="toc-text">表现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%A7%E7%94%9F%E5%8E%9F%E5%9B%A0-1"><span class="toc-number">2.2.2.</span> <span class="toc-text">产生原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88-1"><span class="toc-number">2.2.3.</span> <span class="toc-text">解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B5%E9%9D%A2%E6%94%BE%E5%A4%A7%E6%88%96%E7%BC%A9%E5%B0%8F%E4%B8%8D%E7%A1%AE%E5%AE%9A%E6%80%A7%E8%A1%8C%E4%B8%BA"><span class="toc-number">2.3.</span> <span class="toc-text">页面放大或缩小不确定性行为</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A8%E7%8E%B0-2"><span class="toc-number">2.3.1.</span> <span class="toc-text">表现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%A7%E7%94%9F%E5%8E%9F%E5%9B%A0-2"><span class="toc-number">2.3.2.</span> <span class="toc-text">产生原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86%E4%B8%8E%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">2.3.3.</span> <span class="toc-text">原理与解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#click-%E7%82%B9%E5%87%BB%E4%BA%8B%E4%BB%B6%E5%BB%B6%E6%97%B6%E4%B8%8E%E7%A9%BF%E9%80%8F"><span class="toc-number">2.4.</span> <span class="toc-text">click 点击事件延时与穿透</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A8%E7%8E%B0-3"><span class="toc-number">2.4.1.</span> <span class="toc-text">表现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%A7%E7%94%9F%E5%8E%9F%E5%9B%A0-3"><span class="toc-number">2.4.2.</span> <span class="toc-text">产生原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86%E4%B8%8E%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88-1"><span class="toc-number">2.4.3.</span> <span class="toc-text">原理与解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%AF%E9%94%AE%E7%9B%98%E5%B0%86%E9%A1%B5%E9%9D%A2%E9%A1%B6%E8%B5%B7%E6%9D%A5%E3%80%81%E6%94%B6%E8%B5%B7%E6%9C%AA%E5%9B%9E%E8%90%BD%E9%97%AE%E9%A2%98"><span class="toc-number">2.5.</span> <span class="toc-text">软键盘将页面顶起来、收起未回落问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A1%A8%E7%8E%B0-4"><span class="toc-number">2.6.</span> <span class="toc-text">表现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%A7%E7%94%9F%E5%8E%9F%E5%9B%A0-4"><span class="toc-number">2.7.</span> <span class="toc-text">产生原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86%E4%B8%8E%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88-2"><span class="toc-number">2.8.</span> <span class="toc-text">原理与解决方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#iPhone-X%E7%B3%BB%E5%88%97%E5%AE%89%E5%85%A8%E5%8C%BA%E5%9F%9F%E9%80%82%E9%85%8D%E9%97%AE%E9%A2%98"><span class="toc-number">2.9.</span> <span class="toc-text">iPhone X系列安全区域适配问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A8%E7%8E%B0-5"><span class="toc-number">2.9.1.</span> <span class="toc-text">表现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%A7%E7%94%9F%E5%8E%9F%E5%9B%A0-5"><span class="toc-number">2.9.2.</span> <span class="toc-text">产生原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88-2"><span class="toc-number">2.9.3.</span> <span class="toc-text">解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B5%E9%9D%A2%E7%94%9F%E6%88%90%E4%B8%BA%E5%9B%BE%E7%89%87%E5%92%8C%E4%BA%8C%E7%BB%B4%E7%A0%81%E9%97%AE%E9%A2%98"><span class="toc-number">2.10.</span> <span class="toc-text">页面生成为图片和二维码问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A8%E7%8E%B0-6"><span class="toc-number">2.10.1.</span> <span class="toc-text">表现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88-3"><span class="toc-number">2.10.2.</span> <span class="toc-text">解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7%E5%88%86%E4%BA%AB%E9%97%AE%E9%A2%98"><span class="toc-number">2.11.</span> <span class="toc-text">微信公众号分享问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A8%E7%8E%B0-7"><span class="toc-number">2.11.1.</span> <span class="toc-text">表现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88-4"><span class="toc-number">2.11.2.</span> <span class="toc-text">解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#H5-%E8%B0%83%E7%94%A8-SDK-%E7%9B%B8%E5%85%B3%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">2.12.</span> <span class="toc-text">H5 调用 SDK 相关解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%A7%E7%94%9F%E5%8E%9F%E5%9B%A0-6"><span class="toc-number">2.12.1.</span> <span class="toc-text">产生原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88-5"><span class="toc-number">2.12.2.</span> <span class="toc-text">解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#H5-%E8%B0%83%E8%AF%95%E7%9B%B8%E5%85%B3%E6%96%B9%E6%A1%88%E7%AD%96%E7%95%A5"><span class="toc-number">2.13.</span> <span class="toc-text">H5 调试相关方案策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A8%E7%8E%B0-8"><span class="toc-number">2.13.1.</span> <span class="toc-text">表现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86%E4%B8%8E%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88-3"><span class="toc-number">2.13.2.</span> <span class="toc-text">原理与解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">2.14.</span> <span class="toc-text">参考资料</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -589,7 +589,7 @@ if (process.env.NODE_ENV !== &#39;production&#39;) {
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

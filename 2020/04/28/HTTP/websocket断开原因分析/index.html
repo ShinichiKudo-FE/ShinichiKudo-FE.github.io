@@ -13,8 +13,8 @@
     <meta name="description" content="一枚前端搬砖队队员的记录册,原文地址
 把错误打印出来WebSocket断开的原因有很多，最好在WebSocket断开时，将错误打印出来。
 
-ws.onclose = function (e) {
-  console.log(&amp;,"> 
+ws.onclose = function (e) &amp;#123;
+  console.,"> 
     <meta name="author" content="张白告丶"> 
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -40,7 +40,7 @@ ws.onclose = function (e) {
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -103,7 +103,7 @@ ws.onclose = function (e) {
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    4.7k
+                    4.2k
                 </span>
                 
                 
@@ -143,142 +143,140 @@ ws.onclose = function (e) {
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <p><a href="https://segmentfault.com/a/1190000014582485" target="_blank" rel="noopener">原文地址</a></p>
+            <p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000014582485">原文地址</a></p>
 <h1 id="把错误打印出来"><a href="#把错误打印出来" class="headerlink" title="把错误打印出来"></a>把错误打印出来</h1><p>WebSocket断开的原因有很多，最好在WebSocket断开时，将错误打印出来。</p>
-<p><img src="https://segmentfault.com/img/remote/1460000014582490?w=812&amp;h=408" alt="demo"></p>
-<pre><code class="js">ws.onclose = function (e) {
+<p><img src="https://segmentfault.com/img/remote/1460000014582490?w=812&h=408" alt="demo"></p>
+<pre><code class="js">ws.onclose = function (e) &#123;
   console.log(&#39;websocket 断开: &#39; + e.code + &#39; &#39; + e.reason + &#39; &#39; + e.wasClean)
   console.log(e)
-}
+&#125;
 </code></pre>
 <p>如果你想自己玩玩<code>WebSocket</code>, 但是你又不想自己部署一个<code>WebSocket</code>服务器，你可以使用<code>ws = new WebSocket(&#39;wss://echo.websocket.org/&#39;)</code>, 你向echo.websocket.org发送消息，它会回复你同样的消息。</p>
 <h1 id="重要信息错误状态码"><a href="#重要信息错误状态码" class="headerlink" title="重要信息错误状态码"></a>重要信息错误状态码</h1><p><code>WebSocket</code>断开时，会触发<code>CloseEvent</code>, <code>CloseEvent</code>会在连接关闭时发送给使用 <code>WebSockets</code> 的客户端. 它在 <code>WebSocket</code> 对象的 onclose 事件监听器中使用。<code>CloseEvent</code>的code字段表示了<code>WebSocket</code>断开的原因。可以从该字段中分析断开的原因。</p>
 <p><code>CloseEvent</code>有三个字段需要注意, 通过分析这三个字段，一般就可以找到断开原因</p>
 <blockquote>
 <ul>
-<li><code>CloseEvent.code</code>: code是错误码，是整数类型</li>
+<li><code> CloseEvent.code</code>: code是错误码，是整数类型</li>
 <li><code>CloseEvent.reason</code>: reason是断开原因，是字符串</li>
 <li><code>CloseEvent.wasClean</code>: wasClean表示是否正常断开，是布尔值。一般异常断开时，该值为false</li>
 </ul>
 </blockquote>
-<p><img src="https://segmentfault.com/img/remote/1460000014074898?w=1768&amp;h=732" alt="closed-code"></p>
+<p><img src="https://segmentfault.com/img/remote/1460000014074898?w=1768&h=732" alt="closed-code"></p>
 <h1 id="关闭状态码表"><a href="#关闭状态码表" class="headerlink" title="关闭状态码表"></a>关闭状态码表</h1><p>一般来说<code>1006</code>的错误码出现的情况比较常见，该错误码一般出现在断网时。</p>
 <table>
 <thead>
 <tr>
 <th>状态码</th>
-<th style="text-align:right">名称</th>
-<th style="text-align:center">描述</th>
+<th align="right">名称</th>
+<th align="center">描述</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>0–999</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">保留段, 未使用</td>
+<td align="right"></td>
+<td align="center">保留段, 未使用</td>
 </tr>
 <tr>
 <td>1000</td>
-<td style="text-align:right">CLOSE_NORMAL</td>
-<td style="text-align:center">正常关闭; 无论为何目的而创建, 该链接都已成功完成任务.</td>
+<td align="right">CLOSE_NORMAL</td>
+<td align="center">正常关闭; 无论为何目的而创建, 该链接都已成功完成任务.</td>
 </tr>
 <tr>
 <td>1001</td>
-<td style="text-align:right">CLOSE_GOING_AWAY</td>
-<td style="text-align:center">终端离开, 可能因为服务端错误, 也可能因为浏览器正从打开连接的页面跳转离开.</td>
+<td align="right">CLOSE_GOING_AWAY</td>
+<td align="center">终端离开, 可能因为服务端错误, 也可能因为浏览器正从打开连接的页面跳转离开.</td>
 </tr>
 <tr>
 <td>1002</td>
-<td style="text-align:right">CLOSE_PROTOCOL_ERROR</td>
-<td style="text-align:center">由于协议错误而中断连接.</td>
+<td align="right">CLOSE_PROTOCOL_ERROR</td>
+<td align="center">由于协议错误而中断连接.</td>
 </tr>
 <tr>
 <td>1003</td>
-<td style="text-align:right">CLOSE_UNSUPPORTED</td>
-<td style="text-align:center">由于接收到不允许的数据类型而断开连接 (如仅接收文本数据的终端接收到了二进制数据).</td>
+<td align="right">CLOSE_UNSUPPORTED</td>
+<td align="center">由于接收到不允许的数据类型而断开连接 (如仅接收文本数据的终端接收到了二进制数据).</td>
 </tr>
 <tr>
 <td>1004</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">保留. 其意义可能会在未来定义.</td>
+<td align="right"></td>
+<td align="center">保留. 其意义可能会在未来定义.</td>
 </tr>
 <tr>
 <td>1005</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">CLOSE_NO_STATUS</td>
+<td align="right"></td>
+<td align="center">CLOSE_NO_STATUS</td>
 </tr>
 <tr>
 <td>1006</td>
-<td style="text-align:right">CLOSE_ABNORMAL</td>
-<td style="text-align:center">保留. 用于期望收到状态码时连接非正常关闭 (也就是说, 没有发送关闭帧).</td>
+<td align="right">CLOSE_ABNORMAL</td>
+<td align="center">保留. 用于期望收到状态码时连接非正常关闭 (也就是说, 没有发送关闭帧).</td>
 </tr>
 <tr>
 <td>1007</td>
-<td style="text-align:right">Unsupported Data</td>
-<td style="text-align:center">由于收到了格式不符的数据而断开连接 (如文本消息中包含了非 UTF-8 数据).</td>
+<td align="right">Unsupported Data</td>
+<td align="center">由于收到了格式不符的数据而断开连接 (如文本消息中包含了非 UTF-8 数据).</td>
 </tr>
 <tr>
 <td>1008</td>
-<td style="text-align:right">Policy Violation</td>
-<td style="text-align:center">由于收到不符合约定的数据而断开连接. 这是一个通用状态码, 用于不适合使用 1003 和 1009 状态码的场景.</td>
+<td align="right">Policy Violation</td>
+<td align="center">由于收到不符合约定的数据而断开连接. 这是一个通用状态码, 用于不适合使用 1003 和 1009 状态码的场景.</td>
 </tr>
 <tr>
 <td>1009</td>
-<td style="text-align:right">CLOSE_TOO_LARGE</td>
-<td style="text-align:center">由于收到过大的数据帧而断开连接.</td>
+<td align="right">CLOSE_TOO_LARGE</td>
+<td align="center">由于收到过大的数据帧而断开连接.</td>
 </tr>
 <tr>
 <td>1010</td>
-<td style="text-align:right">Missing Extension</td>
-<td style="text-align:center">客户端期望服务器商定一个或多个拓展, 但服务器没有处理, 因此客户端断开连接.</td>
+<td align="right">Missing Extension</td>
+<td align="center">客户端期望服务器商定一个或多个拓展, 但服务器没有处理, 因此客户端断开连接.</td>
 </tr>
 <tr>
 <td>1011</td>
-<td style="text-align:right">Internal Error</td>
-<td style="text-align:center">客户端由于遇到没有预料的情况阻止其完成请求, 因此服务端断开连接.</td>
+<td align="right">Internal Error</td>
+<td align="center">客户端由于遇到没有预料的情况阻止其完成请求, 因此服务端断开连接.</td>
 </tr>
 <tr>
 <td>1012</td>
-<td style="text-align:right">Service Restart</td>
-<td style="text-align:center">服务器由于重启而断开连接.</td>
+<td align="right">Service Restart</td>
+<td align="center">服务器由于重启而断开连接.</td>
 </tr>
 <tr>
 <td>1013</td>
-<td style="text-align:right">Try Again Later</td>
-<td style="text-align:center">服务器由于临时原因断开连接, 如服务器过载因此断开一部分客户端连接.</td>
+<td align="right">Try Again Later</td>
+<td align="center">服务器由于临时原因断开连接, 如服务器过载因此断开一部分客户端连接.</td>
 </tr>
 <tr>
 <td>1014</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">由 WebSocket标准保留以便未来使用.</td>
+<td align="right"></td>
+<td align="center">由 WebSocket标准保留以便未来使用.</td>
 </tr>
 <tr>
 <td>1015</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">TLS Handshake    保留. 表示连接由于无法完成 TLS 握手而关闭 (例如无法验证服务器证书).</td>
+<td align="right"></td>
+<td align="center">TLS Handshake    保留. 表示连接由于无法完成 TLS 握手而关闭 (例如无法验证服务器证书).</td>
 </tr>
 <tr>
 <td>1016–1999</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">由 WebSocket标准保留以便未来使用.</td>
+<td align="right"></td>
+<td align="center">由 WebSocket标准保留以便未来使用.</td>
 </tr>
 <tr>
 <td>2000–2999</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">由 WebSocket拓展保留使用.</td>
+<td align="right"></td>
+<td align="center">由 WebSocket拓展保留使用.</td>
 </tr>
 <tr>
 <td>3000–3999</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">可以由库或框架使用.? 不应由应用使用. 可以在 IANA 注册, 先到先得.</td>
+<td align="right"></td>
+<td align="center">可以由库或框架使用.? 不应由应用使用. 可以在 IANA 注册, 先到先得.</td>
 </tr>
 <tr>
 <td>4000–4999</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">可以由应用使用.</td>
+<td align="right"></td>
+<td align="center">可以由应用使用.</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <h1 id="其他注意事项"><a href="#其他注意事项" class="headerlink" title="其他注意事项"></a>其他注意事项</h1><p>如果你的服务所在的域是HTTPS的，那么使用的WebSocket协议也必须是wss, 而不能是ws</p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
@@ -304,7 +302,7 @@ ws.onclose = function (e) {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -327,7 +325,7 @@ ws.onclose = function (e) {
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -338,7 +336,7 @@ ws.onclose = function (e) {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#把错误打印出来"><span class="toc-number">1.</span> <span class="toc-text">把错误打印出来</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#重要信息错误状态码"><span class="toc-number">2.</span> <span class="toc-text">重要信息错误状态码</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#关闭状态码表"><span class="toc-number">3.</span> <span class="toc-text">关闭状态码表</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他注意事项"><span class="toc-number">4.</span> <span class="toc-text">其他注意事项</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8A%8A%E9%94%99%E8%AF%AF%E6%89%93%E5%8D%B0%E5%87%BA%E6%9D%A5"><span class="toc-number">1.</span> <span class="toc-text">把错误打印出来</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E4%BF%A1%E6%81%AF%E9%94%99%E8%AF%AF%E7%8A%B6%E6%80%81%E7%A0%81"><span class="toc-number">2.</span> <span class="toc-text">重要信息错误状态码</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%B3%E9%97%AD%E7%8A%B6%E6%80%81%E7%A0%81%E8%A1%A8"><span class="toc-number">3.</span> <span class="toc-text">关闭状态码表</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">4.</span> <span class="toc-text">其他注意事项</span></a></li></ol>
                 </div>
             </div>
             
@@ -357,7 +355,7 @@ ws.onclose = function (e) {
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

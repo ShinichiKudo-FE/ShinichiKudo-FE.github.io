@@ -37,7 +37,7 @@ Diff 算法在深入实现的细,">
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -142,15 +142,15 @@ Diff 算法在深入实现的细,">
         <div class="content markdown animated fadeIn">
             <p><strong>React</strong> 是 Facebook 开发的构建用户界面的类库.<br>它从设计之初就将性能作为重点.<br>这篇文章我展示 diff 算法和渲染过程怎样工作, 你可以借鉴优化自己的应用.</p>
 <h1 id="Diff-算法"><a href="#Diff-算法" class="headerlink" title="Diff 算法"></a>Diff 算法</h1><p>在深入实现的细节之前, 需要了解一下 React 怎样工作的.</p>
-<pre><code class="javascript">class MyComponent extends React.Component{
-    render() {
-        if (this.props.first) {
+<pre><code class="javascript">class MyComponent extends React.Component&#123;
+    render() &#123;
+        if (this.props.first) &#123;
             return &lt;div className=&quot;first&quot;&gt;&lt;span&gt;A Span&lt;/span&gt;&lt;/div&gt;;
-            } else {
+            &#125; else &#123;
             return &lt;div className=&quot;second&quot;&gt;&lt;p&gt;A Paragraph&lt;/p&gt;&lt;/div&gt;;
-            }
-        }
-}
+            &#125;
+        &#125;
+&#125;
 </code></pre>
 <p>任何时间, 你描述的是你的 UI 看起来是什么样子.<br>需要特别注意, render 执行的结果得到的不是真正的 DOM 节点.<br>结果仅仅是轻量级的 JavaScript 对象, 我们称之为 <font color = 'blue'>virtual DOM</font>.</p>
 <p>React 要从这个表现形式当中尝试找到前一个渲染结果到后一个的最小步数.<br>比如, 当我们挂载了 <font color = "red"> <MyComponent first={true} /> </font><br>, 然后用 <font color = "red"><MyComponent first={false} /></font> 替换, 然后又取消挂载,<br>这样一个过程的 DOM 的指令是这样的:</p>
@@ -161,8 +161,9 @@ Diff 算法在深入实现的细,">
 <p>第一步到第二步<br>替换属性: className=”first” 到 className=”second”<br>替换节点: <span>A Span</span> 到 <p>A Paragraph</p></p>
 </blockquote>
 <blockquote>
-<p>第二步到没有<br>删除节点: <div className="second"><p>A Paragraph</p></div><br><a id="more"></a></p>
+<p>第二步到没有<br>删除节点: <div className="second"><p>A Paragraph</p></div></p>
 </blockquote>
+<span id="more"></span>
 <h2 id="按照层级"><a href="#按照层级" class="headerlink" title="按照层级"></a>按照层级</h2><p>找到两棵任意的树之间最小的修改是一个复杂度为 O(n^3) 的问题.<br>你可以想象, 我们的例子里这不是容易处理的.<br>React 用了一种简单但是强大的技巧, 达到了接近 O(n) 的复杂度.</p>
 <p>React 仅仅是尝试把树按照层级分解. 这彻底简化了复杂度,<br>而且也不会失去很多, 因为 Web 应用很少有 component 移动到树的另一个层级去.<br>它们大部分只是在相邻的子节点之间移动.</p>
 <p><img src="https://segmentfault.com/img/remote/1460000004844002" alt="diff1"></p>
@@ -207,7 +208,7 @@ clickBubbleListeners[&#39;a&#39;](event);
 <p>人们还是会经常讨论他们, 因为在实际当中用 JavaScript 进行实现很是挺难的.<br>React 突出的一个原因是这些优化默认就启动了.<br>这就让你避免掉不小心把 app 写得很慢.</p>
 <p>React 消耗性能的模型很简单, 很好理解: 每次调用 setState 会重新计算整个子树.<br>如果你想要提高性能, 尽量少调用 setState,<br>还有用 shouldComponentUpdate 减少大的子树的重新计算.</p>
 <p>react的一大特点就是虚拟DOM的diff算法，下图为diff实现流程图。<br><img src="https://segmentfault.com/img/bVuHXW" alt="diff7"><br>传统算法的理解画的流程图<br><img src="https://segmentfault.com/img/bVuGgm" alt="diff8"><br>React 通过制定大胆的策略，将 O(n^3) 复杂度的问题转换成 O(n) 复杂度的问题。<br><img src="https://segmentfault.com/img/bVuH57" alt="diff9"></p>
-<p>更多关于React源码链接<br><a href="http://purplebamboo.github.io/2015/09/15/reactjs_source_analyze_part_one/" target="_blank" rel="noopener">react源码分析</a><br><a href="https://zhuanlan.zhihu.com/p/20346379?refer=purerender" target="_blank" rel="noopener">react源码剖析（这篇文章对图中移位算法有详细解释）</a><br><a href="https://grfia.dlsi.ua.es/ml/algorithms/references/editsurvey_bille.pdf" target="_blank" rel="noopener">论文算法详解</a></p>
+<p>更多关于React源码链接<br><a target="_blank" rel="noopener" href="http://purplebamboo.github.io/2015/09/15/reactjs_source_analyze_part_one/">react源码分析</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/20346379?refer=purerender">react源码剖析（这篇文章对图中移位算法有详细解释）</a><br><a target="_blank" rel="noopener" href="https://grfia.dlsi.ua.es/ml/algorithms/references/editsurvey_bille.pdf">论文算法详解</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -232,7 +233,7 @@ clickBubbleListeners[&#39;a&#39;](event);
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -255,7 +256,7 @@ clickBubbleListeners[&#39;a&#39;](event);
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -266,7 +267,7 @@ clickBubbleListeners[&#39;a&#39;](event);
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Diff-算法"><span class="toc-number">1.</span> <span class="toc-text">Diff 算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#按照层级"><span class="toc-number">1.1.</span> <span class="toc-text">按照层级</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#列表"><span class="toc-number">1.2.</span> <span class="toc-text">列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Components"><span class="toc-number">1.3.</span> <span class="toc-text">Components</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#事件代理"><span class="toc-number">2.</span> <span class="toc-text">事件代理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#渲染"><span class="toc-number">3.</span> <span class="toc-text">渲染</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#合并操作"><span class="toc-number">3.1.</span> <span class="toc-text">合并操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#子树渲染操作"><span class="toc-number">3.2.</span> <span class="toc-text">子树渲染操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#选择性子树渲染"><span class="toc-number">3.3.</span> <span class="toc-text">选择性子树渲染</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#结论"><span class="toc-number">4.</span> <span class="toc-text">结论</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Diff-%E7%AE%97%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">Diff 算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%89%E7%85%A7%E5%B1%82%E7%BA%A7"><span class="toc-number">1.1.</span> <span class="toc-text">按照层级</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%97%E8%A1%A8"><span class="toc-number">1.2.</span> <span class="toc-text">列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Components"><span class="toc-number">1.3.</span> <span class="toc-text">Components</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E4%BB%A3%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">事件代理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B8%B2%E6%9F%93"><span class="toc-number">3.</span> <span class="toc-text">渲染</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%88%E5%B9%B6%E6%93%8D%E4%BD%9C"><span class="toc-number">3.1.</span> <span class="toc-text">合并操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%90%E6%A0%91%E6%B8%B2%E6%9F%93%E6%93%8D%E4%BD%9C"><span class="toc-number">3.2.</span> <span class="toc-text">子树渲染操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E6%80%A7%E5%AD%90%E6%A0%91%E6%B8%B2%E6%9F%93"><span class="toc-number">3.3.</span> <span class="toc-text">选择性子树渲染</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%93%E8%AE%BA"><span class="toc-number">4.</span> <span class="toc-text">结论</span></a></li></ol>
                 </div>
             </div>
             
@@ -285,7 +286,7 @@ clickBubbleListeners[&#39;a&#39;](event);
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

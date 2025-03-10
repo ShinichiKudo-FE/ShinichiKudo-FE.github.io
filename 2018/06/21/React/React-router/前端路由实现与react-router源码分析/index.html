@@ -36,7 +36,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -99,13 +99,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    10k
+                    11k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    9 mins.
+                    10 mins.
                 </span>
                 
                 
@@ -141,35 +141,35 @@
         <div class="content markdown animated fadeIn">
             <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在单页应用上，前端路由并不陌生。很多前端框架也会有独立开发或推荐配套使用的路由系统。那么，当我们在谈前端路由的时候，还可以谈些什么？本文将简要分析并实现一个的前端路由，并对 react-router 进行分析。</p>
 <h2 id="一个极简前端路由实现"><a href="#一个极简前端路由实现" class="headerlink" title="一个极简前端路由实现"></a>一个极简前端路由实现</h2><p>谈一下前端路由的简要原理，以hash形式（也可以使用History API做处理）为例，当url的hash发生变化时，触发hashchange注册的回调，在回调中进行不同的操作，展示不同的页面。直接看代码比较直观。</p>
-<pre><code class="js">    function Router(){
-        this.routes = {};
+<pre><code class="js">    function Router()&#123;
+        this.routes = &#123;&#125;;
         this.currentUrl = &#39;&#39;;
-    }
+    &#125;
     // 存储路由更新时的回调到回调数组routes中，回调函数将负责对页面的更新
-    Router.prototype.route = function(path,callback) {
-        this.routes[path] = callback || function(){};
-    }
+    Router.prototype.route = function(path,callback) &#123;
+        this.routes[path] = callback || function()&#123;&#125;;
+    &#125;
     // 路由执行当前url对应的回调函数，更新页面
-    Router.prototype.refresh = function(){
+    Router.prototype.refresh = function()&#123;
         this.currentUrl = location.hash.slice(1) || &#39;/&#39;;
         this.routes[this.currentUrl]()
-    }
+    &#125;
     // 路由监听
-    Router.prototype.init = function(){
+    Router.prototype.init = function()&#123;
         window.addEventListener(&#39;load&#39;,this.refresh.bind(this),false);
         window.addEventListener(&#39;hashChange&#39;,this.refresh.bind(this),false);
-    }
+    &#125;
     window.Router = new Router();
     window.Router.init();
 </code></pre>
 <blockquote>
 <p>上面路由系统Router对象实现，主要提供三个方法</p>
+</blockquote>
 <ul>
 <li>route 存储路由更新时的回调到回调数组routes中，回调函数将负责对页面的更新</li>
 <li>refresh 执行当前url对应的回调函数，更新页面</li>
 <li>init 监听浏览器 url hash 更新事件</li>
 </ul>
-</blockquote>
 <p>Router调用方法以及呈现效果如下，点击对应的url，背景色发生不同的变化</p>
 <pre><code class="html">    &lt;ul&gt;
         &lt;li&gt;&lt;a href=&quot;#&quot;&gt;turn white&lt;/a&gt;&lt;/li&gt;
@@ -180,112 +180,112 @@
 <pre><code class="js">    var content = document.quserSelecotor(&#39;body&#39;);
     // change page anything
 
-    function changebBgColor(color){
+    function changebBgColor(color)&#123;
         content.style.backgroundColor = color;
-    }
+    &#125;
 
-    Router(&#39;/&#39;,function(){
+    Router(&#39;/&#39;,function()&#123;
         changeBgColor(&#39;white&#39;);
-    })
-    Router(&#39;/blue&#39;,function(){
+    &#125;)
+    Router(&#39;/blue&#39;,function()&#123;
         changeBgColor(&#39;blue&#39;);
-    })
-    Router(&#39;/green&#39;,function(){
+    &#125;)
+    Router(&#39;/green&#39;,function()&#123;
         changeBgColor(&#39;green&#39;);
-    })
+    &#125;)
 </code></pre>
-<a id="more"></a>
+<span id="more"></span>
 <p><img src="https://cloud.githubusercontent.com/assets/10385585/15266370/156436f6-19d5-11e6-8c90-c24f6d8cc24e.gif" alt="router"></p>
-<p>以上为一个前端路由的简单实现，虽然简单，但实际上很多路由系统的根基都立于此，其他路由系统主要是对自身使用的框架机制的进行配套及优化，如与 react 配套的 <a href="https://github.com/ReactTraining/react-router" target="_blank" rel="noopener">react-router</a>。</p>
+<p>以上为一个前端路由的简单实现，虽然简单，但实际上很多路由系统的根基都立于此，其他路由系统主要是对自身使用的框架机制的进行配套及优化，如与 react 配套的 <a target="_blank" rel="noopener" href="https://github.com/ReactTraining/react-router">react-router</a>。</p>
 <h2 id="react-router-分析"><a href="#react-router-分析" class="headerlink" title="react-router 分析"></a>react-router 分析</h2><h3 id="react-router-与-history-结合形式"><a href="#react-router-与-history-结合形式" class="headerlink" title="react-router 与 history 结合形式"></a>react-router 与 history 结合形式</h3><p>react-router是基于history模块提供的api进行开发的，结合的形式本文记为<strong>包装形式</strong>。所以在开始对其分析之前，先<code>举一个简单的例子来说明如何进行对象的包装</code>。</p>
 <pre><code class="js">//原对象
-var historyModule = {
+var historyModule = &#123;
     listener: [],
 
-    listen: function(listener){
+    listen: function(listener)&#123;
         this.listener.push(listener);
         console.log(&#39;historyModule listen&#39;);
-    },
+    &#125;,
 
-    updateLocation: funcion(){
-        this.listener.forEach(function(listener){
+    updateLocation: funcion()&#123;
+        this.listener.forEach(function(listener)&#123;
             listener(&#39;new location&#39;);
-        })
-    }
-}
+        &#125;)
+    &#125;
+&#125;
 
 //Router将用historyModule对象将其包装
 
-var Router = {
-    source:{},
+var Router = &#123;
+    source:&#123;&#125;,
 
-    init: function(source){
+    init: function(source)&#123;
         this.source = source;
-    },
+    &#125;,
 
-    listen: function(listener){
-        return this.source.listen(function(location){
+    listen: function(listener)&#123;
+        return this.source.listen(function(location)&#123;
             console.log(&#39;Router listen tirgger&#39;);
             listener(location);
-        })
-    }
-}
+        &#125;)
+    &#125;
+&#125;
 
 //将historyModule注入到Router中
 Router.init(historyModule);
 
 //Router 注册监听
-Router.listen(function(location){
+Router.listen(function(location)&#123;
     console.log(loaction + &#39;-&gt; router setstate&#39;);
-})
+&#125;)
 // historyModule 触发回调
 historyModule.updateLocation()
 </code></pre>
 <p>返回：<br><img src="https://cloud.githubusercontent.com/assets/10385585/15266368/fd76c04a-19d4-11e6-9e9f-817f71eaab09.png" alt="demo"></p>
-<p>可看到 historyModule 中含有机制：historyModule.updateLocation() -&gt; listener( )，Router 通过对其进行包装开发，针对 historyModule 的机制对 Router 也起到了作用，即historyModule.updateLocation() 将触发 Router.listen 中的回调函数 。<a href="https://github.com/joeyguo/blog/blob/master/lab/2016/router/package-style.html" target="_blank" rel="noopener">点击查看完整代码</a><br>这种包装形式能够充分利用原对象（historyModule ）的内部机制，减少开发成本，也更好的分离包装函数（Router）的逻辑，减少对原对象的影响。</p>
+<p>可看到 historyModule 中含有机制：historyModule.updateLocation() -&gt; listener( )，Router 通过对其进行包装开发，针对 historyModule 的机制对 Router 也起到了作用，即historyModule.updateLocation() 将触发 Router.listen 中的回调函数 。<a target="_blank" rel="noopener" href="https://github.com/joeyguo/blog/blob/master/lab/2016/router/package-style.html">点击查看完整代码</a><br>这种包装形式能够充分利用原对象（historyModule ）的内部机制，减少开发成本，也更好的分离包装函数（Router）的逻辑，减少对原对象的影响。</p>
 <h3 id="react-router-使用方式"><a href="#react-router-使用方式" class="headerlink" title="react-router 使用方式"></a>react-router 使用方式</h3><p>react-router 以 <code>react component</code> 的组件方式提供 API， 包含 <code>Router，Route，Redirect，Link</code> 等等，这样能够充分利用 <code>react component</code> 提供的生命周期特性，同时也让定义路由跟写 react component 达到统一，如下</p>
 <pre><code class="js">    render((
-    &lt;Router history={browserHistory}&gt;
-        &lt;Route path=&quot;/&quot; component={App}&gt;
-        &lt;Route path=&quot;about&quot; component={About}/&gt;
-        &lt;Route path=&quot;users&quot; component={Users}&gt;
-            &lt;Route path=&quot;/user/:userId&quot; component={User}/&gt;
+    &lt;Router history=&#123;browserHistory&#125;&gt;
+        &lt;Route path=&quot;/&quot; component=&#123;App&#125;&gt;
+        &lt;Route path=&quot;about&quot; component=&#123;About&#125;/&gt;
+        &lt;Route path=&quot;users&quot; component=&#123;Users&#125;&gt;
+            &lt;Route path=&quot;/user/:userId&quot; component=&#123;User&#125;/&gt;
         &lt;/Route&gt;
-        &lt;Route path=&quot;*&quot; component={NoMatch}/&gt;
+        &lt;Route path=&quot;*&quot; component=&#123;NoMatch&#125;/&gt;
         &lt;/Route&gt;
     &lt;/Router&gt;
     ), document.body)
 </code></pre>
 <p>就这样，声明了一份含有 path to component 的各个映射的路由表。</p>
 <p>react-router 还提供的 Link 组件（如下），作为提供更新 url 的途径，触发 Link 后最终将通过如上面定义的路由表进行匹配，并拿到对应的 component 及 state 进行 render 渲染页面。</p>
-<pre><code class="js">&lt;Link to={`/user/89757`}&gt;&#39;joey&#39;&lt;/Link&gt;
+<pre><code class="js">&lt;Link to=&#123;`/user/89757`&#125;&gt;&#39;joey&#39;&lt;/Link&gt;
 </code></pre>
-<p>这里不细讲 react-router 的使用，详情可见：<a href="https://github.com/reactjs/react-router" target="_blank" rel="noopener">https://github.com/reactjs/react-router</a></p>
+<p>这里不细讲 react-router 的使用，详情可见：<a target="_blank" rel="noopener" href="https://github.com/reactjs/react-router">https://github.com/reactjs/react-router</a></p>
 <h2 id="从点击-Link-到-render-对应-component-，路由中发生了什么"><a href="#从点击-Link-到-render-对应-component-，路由中发生了什么" class="headerlink" title="从点击 Link 到 render 对应 component ，路由中发生了什么"></a>从点击 Link 到 render 对应 component ，路由中发生了什么</h2><h3 id="为何能够触发-render-component-？"><a href="#为何能够触发-render-component-？" class="headerlink" title="为何能够触发 render component ？"></a>为何能够触发 render component ？</h3><p>主要是因为触发了 <code>react setState</code> 的方法从而能够触发 <code>render component</code>。</p>
 <p>从顶层组件 Router 出发（下面代码从 <code>react-router/Router</code> 中摘取），可看到 Router 在 react component 生命周期之组件被挂载前 componentWillMount 中使用 this.history.listen 去注册了 url 更新的回调函数。回调函数将在 url 更新时触发，回调中的 setState 起到 render 了新的 component 的作用。</p>
-<pre><code class="js">    React.prototype.componentWillMount = function componentWillMount(){
+<pre><code class="js">    React.prototype.componentWillMount = function componentWillMount()&#123;
         var createHistory = this.props.history;
 
-        this.history = _useRoutes2[&#39;default&#39;](createHistory)({
+        this.history = _useRoutes2[&#39;default&#39;](createHistory)(&#123;
             routes: _RouteUtils.createRoutes(routes || children),
             parseQueryString: parseQueryString,
             stringifyQuery: stringifyQuery
-        });
+        &#125;);
 
-        this._unlisten = this.history.listen(function (error, state) {
+        this._unlisten = this.history.listen(function (error, state) &#123;
             _this.setState(state, _this.props.onUpdate);
-        });
-    }
+        &#125;);
+    &#125;
 </code></pre>
 <p>上面的 _useRoutes2 对 history 操作便是对其做一层包装，所以调用的 this.history 实际为包装以后的对象，该对象含有 _useRoutes2 中的 listen 方法，如下</p>
-<pre><code class="js">    function listen(listener){
-        rerurn listen(function(location){
+<pre><code class="js">    function listen(listener)&#123;
+        rerurn listen(function(location)&#123;
             // .. 省略其他
-          match(location, function (error, redirectLocation, nextState) {
+          match(location, function (error, redirectLocation, nextState) &#123;
             listener(null, nextState);
-          });
-        })
-    }
+          &#125;);
+        &#125;)
+    &#125;
 </code></pre>
 <p>可看到，上面代码中，主要分为两部分</p>
 <ul>
@@ -297,37 +297,37 @@ historyModule.updateLocation()
 <p>以上，为起始注册的监听，及回调的作用。</p>
 <h3 id="如何触发监听的回调函数的执行？"><a href="#如何触发监听的回调函数的执行？" class="headerlink" title="如何触发监听的回调函数的执行？"></a>如何触发监听的回调函数的执行？</h3><p>这里还得从如何更新 url 说起。一般来说，url 更新主要有两种方式：简单的 hash 更新或使用 history api 进行地址更新。</p>
 <p>在 react-router 中，其提供了 Link 组件，该组件能在 render 中使用，最终会表现为 a 标签，并将 Link 中的各个参数组合放它的 href 属性中。可以从 react-router/ Link 中看到，对该组件的点击事件进行了阻止了浏览器的默认跳转行为，而改用 history 模块的 <code>pushState</code> 方法去触发 url 更新。</p>
-<pre><code class="js">Link.prototype.render = function render() {
+<pre><code class="js">Link.prototype.render = function render() &#123;
     // .. 省略其他
-    props.onClick = function (e) {
+    props.onClick = function (e) &#123;
       return _this.handleClick(e);
-    };
-    if (history) {
+    &#125;;
+    if (history) &#123;
      // .. 省略其他
       props.href = history.createHref(to, query);
-    }
+    &#125;
     return _react2[&#39;default&#39;].createElement(&#39;a&#39;, props);
-};
+&#125;;
 
-Link.prototype.handleClick = function handleClick(event) {
+Link.prototype.handleClick = function handleClick(event) &#123;
     // .. 省略其他
     event.preventDefault();
     this.context.history.pushState(this.props.state, this.props.to, this.props.query);
-};
+&#125;;
 </code></pre>
 <p>对 history 模块的 pushState 方法对 url 的更新形式，同样分为两种，<br>分别在 <code>history/createBrowserHistory</code> 及 <code>history/createHashHistory</code> 各自的 <code>finishTransition</code> 中，如 <code>history/createBrowserHistory</code> 中使用的是 <code>window.history.replaceState(historyState, null, path)</code>;<br>而 <code>history/createHashHistory</code> 则使用 <code>window.location.hash = url</code>，<br>调用哪个是根据我们一开始创建 history 的方式。</p>
 <p>更新 url 的显示是一部分，另一部分是根据 url 去更新展示，也就是触发前面的监听。这是在前面 <code>finishTransition</code> 更新 url 之后实现的，调用的是 <code>history/createHistory</code> 中的 <code>updateLocation</code> 方法，<code>changeListeners</code> 中为 <code>history/createHistory</code> 中的 listen 中所添加的，如下</p>
-<pre><code class="js">function updateLocation(newLocation) {
+<pre><code class="js">function updateLocation(newLocation) &#123;
    // 示意代码
     location = newLocation;
-    changeListeners.forEach(function (listener) {
+    changeListeners.forEach(function (listener) &#123;
       listener(location);
-    });
-}
-function listen(listener) {
+    &#125;);
+&#125;
+function listen(listener) &#123;
      // 示意代码
     changeListeners.push(listener);
-}
+&#125;
 </code></pre>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><blockquote>
 <p>可以将以上 react-router 的整个包装闭环总结为</p>
@@ -342,7 +342,7 @@ function listen(listener) {
 </ul>
 <p>至于前进与后退的实现，是通过监听 popstate 以及 hashchange 的事件，当前进或后退 url 更新时，触发这两个事件的回调函数，回调的执行方式 Link 大致相同，最终同样更新了 UI ，这里就不再说明。</p>
 <p>react-router 主要是利用底层 history 模块的机制，通过结合 react 的架构机制做一层包装，实际自身的内容并不多，但其包装的思想笔者认为很值得学习，有兴趣的建议阅读下源码，相信会有其他收获。</p>
-<p><a href="https://github.com/joeyguo/blog/issues/2" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/joeyguo/blog/issues/2">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -367,7 +367,7 @@ function listen(listener) {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -390,7 +390,7 @@ function listen(listener) {
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -401,7 +401,7 @@ function listen(listener) {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一个极简前端路由实现"><span class="toc-number">1.1.</span> <span class="toc-text">一个极简前端路由实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#react-router-分析"><span class="toc-number">1.2.</span> <span class="toc-text">react-router 分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#react-router-与-history-结合形式"><span class="toc-number">1.2.1.</span> <span class="toc-text">react-router 与 history 结合形式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#react-router-使用方式"><span class="toc-number">1.2.2.</span> <span class="toc-text">react-router 使用方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#从点击-Link-到-render-对应-component-，路由中发生了什么"><span class="toc-number">1.3.</span> <span class="toc-text">从点击 Link 到 render 对应 component ，路由中发生了什么</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#为何能够触发-render-component-？"><span class="toc-number">1.3.1.</span> <span class="toc-text">为何能够触发 render component ？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何触发监听的回调函数的执行？"><span class="toc-number">1.3.2.</span> <span class="toc-text">如何触发监听的回调函数的执行？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.4.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%B8%AA%E6%9E%81%E7%AE%80%E5%89%8D%E7%AB%AF%E8%B7%AF%E7%94%B1%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.1.</span> <span class="toc-text">一个极简前端路由实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#react-router-%E5%88%86%E6%9E%90"><span class="toc-number">1.2.</span> <span class="toc-text">react-router 分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#react-router-%E4%B8%8E-history-%E7%BB%93%E5%90%88%E5%BD%A2%E5%BC%8F"><span class="toc-number">1.2.1.</span> <span class="toc-text">react-router 与 history 结合形式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#react-router-%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">1.2.2.</span> <span class="toc-text">react-router 使用方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E%E7%82%B9%E5%87%BB-Link-%E5%88%B0-render-%E5%AF%B9%E5%BA%94-component-%EF%BC%8C%E8%B7%AF%E7%94%B1%E4%B8%AD%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88"><span class="toc-number">1.3.</span> <span class="toc-text">从点击 Link 到 render 对应 component ，路由中发生了什么</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BD%95%E8%83%BD%E5%A4%9F%E8%A7%A6%E5%8F%91-render-component-%EF%BC%9F"><span class="toc-number">1.3.1.</span> <span class="toc-text">为何能够触发 render component ？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E8%A7%A6%E5%8F%91%E7%9B%91%E5%90%AC%E7%9A%84%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E7%9A%84%E6%89%A7%E8%A1%8C%EF%BC%9F"><span class="toc-number">1.3.2.</span> <span class="toc-text">如何触发监听的回调函数的执行？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.4.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -420,7 +420,7 @@ function listen(listener) {
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

@@ -37,7 +37,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -106,7 +106,7 @@
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    26 mins.
+                    27 mins.
                 </span>
                 
                 
@@ -143,7 +143,7 @@
             <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><blockquote>
 <p>首先，这篇文章是根据 webpack 版本 (即 v3.4.1) 撰写，较长一段时间内无需担心过时的问题。其次，这应该会是一篇极长的文章，涵盖了基本的使用方法，有更高级功能的需求可以参考官方文档继续学习。再次，即使是基本的功能，也内容繁多，我尽可能地解释通俗易懂，将我学习过程中的疑惑和坑一一解释，如有纰漏，敬请雅正。再次，为了清晰有效地讲解，我会演示从零编写 demo，只要一步步跟着做，就会清晰许多。</p>
 </blockquote>
-<p><a href="https://github.com/ShinichiKudo-FE/webpack-demo" target="_blank" rel="noopener">本文demo地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ShinichiKudo-FE/webpack-demo">本文demo地址</a></p>
 <h2 id="Webpack，何许人也？"><a href="#Webpack，何许人也？" class="headerlink" title="Webpack，何许人也？"></a>Webpack，何许人也？</h2><p>借用官方的说法:</p>
 <blockquote>
 <p>webpack is a module bundler. Its main purpose is to bundle JavaScript files for usage in a browser, yet it is also capable of transforming, bundling, or packaging just about any resource or asset.</p>
@@ -156,8 +156,9 @@
 <p>而gulp／grunt 是自动化构建工具，或者叫任务运行器（task runner），是把你所有重复的手动操作让代码来做，例如压缩JS代码、CSS代码，代码检查、代码编译等等，自动化构建工具并不能把所有模块打包到一起，也不能构建不同模块之间的依赖图。</p>
 <p>两者来比较的话，gulp/grunt 无法做模块打包的事，webpack 虽然有 loader 和 plugin可以做一部分 gulp／grunt 能做的事，但是终究 webpack 的插件还是不如 gulp／grunt 的插件丰富，能做的事比较有限。</p>
 <p>于是有人两者结合着用，将 webpack 放到 gulp／grunt 中用。然而，更好的方法是用 npm scripts 取代 gulp／grunt，npm 是 node 的包管理器 (node package manager)，用于管理 node 的第三方软件包，npm 对于任务命令的良好支持让你最终省却了编写任务代码的必要，取而代之的，是老祖宗的几个命令行，仅靠几句命令行就足以完成你的模块打包和自动化构建的所有需求。</p>
-<a id="more"></a>
-<h2 id="准备开始"><a href="#准备开始" class="headerlink" title="准备开始"></a>准备开始</h2><p>先来看看一个 webpack 的一个完备的配置文件，是 <a href="https://webpack.js.org/configuration/#options" target="_blank" rel="noopener">介样</a> 的，当然啦，这里面有很多配置项是即使到这个软件被废弃你也用不上的：），所以无需担心。</p>
+<span id="more"></span>
+
+<h2 id="准备开始"><a href="#准备开始" class="headerlink" title="准备开始"></a>准备开始</h2><p>先来看看一个 webpack 的一个完备的配置文件，是 <a target="_blank" rel="noopener" href="https://webpack.js.org/configuration/#options">介样</a> 的，当然啦，这里面有很多配置项是即使到这个软件被废弃你也用不上的：），所以无需担心。</p>
 <h2 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h2><p>开始之前，请确定你已经安装了当前 Node 的较新版本。</p>
 <p>然后执行以下命令以新建我们的 demo 目录：</p>
 <pre><code class="javascript">$ mkdir webpack-demo &amp;&amp; cd webpack-demo &amp;&amp; npm init -y
@@ -170,13 +171,13 @@ $ mkdir src &amp;&amp; cd src &amp;&amp; touch index.js
 <p>src/index.js</p>
 <pre><code class="javascript">import _ from &#39;lodash&#39;;
 
-function component() {
+function component() &#123;
   const element = document.createElement(&#39;div&#39;);
 
   element.innerHTML = _.join([&#39;Hello&#39;, &#39;webpack&#39;], &#39; &#39;);
 
   return element;
-}
+&#125;
 
 document.body.appendChild(component());
 </code></pre>
@@ -207,9 +208,9 @@ Version: webpack 3.4.1
 Time: 390ms
     Asset    Size  Chunks                    Chunk Names
 bundle.js  544 kB       0  [emitted]  [big]  main
-   [0] ./src/index.js 225 bytes {0} [built]
-   [2] (webpack)/buildin/global.js 509 bytes {0} [built]
-   [3] (webpack)/buildin/module.js 517 bytes {0} [built]
+   [0] ./src/index.js 225 bytes &#123;0&#125; [built]
+   [2] (webpack)/buildin/global.js 509 bytes &#123;0&#125; [built]
+   [3] (webpack)/buildin/module.js 517 bytes &#123;0&#125; [built]
     + 1 hidden module
 </code></pre>
 <p>现在，你已经得到了你的第一个打包文件 (bundle.js) 了。</p>
@@ -219,26 +220,26 @@ bundle.js  544 kB       0  [emitted]  [big]  main
 <p>webpack.config.js</p>
 <pre><code class="javascript">const path = require(&#39;path&#39;);
 
-module.exports = {
+module.exports = &#123;
   entry: &#39;./src/index.js&#39;, // 入口起点，可以指定多个入口起点
-  output: { // 输出，只可指定一个输出配置
+  output: &#123; // 输出，只可指定一个输出配置
     filename: &#39;bundle.js&#39;, // 输出文件名
     path: path.resolve(__dirname, &#39;dist&#39;) // 输出文件所在的目录
-  }
-};
+  &#125;
+&#125;;
 </code></pre>
 <p>执行：</p>
 <pre><code class="javascript">$ ./node_modules/.bin/webpack --config webpack.config.js //`--config` 制定 webpack 的配置文件，默认是 `webpack.config.js`
 </code></pre>
 <p>所以这里可以省却 <code>--config webpack.config.js</code>。但是每次都要写 <code>./node_modules/.bin/webpack</code> 实在让人不爽，所以我们要动用 <code>NPM Scripts</code>。</p>
 <p>package.json</p>
-<pre><code class="javascript">{
+<pre><code class="javascript">&#123;
   ...
-  &quot;scripts&quot;: {
+  &quot;scripts&quot;: &#123;
     &quot;build&quot;: &quot;webpack&quot;
-  },
+  &#125;,
   ...
-}
+&#125;
 </code></pre>
 <p>执行：</p>
 <pre><code class="javascript">$ npm run build
@@ -251,45 +252,45 @@ module.exports = {
 <p>style-loader 通过插入 style 标签将 CSS 加入到 DOM 中，<code>css-loader</code> 会像解释 <code>import/require()</code> 一样解释 @import 和 url()。</p>
 <pre><code class="javascript">const path = require(&#39;path&#39;);
 
-module.exports = {
+module.exports = &#123;
   entry: &#39;./src/index.js&#39;,
-  output: {
+  output: &#123;
     filename: &#39;bundle.js&#39;, 
     path: path.resolve(__dirname, &#39;dist&#39;)
-  },
-  module: { // 如何处理项目中不同类型的模块
+  &#125;,
+  module: &#123; // 如何处理项目中不同类型的模块
     rules: [ // 用于规定在不同模块被创建时如何处理模块的规则数组
-      {
+      &#123;
         test: /\.css$/, // 匹配特定文件的正则表达式或正则表达式数组
         use: [ // 应用于模块的 loader 使用列表
           &#39;style-loader&#39;,
           &#39;css-loader&#39;
         ]
-      }
+      &#125;
     ]
-  }
-};
+  &#125;
+&#125;;
 </code></pre>
 <p>我们来创建一个 CSS 文件：</p>
 <pre><code class="javascript">$ cd src &amp;&amp; touch style.css
 </code></pre>
 <p>src/style.css</p>
-<pre><code class="css">.hello {
+<pre><code class="css">.hello &#123;
   color: red;
-}
+&#125;
 </code></pre>
 <p>src/index.js</p>
 <pre><code class="javascript">import _ from &#39;lodash&#39;;
 import &#39;./style.css&#39;; // 通过`import`引入 CSS 文件
 
-function component() {
+function component() &#123;
   const element = document.createElement(&#39;div&#39;);
-
+    
   element.innerHTML = _.join([&#39;Hello&#39;, &#39;webpack&#39;], &#39; &#39;);
   element.classList.add(&#39;hello&#39;); // 在相应元素上添加类名
-
+    
   return element;
-}
+&#125;
 
 document.body.appendChild(component());
 </code></pre>
@@ -300,30 +301,30 @@ document.body.appendChild(component());
 <p>webpack.config.js</p>
 <pre><code class="javascript">const path = require(&#39;path&#39;);
 
-module.exports = {
+module.exports = &#123;
   entry: &#39;./src/index.js&#39;,
-  output: {
+  output: &#123;
     filename: &#39;bundle.js&#39;, 
     path: path.resolve(__dirname, &#39;dist&#39;)
-  },
-  module: {
+  &#125;,
+  module: &#123;
     rules: [
-      {
+      &#123;
         test: /\.css$/,
         use: [
           &#39;style-loader&#39;,
           &#39;css-loader&#39;
         ]
-      },
-      { // 增加加载图片的规则
+      &#125;,
+      &#123; // 增加加载图片的规则
         test: /\.(png|svg|jpg|gif)$/,
         use: [
           &#39;file-loader&#39;
         ]
-      }
+      &#125;
     ]
-  }
-};
+  &#125;
+&#125;;
 </code></pre>
 <p>我们在当前项目的Src目录中如下增加图片</p>
 <p>src/index.js</p>
@@ -331,86 +332,85 @@ module.exports = {
 import &#39;./style.css&#39;;
 import Icon from &#39;./icon.jpg&#39;; // Icon 是图片的 URL
 
-function component() {
+function component() &#123;
   const element = document.createElement(&#39;div&#39;);
-
+    
   element.innerHTML = _.join([&#39;Hello&#39;, &#39;webpack&#39;], &#39; &#39;);
   element.classList.add(&#39;hello&#39;);
-
+  
   const myIcon = new Image();
   myIcon.src = Icon;
 
   element.appendChild(myIcon);
-
+  
   return element;
-}
+&#125;
 
 document.body.appendChild(component());
 </code></pre>
 <p>src/style.css</p>
-<pre><code class="javascript">.hello {
+<pre><code class="javascript">.hello &#123;
   color: red;
   background: url(./icon.jpg);
-}
+&#125;
 </code></pre>
 <p>再<code>npm run build</code>之。现在你可以看到单独的图片和以图片为基础的背景图了。</p>
 <h3 id="加载字体"><a href="#加载字体" class="headerlink" title="加载字体"></a>加载字体</h3><p>加载字体用的也是 file-loader。</p>
 <p>webpack.config.js</p>
 <pre><code class="javascript">const path = require(&#39;path&#39;);
 
-module.exports = {
+module.exports = &#123;
   entry: &#39;./src/index.js&#39;,
-  output: {
+  output: &#123;
     filename: &#39;bundle.js&#39;, 
     path: path.resolve(__dirname, &#39;dist&#39;)
-  },
-  module: {
+  &#125;,
+  module: &#123;
     rules: [
-      {
+      &#123;
         test: /\.css$/,
         use: [
           &#39;style-loader&#39;,
           &#39;css-loader&#39;
         ]
-      },
-      {
+      &#125;,
+      &#123;
         test: /\.(png|svg|jpg|gif)$/,
         use: [
           &#39;file-loader&#39;
         ]
-      },
-      { // 增加加载字体的规则
+      &#125;,
+      &#123; // 增加加载字体的规则
         test: /\.(woff|woff2|eot|ttf|otf)$/,
         use: [
           &#39;file-loader&#39;
         ]
-      }
+      &#125;
     ]
-  }
-};
-
+  &#125;
+&#125;;
 </code></pre>
 <p>在当前项目的Src目录中如下增加字体：</p>
 <p>src/style.css</p>
-<pre><code class="css">@font-face {
+<pre><code class="css">@font-face &#123;
   font-family: MyFont;
   src: url(./my-font.ttf);
-}
+&#125;
 
-.hello {
+.hello &#123;
   color: red;
   background: url(./icon.jpg);
   font-family: MyFont;
-}
+&#125;
 </code></pre>
 <p>运行打包命令之后便可以看到打包好的文件和发生改变的页面。</p>
 <h3 id="加载-JSON-文件"><a href="#加载-JSON-文件" class="headerlink" title="加载 JSON 文件"></a>加载 JSON 文件</h3><p>因为 webpack 对 JSON 文件的支持是内置的，所以可以直接添加。</p>
 <p>src/data.json</p>
-<pre><code class="json">{
+<pre><code class="json">&#123;
   &quot;name&quot;: &quot;webpack-demo&quot;,
   &quot;version&quot;: &quot;1.0.0&quot;,
   &quot;author&quot;: &quot;Sam Yang&quot;
-}
+&#125;
 </code></pre>
 <p>src/index.js</p>
 <pre><code class="javascript">import _ from &#39;lodash&#39;;
@@ -418,9 +418,9 @@ import &#39;./style.css&#39;;
 import Icon from &#39;./icon.jpg&#39;;
 import Data from &#39;./data.json&#39;; // Data 变量包含可直接使用的 JSON 解析得到的对象
 
-function component() {
+function component() &#123;
   const element = document.createElement(&#39;div&#39;);
-
+    
   element.innerHTML = _.join([&#39;Hello&#39;, &#39;webpack&#39;], &#39; &#39;);
   element.classList.add(&#39;hello&#39;);
 
@@ -430,18 +430,18 @@ function component() {
   element.appendChild(myIcon);
 
   console.log(Data);
-
+    
   return element;
-}
+&#125;
 
 document.body.appendChild(component());
 </code></pre>
 <p>关于其他文件的加载，可以寻求相应的 loader。</p>
 <h2 id="输出管理"><a href="#输出管理" class="headerlink" title="输出管理"></a>输出管理</h2><p>前面我们只有一个输入文件，但现实是我们往往有不止一个输入文件，这时我们就需要输入多个入口文件并管理输出文件。我们在 src 目录下增加一个 print.js 文件。</p>
 <p>src/print.js</p>
-<pre><code class="javascript">export default function printMe() {
+<pre><code class="javascript">export default function printMe() &#123;
   console.log(&#39;I get called from print.js!&#39;);
-}
+&#125;
 </code></pre>
 <p>src/index.js</p>
 <pre><code class="javascript">import _ from &#39;lodash&#39;;
@@ -450,10 +450,10 @@ import printMe from &#39;./print.js&#39;;
 // import Icon from &#39;./icon.jpg&#39;;
 // import Data from &#39;./data.json&#39;;
 
-function component() {
+function component() &#123;
   const element = document.createElement(&#39;div&#39;);
   const btn = document.createElement(&#39;button&#39;);
-
+    
   element.innerHTML = _.join([&#39;Hello&#39;, &#39;webpack&#39;], &#39; &#39;);
   // element.classList.add(&#39;hello&#39;);
 
@@ -468,9 +468,9 @@ function component() {
   btn.onclick = printMe;
 
   element.appendChild(btn);
-
+    
   return element;
-}
+&#125;
 
 document.body.appendChild(component());
 </code></pre>
@@ -490,19 +490,19 @@ document.body.appendChild(component());
 <p>webpack.config.js</p>
 <pre><code class="javascript">const path = require(&#39;path&#39;);
 
-module.exports = {
+module.exports = &#123;
   // entry: &#39;./src/index.js&#39;,
-  entry: {
+  entry: &#123;
     app: &#39;./src/index.js&#39;,
     print: &#39;./src/print.js&#39;
-  },
-  output: {
+  &#125;,
+  output: &#123;
     // filename: &#39;bundle.js&#39;,
     filename: &#39;[name].bundle.js&#39;, // 根据入口起点名动态生成 bundle 名，可以使用像 &quot;js/[name]/bundle.js&quot; 这样的文件夹结构
     path: path.resolve(__dirname, &#39;dist&#39;)
-  },
+  &#125;,
   // ...
-};
+&#125;;
 </code></pre>
 <blockquote>
 <p>Tips<br>filename: ‘[name].bundle.js’中的[name]会替换为对应的入口起点名，其他可用的替换请参见 output.filename。</p>
@@ -518,25 +518,25 @@ module.exports = {
 <pre><code class="javascript">const path = require(&#39;path&#39;);
 const HtmlWebpackPlugin = require(&#39;html-webpack-plugin&#39;);
 
-module.exports = {
+module.exports = &#123;
   // entry: &#39;./src/index.js&#39;,
-  entry: {
+  entry: &#123;
     app: &#39;./src/index.js&#39;,
     print: &#39;./src/print.js&#39;
-  },
-  output: {
+  &#125;,
+  output: &#123;
     // filename: &#39;bundle.js&#39;,
     filename: &#39;[name].bundle.js&#39;,
     path: path.resolve(__dirname, &#39;dist&#39;)
-  },
+  &#125;,
   plugins: [ // 插件属性，是插件的实例数组
-    new HtmlWebpackPlugin({
+    new HtmlWebpackPlugin(&#123;
       title: &#39;webpack demo&#39;,  // 生成 HTML 文档的标题
       filename: &#39;index.html&#39; // 写入 HTML 文件的文件名，默认 `index.html`
-    })
+    &#125;)
   ],
   // ...
-};
+&#125;;
 </code></pre>
 <p>你可以先把 dist 文件夹的index.html文件删除，然后执行打包命令。咻咻咻，我们看到 dist 目录下已经自动生成了一个index.html文件，但即使不删除原先的index.html，该插件默认生成的index.html也会替换原本的index.html。</p>
 <p>此刻，当你细细观察 dist 目录时，虽然现在生成了新的打包文件，但原本的打包文件bundle.js及其他不用的文件仍然存在在 dist 目录中，所以在每次构建前我们需要晴空 dist 目录，我们使用 <code>CleanWebpackPlugin</code> 插件。</p>
@@ -547,27 +547,26 @@ module.exports = {
 const HtmlWebpackPlugin = require(&#39;html-webpack-plugin&#39;);
 const CleanWebpackPlugin = require(&#39;clean-webpack-plugin&#39;);
 
-module.exports = {
+module.exports = &#123;
   // entry: &#39;./src/index.js&#39;,
-  entry: {
+  entry: &#123;
     app: &#39;./src/index.js&#39;,
     print: &#39;./src/print.js&#39;
-  },
-  output: {
+  &#125;,
+  output: &#123;
     // filename: &#39;bundle.js&#39;,
     filename: &#39;[name].bundle.js&#39;,
     path: path.resolve(__dirname, &#39;dist&#39;)
-  },
+  &#125;,
   plugins: [
-    new HtmlWebpackPlugin({
+    new HtmlWebpackPlugin(&#123;
       title: &#39;webpack demo&#39;,
       filename: &#39;index.html&#39;
-    }),
+    &#125;),
     new CleanWebpackPlugin([&#39;dist&#39;]) // 第一个参数是要清理的目录的字符串数组
   ],
   // ...
-};
-
+&#125;;
 </code></pre>
 <p>打包之，现在，dist 中只存在打包生成的文件。</p>
 <h2 id="webpack-提供了很多便于开发时使用的功能，来一一看看吧。"><a href="#webpack-提供了很多便于开发时使用的功能，来一一看看吧。" class="headerlink" title="webpack 提供了很多便于开发时使用的功能，来一一看看吧。"></a>webpack 提供了很多便于开发时使用的功能，来一一看看吧。</h2><h3 id="使用代码映射-source-map"><a href="#使用代码映射-source-map" class="headerlink" title="使用代码映射 (source map)"></a>使用代码映射 (source map)</h3><p>当你的代码被打包后，如果打包后的代码发生了错误，你很难追踪到错误发生的原始位置，这个时候，我们就需要代码映射 (source map) 这种工具，它能将编译后的代码映射回原始的源码，你的错误是起源于打包前的b.js的某个位置，代码映射就能告诉你错误是那个模块的那个位置。webpack 默认提供了 10 种风格的代码映射，使用它们会明显影响到构建 (build) 和重构建 (rebuild，每次修改后需要重新构建) 的速度，十种风格的差异可以参看 devtool。关于如何选择映射风格可以参看 Webpack devtool source map。这里，我们为了准确显示错误位置，选择速度较慢的<code>inline-source-map</code>。</p>
@@ -576,22 +575,22 @@ module.exports = {
 const HtmlWebpackPlugin = require(&#39;html-webpack-plugin&#39;);
 const CleanWebpackPlugin = require(&#39;clean-webpack-plugin&#39;);
 
-module.exports = {
+module.exports = &#123;
   devtool: &#39;inline-source-map&#39;, // 控制是否生成以及如何生成 source map
   // entry: &#39;./src/index.js&#39;,
-  entry: {
+  entry: &#123;
     app: &#39;./src/index.js&#39;,
     print: &#39;./src/print.js&#39;
-  },
+  &#125;,
   // ...
-};
+&#125;;
 </code></pre>
 <p>现在来手动制造一些错误：</p>
 <p>src/print.js</p>
-<pre><code class="javascript">  export default function printMe() {
+<pre><code class="javascript">  export default function printMe() &#123;
 -   console.log(&#39;I get called from print.js!&#39;);
 +   cosnole.log(&#39;I get called from print.js!&#39;);
-  }
+  &#125;
 </code></pre>
 <p>打包之后打开index.html再点击按钮，你就会看到控制台显示如下报错：</p>
 <pre><code class="javascript"> Uncaught ReferenceError: cosnole is not defined
@@ -606,28 +605,28 @@ module.exports = {
 const HtmlWebpackPlugin = require(&#39;html-webpack-plugin&#39;);
 const CleanWebpackPlugin = require(&#39;clean-webpack-plugin&#39;);
 
-module.exports = {
+module.exports = &#123;
   devtool: &#39;inline-source-map&#39;,
-  devServer: { // 检测代码变化并自动重新编译并自动刷新浏览器
+  devServer: &#123; // 检测代码变化并自动重新编译并自动刷新浏览器
     contentBase: path.resolve(__dirname, &#39;dist&#39;) // 设置静态资源的根目录
-  },
+  &#125;,
   // entry: &#39;./src/index.js&#39;,
-  entry: {
+  entry: &#123;
     app: &#39;./src/index.js&#39;,
     print: &#39;./src/print.js&#39;
-  },
+  &#125;,
   // ...
-};
+&#125;;
 </code></pre>
 <p>package.json</p>
-<pre><code class="javascript">{
+<pre><code class="javascript">&#123;
   ...
-  &quot;scripts&quot;: {
+  &quot;scripts&quot;: &#123;
     &quot;build&quot;: &quot;webpack&quot;,
     &quot;start&quot;: &quot;webpack-dev-server --open&quot;
-  },
+  &#125;,
   ...
-}
+&#125;
 </code></pre>
 <blockquote>
 <p>Tips<br>使用 webpack-dev-server 时，webpack 并没有将所有生成的文件写入磁盘，而是放在内存中，提供更快的内存内访问，便于实时更新。</p>
@@ -643,30 +642,30 @@ const HtmlWebpackPlugin = require(&#39;html-webpack-plugin&#39;);
 const CleanWebpackPlugin = require(&#39;clean-webpack-plugin&#39;);
 const webpack = require(&#39;webpack&#39;); // 引入 webpack 便于调用其内置插件
 
-module.exports = {
+module.exports = &#123;
   devtool: &#39;inline-source-map&#39;,
-  devServer: {
+  devServer: &#123;
     contentBase: path.resolve(__dirname, &#39;dist&#39;),
     hot: true, // 告诉 dev-server 我们在用 HMR
     hotOnly: true // 指定如果热加载失败了禁止刷新页面 (这是 webpack 的默认行为)，这样便于我们知道失败是因为何种错误
-  },
+  &#125;,
   // entry: &#39;./src/index.js&#39;,
-  entry: {
+  entry: &#123;
     app: &#39;./src/index.js&#39;,
     // print: &#39;./src/print.js&#39;
-  },
+  &#125;,
   // ...
   plugins: [
-    new HtmlWebpackPlugin({
+    new HtmlWebpackPlugin(&#123;
       title: &#39;webpack demo&#39;,
       filename: &#39;index.html&#39;
-    }),
+    &#125;),
     new CleanWebpackPlugin([&#39;dist&#39;]),
     new webpack.HotModuleReplacementPlugin(), // 启用 HMR
     new webpack.NamedModulesPlugin() // 打印日志信息时 webpack 默认使用模块的数字 ID 指代模块，不便于 debug，这个插件可以将其替换为模块的真实路径
   ],
   // ...
-};
+&#125;;
 </code></pre>
 <blockquote>
 <p>Tips<br>webpack-dev-server 会为每个入口文件创建一个客户端脚本，这个脚本会监控该入口文件的依赖模块的更新，如果该入口文件编写了 HMR 处理函数，它就能接收依赖模块的更新，反之，更新会向上冒泡，直到客户端脚本仍没有处理函数的话，webpack-dev-server 会重新加载整个页面。如果入口文件本身发生了更新，因为向上会冒泡到客户端脚本，并且不存在 HMR 处理函数，所以会导致页面重载。</p>
@@ -679,10 +678,10 @@ import printMe from &#39;./print.js&#39;;
 // import Icon from &#39;./icon.jpg&#39;;
 // import Data from &#39;./data.json&#39;;
 
-function component() {
+function component() &#123;
   const element = document.createElement(&#39;div&#39;);
   const btn = document.createElement(&#39;button&#39;);
-
+    
   element.innerHTML = _.join([&#39;Hello&#39;, &#39;webpack&#39;], &#39; &#39;);
   // element.classList.add(&#39;hello&#39;);
 
@@ -697,25 +696,25 @@ function component() {
   btn.onclick = printMe;
 
   element.appendChild(btn);
-
+    
   return element;
-}
+&#125;
 
 document.body.appendChild(component());
 
-if(module.hot) { // 习惯上我们会检查是否可以访问 `module.hot` 属性
-  module.hot.accept(&#39;./print.js&#39;, function() { // 接受给定依赖模块的更新，并触发一个回调函数来对这些更新做出响应
+if(module.hot) &#123; // 习惯上我们会检查是否可以访问 `module.hot` 属性
+  module.hot.accept(&#39;./print.js&#39;, function() &#123; // 接受给定依赖模块的更新，并触发一个回调函数来对这些更新做出响应
     console.log(&#39;Accepting the updated printMe module!&#39;);
     printMe();
-  });
-}
+  &#125;);
+&#125;
 </code></pre>
 <p><code>npm start</code>之。为了演示效果，我们做如下修改：</p>
 <p>src/print.js</p>
-<pre><code class="javascript">  export default function printMe() {
+<pre><code class="javascript">  export default function printMe() &#123;
 -   console.log(&#39;I get called from print.js!&#39;);
 +   console.log(&#39;Updating print.js...&#39;);
-  }
+  &#125;
 </code></pre>
 <p>我们会看到控制台打印出的信息中含有以下几行：</p>
 <pre><code class="javascript">index.js:33 Accepting the updated printMe module!
@@ -741,16 +740,16 @@ import printMe from &#39;./print.js&#39;;
 var element = component();
 document.body.appendChild(element);
 
-if(module.hot) {
-  module.hot.accept(&#39;./print.js&#39;, function() {
+if(module.hot) &#123;
+  module.hot.accept(&#39;./print.js&#39;, function() &#123;
     console.log(&#39;Accepting the updated printMe module!&#39;);
     // printMe();
-
+    
     document.body.removeChild(element);
     element = component();
     document.body.appendChild(element);
-  });
-}
+  &#125;);
+&#125;
 </code></pre>
 <p>模块热替换也可以用于样式的修改，效果跟控制台修改一样一样的。</p>
 <p>src/index.js</p>
@@ -765,9 +764,9 @@ import &#39;./style.css&#39;;
 <p><code>npm start</code>之，做如下修改：</p>
 <pre><code class="css">/* ... */
 
-body {
+body &#123;
   background-color: yellow;
-}
+&#125;
 </code></pre>
 <p>可以发现在不重载页面的前提下我们对样式的修改进行了热加载，棒！</p>
 <h2 id="生产环境"><a href="#生产环境" class="headerlink" title="生产环境"></a>生产环境</h2><h3 id="自动方式"><a href="#自动方式" class="headerlink" title="自动方式"></a>自动方式</h3><p>我们只需要运行webpack -p (相当于 webpack –optimize-minimize –define process.env.NODE_ENV=”‘production’”)这个命令，便可以自动构建生产版本的应用，这个命令会完成以下步骤：</p>
@@ -780,14 +779,14 @@ body {
 <pre><code class="javascript">$ npm i --save-dev cross-env
 </code></pre>
 <p>package.json</p>
-<pre><code class="json">{
+<pre><code class="json">&#123;
   ...
-  &quot;scripts&quot;: {
+  &quot;scripts&quot;: &#123;
     &quot;build&quot;: &quot;cross-env NODE_ENV=production webpack -p&quot;,
     &quot;start&quot;: &quot;webpack-dev-server --open&quot;
-  },
+  &#125;,
   ...
-}
+&#125;
 </code></pre>
 <p>现在可以在配置文件中使用<code>process.env.NODE_ENV</code>了。</p>
 <p>webpack.config.js</p>
@@ -796,25 +795,25 @@ const HtmlWebpackPlugin = require(&#39;html-webpack-plugin&#39;);
 const CleanWebpackPlugin = require(&#39;clean-webpack-plugin&#39;);
 const webpack = require(&#39;webpack&#39;);
 
-module.exports = {
+module.exports = &#123;
   // ...
-  output: {
+  output: &#123;
     // filename: &#39;bundle.js&#39;,
     // filename: &#39;[name].bundle.js&#39;,
     filename: process.env.NODE_ENV === &#39;production&#39; ? &#39;[name].[chunkhash].js&#39; : &#39;[name].bundle.js&#39;, // 在配置文件中使用`process.env.NODE_ENV`
     path: path.resolve(__dirname, &#39;dist&#39;)
-  },
+  &#125;,
   plugins: [
-    new HtmlWebpackPlugin({
+    new HtmlWebpackPlugin(&#123;
       title: &#39;webpack demo&#39;,
       filename: &#39;index.html&#39;
-    }),
+    &#125;),
     new CleanWebpackPlugin([&#39;dist&#39;]),
     // new webpack.HotModuleReplacementPlugin(), // 关闭 HMR 功能
     new webpack.NamedModulesPlugin()
   ],
   // ...
-};
+&#125;;
 </code></pre>
 <blockquote>
 <p>Tips<br>[chunkhash]不能和 HMR 一起使用，换句话说，不应该在开发环境中使用 [chunkhash] (或者 [hash])，这会导致许多问题。</p>
@@ -828,46 +827,45 @@ module.exports = {
 const HtmlWebpackPlugin = require(&#39;html-webpack-plugin&#39;);
 const CleanWebpackPlugin = require(&#39;clean-webpack-plugin&#39;);
 
-module.exports = {
-  entry: {
+module.exports = &#123;
+  entry: &#123;
     app: &#39;./src/index.js&#39;,
     print: &#39;./src/print.js&#39;
-  },
-  output: {
+  &#125;,
+  output: &#123;
     path: path.resolve(__dirname, &#39;dist&#39;)
-  },
+  &#125;,
   plugins: [
-    new HtmlWebpackPlugin({
+    new HtmlWebpackPlugin(&#123;
       title: &#39;webpack demo&#39;,
       filename: &#39;index.html&#39;
-    }),
+    &#125;),
     new CleanWebpackPlugin([&#39;dist&#39;])
   ],
-  module: {
+  module: &#123;
     rules: [
-      {
+      &#123;
         test: /\.css$/,
         use: [
           &#39;style-loader&#39;,
           &#39;css-loader&#39;
         ]
-      },
-      {
+      &#125;,
+      &#123;
         test: /\.(png|svg|jpg|gif)$/,
         use: [
           &#39;file-loader&#39;
         ]
-      },
-      {
+      &#125;,
+      &#123;
         test: /\.(woff|woff2|eot|ttf|otf)$/,
         use: [
           &#39;file-loader&#39;
         ]
-      }
+      &#125;
     ]
-  }
-};
-
+  &#125;
+&#125;;
 </code></pre>
 <p>webpack.dev.js</p>
 <pre><code class="javascript">const path = require(&#39;path&#39;);
@@ -875,24 +873,24 @@ const webpack = require(&#39;webpack&#39;);
 const Merge = require(&#39;webpack-merge&#39;);
 const CommonConfig = require(&#39;./webpack.common.js&#39;);
 
-module.exports = Merge(CommonConfig, {
+module.exports = Merge(CommonConfig, &#123;
   devtool: &#39;cheap-module-eval-source-map&#39;,
-  devServer: {
+  devServer: &#123;
     contentBase: path.resolve(__dirname, &#39;dist&#39;),
     hot: true,
     hotOnly: true
-  },
-  output: {
+  &#125;,
+  output: &#123;
     filename: &#39;[name].bundle.js&#39;
-  },
+  &#125;,
   plugins: [
-    new webpack.DefinePlugin({
+    new webpack.DefinePlugin(&#123;
       &#39;process.env.NODE_ENV&#39;: JSON.stringify(&#39;development&#39;) // 在编译的代码里设置了`process.env.NODE_ENV`变量
-    }),
+    &#125;),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin()
   ]
-});
+&#125;);
 </code></pre>
 <p>webpack.prod.js</p>
 <pre><code class="javascript">const path = require(&#39;path&#39;);
@@ -900,34 +898,33 @@ const webpack = require(&#39;webpack&#39;);
 const Merge = require(&#39;webpack-merge&#39;);
 const CommonConfig = require(&#39;./webpack.common.js&#39;);
 
-module.exports = Merge(CommonConfig, {
+module.exports = Merge(CommonConfig, &#123;
   devtool: &#39;cheap-module-source-map&#39;,
-  output: {
+  output: &#123;
     filename: &#39;[name].[chunkhash].js&#39;
-  },
+  &#125;,
   plugins: [
-    new webpack.DefinePlugin({
+    new webpack.DefinePlugin(&#123;
       &#39;process.env.NODE_ENV&#39;: JSON.stringify(&#39;production&#39;)
-    }),
+    &#125;),
     new webpack.optimize.UglifyJsPlugin()
   ]
-});
-
+&#125;);
 </code></pre>
 <p>package.json</p>
-<pre><code class="json">{
+<pre><code class="json">&#123;
   ...
-  &quot;scripts&quot;: {
+  &quot;scripts&quot;: &#123;
     &quot;build&quot;: &quot;cross-env NODE_ENV=production webpack -p&quot;,
     &quot;start&quot;: &quot;webpack-dev-server --open&quot;,
     &quot;build:dev&quot;: &quot;webpack-dev-server --open --config webpack.dev.js&quot;,
     &quot;build:prod&quot;: &quot;webpack --progress --config webpack.prod.js&quot;
-  },
+  &#125;,
   ...
-}
+&#125;
 </code></pre>
 <p>现在只需执行npm run build:dev或npm run build:prod便可以得到开发版或者生产版了！</p>
-<p><a href="https://segmentfault.com/a/1190000010871559" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000010871559">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -952,7 +949,7 @@ module.exports = Merge(CommonConfig, {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -975,7 +972,7 @@ module.exports = Merge(CommonConfig, {
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -986,7 +983,7 @@ module.exports = Merge(CommonConfig, {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Webpack，何许人也？"><span class="toc-number">1.1.</span> <span class="toc-text">Webpack，何许人也？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么要用介个-Webpack"><span class="toc-number">1.2.</span> <span class="toc-text">为什么要用介个 Webpack?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#webpack，gulp-grunt，npm，它们有什么区别"><span class="toc-number">1.3.</span> <span class="toc-text">webpack，gulp&#x2F;grunt，npm，它们有什么区别?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#准备开始"><span class="toc-number">1.4.</span> <span class="toc-text">准备开始</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本配置"><span class="toc-number">1.5.</span> <span class="toc-text">基本配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用配置文件"><span class="toc-number">1.6.</span> <span class="toc-text">使用配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#打包其他类型的文件"><span class="toc-number">1.7.</span> <span class="toc-text">打包其他类型的文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#加载-CSS"><span class="toc-number">1.7.1.</span> <span class="toc-text">加载 CSS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#加载图片"><span class="toc-number">1.7.2.</span> <span class="toc-text">加载图片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#加载字体"><span class="toc-number">1.7.3.</span> <span class="toc-text">加载字体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#加载-JSON-文件"><span class="toc-number">1.7.4.</span> <span class="toc-text">加载 JSON 文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#输出管理"><span class="toc-number">1.8.</span> <span class="toc-text">输出管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#webpack-提供了很多便于开发时使用的功能，来一一看看吧。"><span class="toc-number">1.9.</span> <span class="toc-text">webpack 提供了很多便于开发时使用的功能，来一一看看吧。</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用代码映射-source-map"><span class="toc-number">1.9.1.</span> <span class="toc-text">使用代码映射 (source map)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#webpack-dev-server"><span class="toc-number">1.9.2.</span> <span class="toc-text">webpack-dev-server</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模块热替换-HMR-Hot-Module-Replacement"><span class="toc-number">1.10.</span> <span class="toc-text">模块热替换 (HMR, Hot Module Replacement)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生产环境"><span class="toc-number">1.11.</span> <span class="toc-text">生产环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#自动方式"><span class="toc-number">1.11.1.</span> <span class="toc-text">自动方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多配置文件配置"><span class="toc-number">1.11.2.</span> <span class="toc-text">多配置文件配置</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Webpack%EF%BC%8C%E4%BD%95%E8%AE%B8%E4%BA%BA%E4%B9%9F%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">Webpack，何许人也？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8%E4%BB%8B%E4%B8%AA-Webpack"><span class="toc-number">1.2.</span> <span class="toc-text">为什么要用介个 Webpack?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#webpack%EF%BC%8Cgulp-grunt%EF%BC%8Cnpm%EF%BC%8C%E5%AE%83%E4%BB%AC%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB"><span class="toc-number">1.3.</span> <span class="toc-text">webpack，gulp&#x2F;grunt，npm，它们有什么区别?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%86%E5%A4%87%E5%BC%80%E5%A7%8B"><span class="toc-number">1.4.</span> <span class="toc-text">准备开始</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE"><span class="toc-number">1.5.</span> <span class="toc-text">基本配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.6.</span> <span class="toc-text">使用配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%93%E5%8C%85%E5%85%B6%E4%BB%96%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%96%87%E4%BB%B6"><span class="toc-number">1.7.</span> <span class="toc-text">打包其他类型的文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A0%E8%BD%BD-CSS"><span class="toc-number">1.7.1.</span> <span class="toc-text">加载 CSS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A0%E8%BD%BD%E5%9B%BE%E7%89%87"><span class="toc-number">1.7.2.</span> <span class="toc-text">加载图片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A0%E8%BD%BD%E5%AD%97%E4%BD%93"><span class="toc-number">1.7.3.</span> <span class="toc-text">加载字体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A0%E8%BD%BD-JSON-%E6%96%87%E4%BB%B6"><span class="toc-number">1.7.4.</span> <span class="toc-text">加载 JSON 文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BE%93%E5%87%BA%E7%AE%A1%E7%90%86"><span class="toc-number">1.8.</span> <span class="toc-text">输出管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#webpack-%E6%8F%90%E4%BE%9B%E4%BA%86%E5%BE%88%E5%A4%9A%E4%BE%BF%E4%BA%8E%E5%BC%80%E5%8F%91%E6%97%B6%E4%BD%BF%E7%94%A8%E7%9A%84%E5%8A%9F%E8%83%BD%EF%BC%8C%E6%9D%A5%E4%B8%80%E4%B8%80%E7%9C%8B%E7%9C%8B%E5%90%A7%E3%80%82"><span class="toc-number">1.9.</span> <span class="toc-text">webpack 提供了很多便于开发时使用的功能，来一一看看吧。</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%A0%81%E6%98%A0%E5%B0%84-source-map"><span class="toc-number">1.9.1.</span> <span class="toc-text">使用代码映射 (source map)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#webpack-dev-server"><span class="toc-number">1.9.2.</span> <span class="toc-text">webpack-dev-server</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%9D%97%E7%83%AD%E6%9B%BF%E6%8D%A2-HMR-Hot-Module-Replacement"><span class="toc-number">1.10.</span> <span class="toc-text">模块热替换 (HMR, Hot Module Replacement)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83"><span class="toc-number">1.11.</span> <span class="toc-text">生产环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">1.11.1.</span> <span class="toc-text">自动方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E9%85%8D%E7%BD%AE"><span class="toc-number">1.11.2.</span> <span class="toc-text">多配置文件配置</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
             
@@ -1005,7 +1002,7 @@ module.exports = Merge(CommonConfig, {
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

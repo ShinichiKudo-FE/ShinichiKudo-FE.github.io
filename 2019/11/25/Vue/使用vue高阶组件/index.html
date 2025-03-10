@@ -36,7 +36,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -99,13 +99,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    11k
+                    12k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    10 mins.
+                    11 mins.
                 </span>
                 
                 
@@ -153,100 +153,100 @@
 
 import Vue from &quot;vue&quot;
 import ComponentExample from &#39;@/components/ComponentExample.vue&#39;
-const HoComponent = (component) =&gt; {
-    return Vue.component(&#39;withSubscription&#39;, {
-        render(createElement) {
+const HoComponent = (component) =&gt; &#123;
+    return Vue.component(&#39;withSubscription&#39;, &#123;
+        render(createElement) &#123;
             return createElement(component)
-        }
-    }
-}
+        &#125;
+    &#125;
+&#125;
 const HoComponentEnhanced = HoComponent(ComponentExample);
-
 </code></pre>
 <p>如上面的代码块所示，<code>HoComponent</code> 函数接受一个组件作为参数，并创建一个新组件来渲染传进来的组件。</p>
 <h2 id="一个简单的-HOC-示例"><a href="#一个简单的-HOC-示例" class="headerlink" title="一个简单的 HOC 示例"></a>一个简单的 HOC 示例</h2><p>在本教程中，我们将介绍一个使用高阶组件的示例。在介绍高阶组件之前，我们将了解在没有高阶组件的情况下，当前的代码库是如何工作的，然后了解如何进行抽象。</p>
-<p><a href="https://codesandbox.io/embed/llvq04nx4l" target="_blank" rel="noopener">https://codesandbox.io/embed/llvq04nx4l</a></p>
+<p><a target="_blank" rel="noopener" href="https://codesandbox.io/embed/llvq04nx4l">https://codesandbox.io/embed/llvq04nx4l</a></p>
 <p>正如上面的 CodeSandbox 所示，该应用程序会显示一个纸业公司及其净资产的列表，以及《办公室》(美国)中的人物及其获奖情况。</p>
 <p>我们获得应用程序所需的所有数据来源只有一个，那就是<code>mockData.js</code>文件。</p>
-<a id="more"></a>
+<span id="more"></span>
+
 <pre><code class="js">// src/components/mockData.js
 const staff = [
-  {
+  &#123;
     name: &quot;Michael Scott&quot;,
     id: 0,
     awards: 2
-  },
-  {
+  &#125;,
+  &#123;
     name: &quot;Toby Flenderson&quot;,
     id: 1,
     awards: 0
-  },
-  {
+  &#125;,
+  &#123;
     name: &quot;Dwight K. Schrute&quot;,
     id: 2,
     awards: 10
-  },
-  {
+  &#125;,
+  &#123;
     name: &quot;Jim Halpert&quot;,
     id: 3,
     awards: 1
-  },
-  {
+  &#125;,
+  &#123;
     name: &quot;Andy Bernard&quot;,
     id: 4,
     awards: 0
-  },
-  {
+  &#125;,
+  &#123;
     name: &quot;Phyllis Vance&quot;,
     id: 5,
     awards: 0
-  },
-  {
+  &#125;,
+  &#123;
     name: &quot;Stanley Hudson&quot;,
     id: 6,
     awards: 0
-  }
+  &#125;
 ];
 const paperCompanies = [
-  {
+  &#123;
     id: 0,
     name: &quot;Staples&quot;,
     net: 10000000
-  },
-  {
+  &#125;,
+  &#123;
     id: 1,
     name: &quot;Dundler Mufflin&quot;,
     net: 5000000
-  },
-  {
+  &#125;,
+  &#123;
     id: 2,
     name: &quot;Michael Scott Paper Company&quot;,
     net: 300000
-  },
-  {
+  &#125;,
+  &#123;
     id: 3,
     name: &quot;Prince Family Paper&quot;,
     net: 30000
-  }
+  &#125;
 ];
 
-export default {
-  getStaff() {
+export default &#123;
+  getStaff() &#123;
     return staff;
-  },
-  getCompanies() {
+  &#125;,
+  getCompanies() &#123;
     return paperCompanies;
-  },
-  increaseAward(id) {
+  &#125;,
+  increaseAward(id) &#123;
     staff[id].awards++;
-  },
-  decreaseAward(id) {
+  &#125;,
+  decreaseAward(id) &#123;
     staff[id].awards--;
-  },
-  setNetWorth(id) {
+  &#125;,
+  setNetWorth(id) &#123;
     paperCompanies[id].net = Math.random() * (5000000 - 50000) + 50000;
-  }
-};
+  &#125;
+&#125;;
 </code></pre>
 <p>在上面的代码片段中，有几个 const 变量保存了公司和员工列表的信息。我们也导出了一些函数，</p>
 <blockquote>
@@ -258,7 +258,7 @@ export default {
   &lt;main&gt;
     &lt;h3&gt;Staff List&lt;/h3&gt;
     &lt;div v-for=&quot;(staff, i) in staffList&quot; :key=&quot;i&quot;&gt;
-      {{ staff.name }}: {{ staff.awards }} Salesman of the year Award 🎉
+      &#123;&#123; staff.name &#125;&#125;: &#123;&#123; staff.awards &#125;&#125; Salesman of the year Award 🎉
       &lt;button @click=&quot;increaseAwards(staff.id);&quot;&gt;+&lt;/button&gt;
       &lt;button @click=&quot;decreaseAwards(staff.id);&quot;&gt;-&lt;/button&gt;
     &lt;/div&gt;
@@ -266,56 +266,55 @@ export default {
 &lt;/template&gt;
 &lt;script&gt;
   import mockData from &quot;./mockData.js&quot;;
-  export default {
-    data() {
-      return {
+  export default &#123;
+    data() &#123;
+      return &#123;
         staffList: mockData.getStaff()
-      };
-    },
-    methods: {
-      increaseAwards(id) {
+      &#125;;
+    &#125;,
+    methods: &#123;
+      increaseAwards(id) &#123;
         mockData.increaseAward(id);
         this.staffList = mockData.getStaff();
-      },
-      decreaseAwards(id) {
+      &#125;,
+      decreaseAwards(id) &#123;
         mockData.decreaseAward(id);
         this.staffList = mockData.getStaff();
-      }
-    }
-  };
+      &#125;
+    &#125;
+  &#125;;
 &lt;/script&gt;
 </code></pre>
-<p>在上面的代码块中，数据实例变量staffList被赋值为函数mockData.getStaff()返回的内容。我们也有increaseAwards和decreaseAwards函数，分别调用mockData.increaseAward 和 mockData.decreaseAward。传递给这些函数的id 是从渲染的模板中获得的。</p>
+<p>在上面的代码块中，数据实例变量staffList被赋值为函数mockData.getStaff()返回的内容。我们也有increaseAwards和decreaseAwards函数，分别调用mockData.increaseAward 和 mockData.decreaseAward。传递给这些函数的id 是从渲染的模板中获得的。</p>
 <pre><code class="html">    // src/components/Companies.vue
     &lt;template&gt;
       &lt;main&gt;
         &lt;h3&gt;Paper Companies&lt;/h3&gt;
         &lt;div v-for=&quot;(companies, i) in companies&quot; :key=&quot;i&quot;&gt;
-          {{ companies.name }} - ${{ companies.net
-          }}&lt;button @click=&quot;setWorth(companies.id);&quot;&gt;Set Company Value&lt;/button&gt;
+          &#123;&#123; companies.name &#125;&#125; - $&#123;&#123; companies.net
+          &#125;&#125;&lt;button @click=&quot;setWorth(companies.id);&quot;&gt;Set Company Value&lt;/button&gt;
         &lt;/div&gt;
       &lt;/main&gt;
     &lt;/template&gt;
 
     &lt;script&gt;
       import mockData from &quot;./mockData.js&quot;;
-        export default {
-        data() {
-          return {
+        export default &#123;
+        data() &#123;
+          return &#123;
             companies: mockData.getCompanies()
-          };
-        },
-        methods: {
-          setWorth(id) {
+          &#125;;
+        &#125;,
+        methods: &#123;
+          setWorth(id) &#123;
             mockData.setNetWorth(id);
             this.companies = mockData.getCompanies();
-          }
-        }
-      };
+          &#125;
+        &#125;
+      &#125;;
     &lt;/script&gt;
-
 </code></pre>
-<p>在上面的代码块中，数据实例变量companies 被赋值为函数mockData.getCompanies()的返回内容。我们还有setWorth函数，它通过将公司的 id 传递给mockData.setNetWorth来设置一个随机值作为净值。传递给函数的id是从渲染的模板中获得的。</p>
+<p>在上面的代码块中，数据实例变量companies 被赋值为函数mockData.getCompanies()的返回内容。我们还有setWorth函数，它通过将公司的 id 传递给mockData.setNetWorth来设置一个随机值作为净值。传递给函数的id是从渲染的模板中获得的。</p>
 <p>现在我们已经看到了这两个组件是如何工作的，我们可以</p>
 <blockquote>
 <p>找出它们之间的共同点，并将其抽象如下：</p>
@@ -330,35 +329,33 @@ export default {
       &lt;main&gt;
         &lt;h3&gt;Staff List&lt;/h3&gt;
         &lt;div v-for=&quot;(staff, i) in returnedData&quot; :key=&quot;i&quot;&gt;
-          {{ staff.name }}: {{ staff.awards }} Salesman of the year Award 🎉
+          &#123;&#123; staff.name &#125;&#125;: &#123;&#123; staff.awards &#125;&#125; Salesman of the year Award 🎉
           &lt;button @click=&quot;increaseAwards(staff.id);&quot;&gt;+&lt;/button&gt;
           &lt;button @click=&quot;decreaseAwards(staff.id);&quot;&gt;-&lt;/button&gt;
         &lt;/div&gt;
       &lt;/main&gt;
     &lt;/template&gt;
     &lt;script&gt;
-      export default {
+      export default &#123;
         props: [&quot;returnedData&quot;]
-      };
+      &#125;;
     &lt;/script&gt;
-
 </code></pre>
 <pre><code class="html">    // src/components/Companies.vue
     &lt;template&gt;
       &lt;main&gt;
         &lt;h3&gt;Paper Companies&lt;/h3&gt;
         &lt;div v-for=&quot;(companies, i) in returnedData&quot; :key=&quot;i&quot;&gt;
-          {{ companies.name }} - ${{ companies.net
-          }}&lt;button @click=&quot;setWorth(companies.id);&quot;&gt;Set Company Value&lt;/button&gt;
+          &#123;&#123; companies.name &#125;&#125; - $&#123;&#123; companies.net
+          &#125;&#125;&lt;button @click=&quot;setWorth(companies.id);&quot;&gt;Set Company Value&lt;/button&gt;
         &lt;/div&gt;
       &lt;/main&gt;
     &lt;/template&gt;
     &lt;script&gt;
-      export default {
+      export default &#123;
         props: [&quot;returnedData&quot;]
-      };
+      &#125;;
     &lt;/script&gt;
-
 </code></pre>
 <p>正如你在上面的代码块中看到的，对于这两个组件，我们去掉了函数和数据实例变量，显示内容所需的所有数据现在都将从这些props中获得。对于删掉的函数，我们将很快会讲到。</p>
 <p>在 App.vue 组件中，用以下代码编辑script 标签中的现有内容：</p>
@@ -378,19 +375,18 @@ export default {
       // Create a const variable which contains the Staff component wrapped in the higher order component
       const StaffComponent = HoComponent(Staff, mockData =&gt; mockData.getStaff());
 
-      export default {
+      export default &#123;
         name: &quot;App&quot;,
-        components: {
+        components: &#123;
           CompaniesComponent,
           StaffComponent
-        }
-      };
+        &#125;
+      &#125;;
     &lt;/script&gt;
-
 </code></pre>
-<p>在上面的代码块中，HoComponent用于包装 Staff 和 Companies 组件。</p>
-<p>每个组件作为HoComponent 的第一个参数传入，第二个参数是一个函数，它返回另一个函数，指定应该从mockData获取什么数据。这是我们之前创建的高阶组件(HoComponent.js)中的fetchData 函数。</p>
-<p>如果你现在刷新应用程序，你应该仍然可以看到来自mockData 文件的数据像往常一样呈现。唯一的区别是，这些按钮无法工作，因为它们还没有绑定到任何函数。让我们解决这个问题。</p>
+<p>在上面的代码块中，HoComponent用于包装 Staff 和 Companies 组件。</p>
+<p>每个组件作为HoComponent 的第一个参数传入，第二个参数是一个函数，它返回另一个函数，指定应该从mockData获取什么数据。这是我们之前创建的高阶组件(HoComponent.js)中的fetchData 函数。</p>
+<p>如果你现在刷新应用程序，你应该仍然可以看到来自mockData 文件的数据像往常一样呈现。唯一的区别是，这些按钮无法工作，因为它们还没有绑定到任何函数。让我们解决这个问题。</p>
 <pre><code class="html">    // src/App.vue
     &lt;template&gt;
       &lt;div id=&quot;app&quot;&gt;
@@ -415,46 +411,45 @@ export default {
       // Create a const variable which contains the Staff component wrapped in the higher order component
       const StaffComponent = HoComponent(Staff, mockData =&gt; mockData.getStaff());
 
-      export default {
+      export default &#123;
         name: &quot;App&quot;,
-        components: {
+        components: &#123;
           CompaniesComponent,
           StaffComponent
-          },
-        methods: {
-          onEventHappen(value) {
+          &#125;,
+        methods: &#123;
+          onEventHappen(value) &#123;
             // set the variable setFunction to the name of the function that was passed iin the value emitted from child component i.e. if value.name is &#39;increaseAward&#39;, setFunction is set to increaseAward()
             let setFunction = sourceData[value.name];
             // call the corresponding function with the id passed as an argument.
             setFunction(value.id);
-          }
-        }
-      };
+          &#125;
+        &#125;
+      &#125;;
     &lt;/script&gt;
 
     &lt;style&gt;
-    #app {
+    #app &#123;
       font-family: &quot;Avenir&quot;, Helvetica, Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       text-align: center;
       color: #2c3e50;
       margin-top: 60px;
-    }
+    &#125;
     &lt;/style&gt;
 </code></pre>
 <p>在上面的代码块中，我们在App.vue组件中添加了一个事件监听器。</p>
-<p>vue的组件。每当Staff.vue 或Companies.vue 组件被点击时，onEventHappen 方法将会被调用。</p>
-<p>在onEventHappen方法中，我们将变量setFunction 设置为从子组件发出的值中传递的函数名，也就是说，如果value.name是’increaseAward’，那么setFunction设置为increaseAward()。setFunction 将以id作为参数执行。</p>
+<p>vue的组件。每当Staff.vue 或Companies.vue 组件被点击时，onEventHappen 方法将会被调用。</p>
+<p>在onEventHappen方法中，我们将变量setFunction 设置为从子组件发出的值中传递的函数名，也就是说，如果value.name是’increaseAward’，那么setFunction设置为increaseAward()。setFunction 将以id作为参数执行。</p>
 <p>最后，为了将事件监听器传递给封装在高阶组件中的组件，我们需要在 HoComponent.js文件中添加下面这行代码。</p>
-<pre><code class="js">    props: {
+<pre><code class="js">    props: &#123;
     returnedData: this.returnedData
-    },
-    on: { ...this.$listeners }
-
+    &#125;,
+    on: &#123; ...this.$listeners &#125;
 </code></pre>
-<h2 id="vue-hoc"><a href="#vue-hoc" class="headerlink" title="vue-hoc"></a>vue-hoc</h2><p>或者，您可以使用<a href="https://github.com/jackmellis/vue-hoc" target="_blank" rel="noopener">vue-hoc</a>库来帮助创建高阶组件。vue-hoc帮助你轻松地创建高阶组件，你要做的就是传递基本组件、应用于HOC的一系列组件选项和在渲染阶段传递给组件的数据属性。<br>vue-hoc 可用如下命令安装：<br>    <code>npm install --save vue-hoc</code></p>
-<p>复制代码vue-hoc插件有一些例子可以让你开始创建更高阶的组件，你可以<a href="https://github.com/jackmellis/vue-hoc/blob/master/packages/vue-hoc/README.md" target="_blank" rel="noopener">查看这里</a>.</p>
+<h2 id="vue-hoc"><a href="#vue-hoc" class="headerlink" title="vue-hoc"></a>vue-hoc</h2><p>或者，您可以使用<a target="_blank" rel="noopener" href="https://github.com/jackmellis/vue-hoc">vue-hoc</a>库来帮助创建高阶组件。vue-hoc帮助你轻松地创建高阶组件，你要做的就是传递基本组件、应用于HOC的一系列组件选项和在渲染阶段传递给组件的数据属性。<br>vue-hoc 可用如下命令安装：<br>    <code>npm install --save vue-hoc</code></p>
+<p>复制代码vue-hoc插件有一些例子可以让你开始创建更高阶的组件，你可以<a target="_blank" rel="noopener" href="https://github.com/jackmellis/vue-hoc/blob/master/packages/vue-hoc/README.md">查看这里</a>.</p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -479,7 +474,7 @@ export default {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -502,7 +497,7 @@ export default {
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -513,7 +508,7 @@ export default {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前文"><span class="toc-number">1.</span> <span class="toc-text">前文</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#预备知识"><span class="toc-number">1.1.</span> <span class="toc-text">预备知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Vue-中的高阶组件模式"><span class="toc-number">1.2.</span> <span class="toc-text">Vue 中的高阶组件模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一个简单的-HOC-示例"><span class="toc-number">1.3.</span> <span class="toc-text">一个简单的 HOC 示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vue-hoc"><span class="toc-number">1.4.</span> <span class="toc-text">vue-hoc</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E6%96%87"><span class="toc-number">1.</span> <span class="toc-text">前文</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86"><span class="toc-number">1.1.</span> <span class="toc-text">预备知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Vue-%E4%B8%AD%E7%9A%84%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.2.</span> <span class="toc-text">Vue 中的高阶组件模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84-HOC-%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.3.</span> <span class="toc-text">一个简单的 HOC 示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vue-hoc"><span class="toc-number">1.4.</span> <span class="toc-text">vue-hoc</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -532,7 +527,7 @@ export default {
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

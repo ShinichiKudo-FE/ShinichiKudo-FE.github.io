@@ -36,7 +36,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -99,7 +99,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    12k
+                    13k
                 </span>
                 
                 
@@ -141,54 +141,53 @@
         <div class="content markdown animated fadeIn">
             <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>React作为一门前端框架，虽然只是focus在MVVM中的View部分，但还是实现了View和model的绑定。修改数据的同时，可以实现View的刷新。这大大简化了我们的逻辑，只用关心数据流的变化，同时减少了代码量，使得后期维护也更加方便。这个特性则要归功于setState()方法。React中利用队列机制来管理state，避免了很多重复的View刷新。下面我们来从源码角度探寻下setState机制。</p>
 <h1 id="setState和replaceState"><a href="#setState和replaceState" class="headerlink" title="setState和replaceState"></a>setState和replaceState</h1><p>我们都知道setState是以修改和新增的方式改变state的，不会改变没有涉及到的state。而replaceState则用新的state完全替换掉老state。比如</p>
-<pre><code class="javascript">this.state = {
+<pre><code class="javascript">this.state = &#123;
   title: &quot;example&quot;,
   desc: &quot;this is an example for react&quot;
-};
+&#125;;
 
-setState({
+setState(&#123;
   title: &quot;new example&quot;
-});
+&#125;);
 console.log(&quot;setState: &quot; + JSON.stringify(this.state));    // 1 
 
-replaceState({
+replaceState(&#123;
   title: &quot;new example&quot;
-})
+&#125;)
 console.log(&quot;replaceState: &quot; + JSON.stringify(this.state));    // 2
-
 </code></pre>
 <p>打印如下:</p>
-<pre><code class="javascript">setState: {&quot;title&quot;:&quot;new example&quot;,&quot;desc&quot;:&quot;this is an example for react&quot;}
-replaceState: {&quot;title&quot;:&quot;new example&quot;}
+<pre><code class="javascript">setState: &#123;&quot;title&quot;:&quot;new example&quot;,&quot;desc&quot;:&quot;this is an example for react&quot;&#125;
+replaceState: &#123;&quot;title&quot;:&quot;new example&quot;&#125;
 </code></pre>
-<a id="more"></a>
+<span id="more"></span>
 <p>可见，setState不会影响没有涉及到的state，而replaceState则是完完全全的替换。下面让我们进入源码来探寻究竟吧。</p>
 <h2 id="setState"><a href="#setState" class="headerlink" title="setState"></a>setState</h2><p>setState方法入口如下</p>
 <pre><code class="javascript">
-ReactComponent.prototype.setState = function (partialState, callback) {
+ReactComponent.prototype.setState = function (partialState, callback) &#123;
   // 将setState事务放入队列中
   this.updater.enqueueSetState(this, partialState);
-  if (callback) {
+  if (callback) &#123;
     this.updater.enqueueCallback(this, callback, &#39;setState&#39;);
-  }
-};
+  &#125;
+&#125;;
 </code></pre>
 <p>取名为partialState，有部分state的含义，可见只是影响涉及到的state，不会伤及无辜。enqueueSetState是state队列管理的入口方法，比较重要，我们之后再接着分析。</p>
-<h2 id="replaceState"><a href="#replaceState" class="headerlink" title="replaceState"></a>replaceState</h2><pre><code class="javascript">replaceState: function (newState, callback) {
+<h2 id="replaceState"><a href="#replaceState" class="headerlink" title="replaceState"></a>replaceState</h2><pre><code class="javascript">replaceState: function (newState, callback) &#123;
   this.updater.enqueueReplaceState(this, newState);
-  if (callback) {
+  if (callback) &#123;
     this.updater.enqueueCallback(this, callback, &#39;replaceState&#39;);
-  }
-},
+  &#125;
+&#125;,
 </code></pre>
 <p>replaceState中取名为newState，有完全替换的含义。同样也是以队列的形式来管理的。</p>
-<h1 id="equeueSetState"><a href="#equeueSetState" class="headerlink" title="equeueSetState"></a>equeueSetState</h1><pre><code class="javascript">enqueueSetState: function (publicInstance, partialState) {
+<h1 id="equeueSetState"><a href="#equeueSetState" class="headerlink" title="equeueSetState"></a>equeueSetState</h1><pre><code class="javascript">enqueueSetState: function (publicInstance, partialState) &#123;
     // 先获取ReactComponent组件对象
     var internalInstance = getInternalInstanceReadyForUpdate(publicInstance, &#39;setState&#39;);
 
-    if (!internalInstance) {
+    if (!internalInstance) &#123;
       return;
-    }
+    &#125;
 
     // 如果_pendingStateQueue为空,则创建它。可以发现队列是数组形式实现的
     var queue = internalInstance._pendingStateQueue || (internalInstance._pendingStateQueue = []);
@@ -196,147 +195,145 @@ ReactComponent.prototype.setState = function (partialState, callback) {
 
     // 将要更新的ReactComponent放入数组中
     enqueueUpdate(internalInstance);
-}
+&#125;
 </code></pre>
 <p>其中getInternalInstanceReadyForUpdate源码如下，解释都在代码注释中</p>
 <pre><code class="javascript">
-function getInternalInstanceReadyForUpdate(publicInstance, callerName) {
+function getInternalInstanceReadyForUpdate(publicInstance, callerName) &#123;
   // 从map取出ReactComponent组件,还记得mountComponent时把ReactElement作为key，将ReactComponent存入了map中了吧，ReactComponent是React组件的核心，包含各种状态，数据和操作方法。而ReactElement则仅仅是一个数据类。
   var internalInstance = ReactInstanceMap.get(publicInstance);
-  if (!internalInstance) {
+  if (!internalInstance) &#123;
     return null;
-  }
+  &#125;
 
   return internalInstance;
-}
+&#125;
 </code></pre>
 <p>enqueueUpdate源码如下</p>
-<pre><code class="javascript">function enqueueUpdate(component) {
+<pre><code class="javascript">function enqueueUpdate(component) &#123;
   ensureInjected();
 
   // 如果不是正处于创建或更新组件阶段,则处理update事务
-  if (!batchingStrategy.isBatchingUpdates) {
+  if (!batchingStrategy.isBatchingUpdates) &#123;
     batchingStrategy.batchedUpdates(enqueueUpdate, component);
     return;
-  }
+  &#125;
 
   // 如果正在创建或更新组件,则暂且先不处理update,只是将组件放在dirtyComponents数组中
   dirtyComponents.push(component);
-}
-
+&#125;
 </code></pre>
 <p>enqueueUpdate包含了React避免重复render的逻辑。mountComponent和updateComponent方法在执行的最开始，会调用到batchedUpdates进行批处理更新，此时会将isBatchingUpdates设置为true，也就是将状态标记为现在正处于更新阶段了。之后React以事务的方式处理组件update，事务处理完后会调用wrapper.close(), 而TRANSACTION_WRAPPERS中包含了RESET_BATCHED_UPDATES这个wrapper，故最终会调用RESET_BATCHED_UPDATES.close(), 它最终会将isBatchingUpdates设置为false。这个过程比较麻烦，想更清晰的了解的话，建议自行分析源码。</p>
 <p>故getInitialState，componentWillMount， render，componentWillUpdate 中setState都不会引起updateComponent。但在componentDidMount和componentDidUpdate中则会。</p>
-<pre><code class="javascript">batchedUpdates: function (callback, a, b, c, d, e) {
+<pre><code class="javascript">batchedUpdates: function (callback, a, b, c, d, e) &#123;
   var alreadyBatchingUpdates = ReactDefaultBatchingStrategy.isBatchingUpdates;
   // 批处理最开始时，将isBatchingUpdates设为true，表明正在更新
   ReactDefaultBatchingStrategy.isBatchingUpdates = true;
 
   // The code is written this way to avoid extra allocations
-  if (alreadyBatchingUpdates) {
+  if (alreadyBatchingUpdates) &#123;
     callback(a, b, c, d, e);
-  } else {
+  &#125; else &#123;
     // 以事务的方式处理updates，后面详细分析transaction
     transaction.perform(callback, null, a, b, c, d, e);
-  }
-}
+  &#125;
+&#125;
 
-var RESET_BATCHED_UPDATES = {
+var RESET_BATCHED_UPDATES = &#123;
   initialize: emptyFunction,
-  close: function () {
+  close: function () &#123;
     // 事务批更新处理结束时，将isBatchingUpdates设为了false
     ReactDefaultBatchingStrategy.isBatchingUpdates = false;
-  }
-};
+  &#125;
+&#125;;
 var TRANSACTION_WRAPPERS = [FLUSH_BATCHED_UPDATES, RESET_BATCHED_UPDATES];
-
 </code></pre>
 <h1 id="事务transaction"><a href="#事务transaction" class="headerlink" title="事务transaction"></a>事务transaction</h1><p>事务通过wrapper进行封装。一个wrapper包含一对initialize和close方法。比如RESET_BATCHED_UPDATES</p>
-<pre><code class="javascript">var RESET_BATCHED_UPDATES = {
+<pre><code class="javascript">var RESET_BATCHED_UPDATES = &#123;
   // 初始化调用
   initialize: emptyFunction,
   // 事务执行完成，close时调用
-  close: function () {
+  close: function () &#123;
     ReactDefaultBatchingStrategy.isBatchingUpdates = false;
-  }
-};
+  &#125;
+&#125;;
 </code></pre>
 <p>transcation被包装在wrapper中，比如</p>
 <pre><code class="javascript">var TRANSACTION_WRAPPERS = [FLUSH_BATCHED_UPDATES, RESET_BATCHED_UPDATES];
 </code></pre>
 <p>transaction是通过transaction.perform(callback, args…)方法进入的，它会先调用注册好的wrapper中的initialize方法，然后执行perform方法中的callback，最后再执行close方法。</p>
 <p>下面分析transaction.perform(callback, args…)</p>
-<pre><code class="javascript">perform: function (method, scope, a, b, c, d, e, f) {
+<pre><code class="javascript">perform: function (method, scope, a, b, c, d, e, f) &#123;
     var errorThrown;
     var ret;
-    try {
+    try &#123;
       this._isInTransaction = true;
       errorThrown = true;
       // 先运行所有wrapper中的initialize方法
       this.initializeAll(0);
-
+      
       // 再执行perform方法传入的callback
       ret = method.call(scope, a, b, c, d, e, f);
       errorThrown = false;
-    } finally {
-      try {
-        if (errorThrown) {
+    &#125; finally &#123;
+      try &#123;
+        if (errorThrown) &#123;
           // 最后运行wrapper中的close方法
-          try {
+          try &#123;
             this.closeAll(0);
-          } catch (err) {}
-        } else {
+          &#125; catch (err) &#123;&#125;
+        &#125; else &#123;
           // 最后运行wrapper中的close方法
           this.closeAll(0);
-        }
-      } finally {
+        &#125;
+      &#125; finally &#123;
         this._isInTransaction = false;
-      }
-    }
+      &#125;
+    &#125;
     return ret;
-  },
-
-  initializeAll: function (startIndex) {
+  &#125;,
+    
+  initializeAll: function (startIndex) &#123;
     var transactionWrappers = this.transactionWrappers;
     // 遍历所有注册的wrapper
-    for (var i = startIndex; i &lt; transactionWrappers.length; i++) {
+    for (var i = startIndex; i &lt; transactionWrappers.length; i++) &#123;
       var wrapper = transactionWrappers[i];
-      try {
+      try &#123;
         this.wrapperInitData[i] = Transaction.OBSERVED_ERROR;
         // 调用wrapper的initialize方法
         this.wrapperInitData[i] = wrapper.initialize ? wrapper.initialize.call(this) : null;
-      } finally {
-        if (this.wrapperInitData[i] === Transaction.OBSERVED_ERROR) {
-          try {
+      &#125; finally &#123;
+        if (this.wrapperInitData[i] === Transaction.OBSERVED_ERROR) &#123;
+          try &#123;
             this.initializeAll(i + 1);
-          } catch (err) {}
-        }
-      }
-    }
-  },
-
-  closeAll: function (startIndex) {
+          &#125; catch (err) &#123;&#125;
+        &#125;
+      &#125;
+    &#125;
+  &#125;,
+    
+  closeAll: function (startIndex) &#123;
     var transactionWrappers = this.transactionWrappers;
     // 遍历所有wrapper
-    for (var i = startIndex; i &lt; transactionWrappers.length; i++) {
+    for (var i = startIndex; i &lt; transactionWrappers.length; i++) &#123;
       var wrapper = transactionWrappers[i];
       var initData = this.wrapperInitData[i];
       var errorThrown;
-      try {
+      try &#123;
         errorThrown = true;
-        if (initData !== Transaction.OBSERVED_ERROR &amp;&amp; wrapper.close) {
+        if (initData !== Transaction.OBSERVED_ERROR &amp;&amp; wrapper.close) &#123;
           // 调用wrapper的close方法，如果有的话
           wrapper.close.call(this, initData);
-        }
+        &#125;
         errorThrown = false;
-      } finally {
-        if (errorThrown) {
-          try {
+      &#125; finally &#123;
+        if (errorThrown) &#123;
+          try &#123;
             this.closeAll(i + 1);
-          } catch (e) {}
-        }
-      }
-    }
+          &#125; catch (e) &#123;&#125;
+        &#125;
+      &#125;
+    &#125;
     this.wrapperInitData.length = 0;
 </code></pre>
 <h1 id="runBatchedUpdates更新组件"><a href="#runBatchedUpdates更新组件" class="headerlink" title="runBatchedUpdates更新组件"></a>runBatchedUpdates更新组件</h1><p>前面分析到enqueueUpdate中调用transaction.perform(callback, args…)后，小伙伴们肯定会发现，callback还是enqueueUpdate方法啊，那岂不是死循环了？不是说好的setState会调用updateComponent，从而自动刷新View的吗？别急，我们还是要先从transaction事务说起。</p>
@@ -344,37 +341,37 @@ var TRANSACTION_WRAPPERS = [FLUSH_BATCHED_UPDATES, RESET_BATCHED_UPDATES];
 <pre><code class="javascript">var TRANSACTION_WRAPPERS = [FLUSH_BATCHED_UPDATES, RESET_BATCHED_UPDATES];
 </code></pre>
 <p>RESET_BATCHED_UPDATES用来管理isBatchingUpdates状态，我们前面在分析setState是否立即生效时已经讲解过了。那FLUSH_BATCHED_UPDATES用来干嘛呢？</p>
-<pre><code class="javascript">var FLUSH_BATCHED_UPDATES = {
+<pre><code class="javascript">var FLUSH_BATCHED_UPDATES = &#123;
   initialize: emptyFunction,
   close: ReactUpdates.flushBatchedUpdates.bind(ReactUpdates)
-};
+&#125;;
 
-var flushBatchedUpdates = function () {
+var flushBatchedUpdates = function () &#123;
   // 循环遍历处理完所有dirtyComponents
-  while (dirtyComponents.length || asapEnqueued) {
-    if (dirtyComponents.length) {
+  while (dirtyComponents.length || asapEnqueued) &#123;
+    if (dirtyComponents.length) &#123;
       var transaction = ReactUpdatesFlushTransaction.getPooled();
       // close前执行完runBatchedUpdates方法，这是关键
       transaction.perform(runBatchedUpdates, null, transaction);
       ReactUpdatesFlushTransaction.release(transaction);
-    }
+    &#125;
 
-    if (asapEnqueued) {
+    if (asapEnqueued) &#123;
       asapEnqueued = false;
       var queue = asapCallbackQueue;
       asapCallbackQueue = CallbackQueue.getPooled();
       queue.notifyAll();
       CallbackQueue.release(queue);
-    }
-  }
-};
+    &#125;
+  &#125;
+&#125;;
 </code></pre>
 <p>FLUSH_BATCHED_UPDATES会在一个transaction的close阶段运行runBatchedUpdates，从而执行update。</p>
-<pre><code class="javascript">function runBatchedUpdates(transaction) {
+<pre><code class="javascript">function runBatchedUpdates(transaction) &#123;
   var len = transaction.dirtyComponentsLength;
   dirtyComponents.sort(mountOrderComparator);
 
-  for (var i = 0; i &lt; len; i++) {
+  for (var i = 0; i &lt; len; i++) &#123;
     // dirtyComponents中取出一个component
     var component = dirtyComponents[i];
 
@@ -383,36 +380,36 @@ var flushBatchedUpdates = function () {
     component._pendingCallbacks = null;
 
     var markerName;
-    if (ReactFeatureFlags.logTopLevelRenders) {
+    if (ReactFeatureFlags.logTopLevelRenders) &#123;
       var namedComponent = component;
-      if (component._currentElement.props === component._renderedComponent._currentElement) {
+      if (component._currentElement.props === component._renderedComponent._currentElement) &#123;
         namedComponent = component._renderedComponent;
-      }
-    }
+      &#125;
+    &#125;
     // 执行updateComponent
     ReactReconciler.performUpdateIfNecessary(component, transaction.reconcileTransaction);
-
+    
     // 执行dirtyComponent中之前未执行的callback
-    if (callbacks) {
-      for (var j = 0; j &lt; callbacks.length; j++) {
+    if (callbacks) &#123;
+      for (var j = 0; j &lt; callbacks.length; j++) &#123;
         transaction.callbackQueue.enqueue(callbacks[j], component.getPublicInstance());
-      }
-    }
-  }
-}
+      &#125;
+    &#125;
+  &#125;
+&#125;
 </code></pre>
 <p>runBatchedUpdates循环遍历dirtyComponents数组，主要干两件事。首先执行performUpdateIfNecessary来刷新组件的view，然后执行之前阻塞的callback。下面来看performUpdateIfNecessary。</p>
-<pre><code class="javascript">performUpdateIfNecessary: function (transaction) {
-    if (this._pendingElement != null) {
+<pre><code class="javascript">performUpdateIfNecessary: function (transaction) &#123;
+    if (this._pendingElement != null) &#123;
       // receiveComponent会最终调用到updateComponent，从而刷新View
       ReactReconciler.receiveComponent(this, this._pendingElement, transaction, this._context);
-    }
+    &#125;
 
-    if (this._pendingStateQueue !== null || this._pendingForceUpdate) {
+    if (this._pendingStateQueue !== null || this._pendingForceUpdate) &#123;
       // 执行updateComponent，从而刷新View。这个流程在React生命周期中讲解过
       this.updateComponent(transaction, this._currentElement, this._currentElement, this._context, this._context);
-    }
-  },
+    &#125;
+  &#125;,
 </code></pre>
 <p>最后惊喜的看到了receiveComponent和updateComponent吧。receiveComponent最后会调用updateComponent，而updateComponent中会执行React组件存在期的生命周期方法，如componentWillReceiveProps， shouldComponentUpdate， componentWillUpdate，render, componentDidUpdate。 从而完成组件更新的整套流程。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>setState流程还是很复杂的，设计也很精巧，避免了重复无谓的刷新组件。它的主要流程如下</p>
@@ -421,11 +418,14 @@ var flushBatchedUpdates = function () {
 <li>enqueueSetState将state放入队列中，并调用enqueueUpdate处理要更新的Component</li>
 <li>如果组件当前正处于update事务中，则先将Component存入dirtyComponent中。否则调用batchedUpdates处理。</li>
 <li>batchedUpdates发起一次transaction.perform()事务</li>
-<li>开始执行事务初始化，运行，结束三个阶段<br>1.初始化：事务初始化阶段没有注册方法，故无方法要执行<br>2.运行：执行setSate时传入的callback方法，一般不会传callback参数<br>3.结束：更新isBatchingUpdates为false，并执行FLUSH_BATCHED_UPDATES这个wrapper中的close方法</li>
+<li>开始执行事务初始化，运行，结束三个阶段</li>
+</ul>
+<p>1.初始化：事务初始化阶段没有注册方法，故无方法要执行<br>2.运行：执行setSate时传入的callback方法，一般不会传callback参数<br>3.结束：更新isBatchingUpdates为false，并执行FLUSH_BATCHED_UPDATES这个wrapper中的close方法</p>
+<ul>
 <li>FLUSH_BATCHED_UPDATES在close阶段，会循环遍历所有的dirtyComponents，调用updateComponent刷新组件，并执行它的pendingCallbacks, 也就是setState中设置的callback。</li>
 </ul>
 </blockquote>
-<p><a href="https://yq.aliyun.com/articles/72329?spm=a2c4e.11153940.blogcont72330.20.351d5033CZkYc1" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://yq.aliyun.com/articles/72329?spm=a2c4e.11153940.blogcont72330.20.351d5033CZkYc1">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -450,7 +450,7 @@ var flushBatchedUpdates = function () {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -473,7 +473,7 @@ var flushBatchedUpdates = function () {
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -484,7 +484,7 @@ var flushBatchedUpdates = function () {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#setState和replaceState"><span class="toc-number">2.</span> <span class="toc-text">setState和replaceState</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#setState"><span class="toc-number">2.1.</span> <span class="toc-text">setState</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#replaceState"><span class="toc-number">2.2.</span> <span class="toc-text">replaceState</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#equeueSetState"><span class="toc-number">3.</span> <span class="toc-text">equeueSetState</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#事务transaction"><span class="toc-number">4.</span> <span class="toc-text">事务transaction</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#runBatchedUpdates更新组件"><span class="toc-number">5.</span> <span class="toc-text">runBatchedUpdates更新组件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#setState%E5%92%8CreplaceState"><span class="toc-number">2.</span> <span class="toc-text">setState和replaceState</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#setState"><span class="toc-number">2.1.</span> <span class="toc-text">setState</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#replaceState"><span class="toc-number">2.2.</span> <span class="toc-text">replaceState</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#equeueSetState"><span class="toc-number">3.</span> <span class="toc-text">equeueSetState</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1transaction"><span class="toc-number">4.</span> <span class="toc-text">事务transaction</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#runBatchedUpdates%E6%9B%B4%E6%96%B0%E7%BB%84%E4%BB%B6"><span class="toc-number">5.</span> <span class="toc-text">runBatchedUpdates更新组件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol>
                 </div>
             </div>
             
@@ -503,7 +503,7 @@ var flushBatchedUpdates = function () {
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

@@ -37,7 +37,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -106,7 +106,7 @@
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    14 mins.
+                    15 mins.
                 </span>
                 
                 
@@ -140,7 +140,7 @@
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <h1 id="HTML5-Device-API"><a href="#HTML5-Device-API" class="headerlink" title="HTML5 Device API"></a>HTML5 Device API</h1><p><a href="http://tgideas.qq.com/webplat/info/news_version3/804/7104/7106/m5723/201506/354489.shtml" target="_blank" rel="noopener">原文地址</a></p>
+            <h1 id="HTML5-Device-API"><a href="#HTML5-Device-API" class="headerlink" title="HTML5 Device API"></a>HTML5 Device API</h1><p><a target="_blank" rel="noopener" href="http://tgideas.qq.com/webplat/info/news_version3/804/7104/7106/m5723/201506/354489.shtml">原文地址</a></p>
 <h2 id="让音乐随心而动-音频处理-Web-audio-API"><a href="#让音乐随心而动-音频处理-Web-audio-API" class="headerlink" title="让音乐随心而动 - 音频处理 Web audio API"></a>让音乐随心而动 - 音频处理 Web audio API</h2><p>Audio对象提供的只是音频文件的播放，而Web Audio则是给了开发者对音频数据进行分析、处理的能力，比如混音、过滤。</p>
 <blockquote>
 <p>系统要求 :<br>ios6+、android chrome、android firefox</p>
@@ -151,31 +151,29 @@ var source = context.createBufferSource();   // 创建一个声音源
 source.buffer = buffer;   // 告诉该源播放何物 
 createBufferSourcesource.connect(context.destination);   // 将该源与硬件相连
 source.start(0); //播放
-
 </code></pre>
-<a id="more"></a>
+<span id="more"></span>
 <p>技术分析 :</p>
 <p>当我们加载完音频数据后，我们将创建一个全局的AudioContext对象来对音频进行处理，AudioContext可以创建各种不同功能类型的音频节点AudioNode</p>
 <h3 id="1-源节点（source-node）"><a href="#1-源节点（source-node）" class="headerlink" title="1.源节点（source node）"></a>1.源节点（source node）</h3><h4 id="1-audio标签"><a href="#1-audio标签" class="headerlink" title="1.audio标签"></a>1.audio标签</h4><pre><code class="javascript">var sound, audio = new Audio();
-audio.addEventListener(&#39;canplay&#39;, function() {
+audio.addEventListener(&#39;canplay&#39;, function() &#123;
  sound = context.createMediaElementSource(audio);
  sound.connect(context.destination);
-});
+&#125;);
 audio.src = &#39;/audio.mp3&#39;;
-
 </code></pre>
 <h4 id="2-XMLHttpRequest"><a href="#2-XMLHttpRequest" class="headerlink" title="2.XMLHttpRequest"></a>2.XMLHttpRequest</h4><pre><code class="javascript">var sound, context = createAudioContext();
 var audioURl = &#39;/audio.mp3&#39;; // 音频文件URL
 var xhr = new XMLHttpRequest();
 xhr.open(&#39;GET&#39;, audioURL, true);
 xhr.responseType = &#39;arraybuffer&#39;; 
-xhr.onload = function() {
- context.decodeAudioData(request.response, function (buffer) {
+xhr.onload = function() &#123;
+ context.decodeAudioData(request.response, function (buffer) &#123;
  source = context.createBufferSource();
  source.buffer = buffer;
  source.connect(context.destination);
- }
-}
+ &#125;
+&#125;
 xhr.send();
 </code></pre>
 <h3 id="2-分析节点（analyser-node）"><a href="#2-分析节点（analyser-node）" class="headerlink" title="2.分析节点（analyser node）"></a>2.分析节点（analyser node）</h3><pre><code class="javascript">var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -185,46 +183,46 @@ var bufferLength = analyser.frequencyBinCount;
 var dataArray = new Uint8Array(bufferLength);
 analyser.getByteTimeDomainData(dataArray);
 
-function draw() {
+function draw() &#123;
  drawVisual = requestAnimationFrame(draw);
  analyser.getByteTimeDomainData(dataArray);
  // 将dataArray数据以canvas方式渲染出来
-};
+&#125;;
 
 draw();
 </code></pre>
-<h3 id="3-处理节点（gain-node、panner-node、wave-shaper-node、delay-node、convolver-node等）"><a href="#3-处理节点（gain-node、panner-node、wave-shaper-node、delay-node、convolver-node等）" class="headerlink" title="3.处理节点（gain node、panner node、wave shaper node、delay node、convolver node等）"></a>3.处理节点（gain node、panner node、wave shaper node、delay node、convolver node等）</h3><p>不同的处理节点有不同的作用，比如使用BiquadFilterNode调整音色（大量滤波器）、使用ChannelSplitterNode分割左右声道、使用GainNode调整增益值实现音乐淡入淡出等等。需要了解更多的音频节点可能参考：<br><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API</a></p>
+<h3 id="3-处理节点（gain-node、panner-node、wave-shaper-node、delay-node、convolver-node等）"><a href="#3-处理节点（gain-node、panner-node、wave-shaper-node、delay-node、convolver-node等）" class="headerlink" title="3.处理节点（gain node、panner node、wave shaper node、delay node、convolver node等）"></a>3.处理节点（gain node、panner node、wave shaper node、delay node、convolver node等）</h3><p>不同的处理节点有不同的作用，比如使用BiquadFilterNode调整音色（大量滤波器）、使用ChannelSplitterNode分割左右声道、使用GainNode调整增益值实现音乐淡入淡出等等。需要了解更多的音频节点可能参考：<br><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API">https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API</a></p>
 <h3 id="4-目的节点（destination-node）"><a href="#4-目的节点（destination-node）" class="headerlink" title="4.目的节点（destination node）"></a>4.目的节点（destination node）</h3><p>所有被渲染音频流到达的最终地点</p>
 <h2 id="捕捉用户摄像头-媒体流-Media-Capture"><a href="#捕捉用户摄像头-媒体流-Media-Capture" class="headerlink" title="捕捉用户摄像头 - 媒体流 Media Capture"></a>捕捉用户摄像头 - 媒体流 Media Capture</h2><p>通过getUserMedia捕捉用户摄像头获取视频流和通过麦克风获取用户声音。</p>
 <blockquote>
 <p>系统要求 :<br>android chrome、android firefox</p>
 </blockquote>
 <p><strong>核心代码</strong> :</p>
-<h3 id="1、摄像头捕捉"><a href="#1、摄像头捕捉" class="headerlink" title="1、摄像头捕捉"></a>1、摄像头捕捉</h3><pre><code class="javascript">navigator.webkitGetUserMedia ({video: true}, function(stream) {
+<h3 id="1、摄像头捕捉"><a href="#1、摄像头捕捉" class="headerlink" title="1、摄像头捕捉"></a>1、摄像头捕捉</h3><pre><code class="javascript">navigator.webkitGetUserMedia (&#123;video: true&#125;, function(stream) &#123;
  video.src = window.URL.createObjectURL(stream);
  localMediaStream = stream;
-}, function(e){
+&#125;, function(e)&#123;
 
-})
+&#125;)
 </code></pre>
-<h3 id="2、从视频流中拍照"><a href="#2、从视频流中拍照" class="headerlink" title="2、从视频流中拍照"></a>2、从视频流中拍照</h3><pre><code class="javascript">btnCapture.addEventListener(&#39;touchend&#39;, function(){
-    if (localMediaStream) {
+<h3 id="2、从视频流中拍照"><a href="#2、从视频流中拍照" class="headerlink" title="2、从视频流中拍照"></a>2、从视频流中拍照</h3><pre><code class="javascript">btnCapture.addEventListener(&#39;touchend&#39;, function()&#123;
+    if (localMediaStream) &#123;
         canvas.setAttribute(&#39;width&#39;, video.videoWidth);
         canvas.setAttribute(&#39;height&#39;, video.videoHeight);
         ctx.drawImage(video, 0, 0);
-    }
-}, false);
+    &#125;
+&#125;, false);
 </code></pre>
-<h3 id="3、用户声音录制"><a href="#3、用户声音录制" class="headerlink" title="3、用户声音录制"></a>3、用户声音录制</h3><pre><code class="javascript">navigator.getUserMedia({audio:true}, function(e) {
+<h3 id="3、用户声音录制"><a href="#3、用户声音录制" class="headerlink" title="3、用户声音录制"></a>3、用户声音录制</h3><pre><code class="javascript">navigator.getUserMedia(&#123;audio:true&#125;, function(e) &#123;
     context = new audioContext();
     audioInput = context.createMediaStreamSource(e);    
     volume = context.createGain();
     recorder = context.createScriptProcessor(2048, 2, 2);
-    recorder.onaudioprocess = function(e){
+    recorder.onaudioprocess = function(e)&#123;
         recordingLength += 2048;
         recorder.connect (context.destination); 
-    }    
-}, function(error){});
+    &#125;    
+&#125;, function(error)&#123;&#125;);
 </code></pre>
 <h3 id="4、保存用户录制的声音"><a href="#4、保存用户录制的声音" class="headerlink" title="4、保存用户录制的声音"></a>4、保存用户录制的声音</h3><pre><code class="javascript">var buffer = new ArrayBuffer(44 + interleaved.length * 2);
 var view = new DataView(buffer);
@@ -245,12 +243,12 @@ speechSynthesis.speak(msg);
 </code></pre>
 <h3 id="2、语音转换为文本，使用SpeechRecognition对象"><a href="#2、语音转换为文本，使用SpeechRecognition对象" class="headerlink" title="2、语音转换为文本，使用SpeechRecognition对象."></a>2、语音转换为文本，使用SpeechRecognition对象.</h3><pre><code class="javascript">
 var newRecognition = new webkitSpeechRecognition();
-newRecognition.onresult = function(event){
+newRecognition.onresult = function(event)&#123;
     var interim_transcript = &#39;&#39;; 
-    for (var i = event.resultIndex; i &lt; event.results.length; ++i) {
+    for (var i = event.resultIndex; i &lt; event.results.length; ++i) &#123;
         final_transcript += event.results[i][0].transcript;
-    }
-};
+    &#125;
+&#125;;
 </code></pre>
 <p>测试结论：<br>Android支持不稳定；语音识别测试失败（暂且认为是某些内置接口被墙所致）。</p>
 <h2 id="让我尽情呵护你-设备电量-Battery-API"><a href="#让我尽情呵护你-设备电量-Battery-API" class="headerlink" title="让我尽情呵护你 - 设备电量 Battery API"></a>让我尽情呵护你 - 设备电量 Battery API</h2><p>查询用户设备电量及是否正在充电。</p>
@@ -260,17 +258,17 @@ newRecognition.onresult = function(event){
 <p><strong>核心代码</strong> ：</p>
 <pre><code class="javascript">var battery = navigator.battery || navigator.webkitBattery || navigator.mozBattery || navigator.msBattery;
 var str = &#39;&#39;;
-if (battery) {
+if (battery) &#123;
  str += &#39;&lt;p&gt;你的浏览器支持HTML5 Battery API&lt;/p&gt;&#39;;
- if(battery.charging) {
+ if(battery.charging) &#123;
  str += &#39;&lt;p&gt;你的设备正在充电&lt;/p&gt;&#39;;
-} else {
+&#125; else &#123;
  str += &#39;&lt;p&gt;你的设备未处于充电状态&lt;/p&gt;&#39;;
-}
+&#125;
  str += &#39;&lt;p&gt;你的设备剩余&#39;+ parseInt(battery.level*100)+&#39;%的电量&lt;/p&gt;&#39;;
-} else {
+&#125; else &#123;
  str += &#39;&lt;p&gt;你的浏览器不支持HTML5 Battery API&lt;/p&gt;&#39;;
-}
+&#125;
 </code></pre>
 <p>测试结论 ：<br>1、QQ浏览器与UC浏览器支持该接口，但未正确显示设备电池信息；<br>2、caniuse显示android chrome42支持该接口，实测不支持。</p>
 <h2 id="获取用户位置-地理位置-Geolocation-API"><a href="#获取用户位置-地理位置-Geolocation-API" class="headerlink" title="获取用户位置 - 地理位置 Geolocation API"></a>获取用户位置 - 地理位置 Geolocation API</h2><p>Geolocation API用于将用户当前地理位置信息共享给信任的站点，目前主流移动设备都能够支持。</p>
@@ -281,15 +279,15 @@ if (battery) {
 <pre><code class="javascript">var domInfo = $(&quot;#info&quot;);
 
 // 获取位置坐标
-if (navigator.geolocation) {
+if (navigator.geolocation) &#123;
     navigator.geolocation.getCurrentPosition(showPosition,showError);
-}
-else{
+&#125;
+else&#123;
     domInfo.innerHTML=&quot;抱歉，你的浏览器不支持地理定位！&quot;;
-}
+&#125;
 
 // 使用腾讯地图显示位置
-function showPosition(position) {
+function showPosition(position) &#123;
     var lat=position.coords.latitude;
     var lon=position.coords.longitude;
 
@@ -298,32 +296,32 @@ function showPosition(position) {
     mapholder.style.width = document.documentElement.clientWidth + &#39;px&#39;;
 
     var center = new soso.maps.LatLng(lat, lon);
-    var map = new soso.maps.Map(mapholder,{
+    var map = new soso.maps.Map(mapholder,&#123;
         center: center,
         zoomLevel: 13
-    });
+    &#125;);
 
     var geolocation = new soso.maps.Geolocation();
     var marker = null;
-    geolocation.position({}, function(results, status) {
+    geolocation.position(&#123;&#125;, function(results, status) &#123;
         console.log(results);
         var city = $(&quot;#info&quot;);
-        if (status == soso.maps.GeolocationStatus.OK) {
+        if (status == soso.maps.GeolocationStatus.OK) &#123;
             map.setCenter(results.latLng);
             domInfo.innerHTML = &#39;你当前所在城市: &#39; + results.name;
-        if (marker != null) {
+        if (marker != null) &#123;
             marker.setMap(null);
-        }
+        &#125;
         // 设置标记
-        marker = new soso.maps.Marker({
+        marker = new soso.maps.Marker(&#123;
             map: map,
             position:results.latLng
-        });
-        } else {
+        &#125;);
+        &#125; else &#123;
             alert(&quot;检索没有结果，原因: &quot; + status);
-        }
-    });
-}
+        &#125;
+    &#125;);
+&#125;
 </code></pre>
 <p>测试结论：</p>
 <p>1、Geolocation API的位置信息来源包括GPS、IP地址、RFID、WIFI和蓝牙的MAC地址、以及GSM/CDMS的ID等等。规范中没有规定使用这些设备的先后顺序。<br>2、初测3g环境下比wifi环境理定位更准确；<br>3、测试三星 GT-S6358(android2.3) geolocation存在，但显示位置信息不可用POSITION_UNAVAILABLE。</p>
@@ -333,84 +331,84 @@ function showPosition(position) {
 </blockquote>
 <p><strong>核心代码</strong>：<br>这段代码实现感应用前当前环境光强度，调整网页背景和文字颜色。</p>
 <pre><code class="javascript">var domInfo = $(&#39;#info&#39;);
-if (!(&#39;ondevicelight&#39; in window)) {
+if (!(&#39;ondevicelight&#39; in window)) &#123;
     domInfo.innerHTML = &#39;你的设备不支持环境光Ambient Light API&#39;;
-} else {
+&#125; else &#123;
     var lightValue = document.getElementById(&#39;dl-value&#39;);
-    window.addEventListener(&#39;devicelight&#39;, function(event) {
+    window.addEventListener(&#39;devicelight&#39;, function(event) &#123;
         domInfo.innerHTML = &#39;当前环境光线强度为：&#39; + Math.round(event.value) + &#39;lux&#39;;
         var backgroundColor = &#39;rgba(0,0,0,&#39;+(1-event.value/100) +&#39;)&#39;;
         document.body.style.backgroundColor = backgroundColor;
-        if(event.value &lt; 50) {
+        if(event.value &lt; 50) &#123;
             document.body.style.color = &#39;#fff&#39;
-        } else {
+        &#125; else &#123;
             document.body.style.color = &#39;#000&#39;
-        }
-    });
-}
+        &#125;
+    &#125;);
+&#125;
 </code></pre>
 <h2 id="陀螺仪-Deviceorientation"><a href="#陀螺仪-Deviceorientation" class="headerlink" title="陀螺仪 Deviceorientation"></a>陀螺仪 Deviceorientation</h2><p>装逼说法：设备移动传感器。</p>
 <p>通俗说法：检测设备运动及运动状况，可以通过该接口获取到设备运动的方向和速度等相关信息</p>
 <p><strong>核心代码</strong> :<br>这货其实就是一个事件，简单地通过事件监听就可以获取到相关的设备运动信息</p>
-<pre><code class="javascript">window.addEventListener(&quot;devicemotion&quot;, function(event) {}, false);
+<pre><code class="javascript">window.addEventListener(&quot;devicemotion&quot;, function(event) &#123;&#125;, false);
 </code></pre>
 <p>最简单的设备运动，我们基本上可以认为是前后、左右、上下这么6个方向上的，装换成3D环境中来讲的话，就是在x、y和z轴上运动，这三个轴上的信息，都包含在了event对象中。我们可以通过这种方式获得</p>
-<pre><code class="javascript">window.addEventListener(&quot;devicemotion&quot;, function(event) {
+<pre><code class="javascript">window.addEventListener(&quot;devicemotion&quot;, function(event) &#123;
     var eventacceleration = event.acceleration;
     document.querySelector(&#39;#devicemotion&#39;).innerHTML = &quot;acceleration:&lt;br&gt;&quot;+
     eventacceleration.x+&quot;&lt;br&gt;&quot;+
     eventacceleration.y+&quot;&lt;br&gt;&quot;+
     eventacceleration.z
-}, false);
+&#125;, false);
 </code></pre>
-<p>不要问我为什么手机躺在桌面上，上面的数字还在不停地抖动，咱们文化人应该都知道什么叫相对静止。上面的三个不断变化的数字，就是你设备的运动数据了。如果你在惊讶为什么我都已经移动过手机，为什么上面的数字貌似也没什么大的变化~那么我会告诉你说：有本事你的眼睛跟着你的手机一样快速移动啊，运动过程中你就能发现这个值的变化了。没有这个本事吧！~自己尝试修改下那个demo。把运动中值的变化都记录下来看看。。。（PS：反正我不弄。）</p>
+<p>不要问我为什么手机躺在桌面上，上面的数字还在不停地抖动，咱们文化人应该都知道什么叫相对静止。上面的三个不断变化的数字，就是你设备的运动数据了。如果你在惊讶为什么我都已经移动过手机，为什么上面的数字貌似也没什么大的变化<del>那么我会告诉你说：有本事你的眼睛跟着你的手机一样快速移动啊，运动过程中你就能发现这个值的变化了。没有这个本事吧！</del>自己尝试修改下那个demo。把运动中值的变化都记录下来看看。。。（PS：反正我不弄。）</p>
 <p>还有一种比较理想的设备运动方式就是不产生位移，只是快速的旋转手机。这个旋转的信息同样也被反馈在了event对象中</p>
-<pre><code class="javascript">window.addEventListener(&quot;devicemotion&quot;, function(event) {
+<pre><code class="javascript">window.addEventListener(&quot;devicemotion&quot;, function(event) &#123;
     eventrotationRate = event.rotationRate;
     document.querySelector(&#39;#devicemotion&#39;).innerHTML = &#39;rotationRate:&lt;br&gt;&#39;+
     eventrotationRate.alpha+&#39;&lt;br&gt;&#39;+
     eventrotationRate.beta+&quot;&lt;br&gt;&quot;+
     eventrotationRate.gamma
-}, false);
+&#125;, false);
 </code></pre>
-<p>可能有的童鞋会觉得~有了这个旋转应该就能实现一些手机左右旋转产生视差的效果了，其实是不行的~因为这货和上面的一样，设备停止后，我们可以认为他的值归0~。真正想要实现手机旋转视差，我们需要用到的就是另外一个event的属性accelerationIncludingGravity。从字面上理解这个属性就是重力加速度。</p>
-<pre><code class="javascript">window.addEventListener(&quot;devicemotion&quot;, function(event) {
+<p>可能有的童鞋会觉得<del>有了这个旋转应该就能实现一些手机左右旋转产生视差的效果了，其实是不行的</del>因为这货和上面的一样，设备停止后，我们可以认为他的值归0~。真正想要实现手机旋转视差，我们需要用到的就是另外一个event的属性accelerationIncludingGravity。从字面上理解这个属性就是重力加速度。</p>
+<pre><code class="javascript">window.addEventListener(&quot;devicemotion&quot;, function(event) &#123;
     eventaccelerationIncludingGravity = event.accelerationIncludingGravity;
     document.querySelector(&#39;#devicemotion&#39;).innerHTML = &quot;accelerationIncludingGravity:&lt;br&gt;&quot;+
     eventaccelerationIncludingGravity.x+&quot;&lt;br&gt;&quot;+
     eventaccelerationIncludingGravity.y+&quot;&lt;br&gt;&quot;+
     eventaccelerationIncludingGravity.z
-}, false);
+&#125;, false);
 </code></pre>
 <p>其实，devicemotion还有一个好基友，这里也推荐给大家看一眼吧：</p>
 <p><strong>deviceorientation</strong><br>这个事件和devicemotion的使用方法基本一致</p>
-<pre><code class="javascript">window.addEventListener(&quot;deviceorientation&quot;, function(event) {
+<pre><code class="javascript">window.addEventListener(&quot;deviceorientation&quot;, function(event) &#123;
     document.querySelector(&#39;#deviceorientation&#39;).innerHTML = 
     event.alpha+&#39;&lt;br&gt;&#39;+
     event.beta+&quot;&lt;br&gt;&quot;+
     event.gamma+&#39;&lt;br&gt;&#39;;
-}, false);
+&#125;, false);
 </code></pre>
 <p>有前面devicemotion好基友的帮忙，似乎能做的东西又可以更多一点了。咱们前面貌似提及过&ldquo;喝前摇一摇&rdquo;。摇完之后，自然是要打开瓶盖痛饮一番了，结合旋转加速度，我们是不是可以尝试些一个拧瓶盖比赛的游戏了？怕长胖？要不，拧个螺丝钉也行。</p>
 <h2 id="Websocket"><a href="#Websocket" class="headerlink" title="Websocket"></a>Websocket</h2><p>浏览器与服务器全双工通信(full-duplex)。</p>
 <p><strong>核心代码</strong> ：</p>
-<pre><code class="javascript">var ws = new WebSocket(&#39;ws://127.0.0.1:8808/&#39;);//建立服务器连接ws.onopen = function(){
+<pre><code class="javascript">var ws = new WebSocket(&#39;ws://127.0.0.1:8808/&#39;);//建立服务器连接ws.onopen = function()&#123;
     systemInfo.innerHTML = &#39;&lt;p&gt;和websocket服务器连接成功&lt;/p&gt;&#39;;
-}//接收到服务器返回的数据ws.onmessage = function(e){
+&#125;//接收到服务器返回的数据ws.onmessage = function(e)&#123;
     systemInfo.innerHTML += &#39;&lt;p&gt;&#39;+e.data+&#39;&lt;/p&gt;&#39;;
-}//断开服务器连接ws.onclose = function(){
+&#125;//断开服务器连接ws.onclose = function()&#123;
     systemInfo.innerHTML += &#39;&lt;p&gt;WebSocket服务器连接关闭&lt;/p&gt;&#39;;
-}//ws发生错误ws.onerror = function(e){
+&#125;//ws发生错误ws.onerror = function(e)&#123;
     console.log(e);
     systemInfo.innerHTML += &#39;&lt;p&gt;WebSocket发生错误&lt;/p&gt;&#39;;
-}
+&#125;
 </code></pre>
 <p> 我们可以通过事件的监听，去实时获取到网络状态的变化</p>
-<pre><code class="javascript">window.addEventListener(&#39;offline&#39;, function(e) {alert(&#39;offline&#39;);})
-window.addEventListener(&#39;online&#39;, function(e) {alert(&#39;online&#39;);})
+<pre><code class="javascript">window.addEventListener(&#39;offline&#39;, function(e) &#123;alert(&#39;offline&#39;);&#125;)
+window.addEventListener(&#39;online&#39;, function(e) &#123;alert(&#39;online&#39;);&#125;)
 </code></pre>
 <h2 id="NFC"><a href="#NFC" class="headerlink" title="NFC"></a>NFC</h2><p>近场通信/近距离无线通信技术。</p>
-<p>其实说实在的，这个功能我并没有在我的页面里面调试出来。主要的一个原因是~这货目前只是在firefox os系统里面的firefox浏览器里面实现了，手头上没这设备。不过从他们官网的例子中，我大概地可以感受得到这货的好用，有兴趣的同学自行前往学习：[<a href="https://developer.mozilla.org/en-US/docs/Web/API/NFC_API/Using_the_NFC_API]https://developer.mozilla.org/en-US/docs/Web/API/NFC_API/Using_the_NFC_API" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Web/API/NFC_API/Using_the_NFC_API]https://developer.mozilla.org/en-US/docs/Web/API/NFC_API/Using_the_NFC_API</a>.</p>
+<p>其实说实在的，这个功能我并没有在我的页面里面调试出来。主要的一个原因是~这货目前只是在firefox os系统里面的firefox浏览器里面实现了，手头上没这设备。不过从他们官网的例子中，我大概地可以感受得到这货的好用，有兴趣的同学自行前往学习：[<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/NFC_API/Using_the_NFC_API]https://developer.mozilla.org/en-US/docs/Web/API/NFC_API/Using_the_NFC_API">https://developer.mozilla.org/en-US/docs/Web/API/NFC_API/Using_the_NFC_API]https://developer.mozilla.org/en-US/docs/Web/API/NFC_API/Using_the_NFC_API</a>.</p>
 <h2 id="震动-Vibration-API"><a href="#震动-Vibration-API" class="headerlink" title="震动 - Vibration API"></a>震动 - Vibration API</h2><p>设备震动</p>
 <p><strong>核心代码</strong> :</p>
 <pre><code class="javascript">navigator.vibrate = navigator.vibrate ||  navigator.webkitVibrate || 
@@ -446,7 +444,7 @@ navigator.vibrate(0);
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -469,7 +467,7 @@ navigator.vibrate(0);
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -480,7 +478,7 @@ navigator.vibrate(0);
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HTML5-Device-API"><span class="toc-number">1.</span> <span class="toc-text">HTML5 Device API</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#让音乐随心而动-音频处理-Web-audio-API"><span class="toc-number">1.1.</span> <span class="toc-text">让音乐随心而动 - 音频处理 Web audio API</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-源节点（source-node）"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.源节点（source node）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-分析节点（analyser-node）"><span class="toc-number">1.1.2.</span> <span class="toc-text">2.分析节点（analyser node）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-处理节点（gain-node、panner-node、wave-shaper-node、delay-node、convolver-node等）"><span class="toc-number">1.1.3.</span> <span class="toc-text">3.处理节点（gain node、panner node、wave shaper node、delay node、convolver node等）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-目的节点（destination-node）"><span class="toc-number">1.1.4.</span> <span class="toc-text">4.目的节点（destination node）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#捕捉用户摄像头-媒体流-Media-Capture"><span class="toc-number">1.2.</span> <span class="toc-text">捕捉用户摄像头 - 媒体流 Media Capture</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1、摄像头捕捉"><span class="toc-number">1.2.1.</span> <span class="toc-text">1、摄像头捕捉</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2、从视频流中拍照"><span class="toc-number">1.2.2.</span> <span class="toc-text">2、从视频流中拍照</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3、用户声音录制"><span class="toc-number">1.2.3.</span> <span class="toc-text">3、用户声音录制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4、保存用户录制的声音"><span class="toc-number">1.2.4.</span> <span class="toc-text">4、保存用户录制的声音</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#你是逗逼？-语音识别-Web-Speech-API"><span class="toc-number">1.3.</span> <span class="toc-text">你是逗逼？ - 语音识别 Web Speech API</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1、文本转换成语音，使用SpeechSynthesisUtterance对象"><span class="toc-number">1.3.1.</span> <span class="toc-text">1、文本转换成语音，使用SpeechSynthesisUtterance对象.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2、语音转换为文本，使用SpeechRecognition对象"><span class="toc-number">1.3.2.</span> <span class="toc-text">2、语音转换为文本，使用SpeechRecognition对象.</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#让我尽情呵护你-设备电量-Battery-API"><span class="toc-number">1.4.</span> <span class="toc-text">让我尽情呵护你 - 设备电量 Battery API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取用户位置-地理位置-Geolocation-API"><span class="toc-number">1.5.</span> <span class="toc-text">获取用户位置 - 地理位置 Geolocation API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#把用户捧在手心-环境光-Ambient-Light-API"><span class="toc-number">1.6.</span> <span class="toc-text">把用户捧在手心 - 环境光 Ambient Light API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#陀螺仪-Deviceorientation"><span class="toc-number">1.7.</span> <span class="toc-text">陀螺仪 Deviceorientation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Websocket"><span class="toc-number">1.8.</span> <span class="toc-text">Websocket</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NFC"><span class="toc-number">1.9.</span> <span class="toc-text">NFC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#震动-Vibration-API"><span class="toc-number">1.10.</span> <span class="toc-text">震动 - Vibration API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#网络环境-Connection-API"><span class="toc-number">1.11.</span> <span class="toc-text">网络环境 Connection API</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HTML5-Device-API"><span class="toc-number">1.</span> <span class="toc-text">HTML5 Device API</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A9%E9%9F%B3%E4%B9%90%E9%9A%8F%E5%BF%83%E8%80%8C%E5%8A%A8-%E9%9F%B3%E9%A2%91%E5%A4%84%E7%90%86-Web-audio-API"><span class="toc-number">1.1.</span> <span class="toc-text">让音乐随心而动 - 音频处理 Web audio API</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%BA%90%E8%8A%82%E7%82%B9%EF%BC%88source-node%EF%BC%89"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.源节点（source node）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%86%E6%9E%90%E8%8A%82%E7%82%B9%EF%BC%88analyser-node%EF%BC%89"><span class="toc-number">1.1.2.</span> <span class="toc-text">2.分析节点（analyser node）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%A4%84%E7%90%86%E8%8A%82%E7%82%B9%EF%BC%88gain-node%E3%80%81panner-node%E3%80%81wave-shaper-node%E3%80%81delay-node%E3%80%81convolver-node%E7%AD%89%EF%BC%89"><span class="toc-number">1.1.3.</span> <span class="toc-text">3.处理节点（gain node、panner node、wave shaper node、delay node、convolver node等）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E7%9B%AE%E7%9A%84%E8%8A%82%E7%82%B9%EF%BC%88destination-node%EF%BC%89"><span class="toc-number">1.1.4.</span> <span class="toc-text">4.目的节点（destination node）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8D%95%E6%8D%89%E7%94%A8%E6%88%B7%E6%91%84%E5%83%8F%E5%A4%B4-%E5%AA%92%E4%BD%93%E6%B5%81-Media-Capture"><span class="toc-number">1.2.</span> <span class="toc-text">捕捉用户摄像头 - 媒体流 Media Capture</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E6%91%84%E5%83%8F%E5%A4%B4%E6%8D%95%E6%8D%89"><span class="toc-number">1.2.1.</span> <span class="toc-text">1、摄像头捕捉</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E4%BB%8E%E8%A7%86%E9%A2%91%E6%B5%81%E4%B8%AD%E6%8B%8D%E7%85%A7"><span class="toc-number">1.2.2.</span> <span class="toc-text">2、从视频流中拍照</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E7%94%A8%E6%88%B7%E5%A3%B0%E9%9F%B3%E5%BD%95%E5%88%B6"><span class="toc-number">1.2.3.</span> <span class="toc-text">3、用户声音录制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E4%BF%9D%E5%AD%98%E7%94%A8%E6%88%B7%E5%BD%95%E5%88%B6%E7%9A%84%E5%A3%B0%E9%9F%B3"><span class="toc-number">1.2.4.</span> <span class="toc-text">4、保存用户录制的声音</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%A0%E6%98%AF%E9%80%97%E9%80%BC%EF%BC%9F-%E8%AF%AD%E9%9F%B3%E8%AF%86%E5%88%AB-Web-Speech-API"><span class="toc-number">1.3.</span> <span class="toc-text">你是逗逼？ - 语音识别 Web Speech API</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E6%96%87%E6%9C%AC%E8%BD%AC%E6%8D%A2%E6%88%90%E8%AF%AD%E9%9F%B3%EF%BC%8C%E4%BD%BF%E7%94%A8SpeechSynthesisUtterance%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.3.1.</span> <span class="toc-text">1、文本转换成语音，使用SpeechSynthesisUtterance对象.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%AF%AD%E9%9F%B3%E8%BD%AC%E6%8D%A2%E4%B8%BA%E6%96%87%E6%9C%AC%EF%BC%8C%E4%BD%BF%E7%94%A8SpeechRecognition%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.3.2.</span> <span class="toc-text">2、语音转换为文本，使用SpeechRecognition对象.</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A9%E6%88%91%E5%B0%BD%E6%83%85%E5%91%B5%E6%8A%A4%E4%BD%A0-%E8%AE%BE%E5%A4%87%E7%94%B5%E9%87%8F-Battery-API"><span class="toc-number">1.4.</span> <span class="toc-text">让我尽情呵护你 - 设备电量 Battery API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E4%BD%8D%E7%BD%AE-%E5%9C%B0%E7%90%86%E4%BD%8D%E7%BD%AE-Geolocation-API"><span class="toc-number">1.5.</span> <span class="toc-text">获取用户位置 - 地理位置 Geolocation API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%8A%E7%94%A8%E6%88%B7%E6%8D%A7%E5%9C%A8%E6%89%8B%E5%BF%83-%E7%8E%AF%E5%A2%83%E5%85%89-Ambient-Light-API"><span class="toc-number">1.6.</span> <span class="toc-text">把用户捧在手心 - 环境光 Ambient Light API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%99%80%E8%9E%BA%E4%BB%AA-Deviceorientation"><span class="toc-number">1.7.</span> <span class="toc-text">陀螺仪 Deviceorientation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Websocket"><span class="toc-number">1.8.</span> <span class="toc-text">Websocket</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NFC"><span class="toc-number">1.9.</span> <span class="toc-text">NFC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9C%87%E5%8A%A8-Vibration-API"><span class="toc-number">1.10.</span> <span class="toc-text">震动 - Vibration API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E7%8E%AF%E5%A2%83-Connection-API"><span class="toc-number">1.11.</span> <span class="toc-text">网络环境 Connection API</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -499,7 +497,7 @@ navigator.vibrate(0);
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

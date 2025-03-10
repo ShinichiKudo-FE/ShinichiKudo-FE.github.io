@@ -11,8 +11,7 @@
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="TriDiamond Obsidian,"> 
     <meta name="description" content="一枚前端搬砖队队员的记录册,前言最近把《javascript高级程序设计》看完了，发现里面有很多跨浏览器的代码，总结一下，方便记录。
-跨浏览器的事件对象EventUtil(事件处理程序)var EventUtil = {
-  ,"> 
+跨浏览器的事件对象EventUtil(事件处理程序)var EventUtil = &amp;#12,"> 
     <meta name="author" content="张白告丶"> 
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -38,7 +37,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -101,7 +100,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    3.4k
+                    3.7k
                 </span>
                 
                 
@@ -142,75 +141,75 @@
     <div class='main'>
         <div class="content markdown animated fadeIn">
             <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近把《javascript高级程序设计》看完了，发现里面有很多跨浏览器的代码，总结一下，方便记录。</p>
-<h2 id="跨浏览器的事件对象EventUtil-事件处理程序"><a href="#跨浏览器的事件对象EventUtil-事件处理程序" class="headerlink" title="跨浏览器的事件对象EventUtil(事件处理程序)"></a>跨浏览器的事件对象EventUtil(事件处理程序)</h2><pre><code class="js">var EventUtil = {
-    addHandler: function(element,type,handler) { //事件监听
-        if(element.addEventListener) {
+<h2 id="跨浏览器的事件对象EventUtil-事件处理程序"><a href="#跨浏览器的事件对象EventUtil-事件处理程序" class="headerlink" title="跨浏览器的事件对象EventUtil(事件处理程序)"></a>跨浏览器的事件对象EventUtil(事件处理程序)</h2><pre><code class="js">var EventUtil = &#123;
+    addHandler: function(element,type,handler) &#123; //事件监听
+        if(element.addEventListener) &#123;
             element.addEventListener(type,handler,false);
-        }else if(element.attachEvent) {
+        &#125;else if(element.attachEvent) &#123;
             element.attachEvent(&quot;on&quot;+type,handler);
-        }else {
+        &#125;else &#123;
             element[&quot;on&quot; +type] = handler;
-        }
-    },
-    removeHandler: function(element,type,handler){ //移除事件监听
-        if(element.removeEventListener) {
+        &#125;
+    &#125;,
+    removeHandler: function(element,type,handler)&#123; //移除事件监听
+        if(element.removeEventListener) &#123;
             element.removeEventListener(type,handler,false);
-        }else if(element.detachEvent) {
+        &#125;else if(element.detachEvent) &#123;
             element.detachEvent(&quot;on&quot;+type,handler);
-        }else {
+        &#125;else &#123;
             element[&quot;on&quot; +type] = null;
-        }
-    },
-    getEvent: function(event) {//获取event对象，返回event对象的引用
+        &#125;
+    &#125;,
+    getEvent: function(event) &#123;//获取event对象，返回event对象的引用
         return event ? event : window.event;
-    },
-    getTarget: function(event) {//返回事件目标。
+    &#125;,
+    getTarget: function(event) &#123;//返回事件目标。
         return event.target || event.srcElement;
-    },
-    preventDefault: function(event){//取消或者阻止事件默认行为
-        if(event.preventDefault) {
+    &#125;,
+    preventDefault: function(event)&#123;//取消或者阻止事件默认行为
+        if(event.preventDefault) &#123;
             event.preventDefault();
-        }else {
+        &#125;else &#123;
             event.returnValue = false;
-        }
-    },
-    stopPropagation: function(event) {//阻止事件流，阻止事件冒泡
-        if(event.stopPropagation) {
+        &#125;
+    &#125;,
+    stopPropagation: function(event) &#123;//阻止事件流，阻止事件冒泡
+        if(event.stopPropagation) &#123;
             event.stopPropagation();
-        }else {
+        &#125;else &#123;
             event.cancelBubble = true;
-        }
-    },
-    getRelatedTarget: function(event){//返回相关元素信息（仅对于mouseover和mouseout事件）
-        if (event.relatedTarget){
+        &#125;
+    &#125;,
+    getRelatedTarget: function(event)&#123;//返回相关元素信息（仅对于mouseover和mouseout事件）
+        if (event.relatedTarget)&#123;
             return event.relatedTarget;
-        } else if (event.toElement){
+        &#125; else if (event.toElement)&#123;
             return event.toElement;
-        } else if (event.fromElement){
+        &#125; else if (event.fromElement)&#123;
             return event.fromElement;
-        } else {
+        &#125; else &#123;
             return null;
-        }
-    },
-    getWheelDelta: function(event) {//获取鼠标滚轮增量值，检测是否包含WheelDelta
-        if(event.wheelDelta) {
+        &#125;
+    &#125;,
+    getWheelDelta: function(event) &#123;//获取鼠标滚轮增量值，检测是否包含WheelDelta
+        if(event.wheelDelta) &#123;
             return event.wheelDelta;
-        }else {
+        &#125;else &#123;
             return -event.detail * 40
-        }
-    },
-    getCharCode: function(event) {//获取键盘按键键码。
-        if(typeof event.charCode == &#39;number&#39;) {
+        &#125;
+    &#125;,
+    getCharCode: function(event) &#123;//获取键盘按键键码。
+        if(typeof event.charCode == &#39;number&#39;) &#123;
             return event.charCode;
-        }else {
+        &#125;else &#123;
             return event.keyCode;
-        }
-    },
-    getButton:function(event){//在mouseup或者mousedown的时候，event存在一个button属性，用于判断是按了鼠标左键，右键，还是中键，0鼠标主键按钮，1是中间，2是次键（右键）
-        if(document.implementation.hasFeature(&quot;MouseEvents&quot;,&quot;2.0&quot;)){
+        &#125;
+    &#125;,
+    getButton:function(event)&#123;//在mouseup或者mousedown的时候，event存在一个button属性，用于判断是按了鼠标左键，右键，还是中键，0鼠标主键按钮，1是中间，2是次键（右键）
+        if(document.implementation.hasFeature(&quot;MouseEvents&quot;,&quot;2.0&quot;))&#123;
             return event.button;
-        }else{
-            switch(event.button){
+        &#125;else&#123;
+            switch(event.button)&#123;
                 case 0:
                 case 1:
                 case 3:
@@ -223,18 +222,19 @@
                 case 4:
                   return 1;
 
-            }
-        }
+            &#125;
+        &#125;
 
-    }
-};
+    &#125;
+&#125;;
 </code></pre>
-<a id="more"></a>
+<span id="more"></span>
+
 <h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><p>例如click事件</p>
 <pre><code class="js">var btn1 = document.getElementById(&quot;myBtn1&quot;);
-var handler = function(){
+var handler = function()&#123;
 alert(&quot;hello haorooms&quot;);
-}
+&#125;
 
 EventUtil.addHandler(btn1, &quot;click&quot;, handler);
 //EventUtil.removeHandler(btn1, &quot;click&quot;, handler);
@@ -263,7 +263,7 @@ EventUtil.addHandler(btn1, &quot;click&quot;, handler);
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -286,7 +286,7 @@ EventUtil.addHandler(btn1, &quot;click&quot;, handler);
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -297,7 +297,7 @@ EventUtil.addHandler(btn1, &quot;click&quot;, handler);
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#跨浏览器的事件对象EventUtil-事件处理程序"><span class="toc-number">1.1.</span> <span class="toc-text">跨浏览器的事件对象EventUtil(事件处理程序)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用方法"><span class="toc-number">1.2.</span> <span class="toc-text">使用方法</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%A8%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%AF%B9%E8%B1%A1EventUtil-%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.1.</span> <span class="toc-text">跨浏览器的事件对象EventUtil(事件处理程序)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">1.2.</span> <span class="toc-text">使用方法</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -316,7 +316,7 @@ EventUtil.addHandler(btn1, &quot;click&quot;, handler);
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

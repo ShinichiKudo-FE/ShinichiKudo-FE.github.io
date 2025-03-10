@@ -36,7 +36,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -98,7 +98,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    4.3k
+                    4.5k
                 </span>
                 
                 
@@ -154,32 +154,32 @@
 
 import child from &#39;./child.vue&#39;;
 
-export default {
-    components: {
+export default &#123;
+    components: &#123;
         child
-    },
-    data () {
-        return {
+    &#125;,
+    data () &#123;
+        return &#123;
             message: &#39;father message&#39;;
-        }
-    }
-}
+        &#125;
+    &#125;
+&#125;
 &lt;/script&gt;
 </code></pre>
 <p>子组件vue模板child.vue</p>
 <pre><code class="html">&lt;template&gt;
-    &lt;div&gt;{{msg}}&lt;/div&gt;
+    &lt;div&gt;&#123;&#123;msg&#125;&#125;&lt;/div&gt;
 &lt;/template&gt;
 
 &lt;script&gt;
-export default {
-    props: {
-        msg: {
+export default &#123;
+    props: &#123;
+        msg: &#123;
             type: String,
             required: true
-        }
-    }
-}
+        &#125;
+    &#125;
+&#125;
 &lt;/script&gt;
 </code></pre>
 <ul>
@@ -198,38 +198,40 @@ export default {
 
 import child from &#39;./child.vue&#39;;
 
-export default {
-    components: {
+export default &#123;
+    components: &#123;
         child
-    },
-    methods: {
-        func (msg) {
+    &#125;,
+    methods: &#123;
+        func (msg) &#123;
             console.log(msg);
-        }
-    }
-}
+        &#125;
+    &#125;
+&#125;
 &lt;/script&gt;
 </code></pre>
-<p>子组件vue模板child.vue<br><a id="more"></a></p>
+<p>子组件vue模板child.vue</p>
+<span id="more"></span>
+
 <pre><code class="html">&lt;template&gt;
     &lt;button @click=&quot;handleClick&quot;&gt;点我&lt;/button&gt;
 &lt;/template&gt;
 
 &lt;script&gt;
-export default {
-    props: {
-        msg: {
+export default &#123;
+    props: &#123;
+        msg: &#123;
             type: String,
             required: true
-        }
-    },
-    methods () {
-        handleClick () {
+        &#125;
+    &#125;,
+    methods () &#123;
+        handleClick () &#123;
             //........
             this.$emit(&#39;msgFunc&#39;);
-        }
-    }
-}
+        &#125;
+    &#125;
+&#125;
 &lt;/script&gt;
 </code></pre>
 <ul>
@@ -241,7 +243,7 @@ export default {
 <li>方法三：使用$parent</li>
 </ul>
 <p>使用$parent可以访问父组件的数据。</p>
-<h3 id="非父子组件、兄弟组件之间的数据传递"><a href="#非父子组件、兄弟组件之间的数据传递" class="headerlink" title="非父子组件、兄弟组件之间的数据传递"></a>非父子组件、兄弟组件之间的数据传递</h3><p>非父子组件通信，Vue官方推荐<a href="https://cn.vuejs.org/v2/guide/components.html#%E9%9D%9E%E7%88%B6%E5%AD%90%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1" target="_blank" rel="noopener">使用一个Vue实例作为中央事件总线</a>。</p>
+<h3 id="非父子组件、兄弟组件之间的数据传递"><a href="#非父子组件、兄弟组件之间的数据传递" class="headerlink" title="非父子组件、兄弟组件之间的数据传递"></a>非父子组件、兄弟组件之间的数据传递</h3><p>非父子组件通信，Vue官方推荐<a target="_blank" rel="noopener" href="https://cn.vuejs.org/v2/guide/components.html#%E9%9D%9E%E7%88%B6%E5%AD%90%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1">使用一个Vue实例作为中央事件总线</a>。</p>
 <p>Vue内部有一个事件机制，可以参考源码。</p>
 <p>$on方法用来监听一个事件。</p>
 <p>$emit用来触发一个事件。</p>
@@ -249,15 +251,15 @@ export default {
 let event = new Vue();
 
 /*监听事件*/
-event.$on(&#39;eventName&#39;, (val) =&gt; {
+event.$on(&#39;eventName&#39;, (val) =&gt; &#123;
     //......do something
-});
+&#125;);
 
 /*触发事件*/
 event.$emit(&#39;eventName&#39;, &#39;this is a message.&#39;);
 </code></pre>
 <h3 id="多层级父子组件通信："><a href="#多层级父子组件通信：" class="headerlink" title="多层级父子组件通信："></a>多层级父子组件通信：</h3><p>在Vue1.0中实现了$broadcast与$dispatch两个方法用来向子组件（或父组件）广播（或派发），当子组件（或父组件）上监听了事件并返回true的时候会向爷孙级组件继续广播（或派发）事件。但是这个方法在Vue2.0里面已经被移除了。</p>
-<p>之前在学习饿了么的开源组件库element的时候发现他们重新实现了broadcast以及dispatch的方法，以mixin的方式引入，具体可以参考<a href="https://github.com/answershuto/learnVue/blob/master/docs/%E8%AF%B4%E8%AF%B4element%E7%BB%84%E4%BB%B6%E5%BA%93broadcast%E4%B8%8Edispatch.MarkDown" target="_blank" rel="noopener">《说说element组件库broadcast与dispatch》</a>。但是跟Vue1.0的两个方法实现有略微的不同。这两个方法实现了向子孙组件事件广播以及向多层级父组件事件派发的功能。但是并非广义上的事件广播，它需要指定一个commentName进行向指定组件名组件定向广播（派发）事件。</p>
+<p>之前在学习饿了么的开源组件库element的时候发现他们重新实现了broadcast以及dispatch的方法，以mixin的方式引入，具体可以参考<a target="_blank" rel="noopener" href="https://github.com/answershuto/learnVue/blob/master/docs/%E8%AF%B4%E8%AF%B4element%E7%BB%84%E4%BB%B6%E5%BA%93broadcast%E4%B8%8Edispatch.MarkDown">《说说element组件库broadcast与dispatch》</a>。但是跟Vue1.0的两个方法实现有略微的不同。这两个方法实现了向子孙组件事件广播以及向多层级父组件事件派发的功能。但是并非广义上的事件广播，它需要指定一个commentName进行向指定组件名组件定向广播（派发）事件。</p>
 <p>其实这两个方法内部实现还是用到的还是$parent以及$children，用以遍历子节点或是逐级向上查询父节点，访问到指定组件名的时候，调用$emit触发指定事件。</p>
 <h3 id="复杂的单页应用数据管理"><a href="#复杂的单页应用数据管理" class="headerlink" title="复杂的单页应用数据管理"></a>复杂的单页应用数据管理</h3><p>当应用足够复杂情况下，请使用vuex进行数据管理。</p>
 
@@ -284,7 +286,7 @@ event.$emit(&#39;eventName&#39;, &#39;this is a message.&#39;);
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -307,7 +309,7 @@ event.$emit(&#39;eventName&#39;, &#39;this is a message.&#39;);
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -318,7 +320,7 @@ event.$emit(&#39;eventName&#39;, &#39;this is a message.&#39;);
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#什么是Vue组件？"><span class="toc-number">1.</span> <span class="toc-text">什么是Vue组件？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Vue组件间通信"><span class="toc-number">1.1.</span> <span class="toc-text">Vue组件间通信</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#父组件向子组件通信"><span class="toc-number">1.1.1.</span> <span class="toc-text">父组件向子组件通信</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#子组件向父组件通信"><span class="toc-number">1.1.2.</span> <span class="toc-text">子组件向父组件通信</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#非父子组件、兄弟组件之间的数据传递"><span class="toc-number">1.1.3.</span> <span class="toc-text">非父子组件、兄弟组件之间的数据传递</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多层级父子组件通信："><span class="toc-number">1.1.4.</span> <span class="toc-text">多层级父子组件通信：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#复杂的单页应用数据管理"><span class="toc-number">1.1.5.</span> <span class="toc-text">复杂的单页应用数据管理</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFVue%E7%BB%84%E4%BB%B6%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">什么是Vue组件？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Vue%E7%BB%84%E4%BB%B6%E9%97%B4%E9%80%9A%E4%BF%A1"><span class="toc-number">1.1.</span> <span class="toc-text">Vue组件间通信</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%88%B6%E7%BB%84%E4%BB%B6%E5%90%91%E5%AD%90%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1"><span class="toc-number">1.1.1.</span> <span class="toc-text">父组件向子组件通信</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%90%E7%BB%84%E4%BB%B6%E5%90%91%E7%88%B6%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1"><span class="toc-number">1.1.2.</span> <span class="toc-text">子组件向父组件通信</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%9E%E7%88%B6%E5%AD%90%E7%BB%84%E4%BB%B6%E3%80%81%E5%85%84%E5%BC%9F%E7%BB%84%E4%BB%B6%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E4%BC%A0%E9%80%92"><span class="toc-number">1.1.3.</span> <span class="toc-text">非父子组件、兄弟组件之间的数据传递</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E5%B1%82%E7%BA%A7%E7%88%B6%E5%AD%90%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1%EF%BC%9A"><span class="toc-number">1.1.4.</span> <span class="toc-text">多层级父子组件通信：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E6%9D%82%E7%9A%84%E5%8D%95%E9%A1%B5%E5%BA%94%E7%94%A8%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86"><span class="toc-number">1.1.5.</span> <span class="toc-text">复杂的单页应用数据管理</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
             
@@ -337,7 +339,7 @@ event.$emit(&#39;eventName&#39;, &#39;this is a message.&#39;);
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

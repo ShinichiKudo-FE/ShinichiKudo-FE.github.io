@@ -37,7 +37,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -100,7 +100,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    5.3k
+                    5.9k
                 </span>
                 
                 
@@ -141,54 +141,56 @@
     <div class='main'>
         <div class="content markdown animated fadeIn">
             <p>上一篇使用Node.js操作数据库，虽然能实现功能，但是异步操作需要不断写回调函数，代码严重冗余，而且阅读困难。</p>
-<p>可以使用<a href="https://github.com/haoxins/co-mysql" target="_blank" rel="noopener">co-mysql</a>，将<code>query</code>方法该写为返回一个<code>Promise</code>，就可以使用<code>async/await</code>进行异步处理。</p>
+<p>可以使用<a target="_blank" rel="noopener" href="https://github.com/haoxins/co-mysql">co-mysql</a>，将<code>query</code>方法该写为返回一个<code>Promise</code>，就可以使用<code>async/await</code>进行异步处理。</p>
 <p>我们可以参考一下它的源码，看看它是如何实现将回调函数转换为</p>
 <pre><code class="js">module.exports = wrapper;
 
 var slice = [].slice;
 
 // 该模块导出为一个包装函数，运行它的返回值是一个带有query方法的对象。
-function wrapper(client) {
+function wrapper(client) &#123;
   // client即为mysql.createPool或mysql.createConnection方法创建的连接对象。
   var query = client.query;
 
-  var o = {};
+  var o = &#123;&#125;;
 
-  o.query = function () {
+  o.query = function () &#123;
     // 提取调用query方法时，传入的所有参数，将其存入一个数组。
     var args = slice.call(arguments);
 
     // 创建一个Promise对象，它将作为o.query的返回值，让其支持async/await方式调用。
-    var p = new Promise(function (resolve, reject) {
+    var p = new Promise(function (resolve, reject) &#123;
       // 为args增加一个回调函数，它将作为client.query方法的回调函数运行，它接收到结果时，将进行判断运行reject还是resolve
-      args.push(function (err, rows) {
-        if (err) {
+      args.push(function (err, rows) &#123;
+        if (err) &#123;
           reject(err);
-        } else {
+        &#125; else &#123;
           resolve(rows);
-        }
-      });
+        &#125;
+      &#125;);
 
       // 用apply方法，将o.query接收到的参数都传给client.query，它可以等同于
       /* 
-        client.query(args[0], function(err, rows) {
-          if (err) {
+        client.query(args[0], function(err, rows) &#123;
+          if (err) &#123;
             reject(err);
-          } else {
+          &#125; else &#123;
             resolve(rows);
-          }
-        })
+          &#125;
+        &#125;)
       */
       query.apply(client, args);
-    });
+    &#125;);
 
     return p;
-  };
+  &#125;;
 
   return o;
-}
+&#125;
 </code></pre>
-<p>于是上一篇的代码可以进行如下优化：<br><a id="more"></a></p>
+<p>于是上一篇的代码可以进行如下优化：</p>
+<span id="more"></span>
+
 <pre><code class="js">const http = require(&#39;http&#39;)
 const url = require(&#39;url&#39;)
 const fs = require(&#39;fs&#39;)
@@ -196,14 +198,14 @@ const mysql = require(&#39;mysql&#39;)
 const coMysql = require(&#39;co-mysql&#39;)
 
 // 1. 连接服务器
-const pool = mysql.createPool({
+const pool = mysql.createPool(&#123;
   connectionLimit: 10,  // 建立的连接数量，默认为10个
   host: &#39;localhost&#39;,  // 地址
   port: 3306,  // 端口，不传则默认3306
   user: &#39;root&#39;,  // 登录名
   password: &#39;&#39;,  // 密码
   database: &#39;test&#39;  // 连接的数据库
-})
+&#125;)
 
 const connection = coMysql(pool)
 
@@ -211,90 +213,90 @@ const connection = coMysql(pool)
 const password = &#39;888888&#39;
 
 // 向数据库中插入数据
-connection.query(`INSERT INTO user_table (username, password) VALUES (&#39;${username}&#39;, &#39;${password}&#39;)`, (err, data) =&gt; {
-  if (err) {
+connection.query(`INSERT INTO user_table (username, password) VALUES (&#39;$&#123;username&#125;&#39;, &#39;$&#123;password&#125;&#39;)`, (err, data) =&gt; &#123;
+  if (err) &#123;
     console.error(err)
-  } else {
+  &#125; else &#123;
     console.log(data)
-  }
-})
+  &#125;
+&#125;)
 
 // 查询user_table表的数据
-connection.query(`SELECT * FROM User_table`, (err, data) =&gt; {
-  if (err) {
+connection.query(`SELECT * FROM User_table`, (err, data) =&gt; &#123;
+  if (err) &#123;
     console.error(err)
-  } else {
+  &#125; else &#123;
     console.log(data)
-  }
-}) */
+  &#125;
+&#125;) */
 // more
 // 2. 与HTTP模块配合使用
-const server = http.createServer(async (req, res) =&gt; {
-  const {
+const server = http.createServer(async (req, res) =&gt; &#123;
+  const &#123;
     pathname,
     query
-  } = url.parse(req.url, true)
+  &#125; = url.parse(req.url, true)
 
-  if (pathname === &#39;/reg&#39;) {
+  if (pathname === &#39;/reg&#39;) &#123;
     // 获取get请求数据
-    const {
+    const &#123;
       username,
       password
-    } = query
+    &#125; = query
 
     // 校验参数是否正确
-    if (!username || !password) {
-      res.write(JSON.stringify({
+    if (!username || !password) &#123;
+      res.write(JSON.stringify(&#123;
         error: 1,
         msg: &#39;用户名或密码不可为空&#39;
-      }))
+      &#125;))
       res.end()
-    } else if (username.length &gt; 32) {
-      res.write(JSON.stringify({
+    &#125; else if (username.length &gt; 32) &#123;
+      res.write(JSON.stringify(&#123;
         error: 1,
         msg: &#39;用户名的长度不可超过32位&#39;
-      }))
+      &#125;))
       res.end()
-    } else if (password.length &gt; 32) {
-      res.write(JSON.stringify({
+    &#125; else if (password.length &gt; 32) &#123;
+      res.write(JSON.stringify(&#123;
         error: 1,
         msg: &#39;密码的长度不可超过32位&#39;
-      }))
+      &#125;))
       res.end()
-    } else {  // 校验通过，开始注册流程
-      try {
+    &#125; else &#123;  // 校验通过，开始注册流程
+      try &#123;
         // 检查用户名是否已存在
-        const data = await connection.query(`SELECT ID FROM User_table WHERE username=&#39;${username}&#39;`)
+        const data = await connection.query(`SELECT ID FROM User_table WHERE username=&#39;$&#123;username&#125;&#39;`)
 
-        if (data.length) {
-          res.write(JSON.stringify({
+        if (data.length) &#123;
+          res.write(JSON.stringify(&#123;
             error: 1,
             msg: &#39;此用户名已被占用&#39;
-          }))
-        } else {
+          &#125;))
+        &#125; else &#123;
           // 将用户名和密码插入数据库
-          await connection.query(`INSERT INTO userddd_table (username, password) VALUES(&#39;${username}&#39;, &#39;${password}&#39;)`)
+          await connection.query(`INSERT INTO userddd_table (username, password) VALUES(&#39;$&#123;username&#125;&#39;, &#39;$&#123;password&#125;&#39;)`)
 
-          res.write(JSON.stringify({
+          res.write(JSON.stringify(&#123;
             error: 0,
             msg: &#39;注册成功&#39;
-          }))
-        }
-      } catch (error) {
+          &#125;))
+        &#125;
+      &#125; catch (error) &#123;
         console.error(error)
         res.writeHead(500)
-      }
+      &#125;
       res.end()
-    }
-  } else if (pathname === &#39;/login&#39;) {
+    &#125;
+  &#125; else if (pathname === &#39;/login&#39;) &#123;
     let arr = []
 
-    req.on(&#39;data&#39;, (buffer) =&gt; {
+    req.on(&#39;data&#39;, (buffer) =&gt; &#123;
       // 获取POST请求的Buffer数据
       arr.push(buffer)
-    })
+    &#125;)
 
-    req.on(&#39;end&#39;, async () =&gt; {
+    req.on(&#39;end&#39;, async () =&gt; &#123;
       // 将Buffer数据合并
       let buffer = Buffer.concat(arr)
 
@@ -302,56 +304,56 @@ const server = http.createServer(async (req, res) =&gt; {
       const post = JSON.parse(buffer.toString())
 
       // 获取post请求数据
-      const {
+      const &#123;
         username,
         password
-      } = post
+      &#125; = post
 
-      try {
+      try &#123;
         // 根据用户名查询
-        const data = await connection.query(`SELECT username, password FROM User_table WHERE username=&#39;${username}&#39;`)
+        const data = await connection.query(`SELECT username, password FROM User_table WHERE username=&#39;$&#123;username&#125;&#39;`)
 
-        if (!data.length) {
+        if (!data.length) &#123;
           // 用户不存在
-          res.write(JSON.stringify({
+          res.write(JSON.stringify(&#123;
             error: 1,
             msg: &#39;用户名或密码错误&#39;
-          }))
-        } else if (data[0].password !== password) {
+          &#125;))
+        &#125; else if (data[0].password !== password) &#123;
           // 密码不正确
-          res.write(JSON.stringify({
+          res.write(JSON.stringify(&#123;
             error: 1,
             msg: &#39;用户名或密码错误&#39;
-          }))
-        } else {
-          res.write(JSON.stringify({
+          &#125;))
+        &#125; else &#123;
+          res.write(JSON.stringify(&#123;
             error: 0,
             msg: &#39;登录成功&#39;
-          }))
-        }
-      } catch (error) {
+          &#125;))
+        &#125;
+      &#125; catch (error) &#123;
         console.error(error)
         res.writeHead(500)
-      }
+      &#125;
       res.end()
-    })
-  } else {
+    &#125;)
+  &#125; else &#123;
     // 若请求不为接口，则默认为请求文件
-    if (pathname !== &#39;/favicon.ico&#39;) {
-      fs.readFile(`.${pathname}`, (err, buffer) =&gt; {
-        if (err) {
+    if (pathname !== &#39;/favicon.ico&#39;) &#123;
+      fs.readFile(`.$&#123;pathname&#125;`, (err, buffer) =&gt; &#123;
+        if (err) &#123;
           res.writeHead(404)
-        } else {
+        &#125; else &#123;
           res.write(buffer)
-        }
+        &#125;
         res.end()
-      })
-    } else {
+      &#125;)
+    &#125; else &#123;
       res.writeHead(404)
       res.end()
-    }
-  }
-})
+    &#125;
+  &#125;
+&#125;)
 
 server.listen(8080)
 </code></pre>
@@ -379,7 +381,7 @@ server.listen(8080)
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -402,7 +404,7 @@ server.listen(8080)
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -425,7 +427,7 @@ server.listen(8080)
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

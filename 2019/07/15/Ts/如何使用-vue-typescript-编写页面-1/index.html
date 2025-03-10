@@ -38,7 +38,7 @@ vue create demo ，demo就是创建项目的名称提示选择预设，选择 Ma
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -101,13 +101,13 @@ vue create demo ，demo就是创建项目的名称提示选择预设，选择 Ma
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    8k
+                    8.4k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    7 mins.
+                    8 mins.
                 </span>
                 
                 
@@ -141,55 +141,55 @@ vue create demo ，demo就是创建项目的名称提示选择预设，选择 Ma
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <p><a href="https://juejin.im/post/5c662a7de51d4562e71c4277#comment" target="_blank" rel="noopener">原文地址</a></p>
+            <p><a target="_blank" rel="noopener" href="https://juejin.im/post/5c662a7de51d4562e71c4277#comment">原文地址</a></p>
 <h1 id="起步"><a href="#起步" class="headerlink" title="起步"></a>起步</h1><p>使用 vue-cli 创建项目</p>
 <p><code>vue create demo</code> ，demo就是创建项目的名称<br>提示选择预设，选择 <code>Manually select features</code> 回车确认<br>选择<code>typescript</code> <code>vuex</code>  <code>router</code> <code>babel</code> <code>css pre-processors</code>，不使用<code>linter</code>，不选单元测试有需要另说<br>回车后按照需要选择合适的选项<br>选择完毕后回车等待资源准备</p>
 <h2 id="编码开始"><a href="#编码开始" class="headerlink" title="编码开始"></a>编码开始</h2><p>熟悉几个vue的装饰器 <code>vue-property-decorator</code></p>
 <p>以下的装饰器的功能和原js编写的功能相同/相似，可以参照官方文档类比解读。</p>
-<pre><code class="js">import { Vue, Component, Inject, Provide, Prop, Model, Watch, Emit, Mixins } from &#39;vue-property-decorator&#39;
+<pre><code class="js">import &#123; Vue, Component, Inject, Provide, Prop, Model, Watch, Emit, Mixins &#125; from &#39;vue-property-decorator&#39;
 </code></pre>
-<h3 id="1-Vue-实际上就是-Vue-本身-继承vue相关属性和函数"><a href="#1-Vue-实际上就是-Vue-本身-继承vue相关属性和函数" class="headerlink" title="1. Vue 实际上就是 Vue 本身,继承vue相关属性和函数"></a>1. Vue 实际上就是 Vue 本身,继承vue相关属性和函数</h3><pre><code class="js">class MyComponent extends Vue { }
+<h3 id="1-Vue-实际上就是-Vue-本身-继承vue相关属性和函数"><a href="#1-Vue-实际上就是-Vue-本身-继承vue相关属性和函数" class="headerlink" title="1. Vue 实际上就是 Vue 本身,继承vue相关属性和函数"></a>1. Vue 实际上就是 Vue 本身,继承vue相关属性和函数</h3><pre><code class="js">class MyComponent extends Vue &#123; &#125;
 </code></pre>
 <h3 id="2-Component-声明成一个vue的组件实例，如果不使用，则不能得到一个vue组件"><a href="#2-Component-声明成一个vue的组件实例，如果不使用，则不能得到一个vue组件" class="headerlink" title="2. @Component 声明成一个vue的组件实例，如果不使用，则不能得到一个vue组件"></a>2. @Component 声明成一个vue的组件实例，如果不使用，则不能得到一个vue组件</h3><p>第一种方式，不需要定义额外内容:</p>
 <pre><code class="js">@Component
-class MyComponent extends Vue { }
+class MyComponent extends Vue &#123; &#125;
 </code></pre>
 <p>第二种方式，定义相关内容:</p>
-<pre><code class="js">@Component({
+<pre><code class="js">@Component(&#123;
     /* 这里和js版本编写的 vue 组件内容相同，
      * 凡是不能在ts里面完成的都可以在这里完成 
      * 最终会被合并到一个实例中。
      * 在这里定义的内容，不会被语法器获取到，因此必须要同步在class中声明
      */
-    data(){
-        return { myname:&quot;&quot;,age:18 }
-    }
-})
-class MyComponent extends Vue {
+    data()&#123;
+        return &#123; myname:&quot;&quot;,age:18 &#125;
+    &#125;
+&#125;)
+class MyComponent extends Vue &#123;
     private myname:string;
-    mounted(){
+    mounted()&#123;
         this.myname;    
         this.age;// 语法器报错，当前类找不到age属性
-    }
-}
+    &#125;
+&#125;
 </code></pre>
 <h3 id="3-Provide-向任意层级的子组件提供可访问的属性，默认为当前属性的名称，可以指定名称"><a href="#3-Provide-向任意层级的子组件提供可访问的属性，默认为当前属性的名称，可以指定名称" class="headerlink" title="3.@Provide 向任意层级的子组件提供可访问的属性，默认为当前属性的名称，可以指定名称"></a>3.@Provide 向任意层级的子组件提供可访问的属性，默认为当前属性的名称，可以指定名称</h3><pre><code class="js">@Component
-class ParentComponent extends Vue { 
+class ParentComponent extends Vue &#123; 
     @Provide() private info!:string;
     @Provide(&quot;next&quot;) private infoNext!:string;
-}
+&#125;
 </code></pre>
 <h3 id="4-Inject-获取父级由Provide提供的属性，默认为当前属性的名称，可以指定名称，多个父级提供相同名称属性时，获取最近父级的名称属性"><a href="#4-Inject-获取父级由Provide提供的属性，默认为当前属性的名称，可以指定名称，多个父级提供相同名称属性时，获取最近父级的名称属性" class="headerlink" title="4. @Inject 获取父级由Provide提供的属性，默认为当前属性的名称，可以指定名称，多个父级提供相同名称属性时，获取最近父级的名称属性"></a>4. @Inject 获取父级由Provide提供的属性，默认为当前属性的名称，可以指定名称，多个父级提供相同名称属性时，获取最近父级的名称属性</h3><pre><code class="js">@Component
-class MyComponent extends Vue { 
+class MyComponent extends Vue &#123; 
     @Inject() private info!:string;
     @Inject(&quot;next&quot;) private infoNext!:string;
-}
+&#125;
 </code></pre>
 <h3 id="5-Prop-由标签属性注入，获取对应标签属性上值-可配置具体prop内容，参照js版本props内容"><a href="#5-Prop-由标签属性注入，获取对应标签属性上值-可配置具体prop内容，参照js版本props内容" class="headerlink" title="5. @Prop 由标签属性注入，获取对应标签属性上值,可配置具体prop内容，参照js版本props内容"></a>5. @Prop 由标签属性注入，获取对应标签属性上值,可配置具体prop内容，参照js版本props内容</h3><pre><code class="js">@Component
-class MyComponent extends Vue { 
+class MyComponent extends Vue &#123; 
    @Prop() age!:number;
-   @Prop({default:1}) sex!:number;
-}
+   @Prop(&#123;default:1&#125;) sex!:number;
+&#125;
 </code></pre>
 <pre><code class="html">&lt;template&gt;
     &lt;MyComponent :age=&quot;16&quot; /&gt;
@@ -198,25 +198,25 @@ class MyComponent extends Vue {
 &lt;script lang=&quot;ts&quot;&gt;  
 import MyComponent from &#39;./MyComponent.vue&#39;;
 
-@Component({
-    components:{ MyComponent }
-})
-class PComponent extends Vue { }
+@Component(&#123;
+    components:&#123; MyComponent &#125;
+&#125;)
+class PComponent extends Vue &#123; &#125;
 &lt;/script&gt;
 </code></pre>
-<a id="more"></a>
+<span id="more"></span>
 <h3 id="6-Model-是v-model的装饰器，当自定义组件想使用v-model时，可以使用这种方式，配合emit可以双向传递属性值"><a href="#6-Model-是v-model的装饰器，当自定义组件想使用v-model时，可以使用这种方式，配合emit可以双向传递属性值" class="headerlink" title="6. @Model 是v-model的装饰器，当自定义组件想使用v-model时，可以使用这种方式，配合emit可以双向传递属性值"></a>6. @Model 是v-model的装饰器，当自定义组件想使用v-model时，可以使用这种方式，配合emit可以双向传递属性值</h3><pre><code class="html">&lt;template&gt;
     &lt;input type=&quot;checkbox&quot; :checked=&quot;checked&quot; @change=&quot;changed&quot;/&gt;
 &lt;/template&gt;
 
 &lt;script lang=&quot;ts&quot;&gt;
 @Component
-class MyComponent extends Vue { 
+class MyComponent extends Vue &#123; 
    @Model(&quot;change&quot;) checked!:number;
-   changed(event:any){ /* 这里是偷懒写的any，在实际项目中需要避免 */
+   changed(event:any)&#123; /* 这里是偷懒写的any，在实际项目中需要避免 */
        this.$emit(&quot;change&quot;,event.target.value)
-   }
-}
+   &#125;
+&#125;
 &lt;/script&gt;
 </code></pre>
 <pre><code class="html">&lt;template&gt;
@@ -226,73 +226,72 @@ class MyComponent extends Vue {
 &lt;script lang=&quot;ts&quot;&gt; 
 import MyComponent from &#39;./MyComponent.vue&#39;;
 
-@Component({
-    components:{ MyComponent }
-})
-class PComponent extends Vue {
+@Component(&#123;
+    components:&#123; MyComponent &#125;
+&#125;)
+class PComponent extends Vue &#123;
     private mycheck:boolean = false;
-}
+&#125;
 &lt;/script&gt;
 </code></pre>
 <h3 id="7-Watch-观察某个属性更新"><a href="#7-Watch-观察某个属性更新" class="headerlink" title="7. @Watch 观察某个属性更新"></a>7. @Watch 观察某个属性更新</h3><pre><code class="js">@Component
-class MyComponent extends Vue { 
+class MyComponent extends Vue &#123; 
    @Prop() age!:number;
    @Watch(&quot;age&quot;)
-   ageChange(newVal:number,oldVal:number){
+   ageChange(newVal:number,oldVal:number)&#123;
        /*age属性更新时，处理相关内容*/
-   }
-}
+   &#125;
+&#125;
 </code></pre>
 <h3 id="8-Emit-this-emit-的装饰器-如果没有指定名称，默认使用函数名称。有返回值时，使用返回值，没有则使用"><a href="#8-Emit-this-emit-的装饰器-如果没有指定名称，默认使用函数名称。有返回值时，使用返回值，没有则使用" class="headerlink" title="8. @Emit this.$emit 的装饰器,如果没有指定名称，默认使用函数名称。有返回值时，使用返回值，没有则使用"></a>8. @Emit this.$emit 的装饰器,如果没有指定名称，默认使用函数名称。有返回值时，使用返回值，没有则使用</h3><pre><code class="js">@Component
-class MyComponent extends Vue { 
+class MyComponent extends Vue &#123; 
    private myname = &quot;&quot;;
-
+   
    @Emit()
-   ageChangeA(){ /* 仅发送 this.$emit(&#39;ageChangeA&#39;) */   }
-
+   ageChangeA()&#123; /* 仅发送 this.$emit(&#39;ageChangeA&#39;) */   &#125;
+   
    @Emit()
-   ageChangeB(age:number){ /* 发送 age  this.$emit(&#39;ageChangeB&#39;,age) */   }
-
+   ageChangeB(age:number)&#123; /* 发送 age  this.$emit(&#39;ageChangeB&#39;,age) */   &#125;
+   
    @Emit()
-   ageChangeC(age:number){  return 1 /* this.$emit(&#39;ageChangeC&#39;,1) 发送return 结果*/ }
-}
-
+   ageChangeC(age:number)&#123;  return 1 /* this.$emit(&#39;ageChangeC&#39;,1) 发送return 结果*/ &#125;
+&#125;
 </code></pre>
 <h3 id="9-Mixins"><a href="#9-Mixins" class="headerlink" title="9. Mixins"></a>9. Mixins</h3><pre><code class="js">// MyMixin.ts
 @Component
-export default class MyMixin extends Vue { 
+export default class MyMixin extends Vue &#123; 
    /* 如果使用private 修饰，则两个相同的 私有属性混入时，会产生冲突 */
    protected myname = &quot;张三&quot;;
-   created(){  /* 混入对象有自己的 生命周期函数*/ }
-   getMyName(){ console.log(&quot;张三混入&quot;) }
-}
+   created()&#123;  /* 混入对象有自己的 生命周期函数*/ &#125;
+   getMyName()&#123; console.log(&quot;张三混入&quot;) &#125;
+&#125;
 </code></pre>
 <pre><code class="js">// OtherMixin.ts
 @Component
-export default class OtherMixin extends Vue { 
+export default class OtherMixin extends Vue &#123; 
    /* 如果使用private 修饰，则两个相同的 私有属性混入时，会产生冲突 */
    protected myname = &quot;李四&quot;;
-   created(){  /* 混入对象有自己的 生命周期函数*/ }
-   getMyName(){ console.log(&quot;李四混入&quot;) }
-}
+   created()&#123;  /* 混入对象有自己的 生命周期函数*/ &#125;
+   getMyName()&#123; console.log(&quot;李四混入&quot;) &#125;
+&#125;
 </code></pre>
 <pre><code class="js">@Component
-class MyComponent extends Mixins(MyMixin,OtherMixin) { 
+class MyComponent extends Mixins(MyMixin,OtherMixin) &#123; 
    private myname = &quot;&quot;; /* 混入对象已经定义，这里产生属性冲突 */
-   mounted(){
+   mounted()&#123;
        this.getMyName() // 李四混入
-   }
-}
+   &#125;
+&#125;
 </code></pre>
 <h3 id="对于computed，使用-get-替代"><a href="#对于computed，使用-get-替代" class="headerlink" title="对于computed，使用 get 替代"></a>对于computed，使用 get 替代</h3><pre><code class="js">@Component
-class MyComponent extends Vue { 
+class MyComponent extends Vue &#123; 
    private myname = &quot;&quot;; /* 混入对象已经定义，这里产生属性冲突 */
-   get upperName(){
+   get upperName()&#123;
        return &quot;A&quot; + this.myname
-   }
-}
+   &#125;
+&#125;
 </code></pre>
-<p><strong>装饰器可以参照 <a href="https://link.juejin.im/?target=http%3A%2F%2Fnpm.taobao.org%2Fpackage%2Fvue-property-decorator">vue-property-decorator</a></strong></p>
+<p><strong>装饰器可以参照 <a href="https://link.juejin.im/?target=http://npm.taobao.org/package/vue-property-decorator">vue-property-decorator</a></strong></p>
 <ul>
 <li>没有filters,没有指令相关装饰器，有需要可以在@Component里面补充，或者可以直接定义函数调用计算返回值 在class里定义的属性即data属性，需要赋值初始值。</li>
 </ul>
@@ -307,11 +306,11 @@ declare module &#39;*&#39;;
 <p>这样属于一劳永逸的描述,但是无法描述到具体模块内容,因此这种方式仅仅引入的组件没有任何操作时,比如引入的是第三方开发的vue组件,可以用这种方式偷懒.</p>
 <p><strong>详细描述文件</strong></p>
 <pre><code class="js">// A.d.ts
-declare module  &quot;A&quot; {
+declare module  &quot;A&quot; &#123;
     // 添加具体的描述内容
-};
+&#125;;
 </code></pre>
-<p>可以从这里查询到<a href="http://microsoft.github.io/TypeSearch/" target="_blank" rel="noopener">@type</a>包查询，已经被编写的文件声明可以直接下载</p>
+<p>可以从这里查询到<a target="_blank" rel="noopener" href="http://microsoft.github.io/TypeSearch/">@type</a>包查询，已经被编写的文件声明可以直接下载</p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -336,7 +335,7 @@ declare module  &quot;A&quot; {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -359,7 +358,7 @@ declare module  &quot;A&quot; {
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -370,7 +369,7 @@ declare module  &quot;A&quot; {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#起步"><span class="toc-number">1.</span> <span class="toc-text">起步</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#编码开始"><span class="toc-number">1.1.</span> <span class="toc-text">编码开始</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Vue-实际上就是-Vue-本身-继承vue相关属性和函数"><span class="toc-number">1.1.1.</span> <span class="toc-text">1. Vue 实际上就是 Vue 本身,继承vue相关属性和函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Component-声明成一个vue的组件实例，如果不使用，则不能得到一个vue组件"><span class="toc-number">1.1.2.</span> <span class="toc-text">2. @Component 声明成一个vue的组件实例，如果不使用，则不能得到一个vue组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Provide-向任意层级的子组件提供可访问的属性，默认为当前属性的名称，可以指定名称"><span class="toc-number">1.1.3.</span> <span class="toc-text">3.@Provide 向任意层级的子组件提供可访问的属性，默认为当前属性的名称，可以指定名称</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Inject-获取父级由Provide提供的属性，默认为当前属性的名称，可以指定名称，多个父级提供相同名称属性时，获取最近父级的名称属性"><span class="toc-number">1.1.4.</span> <span class="toc-text">4. @Inject 获取父级由Provide提供的属性，默认为当前属性的名称，可以指定名称，多个父级提供相同名称属性时，获取最近父级的名称属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-Prop-由标签属性注入，获取对应标签属性上值-可配置具体prop内容，参照js版本props内容"><span class="toc-number">1.1.5.</span> <span class="toc-text">5. @Prop 由标签属性注入，获取对应标签属性上值,可配置具体prop内容，参照js版本props内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-Model-是v-model的装饰器，当自定义组件想使用v-model时，可以使用这种方式，配合emit可以双向传递属性值"><span class="toc-number">1.1.6.</span> <span class="toc-text">6. @Model 是v-model的装饰器，当自定义组件想使用v-model时，可以使用这种方式，配合emit可以双向传递属性值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-Watch-观察某个属性更新"><span class="toc-number">1.1.7.</span> <span class="toc-text">7. @Watch 观察某个属性更新</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-Emit-this-emit-的装饰器-如果没有指定名称，默认使用函数名称。有返回值时，使用返回值，没有则使用"><span class="toc-number">1.1.8.</span> <span class="toc-text">8. @Emit this.$emit 的装饰器,如果没有指定名称，默认使用函数名称。有返回值时，使用返回值，没有则使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-Mixins"><span class="toc-number">1.1.9.</span> <span class="toc-text">9. Mixins</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#对于computed，使用-get-替代"><span class="toc-number">1.1.10.</span> <span class="toc-text">对于computed，使用 get 替代</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#typescript-混用js"><span class="toc-number">1.2.</span> <span class="toc-text">typescript 混用js</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#通用兼容性解决方案"><span class="toc-number">1.2.1.</span> <span class="toc-text">通用兼容性解决方案</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B5%B7%E6%AD%A5"><span class="toc-number">1.</span> <span class="toc-text">起步</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E7%A0%81%E5%BC%80%E5%A7%8B"><span class="toc-number">1.1.</span> <span class="toc-text">编码开始</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Vue-%E5%AE%9E%E9%99%85%E4%B8%8A%E5%B0%B1%E6%98%AF-Vue-%E6%9C%AC%E8%BA%AB-%E7%BB%A7%E6%89%BFvue%E7%9B%B8%E5%85%B3%E5%B1%9E%E6%80%A7%E5%92%8C%E5%87%BD%E6%95%B0"><span class="toc-number">1.1.1.</span> <span class="toc-text">1. Vue 实际上就是 Vue 本身,继承vue相关属性和函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Component-%E5%A3%B0%E6%98%8E%E6%88%90%E4%B8%80%E4%B8%AAvue%E7%9A%84%E7%BB%84%E4%BB%B6%E5%AE%9E%E4%BE%8B%EF%BC%8C%E5%A6%82%E6%9E%9C%E4%B8%8D%E4%BD%BF%E7%94%A8%EF%BC%8C%E5%88%99%E4%B8%8D%E8%83%BD%E5%BE%97%E5%88%B0%E4%B8%80%E4%B8%AAvue%E7%BB%84%E4%BB%B6"><span class="toc-number">1.1.2.</span> <span class="toc-text">2. @Component 声明成一个vue的组件实例，如果不使用，则不能得到一个vue组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Provide-%E5%90%91%E4%BB%BB%E6%84%8F%E5%B1%82%E7%BA%A7%E7%9A%84%E5%AD%90%E7%BB%84%E4%BB%B6%E6%8F%90%E4%BE%9B%E5%8F%AF%E8%AE%BF%E9%97%AE%E7%9A%84%E5%B1%9E%E6%80%A7%EF%BC%8C%E9%BB%98%E8%AE%A4%E4%B8%BA%E5%BD%93%E5%89%8D%E5%B1%9E%E6%80%A7%E7%9A%84%E5%90%8D%E7%A7%B0%EF%BC%8C%E5%8F%AF%E4%BB%A5%E6%8C%87%E5%AE%9A%E5%90%8D%E7%A7%B0"><span class="toc-number">1.1.3.</span> <span class="toc-text">3.@Provide 向任意层级的子组件提供可访问的属性，默认为当前属性的名称，可以指定名称</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Inject-%E8%8E%B7%E5%8F%96%E7%88%B6%E7%BA%A7%E7%94%B1Provide%E6%8F%90%E4%BE%9B%E7%9A%84%E5%B1%9E%E6%80%A7%EF%BC%8C%E9%BB%98%E8%AE%A4%E4%B8%BA%E5%BD%93%E5%89%8D%E5%B1%9E%E6%80%A7%E7%9A%84%E5%90%8D%E7%A7%B0%EF%BC%8C%E5%8F%AF%E4%BB%A5%E6%8C%87%E5%AE%9A%E5%90%8D%E7%A7%B0%EF%BC%8C%E5%A4%9A%E4%B8%AA%E7%88%B6%E7%BA%A7%E6%8F%90%E4%BE%9B%E7%9B%B8%E5%90%8C%E5%90%8D%E7%A7%B0%E5%B1%9E%E6%80%A7%E6%97%B6%EF%BC%8C%E8%8E%B7%E5%8F%96%E6%9C%80%E8%BF%91%E7%88%B6%E7%BA%A7%E7%9A%84%E5%90%8D%E7%A7%B0%E5%B1%9E%E6%80%A7"><span class="toc-number">1.1.4.</span> <span class="toc-text">4. @Inject 获取父级由Provide提供的属性，默认为当前属性的名称，可以指定名称，多个父级提供相同名称属性时，获取最近父级的名称属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-Prop-%E7%94%B1%E6%A0%87%E7%AD%BE%E5%B1%9E%E6%80%A7%E6%B3%A8%E5%85%A5%EF%BC%8C%E8%8E%B7%E5%8F%96%E5%AF%B9%E5%BA%94%E6%A0%87%E7%AD%BE%E5%B1%9E%E6%80%A7%E4%B8%8A%E5%80%BC-%E5%8F%AF%E9%85%8D%E7%BD%AE%E5%85%B7%E4%BD%93prop%E5%86%85%E5%AE%B9%EF%BC%8C%E5%8F%82%E7%85%A7js%E7%89%88%E6%9C%ACprops%E5%86%85%E5%AE%B9"><span class="toc-number">1.1.5.</span> <span class="toc-text">5. @Prop 由标签属性注入，获取对应标签属性上值,可配置具体prop内容，参照js版本props内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-Model-%E6%98%AFv-model%E7%9A%84%E8%A3%85%E9%A5%B0%E5%99%A8%EF%BC%8C%E5%BD%93%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6%E6%83%B3%E4%BD%BF%E7%94%A8v-model%E6%97%B6%EF%BC%8C%E5%8F%AF%E4%BB%A5%E4%BD%BF%E7%94%A8%E8%BF%99%E7%A7%8D%E6%96%B9%E5%BC%8F%EF%BC%8C%E9%85%8D%E5%90%88emit%E5%8F%AF%E4%BB%A5%E5%8F%8C%E5%90%91%E4%BC%A0%E9%80%92%E5%B1%9E%E6%80%A7%E5%80%BC"><span class="toc-number">1.1.6.</span> <span class="toc-text">6. @Model 是v-model的装饰器，当自定义组件想使用v-model时，可以使用这种方式，配合emit可以双向传递属性值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-Watch-%E8%A7%82%E5%AF%9F%E6%9F%90%E4%B8%AA%E5%B1%9E%E6%80%A7%E6%9B%B4%E6%96%B0"><span class="toc-number">1.1.7.</span> <span class="toc-text">7. @Watch 观察某个属性更新</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-Emit-this-emit-%E7%9A%84%E8%A3%85%E9%A5%B0%E5%99%A8-%E5%A6%82%E6%9E%9C%E6%B2%A1%E6%9C%89%E6%8C%87%E5%AE%9A%E5%90%8D%E7%A7%B0%EF%BC%8C%E9%BB%98%E8%AE%A4%E4%BD%BF%E7%94%A8%E5%87%BD%E6%95%B0%E5%90%8D%E7%A7%B0%E3%80%82%E6%9C%89%E8%BF%94%E5%9B%9E%E5%80%BC%E6%97%B6%EF%BC%8C%E4%BD%BF%E7%94%A8%E8%BF%94%E5%9B%9E%E5%80%BC%EF%BC%8C%E6%B2%A1%E6%9C%89%E5%88%99%E4%BD%BF%E7%94%A8"><span class="toc-number">1.1.8.</span> <span class="toc-text">8. @Emit this.$emit 的装饰器,如果没有指定名称，默认使用函数名称。有返回值时，使用返回值，没有则使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-Mixins"><span class="toc-number">1.1.9.</span> <span class="toc-text">9. Mixins</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E4%BA%8Ecomputed%EF%BC%8C%E4%BD%BF%E7%94%A8-get-%E6%9B%BF%E4%BB%A3"><span class="toc-number">1.1.10.</span> <span class="toc-text">对于computed，使用 get 替代</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#typescript-%E6%B7%B7%E7%94%A8js"><span class="toc-number">1.2.</span> <span class="toc-text">typescript 混用js</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E5%85%BC%E5%AE%B9%E6%80%A7%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">1.2.1.</span> <span class="toc-text">通用兼容性解决方案</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
             
@@ -389,7 +388,7 @@ declare module  &quot;A&quot; {
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

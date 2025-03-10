@@ -37,7 +37,7 @@ Babel是一个广泛使用的ES6转码器，可以将ES6代码转为ES5代码，
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -100,7 +100,7 @@ Babel是一个广泛使用的ES6转码器，可以将ES6代码转为ES5代码，
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    8.3k
+                    8.6k
                 </span>
                 
                 
@@ -140,70 +140,71 @@ Babel是一个广泛使用的ES6转码器，可以将ES6代码转为ES5代码，
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <p>在我们正式讲解ES6语法之前，我们得先了解下Babel。<br><a href="https://babeljs.io/" target="_blank" rel="noopener">Babel</a></p>
+            <p>在我们正式讲解ES6语法之前，我们得先了解下Babel。<br><a target="_blank" rel="noopener" href="https://babeljs.io/">Babel</a></p>
 <p>Babel是一个广泛使用的ES6转码器，可以将ES6代码转为ES5代码，从而在现有环境执行。大家可以选择自己习惯的工具来使用使用Babel，具体过程可直接在Babel官网查看：</p>
 <h1 id="最常用的ES6特性"><a href="#最常用的ES6特性" class="headerlink" title="最常用的ES6特性"></a>最常用的ES6特性</h1><p><code>let, const, class, extends, super, arrow functions, template string, destructuring, default, rest，arguments</code></p>
 <p>这些是ES6最常用的几个语法，基本上学会它们，我们就可以走遍天下都不怕啦！我会用最通俗易懂的语言和例子来讲解它们，保证一看就懂，一学就会。</p>
 <h2 id="let-const"><a href="#let-const" class="headerlink" title="let ,const"></a>let ,const</h2><p>这两个的用途与var类似，都是用来声明变量的，但在实际运用中他俩都有各自的特殊用途。<br>首先来看下面这个例子：</p>
 <pre><code class="javascript">var name = &#39;zach&#39;
 
-while (true) {
+while (true) &#123;
     var name = &#39;obama&#39;
     console.log(name)  //obama
     break
-}
+&#125;
 
 console.log(name)  //obama
 </code></pre>
 <p>使用var 两次输出都是obama，这是因为ES5只有全局作用域和函数作用域，没有块级作用域，这带来很多不合理的场景。第一种场景就是你现在看到的内层变量覆盖外层变量。而let则实际上为JavaScript新增了块级作用域。用它所声明的变量，只在let命令所在的代码块内有效。</p>
-<a id="more"></a>
+<span id="more"></span>
+
 <pre><code class="javascript">let name = &#39;zach&#39;
 
-while (true) {
+while (true) &#123;
     let name = &#39;obama&#39;
     console.log(name)  //obama
     break
-}
+&#125;
 
 console.log(name)  //zach
 </code></pre>
 <p>另外一个var带来的不合理场景就是用来计数的循环变量泄露为全局变量，看下面的例子：</p>
 <pre><code class="javascript">var a = [];
-for (var i = 0; i &lt; 10; i++) {
-  a[i] = function () {
+for (var i = 0; i &lt; 10; i++) &#123;
+  a[i] = function () &#123;
     console.log(i);
-  };
-}
+  &#125;;
+&#125;
 a[6](); // 10
 </code></pre>
 <p>上面代码中，变量i是var声明的，在全局范围内都有效。所以每一次循环，新的i值都会覆盖旧值，导致最后输出的是最后一轮的i的值。而使用let则不会出现这个问题。</p>
 <pre><code class="javascript">var a = [];
-for (let i = 0; i &lt; 10; i++) {
-  a[i] = function () {
+for (let i = 0; i &lt; 10; i++) &#123;
+  a[i] = function () &#123;
     console.log(i);
-  };
-}
+  &#125;;
+&#125;
 a[6](); // 6
 </code></pre>
 <p>再来看一个更常见的例子，了解下如果不用ES6，而用闭包如何解决这个问题。</p>
 <pre><code class="javascript">var clickBoxs = document.querySelectorAll(&#39;.clickBox&#39;)
-for (var i = 0; i &lt; clickBoxs.length; i++){
-    clickBoxs[i].onclick = function(){
+for (var i = 0; i &lt; clickBoxs.length; i++)&#123;
+    clickBoxs[i].onclick = function()&#123;
         console.log(i)
-    }
-}
+    &#125;
+&#125;
 </code></pre>
 <p>我们本来希望的是点击不同的clickBox，显示不同的i，但事实是无论我们点击哪个clickBox，输出的都是5。下面我们来看下，如何用闭包搞定它。</p>
-<pre><code class="javascript">function iteratorFactory(i){
-    var onclick = function(e){
+<pre><code class="javascript">function iteratorFactory(i)&#123;
+    var onclick = function(e)&#123;
         console.log(i)
-    }
+    &#125;
     return onclick;
-}
+&#125;
 var clickBoxs = document.querySelectorAll(&#39;.clickBox&#39;)
-for (var i = 0; i &lt; clickBoxs.length; i++){
+for (var i = 0; i &lt; clickBoxs.length; i++)&#123;
     clickBoxs[i].onclick = iteratorFactory(i)
-}
+&#125;
 </code></pre>
 <p>const也用来声明变量，但是声明的是常量。一旦声明，常量的值就不能改变。</p>
 <pre><code class="javascript">const PI = Math.PI
@@ -211,24 +212,24 @@ PI = 23 //Module build failed: SyntaxError: /es6/app.js: &quot;PI&quot; is read-
 </code></pre>
 <p>当我们尝试去改变用const声明的常量时，浏览器就会报错。</p>
 <h2 id="class-extends-super"><a href="#class-extends-super" class="headerlink" title="class, extends, super"></a>class, extends, super</h2><p>这三个特性涉及了ES5中最令人头疼的的几个部分：原型、构造函数，继承…你还在为它们复杂难懂的语法而烦恼吗？你还在为指针到底指向哪里而纠结万分吗？<br>ES6提供了更接近传统语言的写法，引入了Class（类）这个概念。新的class写法让对象原型的写法更加清晰、更像面向对象编程的语法，也更加通俗易懂。</p>
-<pre><code class="javascript">class Animal {
-    constructor(){
+<pre><code class="javascript">class Animal &#123;
+    constructor()&#123;
         this.type = &#39;animal&#39;
-    }
-    says(say){
+    &#125;
+    says(say)&#123;
         console.log(this.type + &#39;says&#39; + say)
-    }
-}
+    &#125;
+&#125;
 let animal = new Animal()
 animal.says(&#39;hello&#39;) //animal says hello
 
-class Cat extends Animal{
-    constructor(){
+class Cat extends Animal&#123;
+    constructor()&#123;
         super()
         this.type = &#39;cat&#39;
-    }
+    &#125;
 
-}
+&#125;
 
 let cat  = new Cat();
 cat.says(&#39;hello&#39;)
@@ -236,32 +237,31 @@ cat.says(&#39;hello&#39;)
 <p>上面代码首先用<code>class</code>定义了一个“类”，可以看到里面有一个<code>constructor</code>方法，这就是构造方法，而<code>this</code>关键字则代表实例对象。简单地说，<code>constructor</code>内定义的方法和属性是实例对象自己的，而constructor外定义的方法和属性则是所有实例对象可以共享的。</p>
 <p><code>Class</code>之间可以通过<code>extends</code>关键字实现继承，这比ES5的通过修改原型链实现继承，要清晰和方便很多。上面定义了一个Cat类，该类通过<code>extends</code>关键字，继承了Animal类的所有属性和方法。</p>
 <p><code>super</code>关键字，它指代父类的实例（即父类的this对象）。子类必须在<code>constructor</code>方法中调用<code>super</code>方法，否则新建实例时会报错。这是因为子类没有自己的this对象，而是继承父类的this对象，然后对其进行加工。如果不调用super方法，子类就得不到this对象。</p>
-<font color = "red">ES6的继承机制，实质是先创造父类的实例对象this（所以必须先调用super方法），然后再用子类的构造函数修改this。</font>
-
+<p><font color = "red">ES6的继承机制，实质是先创造父类的实例对象this（所以必须先调用super方法），然后再用子类的构造函数修改this。</font></p>
 <h2 id="arrow-function-箭头函数"><a href="#arrow-function-箭头函数" class="headerlink" title="arrow function(箭头函数)"></a>arrow function(箭头函数)</h2><p>这个恐怕是ES6最最常用的一个新特性了，用它来写function比原来的写法要简洁清晰很多:</p>
-<pre><code class="javascript">function(i){ return i + 1; } //ES5
+<pre><code class="javascript">function(i)&#123; return i + 1; &#125; //ES5
 (i) =&gt; i + 1 //ES6
 </code></pre>
 <p>简直是简单的不像话对吧…<br>如果方程比较复杂，则需要用{}把代码包起来：</p>
-<pre><code class="javascript">function(x, y) { 
+<pre><code class="javascript">function(x, y) &#123; 
     x++;
     y--;
     return x + y;
-}
+&#125;
 //es6
-(x, y) =&gt; {x++; y--; return x+y}
+(x, y) =&gt; &#123;x++; y--; return x+y&#125;
 </code></pre>
 <p>除了看上去更简洁以外，arrow function还有一项超级无敌的功能！<br>长期以来，JavaScript语言的this对象一直是一个令人头痛的问题，在对象方法中使用this，必须非常小心。例如：</p>
-<pre><code class="javascript">class Animal {
-    constructor(){
+<pre><code class="javascript">class Animal &#123;
+    constructor()&#123;
         this.type = &#39;animal&#39;
-    }
-    says(say){
-        setTimeout(function(){
+    &#125;
+    says(say)&#123;
+        setTimeout(function()&#123;
             console.log(this.type + &#39; says &#39; + say)
-        }, 1000)
-    }
-}
+        &#125;, 1000)
+    &#125;
+&#125;
 
  var animal = new Animal()
  animal.says(&#39;hi&#39;)  //undefined says hi
@@ -269,35 +269,34 @@ cat.says(&#39;hello&#39;)
 <p>运行上面的代码会报错，这是因为setTimeout中的this指向的是全局对象。所以为了让它能够正确的运行，传统的解决方法有两种：</p>
 <blockquote>
 <p>第一种是将this传给self,再用self来指代this</p>
-<pre><code class="javascript">   says(say){
-       var self = this;
-       setTimeout(function(){
-           console.log(self.type + &#39; says &#39; + say)
-       }, 1000)
-</code></pre>
 </blockquote>
+<pre><code class="javascript">   says(say)&#123;
+       var self = this;
+       setTimeout(function()&#123;
+           console.log(self.type + &#39; says &#39; + say)
+       &#125;, 1000)
+</code></pre>
 <blockquote>
 <p>第二种方法是用bind(this),即</p>
-<pre><code class="javascript">   says(say){
-       setTimeout(function(){
-           console.log(this.type + &#39; says &#39; + say)
-       }.bind(this), 1000)
-</code></pre>
 </blockquote>
+<pre><code class="javascript">   says(say)&#123;
+       setTimeout(function()&#123;
+           console.log(this.type + &#39; says &#39; + say)
+       &#125;.bind(this), 1000)
+</code></pre>
 <p>但现在我们有了箭头函数，就不需要这么麻烦了：</p>
-<pre><code class="javascript">class Animal {
-    constructor(){
+<pre><code class="javascript">class Animal &#123;
+    constructor()&#123;
         this.type = &#39;animal&#39;
-    }
-    says(say){
-        setTimeout( () =&gt; {
+    &#125;
+    says(say)&#123;
+        setTimeout( () =&gt; &#123;
             console.log(this.type + &#39; says &#39; + say)
-        }, 1000)
-    }
-}
+        &#125;, 1000)
+    &#125;
+&#125;
  var animal = new Animal()
  animal.says(&#39;hi&#39;)  //animal says hi
-
 </code></pre>
 <p>当我们使用箭头函数时，函数体内的this对象，就是定义时所在的对象，而不是使用时所在的对象。<br>并不是因为箭头函数内部有绑定this的机制，实际原因是箭头函数根本没有自己的this，它的this是继承外面的，因此内部的this就是外层代码块的this。</p>
 <h2 id="template-string-字符串模板"><a href="#template-string-字符串模板" class="headerlink" title="template string(字符串模板)"></a>template string(字符串模板)</h2><p>这个东西也是非常有用，当我们要插入大段的html内容到文档中时，传统的写法非常麻烦，所以之前我们通常会引用一些模板工具库，比如mustache等等。</p>
@@ -310,54 +309,54 @@ $(&quot;#result&quot;).append(
 );
 //es6
 $(&quot;#result&quot;).append(`
-  There are &lt;b&gt;${basket.count}&lt;/b&gt; items
-   in your basket, &lt;em&gt;${basket.onSale}&lt;/em&gt;
+  There are &lt;b&gt;$&#123;basket.count&#125;&lt;/b&gt; items
+   in your basket, &lt;em&gt;$&#123;basket.onSale&#125;&lt;/em&gt;
   are on sale!
 `);
 </code></pre>
 <p>用反引号<code>（\）</code>来标识起始，用${}`来引用变量，而且所有的空格和缩进都会被保留在输出之中，是不是非常爽？！</p>
 <p>React Router从第1.0.3版开始也使用ES6语法了，比如这个例子：</p>
-<pre><code class="javascript">&lt;Link to={`/taco/${taco.name}`}&gt;{taco.name}&lt;/Link&gt;
+<pre><code class="javascript">&lt;Link to=&#123;`/taco/$&#123;taco.name&#125;`&#125;&gt;&#123;taco.name&#125;&lt;/Link&gt;
 </code></pre>
 <h2 id="destructuring-解构赋值"><a href="#destructuring-解构赋值" class="headerlink" title="destructuring(解构赋值)"></a>destructuring(解构赋值)</h2><p>ES6允许按照一定模式，从数组和对象中提取值，对变量进行赋值，这被称为解构（Destructuring）。</p>
 <pre><code class="javascript">// es5
 let cat = &#39;ken&#39;
 let dog = &#39;lili&#39;
-let zoo = {cat: cat, dog: dog}
-console.log(zoo)  //Object {cat: &quot;ken&quot;, dog: &quot;lili&quot;}
+let zoo = &#123;cat: cat, dog: dog&#125;
+console.log(zoo)  //Object &#123;cat: &quot;ken&quot;, dog: &quot;lili&quot;&#125;
 
 // es6
 let cat = &#39;ken&#39;
 let dog = &#39;lili&#39;
-let zoo = {cat, dog}
-console.log(zoo)  //Object {cat: &quot;ken&quot;, dog: &quot;lili&quot;}
+let zoo = &#123;cat, dog&#125;
+console.log(zoo)  //Object &#123;cat: &quot;ken&quot;, dog: &quot;lili&quot;&#125;
 
 //反过来可以这样写
-let dog = {type: &#39;animal&#39;, many: 2}
-let { type, many} = dog
+let dog = &#123;type: &#39;animal&#39;, many: 2&#125;
+let &#123; type, many&#125; = dog
 console.log(type, many)   //animal 2
 </code></pre>
 <h2 id="default-rest"><a href="#default-rest" class="headerlink" title="default,rest"></a>default,rest</h2><p>default很简单，意思就是默认值。大家可以看下面的例子，调用<code>animal()</code>方法时忘了传参数，传统的做法就是加上这一句<code>type = type || &#39;cat&#39;</code> 来指定默认值。</p>
 <pre><code class="javascript">//es5
-function animal(type){
+function animal(type)&#123;
     type = type || &#39;cat&#39;  
     console.log(type)
-}
+&#125;
 animal()
 //es6
-function animal(type = &#39;cat&#39;){
+function animal(type = &#39;cat&#39;)&#123;
     console.log(type)
-}
+&#125;
 animal()
 </code></pre>
 <p>最后一个rest语法也很简单，直接看例子：</p>
-<pre><code class="javascript">function animals(...types){
+<pre><code class="javascript">function animals(...types)&#123;
     console.log(types)
-}
+&#125;
 animals(&#39;cat&#39;, &#39;dog&#39;, &#39;fish&#39;) //[&quot;cat&quot;, &quot;dog&quot;, &quot;fish&quot;]
 </code></pre>
 <p>如果不用es6中的属性，可以用ES5中的<code>argumnets</code></p>
-<p><a href="https://segmentfault.com/a/1190000004365693" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000004365693">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -382,7 +381,7 @@ animals(&#39;cat&#39;, &#39;dog&#39;, &#39;fish&#39;) //[&quot;cat&quot;, &quot;
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -405,7 +404,7 @@ animals(&#39;cat&#39;, &#39;dog&#39;, &#39;fish&#39;) //[&quot;cat&quot;, &quot;
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -416,7 +415,7 @@ animals(&#39;cat&#39;, &#39;dog&#39;, &#39;fish&#39;) //[&quot;cat&quot;, &quot;
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#最常用的ES6特性"><span class="toc-number">1.</span> <span class="toc-text">最常用的ES6特性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#let-const"><span class="toc-number">1.1.</span> <span class="toc-text">let ,const</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#class-extends-super"><span class="toc-number">1.2.</span> <span class="toc-text">class, extends, super</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#arrow-function-箭头函数"><span class="toc-number">1.3.</span> <span class="toc-text">arrow function(箭头函数)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#template-string-字符串模板"><span class="toc-number">1.4.</span> <span class="toc-text">template string(字符串模板)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#destructuring-解构赋值"><span class="toc-number">1.5.</span> <span class="toc-text">destructuring(解构赋值)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#default-rest"><span class="toc-number">1.6.</span> <span class="toc-text">default,rest</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%80%E5%B8%B8%E7%94%A8%E7%9A%84ES6%E7%89%B9%E6%80%A7"><span class="toc-number">1.</span> <span class="toc-text">最常用的ES6特性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#let-const"><span class="toc-number">1.1.</span> <span class="toc-text">let ,const</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#class-extends-super"><span class="toc-number">1.2.</span> <span class="toc-text">class, extends, super</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#arrow-function-%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0"><span class="toc-number">1.3.</span> <span class="toc-text">arrow function(箭头函数)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#template-string-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A8%A1%E6%9D%BF"><span class="toc-number">1.4.</span> <span class="toc-text">template string(字符串模板)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#destructuring-%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC"><span class="toc-number">1.5.</span> <span class="toc-text">destructuring(解构赋值)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#default-rest"><span class="toc-number">1.6.</span> <span class="toc-text">default,rest</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -435,7 +434,7 @@ animals(&#39;cat&#39;, &#39;dog&#39;, &#39;fish&#39;) //[&quot;cat&quot;, &quot;
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

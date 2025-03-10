@@ -12,9 +12,9 @@
     <meta name="keywords" content="TriDiamond Obsidian,"> 
     <meta name="description" content="一枚前端搬砖队队员的记录册,原文地址
 通过需求学习JSON.stringify()首先我们在开发的过程当中遇到这样一个处理数据的需求
-const todayILearn = {
+const todayILearn = &amp;#123;
   _id: 1,
-  content: &amp;#3,"> 
+  content,"> 
     <meta name="author" content="张白告丶"> 
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -40,7 +40,7 @@ const todayILearn = {
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -143,41 +143,41 @@ const todayILearn = {
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <p><a href="https://juejin.im/post/5decf09de51d45584d238319#heading-4" target="_blank" rel="noopener">原文地址</a></p>
+            <p><a target="_blank" rel="noopener" href="https://juejin.im/post/5decf09de51d45584d238319#heading-4">原文地址</a></p>
 <h2 id="通过需求学习JSON-stringify"><a href="#通过需求学习JSON-stringify" class="headerlink" title="通过需求学习JSON.stringify()"></a>通过需求学习JSON.stringify()</h2><p>首先我们在开发的过程当中遇到这样一个处理数据的需求</p>
-<pre><code class="js">const todayILearn = {
+<pre><code class="js">const todayILearn = &#123;
   _id: 1,
   content: &#39;今天学习 JSON.stringify()，我很开心！&#39;,
   created_at: &#39;Mon Nov 25 2019 14:03:55 GMT+0800 (中国标准时间)&#39;,
   updated_at: &#39;Mon Nov 25 2019 16:03:55 GMT+0800 (中国标准时间)&#39;
-}
+&#125;
 </code></pre>
 <p>我们需要将上面这个对象处理成下面这个对象</p>
-<pre><code class="js">const todayILearn = {
+<pre><code class="js">const todayILearn = &#123;
   id: 1,
   content: &#39;今天学习 JSON.stringify()，我很开心！&#39;,
   createdAt: &#39;Mon Nov 25 2019 14:03:55 GMT+0800 (中国标准时间)&#39;,
   updatedAt: &#39;Mon Nov 25 2019 16:03:55 GMT+0800 (中国标准时间)&#39;
-}
+&#125;
 </code></pre>
 <p>也就是在不改变属性的值的前提下，将对象属性修改一下。 把_id  改成 id，把 updated_at 改成 updatedAt，把 created_at 改成 createdAt。我们现在通过这个小小的需求来见识一下 JSON.stringify() 的强大吧。</p>
 <p>首先要解决这个问题我们有很多种解决方式，我们先提供两种不优雅的解决方案：</p>
 <p><strong>方案一：一次遍历+多声明一个变量</strong></p>
 <pre><code class="js">// 多一个变量存储
-const todayILearnTemp = {};
-for (const [key, value] of Object.entries(todayILearn)) {
+const todayILearnTemp = &#123;&#125;;
+for (const [key, value] of Object.entries(todayILearn)) &#123;
   if (key === &quot;_id&quot;) todayILearnTemp[&quot;id&quot;] = value;
   else if (key === &quot;created_at&quot;) todayILearnTemp[&quot;createdAt&quot;] = value;
   else if (key === &quot;updatedAt&quot;) todayILearnTemp[&quot;updatedAt&quot;] = value;
   else todayILearnTemp[key] = value;
-}
+&#125;
 console.log(todayILearnTemp);
 // 结果：
-// { id: 1,
+// &#123; id: 1,
 //  content: &#39;今天学习 JSON.stringify()，我很开心！&#39;,
 //  createdAt: &#39;Mon Nov 25 2019 14:03:55 GMT+0800 (中国标准时间)&#39;,
 //  updated_at: &#39;Mon Nov 25 2019 16:03:55 GMT+0800 (中国标准时间)&#39; 
-// }
+// &#125;
 </code></pre>
 <p>方案一完全没有问题，可以实现。但是多声明了一个变量又加上一层循环并且还有很多的 if else 语句，怎么都显得不太优雅。</p>
 <p><strong>方案二：暴力 delete 属性和增加属性</strong></p>
@@ -190,59 +190,58 @@ delete todayILearn.created_at;
 delete todayILearn.updated_at;
 console.log(todayILearn);
 //     太暴力😢
-//{ 
+//&#123; 
 //  content: &#39;今天学习 JSON.stringify()，我很开心！&#39;,
 //  id: 1,
 //  createdAt: &#39;Mon Nov 25 2019 14:03:55 GMT+0800 (中国标准时间)&#39;,
 //  updatedAt: &#39;Mon Nov 25 2019 16:03:55 GMT+0800 (中国标准时间)&#39; 
-//}
-
+//&#125;
 </code></pre>
 <p>直接 delete 暴力解决太粗鲁了，而且有一个缺点，属性的顺序变了。</p>
 <p><strong>方案三：序列化+ replace 美学典范</strong></p>
-<pre><code class="js">const mapObj = {
+<pre><code class="js">const mapObj = &#123;
   _id: &quot;id&quot;,
   created_at: &quot;createdAt&quot;,
   updated_at: &quot;updatedAt&quot;
-};
+&#125;;
 JSON.parse(
   JSON.stringify(todayILearn).replace(
     /_id|created_at|updated_at/gi,
     matched =&gt; mapObj[matched])
     )
 
-// { 
+// &#123; 
 // id: 1,
 //  content: &#39;今天学习 JSON.stringify()，我很开心！&#39;,
 //  createdAt: &#39;Mon Nov 25 2019 14:03:55 GMT+0800 (中国标准时间)&#39;,
 //  updatedAt: &#39;Mon Nov 25 2019 16:03:55 GMT+0800 (中国标准时间)&#39; 
-// }
+// &#125;
 </code></pre>
 <p><img src="https://user-gold-cdn.xitu.io/2019/12/8/16ee5ace18ca5dbb?imageslim" alt="Json.Stringify"></p>
-<a id="more"></a>
+<span id="more"></span>
+
 <h2 id="JSON-stringify-九大特性"><a href="#JSON-stringify-九大特性" class="headerlink" title="JSON.stringify() 九大特性"></a>JSON.stringify() 九大特性</h2><h3 id="JSON-stringify-第一大特性"><a href="#JSON-stringify-第一大特性" class="headerlink" title="JSON.stringify()第一大特性"></a>JSON.stringify()第一大特性</h3><p><strong>对于 undefined、任意的函数以及 symbol 三个特殊的值分别作为对象属性的值、数组元素、单独的值时 JSON.stringify()将返回不同的结果</strong>。</p>
 <p>首先，我们来复习一下知识点，看一道非常简单的面试题目：请问下面代码会输出什么？</p>
-<pre><code class="js">const data = {
+<pre><code class="js">const data = &#123;
   a: &quot;aaa&quot;,
   b: undefined,
   c: Symbol(&quot;dd&quot;),
-  fn: function() {
+  fn: function() &#123;
     return true;
-  }
-};
+  &#125;
+&#125;;
 JSON.stringify(data); // 输出：？
 
-// &quot;{&quot;a&quot;:&quot;aaa&quot;}&quot;
-
+// &quot;&#123;&quot;a&quot;:&quot;aaa&quot;&#125;&quot;
 </code></pre>
 <p>很简单这道题目面试官主要考察的知识点是：</p>
 <ul>
 <li>undefined、任意的函数以及 symbol 作为对象属性值时 JSON.stringify() 将跳过（忽略）对它们进行序列化</li>
 </ul>
 <p>面试官追问：假设 undefined、任意的函数以及 symbol 值作为数组元素会是怎样呢？</p>
-<pre><code class="js">JSON.stringify([&quot;aaa&quot;, undefined, function aa() {
+<pre><code class="js">JSON.stringify([&quot;aaa&quot;, undefined, function aa() &#123;
     return true
-  }, Symbol(&#39;dd&#39;)])  // 输出：？
+  &#125;, Symbol(&#39;dd&#39;)])  // 输出：？
 
 // &quot;[&quot;aaa&quot;,null,null,null]&quot;
 </code></pre>
@@ -251,7 +250,7 @@ JSON.stringify(data); // 输出：？
 <li>undefined、任意的函数以及 symbol 作为数组元素值时，JSON.stringify() 会将它们序列化为 null</li>
 </ul>
 <p>我们稍微再动下脑筋，如果单独序列化这些值会是什么样的结果呢？</p>
-<pre><code class="js">JSON.stringify(function a (){console.log(&#39;a&#39;)})
+<pre><code class="js">JSON.stringify(function a ()&#123;console.log(&#39;a&#39;)&#125;)
 // undefined
 JSON.stringify(undefined)
 // undefined
@@ -264,21 +263,21 @@ JSON.stringify(Symbol(&#39;dd&#39;))
 <p>JSON.stringify() 第一大特性总结<br>undefined、任意的函数以及 symbol 作为对象属性值时 JSON.stringify() 对跳过（忽略）它们进行序列化<br>undefined、任意的函数以及 symbol 作为数组元素值时，JSON.stringify() 将会将它们序列化为 null<br>undefined、任意的函数以及 symbol 被 JSON.stringify() 作为单独的值进行序列化时，都会返回 undefined</p>
 </blockquote>
 <h3 id="JSON-stringify-第二大特性"><a href="#JSON-stringify-第二大特性" class="headerlink" title="JSON.stringify() 第二大特性"></a>JSON.stringify() 第二大特性</h3><p><strong>非数组对象的属性不能保证以特定的顺序出现在序列化后的字符串中。</strong></p>
-<pre><code class="js">const data = {
+<pre><code class="js">const data = &#123;
   a: &quot;aaa&quot;,
   b: undefined,
   c: Symbol(&quot;dd&quot;),
-  fn: function() {
+  fn: function() &#123;
     return true;
-  },
+  &#125;,
   d: &quot;ddd&quot;
-};
+&#125;;
 JSON.stringify(data); // 输出：？
-// &quot;{&quot;a&quot;:&quot;aaa&quot;,&quot;d&quot;:&quot;ddd&quot;}&quot;
+// &quot;&#123;&quot;a&quot;:&quot;aaa&quot;,&quot;d&quot;:&quot;ddd&quot;&#125;&quot;
 
-JSON.stringify([&quot;aaa&quot;, undefined, function aa() {
+JSON.stringify([&quot;aaa&quot;, undefined, function aa() &#123;
     return true
-  }, Symbol(&#39;dd&#39;),&quot;eee&quot;])  // 输出：？
+  &#125;, Symbol(&#39;dd&#39;),&quot;eee&quot;])  // 输出：？
 
 // &quot;[&quot;aaa&quot;,null,null,null,&quot;eee&quot;]&quot;
 </code></pre>
@@ -286,17 +285,17 @@ JSON.stringify([&quot;aaa&quot;, undefined, function aa() {
 <h3 id="JSON-stringify-第三大特性"><a href="#JSON-stringify-第三大特性" class="headerlink" title="JSON.stringify() 第三大特性"></a>JSON.stringify() 第三大特性</h3><ul>
 <li>转换值如果<strong>有 toJSON() 函数，该函数返回什么值，序列化结果就是什么值，并且忽略其他属性的值</strong>。</li>
 </ul>
-<pre><code class="js">JSON.stringify({
+<pre><code class="js">JSON.stringify(&#123;
     say: &quot;hello JSON.stringify&quot;,
-    toJSON: function() {
+    toJSON: function() &#123;
       return &quot;today i learn&quot;;
-    }
-  })
+    &#125;
+  &#125;)
 // &quot;today i learn&quot;
 </code></pre>
 <h3 id="JSON-stringify-第四大特性"><a href="#JSON-stringify-第四大特性" class="headerlink" title="JSON.stringify()第四大特性"></a>JSON.stringify()第四大特性</h3><p>JSON.stringify() 将会<strong>正常序列化 Date</strong> 的值。</p>
-<pre><code class="js">JSON.stringify({ now: new Date() });
-// &quot;{&quot;now&quot;:&quot;2019-12-08T07:42:11.973Z&quot;}&quot;
+<pre><code class="js">JSON.stringify(&#123; now: new Date() &#125;);
+// &quot;&#123;&quot;now&quot;:&quot;2019-12-08T07:42:11.973Z&quot;&#125;&quot;
 </code></pre>
 <p>实际上 Date 对象自己部署了 toJSON() 方法（同Date.toISOString()），因此 Date 对象会被当做字符串处理。</p>
 <h3 id="JSON-stringify-第五大特性"><a href="#JSON-stringify-第五大特性" class="headerlink" title="JSON.stringify() 第五大特性"></a>JSON.stringify() 第五大特性</h3><p><strong>NaN 和 Infinity 格式的数值及 null 都会被当做 null。</strong></p>
@@ -317,29 +316,29 @@ JSON.stringify(Infinity)
 JSON.stringify( 
     Object.create(
         null, 
-        { 
-            x: { value: &#39;json&#39;, enumerable: false }, 
-            y: { value: &#39;stringify&#39;, enumerable: true } 
-        }
+        &#123; 
+            x: &#123; value: &#39;json&#39;, enumerable: false &#125;, 
+            y: &#123; value: &#39;stringify&#39;, enumerable: true &#125; 
+        &#125;
     )
 );
-// &quot;{&quot;y&quot;:&quot;stringify&quot;}&quot;
+// &quot;&#123;&quot;y&quot;:&quot;stringify&quot;&#125;&quot;
 </code></pre>
 <h3 id="JSON-stringify-第八大特性"><a href="#JSON-stringify-第八大特性" class="headerlink" title="JSON.stringify() 第八大特性"></a>JSON.stringify() 第八大特性</h3><p>我们都知道实现深拷贝最简单粗暴的方式就是序列化：<code>JSON.parse(JSON.stringify())</code>，这个方式实现深拷贝会因为序列化的诸多特性从而导致诸多的坑点：比如现在我们要说的循环引用问题。</p>
 <pre><code class="js">// 对包含循环引用的对象（对象之间相互引用，形成无限循环）执行此方法，会抛出错误。 
-const obj = {
+const obj = &#123;
   name: &quot;loopObj&quot;
-};
-const loopObj = {
+&#125;;
+const loopObj = &#123;
   obj
-};
+&#125;;
 // 对象之间形成循环引用，形成闭环
 obj.loopObj = loopObj;
 
 // 封装一个深拷贝的函数
-function deepClone(obj) {
+function deepClone(obj) &#123;
   return JSON.parse(JSON.stringify(obj));
-}
+&#125;
 // 执行深拷贝，抛出错误
 deepClone(obj)
 /**
@@ -357,11 +356,11 @@ deepClone(obj)
 </ul>
 <p>这也就是为什么用序列化去实现深拷贝时，遇到循环引用的对象会抛出错误的原因</p>
 <h3 id="JSON-stringify-第九大特性"><a href="#JSON-stringify-第九大特性" class="headerlink" title="JSON.stringify() 第九大特性"></a>JSON.stringify() 第九大特性</h3><p><strong>所有以 symbol 为属性键的属性都会被完全忽略掉，即便 replacer 参数中强制指定包含了它们。</strong></p>
-<pre><code class="js">JSON.stringify({ [Symbol.for(&quot;json&quot;)]: &quot;stringify&quot; }, function(k, v) {
-    if (typeof k === &quot;symbol&quot;) {
+<pre><code class="js">JSON.stringify(&#123; [Symbol.for(&quot;json&quot;)]: &quot;stringify&quot; &#125;, function(k, v) &#123;
+    if (typeof k === &quot;symbol&quot;) &#123;
       return v;
-    }
-  })
+    &#125;
+  &#125;)
 
 // undefined
 </code></pre>
@@ -394,7 +393,7 @@ deepClone(obj)
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -417,7 +416,7 @@ deepClone(obj)
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -428,7 +427,7 @@ deepClone(obj)
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#通过需求学习JSON-stringify"><span class="toc-number">1.</span> <span class="toc-text">通过需求学习JSON.stringify()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSON-stringify-九大特性"><span class="toc-number">2.</span> <span class="toc-text">JSON.stringify() 九大特性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-第一大特性"><span class="toc-number">2.1.</span> <span class="toc-text">JSON.stringify()第一大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-第二大特性"><span class="toc-number">2.2.</span> <span class="toc-text">JSON.stringify() 第二大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-第三大特性"><span class="toc-number">2.3.</span> <span class="toc-text">JSON.stringify() 第三大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-第四大特性"><span class="toc-number">2.4.</span> <span class="toc-text">JSON.stringify()第四大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-第五大特性"><span class="toc-number">2.5.</span> <span class="toc-text">JSON.stringify() 第五大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-第六大特性"><span class="toc-number">2.6.</span> <span class="toc-text">JSON.stringify() 第六大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-第七大特性"><span class="toc-number">2.7.</span> <span class="toc-text">JSON.stringify() 第七大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-第八大特性"><span class="toc-number">2.8.</span> <span class="toc-text">JSON.stringify() 第八大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-第九大特性"><span class="toc-number">2.9.</span> <span class="toc-text">JSON.stringify() 第九大特性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第二个参数和第三个参数"><span class="toc-number">3.</span> <span class="toc-text">第二个参数和第三个参数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#强大的第二个参数："><span class="toc-number">3.1.</span> <span class="toc-text">强大的第二个参数：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#华丽的第三个参数："><span class="toc-number">3.2.</span> <span class="toc-text">华丽的第三个参数：</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E9%9C%80%E6%B1%82%E5%AD%A6%E4%B9%A0JSON-stringify"><span class="toc-number">1.</span> <span class="toc-text">通过需求学习JSON.stringify()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSON-stringify-%E4%B9%9D%E5%A4%A7%E7%89%B9%E6%80%A7"><span class="toc-number">2.</span> <span class="toc-text">JSON.stringify() 九大特性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-%E7%AC%AC%E4%B8%80%E5%A4%A7%E7%89%B9%E6%80%A7"><span class="toc-number">2.1.</span> <span class="toc-text">JSON.stringify()第一大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-%E7%AC%AC%E4%BA%8C%E5%A4%A7%E7%89%B9%E6%80%A7"><span class="toc-number">2.2.</span> <span class="toc-text">JSON.stringify() 第二大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-%E7%AC%AC%E4%B8%89%E5%A4%A7%E7%89%B9%E6%80%A7"><span class="toc-number">2.3.</span> <span class="toc-text">JSON.stringify() 第三大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-%E7%AC%AC%E5%9B%9B%E5%A4%A7%E7%89%B9%E6%80%A7"><span class="toc-number">2.4.</span> <span class="toc-text">JSON.stringify()第四大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-%E7%AC%AC%E4%BA%94%E5%A4%A7%E7%89%B9%E6%80%A7"><span class="toc-number">2.5.</span> <span class="toc-text">JSON.stringify() 第五大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-%E7%AC%AC%E5%85%AD%E5%A4%A7%E7%89%B9%E6%80%A7"><span class="toc-number">2.6.</span> <span class="toc-text">JSON.stringify() 第六大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-%E7%AC%AC%E4%B8%83%E5%A4%A7%E7%89%B9%E6%80%A7"><span class="toc-number">2.7.</span> <span class="toc-text">JSON.stringify() 第七大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-%E7%AC%AC%E5%85%AB%E5%A4%A7%E7%89%B9%E6%80%A7"><span class="toc-number">2.8.</span> <span class="toc-text">JSON.stringify() 第八大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON-stringify-%E7%AC%AC%E4%B9%9D%E5%A4%A7%E7%89%B9%E6%80%A7"><span class="toc-number">2.9.</span> <span class="toc-text">JSON.stringify() 第九大特性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E4%B8%AA%E5%8F%82%E6%95%B0%E5%92%8C%E7%AC%AC%E4%B8%89%E4%B8%AA%E5%8F%82%E6%95%B0"><span class="toc-number">3.</span> <span class="toc-text">第二个参数和第三个参数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%BA%E5%A4%A7%E7%9A%84%E7%AC%AC%E4%BA%8C%E4%B8%AA%E5%8F%82%E6%95%B0%EF%BC%9A"><span class="toc-number">3.1.</span> <span class="toc-text">强大的第二个参数：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%8E%E4%B8%BD%E7%9A%84%E7%AC%AC%E4%B8%89%E4%B8%AA%E5%8F%82%E6%95%B0%EF%BC%9A"><span class="toc-number">3.2.</span> <span class="toc-text">华丽的第三个参数：</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -447,7 +446,7 @@ deepClone(obj)
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

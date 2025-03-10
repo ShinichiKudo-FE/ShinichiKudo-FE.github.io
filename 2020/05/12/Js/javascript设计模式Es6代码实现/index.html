@@ -37,7 +37,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -100,13 +100,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    18k
+                    19k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    16 mins.
+                    17 mins.
                 </span>
                 
                 
@@ -140,7 +140,7 @@
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <p><a href="https://juejin.im/post/5e021eb96fb9a01628014095" target="_blank" rel="noopener">原文地址</a></p>
+            <p><a target="_blank" rel="noopener" href="https://juejin.im/post/5e021eb96fb9a01628014095">原文地址</a></p>
 <h1 id="设计模式简介"><a href="#设计模式简介" class="headerlink" title="设计模式简介"></a>设计模式简介</h1><p><code>设计模式</code>代表了最佳的实践，通常被有经验的面向对象的软件开发人员所采用。<code>设计模式</code>是软件开发人员在软件开发过程中面临的一般问题的解决方案。这些解决方案是众多软件开发人员经过相当长的一段时间的试验和错误总结出来的。</p>
 <p><code>设计模式</code>是一套被反复使用的、多数人知晓的、经过分类编目的、代码设计经验的总结。使用<code>设计模式</code>是为了重用代码、让代码更容易被他人理解、保证代码可靠性。 毫无疑问，<code>设计模式</code>于己于他人于系统都是多赢的，<code>设计模式</code>使代码编制真正工程化，<code>设计模式</code>是软件工程的基石，如同大厦的一块块砖石一样。</p>
 <h2 id="设计模式规则（SOLID）"><a href="#设计模式规则（SOLID）" class="headerlink" title="设计模式规则（SOLID）"></a>设计模式规则（SOLID）</h2><p><strong>S – Single Responsibility Principle 单一职责原则</strong></p>
@@ -168,21 +168,21 @@
 <li>面向接口编程，依赖于抽象而不依赖于具体</li>
 <li>使用方只关注接口而不关注具体类的实现</li>
 </ul>
-<p>再举个栗子：<a href="https://juejin.im/post/5adc8e18518825672b0352a8#comment" target="_blank" rel="noopener">此例来源-守候-改善代码的各方面问题</a></p>
+<p>再举个栗子：<a target="_blank" rel="noopener" href="https://juejin.im/post/5adc8e18518825672b0352a8#comment">此例来源-守候-改善代码的各方面问题</a></p>
 <pre><code class="js">//checkType(&#39;165226226326&#39;,&#39;mobile&#39;)
 //result：false
-let checkType=function(str, type) {
-    switch (type) {
+let checkType=function(str, type) &#123;
+    switch (type) &#123;
         case &#39;email&#39;:
             return /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/.test(str)
         case &#39;mobile&#39;:
-            return /^1[3|4|5|7|8][0-9]{9}$/.test(str);
+            return /^1[3|4|5|7|8][0-9]&#123;9&#125;$/.test(str);
         case &#39;tel&#39;:
-            return /^(0\d{2,3}-\d{7,8})(-\d{1,4})?$/.test(str);
+            return /^(0\d&#123;2,3&#125;-\d&#123;7,8&#125;)(-\d&#123;1,4&#125;)?$/.test(str);
         default:
             return true;
-    }
-}
+    &#125;
+&#125;
 </code></pre>
 <p>有以下两个问题：</p>
 <ol>
@@ -190,41 +190,42 @@ let checkType=function(str, type) {
 <li>比如A页面需要添加一个金额的校验，B页面需要一个日期的校验，但是金额的校验只在A页面需要，日期的校验只在B页面需要。如果一直添加 case 。就是导致A页面把只在B页面需要的校验规则也添加进去，造成不必要的开销。B页面也同理。</li>
 </ol>
 <p>建议的方式是给这个 API 增加一个扩展的接口:</p>
-<pre><code class="js">let checkType=(function(){
-    let rules={
-        email(str){
+<pre><code class="js">let checkType=(function()&#123;
+    let rules=&#123;
+        email(str)&#123;
             return /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/.test(str);
-        },
-        mobile(str){
-            return /^1[3|4|5|7|8][0-9]{9}$/.test(str);
-        }
-    };
+        &#125;,
+        mobile(str)&#123;
+            return /^1[3|4|5|7|8][0-9]&#123;9&#125;$/.test(str);
+        &#125;
+    &#125;;
     //暴露接口
-    return {
+    return &#123;
         //校验
-        check(type,str){
+        check(type,str)&#123;
             return rules[type]?rules[type](str):false;
-        },
+        &#125;,
         //添加规则
-        addRule(type,fn){
+        addRule(type,fn)&#123;
             rules[type]=fn;
-        }
-    }
-})();
+        &#125;
+    &#125;
+&#125;)();
 
 //调用方式
 //使用mobile校验规则
 console.log(checkType.check(&#39;mobile&#39;,&#39;188170239&#39;));
 //添加金额校验规则
-checkType.addRule(&#39;money&#39;,function (str) {
-    return /^[0-9]+(.[0-9]{2})?$/.test(str)
-});
+checkType.addRule(&#39;money&#39;,function (str) &#123;
+    return /^[0-9]+(.[0-9]&#123;2&#125;)?$/.test(str)
+&#125;);
 //使用金额校验规则
 console.log(checkType.check(&#39;18.36&#39;,&#39;money&#39;));
 </code></pre>
-<p>此例更详细内容请查看-&gt; <a href="https://juejin.im/post/5adc8e18518825672b0352a8#comment" target="_blank" rel="noopener">守候i-重构-改善代码的各方面问题</a></p>
+<p>此例更详细内容请查看-&gt; <a target="_blank" rel="noopener" href="https://juejin.im/post/5adc8e18518825672b0352a8#comment">守候i-重构-改善代码的各方面问题</a></p>
 <h1 id="设计模式分类（23种）"><a href="#设计模式分类（23种）" class="headerlink" title="设计模式分类（23种）"></a>设计模式分类（23种）</h1><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><blockquote>
 <p>创建型</p>
+</blockquote>
 <ul>
 <li>单例模式</li>
 <li>原型模式</li>
@@ -232,9 +233,9 @@ console.log(checkType.check(&#39;18.36&#39;,&#39;money&#39;));
 <li>抽象工厂模式</li>
 <li>建造者模式</li>
 </ul>
-</blockquote>
 <blockquote>
 <p>结构型</p>
+</blockquote>
 <ul>
 <li>适配器模式</li>
 <li>装饰器模式</li>
@@ -244,9 +245,9 @@ console.log(checkType.check(&#39;18.36&#39;,&#39;money&#39;));
 <li>组合模式</li>
 <li>享元模式</li>
 </ul>
-</blockquote>
 <blockquote>
 <p>行为型</p>
+</blockquote>
 <ul>
 <li>观察者模式</li>
 <li>迭代器模式</li>
@@ -260,21 +261,20 @@ console.log(checkType.check(&#39;18.36&#39;,&#39;money&#39;));
 <li>中介者模式</li>
 <li>解释器模式</li>
 </ul>
-</blockquote>
 <h2 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>工厂模式定义到一个用于创建对象的接口，这个接口由子类决定实例化哪一类。该模式使一个类的实例化延迟到了子类,而子类可以重写接口方法以便创建的时候指定自己的对象类型</p>
-<h3 id="code"><a href="#code" class="headerlink" title="code"></a>code</h3><pre><code class="js">class Product{
-  constructor(name){
+<h3 id="code"><a href="#code" class="headerlink" title="code"></a>code</h3><pre><code class="js">class Product&#123;
+  constructor(name)&#123;
     this.name = name
-  }
-  init(){
+  &#125;
+  init()&#123;
     console.log(&#39;init&#39;,this.name)
-  }
-}
-class Factory {
-  create(name){
+  &#125;
+&#125;
+class Factory &#123;
+  create(name)&#123;
     return new Product(name)
-  }
-}
+  &#125;
+&#125;
 
 let factory = new Factory()
 let p = factory.create(&#39;hello world&#39;)
@@ -300,62 +300,62 @@ p.init()
 <h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><ul>
 <li>曾经我们熟悉的JQuery的$()就是一个工厂函数，它根据传入参数的不同创建元素或者去寻找上下文中的元素，创建成相应的jQuery对象</li>
 </ul>
-<pre><code class="js">class jQuery {
-    constructor(selector) {
+<pre><code class="js">class jQuery &#123;
+    constructor(selector) &#123;
         super(selector)
-    }
-    add() {
-
-    }
+    &#125;
+    add() &#123;
+        
+    &#125;
   // 此处省略若干API
-}
+&#125;
 
-window.$ = function(selector) {
+window.$ = function(selector) &#123;
     return new jQuery(selector)
-}
+&#125;
 </code></pre>
 <ul>
 <li>vue 的异步组件<br>在大型应用中，我们可能需要将应用分割成小一些的代码块，并且只在需要的时候才从服务器加载一个模块。为了简化，Vue 允许你以一个工厂函数的方式定义你的组件，这个工厂函数会异步解析你的组件定义。Vue 只有在这个组件需要被渲染的时候才会触发该工厂函数，且会把结果缓存起来供未来重渲染。例如：</li>
 </ul>
-<pre><code class="js">Vue.component(&#39;async-component&#39;,function(resolve,reject){
-  setTimeout(funciton(){
-    resolve({
+<pre><code class="js">Vue.component(&#39;async-component&#39;,function(resolve,reject)&#123;
+  setTimeout(funciton()&#123;
+    resolve(&#123;
       templete: &#39;&lt;div&gt;I am async&lt;/div&gt;&#39;
-    })
-  },1000)
-})
+    &#125;)
+  &#125;,1000)
+&#125;)
 </code></pre>
 <h2 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h2><h3 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h3><p>一个类只有一个实例，比提供一个访问它的全局访问点</p>
-<h3 id="code-1"><a href="#code-1" class="headerlink" title="code"></a>code</h3><pre><code class="js"> class LoginForm {
-    constructor() {
+<h3 id="code-1"><a href="#code-1" class="headerlink" title="code"></a>code</h3><pre><code class="js"> class LoginForm &#123;
+    constructor() &#123;
         this.state = &#39;hide&#39;
-    }
-    show() {
-        if (this.state === &#39;show&#39;) {
+    &#125;
+    show() &#123;
+        if (this.state === &#39;show&#39;) &#123;
             alert(&#39;已经显示&#39;)
             return
-        }
+        &#125;
         this.state = &#39;show&#39;
         console.log(&#39;登录框显示成功&#39;)
-    }
-    hide() {
-        if (this.state === &#39;hide&#39;) {
+    &#125;
+    hide() &#123;
+        if (this.state === &#39;hide&#39;) &#123;
             alert(&#39;已经隐藏&#39;)
             return
-        }
+        &#125;
         this.state = &#39;hide&#39;
         console.log(&#39;登录框隐藏成功&#39;)
-    }
- }
- LoginForm.getInstance = (function () {
+    &#125;
+ &#125;
+ LoginForm.getInstance = (function () &#123;
      let instance
-     return function () {
-        if (!instance) {
+     return function () &#123;
+        if (!instance) &#123;
             instance = new LoginForm()
-        }
+        &#125;
         return instance
-     }
- })()
+     &#125;
+ &#125;)()
 
 let obj1 = LoginForm.getInstance()
 obj1.show()
@@ -364,7 +364,6 @@ let obj2 = LoginForm.getInstance()
 obj2.hide()
 
 console.log(obj1 === obj2)
-
 </code></pre>
 <h3 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h3><ul>
 <li>划分命名空间，减少全局变量</li>
@@ -377,20 +376,20 @@ console.log(obj1 === obj2)
 </ul>
 <h3 id="场景例子"><a href="#场景例子" class="headerlink" title="场景例子"></a>场景例子</h3><p>定义命名空间和实现分支型方法<br>登录框<br>vuex 和 redux中的store</p>
 <h2 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h2><h3 id="定义-2"><a href="#定义-2" class="headerlink" title="定义"></a>定义</h3><p>将一个类接口转化为另一个接口，以满足用户需求，使类之间接口不兼容问题通过适配器得以解决</p>
-<h3 id="code-2"><a href="#code-2" class="headerlink" title="code"></a>code</h3><pre><code class="js">class Plug {
-  getName() {
+<h3 id="code-2"><a href="#code-2" class="headerlink" title="code"></a>code</h3><pre><code class="js">class Plug &#123;
+  getName() &#123;
     return &#39;iphone充电头&#39;;
-  }
-}
+  &#125;
+&#125;
 
-class Target {
-  constructor() {
+class Target &#123;
+  constructor() &#123;
     this.plug = new Plug();
-  }
-  getName() {
+  &#125;
+  getName() &#123;
     return this.plug.getName() + &#39; 适配器Type-c充电头&#39;;
-  }
-}
+  &#125;
+&#125;
 
 let target = new Target();
 target.getName(); // iphone充电头 适配器转Type-c充电头
@@ -409,47 +408,47 @@ target.getName(); // iphone充电头 适配器转Type-c充电头
 <li>封装旧接口</li>
 </ul>
 <pre><code class="js">// 自己封装的ajax， 使用方式如下
-ajax({
+ajax(&#123;
     url: &#39;/getData&#39;,
     type: &#39;Post&#39;,
     dataType: &#39;json&#39;,
-    data: {
+    data: &#123;
         test: 111
-    }
-}).done(function() {})
+    &#125;
+&#125;).done(function() &#123;&#125;)
 // 因为历史原因，代码中全都是：
-// $.ajax({....})
+// $.ajax(&#123;....&#125;)
 
 // 做一层适配器
-var $ = {
-    ajax: function (options) {
+var $ = &#123;
+    ajax: function (options) &#123;
         return ajax(options)
-    }
-}
+    &#125;
+&#125;
 </code></pre>
 <ul>
 <li>vue的computed</li>
 </ul>
 <pre><code class="html">&lt;template&gt;
     &lt;div id=&quot;example&quot;&gt;
-        &lt;p&gt;Original message: &quot;{{ message }}&quot;&lt;/p&gt;  &lt;!-- Hello --&gt;
-        &lt;p&gt;Computed reversed message: &quot;{{ reversedMessage }}&quot;&lt;/p&gt;  &lt;!-- olleH --&gt;
+        &lt;p&gt;Original message: &quot;&#123;&#123; message &#125;&#125;&quot;&lt;/p&gt;  &lt;!-- Hello --&gt;
+        &lt;p&gt;Computed reversed message: &quot;&#123;&#123; reversedMessage &#125;&#125;&quot;&lt;/p&gt;  &lt;!-- olleH --&gt;
     &lt;/div&gt;
 &lt;/template&gt;
 &lt;script type=&#39;text/javascript&#39;&gt;
-    export default {
+    export default &#123;
         name: &#39;demo&#39;,
-        data() {
-            return {
+        data() &#123;
+            return &#123;
                 message: &#39;Hello&#39;
-            }
-        },
-        computed: {
-            reversedMessage: function() {
+            &#125;
+        &#125;,
+        computed: &#123;
+            reversedMessage: function() &#123;
                 return this.message.split(&#39;&#39;).reverse().join(&#39;&#39;)
-            }
-        }
-    }
+            &#125;
+        &#125;
+    &#125;
 &lt;/script&gt;
 </code></pre>
 <p><strong>原有data 中的数据不满足当前的要求，通过计算属性的规则来适配成我们需要的格式，对原有数据并没有改变，只改变了原有数据的表现形式</strong></p>
@@ -459,23 +458,23 @@ var $ = {
 <li>代理模式：提供一个一模一样的接口</li>
 </ul>
 <h2 id="装饰者模式"><a href="#装饰者模式" class="headerlink" title="装饰者模式"></a>装饰者模式</h2><h3 id="定义-3"><a href="#定义-3" class="headerlink" title="定义"></a>定义</h3><p>动态地给某个对象添加一些额外的职责，，是一种实现继承的替代方案<br>在不改变原对象的基础上，通过对其进行包装扩展，使原有对象可以满足用户的更复杂需求，而不会影响从这个类中派生的其他对象</p>
-<h3 id="code-3"><a href="#code-3" class="headerlink" title="code"></a>code</h3><pre><code class="js">class Cellphone {
-    create() {
+<h3 id="code-3"><a href="#code-3" class="headerlink" title="code"></a>code</h3><pre><code class="js">class Cellphone &#123;
+    create() &#123;
         console.log(&#39;生成一个手机&#39;)
-    }
-}
-class Decorator {
-    constructor(cellphone) {
+    &#125;
+&#125;
+class Decorator &#123;
+    constructor(cellphone) &#123;
         this.cellphone = cellphone
-    }
-    create() {
+    &#125;
+    create() &#123;
         this.cellphone.create()
         this.createShell(cellphone)
-    }
-    createShell() {
+    &#125;
+    createShell() &#123;
         console.log(&#39;生成手机壳&#39;)
-    }
-}
+    &#125;
+&#125;
 // 测试代码
 let cellphone = new Cellphone()
 cellphone.create()
@@ -486,7 +485,7 @@ dec.create()
 </code></pre>
 <h3 id="场景例子-1"><a href="#场景例子-1" class="headerlink" title="场景例子"></a>场景例子</h3><ul>
 <li>比如现在有4 种型号的自行车，我们为每种自行车都定义了一个单独的类。现在要给每种自行车都装上前灯、尾灯和铃铛这3 种配件。如果使用继承的方式来给每种自行车创建子类，则需要 4×3 = 12 个子类。但是如果把前灯、尾灯、铃铛这些对象动态组合到自行车上面，则只需要额外增加3个类</li>
-<li>ES6 <a href="http://es6.ruanyifeng.com/#docs/decorator" target="_blank" rel="noopener">Decorator</a> 阮一峰</li>
+<li>ES6 <a target="_blank" rel="noopener" href="http://es6.ruanyifeng.com/#docs/decorator">Decorator</a> 阮一峰</li>
 <li>core-decorators</li>
 </ul>
 <h3 id="优点-3"><a href="#优点-3" class="headerlink" title="优点"></a>优点</h3><ul>
@@ -501,30 +500,30 @@ dec.create()
 <blockquote>
 <p>假设当A 在心情好的时候收到花，小明表白成功的几率有60%，而当A 在心情差的时候收到花，小明表白的成功率无限趋近于0。<br>小明跟A 刚刚认识两天，还无法辨别A 什么时候心情好。如果不合时宜地把花送给A，花被直接扔掉的可能性很大，这束花可是小明吃了7 天泡面换来的。<br>但是A 的朋友B 却很了解A，所以小明只管把花交给B，B 会监听A 的心情变化，然后选择A 心情好的时候把花转交给A，代码如下：</p>
 </blockquote>
-<pre><code class="js">let Flower = function(){}
-let xiaoming = {
-  sendFlower: function(target){
+<pre><code class="js">let Flower = function()&#123;&#125;
+let xiaoming = &#123;
+  sendFlower: function(target)&#123;
     let flower = new Flower()
     target.receviceFlower()
-  }
-}
-let B = {
-  receviceFlower:function(flower){
-    A.listenGoodMood(function(){
+  &#125;
+&#125;
+let B = &#123;
+  receviceFlower:function(flower)&#123;
+    A.listenGoodMood(function()&#123;
       A.receviceFlower(flower)
-    })
-  }
-}
-let A = {
-  receviceFlower:function(flower){
+    &#125;)
+  &#125;
+&#125;
+let A = &#123;
+  receviceFlower:function(flower)&#123;
     console.log(&#39;收到花&#39;+ flower)
-  }
-  listenGoodMood:function(fn){
-    setTimeout(function(){
+  &#125;
+  listenGoodMood:function(fn)&#123;
+    setTimeout(function()&#123;
       fn()
-    },1000)
-  }
-}
+    &#125;,1000)
+  &#125;
+&#125;
 xiaoming.sendFlower(B)
 </code></pre>
 <h3 id="场景例子-2"><a href="#场景例子-2" class="headerlink" title="场景例子"></a>场景例子</h3><ul>
@@ -537,9 +536,9 @@ xiaoming.sendFlower(B)
 &lt;/ul&gt;
 &lt;script&gt;
   let ul = document.querySelector(&#39;#ul&#39;);
-  ul.addEventListener(&#39;click&#39;, event =&gt; {
+  ul.addEventListener(&#39;click&#39;, event =&gt; &#123;
     console.log(event.target);
-  });
+  &#125;);
 &lt;/script&gt;
 </code></pre>
 <ul>
@@ -560,26 +559,26 @@ xiaoming.sendFlower(B)
 <h3 id="code-4"><a href="#code-4" class="headerlink" title="code"></a>code</h3><ol>
 <li>兼容浏览器事件绑定</li>
 </ol>
-<pre><code class="js">let addMyEvent = function (el, ev, fn) {
-    if (el.addEventListener) {
+<pre><code class="js">let addMyEvent = function (el, ev, fn) &#123;
+    if (el.addEventListener) &#123;
         el.addEventListener(ev, fn, false)
-    } else if (el.attachEvent) {
+    &#125; else if (el.attachEvent) &#123;
         el.attachEvent(&#39;on&#39; + ev, fn)
-    } else {
+    &#125; else &#123;
         el[&#39;on&#39; + ev] = fn
-    }
-}; 
+    &#125;
+&#125;; 
 </code></pre>
 <ol start="2">
 <li>封装接口</li>
 </ol>
-<pre><code class="js">let myEvent = {
+<pre><code class="js">let myEvent = &#123;
     // ...
-    stop: e =&gt; {
+    stop: e =&gt; &#123;
         e.stopPropagation();
         e.preventDefault();
-    }
-};
+    &#125;
+&#125;;
 </code></pre>
 <p>斜挎单肩包，透气跑鞋，运动袜，T恤，运动短裤</p>
 <h3 id="场景-1"><a href="#场景-1" class="headerlink" title="场景"></a>场景</h3><ul>
@@ -599,39 +598,39 @@ xiaoming.sendFlower(B)
 <li>一对多</li>
 </ul>
 <h3 id="code-5"><a href="#code-5" class="headerlink" title="code"></a>code</h3><pre><code class="js">// 主题 保存状态，状态变化之后触发所有观察者对象
-class Subject {
-  constructor() {
+class Subject &#123;
+  constructor() &#123;
     this.state = 0
     this.observers = []
-  }
-  getState() {
+  &#125;
+  getState() &#123;
     return this.state
-  }
-  setState(state) {
+  &#125;
+  setState(state) &#123;
     this.state = state
     this.notifyAllObservers()
-  }
-  notifyAllObservers() {
-    this.observers.forEach(observer =&gt; {
+  &#125;
+  notifyAllObservers() &#123;
+    this.observers.forEach(observer =&gt; &#123;
       observer.update()
-    })
-  }
-  attach(observer) {
+    &#125;)
+  &#125;
+  attach(observer) &#123;
     this.observers.push(observer)
-  }
-}
+  &#125;
+&#125;
 
 // 观察者
-class Observer {
-  constructor(name, subject) {
+class Observer &#123;
+  constructor(name, subject) &#123;
     this.name = name
     this.subject = subject
     this.subject.attach(this)
-  }
-  update() {
-    console.log(`${this.name} update, state: ${this.subject.getState()}`)
-  }
-}
+  &#125;
+  update() &#123;
+    console.log(`$&#123;this.name&#125; update, state: $&#123;this.subject.getState()&#125;`)
+  &#125;
+&#125;
 
 // 测试
 let s = new Subject()
@@ -643,9 +642,9 @@ s.setState(12)
 <h3 id="场景-2"><a href="#场景-2" class="headerlink" title="场景"></a>场景</h3><ul>
 <li>DOM事件</li>
 </ul>
-<pre><code class="js">document.body.addEventListener(&#39;click&#39;, function() {
+<pre><code class="js">document.body.addEventListener(&#39;click&#39;, function() &#123;
     console.log(&#39;hello world!&#39;);
-});
+&#125;);
 document.body.click()
 </code></pre>
 <ul>
@@ -659,26 +658,26 @@ document.body.click()
 </ul>
 <h3 id="缺点-6"><a href="#缺点-6" class="headerlink" title="缺点"></a>缺点</h3><p>过度使用会导致对象与对象之间的联系弱化，会导致程序难以跟踪维护和理解</p>
 <h2 id="状态模式"><a href="#状态模式" class="headerlink" title="状态模式"></a>状态模式</h2><h3 id="定义-7"><a href="#定义-7" class="headerlink" title="定义"></a>定义</h3><p>允许一个对象在其内部状态改变的时候改变它的行为，对象看起来似乎修改了它的类</p>
-<h3 id="code-6"><a href="#code-6" class="headerlink" title="code"></a>code</h3><pre><code class="js">class State {
-  constructor(state){
+<h3 id="code-6"><a href="#code-6" class="headerlink" title="code"></a>code</h3><pre><code class="js">class State &#123;
+  constructor(state)&#123;
     this.state = state
-  }
-  handle(context){
-    console.log(`this is ${context} light`)
-  }
-}
+  &#125;
+  handle(context)&#123;
+    console.log(`this is $&#123;context&#125; light`)
+  &#125;
+&#125;
 
-class Context{
-  constructor(){
+class Context&#123;
+  constructor()&#123;
     this.state = null
-  }
-  getState(){
+  &#125;
+  getState()&#123;
     return this.state
-  }
-  setState(state){
+  &#125;
+  setState(state)&#123;
     this.state = state
-  }
-}
+  &#125;
+&#125;
 
 let context = new Context()
 let weak = new State(&#39;Weak&#39;)
@@ -734,7 +733,7 @@ console.log(context.getState())
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -757,7 +756,7 @@ console.log(context.getState())
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -768,7 +767,7 @@ console.log(context.getState())
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#设计模式简介"><span class="toc-number">1.</span> <span class="toc-text">设计模式简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#设计模式规则（SOLID）"><span class="toc-number">1.1.</span> <span class="toc-text">设计模式规则（SOLID）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#设计模式分类（23种）"><span class="toc-number">2.</span> <span class="toc-text">设计模式分类（23种）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">2.1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#工厂模式"><span class="toc-number">2.2.</span> <span class="toc-text">工厂模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#定义"><span class="toc-number">2.2.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#code"><span class="toc-number">2.2.2.</span> <span class="toc-text">code</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用场景"><span class="toc-number">2.2.3.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优点"><span class="toc-number">2.2.4.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缺点"><span class="toc-number">2.2.5.</span> <span class="toc-text">缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#什么时候不用"><span class="toc-number">2.2.6.</span> <span class="toc-text">什么时候不用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例子"><span class="toc-number">2.2.7.</span> <span class="toc-text">例子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#单例模式"><span class="toc-number">2.3.</span> <span class="toc-text">单例模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#定义-1"><span class="toc-number">2.3.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#code-1"><span class="toc-number">2.3.2.</span> <span class="toc-text">code</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优点-1"><span class="toc-number">2.3.3.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缺点-1"><span class="toc-number">2.3.4.</span> <span class="toc-text">缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#场景例子"><span class="toc-number">2.3.5.</span> <span class="toc-text">场景例子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#适配器模式"><span class="toc-number">2.4.</span> <span class="toc-text">适配器模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#定义-2"><span class="toc-number">2.4.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#code-2"><span class="toc-number">2.4.2.</span> <span class="toc-text">code</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优点-2"><span class="toc-number">2.4.3.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缺点-2"><span class="toc-number">2.4.4.</span> <span class="toc-text">缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#场景"><span class="toc-number">2.4.5.</span> <span class="toc-text">场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#不同点"><span class="toc-number">2.4.6.</span> <span class="toc-text">不同点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#装饰者模式"><span class="toc-number">2.5.</span> <span class="toc-text">装饰者模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#定义-3"><span class="toc-number">2.5.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#code-3"><span class="toc-number">2.5.2.</span> <span class="toc-text">code</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#场景例子-1"><span class="toc-number">2.5.3.</span> <span class="toc-text">场景例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优点-3"><span class="toc-number">2.5.4.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缺点-3"><span class="toc-number">2.5.5.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代理模式"><span class="toc-number">2.6.</span> <span class="toc-text">代理模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#定义-4"><span class="toc-number">2.6.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#场景例子-2"><span class="toc-number">2.6.2.</span> <span class="toc-text">场景例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优点-4"><span class="toc-number">2.6.3.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缺点-4"><span class="toc-number">2.6.4.</span> <span class="toc-text">缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#不同点-1"><span class="toc-number">2.6.5.</span> <span class="toc-text">不同点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#外观模式"><span class="toc-number">2.7.</span> <span class="toc-text">外观模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#定义-5"><span class="toc-number">2.7.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#code-4"><span class="toc-number">2.7.2.</span> <span class="toc-text">code</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#场景-1"><span class="toc-number">2.7.3.</span> <span class="toc-text">场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优点-5"><span class="toc-number">2.7.4.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缺点-5"><span class="toc-number">2.7.5.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#观察者模式"><span class="toc-number">2.8.</span> <span class="toc-text">观察者模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#定义-6"><span class="toc-number">2.8.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#code-5"><span class="toc-number">2.8.2.</span> <span class="toc-text">code</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#场景-2"><span class="toc-number">2.8.3.</span> <span class="toc-text">场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优点-6"><span class="toc-number">2.8.4.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缺点-6"><span class="toc-number">2.8.5.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#状态模式"><span class="toc-number">2.9.</span> <span class="toc-text">状态模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#定义-7"><span class="toc-number">2.9.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#code-6"><span class="toc-number">2.9.2.</span> <span class="toc-text">code</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#场景-3"><span class="toc-number">2.9.3.</span> <span class="toc-text">场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优点-7"><span class="toc-number">2.9.4.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缺点-7"><span class="toc-number">2.9.5.</span> <span class="toc-text">缺点</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">设计模式简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E8%A7%84%E5%88%99%EF%BC%88SOLID%EF%BC%89"><span class="toc-number">1.1.</span> <span class="toc-text">设计模式规则（SOLID）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%88%86%E7%B1%BB%EF%BC%8823%E7%A7%8D%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">设计模式分类（23种）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-number">2.1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.2.</span> <span class="toc-text">工厂模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89"><span class="toc-number">2.2.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#code"><span class="toc-number">2.2.2.</span> <span class="toc-text">code</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">2.2.3.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9"><span class="toc-number">2.2.4.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">2.2.5.</span> <span class="toc-text">缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E4%B8%8D%E7%94%A8"><span class="toc-number">2.2.6.</span> <span class="toc-text">什么时候不用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90"><span class="toc-number">2.2.7.</span> <span class="toc-text">例子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.3.</span> <span class="toc-text">单例模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-1"><span class="toc-number">2.3.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#code-1"><span class="toc-number">2.3.2.</span> <span class="toc-text">code</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-1"><span class="toc-number">2.3.3.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-1"><span class="toc-number">2.3.4.</span> <span class="toc-text">缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E4%BE%8B%E5%AD%90"><span class="toc-number">2.3.5.</span> <span class="toc-text">场景例子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.4.</span> <span class="toc-text">适配器模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-2"><span class="toc-number">2.4.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#code-2"><span class="toc-number">2.4.2.</span> <span class="toc-text">code</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-2"><span class="toc-number">2.4.3.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-2"><span class="toc-number">2.4.4.</span> <span class="toc-text">缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF"><span class="toc-number">2.4.5.</span> <span class="toc-text">场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E5%90%8C%E7%82%B9"><span class="toc-number">2.4.6.</span> <span class="toc-text">不同点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.5.</span> <span class="toc-text">装饰者模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-3"><span class="toc-number">2.5.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#code-3"><span class="toc-number">2.5.2.</span> <span class="toc-text">code</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E4%BE%8B%E5%AD%90-1"><span class="toc-number">2.5.3.</span> <span class="toc-text">场景例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-3"><span class="toc-number">2.5.4.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-3"><span class="toc-number">2.5.5.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.6.</span> <span class="toc-text">代理模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-4"><span class="toc-number">2.6.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E4%BE%8B%E5%AD%90-2"><span class="toc-number">2.6.2.</span> <span class="toc-text">场景例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-4"><span class="toc-number">2.6.3.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-4"><span class="toc-number">2.6.4.</span> <span class="toc-text">缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E5%90%8C%E7%82%B9-1"><span class="toc-number">2.6.5.</span> <span class="toc-text">不同点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.7.</span> <span class="toc-text">外观模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-5"><span class="toc-number">2.7.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#code-4"><span class="toc-number">2.7.2.</span> <span class="toc-text">code</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF-1"><span class="toc-number">2.7.3.</span> <span class="toc-text">场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-5"><span class="toc-number">2.7.4.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-5"><span class="toc-number">2.7.5.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.8.</span> <span class="toc-text">观察者模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-6"><span class="toc-number">2.8.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#code-5"><span class="toc-number">2.8.2.</span> <span class="toc-text">code</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF-2"><span class="toc-number">2.8.3.</span> <span class="toc-text">场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-6"><span class="toc-number">2.8.4.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-6"><span class="toc-number">2.8.5.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.9.</span> <span class="toc-text">状态模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-7"><span class="toc-number">2.9.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#code-6"><span class="toc-number">2.9.2.</span> <span class="toc-text">code</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF-3"><span class="toc-number">2.9.3.</span> <span class="toc-text">场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-7"><span class="toc-number">2.9.4.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-7"><span class="toc-number">2.9.5.</span> <span class="toc-text">缺点</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
             
@@ -787,7 +786,7 @@ console.log(context.getState())
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

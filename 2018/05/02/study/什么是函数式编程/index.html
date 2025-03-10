@@ -39,7 +39,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -146,10 +146,11 @@
 <p><img src="http://www.ruanyifeng.com/blogimg/asset/2017/bg2017022201.jpg" alt="函数式编程"></p>
 <p>网上搜索一下，你会轻松找到好多答案。</p>
 <blockquote>
-<p>与面向对象编程和过程式编程并列的编程范式<br>主要的特征：<a href="https://llh911001.gitbooks.io/mostly-adequate-guide-chinese/content/ch2.html#%E4%B8%BA%E4%BD%95%E9%92%9F%E7%88%B1%E4%B8%80%E7%AD%89%E5%85%AC%E6%B0%91" target="_blank" rel="noopener">函数是第一等公民</a><br>强调将计算过程分解成可复用的函数，典型的例子就是map函数和reduce函数组成的<code>MapReduce函数</code><br>只有纯函数，没有副作用的函数，才被称为函数</p>
+<p>与面向对象编程和过程式编程并列的编程范式<br>主要的特征：<a target="_blank" rel="noopener" href="https://llh911001.gitbooks.io/mostly-adequate-guide-chinese/content/ch2.html#%E4%B8%BA%E4%BD%95%E9%92%9F%E7%88%B1%E4%B8%80%E7%AD%89%E5%85%AC%E6%B0%91">函数是第一等公民</a><br>强调将计算过程分解成可复用的函数，典型的例子就是map函数和reduce函数组成的<code>MapReduce函数</code><br>只有纯函数，没有副作用的函数，才被称为函数</p>
 </blockquote>
 <p>上面这些说法都对，但还不够，都没有回答下面这个更深层的问题。</p>
-<a id="more"></a>
+<span id="more"></span>
+
 <blockquote>
 <p><strong>为什么要这样做？</strong></p>
 </blockquote>
@@ -173,21 +174,21 @@
 <p>理论上通过函数，就可以从范畴的一个成员，算出其他所有成员。</p>
 <h3 id="范畴与容器"><a href="#范畴与容器" class="headerlink" title="范畴与容器"></a>范畴与容器</h3><blockquote>
 <p>我们可以把”范畴”想象成是一个容器，里面包含两样东西。</p>
+</blockquote>
 <ul>
 <li>值（value）</li>
 <li>值的变形关系，也就是函数。</li>
 </ul>
-</blockquote>
 <p>下面我们使用代码，定义一个简单的范畴。</p>
-<pre><code class="js">class Category{
-    constructor(val){
+<pre><code class="js">class Category&#123;
+    constructor(val)&#123;
         this.val = val;
-    }
+    &#125;
 
-    addOne(x){
+    addOne(x)&#123;
         return x +1;
-    }
-}
+    &#125;
+&#125;
 </code></pre>
 <p>上面代码中，<code>Category</code>是一个类，也是一个容器，里面包含一个值（<code>this.val</code>）和一种变形关系（addOne）。你可能已经看出来了，这里的范畴，就是所有彼此之间<code>相差1</code>的数字。</p>
 <p>注意，本文后面的部分，凡是提到”容器”的地方，全部都是指”范畴”。</p>
@@ -197,11 +198,11 @@
 <p><img src="http://www.ruanyifeng.com/blogimg/asset/2017/bg2017022204.png" alt="compose"></p>
 <p>上图中，X和Y之间的变形关系是<code>函数f</code>，Y和Z之间的变形关系是<code>函数g</code>，那么X和Z之间的关系，就是g和f的合成<code>函数g·f</code>。</p>
 <p>合成两个函数的简单代码如下。</p>
-<pre><code class="js">const compose = function(f,g){
-    return function(x){
+<pre><code class="js">const compose = function(f,g)&#123;
+    return function(x)&#123;
         return f(g(x));
-    }
-}
+    &#125;
+&#125;
 </code></pre>
 <p>函数的合成还必须满足结合律。</p>
 <p><img src="http://www.ruanyifeng.com/blogimg/asset/2017/bg2017022209.png" alt="结合律"></p>
@@ -216,17 +217,17 @@ compose(f, g, h)
 <h3 id="柯里化"><a href="#柯里化" class="headerlink" title="柯里化"></a>柯里化</h3><p><code>f(x)</code>和<code>g(x)</code>合成为<code>f(g(x))</code>，有一个隐藏的前提，就是f和g都只能接受一个参数。如果可以接受多个参数，比如<code>f(x, y)</code>和<code>g(a, b, c)</code>，函数合成就非常麻烦。</p>
 <p>这时候就需要柯里化，所谓“柯里化”就是把一个多参数的函数，转化为单参数的函数</p>
 <pre><code class="js">// 柯里化之前
-function(x,y){
+function(x,y)&#123;
     return x + y;
-}
+&#125;
 add (1,2) // 3
 
 // 柯里化之后
-function(y){
-    return function(x){
+function(y)&#123;
+    return function(x)&#123;
         return x + y;
-    }
-}
+    &#125;
+&#125;
 
 add(2)(1); // 3
 </code></pre>
@@ -240,26 +241,25 @@ add(2)(1); // 3
 <p><img src="http://www.ruanyifeng.com/blogimg/asset/2017/bg2017022211.jpg" alt="functor-1"></p>
 <p>上图中，函数f完成值的转换<code>（a到b）</code>，将它传入<code>函子</code>，就可以实现范畴的转换<code>（Fa到Fb）</code>。</p>
 <h3 id="函子的代码实现"><a href="#函子的代码实现" class="headerlink" title="函子的代码实现"></a>函子的代码实现</h3><p>任何具有<code>map</code>方法的数据结构，都可以当作函子的实现。</p>
-<pre><code class="js">class Functor{
-    construcor(val){
+<pre><code class="js">class Functor&#123;
+    construcor(val)&#123;
         this.val = val;
-    }
+    &#125;
 
-    map(f){
+    map(f)&#123;
         return new Functor(f(this.val));
-    }
-}
-
+    &#125;
+&#125;
 </code></pre>
 <p>上面代码中，<code>Functor</code>是一个函子，它的<code>map</code>方法接受函数<code>f</code>作为参数，然后返回一个新的函子，里面包含的值是被f处理过的<code>（f(this.val)）</code>。<br><strong>一般约定，函子的标志就是容器具有<code>map</code>方法。该方法将容器里面的每一个值，映射到另一个容器</strong>。</p>
 <p>下面是一些用法的示例。</p>
-<pre><code class="js">(new Functot(2)).map(function(two){
+<pre><code class="js">(new Functot(2)).map(function(two)&#123;
     return two + 2;
-}); //Functor(4)
+&#125;); //Functor(4)
 
-(new Functor(&#39;flamethrowers&#39;)).map(function(s) {
+(new Functor(&#39;flamethrowers&#39;)).map(function(s) &#123;
   return s.toUpperCase();
-});
+&#125;);
 // Functor(&#39;FLAMETHROWERS&#39;)
 
 (new Functor(&#39;bombs&#39;)).map(_.concat(&#39; away&#39;)).map(_.prop(&#39;length&#39;));
@@ -270,51 +270,50 @@ add(2)(1); // 3
 <h2 id="of方法"><a href="#of方法" class="headerlink" title="of方法"></a>of方法</h2><p>你可能注意到了，上面生成新的函子的时候，用了new命令。这实在太不像函数式编程了，因为new命令是面向对象编程的标志。</p>
 <p><strong>函数式编程一般约定，函子有一个of方法，用来生成新的容器。</strong></p>
 <p>下面就用<code>of</code>方法替换掉<code>new</code>。</p>
-<pre><code class="js">Functor.of = function(val) {
+<pre><code class="js">Functor.of = function(val) &#123;
   return new Functor(val);
-};
+&#125;;
 </code></pre>
 <p>这就更像函数式编程了。</p>
 <h2 id="Maybe-函子"><a href="#Maybe-函子" class="headerlink" title="Maybe 函子"></a>Maybe 函子</h2><p>函子接受各种函数，处理容器内部的值。这里就有一个问题，容器内部的值可能是一个空值（比如<code>null</code>），而外部函数未必有处理空值的机制，如果传入空值，很可能就会出错。</p>
-<pre><code class="js">Functor.of(null).map(function (s) {
+<pre><code class="js">Functor.of(null).map(function (s) &#123;
   return s.toUpperCase();
-});
+&#125;);
 // TypeError
 </code></pre>
 <p>上面代码中，函子里面的值是<code>null</code>，结果小写变成大写的时候就出错了。</p>
 <p>Maybe 函子就是为了解决这一类问题而设计的。简单说，<strong>它的map方法里面设置了空值检查</strong>。</p>
-<pre><code class="js">class Maybe extends Functor {
-  map(f) {
+<pre><code class="js">class Maybe extends Functor &#123;
+  map(f) &#123;
     return this.val ? Maybe.of(f(this.val)) : Maybe.of(null);
-  }
+  &#125;
 </code></pre>
 <p>有了 Maybe 函子，处理空值就不会出错了。</p>
-<pre><code class="js">Maybe.of(null).map(function (s) {
+<pre><code class="js">Maybe.of(null).map(function (s) &#123;
   return s.toUpperCase();
-});
+&#125;);
 // Maybe(null)
-
 </code></pre>
 <h2 id="Either函子"><a href="#Either函子" class="headerlink" title="Either函子"></a>Either函子</h2><p>条件运算<code>if...else</code>是最常见的运算之一，函数式编程里面，使用<code>Either</code>函子表达。</p>
 <p>Either 函子内部有两个值：<code>左值（Left）</code>和<code>右值（Right）</code>。右值是正常情况下使用的值，左值是右值不存在时使用的默认值。</p>
-<pre><code class="js">class Either extends Functor{
-    construcor(left,right){
+<pre><code class="js">class Either extends Functor&#123;
+    construcor(left,right)&#123;
         this.left = left;
         this.right = right;
-    }
-    map(f){
+    &#125;
+    map(f)&#123;
         return this.right ? Either.of(this.left,f(this.right)) : Either.of(f(this.left),this.right);
-    }
-}
+    &#125;
+&#125;
 
-Either.of = function(left,right){
+Either.of = function(left,right)&#123;
     return new Either(left,right);
-}
+&#125;
 // 下面是用法。
 
-var addOne = function (x) {
+var addOne = function (x) &#123;
   return x + 1;
-};
+&#125;;
 
 Either.of(5, 6).map(addOne);
 // Either(5, 7);
@@ -325,23 +324,23 @@ Either.of(1, null).map(addOne);
 <p>上面代码中，如果右值有值，就使用右值，否则使用左值。通过这种方式，Either 函子表达了条件运算。</p>
 <p><strong>Either 函子的常见用途是提供默认值</strong>。下面是一个例子。</p>
 <pre><code class="js">Either
-.of({address: &#39;xxx&#39;}, currentUser.address)
+.of(&#123;address: &#39;xxx&#39;&#125;, currentUser.address)
 .map(updateField);
 </code></pre>
 <p>上面代码中，如果用户没有提供地址，Either 函子就会使用左值的默认地址。</p>
 <p>Either 函子的另一个用途是代替<code>try...catch</code>，使用左值表示错误。</p>
-<pre><code class="js">function parseJSON(json) {
-  try {
+<pre><code class="js">function parseJSON(json) &#123;
+  try &#123;
     return Either.of(null, JSON.parse(json));
-  } catch (e: Error) {
+  &#125; catch (e: Error) &#123;
     return Either.of(e, null);
-  }
-}
+  &#125;
+&#125;
 </code></pre>
 <h2 id="ap函子"><a href="#ap函子" class="headerlink" title="ap函子"></a>ap函子</h2><p>函子里面包含的值，完全可能是函数。我们可以想象这样一种情况，一个函子的值是数值，另一个函子的值是函数。</p>
-<pre><code class="js">function addTwo(x) {
+<pre><code class="js">function addTwo(x) &#123;
   return x + 2;
-}
+&#125;
 
 const A = Functor.of(2);
 const B = Functor.of(addTwo)
@@ -349,11 +348,11 @@ const B = Functor.of(addTwo)
 <p>上面代码中，函子A内部的值是2，函子B内部的值是函数addTwo。</p>
 <p>有时，我们想让函子B内部的函数，可以使用函子A内部的值进行运算。这时就需要用到 <strong>ap 函子</strong>。</p>
 <p><strong>ap 是 applicative（应用）的缩写</strong>。凡是部署了ap方法的函子，就是 ap 函子。</p>
-<pre><code class="js">class Ap extends Functor{
-    ap(F){
+<pre><code class="js">class Ap extends Functor&#123;
+    ap(F)&#123;
         return Ap.of(this.val(F.val));
-    }
-}
+    &#125;
+&#125;
 </code></pre>
 <blockquote>
 <p>注意，ap方法的参数不是函数，而是另一个函子。</p>
@@ -362,11 +361,11 @@ const B = Functor.of(addTwo)
 <pre><code class="js">Ap.of(addTwo).ap(Functor.of(2))//Ap(4)
 </code></pre>
 <p>ap 函子的意义在于，<strong>对于那些多参数的函数，就可以从多个容器之中取值，实现函子的链式操作</strong>。</p>
-<pre><code class="js">function add (y){
-    return function(y){
+<pre><code class="js">function add (y)&#123;
+    return function(y)&#123;
         return x + y;
-    }
-}
+    &#125;
+&#125;
 
 Ap.of(add).ap(Maybe.of(2)).ap(Maybe.of(3)); //Ap(5)
 </code></pre>
@@ -376,37 +375,37 @@ Ap.of(add).ap(Maybe.of(2)).ap(Maybe.of(3)); //Ap(5)
 <h2 id="Monad-函子"><a href="#Monad-函子" class="headerlink" title="Monad 函子"></a>Monad 函子</h2><p>函子是一个容器，可以包含任何值。函子之中再包含一个函子，也是完全合法的。但是，这样就会出现多层嵌套的函子。</p>
 <pre><code class="js">Maybe.of(
   Maybe.of(
-    Maybe.of({name: &#39;Mulburry&#39;, number: 8402})
+    Maybe.of(&#123;name: &#39;Mulburry&#39;, number: 8402&#125;)
   )
 )
 </code></pre>
 <p>上面这个函子，一共有三个<code>Maybe嵌套</code>。如果要取出内部的值，就要连续取三次<code>this.val</code>。这当然很不方便，因此就出现了 <strong>Monad 函子</strong>。</p>
 <p><font color = "red">Monad 函子的作用是，总是返回一个单层的函子</font>。它有一个flatMap方法，与map方法作用相同，唯一的区别是<code>如果生成了一个嵌套函子，它会取出后者内部的值，保证返回的永远是一个单层的容器，不会出现嵌套的情况</code>。</p>
-<pre><code class="js">class Monad extends Functor {
-  join() {
+<pre><code class="js">class Monad extends Functor &#123;
+  join() &#123;
     return this.val;
-  }
-  flatMap(f) {
+  &#125;
+  flatMap(f) &#123;
     return this.map(f).join();
-  }
-}
+  &#125;
+&#125;
 </code></pre>
 <p>上面代码中，如果函数<code>f</code>返回的是一个函子，那么<code>this.map(f)</code>就会生成一个嵌套的函子。所以，<code>join</code>方法保证了<code>flatMap</code>方法总是返回一个单层的函子。这意味着嵌套的函子会被铺平（<code>flatten</code>）。</p>
 <h2 id="IO-操作"><a href="#IO-操作" class="headerlink" title="IO 操作"></a>IO 操作</h2><p>Monad 函子的重要应用，就是<strong>实现 I/O （输入输出）操作</strong>。</p>
 <pre><code class="js">var fs = require(&#39;fs&#39;);
 
-var readFile = function(filename){
-    return new IO(function(){
+var readFile = function(filename)&#123;
+    return new IO(function()&#123;
         return fs.readFileSync(filename,&#39;utf-8&#39;);
-    });
-}
+    &#125;);
+&#125;
 
-var print = function(x) {
-  return new IO(function() {
+var print = function(x) &#123;
+  return new IO(function() &#123;
     console.log(x);
     return x;
-  });
-}
+  &#125;);
+&#125;
 </code></pre>
 <p>上面代码中，读取文件和打印本身都是不纯的操作，但是readFile和print却是纯函数，因为它们总是返回 IO 函子。</p>
 <p>如果 IO 函子是一个<code>Monad</code>，具有<code>flatMap</code>方法，那么我们就可以像下面这样调用这两个函数。</p>
@@ -415,11 +414,11 @@ var print = function(x) {
 </code></pre>
 <p>这就是神奇的地方，上面的代码完成了不纯的操作，但是因为<code>flatMap</code>返回的还是一个 IO 函子，所以这个表达式是纯的。我们通过一个纯的表达式，完成带有副作用的操作，这就是 Monad 的作用。</p>
 <p>由于返回还是 IO 函子，所以可以实现<em>链式操作</em>。因此，在大多数库里面，<code>flatMap</code>方法被改名成<code>chain</code>。</p>
-<pre><code class="js">var tail = function(x) {
-  return new IO(function() {
+<pre><code class="js">var tail = function(x) &#123;
+  return new IO(function() &#123;
     return x[x.length - 1];
-  });
-}
+  &#125;);
+&#125;
 
 readFile(&#39;./user.txt&#39;)
 .flatMap(tail)
@@ -431,7 +430,7 @@ readFile(&#39;./user.txt&#39;)
 .chain(print)
 </code></pre>
 <p>上面代码读取了文件<code>user.txt</code>，然后选取最后一行输出。</p>
-<p><a href="http://www.ruanyifeng.com/blog/2017/02/fp-tutorial.html" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2017/02/fp-tutorial.html">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -456,7 +455,7 @@ readFile(&#39;./user.txt&#39;)
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -479,7 +478,7 @@ readFile(&#39;./user.txt&#39;)
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -490,7 +489,7 @@ readFile(&#39;./user.txt&#39;)
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Functional-programming"><span class="toc-number">1.</span> <span class="toc-text">Functional programming</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#范畴论"><span class="toc-number">1.1.</span> <span class="toc-text">范畴论</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#范畴的概念"><span class="toc-number">1.1.1.</span> <span class="toc-text">范畴的概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数学模型"><span class="toc-number">1.1.2.</span> <span class="toc-text">数学模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#范畴与容器"><span class="toc-number">1.1.3.</span> <span class="toc-text">范畴与容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#范畴论与函数编程式的关系"><span class="toc-number">1.1.4.</span> <span class="toc-text">范畴论与函数编程式的关系</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数的合成与柯里化"><span class="toc-number">1.2.</span> <span class="toc-text">函数的合成与柯里化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#函数的合成"><span class="toc-number">1.2.1.</span> <span class="toc-text">函数的合成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#柯里化"><span class="toc-number">1.2.2.</span> <span class="toc-text">柯里化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函子（functor）"><span class="toc-number">1.3.</span> <span class="toc-text">函子（functor）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#函子的概念"><span class="toc-number">1.3.1.</span> <span class="toc-text">函子的概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#函子的代码实现"><span class="toc-number">1.3.2.</span> <span class="toc-text">函子的代码实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#of方法"><span class="toc-number">1.4.</span> <span class="toc-text">of方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Maybe-函子"><span class="toc-number">1.5.</span> <span class="toc-text">Maybe 函子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Either函子"><span class="toc-number">1.6.</span> <span class="toc-text">Either函子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ap函子"><span class="toc-number">1.7.</span> <span class="toc-text">ap函子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Monad-函子"><span class="toc-number">1.8.</span> <span class="toc-text">Monad 函子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IO-操作"><span class="toc-number">1.9.</span> <span class="toc-text">IO 操作</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Functional-programming"><span class="toc-number">1.</span> <span class="toc-text">Functional programming</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8C%83%E7%95%B4%E8%AE%BA"><span class="toc-number">1.1.</span> <span class="toc-text">范畴论</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8C%83%E7%95%B4%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">1.1.1.</span> <span class="toc-text">范畴的概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E5%AD%A6%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.2.</span> <span class="toc-text">数学模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8C%83%E7%95%B4%E4%B8%8E%E5%AE%B9%E5%99%A8"><span class="toc-number">1.1.3.</span> <span class="toc-text">范畴与容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8C%83%E7%95%B4%E8%AE%BA%E4%B8%8E%E5%87%BD%E6%95%B0%E7%BC%96%E7%A8%8B%E5%BC%8F%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">1.1.4.</span> <span class="toc-text">范畴论与函数编程式的关系</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E5%90%88%E6%88%90%E4%B8%8E%E6%9F%AF%E9%87%8C%E5%8C%96"><span class="toc-number">1.2.</span> <span class="toc-text">函数的合成与柯里化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E5%90%88%E6%88%90"><span class="toc-number">1.2.1.</span> <span class="toc-text">函数的合成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%AF%E9%87%8C%E5%8C%96"><span class="toc-number">1.2.2.</span> <span class="toc-text">柯里化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E5%AD%90%EF%BC%88functor%EF%BC%89"><span class="toc-number">1.3.</span> <span class="toc-text">函子（functor）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E5%AD%90%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">1.3.1.</span> <span class="toc-text">函子的概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E5%AD%90%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.3.2.</span> <span class="toc-text">函子的代码实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#of%E6%96%B9%E6%B3%95"><span class="toc-number">1.4.</span> <span class="toc-text">of方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Maybe-%E5%87%BD%E5%AD%90"><span class="toc-number">1.5.</span> <span class="toc-text">Maybe 函子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Either%E5%87%BD%E5%AD%90"><span class="toc-number">1.6.</span> <span class="toc-text">Either函子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ap%E5%87%BD%E5%AD%90"><span class="toc-number">1.7.</span> <span class="toc-text">ap函子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Monad-%E5%87%BD%E5%AD%90"><span class="toc-number">1.8.</span> <span class="toc-text">Monad 函子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IO-%E6%93%8D%E4%BD%9C"><span class="toc-number">1.9.</span> <span class="toc-text">IO 操作</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -509,7 +508,7 @@ readFile(&#39;./user.txt&#39;)
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

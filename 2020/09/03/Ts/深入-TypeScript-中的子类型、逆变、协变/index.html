@@ -37,7 +37,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -140,16 +140,16 @@
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <p><a href="https://juejin.im/post/6855517117778198542" target="_blank" rel="noopener">原文地址</a></p>
+            <p><a target="_blank" rel="noopener" href="https://juejin.im/post/6855517117778198542">原文地址</a></p>
 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>TypeScript 中有很多地方涉及到子类型 <code>subtype</code>、父类型 <code>supertype</code>、逆变和协变<code>covariance and contravariance</code>的概念，如果搞不清这些概念，那么很可能被报错搞的无从下手，或者在写一些复杂类型的时候看到别人可以这么写，但是不知道为什么他可以生效。</p>
 <h2 id="子类型"><a href="#子类型" class="headerlink" title="子类型"></a>子类型</h2><p>比如考虑如下的接口：</p>
-<pre><code class="js">interface Animal {
+<pre><code class="js">interface Animal &#123;
   age: number
-}
+&#125;
 
-interface Dog extends Animal {
+interface Dog extends Animal &#123;
   bark(): void
-}
+&#125;
 </code></pre>
 <p>在这个例子中，<code>Animal</code> 是 <code>Dog</code> 的父类，<code>Dog</code>是<code>Animal</code>的子类型，子类型的属性比父类型更多，更具体。</p>
 <p>在类型系统中，属性更多的类型是子类型。<br>在集合论中，属性更少的集合是子集。</p>
@@ -163,22 +163,22 @@ dog = animal // ❌error! animal 实例上缺少属性 &#39;bark&#39;
 </code></pre>
 <p>从这个例子里可以看出，animal 是一个「更宽泛」的类型，它的属性比较少，所以更「具体」的子类型是可以赋值给它的，因为你是知道 animal 上只有 age 这个属性的，你只会去使用这个属性，dog 上拥有 animal 所拥有的一切类型，赋值给 animal 是不会出现类型安全问题的。</p>
 <p>反之，如果 dog = animal，那么后续使用者会期望 dog 上拥有 bark 属性，当他调用了 dog.bark() 就会引发运行时的崩溃。</p>
-<p>从可赋值性角度来说，子类型是可以赋值给父类型的，也就是<code>父类型变量 = 子类型变量</code> 是安全的，因为子类型上涵盖了父类型所拥有的的一切属性。</p>
-<p>当我初学的时候，我会觉得<code>T extends {}</code> 这样的语句很奇怪，为什么可以 <code>extends</code>一个空类型并且在传递任意类型时都成立呢？当搞明白上面的知识点，这个问题也自然迎刃而解了。</p>
+<p>从可赋值性角度来说，子类型是可以赋值给父类型的，也就是<code> 父类型变量 = 子类型变量</code> 是安全的，因为子类型上涵盖了父类型所拥有的的一切属性。</p>
+<p>当我初学的时候，我会觉得<code>T extends &#123;&#125;</code> 这样的语句很奇怪，为什么可以 <code>extends</code>一个空类型并且在传递任意类型时都成立呢？当搞明白上面的知识点，这个问题也自然迎刃而解了。</p>
 <h2 id="在函数中的运用"><a href="#在函数中的运用" class="headerlink" title="在函数中的运用"></a>在函数中的运用</h2><p>假设我们有这样的一个函数：</p>
-<pre><code class="js">function c(val:{a:number,b:number})
+<pre><code class="js">function c(val:&#123;a:number,b:number&#125;)
 </code></pre>
 <p>有这样两个变量：</p>
-<pre><code class="js">let val1 = { a: 1 }
-let val2 = { a: 1, b: 2, c: 3 }
+<pre><code class="js">let val1 = &#123; a: 1 &#125;
+let val2 = &#123; a: 1, b: 2, c: 3 &#125;
 </code></pre>
 <p>调用 <code>f(val1)</code> 是会报错的，比较显而易见的来看是因为缺少属性 b，而函数 f 中很可能去访问 b 属性并且做一些操作，比如 <code>b.substr()</code>，这就会导致崩溃。</p>
 <p>换成上面的知识点来看，val1 对应的类型是{ a: number }，它是 { a: number, b: number } 的父类型，调用 <code>f(val1)</code> 其实就相当于把函数定义中的形参 val 赋值成了 val1，把父类型的变量赋值给子类型的变量，这是危险的。</p>
 <p>反之，调用 f(val2) 没有任何问题，因为 val2 的类型是 val类型的子类型，它拥有更多的属性，函数有可能使用的一切属性它都有。</p>
 <p>假设我现在要开发一个 <code>redux</code>，在声明 <code>dispatch</code> 类型的时候，我就可以这样去做：</p>
-<pre><code class="ts">interface Action {
+<pre><code class="ts">interface Action &#123;
   type: string
-}
+&#125;
 
 declare function dispatch&lt;T extends Action&gt;(action: T)
 </code></pre>
@@ -194,7 +194,7 @@ parent = son // ✅ok
 son = parent // ❌error! parent 有可能是 &#39;c&#39;
 </code></pre>
 <p>这里 son 是可以安全的赋值给 parent 的，因为 son 的所有可能性都被 parent 涵盖了。<br>而反之则不行，parent 太宽泛了，它有可能是 ‘c’，这是 Son 类型 hold 不住的。<br>这个例子看完以后，你应该可以理解为什么 <code>&#39;a&#39; | &#39;b&#39;</code> extends <code>&#39;a&#39; | &#39;b&#39; | &#39;c&#39;</code> 为 true 了，在书写 <code>conditional types</code>的时候更加灵活的运用吧。</p>
-<h2 id="逆变和协变"><a href="#逆变和协变" class="headerlink" title="逆变和协变"></a>逆变和协变</h2><p>先来段<a href="https://zh.wikipedia.org/wiki/%E5%8D%8F%E5%8F%98%E4%B8%8E%E9%80%86%E5%8F%98" target="_blank" rel="noopener">维基百科的定义</a>：</p>
+<h2 id="逆变和协变"><a href="#逆变和协变" class="headerlink" title="逆变和协变"></a>逆变和协变</h2><p>先来段<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%8D%8F%E5%8F%98%E4%B8%8E%E9%80%86%E5%8F%98">维基百科的定义</a>：</p>
 <blockquote>
 <p>协变与逆变(covariance and contravariance)是在计算机科学中，描述具有父/子型别关系的多个型别通过型别构造器、构造出的多个复杂型别之间是否有父/子型别关系的用语。</p>
 </blockquote>
@@ -214,19 +214,19 @@ animals[0].age // ✅ok
 let visitDog = (dog: Dog) =&gt; void;
 </code></pre>
 <p><code>animal = dog</code> 是类型安全的，那么 <code>visitAnimal = visitDog</code> 好像也是可行的？其实不然，想象一下这两个函数的实现：</p>
-<pre><code class="ts">let visitAnimal = (animal: Animal) =&gt; {
+<pre><code class="ts">let visitAnimal = (animal: Animal) =&gt; &#123;
   animal.age
-}
+&#125;
 
-let visitDog = (dog: Dog) =&gt; {
+let visitDog = (dog: Dog) =&gt; &#123;
   dog.age
   dog.bark()
-}
+&#125;
 </code></pre>
 <p>由于 visitDog 的参数期望的是一个更具体的带有 bark 属性的子类型，所以如果 visitAnimal = visitDog 后，我们可能会用一个不带 bark 属性的普通的 animal 类型来传给 visitDog。</p>
 <pre><code class="ts">visitAnimal = visitDog
 
-let animal = { age: 5 }
+let animal = &#123; age: 5 &#125;
 
 visitAnimal(animal) // ❌
 </code></pre>
@@ -260,7 +260,7 @@ visitAnimal(animal) // ❌
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -283,7 +283,7 @@ visitAnimal(animal) // ❌
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -294,7 +294,7 @@ visitAnimal(animal) // ❌
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#子类型"><span class="toc-number">1.1.</span> <span class="toc-text">子类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可赋值性的assignable"><span class="toc-number">1.2.</span> <span class="toc-text">可赋值性的assignable</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在函数中的运用"><span class="toc-number">1.3.</span> <span class="toc-text">在函数中的运用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在联合类型中的运用"><span class="toc-number">1.4.</span> <span class="toc-text">在联合类型中的运用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#逆变和协变"><span class="toc-number">1.5.</span> <span class="toc-text">逆变和协变</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#协变（Covariance）"><span class="toc-number">1.5.1.</span> <span class="toc-text">协变（Covariance）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#逆变（Contravariance）"><span class="toc-number">1.5.2.</span> <span class="toc-text">逆变（Contravariance）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-number">1.6.</span> <span class="toc-text">结语</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%90%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.1.</span> <span class="toc-text">子类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E8%B5%8B%E5%80%BC%E6%80%A7%E7%9A%84assignable"><span class="toc-number">1.2.</span> <span class="toc-text">可赋值性的assignable</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E5%87%BD%E6%95%B0%E4%B8%AD%E7%9A%84%E8%BF%90%E7%94%A8"><span class="toc-number">1.3.</span> <span class="toc-text">在函数中的运用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E8%81%94%E5%90%88%E7%B1%BB%E5%9E%8B%E4%B8%AD%E7%9A%84%E8%BF%90%E7%94%A8"><span class="toc-number">1.4.</span> <span class="toc-text">在联合类型中的运用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%86%E5%8F%98%E5%92%8C%E5%8D%8F%E5%8F%98"><span class="toc-number">1.5.</span> <span class="toc-text">逆变和协变</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%8F%E5%8F%98%EF%BC%88Covariance%EF%BC%89"><span class="toc-number">1.5.1.</span> <span class="toc-text">协变（Covariance）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%86%E5%8F%98%EF%BC%88Contravariance%EF%BC%89"><span class="toc-number">1.5.2.</span> <span class="toc-text">逆变（Contravariance）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E8%AF%AD"><span class="toc-number">1.6.</span> <span class="toc-text">结语</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -313,7 +313,7 @@ visitAnimal(animal) // ❌
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

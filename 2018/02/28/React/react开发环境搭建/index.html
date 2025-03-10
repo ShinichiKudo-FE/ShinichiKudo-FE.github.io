@@ -38,7 +38,7 @@ npm install -g create-react-app    ,">
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -101,7 +101,7 @@ npm install -g create-react-app    ,">
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    9k
+                    8.9k
                 </span>
                 
                 
@@ -142,7 +142,7 @@ npm install -g create-react-app    ,">
     <div class='main'>
         <div class="content markdown animated fadeIn">
             <h1 id="使用creat-react-app搭建基于webpack的react开发环境"><a href="#使用creat-react-app搭建基于webpack的react开发环境" class="headerlink" title="使用creat-react-app搭建基于webpack的react开发环境"></a>使用creat-react-app搭建基于webpack的react开发环境</h1><hr>
-<p><a href="https://github.com/facebook/create-react-app" target="_blank" rel="noopener">facebook官方文档</a><br><strong>Quick Start</strong>:</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/facebook/create-react-app">facebook官方文档</a><br><strong>Quick Start</strong>:</p>
 <pre><code class="javascript">npm install -g create-react-app       //安装create-react-app，yarn命令(需要安装yarn) yarn add create-react-app
 
 create-react-app myapp  //使用命令创建react应用 myapp为文件名称
@@ -156,63 +156,65 @@ npm test or yarn test //测试
 npm run build or yarn build //打包编译
 </code></pre>
 <p>上述命令即可快速创建react开发环境</p>
-<p>打开<a href="http://localhost:3000/" target="_blank" rel="noopener">http://localhost:3000/</a> 查看<br><a id="more"></a></p>
+<p>打开<a target="_blank" rel="noopener" href="http://localhost:3000/">http://localhost:3000/</a> 查看</p>
+<span id="more"></span>
+
 <h2 id="环境配置介绍："><a href="#环境配置介绍：" class="headerlink" title="环境配置介绍："></a>环境配置介绍：</h2><h3 id="项目结构："><a href="#项目结构：" class="headerlink" title="项目结构："></a>项目结构：</h3><p>生成项目后，脚手架为了“优雅”… …隐藏了所有的webpack相关的配置文件，此时查看myapp文件夹目录，会发现找不到任何webpack配置文件。执行以下命令：</p>
 <pre><code class="javascript">npm run eject
 </code></pre>
 <p>再查看myapp 文件夹，可以看到完整的项目结构：</p>
 <pre><code class="javascript">myapp/
-    node_modules/
-    package.json
-    .gitignore
-    config/
-        paths.js
-        polyfills
-        env.js
-        webpack.config.dev.js
-        webpack.config.prod.js
-    public/
-        index.html   / 入口html文件 /
-    scripts
-        **build.js**
-        **start.js**
-        test.js
-    src/
-        App.js
-        index.js    / 主入口文件 /
+    node_modules/
+    package.json
+    .gitignore
+    config/
+        paths.js
+        polyfills
+        env.js
+        webpack.config.dev.js
+        webpack.config.prod.js
+    public/
+        index.html   / 入口html文件 /
+    scripts
+        **build.js**
+        **start.js**
+        test.js
+    src/
+        App.js
+        index.js    / 主入口文件 /
 </code></pre>
 <p>加粗文件为主要配置文件。</p>
-<p>二、项目配置介绍<br>此处需要有npm、webpack的基础知识，充电传送门：<a href="http://www.jianshu.com/p/42e11515c10f" target="_blank" rel="noopener">webpack学习教程</a></p>
+<p>二、项目配置介绍<br>此处需要有npm、webpack的基础知识，充电传送门：<a target="_blank" rel="noopener" href="http://www.jianshu.com/p/42e11515c10f">webpack学习教程</a></p>
 <p>查看package.json文件的scripts，</p>
-<pre><code class="javascript">&quot;scripts&quot;: {
+<pre><code class="javascript">&quot;scripts&quot;: &#123;
 
-    &quot;start&quot;: &quot;node scripts/start.js&quot;,
+    &quot;start&quot;: &quot;node scripts/start.js&quot;,
 
-    &quot;build&quot;: &quot;node scripts/build.js&quot;,
+    &quot;build&quot;: &quot;node scripts/build.js&quot;,
 
-    &quot;test&quot;: &quot;node scripts/test.js --env=jsdom&quot;
+    &quot;test&quot;: &quot;node scripts/test.js --env=jsdom&quot;
 
-},
+&#125;,
 </code></pre>
 <p>可知，运行时是直接执行scripts文件目录下的js文件。<br>其中<strong>start.js</strong>为开发环境，<strong>build.js</strong>为打包脚本。</p>
 <h3 id="开发环境，代理请求"><a href="#开发环境，代理请求" class="headerlink" title="开发环境，代理请求"></a>开发环境，代理请求</h3><p>查看<strong>start.js</strong>, Facebook基本为每项配置都写了详尽的注释，<br><strong>start.js</strong>脚本启动了dev-server, 这里需要了解的是</p>
-<pre><code class="javascript">function addMiddleware(devServer){
+<pre><code class="javascript">function addMiddleware(devServer)&#123;
     ... ...
     这个函数调用http-proxy-middleware模块，将代理请求，代理地址在package.json中添加
 
-}
+&#125;
 </code></pre>
 <p>在package.json中添加字段proxy，开发环境下dev-server将会自动转发请求：</p>
 <pre><code class="javascript">&quot;proxy&quot;: &quot;http://aaa.bbb.com&quot;
 </code></pre>
 <h3 id="SASS、LESS等CSS预处理器配置"><a href="#SASS、LESS等CSS预处理器配置" class="headerlink" title="SASS、LESS等CSS预处理器配置"></a>SASS、LESS等CSS预处理器配置</h3><p>Facebook官方在create-react-app升级到某一版本，突然丢掉了默认对sass、less等预处理器的支持，官方文档说明</p>
-<p>于是，只能自己动手，在config目录下，<strong>webpack.config.dev.js</strong> 和 <strong>webpack.config.prod.js</strong>文件，没有抽出 loader、postcss之类一般共用的配置，于是，在两个文件夹都要一起配置，也可以抽出共用部分，以便维护。</p>
+<p>于是，只能自己动手，在config目录下，<strong>webpack.config.dev.js</strong> 和 <strong>webpack.config.prod.js</strong>文件，没有抽出 loader、postcss之类一般共用的配置，于是，在两个文件夹都要一起配置，也可以抽出共用部分，以便维护。</p>
 <p>这里以<strong>webpack.config.dev.js</strong>举例，<strong>webpack.config.prod.js</strong>一样配置即可：</p>
 <p>SASS-loader：<br>1、命令行，在当前目录执行：</p>
 <pre><code class="javascript">npm install --save node-sass-chokidar //or yarn add node-sass-chokidar
 </code></pre>
 <p>然后在package.json修改为</p>
-<pre><code class="javascript">&quot;scripts&quot;: {
+<pre><code class="javascript">&quot;scripts&quot;: &#123;
    &quot;build-css&quot;: &quot;node-sass-chokidar src/ -o src/&quot;,
    &quot;watch-css&quot;: &quot;npm run build-css &amp;&amp; node-sass-chokidar src/ -o src/ --watch --recursive&quot;,
      &quot;start&quot;: &quot;react-scripts start&quot;,
@@ -227,7 +229,7 @@ npm run build or yarn build //打包编译
 <pre><code class="javascript">npm install --save npm-run-all //yarn add npm-run-all（ 这是watch-css和build-css的合集）
 </code></pre>
 <p>同样修改package.json中的</p>
-<pre><code class="javascript"> &quot;scripts&quot;: {
+<pre><code class="javascript"> &quot;scripts&quot;: &#123;
     &quot;build-css&quot;: &quot;node-sass-chokidar src/ -o src/&quot;,
     &quot;watch-css&quot;: &quot;npm run build-css &amp;&amp; node-sass-chokidar src/ -o src/ --watch --recursive&quot;,
     &quot;start-js&quot;: &quot;node scripts/start.js&quot;,
@@ -235,11 +237,11 @@ npm run build or yarn build //打包编译
     &quot;build-js&quot;: &quot;node scripts/build.js&quot;,
     &quot;build&quot;: &quot;npm-run-all build-css build-js&quot;,
     &quot;test&quot;: &quot;node scripts/test.js --env=jsdom&quot;
-  },
+  &#125;,
 </code></pre>
 <p>这样就可以只需执行npm start 编辑查看了</p>
 <p>2、找到webpack.config.dev.js文件中 loaders中的第一项exclude（值为数组），排除scss文件，否则将被’url-loader’捕获。</p>
-<pre><code class="javascript">{
+<pre><code class="javascript">&#123;
 
 exclude: [
     /\.html$/,
@@ -251,61 +253,60 @@ exclude: [
 ]
 </code></pre>
 <p>3、loaders新增一项：</p>
-<pre><code class="javascript">{
+<pre><code class="javascript">&#123;
     test: /\.scss$/,
     loader: &#39;style!css!postcss!sass?outputStyle=expanded&#39;
-},
+&#125;,
 </code></pre>
 <p>至此，SASS文件就可以正常打包了（此处针对SCSS文件，如用到SASS，可将SCSS的正则修改下），LESS文件类似，不再赘述。</p>
-<h2 id="使用and-mobile-UI工具-可以快速开发react应用"><a href="#使用and-mobile-UI工具-可以快速开发react应用" class="headerlink" title="使用and-mobile UI工具 可以快速开发react应用"></a>使用and-mobile UI工具 可以快速开发react应用</h2><p><a href="https://mobile.ant.design/index-cn" target="_blank" rel="noopener">and-mobile入口</a></p>
+<h2 id="使用and-mobile-UI工具-可以快速开发react应用"><a href="#使用and-mobile-UI工具-可以快速开发react应用" class="headerlink" title="使用and-mobile UI工具 可以快速开发react应用"></a>使用and-mobile UI工具 可以快速开发react应用</h2><p><a target="_blank" rel="noopener" href="https://mobile.ant.design/index-cn">and-mobile入口</a></p>
 <h3 id="antd-mobile的引入及配置"><a href="#antd-mobile的引入及配置" class="headerlink" title="antd-mobile的引入及配置"></a>antd-mobile的引入及配置</h3><p>在命令行执行：</p>
 <pre><code class="javascript">npm install antd-mobile --save
 </code></pre>
 <p><strong>按需引入</strong></p>
 <p>为减少打包后体积以及方便书写，可用babel-plugin-import插件，配置后引入模块可如下：</p>
-<pre><code class="javascript">import {Picker} from &#39;antd-mobile&#39;;
+<pre><code class="javascript">import &#123;Picker&#125; from &#39;antd-mobile&#39;;
 </code></pre>
 <p>自动引入CSS和JS，无需再引入整个antd-mobile的整个CSS文件</p>
 <p>使用如下：</p>
 <pre><code class="javascript">npm install babel-plugin-import --save-dev
 </code></pre>
 <p>安装完毕后，在根目录新建文件，命名: .babelrc.js</p>
-<pre><code class="javascript">{
-  &quot;presets&quot;: [
-    &quot;es2015&quot;,
-    &quot;react&quot;
-  ],
-  &quot;plugins&quot;: [
-    [
-      &quot;import&quot;,
-        {
-          &quot;libraryName&quot;: &quot;antd-mobile&quot;,
-          &quot;style&quot;: &quot;css&quot;
-        }
-      ]
-    ]
-}
-
+<pre><code class="javascript">&#123;
+  &quot;presets&quot;: [
+    &quot;es2015&quot;,
+    &quot;react&quot;
+  ],
+  &quot;plugins&quot;: [
+    [
+      &quot;import&quot;,
+        &#123;
+          &quot;libraryName&quot;: &quot;antd-mobile&quot;,
+          &quot;style&quot;: &quot;css&quot;
+        &#125;
+      ]
+    ]
+&#125;
 </code></pre>
 <p>在文件内输入以上内容，为babel的配置。</p>
 <p>然后！！！最重要的一步，<strong>把package.json中的babel配置给删掉，尤其是：react-app！！！</strong></p>
 <p>webpack.config.dev.js和webpack.config.prod.js中，都需要为resolve的extensions新增一项’<strong>.web.js</strong>‘</p>
-<p>antd-mobile的web版的文件后缀为.web.js …</p>
+<p>antd-mobile的web版的文件后缀为.web.js …</p>
 <h2 id="基于create-react-app的打包后文件根路径修改"><a href="#基于create-react-app的打包后文件根路径修改" class="headerlink" title="基于create-react-app的打包后文件根路径修改"></a>基于create-react-app的打包后文件根路径修改</h2><p>找到react-script模块文件夹config下面  paths.js 或<br>node_modules\react-scripts\config\ paths.js<br>45行到 49行</p>
-<pre><code class="javascript">function getServedPath(appPackageJson) {
+<pre><code class="javascript">function getServedPath(appPackageJson) &#123;
   const publicUrl = getPublicUrl(appPackageJson);
   const servedUrl =
     envPublicUrl || (publicUrl ? url.parse(publicUrl).pathname : &#39;./&#39;); // 配置文件跟路径&#39;/&#39;前面加.
   return ensureSlash(servedUrl, true);
-}
+&#125;
 </code></pre>
-<h2 id="react段位排行要求知乎大神总结"><a href="#react段位排行要求知乎大神总结" class="headerlink" title="react段位排行要求知乎大神总结"></a>react段位排行要求<a href="https://www.zhihu.com/people/mo-ran-biao-82/activities" target="_blank" rel="noopener">知乎大神总结</a></h2><h3 id="倔强青铜"><a href="#倔强青铜" class="headerlink" title="倔强青铜"></a>倔强青铜</h3><p>初入峡谷的初始段位，默认召唤师已经有了ES6，nodejs的基础使用create-react-app建立React开发环境学习React世界里的基本玩法，例如组件化，JSX，事件监听，内部state，组件的props、生命周期函数等这篇文章主要介绍React青铜升白银需要的基础知识，看完你就白银啦</p>
+<h2 id="react段位排行要求知乎大神总结"><a href="#react段位排行要求知乎大神总结" class="headerlink" title="react段位排行要求知乎大神总结"></a>react段位排行要求<a target="_blank" rel="noopener" href="https://www.zhihu.com/people/mo-ran-biao-82/activities">知乎大神总结</a></h2><h3 id="倔强青铜"><a href="#倔强青铜" class="headerlink" title="倔强青铜"></a>倔强青铜</h3><p>初入峡谷的初始段位，默认召唤师已经有了ES6，nodejs的基础使用create-react-app建立React开发环境学习React世界里的基本玩法，例如组件化，JSX，事件监听，内部state，组件的props、生命周期函数等这篇文章主要介绍React青铜升白银需要的基础知识，看完你就白银啦</p>
 <h3 id="秩序白银"><a href="#秩序白银" class="headerlink" title="秩序白银"></a>秩序白银</h3><p>到了白银段位，基本都是有了基本的操作，不会出现呆萌的站在地方塔下被打死的情况了我们需要买一个皮肤来提升页面美观并且多加练习学习使用蚂蚁金服ant-design的使用</p>
 <h3 id="荣耀黄金"><a href="#荣耀黄金" class="headerlink" title="荣耀黄金"></a>荣耀黄金</h3><p>到了这个阶段，召唤师对React有了基本的认识，想进一步的提升段位，我们需要提高自己的大局观学习使用React-Router4来让我们有多面作战能力学会使用BrowserRouter，Router，Link等组件学会使用Redux和队友配合，修炼大局观了解单项数据流开发模式和Redux的各种概念,如dispatch,action,reducers使用react-redux更好的和Redux配合有大局观意识，上铂金也是很 easy 了</p>
 <h3 id="尊贵铂金"><a href="#尊贵铂金" class="headerlink" title="尊贵铂金"></a>尊贵铂金</h3><p>很多召唤师卡在铂金上不去，因为铂金想上钻石，需要了解更多的细节和原理React原理剖析对自己技能的原理有深刻的了解，上钻石必备</p>
 <h3 id="永恒钻石"><a href="#永恒钻石" class="headerlink" title="永恒钻石"></a>永恒钻石</h3><p>钻石段位开始了征兆模式，召唤师的技能池要足够深才能更进一步，对自己擅长技能的理解也要更深刻Redux中间件机制，实现自己的中间件常见的React 性能优化方式服务端渲染Redux之外其他的数据解决方案如mobx，dva</p>
 <h3 id="至尊星耀"><a href="#至尊星耀" class="headerlink" title="至尊星耀"></a>至尊星耀</h3><p>这个段位已经是独当一面的强者了，目标仅限于 React 这个库很难更近一层，需要了解更底层的原理Redux原理剖析+实现自己的ReduxReact-Router+实现自己的React-RouterWebppack工作机制和原理剖析Babel工作机制和原理剖析</p>
-<h3 id="最强王者"><a href="#最强王者" class="headerlink" title="最强王者"></a>最强王者</h3><p>达到最强王者已经是顶尖召唤师，在整个 React 峡谷都是鼎鼎大名的存在，听说上面还有传说中的<strong>荣耀王者</strong>的段位，我这辈子是达不到了，也没法教你们了，囧这个阶段，我只推荐《程序员健康指南》一本书，保持身心健康，成为荣耀王者是早晚的事<br><a href="https://www.jianshu.com/p/5e6c620ff4d6" target="_blank" rel="noopener">原文链接</a></p>
+<h3 id="最强王者"><a href="#最强王者" class="headerlink" title="最强王者"></a>最强王者</h3><p>达到最强王者已经是顶尖召唤师，在整个 React 峡谷都是鼎鼎大名的存在，听说上面还有传说中的<strong>荣耀王者</strong>的段位，我这辈子是达不到了，也没法教你们了，囧这个阶段，我只推荐《程序员健康指南》一本书，保持身心健康，成为荣耀王者是早晚的事<br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/5e6c620ff4d6">原文链接</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -330,7 +331,7 @@ exclude: [
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -353,7 +354,7 @@ exclude: [
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -364,7 +365,7 @@ exclude: [
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#使用creat-react-app搭建基于webpack的react开发环境"><span class="toc-number">1.</span> <span class="toc-text">使用creat-react-app搭建基于webpack的react开发环境</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#环境配置介绍："><span class="toc-number">1.1.</span> <span class="toc-text">环境配置介绍：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#项目结构："><span class="toc-number">1.1.1.</span> <span class="toc-text">项目结构：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开发环境，代理请求"><span class="toc-number">1.1.2.</span> <span class="toc-text">开发环境，代理请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SASS、LESS等CSS预处理器配置"><span class="toc-number">1.1.3.</span> <span class="toc-text">SASS、LESS等CSS预处理器配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用and-mobile-UI工具-可以快速开发react应用"><span class="toc-number">1.2.</span> <span class="toc-text">使用and-mobile UI工具 可以快速开发react应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#antd-mobile的引入及配置"><span class="toc-number">1.2.1.</span> <span class="toc-text">antd-mobile的引入及配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基于create-react-app的打包后文件根路径修改"><span class="toc-number">1.3.</span> <span class="toc-text">基于create-react-app的打包后文件根路径修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#react段位排行要求知乎大神总结"><span class="toc-number">1.4.</span> <span class="toc-text">react段位排行要求知乎大神总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#倔强青铜"><span class="toc-number">1.4.1.</span> <span class="toc-text">倔强青铜</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#秩序白银"><span class="toc-number">1.4.2.</span> <span class="toc-text">秩序白银</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#荣耀黄金"><span class="toc-number">1.4.3.</span> <span class="toc-text">荣耀黄金</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#尊贵铂金"><span class="toc-number">1.4.4.</span> <span class="toc-text">尊贵铂金</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#永恒钻石"><span class="toc-number">1.4.5.</span> <span class="toc-text">永恒钻石</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#至尊星耀"><span class="toc-number">1.4.6.</span> <span class="toc-text">至尊星耀</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#最强王者"><span class="toc-number">1.4.7.</span> <span class="toc-text">最强王者</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8creat-react-app%E6%90%AD%E5%BB%BA%E5%9F%BA%E4%BA%8Ewebpack%E7%9A%84react%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"><span class="toc-number">1.</span> <span class="toc-text">使用creat-react-app搭建基于webpack的react开发环境</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%BB%8B%E7%BB%8D%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">环境配置介绍：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84%EF%BC%9A"><span class="toc-number">1.1.1.</span> <span class="toc-text">项目结构：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%EF%BC%8C%E4%BB%A3%E7%90%86%E8%AF%B7%E6%B1%82"><span class="toc-number">1.1.2.</span> <span class="toc-text">开发环境，代理请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SASS%E3%80%81LESS%E7%AD%89CSS%E9%A2%84%E5%A4%84%E7%90%86%E5%99%A8%E9%85%8D%E7%BD%AE"><span class="toc-number">1.1.3.</span> <span class="toc-text">SASS、LESS等CSS预处理器配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8and-mobile-UI%E5%B7%A5%E5%85%B7-%E5%8F%AF%E4%BB%A5%E5%BF%AB%E9%80%9F%E5%BC%80%E5%8F%91react%E5%BA%94%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text">使用and-mobile UI工具 可以快速开发react应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#antd-mobile%E7%9A%84%E5%BC%95%E5%85%A5%E5%8F%8A%E9%85%8D%E7%BD%AE"><span class="toc-number">1.2.1.</span> <span class="toc-text">antd-mobile的引入及配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8Ecreate-react-app%E7%9A%84%E6%89%93%E5%8C%85%E5%90%8E%E6%96%87%E4%BB%B6%E6%A0%B9%E8%B7%AF%E5%BE%84%E4%BF%AE%E6%94%B9"><span class="toc-number">1.3.</span> <span class="toc-text">基于create-react-app的打包后文件根路径修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#react%E6%AE%B5%E4%BD%8D%E6%8E%92%E8%A1%8C%E8%A6%81%E6%B1%82%E7%9F%A5%E4%B9%8E%E5%A4%A7%E7%A5%9E%E6%80%BB%E7%BB%93"><span class="toc-number">1.4.</span> <span class="toc-text">react段位排行要求知乎大神总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%80%94%E5%BC%BA%E9%9D%92%E9%93%9C"><span class="toc-number">1.4.1.</span> <span class="toc-text">倔强青铜</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A7%A9%E5%BA%8F%E7%99%BD%E9%93%B6"><span class="toc-number">1.4.2.</span> <span class="toc-text">秩序白银</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8D%A3%E8%80%80%E9%BB%84%E9%87%91"><span class="toc-number">1.4.3.</span> <span class="toc-text">荣耀黄金</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8A%E8%B4%B5%E9%93%82%E9%87%91"><span class="toc-number">1.4.4.</span> <span class="toc-text">尊贵铂金</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B0%B8%E6%81%92%E9%92%BB%E7%9F%B3"><span class="toc-number">1.4.5.</span> <span class="toc-text">永恒钻石</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%B3%E5%B0%8A%E6%98%9F%E8%80%80"><span class="toc-number">1.4.6.</span> <span class="toc-text">至尊星耀</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E5%BC%BA%E7%8E%8B%E8%80%85"><span class="toc-number">1.4.7.</span> <span class="toc-text">最强王者</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
             
@@ -383,7 +384,7 @@ exclude: [
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

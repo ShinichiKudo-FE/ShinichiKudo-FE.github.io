@@ -14,8 +14,8 @@
 
 异步编程在JavaScript中非常重要。过多的异步编程也带了回调嵌套的问题，本文会提供一些解决“回调地狱”的方法。
 
-setTimeout(function(){
-    consol,"> 
+setTimeout(function()&amp;#123;
+    c,"> 
     <meta name="author" content="张白告丶"> 
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -41,7 +41,7 @@ setTimeout(function(){
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -104,13 +104,13 @@ setTimeout(function(){
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    9.1k
+                    9.6k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    8 mins.
+                    9 mins.
                 </span>
                 
                 
@@ -144,28 +144,28 @@ setTimeout(function(){
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <p><a href="https://www.jianshu.com/p/bc7b8d542dcd" target="_blank" rel="noopener">原文地址</a></p>
+            <p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/bc7b8d542dcd">原文地址</a></p>
 <blockquote>
 <p>异步编程在JavaScript中非常重要。过多的异步编程也带了回调嵌套的问题，本文会提供一些解决“回调地狱”的方法。</p>
 </blockquote>
-<pre><code class="js">setTimeout(function(){
+<pre><code class="js">setTimeout(function()&#123;
     console.log(&quot;延时触发&quot;)
-},2000)
-fs.readFile(&#39;./samp.txt&#39;,&#39;utf-8&#39;,function(res,error){
+&#125;,2000)
+fs.readFile(&#39;./samp.txt&#39;,&#39;utf-8&#39;,function(res,error)&#123;
     console.log(res);
-})
+&#125;)
 </code></pre>
 <p>上面就是典型的回调函数，不论是在浏览器中，还是在node中，JavaScript本身是单线程，因此，为了应对一些单线程带来的问题，异步编程成为了JavaScript中非常重要的一部分。</p>
 <p>不论是浏览器中最为常见的<strong>ajax、事件监听，还是node中文件读取、网络编程、数据库等操作</strong>，都离不开异步编程。在异步编程中，许多操作都会放<strong>在回调函数（callback）</strong>中。同步与异步的混杂、过多的回调嵌套都会使得代码变得难以理解与维护，这也是常受人诟病的地方。</p>
 <p>先看下面这段代码</p>
-<pre><code class="js">fs.readFile(&#39;./sample.txt&#39;, &#39;utf-8&#39;, (err, content) =&gt; {
+<pre><code class="js">fs.readFile(&#39;./sample.txt&#39;, &#39;utf-8&#39;, (err, content) =&gt; &#123;
     let keyword = content.substring(0, 5);
-    db.find(`select * from sample where kw = ${keyword}`, (err, res) =&gt; {
-        get(`/sampleget?count=${res.length}`, data =&gt; {
+    db.find(`select * from sample where kw = $&#123;keyword&#125;`, (err, res) =&gt; &#123;
+        get(`/sampleget?count=$&#123;res.length&#125;`, data =&gt; &#123;
            console.log(data);
-        });
-    });
-});
+        &#125;);
+    &#125;);
+&#125;);
 </code></pre>
 <p>首先我们读取的一个文件中的关键字keyword，然后根据该keyword进行数据库查询，最后依据查询结果请求数据。</p>
 <ul>
@@ -175,61 +175,62 @@ fs.readFile(&#39;./samp.txt&#39;,&#39;utf-8&#39;,function(res,error){
 </ul>
 <p>可以看到，我们没增加一个异步请求，就会多添加一层回调函数的嵌套，这段代码中三个异步函数的嵌套已经开始使一段本可以语言明确的代码编程不易阅读与维护了。</p>
 <p>抽象出来这种代码会变成下面这样：</p>
-<pre><code class="js">asyncFunc1(opt, (...args1) =&gt; {
-    asyncFunc2(opt, (...args2) =&gt; {
-        asyncFunc3(opt, (...args3) =&gt; {
-            asyncFunc4(opt, (...args4) =&gt; {
+<pre><code class="js">asyncFunc1(opt, (...args1) =&gt; &#123;
+    asyncFunc2(opt, (...args2) =&gt; &#123;
+        asyncFunc3(opt, (...args3) =&gt; &#123;
+            asyncFunc4(opt, (...args4) =&gt; &#123;
                 // some operation
-            });
-        });
-    });
-});
+            &#125;);
+        &#125;);
+    &#125;);
+&#125;);
 </code></pre>
 <p>左侧明显出现了一个三角形的缩进区域，过多的回调也就让我们陷入<code>“回调地狱”</code>。接下来会介绍一些方法来规避回调地狱。</p>
 <h2 id="一、拆解function"><a href="#一、拆解function" class="headerlink" title="一、拆解function"></a>一、拆解function</h2><p>回调嵌套所带来的一个重要问题就是代码不易阅读与维护。因为普遍来说，过多的缩进（嵌套）会极大的影响代码的可读性。基于这一点，可以进行一个最简单的优化——将各步拆解为单个的<code>function</code></p>
-<pre><code class="js">function getData(count) {
-    get(`/sampleget?count=${count}`, data =&gt; {
+<pre><code class="js">function getData(count) &#123;
+    get(`/sampleget?count=$&#123;count&#125;`, data =&gt; &#123;
         console.log(data);
-    });
-}
+    &#125;);
+&#125;
 
-function queryDB(kw) {
-    db.find(`select * from sample where kw = ${kw}`, (err, res) =&gt; {
+function queryDB(kw) &#123;
+    db.find(`select * from sample where kw = $&#123;kw&#125;`, (err, res) =&gt; &#123;
         getData(res.length);
-    });
-}
+    &#125;);
+&#125;
 
-function readFile(filepath) {
-    fs.readFile(filepath, &#39;utf-8&#39;, (err, content) =&gt; {
+function readFile(filepath) &#123;
+    fs.readFile(filepath, &#39;utf-8&#39;, (err, content) =&gt; &#123;
         let keyword = content.substring(0, 5);
         queryDB(keyword);
-    });
-}
+    &#125;);
+&#125;
 
 readFile(&#39;./sample.txt&#39;);
 </code></pre>
 <p>可以看到，通过上面的改写方式，代码清晰了许多。该方法非常简单，具有一定的效果，但是缺少通用性。</p>
 <h2 id="二、事件发布-监听模式"><a href="#二、事件发布-监听模式" class="headerlink" title="二、事件发布/监听模式"></a>二、事件发布/监听模式</h2><p>如果在浏览器中写过事件监听<code>addEventListener</code>，那么你对这种事件发布/监听的模式一定不陌生。</p>
-<p>借鉴这种思想，一方面，我们可以监听某一事件，当事件发生时，进行相应回调操作；另一方面，当某些操作完成后，通过发布事件触发回调。这样就可以将原本捆绑在一起的代码解耦。<br><a id="more"></a></p>
+<p>借鉴这种思想，一方面，我们可以监听某一事件，当事件发生时，进行相应回调操作；另一方面，当某些操作完成后，通过发布事件触发回调。这样就可以将原本捆绑在一起的代码解耦。</p>
+<span id="more"></span>
 <pre><code class="js">const events = require(&#39;events&#39;);
 const eventEmitter = new events.EventEmitter();
 
-eventEmitter.on(&#39;db&#39;, (err, kw) =&gt; {
-    db.find(`select * from sample where kw = ${kw}`, (err, res) =&gt; {
+eventEmitter.on(&#39;db&#39;, (err, kw) =&gt; &#123;
+    db.find(`select * from sample where kw = $&#123;kw&#125;`, (err, res) =&gt; &#123;
         eventEmitter(&#39;get&#39;, res.length);
-    });
-});
+    &#125;);
+&#125;);
 
-eventEmitter.on(&#39;get&#39;, (err, count) =&gt; {
-    get(`/sampleget?count=${count}`, data =&gt; {
+eventEmitter.on(&#39;get&#39;, (err, count) =&gt; &#123;
+    get(`/sampleget?count=$&#123;count&#125;`, data =&gt; &#123;
         console.log(data);
-    });
-});
+    &#125;);
+&#125;);
 
-fs.readFile(&#39;./sample.txt&#39;, &#39;utf-8&#39;, (err, content) =&gt; {
+fs.readFile(&#39;./sample.txt&#39;, &#39;utf-8&#39;, (err, content) =&gt; &#123;
     let keyword = content.substring(0, 5);
     eventEmitter. emit(&#39;db&#39;, keyword);
-});
+&#125;);
 </code></pre>
 <p>使用这种模式的实现需要一个事件发布/监听的库。上面代码中使用node原生的events模块，当然你可以使用任何你喜欢的库。</p>
 <h2 id="三、Promise"><a href="#三、Promise" class="headerlink" title="三、Promise"></a>三、Promise</h2><p><code>Promise</code>是一种异步解决方案，最早由社区提出并实现，后来写进了es6规范。</p>
@@ -242,67 +243,67 @@ const readFile = bluebird.promisify(fs.readFile);
 <p>这样，readFile就变成了一个Promise对象。</p>
 <p>但是，有的异步方法无法进行转换，或者我们需要使用原生<code>Promise</code>，这就需要我们手动进行一些改造。下面提供一种改造的方法。</p>
 <p>以fs.readFile为例，借助原生<code>Promise</code>来改造该方法：</p>
-<pre><code class="js">const readFile = function (filepath) {
+<pre><code class="js">const readFile = function (filepath) &#123;
     let resolve,
         reject;
-    let promise = new Promise((_resolve, _reject) =&gt; {
+    let promise = new Promise((_resolve, _reject) =&gt; &#123;
         resolve = _resolve;
         reject = _reject;
-    });
-    let deferred = {
+    &#125;);
+    let deferred = &#123;
         resolve,
         reject,
         promise
-    };
-    fs.readFile(filepath, &#39;utf-8&#39;, function (err, ...args) {
-        if (err) {
+    &#125;;
+    fs.readFile(filepath, &#39;utf-8&#39;, function (err, ...args) &#123;
+        if (err) &#123;
             deferred.reject(err);
-        }
-        else {
+        &#125;
+        else &#123;
             deferred.resolve(...args);
-        }
-    });
+        &#125;
+    &#125;);
     return deferred.promise;
-}
+&#125;
 </code></pre>
 <p>我们在方法中创建了一个Promise对象，并在异步回调中根据不同的情况使用reject与resolve来改变Promise对象的状态。该方法返回这个Promise对象。其他的一些异步方法也可以参照这种方式进行改造。</p>
 <p>假设通过改造，readFile、queryDB与getData方法均会返回一个Promise对象。代码就变为了:</p>
-<pre><code class="js">readFile(&#39;./sample.txt&#39;).then(content =&gt; {
+<pre><code class="js">readFile(&#39;./sample.txt&#39;).then(content =&gt; &#123;
     let keyword = content.substring(0, 5);
     return queryDB(keyword);
-}).then(res =&gt; {
+&#125;).then(res =&gt; &#123;
     return getData(res.length);
-}).then(data =&gt; {
+&#125;).then(data =&gt; &#123;
     console.log(data);
-}).catch(err =&gt; {
+&#125;).catch(err =&gt; &#123;
     console.warn(err);
-});
+&#125;);
 </code></pre>
 <p>可以看到，之前的嵌套操作编程了通过then连接的链式操作。代码的整洁度上有了一个较大的提高。</p>
 <h2 id="四、generator"><a href="#四、generator" class="headerlink" title="四、generator"></a>四、generator</h2><p><code>generator</code>是es6中的一个新的语法。在function关键字后添加*即可将函数变为<code>generator</code>。</p>
-<pre><code class="js">const gen = function* () {
+<pre><code class="js">const gen = function* () &#123;
     yield 1;
     yield 2;
     return 3;
-}
+&#125;
 </code></pre>
 <p>执行<code>generator</code>将会返回一个遍历器对象，用于遍历<code>generator</code>内部的状态</p>
 <pre><code class="js">let g = gen();
-g.next(); // { value: 1, done: false }
-g.next(); // { value: 2, done: false }
-g.next(); // { value: 3, done: true }
-g.next(); // { value: undefined, done: true }
+g.next(); // &#123; value: 1, done: false &#125;
+g.next(); // &#123; value: 2, done: false &#125;
+g.next(); // &#123; value: 3, done: true &#125;
+g.next(); // &#123; value: undefined, done: true &#125;
 </code></pre>
 <p>可以看到，<code>generator</code>函数有一个最大的特点，可以在内部执行的过程中交出程序的控制权，<code>yield</code>相当于起到了一个暂停的作用；而当一定情况下，外部又将控制权再移交回来。</p>
 <p>想象一下，我们用<code>generator</code>来封装代码，在异步任务处使用<code>yield</code>关键词，此时<code>generator</code>会将程序执行权交给其他代码，而在异步任务完成后，调用next方法来恢复<code>yield</code>下方代码的执行。以readFile为例，大致流程如下：</p>
 <pre><code class="js">// 我们的主任务——显示关键字
 // 使用yield暂时中断下方代码执行
 // yield后面为promise对象
-const showKeyword = function* (filepath) {
+const showKeyword = function* (filepath) &#123;
     console.log(&#39;开始读取&#39;);
     let keyword = yield readFile(filepath);
-    console.log(`关键字为${filepath}`);
-}
+    console.log(`关键字为$&#123;filepath&#125;`);
+&#125;
 
 // generator的流程控制
 let gen = showKeyword();
@@ -315,11 +316,11 @@ res.value.then(res =&gt; gen.next(res));
 // 我们的主任务——显示关键字
 // 使用yield暂时中断下方代码执行
 // yield后面为promise对象
-const showKeyword = function* (filepath) {
+const showKeyword = function* (filepath) &#123;
     console.log(&#39;开始读取&#39;);
     let keyword = yield readFile(filepath);
-    console.log(`关键字为${filepath}`);
-}
+    console.log(`关键字为$&#123;filepath&#125;`);
+&#125;
 
 // 使用co
 co(showKeyword);
@@ -327,12 +328,12 @@ co(showKeyword);
 <p>其中，yeild关键字后面需要是<code>functio, promise, generator, array或object</code>。可以改写文章一开始的例子：</p>
 <pre><code class="js">const co = reuqire(&#39;co&#39;);
 
-const task = function* (filepath) {
+const task = function* (filepath) &#123;
    let keyword = yield readFile(filepath);
    let count = yield queryDB(keyword);
    let data = yield getData(res.length);
    console.log(data);
-});
+&#125;);
 
 co(task, &#39;./sample.txt&#39;);
 </code></pre>
@@ -346,25 +347,25 @@ co(task, &#39;./sample.txt&#39;);
 </ul>
 <p>因此，这里再介绍一个方法，它就是es7中的async/await。</p>
 <p>简单介绍一下async/await。基本上，任何一个函数都可以成为async函数，以下都是合法的书写形式：</p>
-<pre><code class="js">async function foo () {};
-const foo = async function () {};
-const foo = async () =&gt; {};
+<pre><code class="js">async function foo () &#123;&#125;;
+const foo = async function () &#123;&#125;;
+const foo = async () =&gt; &#123;&#125;;
 </code></pre>
 <p>在async函数中可以使用await语句。await后一般是一个Promise对象。</p>
-<pre><code class="js">async function foo () {
+<pre><code class="js">async function foo () &#123;
     console.log(&#39;开始&#39;);
     let res = await post(data);
-    console.log(`post已完成，结果为：${res}`);
-};
+    console.log(`post已完成，结果为：$&#123;res&#125;`);
+&#125;;
 </code></pre>
 <p>当上面的函数执行到await时，可以简单理解为，函数挂起，等待<code>await</code>后的<code>Promise</code>返回，再执行下面的语句。</p>
 <p>值得注意的是，这段异步操作的代码，看起来就像是“同步操作”。这就大大方便了异步代码的编写与阅读。下面改写我们的例子。</p>
-<pre><code class="js">const printData = async function (filepath) {
+<pre><code class="js">const printData = async function (filepath) &#123;
    let keyword = await readFile(filepath);
    let count = await queryDB(keyword);
    let data = await getData(res.length);
    console.log(data);
-});
+&#125;);
 
 printData(&#39;./sample.txt&#39;);
 </code></pre>
@@ -403,7 +404,7 @@ printData(&#39;./sample.txt&#39;);
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -426,7 +427,7 @@ printData(&#39;./sample.txt&#39;);
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -437,7 +438,7 @@ printData(&#39;./sample.txt&#39;);
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一、拆解function"><span class="toc-number">1.</span> <span class="toc-text">一、拆解function</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二、事件发布-监听模式"><span class="toc-number">2.</span> <span class="toc-text">二、事件发布&#x2F;监听模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三、Promise"><span class="toc-number">3.</span> <span class="toc-text">三、Promise</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#四、generator"><span class="toc-number">4.</span> <span class="toc-text">四、generator</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后记"><span class="toc-number">5.</span> <span class="toc-text">后记</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%8B%86%E8%A7%A3function"><span class="toc-number">1.</span> <span class="toc-text">一、拆解function</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BA%8B%E4%BB%B6%E5%8F%91%E5%B8%83-%E7%9B%91%E5%90%AC%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">二、事件发布&#x2F;监听模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81Promise"><span class="toc-number">3.</span> <span class="toc-text">三、Promise</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81generator"><span class="toc-number">4.</span> <span class="toc-text">四、generator</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E8%AE%B0"><span class="toc-number">5.</span> <span class="toc-text">后记</span></a></li></ol>
                 </div>
             </div>
             
@@ -456,7 +457,7 @@ printData(&#39;./sample.txt&#39;);
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

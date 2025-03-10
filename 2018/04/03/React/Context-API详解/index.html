@@ -37,7 +37,7 @@ Demo地址,">
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -141,54 +141,54 @@ Demo地址,">
     <div class='main'>
         <div class="content markdown animated fadeIn">
             <p>React在版本<code>16.3-alpha</code>里引入了新的Context API，社区一片期待之声。我们先通过简单的例子，看下新的Context API长啥样，然后再简单探讨下新的API的意义。</p>
-<p><a href="https://github.com/chyingp/blog/tree/master/demo/2018.02.08-react-16.3" target="_blank" rel="noopener">Demo地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/chyingp/blog/tree/master/demo/2018.02.08-react-16.3">Demo地址</a></p>
 <h1 id="看下新的Context-API"><a href="#看下新的Context-API" class="headerlink" title="看下新的Context API"></a>看下新的Context API</h1><p>需要安装16.3-alpha版本的react。<br>下面，直接来看代码，如果用过<code>react-redux</code>应该会觉得很眼熟。<br>首先，创建<code>context</code>实例：</p>
 <pre><code class="javascript">import React from &#39;react&#39;;
 import ReactDOM from &#39;react-dom&#39;;
 
 // 创建context实例
-const ThemeContext = React.createContext({
+const ThemeContext = React.createContext(&#123;
   background: &#39;red&#39;,
   color: &#39;white&#39;
-});
-
+&#125;);
 </code></pre>
 <p>然后，定义App组件，注意这里用到了<code>Provider</code>组件，类似<code>react-redux</code>的Provider组件</p>
-<a id="more"></a>
-<pre><code class="javascript">class App extends React.Component {
+<span id="more"></span>
 
-  render () {
+<pre><code class="javascript">class App extends React.Component &#123;
+
+  render () &#123;
     return (
-      &lt;ThemeContext.Provider value={{background: 'green', color: 'white'}}&gt;
+      &lt;ThemeContext.Provider value=&#123;&#123;background: 'green', color: 'white'&#125;&#125;&gt;
         &lt;Header /&gt;
        &lt;/ThemeContext.Provider&gt;
     );
-  }
-}
+  &#125;
+&#125;
 </code></pre>
 <p>接下来，定义<code>Header</code>、<code>Title</code>组件。注意：</p>
 <p>Title组件用到了<code>Consumer</code>组件，表示要消费<code>Provider</code>传递的数据。<br>Title组件是App的孙组件，但跳过了<code>Header</code>消费数据。</p>
-<pre><code class="javascript">class Header extends React.Component {
-  render () {
+<pre><code class="javascript">class Header extends React.Component &#123;
+  render () &#123;
     return (
       &lt;Title&gt;Hello React Context API&lt;/Title&gt;
     );
-  }
-}
+  &#125;
+&#125;
 
-class Title extends React.Component {
-  render () {
+class Title extends React.Component &#123;
+  render () &#123;
     return (
       &lt;ThemeContext.Consumer&gt;
-        {context =&gt; (
-          &lt;h1 style={{background: context.background, color: context.color}}&gt;
-            {this.props.children}
+        &#123;context =&gt; (
+          &lt;h1 style=&#123;&#123;background: context.background, color: context.color&#125;&#125;&gt;
+            &#123;this.props.children&#125;
           &lt;/h1&gt;
-        )}
+        )&#125;
       &lt;/ThemeContext.Consumer&gt;
     );
-  }
-}
+  &#125;
+&#125;
 </code></pre>
 <p>最后常规操作</p>
 <pre><code class="javascript">ReactDOM.render(
@@ -201,7 +201,7 @@ class Title extends React.Component {
 <blockquote>
 <p>现有Context API的实现存在一定问题：比如当父组件的shouldComponentUpdate性能优化，可能会导致消费了context数据的子组件不更新。<br>1.降低复杂度：类似redux全家桶这样的解决方案，给项目引入了一定的复杂度，尤其是对方案了解不足的同学，遇到问题可能一筹莫展。<br>2.新Context API的引入，一定程度上可以不少项目对redux全家桶的依赖。</p>
 </blockquote>
-<p><a href="http://cnodejs.org/topic/5a7bd5c4497a08f571384f03" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="http://cnodejs.org/topic/5a7bd5c4497a08f571384f03">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -226,7 +226,7 @@ class Title extends React.Component {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -249,7 +249,7 @@ class Title extends React.Component {
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -260,7 +260,7 @@ class Title extends React.Component {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#看下新的Context-API"><span class="toc-number">1.</span> <span class="toc-text">看下新的Context API</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#为什么有新的Context-API"><span class="toc-number">2.</span> <span class="toc-text">为什么有新的Context API</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%9C%8B%E4%B8%8B%E6%96%B0%E7%9A%84Context-API"><span class="toc-number">1.</span> <span class="toc-text">看下新的Context API</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89%E6%96%B0%E7%9A%84Context-API"><span class="toc-number">2.</span> <span class="toc-text">为什么有新的Context API</span></a></li></ol>
                 </div>
             </div>
             
@@ -279,7 +279,7 @@ class Title extends React.Component {
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

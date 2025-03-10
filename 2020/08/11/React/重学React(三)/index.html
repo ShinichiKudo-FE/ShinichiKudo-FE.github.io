@@ -36,7 +36,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -98,7 +98,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    4k
+                    4.1k
                 </span>
                 
                 
@@ -136,7 +136,7 @@
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>终于到了期盼已久的HOOK环节了，我最初学react的时候是版本为15.4.2(特地去看了react仓库看了<a href="https://github.com/facebook/react/blob/master/CHANGELOG.md#1562-september-25-2017" target="_blank" rel="noopener">更新日志</a>)算是很早的学习，可惜自己学的东西在工作中实践不了，当时也刚参加工作，又推动不了新技术的落地。无奈过段时间就忘了。计算机技术只有不断敲，看了用不到7天内就会忘得差不多了。当时看到class组件的时候觉得帅呆了，因为那时es6正当时，看到很多人都是使用jsx语法，class声明组件等等，觉得自己赶上了好时机。后来情况就是用不到放弃了，虽然用不到但是平时关注一些新的技术，react HOOK 发布时，也看了一些文章，一些大佬也推荐使用hook的语法写react,到了现在版本16.13.1，我才开始真正接触HOOK</p>
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>终于到了期盼已久的HOOK环节了，我最初学react的时候是版本为15.4.2(特地去看了react仓库看了<a target="_blank" rel="noopener" href="https://github.com/facebook/react/blob/master/CHANGELOG.md#1562-september-25-2017">更新日志</a>)算是很早的学习，可惜自己学的东西在工作中实践不了，当时也刚参加工作，又推动不了新技术的落地。无奈过段时间就忘了。计算机技术只有不断敲，看了用不到7天内就会忘得差不多了。当时看到class组件的时候觉得帅呆了，因为那时es6正当时，看到很多人都是使用jsx语法，class声明组件等等，觉得自己赶上了好时机。后来情况就是用不到放弃了，虽然用不到但是平时关注一些新的技术，react HOOK 发布时，也看了一些文章，一些大佬也推荐使用hook的语法写react,到了现在版本16.13.1，我才开始真正接触HOOK</p>
 <p>根据官网的介绍：</p>
 <p><Big><strong>Hook 是 React 16.8 的新增特性。它可以让你在不编写 class 的情况下使用 state 以及其他的 React 特性</strong><Big>。</p>
 <blockquote>
@@ -147,89 +147,88 @@
 <li>100%向后兼容的</li>
 <li>现在就用 </li>
 </ul>
-<h2 id="使用Hook的动机"><a href="#使用Hook的动机" class="headerlink" title="使用Hook的动机"></a>使用Hook的动机</h2><p><a href="https://react.docschina.org/docs/hooks-intro.html#motivation" target="_blank" rel="noopener">具体介绍</a><br>1.在组件之间复用状态逻辑很难</p>
+<h2 id="使用Hook的动机"><a href="#使用Hook的动机" class="headerlink" title="使用Hook的动机"></a>使用Hook的动机</h2><p><a target="_blank" rel="noopener" href="https://react.docschina.org/docs/hooks-intro.html#motivation">具体介绍</a><br>1.在组件之间复用状态逻辑很难</p>
 <p>2.复杂组件变得难以理解</p>
 <p>3.难以理解的 class</p>
 <h2 id="使用State-Hook"><a href="#使用State-Hook" class="headerlink" title="使用State Hook"></a>使用State Hook</h2><pre><code class="js">// demo
 
-import React, { useState } from &#39;react&#39;;
+import React, &#123; useState &#125; from &#39;react&#39;;
 
-function Example() {
+function Example() &#123;
   // 声明一个叫 &quot;count&quot; 的 state 变量
   const [count, setCount] = useState(0);
 
   return (
     &lt;div&gt;
-      &lt;p&gt;You clicked {count} times&lt;/p&gt;
-      &lt;button onClick={() =&gt; setCount(count + 1)}&gt;
+      &lt;p&gt;You clicked &#123;count&#125; times&lt;/p&gt;
+      &lt;button onClick=&#123;() =&gt; setCount(count + 1)&#125;&gt;
         Click me
       &lt;/button&gt;
     &lt;/div&gt;
   );
-};
+&#125;;
 
 // 等价class组件
 
-class Example extends React.Component {
-  constructor(props) {
+class Example extends React.Component &#123;
+  constructor(props) &#123;
     super(props);
-    this.state = {
+    this.state = &#123;
       count: 0
-    };
-  }
+    &#125;;
+  &#125;
 
-  render() {
+  render() &#123;
     return (
       &lt;div&gt;
-        &lt;p&gt;You clicked {this.state.count} times&lt;/p&gt;
-        &lt;button onClick={() =&gt; this.setState({ count: this.state.count + 1 })}&gt;
+        &lt;p&gt;You clicked &#123;this.state.count&#125; times&lt;/p&gt;
+        &lt;button onClick=&#123;() =&gt; this.setState(&#123; count: this.state.count + 1 &#125;)&#125;&gt;
           Click me
         &lt;/button&gt;
       &lt;/div&gt;
     );
-  }
-}
-
+  &#125;
+&#125;
 </code></pre>
 <p>在函数组件中，我们没有 this，所以我们不能分配或读取 this.state。</p>
 <h2 id="使用Effect-Hook"><a href="#使用Effect-Hook" class="headerlink" title="使用Effect Hook"></a>使用Effect Hook</h2><p><code>Effect Hook</code> 可以让你在函数组件中执行副作用操作</p>
-<pre><code class="js">import React, { useState, useEffect } from &#39;react&#39;;
+<pre><code class="js">import React, &#123; useState, useEffect &#125; from &#39;react&#39;;
 
-function Example() {
+function Example() &#123;
   const [count, setCount] = useState(0);
 
   // Similar to componentDidMount and componentDidUpdate:
-  useEffect(() =&gt; {
+  useEffect(() =&gt; &#123;
     // Update the document title using the browser API
-    document.title = `You clicked ${count} times`;
-  });
+    document.title = `You clicked $&#123;count&#125; times`;
+  &#125;);
 
   return (
     &lt;div&gt;
-      &lt;p&gt;You clicked {count} times&lt;/p&gt;
-      &lt;button onClick={() =&gt; setCount(count + 1)}&gt;
+      &lt;p&gt;You clicked &#123;count&#125; times&lt;/p&gt;
+      &lt;button onClick=&#123;() =&gt; setCount(count + 1)&#125;&gt;
         Click me
       &lt;/button&gt;
     &lt;/div&gt;
   );
-}
+&#125;
 </code></pre>
 <p><em>有些副作用可能需要清除，所以需要返回一个函数：</em></p>
-<pre><code class="js">useEffect(() =&gt; {
-  function handleStatusChange(status) {
+<pre><code class="js">useEffect(() =&gt; &#123;
+  function handleStatusChange(status) &#123;
     setIsOnline(status.isOnline);
-  }
+  &#125;
 
   ChatAPI.subscribeToFriendStatus(props.friend.id, handleStatusChange);
-  return () =&gt; {
+  return () =&gt; &#123;
     ChatAPI.unsubscribeFromFriendStatus(props.friend.id, handleStatusChange);
-  };
-});
+  &#125;;
+&#125;);
 </code></pre>
 <p><em>其他的 effect 可能不必清除，所以不需要返回。</em></p>
-<pre><code class="js">useEffect(() =&gt; {
-  document.title = `You clicked ${count} times`;
-});
+<pre><code class="js">useEffect(() =&gt; &#123;
+  document.title = `You clicked $&#123;count&#125; times`;
+&#125;);
 </code></pre>
 <h2 id="Hook的规则"><a href="#Hook的规则" class="headerlink" title="Hook的规则"></a>Hook的规则</h2><p>1.只在最顶层使用 Hook</p>
 <p><strong>不要在循环，条件或嵌套函数中调用 Hook</strong>， 确保总是在你的 React 函数的最顶层调用他们。</p>
@@ -240,7 +239,7 @@ function Example() {
 <li>在 React 的函数组件中调用 Hook</li>
 <li>在自定义 Hook 中调用其他 Hook</li>
 </ul>
-<h2 id="FAQ"><a href="#FAQ" class="headerlink" title="FAQ"></a>FAQ</h2><p><a href="https://react.docschina.org/docs/hooks-faq.html#which-versions-of-react-include-hooks" target="_blank" rel="noopener">更多</a></p>
+<h2 id="FAQ"><a href="#FAQ" class="headerlink" title="FAQ"></a>FAQ</h2><p><a target="_blank" rel="noopener" href="https://react.docschina.org/docs/hooks-faq.html#which-versions-of-react-include-hooks">更多</a></p>
 <p>为什么要在 effect 中返回一个函数？<br><strong>这是 effect 可选的清除机制</strong>。每个 effect 都可以返回一个清除函数。如此可以将添加和移除订阅的逻辑放在一起。它们都属于 effect 的一部分。</p>
 <p>React 何时清除 effect？<br><strong>React 会在组件卸载的时候执行清除操作</strong>。正如之前学到的，effect 在每次渲染的时候都会执行。</p>
 
@@ -267,7 +266,7 @@ function Example() {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -290,7 +289,7 @@ function Example() {
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -301,7 +300,7 @@ function Example() {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#使用Hook的动机"><span class="toc-number">1.1.</span> <span class="toc-text">使用Hook的动机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用State-Hook"><span class="toc-number">1.2.</span> <span class="toc-text">使用State Hook</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用Effect-Hook"><span class="toc-number">1.3.</span> <span class="toc-text">使用Effect Hook</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hook的规则"><span class="toc-number">1.4.</span> <span class="toc-text">Hook的规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FAQ"><span class="toc-number">1.5.</span> <span class="toc-text">FAQ</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8Hook%E7%9A%84%E5%8A%A8%E6%9C%BA"><span class="toc-number">1.1.</span> <span class="toc-text">使用Hook的动机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8State-Hook"><span class="toc-number">1.2.</span> <span class="toc-text">使用State Hook</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8Effect-Hook"><span class="toc-number">1.3.</span> <span class="toc-text">使用Effect Hook</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hook%E7%9A%84%E8%A7%84%E5%88%99"><span class="toc-number">1.4.</span> <span class="toc-text">Hook的规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FAQ"><span class="toc-number">1.5.</span> <span class="toc-text">FAQ</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -320,7 +319,7 @@ function Example() {
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

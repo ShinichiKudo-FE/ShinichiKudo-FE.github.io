@@ -38,7 +38,7 @@ Vue.config.errorHandler = fu,">
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -101,7 +101,7 @@ Vue.config.errorHandler = fu,">
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    6.4k
+                    6.9k
                 </span>
                 
                 
@@ -143,13 +143,13 @@ Vue.config.errorHandler = fu,">
         <div class="content markdown animated fadeIn">
             <h2 id="errorHandler"><a href="#errorHandler" class="headerlink" title="errorHandler"></a>errorHandler</h2><p>官网介绍及使用：</p>
 <p>指定组件的渲染和观察期间未捕获错误的处理函数。这个处理函数被调用时，可获取错误信息和 Vue 实例</p>
-<pre><code class="js">Vue.config.errorHandler = function (err, vm, info) {
+<pre><code class="js">Vue.config.errorHandler = function (err, vm, info) &#123;
   //处理错误信息, 进行错误上报
   //err错误对象
   //vm Vue实例
   //`info` 是 Vue 特定的错误信息，比如错误所在的生命周期钩子
   //只在 2.2.0+ 可用
-}
+&#125;
 </code></pre>
 <h2 id="Vue-observable-object"><a href="#Vue-observable-object" class="headerlink" title="Vue.observable( object )"></a>Vue.observable( object )</h2><p>这个相当于一个简单的store管理，在不用vuex的情况下，不同组件之间通信可以用<code>Vue.observeable</code></p>
 <p>官网介绍：</p>
@@ -158,12 +158,12 @@ Vue.config.errorHandler = fu,">
 <p>使用：</p>
 <p>在store.js中</p>
 <pre><code class="js">impor vue from &#39;vue&#39;;
-export const store = vue.observable({count:0});
-export const mutation = {
-    setCount(count){
+export const store = vue.observable(&#123;count:0&#125;);
+export const mutation = &#123;
+    setCount(count)&#123;
         store.count = count;
-    }
-}
+    &#125;
+&#125;
 </code></pre>
 <p>在组件中使用</p>
 <pre><code class="js">&lt;template&gt;
@@ -171,67 +171,67 @@ export const mutation = {
     &lt;p @click=&quot;setCount(testCount + 1)&quot;&gt;+&lt;/p&gt;
     &lt;p @click=&quot;setCount(testCount - 1)&quot;&gt;-&lt;/p&gt;
     &lt;test /&gt;
-    &lt;p&gt;{{testCount}}&lt;/p&gt;
+    &lt;p&gt;&#123;&#123;testCount&#125;&#125;&lt;/p&gt;
   &lt;/div&gt;
 &lt;/template&gt;
 
 &lt;script&gt;
 import test from &#39;./test&#39;
-import { store,  mutation} from &#39;@/store&#39;
-export default {
+import &#123; store,  mutation&#125; from &#39;@/store&#39;
+export default &#123;
   name: &#39;HelloWorld&#39;,
-  data () {
-    return {
+  data () &#123;
+    return &#123;
       msg: &#39;Welcome to Your Vue.js App&#39;
-    }
-  },
-  components: {
+    &#125;
+  &#125;,
+  components: &#123;
     test
-  },
-  methods: {
+  &#125;,
+  methods: &#123;
     setCount: mutation.setCount
-  },
-  computed: {
-    testCount(){
+  &#125;,
+  computed: &#123;
+    testCount()&#123;
       return store.count
-    }
-  }
-}
+    &#125;
+  &#125;
+&#125;
 &lt;/script&gt;
 
 &lt;!-- Add &quot;scoped&quot; attribute to limit CSS to this component only --&gt;
 &lt;style scoped&gt;
-h1, h2 {
+h1, h2 &#123;
   font-weight: normal;
-}
-ul {
+&#125;
+ul &#123;
   list-style-type: none;
   padding: 0;
-}
-li {
+&#125;
+li &#123;
   display: inline-block;
   margin: 0 10px;
-}
-a {
+&#125;
+a &#123;
   color: #42b983;
-}
+&#125;
 &lt;/style&gt;
-
 </code></pre>
-<a id="more"></a>
+<span id="more"></span>
+
 <p>test 组件</p>
 <pre><code class="js">&lt;template&gt;
-  &lt;div&gt;test{{testCount}}&lt;/div&gt;
+  &lt;div&gt;test&#123;&#123;testCount&#125;&#125;&lt;/div&gt;
 &lt;/template&gt;
 &lt;script&gt;
-import { store } from &#39;@/store&#39;;
-export default {
-  computed: {
-    testCount(){
+import &#123; store &#125; from &#39;@/store&#39;;
+export default &#123;
+  computed: &#123;
+    testCount()&#123;
       return store.count
-    }
-  }
-}
+    &#125;
+  &#125;
+&#125;
 &lt;/script&gt;
 &lt;style scoped&gt;
 
@@ -252,37 +252,37 @@ export default {
 <p>mixins就是定义一部分公共的方法或者计算属性,然后混入到各个组件中使用,方便管理与统一修改</p>
 <p>1、在assets文件夹下创建一个js文件</p>
 <pre><code class="js">// 创建一个需要混入的对象 
-export const mixinTest1 = {
-    created() {
+export const mixinTest1 = &#123;
+    created() &#123;
         this.hello();
-    },
-    methods: {
-        hello() {
+    &#125;,
+    methods: &#123;
+        hello() &#123;
             console.log(&#39;mixinTest1&#39;);
-        }
-    }
-};
+        &#125;
+    &#125;
+&#125;;
 </code></pre>
 <p>2、在组件中使用刚刚创建的混入</p>
-<pre><code class="js">import {mixinTest1} from &#39;./../assets/js/mixin&#39;;
-export default {
+<pre><code class="js">import &#123;mixinTest1&#125; from &#39;./../assets/js/mixin&#39;;
+export default &#123;
     mixins:[mixinTest1],
     name: &#39;hello&#39;,
-    data () {
-        return {
+    data () &#123;
+        return &#123;
             msg: &#39;Welcome to Your Vue.js App&#39;
-        }
-    }
-}
+        &#125;
+    &#125;
+&#125;
 </code></pre>
 <p>3、如果组件中定义的方法与混入对象中的方法/属性一样,组件中的优先级大于混入对象中的(方法会调用多次)</p>
 <p>4、混入对象中可以定义抽象方法,使用混入的组件必须重写该方法</p>
 <pre><code class="js">...
-methods: {
-    handlePlaylist() {
+methods: &#123;
+    handlePlaylist() &#123;
         throw new Error(&#39;component must implement handlePlaylist method&#39;)
-    }
-}
+    &#125;
+&#125;
 ...
 </code></pre>
 <h1 id="provide-inject"><a href="#provide-inject" class="headerlink" title="provide / inject"></a>provide / inject</h1><p>官网介绍：</p>
@@ -302,45 +302,44 @@ methods: {
     &lt;/div&gt;
 &lt;/template&gt;
 &lt;script&gt;
-    export default{
+    export default&#123;
         name: &#39;App&#39;,
-        provide:{
-            retrun{
+        provide:&#123;
+            retrun&#123;
                 reload:this.reload
-            }
-        },
-        data(){
-            return{
+            &#125;
+        &#125;,
+        data()&#123;
+            return&#123;
                 isRouterActive: true
-            }
-        },
-        methods:{
-            reload(){
+            &#125;
+        &#125;,
+        methods:&#123;
+            reload()&#123;
                 this.isRouterActive = false;
-                this.$nextTick(()=&gt;{
+                this.$nextTick(()=&gt;&#123;
                      this.isRouterActive = true;
-                })
-            }
-        }
-    }
+                &#125;)
+            &#125;
+        &#125;
+    &#125;
 &lt;/script&gt;
-
 </code></pre>
 <p>通过声明reload方法，控制isRouterAlice属性true or false 来控制router-view的显示或隐藏，从而控制页面的再次加载</p>
 <p>2.在需要当前页面刷新的页面中注入App.vue组件提供（provide）的 reload 依赖，然后直接用this.reload来调用就行</p>
-<pre><code class="js">export defalut{
+<pre><code class="js">export defalut&#123;
     inject:[&#39;reload&#39;],
-    data(){
-        return{
+    data()&#123;
+        return&#123;
 
-        }
-    },
-    methods:{
-        reloadPage(){
+        &#125;
+    &#125;,
+    methods:&#123;
+        reloadPage()&#123;
             this.reload();
-        }
-    }
-}
+        &#125;
+    &#125;
+&#125;
 </code></pre>
 <h1 id="keep-alive"><a href="#keep-alive" class="headerlink" title="keep-alive"></a>keep-alive</h1><p>官网介绍：</p>
 <p><code>&lt;keep-alive&gt;</code> 包裹动态组件时，会缓存不活动的组件实例，而不是销毁它们。和 <code>&lt;transition&gt;</code> 相似，<code>&lt;keep-alive&gt;</code> 是一个抽象组件：它自身不会渲染一个 DOM 元素，也不会出现在父组件链中。</p>
@@ -369,7 +368,7 @@ methods: {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -392,7 +391,7 @@ methods: {
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -403,7 +402,7 @@ methods: {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#errorHandler"><span class="toc-number">1.</span> <span class="toc-text">errorHandler</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Vue-observable-object"><span class="toc-number">2.</span> <span class="toc-text">Vue.observable( object )</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#errorCaptured-2-5-0新增的生命周期钩子"><span class="toc-number"></span> <span class="toc-text">errorCaptured(2.5.0新增的生命周期钩子)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#parent"><span class="toc-number"></span> <span class="toc-text">parent</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#mixin"><span class="toc-number"></span> <span class="toc-text">mixin</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#provide-inject"><span class="toc-number"></span> <span class="toc-text">provide &#x2F; inject</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#keep-alive"><span class="toc-number"></span> <span class="toc-text">keep-alive</span></a>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#errorHandler"><span class="toc-number">1.</span> <span class="toc-text">errorHandler</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Vue-observable-object"><span class="toc-number">2.</span> <span class="toc-text">Vue.observable( object )</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#errorCaptured-2-5-0%E6%96%B0%E5%A2%9E%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E9%92%A9%E5%AD%90"><span class="toc-number"></span> <span class="toc-text">errorCaptured(2.5.0新增的生命周期钩子)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#parent"><span class="toc-number"></span> <span class="toc-text">parent</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#mixin"><span class="toc-number"></span> <span class="toc-text">mixin</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#provide-inject"><span class="toc-number"></span> <span class="toc-text">provide &#x2F; inject</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#keep-alive"><span class="toc-number"></span> <span class="toc-text">keep-alive</span></a>
                 </div>
             </div>
             
@@ -422,7 +421,7 @@ methods: {
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

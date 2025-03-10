@@ -41,7 +41,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -144,48 +144,48 @@
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <p><a href="https://www.imooc.com/article/286988" target="_blank" rel="noopener">原文地址</a></p>
+            <p><a target="_blank" rel="noopener" href="https://www.imooc.com/article/286988">原文地址</a></p>
 <p><img src="http://upload-images.jianshu.io/upload_images/13133049-963e2b89fb9da2ad.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="wave"></p>
 <p>类似下面这种效果<br><img src="http://upload-images.jianshu.io/upload_images/13133049-03fa0c4c990af8f1.gif?imageMogr2/auto-orient/strip" alt="text wave"></p>
 <p>有以下几种方式可以实现这种效果</p>
 <h2 id="径向渐变纯CSS的方式"><a href="#径向渐变纯CSS的方式" class="headerlink" title="径向渐变纯CSS的方式"></a>径向渐变纯CSS的方式</h2><p>就是使用径向渐变绘制我们的波浪线效果，一个波浪线循环段是有一个朝上的半个圆弧和一个朝下的半个圆弧组合而成的。</p>
 <p>所以，我们只要使用径向渐变绘制圆弧，再通过<code>background-position</code>控制两个圆弧的位置，让其前后拼接在一起就可以实现波浪线效果。</p>
 <p>相关CSS代码</p>
-<pre><code class="css">.flow-wave {
+<pre><code class="css">.flow-wave &#123;
     background: radial-gradient(circle at 10px -7px, transparent 8px, currentColor 8px, currentColor 9px, transparent 9px) repeat-x,
         radial-gradient(circle at 10px 27px, transparent 8px, currentColor 8px, currentColor 9px, transparent 9px) repeat-x;
     background-size: 20px 20px;
     background-position: -10px calc(100% + 16px), 0 calc(100% - 4px);
-}
+&#125;
 </code></pre>
 <p>实时效果如下：<br>有了静态的波浪线效果，剩下的就像这个波浪线动起来，用<code>CSS3 animation</code>动画控制<code>background-position</code>位置即可。</p>
-<pre><code class="css">.flow-wave {
+<pre><code class="css">.flow-wave &#123;
     animation: waveFlow 1s infinite linear;
-}
-@keyframes waveFlow {
-    from { background-position-x: -10px, 0; }
-    to { background-position-x: -30px, -20px; }
-}
+&#125;
+@keyframes waveFlow &#123;
+    from &#123; background-position-x: -10px, 0; &#125;
+    to &#123; background-position-x: -30px, -20px; &#125;
+&#125;
 </code></pre>
 <p>于是波浪线动画效果就实现了。</p>
 <p>这种方法实现的优点是颜色控制非常方便，例如，我们修改文字颜色为原谅绿，弯弯水波的颜色也变成了原谅绿：</p>
 <p>此方法实现的不足就是：理解成本有点高，如何使用CSS radial-gradient模拟波浪线效果是需要相当的CSS功力积累的，上手不太容易，以后要修改个尺寸什么的也不太好维护。同时，在普通屏幕密度屏幕下的Chrome浏览器上，线条并不平滑，吹毛求疵的设计师不一定会接受。</p>
 <p>此时，可以试试下面这种更利于理解的方法。</p>
 <h2 id="使用SVG波形矢量图作为背景"><a href="#使用SVG波形矢量图作为背景" class="headerlink" title="使用SVG波形矢量图作为背景"></a>使用SVG波形矢量图作为背景</h2><p>就是我们直接使用一个使用SVG波形矢量图作为背景，不用自己去手动CSS绘制，代码量差不多，还更容易理解。CSS代码示意：</p>
-<pre><code class="css">svg-wave {
+<pre><code class="css">svg-wave &#123;
     background: url(&quot;data:image/svg+xml,%3Csvg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 20 4&#39;%3E%3Cpath fill=&#39;none&#39; stroke=&#39;%23333&#39; d=&#39;M0 3.5c5 0 5-3 10-3s5 3 10 3 5-3 10-3 5 3 10 3&#39;/%3E%3C/svg%3E&quot;) repeat-x 0 100%; 
     background-size: 20px auto;
-}
+&#125;
 </code></pre>
 <p>实时效果如下：</p>
 <p>有了静态的波浪线效果，剩下的就像这个波浪线动起来，用<code>CSS3 animation</code>动画控制<code>background-position</code>位置即可。</p>
-<pre><code class="css">.svg-wave {
+<pre><code class="css">.svg-wave &#123;
     animation: waveMove 1s infinite linear;
-}
-@keyframes waveMove {
-    from { background-position: 0 100%; }
-    to   { background-position: -20px 100%; }
-}
+&#125;
+@keyframes waveMove &#123;
+    from &#123; background-position: 0 100%; &#125;
+    to   &#123; background-position: -20px 100%; &#125;
+&#125;
 </code></pre>
 <p>优点是线条边缘平滑，效果细腻，易理解，易上手，易维护。</p>
 <p>缺点也很明显，就是波浪线的颜色无法实时跟着文字的颜色发生变化，适用于文字颜色不会多变的场景。</p>
@@ -222,7 +222,7 @@
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -245,7 +245,7 @@
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -256,7 +256,7 @@
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#径向渐变纯CSS的方式"><span class="toc-number">1.</span> <span class="toc-text">径向渐变纯CSS的方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用SVG波形矢量图作为背景"><span class="toc-number">2.</span> <span class="toc-text">使用SVG波形矢量图作为背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#text-decoration"><span class="toc-number">3.</span> <span class="toc-text">text-decoration</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BE%84%E5%90%91%E6%B8%90%E5%8F%98%E7%BA%AFCSS%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">径向渐变纯CSS的方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8SVG%E6%B3%A2%E5%BD%A2%E7%9F%A2%E9%87%8F%E5%9B%BE%E4%BD%9C%E4%B8%BA%E8%83%8C%E6%99%AF"><span class="toc-number">2.</span> <span class="toc-text">使用SVG波形矢量图作为背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#text-decoration"><span class="toc-number">3.</span> <span class="toc-text">text-decoration</span></a></li></ol>
                 </div>
             </div>
             
@@ -275,7 +275,7 @@
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

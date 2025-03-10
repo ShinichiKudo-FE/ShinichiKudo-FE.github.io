@@ -38,7 +38,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -141,7 +141,7 @@
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <p><a href="https://www.jianshu.com/p/5522df15c9ec" target="_blank" rel="noopener">原文地址</a></p>
+            <p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/5522df15c9ec">原文地址</a></p>
 <h1 id="一、为什么需要规范？"><a href="#一、为什么需要规范？" class="headerlink" title="一、为什么需要规范？"></a>一、为什么需要规范？</h1><p>无规矩不成方圆，编程也一样。</p>
 <p>如果你有一个项目，从始至终都是自己写，那么你想怎么写都可以，没有人可以干预你。可是如果在团队协作中，大家都张扬个性，那么代码将会是一团糟，好好的项目就被糟践了。不管是开发还是日后维护，都将是灾难。</p>
 <p>这时候，有人提出了何不统一标准，大家都按照这个标准来。于是 ESLint，JSHint 等代码工具如雨后春笋般涌现，成为了项目构建的必备良品。</p>
@@ -151,6 +151,7 @@
 <p><strong><code>&lt;type&gt;(&lt;scope&gt;): &lt;subject&gt;</code></strong></p>
 <blockquote>
 <p>type 用于说明 commit 的类别，只允许使用下面7个标识。</p>
+</blockquote>
 <ul>
 <li>feat：新功能(feature)</li>
 <li>fix：修补</li>
@@ -160,7 +161,6 @@
 <li>test：增加测试</li>
 <li>chore：构建过程或辅助工具的变动</li>
 </ul>
-</blockquote>
 <blockquote>
 <p>scope 用于说明 commit 影响的范围，比如<code>数据层、控制层、视图层</code>等等，视项目不同而不同。</p>
 </blockquote>
@@ -192,7 +192,7 @@ jartto:fix bug
 <li>2、将 HEAD 移动到需要修改的 commit 上 <code>git rebase 9633cf0919^ --interactive</code></li>
 <li>3、找到需要修改的 commit ,将首行的 pick 改成 edit</li>
 <li>4、开始着手解决你的 bug</li>
-<li>5、<code>git add</code>将改动文件添加到暂存</li>
+<li>5、<code>git add </code>将改动文件添加到暂存</li>
 <li>6、<code>git commit –amend</code> 追加改动到提交</li>
 <li>7、<code>git rebase –continue</code> 移动 HEAD 回最新的 commit</li>
 <li>8、恢复之前的工作状态 <code>git stash pop</code></li>
@@ -207,51 +207,51 @@ jartto:fix bug
 </code></pre>
 <ul>
 <li><p>2.使用方式一，建立 .vcmrc 文件：</p>
-<pre><code class="js">{ 
+<pre><code class="js">&#123; 
 &quot;types&quot;: [&quot;feat&quot;, &quot;fix&quot;, &quot;docs&quot;, &quot;style&quot;, &quot;refactor&quot;, &quot;perf&quot;, &quot;test&quot;, &quot;build&quot;, &quot;ci&quot;, &quot;chore&quot;, &quot;revert&quot;], 
-&quot;scope&quot;: { 
+&quot;scope&quot;: &#123; 
   &quot;required&quot;: false, 
   &quot;allowed&quot;: [&quot;*&quot;], 
   &quot;validate&quot;: false, 
   &quot;multiple&quot;: false 
-}, 
+&#125;, 
 &quot;warnOnFail&quot;: false, 
 &quot;maxSubjectLength&quot;: 100, 
 &quot;subjectPattern&quot;: &quot;.+&quot;, 
 &quot;subjectPatternErrorMsg&quot;: &quot;subject does not match subject pattern!&quot;, 
 &quot;helpMessage&quot;: &quot;&quot;, 
 &quot;autoFix&quot;: false 
-}
+&#125;
 </code></pre>
 </li>
 <li><p>3.使用方式二：写入 package.json</p>
 </li>
 </ul>
-<pre><code class="json">{ 
-  &quot;config&quot;: { 
-    &quot;validate-commit-msg&quot;: { 
+<pre><code class="json">&#123; 
+  &quot;config&quot;: &#123; 
+    &quot;validate-commit-msg&quot;: &#123; 
       /* your config here */ 
-    } 
-  } 
-}
+    &#125; 
+  &#125; 
+&#125;
 </code></pre>
 <ul>
 <li>4.可是我们如果想自动使用 ghooks 钩子函数呢？</li>
 </ul>
-<pre><code class="js">{ 
+<pre><code class="js">&#123; 
   … 
-  &quot;config&quot;: { 
-    &quot;ghooks&quot;: { 
+  &quot;config&quot;: &#123; 
+    &quot;ghooks&quot;: &#123; 
       &quot;pre-commit&quot;: &quot;gulp lint&quot;, 
       &quot;commit-msg&quot;: &quot;validate-commit-msg&quot;, 
       &quot;pre-push&quot;: &quot;make test&quot;, 
       &quot;post-merge&quot;: &quot;npm install&quot;, 
       &quot;post-rewrite&quot;: &quot;npm install&quot;, 
       … 
-    } 
-  } 
+    &#125; 
+  &#125; 
   … 
-} 
+&#125; 
 </code></pre>
 <p>在 ghooks 中我们可以做很多事情，当然不只是 <code>validate-commit-msg</code>哦。</p>
 <h1 id="六、Commit-规范的作用"><a href="#六、Commit-规范的作用" class="headerlink" title="六、Commit 规范的作用"></a>六、Commit 规范的作用</h1><ul>
@@ -270,11 +270,11 @@ cd jartto-domo
 conventional-changelog -p angular -i CHANGELOG.md -w
 </code></pre>
 <p>为了方便使用，可以将其写入 <code>package.json</code> 的 scripts 字段。</p>
-<pre><code class="js">{ 
-  &quot;scripts&quot;: { 
+<pre><code class="js">&#123; 
+  &quot;scripts&quot;: &#123; 
     &quot;changelog&quot;: &quot;conventional-changelog -p angular -i CHANGELOG.md -w -r 0&quot; 
-  } 
-}
+  &#125; 
+&#125;
 </code></pre>
 <p>这样，使用起来就很简单了：</p>
 <pre><code class="js"> npm run changelog
@@ -305,7 +305,7 @@ conventional-changelog -p angular -i CHANGELOG.md -w
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -328,7 +328,7 @@ conventional-changelog -p angular -i CHANGELOG.md -w
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -339,7 +339,7 @@ conventional-changelog -p angular -i CHANGELOG.md -w
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、为什么需要规范？"><span class="toc-number">1.</span> <span class="toc-text">一、为什么需要规范？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#三、异常处理"><span class="toc-number">2.</span> <span class="toc-text">三、异常处理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#四、如何修改之前的-commit-信息？"><span class="toc-number">3.</span> <span class="toc-text">四、如何修改之前的 commit 信息？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#五、项目中使用"><span class="toc-number">4.</span> <span class="toc-text">五、项目中使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#六、Commit-规范的作用"><span class="toc-number">5.</span> <span class="toc-text">六、Commit 规范的作用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#七、生成-Change-log"><span class="toc-number">6.</span> <span class="toc-text">七、生成 Change log</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#八、总结"><span class="toc-number">7.</span> <span class="toc-text">八、总结</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E8%A7%84%E8%8C%83%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">一、为什么需要规范？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">三、异常处理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%A6%82%E4%BD%95%E4%BF%AE%E6%94%B9%E4%B9%8B%E5%89%8D%E7%9A%84-commit-%E4%BF%A1%E6%81%AF%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">四、如何修改之前的 commit 信息？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BD%BF%E7%94%A8"><span class="toc-number">4.</span> <span class="toc-text">五、项目中使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81Commit-%E8%A7%84%E8%8C%83%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">5.</span> <span class="toc-text">六、Commit 规范的作用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E7%94%9F%E6%88%90-Change-log"><span class="toc-number">6.</span> <span class="toc-text">七、生成 Change log</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E6%80%BB%E7%BB%93"><span class="toc-number">7.</span> <span class="toc-text">八、总结</span></a></li></ol>
                 </div>
             </div>
             
@@ -358,7 +358,7 @@ conventional-changelog -p angular -i CHANGELOG.md -w
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

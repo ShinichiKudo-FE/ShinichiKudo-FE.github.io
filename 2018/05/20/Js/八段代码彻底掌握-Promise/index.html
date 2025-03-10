@@ -11,8 +11,8 @@
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="TriDiamond Obsidian,"> 
     <meta name="description" content="一枚前端搬砖队队员的记录册,PromisePromise的立即执行性//1
-var p = new Promise(function(resolve, reject){
-  console.log(&amp;quot;create a,"> 
+var p = new Promise(function(resolve, reject)&amp;#123;
+  console.log(&amp;quot;cre,"> 
     <meta name="author" content="张白告丶"> 
     <link rel="alternative" href="atom.xml" title="默默默默燃" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -38,7 +38,7 @@ var p = new Promise(function(resolve, reject){
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -101,7 +101,7 @@ var p = new Promise(function(resolve, reject){
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    9.8k
+                    10k
                 </span>
                 
                 
@@ -142,16 +142,16 @@ var p = new Promise(function(resolve, reject){
     <div class='main'>
         <div class="content markdown animated fadeIn">
             <h1 id="Promise"><a href="#Promise" class="headerlink" title="Promise"></a>Promise</h1><h2 id="Promise的立即执行性"><a href="#Promise的立即执行性" class="headerlink" title="Promise的立即执行性"></a>Promise的立即执行性</h2><pre><code class="js">//1
-var p = new Promise(function(resolve, reject){
+var p = new Promise(function(resolve, reject)&#123;
   console.log(&quot;create a promise&quot;);
   resolve(&quot;success&quot;);
-});
+&#125;);
 //2
 console.log(&quot;after new Promise&quot;);
 //3
-p.then(function(value){
+p.then(function(value)&#123;
   console.log(value);
-});
+&#125;);
 </code></pre>
 <p>控制台输出：</p>
 <pre><code class="js">&quot;create a promise&quot;
@@ -159,95 +159,95 @@ p.then(function(value){
 &quot;success&quot;
 </code></pre>
 <p>Promise对象<code>表示未来某个将要发生的事件</code>，但在创建（new）Promise时，作为Promise参数传入的函数是会被立即执行的，只是其中执行的代码可以是<code>异步代码</code>。有些同学会认为，当Promise对象调用then方法时，Promise接收的函数才会执行，这是错误的。因此，代码中”create a promise”先于”after new Promise”输出。</p>
-<h2 id="Promise-三种状态"><a href="#Promise-三种状态" class="headerlink" title="Promise 三种状态"></a>Promise 三种状态</h2><pre><code class="js">var p1 = new Promise(function(resolve,reject){
+<h2 id="Promise-三种状态"><a href="#Promise-三种状态" class="headerlink" title="Promise 三种状态"></a>Promise 三种状态</h2><pre><code class="js">var p1 = new Promise(function(resolve,reject)&#123;
   resolve(1);
-});
-var p2 = new Promise(function(resolve,reject){
-  setTimeout(function(){
+&#125;);
+var p2 = new Promise(function(resolve,reject)&#123;
+  setTimeout(function()&#123;
     resolve(2);
-  }, 500);
-});
-var p3 = new Promise(function(resolve,reject){
-  setTimeout(function(){
+  &#125;, 500);
+&#125;);
+var p3 = new Promise(function(resolve,reject)&#123;
+  setTimeout(function()&#123;
     reject(3);
-  }, 500);
-});
+  &#125;, 500);
+&#125;);
 
 console.log(p1);
 console.log(p2);
 console.log(p3);
-setTimeout(function(){
+setTimeout(function()&#123;
   console.log(p2);
-}, 1000);
-setTimeout(function(){
+&#125;, 1000);
+setTimeout(function()&#123;
   console.log(p3);
-}, 1000);
+&#125;, 1000);
 
-p1.then(function(value){
+p1.then(function(value)&#123;
   console.log(value);
-});
-p2.then(function(value){
+&#125;);
+p2.then(function(value)&#123;
   console.log(value);
-});
-p3.catch(function(err){
+&#125;);
+p3.catch(function(err)&#123;
   console.log(err);
-});
+&#125;);
 </code></pre>
-<a id="more"></a>
+<span id="more"></span>
 <p>控制台输出：</p>
-<pre><code class="js">Promise {[[PromiseStatus]]: &quot;resolved&quot;, [[PromiseValue]]: 1}
-Promise {[[PromiseStatus]]: &quot;pending&quot;, [[PromiseValue]]: undefined}
-Promise {[[PromiseStatus]]: &quot;pending&quot;, [[PromiseValue]]: undefined}
+<pre><code class="js">Promise &#123;[[PromiseStatus]]: &quot;resolved&quot;, [[PromiseValue]]: 1&#125;
+Promise &#123;[[PromiseStatus]]: &quot;pending&quot;, [[PromiseValue]]: undefined&#125;
+Promise &#123;[[PromiseStatus]]: &quot;pending&quot;, [[PromiseValue]]: undefined&#125;
 1
 2
 3
-Promise {[[PromiseStatus]]: &quot;resolved&quot;, [[PromiseValue]]: 2}
-Promise {[[PromiseStatus]]: &quot;rejected&quot;, [[PromiseValue]]: 3}
+Promise &#123;[[PromiseStatus]]: &quot;resolved&quot;, [[PromiseValue]]: 2&#125;
+Promise &#123;[[PromiseStatus]]: &quot;rejected&quot;, [[PromiseValue]]: 3&#125;
 </code></pre>
 <p>Promise的内部实现是一个状态机。Promise有三种状态：<code>pending，resolved，rejected</code>。当Promise刚创建完成时，处于pending状态；当Promise中的函数参数执行了resolve后，Promise由pending状态变成resolved状态；如果在Promise的函数参数中执行的不是resolve方法，而是reject方法，那么Promise会由pending状态变成rejected状态。</p>
 <p>p2、p3刚创建完成时，控制台输出的这两台Promise都处于pending状态，但为什么p1是resolved状态呢？ 这是<strong>因为p1的函数参数中执行的是一段同步代码</strong>，Promise刚创建完成，resolve方法就已经被调用了，因而紧跟着的输出显示p1是resolved状态。我们通过两个setTimeout函数，延迟1s后再次输出p2、p3的状态，此时p2、p3已经执行完成，状态分别变成resolved和rejected。</p>
-<h2 id="Promise-状态的不可逆性"><a href="#Promise-状态的不可逆性" class="headerlink" title="Promise 状态的不可逆性"></a>Promise 状态的不可逆性</h2><pre><code class="js">var p1 = new Promise(function(resolve, reject){
+<h2 id="Promise-状态的不可逆性"><a href="#Promise-状态的不可逆性" class="headerlink" title="Promise 状态的不可逆性"></a>Promise 状态的不可逆性</h2><pre><code class="js">var p1 = new Promise(function(resolve, reject)&#123;
   resolve(&quot;success1&quot;);
   resolve(&quot;success2&quot;);
-});
+&#125;);
 
-var p2 = new Promise(function(resolve, reject){
+var p2 = new Promise(function(resolve, reject)&#123;
   resolve(&quot;success&quot;);
   reject(&quot;reject&quot;);
-});
+&#125;);
 
-p1.then(function(value){
+p1.then(function(value)&#123;
   console.log(value);
-});
+&#125;);
 
-p2.then(function(value){
+p2.then(function(value)&#123;
   console.log(value);
-});
+&#125;);
 </code></pre>
 <p>控制台输出：</p>
 <pre><code class="js">&quot;success1&quot;
 &quot;success&quot;
 </code></pre>
 <p>Promise状态的一旦变成resolved或rejected时，Promise的状态和值就固定下来了，不论你后续再怎么调用resolve或reject方法，都不能改变它的状态和值。因此，p1中<code>resolve(&quot;success2&quot;)</code>并不能将p1的值更改为<code>success2</code>，p2中<code>reject(&quot;reject&quot;)</code>也不能将p2的状态由resolved改变为rejected.</p>
-<h2 id="链式调用"><a href="#链式调用" class="headerlink" title="链式调用"></a>链式调用</h2><pre><code class="js">var p = new Promise(function(resolve, reject){
+<h2 id="链式调用"><a href="#链式调用" class="headerlink" title="链式调用"></a>链式调用</h2><pre><code class="js">var p = new Promise(function(resolve, reject)&#123;
   resolve(1);
-});
-p.then(function(value){               //第一个then
+&#125;);
+p.then(function(value)&#123;               //第一个then
   console.log(value);
   return value*2;
-}).then(function(value){              //第二个then
+&#125;).then(function(value)&#123;              //第二个then
   console.log(value);
-}).then(function(value){              //第三个then
+&#125;).then(function(value)&#123;              //第三个then
   console.log(value);
   return Promise.resolve(&#39;resolve&#39;);
-}).then(function(value){              //第四个then
+&#125;).then(function(value)&#123;              //第四个then
   console.log(value);
   return Promise.reject(&#39;reject&#39;);
-}).then(function(value){              //第五个then
+&#125;).then(function(value)&#123;              //第五个then
   console.log(&#39;resolve: &#39;+ value);
-}, function(err){
+&#125;, function(err)&#123;
   console.log(&#39;reject: &#39; + err);
-})
+&#125;)
 </code></pre>
 <p>控制台输出：</p>
 <pre><code class="js">1
@@ -268,73 +268,71 @@ undefined
 </ul>
 <p>根据以上分析，代码中第一个then会返回一个值为2（1*2），状态为resolved的Promise对象，于是第二个then输出的值是2。第二个then中没有返回值，因此将返回默认的undefined，于是在第三个then中输出undefined。第三个then和第四个then中分别返回一个状态是resolved的Promise和一个状态是rejected的Promise，依次由第四个then中成功的回调函数和第五个then中失败的回调函数处理。</p>
 <h2 id="Promise-then-回调异步性"><a href="#Promise-then-回调异步性" class="headerlink" title="Promise then() 回调异步性"></a>Promise then() 回调异步性</h2><pre><code class="js">
-var p = new Promise(function(resolve, reject){
+var p = new Promise(function(resolve, reject)&#123;
   resolve(&quot;success&quot;);
-});
+&#125;);
 
-p.then(function(value){
+p.then(function(value)&#123;
   console.log(value);
-});
+&#125;);
 
 console.log(&quot;which one is called first ?&quot;);
-
 </code></pre>
 <p>控制台输出：</p>
 <pre><code class="js">&quot;which one is called first ?&quot;
 &quot;success&quot;
 </code></pre>
 <p>Promise<strong>接收的函数参数是同步执行</strong>的，但then方法中的回调函数执行则是异步的，因此，”success”会在后面输出。</p>
-<h2 id="Promise-中的异常"><a href="#Promise-中的异常" class="headerlink" title="Promise 中的异常"></a>Promise 中的异常</h2><pre><code class="js">var p1 = new Promise( function(resolve,reject){
+<h2 id="Promise-中的异常"><a href="#Promise-中的异常" class="headerlink" title="Promise 中的异常"></a>Promise 中的异常</h2><pre><code class="js">var p1 = new Promise( function(resolve,reject)&#123;
   foo.bar();
   resolve( 1 );
-});
+&#125;);
 
 p1.then(
-  function(value){
+  function(value)&#123;
     console.log(&#39;p1 then value: &#39; + value);
-  },
-  function(err){
+  &#125;,
+  function(err)&#123;
     console.log(&#39;p1 then err: &#39; + err);
-  }
+  &#125;
 ).then(
-  function(value){
+  function(value)&#123;
     console.log(&#39;p1 then then value: &#39;+value);
-  },
-  function(err){
+  &#125;,
+  function(err)&#123;
     console.log(&#39;p1 then then err: &#39; + err);
-  }
+  &#125;
 );
 
 // P2
-var p2 = new Promise(function(resolve,reject){
+var p2 = new Promise(function(resolve,reject)&#123;
   resolve( 2 );
-});
+&#125;);
 
 p2.then(
-  function(value){
+  function(value)&#123;
     console.log(&#39;p2 then value: &#39; + value);
     foo.bar();
-  },
-  function(err){
+  &#125;,
+  function(err)&#123;
     console.log(&#39;p2 then err: &#39; + err);
-  }
+  &#125;
 ).then(
-  function(value){
+  function(value)&#123;
     console.log(&#39;p2 then then value: &#39; + value);
-  },
-  function(err){
+  &#125;,
+  function(err)&#123;
     console.log(&#39;p2 then then err: &#39; + err);
     return 1;
-  }
+  &#125;
 ).then(
-  function(value){
+  function(value)&#123;
     console.log(&#39;p2 then then then value: &#39; + value);
-  },
-  function(err){
+  &#125;,
+  function(err)&#123;
     console.log(&#39;p2 then then then err: &#39; + err);
-  }
+  &#125;
 );
-
 </code></pre>
 <p> 控制台输出：</p>
 <pre><code class="js">p1 then err: ReferenceError: foo is not defined
@@ -346,30 +344,29 @@ p2 then then then value: 1
 <p>Promise中的异常由then参数中第二个回调函数（Promise执行失败的回调）处理，异常信息将作为Promise的值。异常一旦得到处理，then返回的后续Promise对象将恢复正常，并会被Promise执行成功的回调函数处理。另外，需要注意p1、p2 多级then的回调函数是交替执行的 ，这正是由Promise then回调的异步性决定的。</p>
 <h2 id="Promise-resolve"><a href="#Promise-resolve" class="headerlink" title="Promise.resolve()"></a>Promise.resolve()</h2><pre><code class="js">var p1 = Promise.resolve( 1 );
 var p2 = Promise.resolve( p1 );
-var p3 = new Promise(function(resolve, reject){
+var p3 = new Promise(function(resolve, reject)&#123;
   resolve(1);
-});
-var p4 = new Promise(function(resolve, reject){
+&#125;);
+var p4 = new Promise(function(resolve, reject)&#123;
   resolve(p1);
-});
+&#125;);
 
 console.log(p1 === p2);
 console.log(p1 === p3);
 console.log(p1 === p4);
 console.log(p3 === p4);
 
-p4.then(function(value){
+p4.then(function(value)&#123;
   console.log(&#39;p4=&#39; + value);
-});
+&#125;);
 
-p2.then(function(value){
+p2.then(function(value)&#123;
   console.log(&#39;p2=&#39; + value);
-})
+&#125;)
 
-p1.then(function(value){
+p1.then(function(value)&#123;
   console.log(&#39;p1=&#39; + value);
-})
-
+&#125;)
 </code></pre>
 <p>控制台输出：</p>
 <pre><code class="js">true
@@ -381,43 +378,43 @@ p1=1
 p4=1
 </code></pre>
 <p><code>Promise.resolve(...)</code>可以接收一个值或者是一个Promise对象作为参数。当参数是普通值时，它返回一个resolved状态的Promise对象，对象的值就是这个参数；当参数是一个Promise对象时，它直接返回这个Promise参数。因此，p1 === p2。但通过new的方式创建的Promise对象都是一个新的对象，因此后面的三个比较结果都是false。另外，为什么p4的then最先调用，但在控制台上是最后输出结果的呢？因为p4的resolve中接收的参数是一个Promise对象p1，resolve会对p1”拆箱“，获取p1的状态和值，但这个过程是异步的，可参考下一节。</p>
-<h2 id="resolve-vs-reject"><a href="#resolve-vs-reject" class="headerlink" title="resolve vs reject"></a>resolve vs reject</h2><pre><code class="js">var p1 = new Promise(function(resolve, reject){
+<h2 id="resolve-vs-reject"><a href="#resolve-vs-reject" class="headerlink" title="resolve vs reject"></a>resolve vs reject</h2><pre><code class="js">var p1 = new Promise(function(resolve, reject)&#123;
   resolve(Promise.resolve(&#39;resolve&#39;));
-});
+&#125;);
 
-var p2 = new Promise(function(resolve, reject){
+var p2 = new Promise(function(resolve, reject)&#123;
   resolve(Promise.reject(&#39;reject&#39;));
-});
+&#125;);
 
-var p3 = new Promise(function(resolve, reject){
+var p3 = new Promise(function(resolve, reject)&#123;
   reject(Promise.resolve(&#39;resolve&#39;));
-});
+&#125;);
 
 p1.then(
-  function fulfilled(value){
+  function fulfilled(value)&#123;
     console.log(&#39;fulfilled: &#39; + value);
-  },
-  function rejected(err){
+  &#125;,
+  function rejected(err)&#123;
     console.log(&#39;rejected: &#39; + err);
-  }
+  &#125;
 );
 
 p2.then(
-  function fulfilled(value){
+  function fulfilled(value)&#123;
     console.log(&#39;fulfilled: &#39; + value);
-  },
-  function rejected(err){
+  &#125;,
+  function rejected(err)&#123;
     console.log(&#39;rejected: &#39; + err);
-  }
+  &#125;
 );
 
 p3.then(
-  function fulfilled(value){
+  function fulfilled(value)&#123;
     console.log(&#39;fulfilled: &#39; + value);
-  },
-  function rejected(err){
+  &#125;,
+  function rejected(err)&#123;
     console.log(&#39;rejected: &#39; + err);
-  }
+  &#125;
 );
 </code></pre>
 <p>控制台输出：</p>
@@ -426,7 +423,7 @@ p1 fulfilled: resolve
 p2 rejected: reject
 </code></pre>
 <p>Promise回调函数中的第一个参数<code>resolve</code>，会对Promise执行”拆箱”动作。即当<code>resolve</code>的参数是一个Promise对象时，<code>resolve</code>会”拆箱”获取这个<code>Promise</code>对象的状态和值，但这个过程是异步的。p1”拆箱”后，获取到<code>Promise</code>对象的状态是<code>resolved</code>，因此fulfilled回调被执行；p2”拆箱”后，获取到<code>Promise</code>对象的状态是<code>rejected</code>，因此<code>rejected</code>回调被执行。但<code>Promise</code>回调函数中的第二个参数reject不具备”拆箱“的能力，reject的参数会直接传递给then方法中的<code>rejected</code>回调。因此，即使p3 reject接收了一个<code>resolved</code>状态的<code>Promise</code>，then方法中被调用的依然是<code>rejected</code>，并且参数就是reject接收到的<code>Promise</code>对象。</p>
-<p><a href="https://juejin.im/post/597724c26fb9a06bb75260e8" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.im/post/597724c26fb9a06bb75260e8">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -451,7 +448,7 @@ p2 rejected: reject
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -474,7 +471,7 @@ p2 rejected: reject
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -485,7 +482,7 @@ p2 rejected: reject
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Promise"><span class="toc-number">1.</span> <span class="toc-text">Promise</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise的立即执行性"><span class="toc-number">1.1.</span> <span class="toc-text">Promise的立即执行性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise-三种状态"><span class="toc-number">1.2.</span> <span class="toc-text">Promise 三种状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise-状态的不可逆性"><span class="toc-number">1.3.</span> <span class="toc-text">Promise 状态的不可逆性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#链式调用"><span class="toc-number">1.4.</span> <span class="toc-text">链式调用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise-then-回调异步性"><span class="toc-number">1.5.</span> <span class="toc-text">Promise then() 回调异步性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise-中的异常"><span class="toc-number">1.6.</span> <span class="toc-text">Promise 中的异常</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise-resolve"><span class="toc-number">1.7.</span> <span class="toc-text">Promise.resolve()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#resolve-vs-reject"><span class="toc-number">1.8.</span> <span class="toc-text">resolve vs reject</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Promise"><span class="toc-number">1.</span> <span class="toc-text">Promise</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise%E7%9A%84%E7%AB%8B%E5%8D%B3%E6%89%A7%E8%A1%8C%E6%80%A7"><span class="toc-number">1.1.</span> <span class="toc-text">Promise的立即执行性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise-%E4%B8%89%E7%A7%8D%E7%8A%B6%E6%80%81"><span class="toc-number">1.2.</span> <span class="toc-text">Promise 三种状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise-%E7%8A%B6%E6%80%81%E7%9A%84%E4%B8%8D%E5%8F%AF%E9%80%86%E6%80%A7"><span class="toc-number">1.3.</span> <span class="toc-text">Promise 状态的不可逆性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%93%BE%E5%BC%8F%E8%B0%83%E7%94%A8"><span class="toc-number">1.4.</span> <span class="toc-text">链式调用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise-then-%E5%9B%9E%E8%B0%83%E5%BC%82%E6%AD%A5%E6%80%A7"><span class="toc-number">1.5.</span> <span class="toc-text">Promise then() 回调异步性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise-%E4%B8%AD%E7%9A%84%E5%BC%82%E5%B8%B8"><span class="toc-number">1.6.</span> <span class="toc-text">Promise 中的异常</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise-resolve"><span class="toc-number">1.7.</span> <span class="toc-text">Promise.resolve()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#resolve-vs-reject"><span class="toc-number">1.8.</span> <span class="toc-text">resolve vs reject</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -504,7 +501,7 @@ p2 rejected: reject
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

@@ -37,7 +37,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -100,7 +100,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    6.7k
+                    6.9k
                 </span>
                 
                 
@@ -142,7 +142,7 @@
         <div class="content markdown animated fadeIn">
             <h1 id="keep-alive"><a href="#keep-alive" class="headerlink" title="keep-alive"></a>keep-alive</h1><p>keep-alive是Vue.js的一个内置组件。它能够不活动的组件实例保存在内存中，而不是直接将其销毁，它是一个抽象组件，不会被渲染到真实DOM中，也不会出现在父组件链中。</p>
 <p>它提供了include与exclude两个属性，允许组件有条件地进行缓存。</p>
-<p>具体内容可以参考<a href="https://cn.vuejs.org/v2/api/#keep-alive" target="_blank" rel="noopener">官网</a>。</p>
+<p>具体内容可以参考<a target="_blank" rel="noopener" href="https://cn.vuejs.org/v2/api/#keep-alive">官网</a>。</p>
 <h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><pre><code class="js">&lt;keep-alive&gt;
     &lt;component&gt;&lt;/component&gt;
 &lt;/keep-alive&gt;
@@ -155,18 +155,18 @@
 &lt;keep-alive/&gt;
 &lt;button @click=&quot;test=handleClick&quot;&gt;请点击&lt;/button&gt;
 </code></pre>
-<pre><code class="js">export default {
-    data () {
-        return {
+<pre><code class="js">export default &#123;
+    data () &#123;
+        return &#123;
             test: true
-        }
-    },
-    methods: {
-        handleClick () {
+        &#125;
+    &#125;,
+    methods: &#123;
+        handleClick () &#123;
             this.test = !this.test;
-        }
-    }
-}
+        &#125;
+    &#125;
+&#125;
 </code></pre>
 <p>在点击button时候，coma与comb两个组件会发生切换，但是这时候这两个组件的状态会被缓存起来，比如说coma与comb组件中都有一个input标签，那么input标签中的内容不会因为组件的切换而消失。</p>
 <h3 id="props"><a href="#props" class="headerlink" title="props"></a>props</h3><p>keep-alive组件提供了<code>include</code>与<code>exclude</code>两个属性来允许组件有条件地进行缓存，二者都可以用逗号分隔字符串、正则表达式或一个数组来表示。</p>
@@ -185,27 +185,28 @@
 <p>因为keep-alive会将组件保存在内存中，并不会销毁以及重新创建，所以不会重新调用组件的created等方法，需要用activated与deactivated这两个生命钩子来得知当前组件是否处于活动状态。</p>
 <h2 id="深入keep-alive组件实现"><a href="#深入keep-alive组件实现" class="headerlink" title="深入keep-alive组件实现"></a>深入keep-alive组件实现</h2><p>说完了keep-alive组件的使用，我们从源码角度看一下keep-alive组件究竟是如何实现组件的缓存的呢？</p>
 <h3 id="created与destroyed钩子"><a href="#created与destroyed钩子" class="headerlink" title="created与destroyed钩子"></a>created与destroyed钩子</h3><p>created钩子会创建一个cache对象，用来作为缓存容器，保存vnode节点。</p>
-<pre><code class="js">created () {
+<pre><code class="js">created () &#123;
     /* 缓存对象 */
     this.cache = Object.create(null)
-},
+&#125;,
 </code></pre>
 <p>destroyed钩子则在组件被销毁的时候清除cache缓存中的所有组件实例。</p>
 <pre><code class="js">/* destroyed钩子中销毁所有cache中的组件实例 */
-destroyed () {
-    for (const key in this.cache) {
+destroyed () &#123;
+    for (const key in this.cache) &#123;
         pruneCacheEntry(this.cache[key])
-    }
-},
+    &#125;
+&#125;,
 </code></pre>
-<a id="more"></a>
+<span id="more"></span>
+
 <h3 id="render"><a href="#render" class="headerlink" title="render"></a>render</h3><p>接下来是render函数。</p>
-<pre><code class="js">render () {
+<pre><code class="js">render () &#123;
     /* 得到slot插槽中的第一个组件 */
     const vnode: VNode = getFirstComponentChild(this.$slots.default)
 
     const componentOptions: ?VNodeComponentOptions = vnode &amp;&amp; vnode.componentOptions
-    if (componentOptions) {
+    if (componentOptions) &#123;
         // check pattern
         /* 获取组件名称，优先获取组件的name字段，否则是组件的tag */
         const name: ?string = getComponentName(componentOptions)
@@ -213,85 +214,85 @@ destroyed () {
         if (name &amp;&amp; (
         (this.include &amp;&amp; !matches(this.include, name)) ||
         (this.exclude &amp;&amp; matches(this.exclude, name))
-        )) {
+        )) &#123;
             return vnode
-        }
+        &#125;
         const key: ?string = vnode.key == null
         // same constructor may get registered as different local components
         // so cid alone is not enough (#3269)
-        ? componentOptions.Ctor.cid + (componentOptions.tag ? `::${componentOptions.tag}` : &#39;&#39;)
+        ? componentOptions.Ctor.cid + (componentOptions.tag ? `::$&#123;componentOptions.tag&#125;` : &#39;&#39;)
         : vnode.key
         /* 如果已经做过缓存了则直接从缓存中获取组件实例给vnode，还未缓存过则进行缓存 */
-        if (this.cache[key]) {
+        if (this.cache[key]) &#123;
             vnode.componentInstance = this.cache[key].componentInstance
-        } else {
+        &#125; else &#123;
             this.cache[key] = vnode
-        }
+        &#125;
         /* keepAlive标记位 */
         vnode.data.keepAlive = true
-    }
+    &#125;
     return vnode
-}
+&#125;
 </code></pre>
-<p>首先通过getFirstComponentChild获取第一个子组件，获取该组件的name（存在组件名则直接使用组件名，否则会使用tag）。接下来会将这个name通过include与exclude属性进行匹配，匹配不成功（说明不需要进行缓存）则不进行任何操作直接返回vnode，vnode是一个VNode类型的对象，不了解VNode的同学可以参考笔者的另一篇文章<a href="https://github.com/answershuto/learnVue/blob/master/docs/VNode%E8%8A%82%E7%82%B9.MarkDown" target="_blank" rel="noopener">《VNode节点》</a> .</p>
+<p>首先通过getFirstComponentChild获取第一个子组件，获取该组件的name（存在组件名则直接使用组件名，否则会使用tag）。接下来会将这个name通过include与exclude属性进行匹配，匹配不成功（说明不需要进行缓存）则不进行任何操作直接返回vnode，vnode是一个VNode类型的对象，不了解VNode的同学可以参考笔者的另一篇文章<a target="_blank" rel="noopener" href="https://github.com/answershuto/learnVue/blob/master/docs/VNode%E8%8A%82%E7%82%B9.MarkDown">《VNode节点》</a> .</p>
 <pre><code class="js">/* 检测name是否匹配 */
-function matches (pattern: string | RegExp, name: string): boolean {
-  if (typeof pattern === &#39;string&#39;) {
+function matches (pattern: string | RegExp, name: string): boolean &#123;
+  if (typeof pattern === &#39;string&#39;) &#123;
     /* 字符串情况，如a,b,c */
     return pattern.split(&#39;,&#39;).indexOf(name) &gt; -1
-  } else if (isRegExp(pattern)) {
+  &#125; else if (isRegExp(pattern)) &#123;
     /* 正则 */
     return pattern.test(name)
-  }
+  &#125;
   /* istanbul ignore next */
   return false
-}
+&#125;
 </code></pre>
 <p>检测include与exclude属性匹配的函数很简单，include与exclude属性支持字符串如”a,b,c”这样组件名以逗号隔开的情况以及正则表达式。matches通过这两种方式分别检测是否匹配当前组件。</p>
-<pre><code class="js">if (this.cache[key]) {
+<pre><code class="js">if (this.cache[key]) &#123;
     vnode.componentInstance = this.cache[key].componentInstance
-} else {
+&#125; else &#123;
     this.cache[key] = vnode
-}
+&#125;
 </code></pre>
 <p>接下来的事情很简单，根据key在this.cache中查找，如果存在则说明之前已经缓存过了，直接将缓存的vnode的componentInstance（组件实例）覆盖到目前的vnode上面。否则将vnode存储在cache中。</p>
 <p>最后返回vnode（有缓存时该vnode的componentInstance已经被替换成缓存中的了）。</p>
 <h3 id="watch"><a href="#watch" class="headerlink" title="watch"></a>watch</h3><p>用watch来监听pruneCache与pruneCache这两个属性的改变，在改变的时候修改cache缓存中的缓存数据。</p>
-<pre><code class="js">watch: {
+<pre><code class="js">watch: &#123;
     /* 监视include以及exclude，在被修改的时候对cache进行修正 */
-    include (val: string | RegExp) {
+    include (val: string | RegExp) &#123;
         pruneCache(this.cache, this._vnode, name =&gt; matches(val, name))
-    },
-    exclude (val: string | RegExp) {
+    &#125;,
+    exclude (val: string | RegExp) &#123;
         pruneCache(this.cache, this._vnode, name =&gt; !matches(val, name))
-    }
-},
+    &#125;
+&#125;,
 </code></pre>
 <p>来看一下pruneCache的实现。</p>
 <pre><code class="js">/* 修正cache */
-function pruneCache (cache: VNodeCache, current: VNode, filter: Function) {
-  for (const key in cache) {
+function pruneCache (cache: VNodeCache, current: VNode, filter: Function) &#123;
+  for (const key in cache) &#123;
     /* 取出cache中的vnode */
     const cachedNode: ?VNode = cache[key]
-    if (cachedNode) {
+    if (cachedNode) &#123;
       const name: ?string = getComponentName(cachedNode.componentOptions)
       /* name不符合filter条件的，同时不是目前渲染的vnode时，销毁vnode对应的组件实例（Vue实例），并从cache中移除 */
-      if (name &amp;&amp; !filter(name)) {
-        if (cachedNode !== current) {
+      if (name &amp;&amp; !filter(name)) &#123;
+        if (cachedNode !== current) &#123;
           pruneCacheEntry(cachedNode)
-        }
+        &#125;
         cache[key] = null
-      }
-    }
-  }
-} 
+      &#125;
+    &#125;
+  &#125;
+&#125; 
 
 /* 销毁vnode对应的组件实例（Vue实例） */
-function pruneCacheEntry (vnode: ?VNode) {
-  if (vnode) {
+function pruneCacheEntry (vnode: ?VNode) &#123;
+  if (vnode) &#123;
     vnode.componentInstance.$destroy()
-  }
-}
+  &#125;
+&#125;
 </code></pre>
 <p>遍历cache中的所有项，如果不符合filter指定的规则的话，则会执行pruneCacheEntry。pruneCacheEntry则会调用组件实例的$destroy方法来将组件销毁。</p>
 <h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>Vue.js内部将DOM节点抽象成了一个个的VNode节点，keep-alive组件的缓存也是基于VNode节点的而不是直接存储DOM结构。它将满足条件（pruneCache与pruneCache）的组件在cache对象中缓存起来，在需要重新渲染的时候再将vnode节点从cache对象中取出并渲染。</p>
@@ -319,7 +320,7 @@ function pruneCacheEntry (vnode: ?VNode) {
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -342,7 +343,7 @@ function pruneCacheEntry (vnode: ?VNode) {
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -353,7 +354,7 @@ function pruneCacheEntry (vnode: ?VNode) {
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#keep-alive"><span class="toc-number">1.</span> <span class="toc-text">keep-alive</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#用法"><span class="toc-number">1.1.</span> <span class="toc-text">用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#props"><span class="toc-number">1.1.1.</span> <span class="toc-text">props</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#生命钩子"><span class="toc-number">1.1.2.</span> <span class="toc-text">生命钩子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#深入keep-alive组件实现"><span class="toc-number">1.2.</span> <span class="toc-text">深入keep-alive组件实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#created与destroyed钩子"><span class="toc-number">1.2.1.</span> <span class="toc-text">created与destroyed钩子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#render"><span class="toc-number">1.2.2.</span> <span class="toc-text">render</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#watch"><span class="toc-number">1.2.3.</span> <span class="toc-text">watch</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最后"><span class="toc-number">1.3.</span> <span class="toc-text">最后</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#keep-alive"><span class="toc-number">1.</span> <span class="toc-text">keep-alive</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#props"><span class="toc-number">1.1.1.</span> <span class="toc-text">props</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E5%91%BD%E9%92%A9%E5%AD%90"><span class="toc-number">1.1.2.</span> <span class="toc-text">生命钩子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%B1%E5%85%A5keep-alive%E7%BB%84%E4%BB%B6%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.2.</span> <span class="toc-text">深入keep-alive组件实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#created%E4%B8%8Edestroyed%E9%92%A9%E5%AD%90"><span class="toc-number">1.2.1.</span> <span class="toc-text">created与destroyed钩子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#render"><span class="toc-number">1.2.2.</span> <span class="toc-text">render</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#watch"><span class="toc-number">1.2.3.</span> <span class="toc-text">watch</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%90%8E"><span class="toc-number">1.3.</span> <span class="toc-text">最后</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -372,7 +373,7 @@ function pruneCacheEntry (vnode: ?VNode) {
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

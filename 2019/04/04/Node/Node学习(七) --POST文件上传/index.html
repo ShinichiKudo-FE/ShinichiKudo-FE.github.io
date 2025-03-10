@@ -38,7 +38,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -101,13 +101,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    8.2k
+                    8.4k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
-                    7 mins.
+                    8 mins.
                 </span>
                 
                 
@@ -156,19 +156,19 @@
 <p>其次，在server.js中，查看接收到的表单提交数据：</p>
 <pre><code class="js">const http = require(&#39;http&#39;)
 
-const server = http.createServer((req, res) =&gt; {
+const server = http.createServer((req, res) =&gt; &#123;
   let arr = []
 
-  req.on(&#39;data&#39;, (buffer) =&gt; {
+  req.on(&#39;data&#39;, (buffer) =&gt; &#123;
     arr.push(buffer)
-  })
+  &#125;)
 
-  req.on(&#39;end&#39;, () =&gt; {
+  req.on(&#39;end&#39;, () =&gt; &#123;
     let buffer = Buffer.concat(arr)
 
     console.log(buffer.toString())
-  })
-})
+  &#125;)
+&#125;)
 
 server.listen(8080)
 </code></pre>
@@ -207,7 +207,7 @@ Content-Type: text/plain\r\n
 upload\r\n
 ------WebKitFormBoundaryL5AGcit70yhKB92Y--
 </code></pre>
-<a id="more"></a>
+<span id="more"></span>
 <p>可以看出，每段数据的结构其实是这样的：</p>
 <pre><code class="js">------WebKitFormBoundaryL5AGcit70yhKB92Y\r\nContent-Disposition: form-data; name=&quot;username&quot;\r\n\r\nlee\r\
 </code></pre>
@@ -229,22 +229,21 @@ const index = buffer.indexOf(&#39;\r\n&#39;)
 
 console.log(index)
 console.log(buffer.slice(0, index).toString())
-
 </code></pre>
 <p>可以看到打印结果分别为3和”lee”，也就是说，我们先找到了”\r\n”所在的index为3，之后从Buffer数据的index为0的位置，切割到index为3的位置，得到了正确的结果。</p>
 <p>由此，可以封装一个专门用于切割Buffer数据的方法：</p>
-<pre><code class="js">module.exports = function bufferSplit(buffer, separator) {
+<pre><code class="js">module.exports = function bufferSplit(buffer, separator) &#123;
   let result = [];
   let index = 0;
 
-  while ((index = buffer.indexOf(separator)) != -1) {
+  while ((index = buffer.indexOf(separator)) != -1) &#123;
     result.push(buffer.slice(0, index));
     buffer = buffer.slice(index + separator.length);
-  }
+  &#125;
   result.push(buffer);
 
   return result;
-}
+&#125;
 </code></pre>
 <p>有了bufferSplit方法，就可以正式开始处理数据了。</p>
 <h2 id="文件上传数据处理"><a href="#文件上传数据处理" class="headerlink" title="文件上传数据处理"></a>文件上传数据处理</h2><p>根据上面的思路，就可以实现一个完整的文件上传流程。</p>
@@ -252,15 +251,15 @@ console.log(buffer.slice(0, index).toString())
 const fs = require(&#39;fs&#39;)
 const bufferSplit = require(&#39;./bufferSplit&#39;)
 
-const server = http.createServer((req, res) =&gt; {
-  const boundary = `--${req.headers[&#39;content-type&#39;].split(&#39;; &#39;)[1].split(&#39;=&#39;)[1]}`  // 获取分隔符
+const server = http.createServer((req, res) =&gt; &#123;
+  const boundary = `--$&#123;req.headers[&#39;content-type&#39;].split(&#39;; &#39;)[1].split(&#39;=&#39;)[1]&#125;`  // 获取分隔符
   let arr = []
 
-  req.on(&#39;data&#39;, (buffer) =&gt; {
+  req.on(&#39;data&#39;, (buffer) =&gt; &#123;
     arr.push(buffer)
-  })
+  &#125;)
 
-  req.on(&#39;end&#39;, () =&gt; {
+  req.on(&#39;end&#39;, () =&gt; &#123;
     const buffer = Buffer.concat(arr)
     console.log(buffer.toString())
 
@@ -278,14 +277,14 @@ const server = http.createServer((req, res) =&gt; {
     console.log(result.map(item =&gt; item.toString()))
 
     // 4. 将每一项数据中间的\r\n\r\n删除，得到最终结果
-    result.forEach(item =&gt; {
+    result.forEach(item =&gt; &#123;
       console.log(bufferSplit(item, &#39;\r\n\r\n&#39;).map(item =&gt; item.toString()))
 
       let [info, data] = bufferSplit(item, &#39;\r\n\r\n&#39;)  // 数据中含有文件信息，保持为Buffer类型
 
       info = info.toString()  // info为字段信息，这是字符串类型数据，直接转换成字符串，若为文件信息，则数据中含有一个回车符\r\n，可以据此判断数据为文件还是为普通数据。
 
-      if (info.indexOf(&#39;\r\n&#39;) &gt;= 0) {  // 若为文件信息，则将Buffer转为文件保存
+      if (info.indexOf(&#39;\r\n&#39;) &gt;= 0) &#123;  // 若为文件信息，则将Buffer转为文件保存
         // 获取字段名
         let infoResult = info.split(&#39;\r\n&#39;)[0].split(&#39;; &#39;)
         let name = infoResult[1].split(&#39;=&#39;)[1]
@@ -298,26 +297,26 @@ const server = http.createServer((req, res) =&gt; {
         console.log(filename)
 
         // 将文件存储到服务器
-        fs.writeFile(`./upload/${filename}`, data, err =&gt; {
-          if (err) {
+        fs.writeFile(`./upload/$&#123;filename&#125;`, data, err =&gt; &#123;
+          if (err) &#123;
             console.log(err)
-          } else {
+          &#125; else &#123;
             console.log(&#39;文件上传成功&#39;)
-          }
-        })
-      } else {  // 若为数据，则直接获取字段名称和值
+          &#125;
+        &#125;)
+      &#125; else &#123;  // 若为数据，则直接获取字段名称和值
         let name = info.split(&#39;; &#39;)[1].split(&#39;=&#39;)[1]
         name = name.substring(1, name.length - 1)
         const value = data.toString()
         console.log(name, value)
-      }
-    })
-  })
-})
+      &#125;
+    &#125;)
+  &#125;)
+&#125;)
 
 server.listen(8080)
 </code></pre>
-<h2 id="multiparty"><a href="#multiparty" class="headerlink" title="multiparty"></a>multiparty</h2><p>我们可以尝试使用第三方库来完成POST请求的处理，如<a href="https://github.com/pillarjs/multiparty" target="_blank" rel="noopener">multiparty</a>。</p>
+<h2 id="multiparty"><a href="#multiparty" class="headerlink" title="multiparty"></a>multiparty</h2><p>我们可以尝试使用第三方库来完成POST请求的处理，如<a target="_blank" rel="noopener" href="https://github.com/pillarjs/multiparty">multiparty</a>。</p>
 <h3 id="multiparty-demo"><a href="#multiparty-demo" class="headerlink" title="multiparty demo"></a>multiparty demo</h3><p>通过如下例子，可以测试一下multiparty的功能。</p>
 <p>它会在field事件中，将数据信息的字段名和值返回。在file事件中，将文件的字段名和信息返回。</p>
 <p>上传成功后，会在指定的文件夹创建一个上传的文件，并会将文件重命名（如：IqUHkFe0u2h2TsiBztjKxoBR.jpg），以防止重名。</p>
@@ -326,25 +325,25 @@ server.listen(8080)
 <pre><code class="js">const http = require(&#39;http&#39;)
 const multiparty = require(&#39;multiparty&#39;)
 
-const server = http.createServer((req, res) =&gt; {
-  const form = new multiparty.Form({
+const server = http.createServer((req, res) =&gt; &#123;
+  const form = new multiparty.Form(&#123;
     uploadDir: &#39;./upload&#39; // 指定文件存储目录
-  })
+  &#125;)
 
   form.parse(req) // 将请求参数传入，multiparty会进行相应处理
 
-  form.on(&#39;field&#39;, (name, value) =&gt; { // 接收到数据参数时，触发field事件
+  form.on(&#39;field&#39;, (name, value) =&gt; &#123; // 接收到数据参数时，触发field事件
     console.log(name, value)
-  })
+  &#125;)
 
-  form.on(&#39;file&#39;, (name, file, ...rest) =&gt; { // 接收到文件参数时，触发file事件
+  form.on(&#39;file&#39;, (name, file, ...rest) =&gt; &#123; // 接收到文件参数时，触发file事件
     console.log(name, file)
-  })
+  &#125;)
 
-  form.on(&#39;close&#39;, () =&gt; {  // 表单数据解析完成，触发close事件
+  form.on(&#39;close&#39;, () =&gt; &#123;  // 表单数据解析完成，触发close事件
     console.log(&#39;表单数据解析完成&#39;)
-  })
-})
+  &#125;)
+&#125;)
 
 server.listen(8080)
 </code></pre>
@@ -372,7 +371,7 @@ server.listen(8080)
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -395,7 +394,7 @@ server.listen(8080)
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -406,7 +405,7 @@ server.listen(8080)
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#简单的文件上传例子"><span class="toc-number">1.</span> <span class="toc-text">简单的文件上传例子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件上传数据分析"><span class="toc-number">2.</span> <span class="toc-text">文件上传数据分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件上传数据简化"><span class="toc-number">3.</span> <span class="toc-text">文件上传数据简化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件上传数据处理步骤"><span class="toc-number">4.</span> <span class="toc-text">文件上传数据处理步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Buffer的数据处理"><span class="toc-number">5.</span> <span class="toc-text">Buffer的数据处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件上传数据处理"><span class="toc-number">6.</span> <span class="toc-text">文件上传数据处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#multiparty"><span class="toc-number">7.</span> <span class="toc-text">multiparty</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#multiparty-demo"><span class="toc-number">7.1.</span> <span class="toc-text">multiparty demo</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E7%9A%84%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E4%BE%8B%E5%AD%90"><span class="toc-number">1.</span> <span class="toc-text">简单的文件上传例子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"><span class="toc-number">2.</span> <span class="toc-text">文件上传数据分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%95%B0%E6%8D%AE%E7%AE%80%E5%8C%96"><span class="toc-number">3.</span> <span class="toc-text">文件上传数据简化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%AD%A5%E9%AA%A4"><span class="toc-number">4.</span> <span class="toc-text">文件上传数据处理步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Buffer%E7%9A%84%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="toc-number">5.</span> <span class="toc-text">Buffer的数据处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="toc-number">6.</span> <span class="toc-text">文件上传数据处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#multiparty"><span class="toc-number">7.</span> <span class="toc-text">multiparty</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#multiparty-demo"><span class="toc-number">7.1.</span> <span class="toc-text">multiparty demo</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -425,7 +424,7 @@ server.listen(8080)
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

@@ -39,7 +39,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -102,7 +102,7 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>Words count</i>
-                    8.1k
+                    8.2k
                 </span>
                 
                 
@@ -143,7 +143,7 @@
     <div class='main'>
         <div class="content markdown animated fadeIn">
             <blockquote>
-<p>原文：<a href="https://medium.com/m/global-identity?redirectUrl=https%3A%2F%2Fblog.bitsrc.io%2Fwhat-is-this-in-javascript-3b03480514a7" target="_blank" rel="noopener">What is “this” in JavaScript?</a></p>
+<p>原文：<a target="_blank" rel="noopener" href="https://medium.com/m/global-identity?redirectUrl=https://blog.bitsrc.io/what-is-this-in-javascript-3b03480514a7">What is “this” in JavaScript?</a></p>
 </blockquote>
 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>如果你曾使用JavaScript库做过开发，那么你可能已经注意到一个名为 this的特定关键字。虽然 this在JavaScript中非常常见，但是完全理解this关键字的原理以及在代码中如何使用对相当一部分的开发者来说着实不易。在这篇文章中，我将帮你深入理解 this及其工作机制。<br>在开始之前，请确保已安装 Node。然后，打开命令行终端并运行 node 命令。</p>
 <h2 id="全局环境中的“this”"><a href="#全局环境中的“this”" class="headerlink" title="全局环境中的“this”"></a>全局环境中的“this”</h2><p>this的工作机制理解起来并不是很容易。我们通过将 this置于不同环境下，分别来理解 this是如何工作的。首先看一下 global环境。</p>
@@ -162,17 +162,17 @@ false
 <p>原因是在JavaScript文件中， this等同于 <code>module.exports</code>而不是 global 。</p>
 <h2 id="函数中的“this”"><a href="#函数中的“this”" class="headerlink" title="函数中的“this”"></a>函数中的“this”</h2><p>函数中的 this值通常是由函数的调用方来定义。因此，每次执行函数，函数内的 this值可能都不一样。</p>
 <p>在 index.js文件中，编写一个非常简单的函数，来检查 this是否等于global对象。</p>
-<pre><code class="js">function rajat() {
+<pre><code class="js">function rajat() &#123;
   console.log(this === global)
-}
+&#125;
 rajat()
 </code></pre>
-<a id="more"></a>
+<span id="more"></span>
 <p>如果我们使用 node运行此代码，得到的输出为 true 。如果在文件的顶部添加 “use strict”，并再次运行它，将会得到一个 false输出，因为现在的 this值为 undefined 。<br>为了进一步解释这一点，让我们创建一个简单的函数来定义超级英雄的真实姓名和英雄名字</p>
-<pre><code class="js">function Hero(heroName, realName) {
+<pre><code class="js">function Hero(heroName, realName) &#123;
   this.realName = realName;
   this.heroName = heroName;
-}
+&#125;
 const superman= Hero(&quot;Superman&quot;, &quot;Clark Kent&quot;);
 console.log(superman);
 </code></pre>
@@ -184,22 +184,21 @@ console.log(superman);
 </code></pre>
 <p>再次运行 node index.js命令，现在会得到你预期的输出。</p>
 <h2 id="构造函数中的“this”"><a href="#构造函数中的“this”" class="headerlink" title="构造函数中的“this”"></a>构造函数中的“this”</h2><p>JavaScript没有特定的构造函数。我们所能做的就是使用 new运算符将函数调用转换为构造函数调用，如上一节所示。<br>构造函数被调用时，会创建一个新对象并将其设置为函数的 this参数。构造函数会隐式的返回这个对象，除非我们明确的返回了另外一个对象。<br>在 hero函数内部添加下面的 return语句：</p>
-<pre><code class="js">return {
+<pre><code class="js">return &#123;
   heroName: &quot;Batman&quot;,
   realName: &quot;Bruce Wayne&quot;,
-};
+&#125;;
 </code></pre>
 <p>如果我们再次运行 node命令，我们会看到 上面的 return语句覆盖了构造函数调用。</p>
 <p>return语句不会覆盖构造函数调用的唯一情形是，<strong>return语句返回的不是一个对象</strong>。在这种情况下，对象将包含原始值。</p>
 <h2 id="方法中的“this”"><a href="#方法中的“this”" class="headerlink" title="方法中的“this”"></a>方法中的“this”</h2><p>当函数作为对象的方法被调用时， this指向的是该对象，也称为函数调用的接收器(receiver)。<br>假设 hero对象有一个 dialogue方法 ，那么 dialogue中的 this值指向 hero本身。此时的 hero也被称为 dialogue方法调用的接收者。</p>
-<pre><code class="js">const hero = {
+<pre><code class="js">const hero = &#123;
   heroName: &quot;Batman&quot;,
-  dialogue() {
-    console.log(`I am ${this.heroName}!`);
-  }
-};
+  dialogue() &#123;
+    console.log(`I am $&#123;this.heroName&#125;!`);
+  &#125;
+&#125;;
 hero.dialogue();
-
 </code></pre>
 <p>这个例子非常简单，但在实际情况中，我们的方法很难跟踪接收器。在 index.js的末尾添加以下代码段。</p>
 <pre><code class="js">const saying = hero.dialogue;
@@ -209,13 +208,12 @@ saying();
 <p>当我们将一个方法作为回调传递给另一个方法时，通常会丢失接收器。我们可以通过添加包装函数或使用 <code>bind</code>方法将 this与特定对象绑定来解决这个问题。</p>
 <h2 id="call-和-apply"><a href="#call-和-apply" class="headerlink" title="call() 和 apply()"></a>call() 和 apply()</h2><p>虽然函数的 this值是隐式设置的，我们在调用函数时也可以使用 call()和 apply()明确设置 this参数。</p>
 <p>我们重构一下前面章节的代码片段，如下所示：</p>
-<pre><code class="js">function dialogue () {
-  console.log (`I am ${this.heroName}`);
-}
-const hero = {
+<pre><code class="js">function dialogue () &#123;
+  console.log (`I am $&#123;this.heroName&#125;`);
+&#125;
+const hero = &#123;
   heroName: &#39;Batman&#39;,
-};
-
+&#125;;
 </code></pre>
 <p>如果要将 hero对象作为 dialogue函数的接收器，我们可以这样使用 call()或 apply() ：</p>
 <pre><code class="js">dialogue.call(hero)
@@ -225,39 +223,37 @@ dialogue.apply(hero)
 <p>如果你是在非严格模式下使用 call或 apply ，JavaScript引擎会忽略传递给 call或 apply的 null或 undefined （译者注：被替换为global）。这也是为什么建议始终以严格模式编写代码的原因之一。</p>
 <h2 id="bind"><a href="#bind" class="headerlink" title="bind()"></a>bind()</h2><p>当我们将一个方法作为回调函数传递给另一个函数时，总是存在丢失方法的原有接收器的风险，使得 this参数指向全局对象。</p>
 <p><code>bind()</code>方法可以将 this参数固定的绑定到一个值上。下面的代码片段， bind会创建一个新的 dialogue函数，并将 this值设置为 hero 。（译者注：<code>bind()</code>方法会创建一个新函数，称为绑定函数-bound function-BF，当调用这个绑定函数时，绑定函数会以创建它时传入 <code>bind()</code>方法的第一个参数作为 this，传入 <code>bind()</code>方法的第二个以及以后的参数加上绑定函数运行时本身的参数按照顺序作为原函数的参数来调用原函数。）</p>
-<pre><code class="js">const hero = {
+<pre><code class="js">const hero = &#123;
   heroName: &quot;Batman&quot;,
-  dialogue() {
-    console.log(`I am ${this.heroName}`);
-  }
-};
+  dialogue() &#123;
+    console.log(`I am $&#123;this.heroName&#125;`);
+  &#125;
+&#125;;
 setTimeOut(hero.dialogue.bind(hero), 1000);
-
 </code></pre>
 <p>这样的话，即使使用 call或 apply方法也无法改变 this的值 。</p>
 <h2 id="箭头函数中的“this”"><a href="#箭头函数中的“this”" class="headerlink" title="箭头函数中的“this”"></a>箭头函数中的“this”</h2><p>箭头函数内的 this与其他类型的JavaScript函数有很大的不同。An arrow function uses the this value from its enclosing execution context, since it does have one of its own.</p>
 <p>箭头函数会<strong>永久地捕获 this值，阻止 apply或 call后续更改它</strong>。</p>
 <p>为了解释箭头函数中的 this是如何工作的，我们来写一个箭头函数：</p>
 <pre><code class="js">const batman = this;
-const bruce = () =&gt; {
+const bruce = () =&gt; &#123;
   console.log(this === batman);
-};
+&#125;;
 bruce(); //  true
-
 </code></pre>
 <p>这里，我们将 this值存储在变量中，然后将该值与箭头函数内的 this值进行比较。在终端中运行 node index.js，输出应该为 true 。</p>
 <p>箭头函数内的 this值无法明确设置。此外，使用 call 、 apply或 bind等方法给 this传值，箭头函数会忽略。<strong>箭头函数引用的是箭头函数在创建时设置的 this值</strong>。（译者注：<strong>箭头函数中没有this绑定，必须通过查找作用域链来决定它的值，如果箭头函数被非箭头函数包裹，那么this值由外围最近一层非箭头函数决定，否则为undefined。</strong>）</p>
 <p>箭头函数也不能用作构造函数。因此，我们也不能在箭头函数内给 this设置属性。</p>
 <p>那么箭头函数对 this 可以做什么呢？</p>
 <p>箭头函数 <strong>可以使我们在回调函数中访问this</strong> 。通过下面的 counter对象来看看如何做到的：</p>
-<pre><code class="js">const counter = {
+<pre><code class="js">const counter = &#123;
   count: 0,
-  increase() {
-    setInterval(function() {
+  increase() &#123;
+    setInterval(function() &#123;
       console.log(++this.count);
-    }, 1000);
-  }
-}
+    &#125;, 1000);
+  &#125;
+&#125;
 counter.increase();
 </code></pre>
 <p>使用 node index.js运行此代码，只会得到一个 NaN的列表。这是因为 this.count已经不是指向 counter对象了。它实际上指向的为 global对象。</p>
@@ -268,14 +264,14 @@ counter.increase();
 <p>类通常包含一个 constructor ， <strong>this可以指向任何新创建的对象</strong>。</p>
 <p>不过在作为方法时，如果该方法作为普通函数被调用， this也可以指向任何其他值。与方法一样，类也可能失去对接收器的跟踪。</p>
 <p>我们将之前创建的 Hero函数改造为类。该类包含一个构造函数和一个 dialogue()方法。最后，创建一个类的实例并调用 dialogue方法。</p>
-<pre><code class="js">class Hero {
-  constructor(heroName) {
+<pre><code class="js">class Hero &#123;
+  constructor(heroName) &#123;
     this.heroName = heroName;
-  }
-  dialogue() {
-    console.log(`I am ${this.heroName}`)
-  }
-}
+  &#125;
+  dialogue() &#123;
+    console.log(`I am $&#123;this.heroName&#125;`)
+  &#125;
+&#125;
 const batman = new Hero(&quot;Batman&quot;);
 batman.dialogue();
 </code></pre>
@@ -303,7 +299,7 @@ say();
 </ul>
 </blockquote>
 <p>这个简短的语法课完美地解释了 this在JavaScript中的重要性。就像代词 he将两个句子连接在一起一样， this可以作为再次引用相同内容的捷径。</p>
-<p><a href="https://juejin.im/post/5b6676e6f265da0fa00a3a12?utm_source=gold_browser_extension#comment" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.im/post/5b6676e6f265da0fa00a3a12?utm_source=gold_browser_extension#comment">原文地址</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -328,7 +324,7 @@ say();
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -351,7 +347,7 @@ say();
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -362,7 +358,7 @@ say();
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#全局环境中的“this”"><span class="toc-number">1.1.</span> <span class="toc-text">全局环境中的“this”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数中的“this”"><span class="toc-number">1.2.</span> <span class="toc-text">函数中的“this”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#构造函数中的“this”"><span class="toc-number">1.3.</span> <span class="toc-text">构造函数中的“this”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方法中的“this”"><span class="toc-number">1.4.</span> <span class="toc-text">方法中的“this”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#call-和-apply"><span class="toc-number">1.5.</span> <span class="toc-text">call() 和 apply()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bind"><span class="toc-number">1.6.</span> <span class="toc-text">bind()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#箭头函数中的“this”"><span class="toc-number">1.7.</span> <span class="toc-text">箭头函数中的“this”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Class中的“this”"><span class="toc-number">1.8.</span> <span class="toc-text">Class中的“this”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.9.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E7%8E%AF%E5%A2%83%E4%B8%AD%E7%9A%84%E2%80%9Cthis%E2%80%9D"><span class="toc-number">1.1.</span> <span class="toc-text">全局环境中的“this”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E4%B8%AD%E7%9A%84%E2%80%9Cthis%E2%80%9D"><span class="toc-number">1.2.</span> <span class="toc-text">函数中的“this”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E4%B8%AD%E7%9A%84%E2%80%9Cthis%E2%80%9D"><span class="toc-number">1.3.</span> <span class="toc-text">构造函数中的“this”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%AD%E7%9A%84%E2%80%9Cthis%E2%80%9D"><span class="toc-number">1.4.</span> <span class="toc-text">方法中的“this”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#call-%E5%92%8C-apply"><span class="toc-number">1.5.</span> <span class="toc-text">call() 和 apply()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bind"><span class="toc-number">1.6.</span> <span class="toc-text">bind()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0%E4%B8%AD%E7%9A%84%E2%80%9Cthis%E2%80%9D"><span class="toc-number">1.7.</span> <span class="toc-text">箭头函数中的“this”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Class%E4%B8%AD%E7%9A%84%E2%80%9Cthis%E2%80%9D"><span class="toc-number">1.8.</span> <span class="toc-text">Class中的“this”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.9.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -381,7 +377,7 @@ say();
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.

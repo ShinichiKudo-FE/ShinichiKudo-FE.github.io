@@ -36,7 +36,7 @@
     
 <link rel="stylesheet" href="/css/ball-atom.min.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body class="loading">
@@ -139,13 +139,13 @@
     <div class='main'>
         <div class="content markdown animated fadeIn">
             <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>说道fetch就不得不提<code>XMLHttpRequest</code>了，XHR在发送web请求时需要开发者配置相关请求信息和成功后的回调，尽管开发者只关心请求成功后的业务处理，但是也要配置其他繁琐内容，导致配置和调用比较混乱，也不符合关注分离的原则；fetch的出现正是为了解决XHR存在的这些问题。例如下面代码：</p>
-<pre><code class="js">fetch(url).then(function(response){
+<pre><code class="js">fetch(url).then(function(response)&#123;
     return response.json();
-}).then(function(data){
+&#125;).then(function(data)&#123;
     console.log(data)
-}).catch(function(e){
+&#125;).catch(function(e)&#123;
     console.log(&quot;Oops,error&quot;)
-})
+&#125;)
 </code></pre>
 <p>上面这段代码让开发者只关注请求成功后的业务逻辑处理，其他的不用关心，相当简单；也比较符合现代Promise形式，比较友好。</p>
 <p>fetch是基于Promise设计的，从上面代码也能看得出来，这就要求fetch要配合Promise一起使用。正是这种设计，fetch所带来的优点正如【传统 Ajax 已死，Fetch 永生总结】的一样：</p>
@@ -161,7 +161,9 @@
 <h2 id="fetch兼容性"><a href="#fetch兼容性" class="headerlink" title="fetch兼容性"></a>fetch兼容性</h2><p>fetch是相对较新的技术，当然就会存在浏览器兼容性的问题，借用上面应用文章的一幅图加以说明fetch在各种浏览器的原生支持情况：</p>
 <p><img src="https://images2015.cnblogs.com/blog/408483/201702/408483-20170221215434991-1565736785.png" alt="fetch兼容性"></p>
 <p>从上图可以看出，在各个浏览器低版本的情况下都是不被支持的。</p>
-<p>那么问题来了，如何在所有浏览器中通用fetch呢，当然就要考虑fetch的<code>polyfill</code>了。<br><a id="more"></a><br>上面说过，fetch是基于Promise来实现的，所以在低版本浏览器中Promise可能也未被原生支持，所以还需要Promise的polyfill；大多数情况下，实现fetch的polyfill需要涉及到的：</p>
+<p>那么问题来了，如何在所有浏览器中通用fetch呢，当然就要考虑fetch的<code>polyfill</code>了。</p>
+<span id="more"></span>
+<p>上面说过，fetch是基于Promise来实现的，所以在低版本浏览器中Promise可能也未被原生支持，所以还需要Promise的polyfill；大多数情况下，实现fetch的polyfill需要涉及到的：</p>
 <ul>
 <li><strong>promise的polyfill</strong>，例如es6-promise、babel-polyfill提供的promise实现。</li>
 <li><strong>fetch的polyfill实现</strong>，例如isomorphic-fetch和whatwg-fetch</li>
@@ -181,34 +183,34 @@
 <li>same-origin: 表示cookie只能同域发送，不能跨域发送</li>
 <li>include: cookie既可以同域发送，也可以跨域发送</li>
 </ul>
-<p><code>credentials</code>所表达的含义，其实与XHR2中的<code>withCredentials</code>属性类似，表示请求是否携带cookie；具体可以参考阮一峰老师的<a href="http://www.ruanyifeng.com/blog/2016/04/cors.html" target="_blank" rel="noopener">跨域资源共享 CORS</a> 详解中<code>withCredentials</code>一节的介绍；</p>
+<p><code>credentials</code>所表达的含义，其实与XHR2中的<code>withCredentials</code>属性类似，表示请求是否携带cookie；具体可以参考阮一峰老师的<a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2016/04/cors.html">跨域资源共享 CORS</a> 详解中<code>withCredentials</code>一节的介绍；</p>
 <p>这样，若要fetch请求携带cookie信息，只需设置一下credentials选项即可，例如</p>
-<pre><code class="js">fetch(url, {credentials: &#39;include&#39;});
+<pre><code class="js">fetch(url, &#123;credentials: &#39;include&#39;&#125;);
 </code></pre>
 <p>另外补充一点：</p>
 <blockquote>
 <p>fetch默认对服务端通过Set-Cookie头设置的cookie也会忽略，若想选择接受来自服务端的cookie信息，也必须要配置<code>credentials</code>选项；</p>
 </blockquote>
 <h2 id="fetch请求对某些错误http状态不会reject"><a href="#fetch请求对某些错误http状态不会reject" class="headerlink" title="fetch请求对某些错误http状态不会reject"></a>fetch请求对某些错误http状态不会reject</h2><p>主要是由fetch返回promise导致的，因为fetch返回的promise在某些错误的http状态下如 <strong>400、500</strong>等不会reject，相反它会被resolve；只有网络错误会导致请求不能完成时，fetch 才会被 reject；所以一般会对fetch请求做一层封装，例如下面代码所示：</p>
-<pre><code class="js">function checkStatus(response) {
-  if (response.status &gt;= 200 &amp;&amp; response.status &lt; 300) {
+<pre><code class="js">function checkStatus(response) &#123;
+  if (response.status &gt;= 200 &amp;&amp; response.status &lt; 300) &#123;
     return response;
-  }
+  &#125;
   const error = new Error(response.statusText);
   error.response = response;
   throw error;
-}
-function parseJSON(response) {
+&#125;
+function parseJSON(response) &#123;
   return response.json();
-}
-export default function request(url, options) {
-  let opt = options||{};
-  return fetch(url, {credentials: &#39;include&#39;, ...opt})
+&#125;
+export default function request(url, options) &#123;
+  let opt = options||&#123;&#125;;
+  return fetch(url, &#123;credentials: &#39;include&#39;, ...opt&#125;)
     .then(checkStatus)
     .then(parseJSON)
     .then((data) =&gt; ( data ))
     .catch((err) =&gt; ( err ));
-}
+&#125;
 </code></pre>
 <h2 id="fetch不支持超时timeout处理"><a href="#fetch不支持超时timeout处理" class="headerlink" title="fetch不支持超时timeout处理"></a>fetch不支持超时timeout处理</h2><p>用过fetch的都知道，fetch不像大多数ajax库那样对请求设置超时timeout，它没有有关请求超时的feature，这一点比较蛋疼。所以在fetch标准添加超时feature之前，都需要polyfill该特性。</p>
 <p>实际上，我们真正需要的是<code>abort()</code>, timeout可以通过<code>timeout+abort</code>方式来实现，起到真正超时丢弃当前的请求。</p>
@@ -220,51 +222,51 @@ export default function request(url, options) {
 <li>第一种：单纯setTimeout方式</li>
 </ul>
 <pre><code class="js">var oldFetchfn = fetch; //拦截原始的fetch方法
-window.fetch = function(input, opts){//定义新的fetch方法，封装原有的fetch方法
-    return new Promise(function(resolve, reject){
-        var timeoutId = setTimeout(function(){
+window.fetch = function(input, opts)&#123;//定义新的fetch方法，封装原有的fetch方法
+    return new Promise(function(resolve, reject)&#123;
+        var timeoutId = setTimeout(function()&#123;
             reject(new Error(&quot;fetch timeout&quot;))
-        }, opts.timeout);
+        &#125;, opts.timeout);
         oldFetchfn(input, opts).then(
-            res=&gt;{
+            res=&gt;&#123;
                 clearTimeout(timeoutId);
                 resolve(res)
-            },
-            err=&gt;{
+            &#125;,
+            err=&gt;&#123;
                 clearTimeout(timeoutId);
                 reject(err)
-            }
+            &#125;
         )
-    })
-}
+    &#125;)
+&#125;
 </code></pre>
 <p>上面方法可以模拟xhr的abort()功能</p>
 <pre><code class="js">var oldFetch = fetch;
-window.fetch = function(input, opts){
-    return new promise(function(resolve,reject){
-        var abort_promise = function(){
+window.fetch = function(input, opts)&#123;
+    return new promise(function(resolve,reject)&#123;
+        var abort_promise = function()&#123;
             reject(new Error(&quot;fetch abort&quot;));
-        }
+        &#125;
         var p = oldFetchfn(input, opts).then(resolve, reject);
         p.abort = abort_promise;
         return p;
-    })
-}
+    &#125;)
+&#125;
 </code></pre>
 <ul>
 <li>方法二：利用Promise.race方法</li>
 </ul>
-<p>Promise.race方法接受一个promise实例数组参数，表示多个promise实例中任何一个最先改变状态，那么race方法返回的promise实例状态就跟着改变，具体可以参考<a href="http://es6.ruanyifeng.com/#docs/promise#Promise-race" target="_blank" rel="noopener">这里</a>。</p>
+<p>Promise.race方法接受一个promise实例数组参数，表示多个promise实例中任何一个最先改变状态，那么race方法返回的promise实例状态就跟着改变，具体可以参考<a target="_blank" rel="noopener" href="http://es6.ruanyifeng.com/#docs/promise#Promise-race">这里</a>。</p>
 <pre><code class="js">var oldFetchfn = fetch; //拦截原始的fetch方法
-window.fetch = function(input, opts){//定义新的fetch方法，封装原有的fetch方法
+window.fetch = function(input, opts)&#123;//定义新的fetch方法，封装原有的fetch方法
     var fetchPromise = oldFetchfn(input, opts);
-    var timeoutPromise = new Promise(function(resolve, reject){
-        setTimeout(()=&gt;{
+    var timeoutPromise = new Promise(function(resolve, reject)&#123;
+        setTimeout(()=&gt;&#123;
              reject(new Error(&quot;fetch timeout&quot;))
-        }, opts.timeout)
-    });
+        &#125;, opts.timeout)
+    &#125;);
     retrun Promise.race([fetchPromise, timeoutPromise])
-}
+&#125;
 </code></pre>
 <p>最后，对fetch的timeout的上述实现方式补充几点：</p>
 <ul>
@@ -275,35 +277,35 @@ window.fetch = function(input, opts){//定义新的fetch方法，封装原有的
 </ul>
 <h2 id="fetch不支持jsonp"><a href="#fetch不支持jsonp" class="headerlink" title="fetch不支持jsonp"></a>fetch不支持jsonp</h2><p>fetch是与服务器端进行异步交互的，而JSONP是 <strong>外链一个javascript资源，并不是真正ajax</strong>，所以fetch与JSONP没有什么直接关联，当然至少目前是不支持JSONP的。</p>
 <p>这里我们把JSONP与fetch关联在一起有点差强人意，fetch只是一个ajax库，我们不可能使fetch支持JSONP；只是我们要实现一个JSONP，只不过这个JSONP的实现要与fetch的实现类似，即<strong>基于Promise来实现一个JSONP</strong>；而其外在表现给人感觉是fetch支持JSONP一样；</p>
-<p>目前比较成熟的开源JSONP实现<a href="https://github.com/camsong/fetch-jsonp" target="_blank" rel="noopener">fetch-jsonp</a>给我们提供了解决方案，想了解可以自行前往。不过再次想唠叨一下其JSONP的实现步骤，因为在本人面试的前端候选人中大部分人对JSONP的实现语焉不详；</p>
+<p>目前比较成熟的开源JSONP实现<a target="_blank" rel="noopener" href="https://github.com/camsong/fetch-jsonp">fetch-jsonp</a>给我们提供了解决方案，想了解可以自行前往。不过再次想唠叨一下其JSONP的实现步骤，因为在本人面试的前端候选人中大部分人对JSONP的实现语焉不详；</p>
 <p>使用它非常简单，首先需要用npm安装fetch-jsonp</p>
 <pre><code class="js"> npm install fetch-jsonp --save-dev
 </code></pre>
 <p>然后在像下面一样使用：</p>
-<pre><code class="js">fetchJsonp(fetchJsonp(&#39;/users.jsonp&#39;, {
+<pre><code class="js">fetchJsonp(fetchJsonp(&#39;/users.jsonp&#39;, &#123;
     timeout: 3000,
     jsonpCallback: &#39;custom_callback&#39;
-  })
-  .then(function(response) {
+  &#125;)
+  .then(function(response) &#123;
     return response.json()
-  }).catch(function(ex) {
+  &#125;).catch(function(ex) &#123;
     console.log(&#39;parsing failed&#39;, ex)
-  })
+  &#125;)
 </code></pre>
 <h2 id="fetch不支持progress事件"><a href="#fetch不支持progress事件" class="headerlink" title="fetch不支持progress事件"></a>fetch不支持progress事件</h2><p>XHR是原生支持progress事件的，例如下面代码这样：</p>
 <pre><code class="js">
 var xhr = new XMLHttpRequest()
 xhr.open(&#39;POST&#39;, &#39;/uploads&#39;)
-xhr.onload = function() {}
-xhr.onerror = function() {}
-function updateProgress (event) {
-  if (event.lengthComputable) {
+xhr.onload = function() &#123;&#125;
+xhr.onerror = function() &#123;&#125;
+function updateProgress (event) &#123;
+  if (event.lengthComputable) &#123;
     var percent = Math.round((event.loaded / event.total) * 100)
     console.log(percent)
-  }
+  &#125;
 xhr.upload.onprogress =updateProgress; //上传的progress事件
 xhr.onprogress = updateProgress; //下载的progress事件
-}
+&#125;
 xhr.send();
 </code></pre>
 <p>但是fetch是不支持有关progress事件的；不过可喜的是，根据fetch的指导规范标准，其内部设计实现了Request和Response类；其中Response封装一些方法和属性，通过Response实例可以访问这些方法和属性，例如<code>response.json()、response.body</code>等等；</p>
@@ -313,21 +315,21 @@ xhr.send();
 </blockquote>
 <p>因此，利用到这点可以模拟出fetch的progress,代码实现如下</p>
 <pre><code class="js">// fetch() returns a promise that resolves once headers have been received
-fetch(url).then(response =&gt; {
+fetch(url).then(response =&gt; &#123;
   // response.body is a readable stream.
   // Calling getReader() gives us exclusive access to the stream&#39;s content
   var reader = response.body.getReader();
   var bytesReceived = 0;
 
   // read() returns a promise that resolves when a value has been received
-  reader.read().then(function processResult(result) {
+  reader.read().then(function processResult(result) &#123;
     // Result objects contain two properties:
     // done  - true if the stream has already given you all its data.
     // value - some data. Always undefined when done is true.
-    if (result.done) {
+    if (result.done) &#123;
       console.log(&quot;Fetch complete&quot;);
       return;
-    }
+    &#125;
 
     // result.value for fetch streams is a Uint8Array
     bytesReceived += result.value.length;
@@ -335,30 +337,29 @@ fetch(url).then(response =&gt; {
 
     // Read some more, and call this function again
     return reader.read().then(processResult);
-  });
-});
-
+  &#125;);
+&#125;);
 </code></pre>
 <p>另外，github上也有使用<code>Promise+XHR</code>结合的方式实现类fetch的progress效果(当然这跟fetch完全不搭边）可以参考这里，具体代码如下：</p>
-<pre><code class="js">function fetchProgress(url, opts={}, onProgress){
-    return new Promise(funciton(resolve, reject){
+<pre><code class="js">function fetchProgress(url, opts=&#123;&#125;, onProgress)&#123;
+    return new Promise(funciton(resolve, reject)&#123;
         var xhr = new XMLHttpRequest();
         xhr.open(opts.method || &#39;get&#39;, url);
-        for(var key in opts.headers || {}){
+        for(var key in opts.headers || &#123;&#125;)&#123;
             xhr.setRequestHeader(key, opts.headers[key]);
-        }
+        &#125;
 
         xhr.onload = e =&gt; resolve(e.target.responseText)
         xhr.onerror = reject;
-        if (xhr.upload &amp;&amp; onProgress){
+        if (xhr.upload &amp;&amp; onProgress)&#123;
             xhr.upload.onprogress = onProgress; //上传
-        }
-        if (&#39;onprogerss&#39; in xhr &amp;&amp; onProgress){
+        &#125;
+        if (&#39;onprogerss&#39; in xhr &amp;&amp; onProgress)&#123;
             xhr.onprogress = onProgress; //下载
-        }
+        &#125;
         xhr.send(opts.body)
-    })
-}
+    &#125;)
+&#125;
 fetchProgress(&#39;/upload&#39;).then(console.log)
 </code></pre>
 <h2 id="fetch跨域问题"><a href="#fetch跨域问题" class="headerlink" title="fetch跨域问题"></a>fetch跨域问题</h2><p>既然是ajax库，就不可避免与跨域扯上关系；XHR2是支持跨域请求的，只不过要满足浏览器端支持<code>CORS</code>，服务器通过<code>Access-Control-Allow-Origin</code>来允许指定的源进行跨域，仅此一种方式。</p>
@@ -402,7 +403,7 @@ fetchProgress(&#39;/upload&#39;).then(console.log)
         data-r='blog-comments'
         data-o='TriDiamond'
         data-a='TriDiamond'
-        data-d='undefined'
+        data-d=''
     >Comments</div>
 
 
@@ -425,7 +426,7 @@ fetchProgress(&#39;/upload&#39;).then(console.log)
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">174 <p>Articles</p></a></li>
+                    <li><a href="/">176 <p>Articles</p></a></li>
                     <li><a href="/categories">27 <p>Categories</p></a></li>
                     <li><a href="/tags">55 <p>Tags</p></a></li>
                 </ul>
@@ -436,7 +437,7 @@ fetchProgress(&#39;/upload&#39;).then(console.log)
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>Contents</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#fetch兼容性"><span class="toc-number">1.1.</span> <span class="toc-text">fetch兼容性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fetch默认不携带cookie"><span class="toc-number">1.2.</span> <span class="toc-text">fetch默认不携带cookie</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fetch请求对某些错误http状态不会reject"><span class="toc-number">1.3.</span> <span class="toc-text">fetch请求对某些错误http状态不会reject</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fetch不支持超时timeout处理"><span class="toc-number">1.4.</span> <span class="toc-text">fetch不支持超时timeout处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fetch不支持jsonp"><span class="toc-number">1.5.</span> <span class="toc-text">fetch不支持jsonp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fetch不支持progress事件"><span class="toc-number">1.6.</span> <span class="toc-text">fetch不支持progress事件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fetch跨域问题"><span class="toc-number">1.7.</span> <span class="toc-text">fetch跨域问题</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#fetch%E5%85%BC%E5%AE%B9%E6%80%A7"><span class="toc-number">1.1.</span> <span class="toc-text">fetch兼容性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fetch%E9%BB%98%E8%AE%A4%E4%B8%8D%E6%90%BA%E5%B8%A6cookie"><span class="toc-number">1.2.</span> <span class="toc-text">fetch默认不携带cookie</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fetch%E8%AF%B7%E6%B1%82%E5%AF%B9%E6%9F%90%E4%BA%9B%E9%94%99%E8%AF%AFhttp%E7%8A%B6%E6%80%81%E4%B8%8D%E4%BC%9Areject"><span class="toc-number">1.3.</span> <span class="toc-text">fetch请求对某些错误http状态不会reject</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fetch%E4%B8%8D%E6%94%AF%E6%8C%81%E8%B6%85%E6%97%B6timeout%E5%A4%84%E7%90%86"><span class="toc-number">1.4.</span> <span class="toc-text">fetch不支持超时timeout处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fetch%E4%B8%8D%E6%94%AF%E6%8C%81jsonp"><span class="toc-number">1.5.</span> <span class="toc-text">fetch不支持jsonp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fetch%E4%B8%8D%E6%94%AF%E6%8C%81progress%E4%BA%8B%E4%BB%B6"><span class="toc-number">1.6.</span> <span class="toc-text">fetch不支持progress事件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fetch%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98"><span class="toc-number">1.7.</span> <span class="toc-text">fetch跨域问题</span></a></li></ol></li></ol>
                 </div>
             </div>
             
@@ -455,7 +456,7 @@ fetchProgress(&#39;/upload&#39;).then(console.log)
 </body>
 <footer>
     <p class="copyright" id="copyright">
-        &copy; 2020
+        &copy; 2025
         <span class="gradient-text">
             张白告丶
         </span>.
